@@ -19,8 +19,9 @@ except ImportError:
 
 def main(plan, run):
     c.validate(plan)
-    actual = assets.inspect(Path('/data')/plan['profile']['paths']['model'], Path('/data')/plan['profile']['paths']['data'],
-                            Path('/data')/plan['profile']['paths']['staging'])
+    # Match preparation's canonical Volume paths while retaining nested-symlink rejection.
+    actual = assets.inspect(*(assets.owned_path('/data', plan['profile']['paths'][key])
+                              for key in ('model', 'data', 'staging')))
     if actual != plan['assets']:
         raise ValueError('Preflight assets differ from plan')
     head = subprocess.check_output(['git', '-C', '/opt/agent-lightning', 'rev-parse', 'HEAD'], text=True).strip()

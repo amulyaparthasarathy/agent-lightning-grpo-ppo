@@ -324,6 +324,23 @@ class AssetsTests(unittest.TestCase):
             with patch.object(assets, 'model_lock', return_value=lock):
                 actual = assets.prepare(p, root, mocked_acquisition, root, {'WANDB_ENTITY': 'fixture'})
                 self.assertEqual(actual, assets.inspect(root/p['profile']['paths']['model'], root/p['profile']['paths']['data']))
+                # Real Modal mounts alias a physical Volume directory. Preparation
+                # records physical source paths; later workers must use owned_path
+                # too, without rewriting manifests or accepting nested symlinks.
+                mount = root/'mount-alias'; mount.symlink_to(root, target_is_directory=True)
+                paths = p['profile']['paths']
+                with self.assertRaisesRegex(ValueError, 'Acquired source path/content differs'):
+                    assets.inspect(*(mount/paths[key] for key in ('model', 'data', 'staging')))
+                self.assertEqual(actual, assets.inspect(*(assets.owned_path(mount, paths[key])
+                                                         for key in ('model', 'data', 'staging'))))
+                source_file = root/paths['staging']/'train.parquet'
+                original = source_file.read_bytes(); source_file.write_bytes(b'corrupt source')
+                with self.assertRaisesRegex(ValueError, 'Acquired source path/content differs'):
+                    assets.verify_data(root/paths['data'], assets.owned_path(mount, paths['staging']))
+                source_file.write_bytes(original)
+                outside = root/'unexpected-source.parquet'; source_file.rename(outside); source_file.symlink_to(outside)
+                with self.assertRaisesRegex(ValueError, 'Acquired source path/content differs'):
+                    assets.verify_data(root/paths['data'], assets.owned_path(mount, paths['staging']))
                 self.assertFalse(c.make_plan(profile(), source(), actual)['training_admissible'])
             self.assertEqual(len(calls), 3)
             self.assertTrue(all(p['profile']['paths']['staging'] in ' '.join(call) for call in calls))

@@ -131,10 +131,10 @@ def validate_inputs(request, model, data, repo, bundle, contract=c):
         raise ValueError('Unreviewed training checkout')
     if contract is not c:
         try:
-            from .reader_assets import inspect
+            from .reader_assets import inspect, owned_path
         except ImportError:
-            from reader_assets import inspect
-        if inspect(model, data, Path('/data')/request['plan']['profile']['paths']['staging']) != request['plan']['assets']:
+            from reader_assets import inspect, owned_path
+        if inspect(model, data, owned_path('/data', request['plan']['profile']['paths']['staging'])) != request['plan']['assets']:
             raise ValueError('Actual reader assets differ from exact plan manifests')
         return
     lock = json.loads((bundle/'ppo_source_lock.json').read_text())
