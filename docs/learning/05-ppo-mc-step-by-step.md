@@ -118,7 +118,7 @@ The new head weight uses Transformers' normal initialization with `initializer_r
 For updated prediction $v_i=V_\phi(h_i)$, cached old value $V_i$ and target $R_{\rho(i)}$, define
 
 $$
-v_i^{\mathrm{clip}}=V_i+\operatorname{clip}(v_i-V_i,-0.5,0.5),
+v_i^{\mathrm{clip}}=V_i+\mathrm{clip}(v_i-V_i,-0.5,0.5),
 $$
 
 $$
@@ -180,7 +180,7 @@ PY
 
 Read [`matched_runtime.advantages`](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/blob/89fe32f92f29209803c13264baed951713741d42/experiment/matched_runtime.py#L117), [`value_loss`](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/blob/89fe32f92f29209803c13264baed951713741d42/experiment/matched_runtime.py#L167), [`ppo_runtime._instrument_engine`](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/blob/89fe32f92f29209803c13264baed951713741d42/experiment/ppo_runtime.py#L379), and [`ppo_contract.overrides`](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/blob/89fe32f92f29209803c13264baed951713741d42/experiment/ppo_contract.py#L69). The [pinned generic GAE](https://github.com/verl-project/verl/blob/7aed6b230776f963fa09509c10d9c3a767d1102c/verl/trainer/ppo/core_algos.py#L216) skips observation gaps. [GAE's paper](https://arxiv.org/abs/1506.02438v6) supplies method attribution; the direct matched override defines this execution.
 
-[`prediction_metrics`](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/blob/89fe32f92f29209803c13264baed951713741d42/experiment/ppo_math.py#L101) reports pre-update valid-token MSE, mean squared prediction error, and explained variance. Qualified EV uses $1-\operatorname{Var}(V-R)/(\operatorname{Var}(R)+10^{-5})$ only when target sample variance exceeds $10^{-8}$. Constant targets make qualified EV undefined. This token-population diagnostic differs from the clipped, half-scaled, rollout-weighted training loss.
+[`prediction_metrics`](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/blob/89fe32f92f29209803c13264baed951713741d42/experiment/ppo_math.py#L101) reports pre-update valid-token MSE, mean squared prediction error, and explained variance. Qualified EV uses $1-\mathrm{Var}(V-R)/(\mathrm{Var}(R)+10^{-5})$ only when target sample variance exceeds $10^{-8}$. Constant targets make qualified EV undefined. This token-population diagnostic differs from the clipped, half-scaled, rollout-weighted training loss.
 
 The [scientific analysis](../../evidence/phase2-r03/SCIENTIFIC_ANALYSIS.md) reports decreasing critic MSE, but no win over the recorded earlier-data constant predictor in 57 comparable steps; all 51 defined EV observations were negative. There is no earlier-data predictor comparison at the first step. The predictor is the mean of earlier rollout rewards, evaluated on current valid tokens. These findings do not establish that the critic caused either arm's endpoint performance.
 
