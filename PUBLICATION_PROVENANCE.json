@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "publication_repository": "amulyaparthasarathy/agent-lightning-lab-public",
+  "publication_repository": "amulyaparthasarathy/agent-lightning-grpo-ppo",
   "publication_source_ref": "89fe32f92f29209803c13264baed951713741d42",
   "private_export": {
     "repository": "amulyaparthasarathy/agent-lightning-lab",

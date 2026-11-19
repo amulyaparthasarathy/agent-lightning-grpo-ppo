@@ -1,4 +1,4 @@
-# Agent Lightning Lab: Understanding Harness-Aware Agentic Reinforcement Learning
+# Agent Lightning: GRPO and PPO-MC
 
 How does one calculator-agent experience become a model-weight update? This independent educational implementation follows that path through a real agent harness and compares GRPO with this lab's terminal Monte Carlo **PPO-MC** configuration. It is not an official Agent Lightning benchmark or a claim about every PPO implementation.
 
@@ -17,8 +17,8 @@ Training through the harness matters because the model must act on the same kind
 Using Python 3.12, obtain this educational snapshot and run the credential-free checks:
 
 ```bash
-git clone https://github.com/amulyaparthasarathy/agent-lightning-lab-public.git
-cd agent-lightning-lab-public
+git clone https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo.git
+cd agent-lightning-grpo-ppo
 python3 experiment/cpu_accounting_demo.py
 python3 scripts/check_phase2_results.py
 ```
@@ -130,8 +130,8 @@ Prefer a reader-owned Linux filesystem checkout when using WSL, as described in 
 The following optional client sequence describes the original environment. Full test discovery includes historical-Git checks whose objects are deliberately absent from this snapshot. It is not the supported offline quick start above; see the release receipt for the bounded 54-test verification actually performed. Use a directory you own:
 
 ```bash
-git clone https://github.com/amulyaparthasarathy/agent-lightning-lab-public.git
-cd agent-lightning-lab-public
+git clone https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo.git
+cd agent-lightning-grpo-ppo
 git status --short
 git rev-parse HEAD
 uv --version
