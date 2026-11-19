@@ -72,8 +72,9 @@ def cpu_action(plan, action, deadline_epoch, image_id=None):
     if action not in ('prepare', 'preflight'):
         raise ValueError('Unsupported CPU action')
     limit = profile['bounds']['preparation_seconds' if action == 'prepare' else 'preflight_seconds']
-    if not time.time() < deadline_epoch <= time.time()+limit:
-        raise ValueError('Missing/expired CPU deadline')
+    entered_at = time.time()
+    if not entered_at < deadline_epoch <= entered_at+limit:
+        raise ValueError(f'Missing/expired/extended CPU deadline: deadline={deadline_epoch!r}, entered={entered_at}, limit={limit}')
     call_id = modal.current_function_call_id()
     key = action+':'+plan['root']
     if not registry.put('entered:'+key, {'call_id': call_id, 'plan_sha256': c.digest(plan)}, skip_if_exists=True):
@@ -83,7 +84,8 @@ def cpu_action(plan, action, deadline_epoch, image_id=None):
     run.mkdir(parents=True, exist_ok=False)
     # owned_path resolves Modal's /data symlink; receipts retain the logical Volume path.
     receipt = {'status': 'started', 'action': action, 'plan_sha256': c.digest(plan),
-               'call_id': call_id, 'output': plan['root']+'/'+action}
+               'call_id': call_id, 'output': plan['root']+'/'+action,
+               'deadline': {'epoch': deadline_epoch, 'entered_at': entered_at, 'limit_seconds': limit}}
     assets.write_new(run/'plan.json', plan)
     remote.write(run/'receipt.json', receipt)
     volume.commit()

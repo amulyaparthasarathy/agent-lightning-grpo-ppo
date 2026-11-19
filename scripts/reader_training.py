@@ -201,7 +201,7 @@ def online(args, plan, profile):
                 call = reader_app.supervise.with_options(timeout=plan['bounds']['supervisor_seconds']).spawn(plan, image_id=image_id)
             else:
                 limit = profile['bounds']['preparation_seconds' if args.command == 'prepare' else 'preflight_seconds']
-                call = reader_app.cpu_action.with_options(timeout=limit).spawn(plan, args.command, time.time()+limit, image_id=image_id)
+                call = reader_app.cpu_action.with_options(timeout=limit).spawn(plan, args.command, c.dispatch_deadline(limit, time.time()), image_id=image_id)
             return {'call_id': call.object_id, 'image_id': image_id, 'app_id': reader_app.app.app_id}
     return submit(plan, args.command, registry, spawn, args.out, ownership)
 

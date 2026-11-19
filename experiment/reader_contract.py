@@ -28,6 +28,17 @@ RESOURCES = {'gpu': 'H100!', 'cpu': 16, 'memory_mib': 196608}
 PROTECTED = ('restored', 'phase2', 'models', 'data-small', 'runs', 'exports')
 
 
+# Dispatch deadlines are shortened, never extended, to allow for cross-host clock uncertainty.
+# Provider timeouts and the existing worker admission checks remain independent hard bounds.
+DISPATCH_CLOCK_RESERVE_SECONDS = 30
+
+
+def dispatch_deadline(limit, issued_at):
+    if any(type(v) not in (int, float) or not math.isfinite(v) for v in (limit, issued_at)) or limit <= DISPATCH_CLOCK_RESERVE_SECONDS:
+        raise ValueError('Invalid reader dispatch deadline bounds')
+    return issued_at + limit - DISPATCH_CLOCK_RESERVE_SECONDS
+
+
 def exact(value, keys, label):
     if not isinstance(value, dict) or set(value) != set(keys.split()):
         raise ValueError(f'Incomplete or unknown {label} fields')

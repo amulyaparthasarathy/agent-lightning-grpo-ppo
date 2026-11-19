@@ -56,6 +56,16 @@ class ContractTests(unittest.TestCase):
         self.assertEqual(p['bounds']['max_gpu_seconds'], 21600)
         self.assertEqual(p['bounds']['supervisor_seconds'], 22200)
 
+    def test_reader_deadlines_shorten_exposure_and_preserve_strict_worker_bounds(self):
+        issued = 1000.0; limit = 900
+        deadline = c.dispatch_deadline(limit, issued)
+        self.assertEqual(deadline, 1870.0)
+        for worker_now in (issued-20, issued, issued+20):
+            self.assertTrue(worker_now < deadline <= worker_now+limit)
+        self.assertLess(deadline, issued+limit)
+        for bad_limit, bad_time in ((30, issued), (float('inf'), issued), (limit, float('nan')), (True, issued)):
+            with self.assertRaises(ValueError): c.dispatch_deadline(bad_limit, bad_time)
+
     def test_reject_missing_unsupported_unsafe_colliding_and_underfunded(self):
         edits = [lambda p: p['modal'].pop('workspace'), lambda p: p['modal'].update(volume=historical.VOLUME),
                  lambda p: p.update(task='asset-status'), lambda p: p['model'].update(parser='hermes'),
@@ -452,7 +462,7 @@ class CompletionTests(unittest.TestCase):
             receipts = []; previous = None
             for stage in job['stages']:
                 call = 'fc-'+stage['wandb']['id']
-                proof = {'execution_schema': c.SCHEMA, 'plan_sha256': c.digest(p), 'stage': stage['name'], 'worker': {'call_id': call, 'hostname': call},
+                proof = {'execution_schema': c.SCHEMA, 'plan_sha256': c.digest(p), 'stage': stage['name'], 'worker': {'call_id': call, 'hostname': 'modal', 'container_id': 'ta-'+c.digest(call)[:16]},
                          'source_sha256': c.digest(p['source']), 'configuration_sha256': p['configuration_sha256'],
                          'assets_sha256': c.digest(p['assets']), 'task_sha256': c.digest(p['task_identity']),
                          'wandb_id': stage['wandb']['id'], 'checkpoint_sha256': 'd'*64}
@@ -460,7 +470,7 @@ class CompletionTests(unittest.TestCase):
                     previous = proof['worker']
                     proof['learning_diagnostics'] = {'informative_reward_groups': 0}
                 if stage['name'] == 'checkpoint-eval': proof['training_worker'] = previous
-                receipt = {'call_id': call, 'status': 'completed', 'completion': proof, 'output': stage['output']}
+                receipt = {'call_id': call, 'container_id': proof['worker']['container_id'], 'status': 'completed', 'completion': proof, 'output': stage['output']}
                 files[stage['output']+'/receipt.json'] = receipt
                 files[stage['output']+'/completion.json'] = proof
                 files[stage['output']+'/observability.json'] = {'wandb': stage['wandb']}
@@ -507,7 +517,7 @@ class CompletionTests(unittest.TestCase):
         return request, events
 
     def test_completion_duplicates_counts_finite_losses_and_no_informative_signal(self):
-        with tempfile.TemporaryDirectory() as tmp, patch.dict(os.environ, {'AGL_READER_CALL_ID': 'fc-synthetic'}):
+        with tempfile.TemporaryDirectory() as tmp, patch.dict(os.environ, {'AGL_READER_CALL_ID': 'fc-synthetic', 'MODAL_TASK_ID': 'ta-synthetic'}):
             root = Path(tmp); request, events = self.fixture(root)
             def save(es): (root/'audit/events-1.jsonl').write_text(''.join(json.dumps(e)+'\n' for e in es))
             save(events)
@@ -528,7 +538,7 @@ class CompletionTests(unittest.TestCase):
             with self.assertRaises(ValueError): evidence.complete(root, request, {})
 
     def test_ppo_completion_requires_both_critic_losses(self):
-        with tempfile.TemporaryDirectory() as tmp, patch.dict(os.environ, {'AGL_READER_CALL_ID': 'fc-synthetic'}):
+        with tempfile.TemporaryDirectory() as tmp, patch.dict(os.environ, {'AGL_READER_CALL_ID': 'fc-synthetic', 'MODAL_TASK_ID': 'ta-synthetic'}):
             root = Path(tmp); request, events = self.fixture(root)
             job = request['plan']['jobs'][1]
             request = c.stage_request(request['plan'], job, job['stages'][1])
@@ -545,6 +555,25 @@ class CompletionTests(unittest.TestCase):
             with (root/'metrics.jsonl').open('a') as f:
                 f.write(json.dumps({'step': 2, 'metrics': {'critic/vf_loss': 0.0}})+'\n')
             self.assertEqual(len(evidence.complete(root, request, {})['learning_diagnostics']['losses_by_update']), 4)
+
+    def test_reload_requires_new_provider_container_not_unique_hostname(self):
+        p = plan(); job = p['jobs'][0]; request = c.stage_request(p, job, job['stages'][2])
+        with tempfile.TemporaryDirectory() as tmp, patch.dict(os.environ, {'AGL_READER_CALL_ID': 'fc-reload', 'MODAL_TASK_ID': 'ta-reload'}), patch.object(evidence.socket, 'gethostname', return_value='modal'):
+            root = Path(tmp)/'checkpoint-eval'; (root/'audit').mkdir(parents=True)
+            events = [{'event': 'wandb_finished', 'id': request['stage']['wandb']['id']},
+                      {'event': 'trainer_returned', 'validation_only': True, 'pid': 123}]
+            (root/'audit/events-1.jsonl').write_text(''.join(json.dumps(e)+'\n' for e in events))
+            training = {'plan_sha256': request['plan_sha256'], 'checkpoint_sha256': 'a'*64,
+                'worker': {'call_id': 'fc-training', 'hostname': 'modal', 'container_id': 'ta-training', 'trainer_pid': 123}}
+            path = root.parent/'training/completion.json'; assets.write_new(path, training)
+            proof = evidence.complete(root, request, {'checkpoint_sha256': 'a'*64})
+            self.assertEqual(proof['worker']['hostname'], training['worker']['hostname'])
+            self.assertNotEqual(proof['worker']['container_id'], training['worker']['container_id'])
+            training['worker'].update(container_id='ta-reload', hostname='different-hostname')
+            path.write_text(json.dumps(training))
+            with self.assertRaisesRegex(ValueError, 'distinct worker'): evidence.complete(root, request, {'checkpoint_sha256': 'a'*64})
+            for invalid in (None, '', 'modal', 'fc-notacontainer'):
+                with self.assertRaises(ValueError): evidence.container_identity(invalid)
 
     def test_shared_checkpoint_inventory_rejects_missing_role_and_changed_bytes(self):
         p = plan(); j = p['jobs'][1]; request = c.stage_request(p, j, j['stages'][1])

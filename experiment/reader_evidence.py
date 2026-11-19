@@ -2,6 +2,7 @@
 import json
 import math
 import os
+import re
 from pathlib import Path
 import socket
 
@@ -10,6 +11,12 @@ try:
 except ImportError:
     import reader_contract as c
     import reader_integration
+
+
+def container_identity(value):
+    if not isinstance(value, str) or not re.fullmatch(r'ta-[A-Za-z0-9]+', value):
+        raise ValueError('Missing/invalid provider container identity')
+    return value
 
 
 def loss_evidence(metrics, roles):
@@ -52,6 +59,7 @@ def complete(run, request, completion):
               'assets_sha256': c.digest(request['plan']['assets']),
               'task_sha256': c.digest(request['plan']['task_identity']),
               'worker': {'call_id': os.environ['AGL_READER_CALL_ID'], 'hostname': socket.gethostname(),
+                         'container_id': container_identity(os.environ.get('MODAL_TASK_ID')),
                          'launcher_pid': os.getpid(), 'trainer_pid': terminal[0]['pid']},
               'wandb_id': stage['wandb']['id']}
     if stage['name'] == 'training':
@@ -89,7 +97,7 @@ def complete(run, request, completion):
         if (training['plan_sha256'] != request['plan_sha256']
                 or training['checkpoint_sha256'] != result['checkpoint_sha256']
                 or training['worker']['call_id'] == result['worker']['call_id']
-                or training['worker']['hostname'] == result['worker']['hostname']):
+                or container_identity(training['worker'].get('container_id')) == result['worker']['container_id']):
             raise ValueError('Reload requires the exact training checkpoint in a distinct worker/process')
         result['training_worker'] = training['worker']
     result['model_tool_integration'] = reader_integration.report(run, request)
@@ -117,6 +125,7 @@ def validate_collection(plan, index, read):
                     or receipt['completion'] != proof or proof != entry['result']['completion']
                     or proof['plan_sha256'] != c.digest(plan) or proof['stage'] != stage['name']
                     or proof['worker']['call_id'] != receipt['call_id']
+                    or container_identity(proof['worker'].get('container_id')) != receipt.get('container_id')
                     or proof['source_sha256'] != c.digest(plan['source'])
                     or proof['configuration_sha256'] != plan['configuration_sha256']
                     or proof['assets_sha256'] != c.digest(plan['assets'])
@@ -144,7 +153,7 @@ def validate_collection(plan, index, read):
                 previous = checkpoints[job['job_id']]
                 if (proof['checkpoint_sha256'] != previous['checkpoint_sha256']
                         or proof['training_worker'] != previous['worker']
-                        or proof['worker']['hostname'] == previous['worker']['hostname']):
+                        or proof['worker']['container_id'] == previous['worker']['container_id']):
                     raise ValueError('Training/reload evidence differs')
         outcome['harness_integration_qualified'] = any(r['qualified'] for r in outcome['model_tool_integration'].values())
         outcome['qualification_gaps'] = [] if outcome['harness_integration_qualified'] else ['Model/tool integration unqualified: no valid chain in this algorithm workflow']

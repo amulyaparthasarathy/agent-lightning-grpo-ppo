@@ -4,6 +4,7 @@ No resource declarations. Historical and reader apps share these mechanisms.
 """
 import asyncio
 import json
+import os
 from pathlib import Path
 import shutil
 import threading
@@ -28,9 +29,8 @@ def verify_package(plan):
 def capture_build(run, image_id=None):
     shutil.copytree('/opt/agl-build/evidence', run/'image-build')
     # Image ID is supplied by the explicit client submission, not inferred from a cache hit.
-    import os
     write(run/'runtime-identity.json', {'image_id': image_id or 'unavailable',
-          'cache_hit': 'unverified', 'python': str(runtime.PYTHON), 'worker_hostname': __import__('socket').gethostname()})
+          'cache_hit': 'unverified', 'python': str(runtime.PYTHON), 'container_id': os.environ['MODAL_TASK_ID'], 'worker_hostname': __import__('socket').gethostname()})
 
 
 def stage_worker(request, deadline_epoch, *, c, registry, volume, call_id, image_id=None):
@@ -57,6 +57,8 @@ def stage_worker(request, deadline_epoch, *, c, registry, volume, call_id, image
     volume.reload()
     run.mkdir(parents=True, exist_ok=False)
     receipt = {'status': 'started', 'call_id': call_id, 'output': output, 'started_at': time.time()}
+    if reader:
+        receipt['container_id'] = os.environ['MODAL_TASK_ID']
     write(run/'receipt.json', receipt)
     write(run/'request.json', request, exclusive=True)
     volume.commit()
@@ -151,7 +153,7 @@ def supervise(plan, *, c, registry, volume, modal, stage_worker, image_id=None):
             kwargs = {}
             if (reader or historical.exploratory.is_exploratory(plan)):
                 options.update(cpu=(16,16), memory=(196608,196608))
-                kwargs['deadline_epoch'] = time.time()+limit
+                kwargs['deadline_epoch'] = c.dispatch_deadline(limit, time.time()) if reader else time.time()+limit
             if reader:
                 kwargs['image_id'] = image_id
             call = await asyncio.wait_for(stage_worker.with_options(**options).spawn.aio(
