@@ -60,7 +60,7 @@ Tool observations can affect gradients of later generated-token predictions thro
 
 The pinned adapter's [`ids_startswith`](https://github.com/microsoft/agent-lightning/blob/cbc56e41e0eab643aa71d195e92e5bba652fa683/agentlightning/verl/rollout_adapter.py#L55) and [`RolloutAdapter.get_train_data_batch`](https://github.com/microsoft/agent-lightning/blob/cbc56e41e0eab643aa71d195e92e5bba652fa683/agentlightning/verl/rollout_adapter.py#L456) handle prefix comparison, fragments and masks. The [paper's §2.1](https://arxiv.org/html/2608.17528v1#S2.SS1) provides design context; these exact functions determine the implementation.
 
-The lab's [`instrument_adapter`](https://github.com/amulyaparthasarathy/agent-lightning-lab-public/blob/main/experiment/matched_runtime.py#L209) checks generated-token completeness, binary rewards, unique rollouts, valid prompts and four distinct rollouts per group. Missing/truncated data rejects the collection. [`patch_train_step`](https://github.com/amulyaparthasarathy/agent-lightning-lab-public/blob/main/experiment/matched_runtime.py#L83) removes legacy row dropping; [`rollout_weights` and `normalize`](https://github.com/amulyaparthasarathy/agent-lightning-lab-public/blob/main/experiment/matched_runtime.py#L102) use real-rollout totals.
+The lab's [`instrument_adapter`](https://github.com/amulyaparthasarathy/agent-lightning-lab-public/blob/89fe32f92f29209803c13264baed951713741d42/experiment/matched_runtime.py#L209) checks generated-token completeness, binary rewards, unique rollouts, valid prompts and four distinct rollouts per group. Missing/truncated data rejects the collection. [`patch_train_step`](https://github.com/amulyaparthasarathy/agent-lightning-lab-public/blob/89fe32f92f29209803c13264baed951713741d42/experiment/matched_runtime.py#L83) removes legacy row dropping; [`rollout_weights` and `normalize`](https://github.com/amulyaparthasarathy/agent-lightning-lab-public/blob/89fe32f92f29209803c13264baed951713741d42/experiment/matched_runtime.py#L102) use real-rollout totals.
 
 The actor loss receives already weighted advantages. Do not multiply those advantages by $w$ again. The critic receives its own weight tensor. Chapter 6 follows both paths.
 
@@ -68,7 +68,7 @@ The actor loss receives already weighted advantages. Do not multiply those advan
 
 The [audit publication copy](../../evidence/phase2-r03/SCIENTIFIC_ANALYSIS.md) reports complete retention and fragment/token reconciliation. Raw tensor diagnostics are bounded to the first four fragment rows. The selected bundle cannot independently replay every token.
 
-[`ppo_math.normalize_actor`](https://github.com/amulyaparthasarathy/agent-lightning-lab-public/blob/main/experiment/ppo_math.py#L72) is a standalone historical port using row count. It is **not** final matched weighting. A synthetic arithmetic demonstration likewise proves an identity, not runtime integration or improved policy quality.
+[`ppo_math.normalize_actor`](https://github.com/amulyaparthasarathy/agent-lightning-lab-public/blob/89fe32f92f29209803c13264baed951713741d42/experiment/ppo_math.py#L72) is a standalone historical port using row count. It is **not** final matched weighting. A synthetic arithmetic demonstration likewise proves an identity, not runtime integration or improved policy quality.
 
 ## Offline exercise and answer
 
@@ -78,7 +78,7 @@ Run from the repository root:
 python3 experiment/cpu_accounting_demo.py
 ```
 
-The [existing fixture](https://github.com/amulyaparthasarathy/agent-lightning-lab-public/blob/main/experiment/cpu_accounting_demo.py#L14) uses two synthetic rollouts with predefined losses, separate from our four-attempt calculator illustration.
+The [existing fixture](https://github.com/amulyaparthasarathy/agent-lightning-lab-public/blob/89fe32f92f29209803c13264baed951713741d42/experiment/cpu_accounting_demo.py#L14) uses two synthetic rollouts with predefined losses, separate from our four-attempt calculator illustration.
 
 **Exercise:** Why does the row mean change when rollout A splits into three rows, while the equal-rollout token mean stays fixed? What if our 120-token rollout splits again?
 
