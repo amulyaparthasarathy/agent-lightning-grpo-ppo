@@ -84,6 +84,8 @@ def configuration(request, model, run):
         'lab_protocol': {'protocol': c.PROTOCOL, 'algorithm': job['algorithm'],
                          'seed_streams': s, 'comparison_qualified': False},
     })
+    if request['plan'].get('schema') == 'reader-reference-v1':
+        cfg['trainer.project_name'] = stage['wandb']['project']
     if stage['name'] == 'checkpoint-eval':
         checkpoint = run.parent/'training/checkpoints'/f"global_step_{job['steps']}"
         cfg.update({'trainer.resume_mode': 'resume_path', 'trainer.resume_from_path': str(checkpoint)})
@@ -119,14 +121,22 @@ def validate_resolved(config, plan):
         raise ValueError('Actor base changed')
 
 
-def validate_inputs(request, model, data, repo, bundle):
-    c.validate(request['plan'])
-    if request != c.stage_request(request['plan'], request['job'], request['stage']):
+def validate_inputs(request, model, data, repo, bundle, contract=c):
+    contract.validate(request['plan'])
+    if request != contract.stage_request(request['plan'], request['job'], request['stage']):
         raise ValueError('Request identity mismatch')
     head = subprocess.check_output(['git', '-C', str(repo), 'rev-parse', 'HEAD'], text=True).strip()
     dirty = subprocess.check_output(['git', '-C', str(repo), 'status', '--porcelain', '--untracked-files=no'], text=True).strip()
     if head != launch.AGL_COMMIT or dirty:
         raise ValueError('Unreviewed training checkout')
+    if contract is not c:
+        try:
+            from .reader_assets import inspect
+        except ImportError:
+            from reader_assets import inspect
+        if inspect(model, data, Path('/data')/request['plan']['profile']['paths']['staging']) != request['plan']['assets']:
+            raise ValueError('Actual reader assets differ from exact plan manifests')
+        return
     lock = json.loads((bundle/'ppo_source_lock.json').read_text())
     for name, identity in lock['prepared_assets'].items():
         if (model/name).stat().st_size != identity['bytes'] or c.file_hash(model/name) != identity['sha256']:
@@ -228,11 +238,19 @@ def main():
     args = parser.parse_args()
     request = json.loads(args.request.read_text())
     run = args.request.parent
+    contract = c
     repo, model, data = Path('/opt/agent-lightning'), Path('/data/restored/models/llama3b'), Path('/data/restored/data-small')
-    if request['plan']['data_manifest'].get('holdout'):
+    if request['plan'].get('schema') == 'reader-reference-v1':
+        try:
+            from . import reader_contract as contract
+        except ImportError:
+            import reader_contract as contract
+        model = Path('/data')/request['plan']['profile']['paths']['model']
+        data = Path('/data')/request['plan']['profile']['paths']['data']
+    elif request['plan']['data_manifest'].get('holdout'):
         data = Path('/data')/request['plan']['data_manifest']['holdout']['volume_path']
     bundle = Path(__file__).parent
-    validate_inputs(request, model, data, repo, bundle)
+    validate_inputs(request, model, data, repo, bundle, contract)
     if request['stage']['name']=='checkpoint-eval':
         verify_checkpoint(run.parent/'training/checkpoints'/f"global_step_{request['job']['steps']}", request)
     (run/'logs').mkdir()
@@ -243,7 +261,7 @@ def main():
         raise KeyboardInterrupt
     signal.signal(signal.SIGTERM, stop)
     remaining = c.stage_limit(request['plan'],request['stage'])-120
-    if c.exploratory.is_exploratory(request['plan']):
+    if c.exploratory.is_exploratory(request['plan']) or contract is not c:
         remaining = float(os.environ['AGL_MATCHED_DEADLINE'])-time.time()-120
         if remaining <= 0:
             raise TimeoutError('Stage budget exhausted during prepared-asset hashing')
@@ -251,7 +269,14 @@ def main():
                                remaining/60)
     if code:
         raise SystemExit(code)
-    launch.dump_json(run/'completion.json', complete_stage(run, request, data))
+    completion = complete_stage(run, request, data)
+    if contract is not c:
+        try:
+            from .reader_evidence import complete
+        except ImportError:
+            from reader_evidence import complete
+        completion = complete(run, request, completion)
+    launch.dump_json(run/'completion.json', completion)
 
 
 if __name__ == '__main__':

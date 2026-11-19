@@ -21,7 +21,8 @@ from datetime import datetime, timezone
 import zipfile
 
 import modal
-from modal_build import build_training_stack, finalize_training_stack
+from modal_image import CUDA_IMAGE, RUNTIME_FILES, training_image
+from modal_build import build_training_stack, finalize_training_stack  # public discovery compatibility
 
 LOCAL = Path(__file__).resolve().parent
 STATE = Path("/data")
@@ -42,35 +43,12 @@ if WORKING_VOLUME and (not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._-]{0,79}", WORK
 VOLUME_NAME = WORKING_VOLUME or SOURCE_VOLUME_NAME
 SECRET_NAME = "agent-lightning-credentials"
 DATA_ID = "1FQMyKLLd6hP9dw9rfZn1EZOWNvKaDsqw"
-CUDA_IMAGE = "nvidia/cuda:13.0.0-devel-ubuntu24.04@sha256:1e8ac7a54c184a1af8ef2167f28fa98281892a835c981ebcddb1fad04bdd452d"
 PHASES = {"smoke", "smoke-reload-eval", "baseline-eval", "main", "reload-eval", "export-eval"}
 ACTIONS = PHASES | {"prepare", "preflight", "summarize", "export"}
 NAME_RE = r"[A-Za-z0-9][A-Za-z0-9._-]{0,79}"
-RUNTIME_FILES = (
-    "ppo_contract.py", "ppo_math.py", "ppo_runtime.py", "ppo_source_lock.json",
-    "check_gpu.py", "launch.py", "export_artifact.py", "observed_calc_agent.py", "prepare_model.py",
-    "prepare_data.py", "summarize.py", "requirements-agent.txt", "LICENSE-AgentLightning.txt",
-    "templates/tool_chat_template_llama3.1_json.jinja", "templates/PROVENANCE.json",
-    "templates/LICENSE-vllm.txt",
-)
 
 
-image = (
-    modal.Image.from_registry(CUDA_IMAGE, add_python="3.12")
-    .apt_install("build-essential", "git", "curl", "unzip", "pkg-config", "ca-certificates")
-    .uv_pip_install("uv==0.12.13", uv_version="0.12.13")
-    # Present before either builder is discovered; no experiment/app source here.
-    .add_local_file(LOCAL / "modal_build.py", "/root/modal_build.py", copy=True)
-    .add_local_file(LOCAL / "scripts/install_modal_training.sh", "/opt/agl-build/install_modal_training.sh", copy=True)
-    .run_function(build_training_stack, cpu=8, memory=65536, timeout=7200, include_source=False)
-    # Changes below this line reuse a successfully built FlashAttention layer.
-    .add_local_file(LOCAL / "scripts/finalize_modal_training.sh", "/opt/agl-build/finalize_modal_training.sh", copy=True)
-    .add_local_file(LOCAL / "experiment/requirements-agent.txt", "/opt/agl-build/requirements-agent.txt", copy=True)
-    .run_function(finalize_training_stack, cpu=4, memory=16384, timeout=1800, include_source=False)
-)
-# Only named runtime inputs are copied; credentials, local venvs, and datasets are not uploaded.
-for relative in RUNTIME_FILES:
-    image = image.add_local_file(LOCAL / "experiment" / relative, str(BUNDLE / relative), copy=True)
+image = training_image()
 if WORKING_VOLUME:
     # Preserve the explicit non-secret binding when the module is imported remotely.
     image = image.env({"AGL_WORKING_VOLUME": WORKING_VOLUME})

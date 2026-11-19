@@ -48,7 +48,7 @@ def source_identity(root=ROOT, clean=False):
     dirty = subprocess.check_output(['git', '-C', str(root), 'status', '--porcelain'], text=True).strip()
     if clean and dirty:
         raise ValueError('Launch requires committed clean source; regenerate the plan after committing')
-    paths = ['matched_app.py', 'modal_app.py', 'modal_build.py', 'scripts/phase2_study.py',
+    paths = ['matched_app.py', 'modal_app.py', 'modal_image.py', 'modal_build.py', 'scripts/phase2_study.py',
              'docs/PHASE2_MATCHED_STUDY_CONTRACT.md', 'scripts/install_modal_training.sh',
              'scripts/finalize_modal_training.sh', 'scripts/phase2_probe.py', 'scripts/phase2_evaluation.py', 'admission_app.py',
              'docs/PHASE2_TENWAY.md', 'docs/PHASE2_EXPLORATORY.md']

@@ -113,8 +113,9 @@ print(json.dumps({'builder': function_name, 'module': module_name,
             self.assertNotIsInstance(node, ast.ImportFrom)
 
     def test_build_module_is_copied_before_builders_and_runtime_after(self):
-        tree = ast.parse((ROOT/'modal_app.py').read_text())
-        recipe = next(node.value for node in tree.body if isinstance(node, ast.Assign)
+        tree = ast.parse((ROOT/'modal_image.py').read_text())
+        body = next(n.body for n in tree.body if isinstance(n, ast.FunctionDef) and n.name == 'training_image')
+        recipe = next(node.value for node in body if isinstance(node, ast.Assign)
                       and any(isinstance(t, ast.Name) and t.id == 'image' for t in node.targets))
         calls = []
         while isinstance(recipe, ast.Call) and isinstance(recipe.func, ast.Attribute):
@@ -137,6 +138,6 @@ print(json.dumps({'builder': function_name, 'module': module_name,
             self.assertLess(copy_index, index)
             # Explicit source only; no implicit app imports, GPU, Volume or Secret.
             self.assertEqual({kw.arg: ast.literal_eval(kw.value) for kw in call.keywords}, resources)
-        runtime_copy = next(node for node in tree.body if isinstance(node, ast.For)
+        runtime_copy = next(node for node in body if isinstance(node, ast.For)
                             and isinstance(node.iter, ast.Name) and node.iter.id == 'RUNTIME_FILES')
         self.assertGreater(runtime_copy.lineno, builders[-1][1].end_lineno)

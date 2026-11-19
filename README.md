@@ -10,6 +10,7 @@ Training through the harness matters because the model must act on the same kind
 |---|---|---|
 | **A. Learn** | [Eight-chapter guide](docs/learning/README.md) and [source map](docs/learning/source-map.md) | Follow one synthetic task through tokens, rewards, GRPO/PPO-MC losses, a weight update and checkpoint evaluation. |
 | **B. Verify offline** | Quick start below and [selected evidence index](evidence/phase2-r03/EVIDENCE_INDEX.md) | Check synthetic arithmetic and committed derived results using Python's standard library. |
+| **Reader-owned training** | [Canonical reader procedure](docs/READER_TRAINING.md) | Plan and validate the reference Llama/calculator workflow locally. Both matched algorithms are implemented and verified offline; live qualification is pending. |
 | **C. Inspect historical training** | [Experiment runbook](experiment/README.md) and [r03 closeout](docs/PHASE2_CLOSEOUT_2026-11-15.md) | Study the integration, configuration, scientific results and operational records. A new reader-owned matched training run is not yet qualified. |
 
 ## Credential-free offline quick start

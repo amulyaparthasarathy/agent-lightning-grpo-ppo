@@ -26,6 +26,7 @@ class RemoteImportTests(unittest.TestCase):
             self.assertEqual(source.count(binding), 1)
             (remote_root/'modal_app.py').write_text(source.replace(binding, f'BUNDLE = Path({str(bundle)!r})'))
             shutil.copyfile(ROOT/'modal_build.py', remote_root/'modal_build.py')
+            shutil.copyfile(ROOT/'modal_image.py', remote_root/'modal_image.py')
             if include_contract:
                 shutil.copyfile(ROOT/'experiment/ppo_contract.py', bundle/'ppo_contract.py')
             script = r'''
