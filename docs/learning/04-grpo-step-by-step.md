@@ -48,13 +48,13 @@ Both `[0,0,0,0]` and `[1,1,1,1]` yield zero group-relative advantage. An all-suc
 Let $a$ be a sampled token and $h$ its exact preceding history. The policy $\pi_\theta(a\mid h)$ gives its probability under actor parameters $\theta$. Define probability ratio $u$ against saved pre-update log probabilities:
 
 $$
-d=\operatorname{clip}(\log\pi_\theta(a\mid h)-\log\pi_{\mathrm{old}}(a\mid h),-20,20),\qquad u=e^d.
+d=\mathrm{clip}(\log\pi_\theta(a\mid h)-\log\pi_{\mathrm{old}}(a\mid h),-20,20),\qquad u=e^d.
 $$
 
 We use $u$ for the ratio so $\rho$ always means rollout. For an unweighted advantage $A$, the shared actor surrogate is
 
 $$
-\ell^+=\max\{-Au,-A\operatorname{clip}(u,0.8,1.3)\},
+\ell^+=\max\{-Au,-A\mathrm{clip}(u,0.8,1.3)\},
 \qquad
 \ell=\begin{cases}\min(\ell^+,-3A),&A<0,\\\ell^+,&A\geq0.\end{cases}
 $$
