@@ -1,0 +1,75 @@
+5013: Traceback (most recent call last):
+5014:   File "/data/phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-grpo-matched-v2-s9101-a01/baseline/trainer_worker.py", line 22, in <module>
+5015:     train(train_file=plan['train_file'], val_file=plan['eval_file'], **kwargs)
+5016:   File "/opt/agent-lightning/examples/calc_x/train_calc_agent.py", line 193, in train
+5017:     run_ppo(config, train_dataset=train_dataset, val_dataset=val_dataset)
+5018:   File "/opt/agent-lightning/agentlightning/verl/entrypoint.py", line 74, in run_ppo
+5019:     ray.get(runner.run.remote(config, train_ds, val_ds))
+5020:   File "/opt/agent-lightning/.venv/lib/python3.12/site-packages/ray/_private/auto_init_hook.py", line 22, in auto_init_wrapper
+5021:     return fn(*args, **kwargs)
+5022:            ^^^^^^^^^^^^^^^^^^^
+5023:   File "/opt/agent-lightning/.venv/lib/python3.12/site-packages/ray/_private/client_mode_hook.py", line 134, in wrapper
+5024:     return func(*args, **kwargs)
+5025:            ^^^^^^^^^^^^^^^^^^^^^
+5026:   File "/opt/agent-lightning/.venv/lib/python3.12/site-packages/ray/_private/worker.py", line 3009, in get
+5027:     values, debugger_breakpoint = worker.get_objects(
+5028:                                   ^^^^^^^^^^^^^^^^^^^
+5029:   File "/opt/agent-lightning/.venv/lib/python3.12/site-packages/ray/_private/worker.py", line 1053, in get_objects
+5030:     raise value.as_instanceof_cause()
+5031: ray.exceptions.RayTaskError(InstantiationException): [36mray::_AglTaskRunner.run()[39m (pid=1164, ip=172.20.2.191, actor_id=90e5c276a2e9b31bb26a19f001000000, repr=<agentlightning.verl.entrypoint._AglTaskRunner object at 0x2ad8bf460890>)
+5032:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+5033:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+5034:   File "/opt/agent-lightning/agentlightning/verl/entrypoint.py", line 175, in run
+5035:     trainer.init_workers()
+5036:   File "/opt/agent-lightning-lab/experiment/matched_runtime.py", line 294, in init_workers
+5037:     result = original_init(self)
+5038:              ^^^^^^^^^^^^^^^^^^^
+5039:   File "/opt/agent-lightning/.venv/lib/python3.12/site-packages/verl/trainer/ppo/ray_trainer.py", line 895, in init_workers
+5040:     self.actor_rollout_wg.init_model()
+5041:   File "/opt/agent-lightning/.venv/lib/python3.12/site-packages/verl/single_controller/ray/base.py", line 55, in __call__
+5042:     output = ray.get(output)
+5043:              ^^^^^^^^^^^^^^^
+5044:            ^^^^^^^^^^^^^^^^^^^
+5045:            ^^^^^^^^^^^^^^^^^^^^^
+5046:                                   ^^^^^^^^^^^^^^^^^^^
+5047: ray.exceptions.RayTaskError(InstantiationException): [36mray::WorkerDict.actor_rollout_init_model()[39m (pid=1456, ip=172.20.2.191, actor_id=4e65054feb6a98d59b528ef001000000, repr=<verl.single_controller.ray.base.WorkerDict object at 0x2ac23652f710>)
+5048:            ^^^^^^^^^^^^^^^^^^^^^^^^^
+5049: TypeError: RolloutConfig.__init__() got an unexpected keyword argument 'seed'
+5050: 
+5051: The above exception was the direct cause of the following exception:
+5052: 
+5053: [36mray::WorkerDict.actor_rollout_init_model()[39m (pid=1456, ip=172.20.2.191, actor_id=4e65054feb6a98d59b528ef001000000, repr=<verl.single_controller.ray.base.WorkerDict object at 0x2ac23652f710>)
+5054:   File "/usr/local/lib/python3.12/concurrent/futures/_base.py", line 456, in result
+5055:     return self.__get_result()
+5056:            ^^^^^^^^^^^^^^^^^^^
+5057:   File "/usr/local/lib/python3.12/concurrent/futures/_base.py", line 401, in __get_result
+5058:     raise self._exception
+5059:            ^^^^^^^^^^^^^^^^^^^^^
+5060:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+5061:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+5062:   File "/opt/agent-lightning/.venv/lib/python3.12/site-packages/verl/single_controller/ray/base.py", line 937, in func
+5063:     return getattr(self.worker_dict[key], name)(*args, **kwargs)
+5064:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+5065:   File "/opt/agent-lightning/.venv/lib/python3.12/site-packages/verl/single_controller/base/decorator.py", line 431, in inner
+5066:     return func(*args, **kwargs)
+5067:            ^^^^^^^^^^^^^^^^^^^^^
+5068:   File "/opt/agent-lightning/.venv/lib/python3.12/site-packages/verl/utils/transferqueue_utils.py", line 329, in inner
+5069:     return func(*args, **kwargs)
+5070:            ^^^^^^^^^^^^^^^^^^^^^
+5071:   File "/opt/agent-lightning/.venv/lib/python3.12/site-packages/verl/workers/engine_workers.py", line 592, in init_model
+5072:     rollout_config: RolloutConfig = omega_conf_to_dataclass(self.config.rollout)
+5073:                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+5074:   File "/opt/agent-lightning/.venv/lib/python3.12/site-packages/verl/utils/config.py", line 50, in omega_conf_to_dataclass
+5075:     return instantiate(config, _convert_="partial")
+5076:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+5077:   File "/opt/agent-lightning/.venv/lib/python3.12/site-packages/hydra/_internal/instantiate/_instantiate2.py", line 226, in instantiate
+5078:     return instantiate_node(
+5079:            ^^^^^^^^^^^^^^^^^
+5080:   File "/opt/agent-lightning/.venv/lib/python3.12/site-packages/hydra/_internal/instantiate/_instantiate2.py", line 347, in instantiate_node
+5081:     return _call_target(_target_, partial, args, kwargs, full_key)
+5082:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+5083:   File "/opt/agent-lightning/.venv/lib/python3.12/site-packages/hydra/_internal/instantiate/_instantiate2.py", line 97, in _call_target
+5084:     raise InstantiationException(msg) from e
+5085: hydra.errors.InstantiationException: Error in call to target 'verl.workers.config.rollout.RolloutConfig':
+5086: TypeError("RolloutConfig.__init__() got an unexpected keyword argument 'seed'")
+5087: full_key: actor_rollout_ref.rollout

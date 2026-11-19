@@ -1,0 +1,44 @@
+# Optional self-managed x86_64 host only. Run via scripts/gpu-runtime.sh.
+# No ARM emulation, provider provisioning, drivers, or automatic training.
+name: agl-training
+services:
+  training:
+    image: agent-lightning-lab:cu130-v1
+    build:
+      context: .
+      dockerfile: Dockerfile.gpu
+    init: true
+    command: ["sleep", "infinity"]
+    working_dir: /opt/agent-lightning-lab
+    environment:
+      AGL_CONTAINER_ROLE: training
+      AGL_LAB_ROOT: /workspace/agl-course
+      PYTHONDONTWRITEBYTECODE: "1"
+      UV_LINK_MODE: copy
+    volumes:
+      - type: bind
+        source: ${AGL_SOURCE_DIR:?Use scripts/gpu-runtime.sh}
+        target: /opt/agent-lightning-lab
+        read_only: true
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ${AGL_RUNTIME_DIR:?Set an absolute dedicated runtime directory}
+        target: /workspace
+        bind:
+          create_host_path: false
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              device_ids: ["${AGL_GPU_DEVICE:-0}"]
+              capabilities: [gpu]
+    shm_size: 8gb
+    restart: "no"
+    stop_grace_period: 60s
+    logging:
+      driver: local
+      options:
+        max-size: 10m
+        max-file: "3"

@@ -1,0 +1,17 @@
+{
+  "scope": "real Modal 1.6.3 container importer, isolated image layout, blocked network",
+  "results": [
+    {
+      "function": "supervise",
+      "returncode": 0,
+      "stdout": "{\"function\": \"supervise\", \"sdk\": \"1.6.3\", \"import\": \"passed\", \"network\": \"blocked\", \"builders\": \"absent\"}\n",
+      "stderr": ""
+    },
+    {
+      "function": "stage_worker",
+      "returncode": 0,
+      "stdout": "{\"function\": \"stage_worker\", \"sdk\": \"1.6.3\", \"import\": \"passed\", \"network\": \"blocked\", \"builders\": \"absent\"}\n",
+      "stderr": ""
+    }
+  ]
+}

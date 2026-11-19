@@ -1,0 +1,13 @@
+# Install in the agent/gateway runtime, not a separate training dependency upgrade.
+# Public APIs inspected at microsoft/autogen tag python-v0.7.5.
+autogen-agentchat==0.7.5
+autogen-ext[openai,mcp]==0.7.5
+mcp>=1.11.0,<2
+mcp-server-calculator==0.2.1
+openai==2.54.0
+sympy>=1.13.0,<2
+httpx>=0.28.0,<1
+# Optional hosted trajectory export. Omit to retain local JSONL only.
+weave==0.54.1
+# Newer 1.75.x patches require protobuf 6; AutoGen 0.7.5 requires protobuf 5.
+googleapis-common-protos==1.75.0

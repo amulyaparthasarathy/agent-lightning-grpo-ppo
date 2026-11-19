@@ -1,0 +1,1024 @@
+{
+  "schema_version": 1,
+  "workflow_id": "preserve-20261114-01",
+  "status": "complete",
+  "github_main_inspected": "423245806c51d8af0c5f0546609ecb8689db4b88",
+  "terminal_ledger": {
+    "repo_id": "amulyaparthasarathy/Llama-3.2-3B-AgentLightning-Lab-Backup",
+    "revision": "b19f5308aba912a7381310b87295fddbaa738399",
+    "path": "workflows/preserve-20261114-01/ledger.json"
+  },
+  "closeout_audit_revision": "22157221ad45fb37d08145f4426fbdfaa4d18238",
+  "phases": [
+    {
+      "phase": "inventory",
+      "status": "passed",
+      "attempt": 0,
+      "function_call_id": "fc-01M7C4DTBGJVKEFA3R8VADJ96G",
+      "execution_commit": "bdbf4aaeaf9e3a0bc8d03c986b8a93234b91045e",
+      "receipt": {
+        "receipt_path": "workflows/preserve-20261114-01/receipts/inventory-0.json",
+        "revision": "2b8f199ffaea67c7d1c77a95f216a287e4357bca"
+      }
+    },
+    {
+      "phase": "backup",
+      "status": "passed",
+      "attempt": 2,
+      "function_call_id": "fc-01M7CCV987C3R5TEWZMN7AWFX4",
+      "execution_commit": "e5a4d12e6163e6dff68fc6d6bcd38ee9e630960f",
+      "receipt": {
+        "receipt_path": "workflows/preserve-20261114-01/receipts/backup-2.json",
+        "revision": "fdf57a10ca91773c23c6126f34cb26602ec55dc7"
+      }
+    },
+    {
+      "phase": "verify_backup",
+      "status": "passed",
+      "attempt": 0,
+      "function_call_id": "fc-01M7CF5KSPCQAG2KBS5NG13ZWY",
+      "execution_commit": "e5a4d12e6163e6dff68fc6d6bcd38ee9e630960f",
+      "receipt": {
+        "receipt_path": "workflows/preserve-20261114-01/receipts/verify_backup-0.json",
+        "revision": "de8e29e050b10fcbe2dd995100abc4e5fea9afd1"
+      }
+    },
+    {
+      "phase": "restore",
+      "status": "passed",
+      "attempt": 0,
+      "function_call_id": "fc-01M7CGPVME79FDDS5BRAKG9WW9",
+      "execution_commit": "e5a4d12e6163e6dff68fc6d6bcd38ee9e630960f",
+      "receipt": {
+        "receipt_path": "workflows/preserve-20261114-01/receipts/restore-0.json",
+        "revision": "6ad9ead7ee6baddf887a0d9e605c16baa0580688"
+      }
+    },
+    {
+      "phase": "native_eval",
+      "status": "passed",
+      "attempt": 1,
+      "function_call_id": "fc-01M7CJHD8J3B2W5DVVNT9N6H6F",
+      "execution_commit": "0c43f0c17c4a4082d3c390910183237988b06c42",
+      "receipt": {
+        "receipt_path": "workflows/preserve-20261114-01/receipts/native_eval-1.json",
+        "revision": "990d2e4f19c2c85fac7309fee4e075d49f573ad5"
+      }
+    },
+    {
+      "phase": "convert",
+      "status": "passed",
+      "attempt": 1,
+      "function_call_id": "fc-01M7CKTQ1BAQDPXF7CM4J694BM",
+      "execution_commit": "7367380d77e86b15dfce8f0c30df0592d2b56024",
+      "receipt": {
+        "receipt_path": "workflows/preserve-20261114-01/receipts/convert-1.json",
+        "revision": "7edb845dafa0f1a708d1437c08916da511525969"
+      }
+    },
+    {
+      "phase": "export_eval",
+      "status": "passed",
+      "attempt": 0,
+      "function_call_id": "fc-01M7CM1JFT405TSFKTE4CXRWE8",
+      "execution_commit": "7367380d77e86b15dfce8f0c30df0592d2b56024",
+      "receipt": {
+        "receipt_path": "workflows/preserve-20261114-01/receipts/export_eval-0.json",
+        "revision": "8d2e9b9edc49fcc574b63843dd93b0452f45c45a"
+      }
+    },
+    {
+      "phase": "compare",
+      "status": "passed",
+      "attempt": 0,
+      "function_call_id": "fc-01M7CMBEW1AHAGRAB7ENRD6YJC",
+      "execution_commit": "7367380d77e86b15dfce8f0c30df0592d2b56024",
+      "receipt": {
+        "receipt_path": "workflows/preserve-20261114-01/receipts/compare-0.json",
+        "revision": "0d0afe1c8aaf9d6d688692d441d067beab149215"
+      }
+    },
+    {
+      "phase": "original_evidence_backup",
+      "status": "passed",
+      "attempt": 1,
+      "function_call_id": "fc-01M7CN7AXZ7ZY8W5D12SA74G8W",
+      "execution_commit": "423245806c51d8af0c5f0546609ecb8689db4b88",
+      "receipt": {
+        "receipt_path": "workflows/preserve-20261114-01/receipts/original_evidence_backup-1.json",
+        "revision": "68b0199c8e5e6980c2d68f26b59a5a5ffb72e05f"
+      }
+    },
+    {
+      "phase": "original_evidence_verify",
+      "status": "passed",
+      "attempt": 0,
+      "function_call_id": "fc-01M7CN8E4VD913KB1ZG4R5PN9E",
+      "execution_commit": "423245806c51d8af0c5f0546609ecb8689db4b88",
+      "receipt": {
+        "receipt_path": "workflows/preserve-20261114-01/receipts/original_evidence_verify-0.json",
+        "revision": "ee9bf1fc1a1a2591c72624efce086c6fd9e8f39b"
+      }
+    },
+    {
+      "phase": "publish",
+      "status": "passed",
+      "attempt": 0,
+      "function_call_id": "fc-01M7CN95GF2P00VW8ZJXPFHE0Q",
+      "execution_commit": "423245806c51d8af0c5f0546609ecb8689db4b88",
+      "receipt": {
+        "receipt_path": "workflows/preserve-20261114-01/receipts/publish-0.json",
+        "revision": "6dc306a1031ad324ad32ce55624fbf1048b4df05"
+      }
+    },
+    {
+      "phase": "retrieve",
+      "status": "passed",
+      "attempt": 0,
+      "function_call_id": "fc-01M7CNGCMFAM06PYWT2KAZW3P7",
+      "execution_commit": "423245806c51d8af0c5f0546609ecb8689db4b88",
+      "receipt": {
+        "receipt_path": "workflows/preserve-20261114-01/receipts/retrieve-0.json",
+        "revision": "8cfba1ea1de4fe7e691f129f3bd73dc8b06b8540"
+      }
+    },
+    {
+      "phase": "replication_baseline",
+      "status": "passed",
+      "attempt": 0,
+      "function_call_id": "fc-01M7CNQFKZST6M9N67N2WRBWDF",
+      "execution_commit": "423245806c51d8af0c5f0546609ecb8689db4b88",
+      "receipt": {
+        "receipt_path": "workflows/preserve-20261114-01/receipts/replication_baseline-0.json",
+        "revision": "9a4021e5183c1f7def027fb99da80be0a3c47a55"
+      }
+    },
+    {
+      "phase": "replication_train",
+      "status": "passed",
+      "attempt": 0,
+      "function_call_id": "fc-01M7CP1K4YQ1BCDZ5Z03ZFHTJR",
+      "execution_commit": "423245806c51d8af0c5f0546609ecb8689db4b88",
+      "receipt": {
+        "receipt_path": "workflows/preserve-20261114-01/receipts/replication_train-0.json",
+        "revision": "e67d63c9f676775ad53921677c987e78c9d12db7"
+      }
+    },
+    {
+      "phase": "replication_native",
+      "status": "passed",
+      "attempt": 0,
+      "function_call_id": "fc-01M7CRWRXCWSK43XJ9VAFV6A06",
+      "execution_commit": "423245806c51d8af0c5f0546609ecb8689db4b88",
+      "receipt": {
+        "receipt_path": "workflows/preserve-20261114-01/receipts/replication_native-0.json",
+        "revision": "5ad58b18538bc58c4f960b71d2e6677580685695"
+      }
+    },
+    {
+      "phase": "replication_compare",
+      "status": "passed",
+      "attempt": 0,
+      "function_call_id": "fc-01M7CSANTG2WQ03KQ2JPCF0Z9Q",
+      "execution_commit": "423245806c51d8af0c5f0546609ecb8689db4b88",
+      "receipt": {
+        "receipt_path": "workflows/preserve-20261114-01/receipts/replication_compare-0.json",
+        "revision": "6eac20f6c5a67330e2bc9f1d0e9e3c1b3d1709a7"
+      }
+    },
+    {
+      "phase": "replication_backup",
+      "status": "passed",
+      "attempt": 0,
+      "function_call_id": "fc-01M7CSC200ET9MGZP1EXKJW4EB",
+      "execution_commit": "423245806c51d8af0c5f0546609ecb8689db4b88",
+      "receipt": {
+        "receipt_path": "workflows/preserve-20261114-01/receipts/replication_backup-0.json",
+        "revision": "41adae952fa1ffd75474d317294021c8789d99a3"
+      }
+    },
+    {
+      "phase": "replication_verify",
+      "status": "passed",
+      "attempt": 0,
+      "function_call_id": "fc-01M7CT4422TWXM0Q9G9B84KBJF",
+      "execution_commit": "423245806c51d8af0c5f0546609ecb8689db4b88",
+      "receipt": {
+        "receipt_path": "workflows/preserve-20261114-01/receipts/replication_verify-0.json",
+        "revision": "1bdd94b86bc3ae0f3a576ad0d428e5ab4d74e7a2"
+      }
+    },
+    {
+      "phase": "replication_convert",
+      "status": "passed",
+      "attempt": 0,
+      "function_call_id": "fc-01M7CTER6SR2874A2HHTMREF2E",
+      "execution_commit": "423245806c51d8af0c5f0546609ecb8689db4b88",
+      "receipt": {
+        "receipt_path": "workflows/preserve-20261114-01/receipts/replication_convert-0.json",
+        "revision": "5fc86787d8ecc2a3d7dc0d118568b976d84dd352"
+      }
+    },
+    {
+      "phase": "replication_export_eval",
+      "status": "passed",
+      "attempt": 0,
+      "function_call_id": "fc-01M7CTHT8NDN0KDEQW0BWEH33J",
+      "execution_commit": "423245806c51d8af0c5f0546609ecb8689db4b88",
+      "receipt": {
+        "receipt_path": "workflows/preserve-20261114-01/receipts/replication_export_eval-0.json",
+        "revision": "4a64511671dcafc056d1ff640e02f51e81a9b01f"
+      }
+    },
+    {
+      "phase": "replication_export_compare",
+      "status": "passed",
+      "attempt": 0,
+      "function_call_id": "fc-01M7CTWXFGMT4G6CT8S9ACJ596",
+      "execution_commit": "423245806c51d8af0c5f0546609ecb8689db4b88",
+      "receipt": {
+        "receipt_path": "workflows/preserve-20261114-01/receipts/replication_export_compare-0.json",
+        "revision": "d3de857e10873e7b7014b25248974cab68afbfe2"
+      }
+    },
+    {
+      "phase": "replication_evidence_backup",
+      "status": "passed",
+      "attempt": 0,
+      "function_call_id": "fc-01M7CTY4KR6Q1YWGFVK10KQ5PG",
+      "execution_commit": "423245806c51d8af0c5f0546609ecb8689db4b88",
+      "receipt": {
+        "receipt_path": "workflows/preserve-20261114-01/receipts/replication_evidence_backup-0.json",
+        "revision": "59252484de6a9dd0e093150ef83726bf108b187b"
+      }
+    },
+    {
+      "phase": "replication_evidence_verify",
+      "status": "passed",
+      "attempt": 0,
+      "function_call_id": "fc-01M7CTYZQZTXK013ECMEPWWEDJ",
+      "execution_commit": "423245806c51d8af0c5f0546609ecb8689db4b88",
+      "receipt": {
+        "receipt_path": "workflows/preserve-20261114-01/receipts/replication_evidence_verify-0.json",
+        "revision": "9a60b7b44e4bc31fb1fa342734be24d1cd65877a"
+      }
+    },
+    {
+      "phase": "replication_publish",
+      "status": "passed",
+      "attempt": 0,
+      "function_call_id": "fc-01M7D13862MZ8TYCMCMM06T6R9",
+      "execution_commit": "423245806c51d8af0c5f0546609ecb8689db4b88",
+      "receipt": {
+        "receipt_path": "workflows/preserve-20261114-01/receipts/replication_publish-0.json",
+        "revision": "88c2c126df9370803d6ab5378afcf65ef80c5bc9"
+      }
+    },
+    {
+      "phase": "replication_retrieve",
+      "status": "passed",
+      "attempt": 0,
+      "function_call_id": "fc-01M7D1AW6DQ8KZVRKDX45WSN7D",
+      "execution_commit": "423245806c51d8af0c5f0546609ecb8689db4b88",
+      "receipt": {
+        "receipt_path": "workflows/preserve-20261114-01/receipts/replication_retrieve-0.json",
+        "revision": "006c8bcc095f252a6b41d85a07e075543cfb4700"
+      }
+    }
+  ],
+  "failed_attempts": [
+    {
+      "phase": "backup",
+      "diagnosis": "Retain terminal fallback and batch small commits; original HTTP GateFailure detail unavailable; validate same-manifest destination parts before reuse",
+      "attempt": 0,
+      "call_id": "fc-01M7C4Y66R4RCTBNQA1VS28CK0",
+      "receipt": {
+        "receipt_path": "workflows/preserve-20261114-01/receipts/backup-0-reconciliation-final.json",
+        "revision": "cd9529d50251131b94c62ebcb29759df3474649a"
+      }
+    },
+    {
+      "phase": "backup",
+      "diagnosis": "Sequential destination readback projected beyond bounded timeout; use eight verified concurrent streams and source-only 2-core 4-GiB profile; prior invocation conclusively terminal",
+      "attempt": 1,
+      "call_id": "fc-01M7C99BMAVTD66JKCPH3ZP2G4",
+      "receipt": {
+        "receipt_path": "workflows/preserve-20261114-01/receipts/backup-1.json",
+        "revision": "fbb2f383c0a4e5e74ce611acf761236f456b83eb"
+      }
+    },
+    {
+      "phase": "convert",
+      "diagnosis": "verified-verl-tokenizer-override-and-lossless-rope-serialization",
+      "attempt": 0,
+      "call_id": "fc-01M7CJWHX3FCFNW02AYJHPV4Z6",
+      "receipt": {
+        "receipt_path": "workflows/preserve-20261114-01/receipts/convert-0.json",
+        "revision": "46f70907249adbff6a8c407da91e5610510fbbfc"
+      }
+    },
+    {
+      "phase": "native_eval",
+      "diagnosis": "client-orchestration-before-native-launch",
+      "attempt": 0,
+      "call_id": "fc-01M7CH0DXBN8FGEJP89WT055RJ",
+      "receipt": {
+        "receipt_path": "workflows/preserve-20261114-01/receipts/native_eval-0.json",
+        "revision": "70efa6fbf653a6b96843ff8ac31e9737701f787a"
+      }
+    },
+    {
+      "phase": "original_evidence_backup",
+      "diagnosis": "approved-working-mount-child-root-binding",
+      "attempt": 0,
+      "call_id": "fc-01M7CMCTGGC9ZAATSPVER985S1",
+      "receipt": {
+        "receipt_path": "workflows/preserve-20261114-01/receipts/original_evidence_backup-0.json",
+        "revision": "7368690087424f703d3123e7c88dedbaa8ec0ba2"
+      }
+    }
+  ],
+  "diagnostics": {
+    "conversion-metadata-0": {
+      "claimed_at": "2026-11-14T08:36:08.776424+00:00",
+      "cpu": 2,
+      "function_call_id": "fc-01M7CK8HJA92S6SD3A3P8SSETK",
+      "implementation_commit": "bb6add24a183ae79ff65f74fe436df80b1db94c9",
+      "kind": "conversion_metadata_diagnostic",
+      "memory_gib": 4,
+      "phase": "convert",
+      "prior_call_terminal_state": "SUCCESS",
+      "prior_phase_call": "fc-01M7CJWHX3FCFNW02AYJHPV4Z6",
+      "probe_sha256": "d134731349264a3665945d21a7c00b55bff586b9f520703700b4173598d9184e",
+      "report_sha256": "e63dcd52363636442d3c57d7882fe0277e050efc8cb0d12c4008c38fb7c335ae",
+      "reservation": {
+        "cost_usd": 0.1,
+        "cpu_seconds": 780,
+        "egress_bytes": 16777216,
+        "gpu_seconds": 0,
+        "hf_bytes": 1048576,
+        "modal_bytes": 1048576,
+        "monthly_usd": 0
+      },
+      "result": {
+        "receipt_path": "workflows/preserve-20261114-01/receipts/conversion-metadata-0.json",
+        "revision": "24136d63394756b311092bd0b6e5c15fe33d1883"
+      },
+      "status": "observed",
+      "timeout_seconds": 180
+    },
+    "evidence-inventory-0": {
+      "claimed_at": "2026-11-14T09:02:46.185914+00:00",
+      "cpu": 2,
+      "function_call_id": "fc-01M7CMSAWZDFFSF35Z448XBQ3Z",
+      "implementation_commit": "815efc7224fac11a3b8bf7f8d62ef536e18fa957",
+      "kind": "evidence_inventory_diagnostic",
+      "memory_gib": 4,
+      "phase": "original_evidence_backup",
+      "prior_call_terminal_state": "SUCCESS",
+      "prior_phase_call": "fc-01M7CMCTGGC9ZAATSPVER985S1",
+      "probe_sha256": "23d550bb3862be06f2020f2a3f3bcdb420c2dfb3e0cbd752ca3a2fc5907ec6c5",
+      "report_sha256": "6b3e61b427ddeaf840e6dad944741a6760503d960f6b285ab083b00b39c3adf2",
+      "reservation": {
+        "cost_usd": 0.1,
+        "cpu_seconds": 780,
+        "egress_bytes": 16777216,
+        "gpu_seconds": 0,
+        "hf_bytes": 1048576,
+        "modal_bytes": 1048576,
+        "monthly_usd": 0
+      },
+      "result": {
+        "receipt_path": "workflows/preserve-20261114-01/receipts/evidence-inventory-0.json",
+        "revision": "1f89dd0c3042dce675312a1d57e90891fe2c09e4"
+      },
+      "status": "observed",
+      "timeout_seconds": 180
+    },
+    "native-eval-startup-0": {
+      "claimed_at": "2026-11-14T08:11:56.028498+00:00",
+      "cpu": 2,
+      "function_call_id": "fc-01M7CHW6Q4SVCYHKQ8DPKYRA3S",
+      "implementation_commit": "4cfd1ea545312be6be5109fdf8b9debba48e91d2",
+      "kind": "import_only_diagnostic",
+      "memory_gib": 4,
+      "prior_call_terminal_state": "SUCCESS",
+      "prior_native_call": "fc-01M7CH0DXBN8FGEJP89WT055RJ",
+      "probe_sha256": "0f01af4f0bfc83a7041e339d8933a91f507e4e2e668336177e1024aad985aa59",
+      "report_sha256": "8c5d0277e75e11abf3c74a34de64505c1b3da869114b932452de3ce0bacab889",
+      "reservation": {
+        "cost_usd": 0.1,
+        "cpu_seconds": 780,
+        "egress_bytes": 16777216,
+        "gpu_seconds": 0,
+        "hf_bytes": 1048576,
+        "modal_bytes": 1048576,
+        "monthly_usd": 0
+      },
+      "result": {
+        "receipt_path": "workflows/preserve-20261114-01/receipts/native-eval-startup-0.json",
+        "revision": "d5d1dfccc4354b341445234783811cc53f75999c"
+      },
+      "status": "observed",
+      "timeout_seconds": 180
+    }
+  },
+  "recovery_bundles": [
+    {
+      "bytes": 348877,
+      "path": "workflows/preserve-20261114-01/recovery-history/738ce0da2c68b152157a49fa9ccf1e2247d5d589.bundle",
+      "repo_id": "amulyaparthasarathy/Llama-3.2-3B-AgentLightning-Lab-Backup",
+      "required_commits": [
+        "738ce0da2c68b152157a49fa9ccf1e2247d5d589"
+      ],
+      "revision": "4793f46aea6f61f0467e48b96c947a2bc6d7deef",
+      "sha256": "aac85843a879630829c0329a8a0e58998e53efab6f51cc4dfd4c22c9fe234b06"
+    },
+    {
+      "bytes": 360730,
+      "path": "workflows/preserve-20261114-01/recovery-history/e5a4d12e6163e6dff68fc6d6bcd38ee9e630960f.bundle",
+      "repo_id": "amulyaparthasarathy/Llama-3.2-3B-AgentLightning-Lab-Backup",
+      "required_commits": [
+        "e5a4d12e6163e6dff68fc6d6bcd38ee9e630960f"
+      ],
+      "revision": "ef4c7092ce4cdf20e262be439e238a07f23f77a7",
+      "sha256": "ed027559bf4c7887a3534f0e59ceaa93db401a15297fad45382f0c79a07aa387"
+    },
+    {
+      "bytes": 371768,
+      "path": "workflows/preserve-20261114-01/recovery-history/0c43f0c17c4a4082d3c390910183237988b06c42.bundle",
+      "repo_id": "amulyaparthasarathy/Llama-3.2-3B-AgentLightning-Lab-Backup",
+      "required_commits": [
+        "e5a4d12e6163e6dff68fc6d6bcd38ee9e630960f",
+        "0c43f0c17c4a4082d3c390910183237988b06c42"
+      ],
+      "revision": "94261a1ba93d79c722f063105309f39207152283",
+      "sha256": "83851e50c21ec5ce0cfbeab443a54bb1d2ee69ca3b61f0df752ece95f0d997ab"
+    },
+    {
+      "bytes": 382051,
+      "path": "workflows/preserve-20261114-01/recovery-history/7367380d77e86b15dfce8f0c30df0592d2b56024.bundle",
+      "repo_id": "amulyaparthasarathy/Llama-3.2-3B-AgentLightning-Lab-Backup",
+      "required_commits": [
+        "0c43f0c17c4a4082d3c390910183237988b06c42",
+        "7367380d77e86b15dfce8f0c30df0592d2b56024"
+      ],
+      "revision": "ea6102b98af8a15e9f5edd594246ba522aad3416",
+      "sha256": "ce2ffa6450366cf593f166fcc959e7c2d91204007773fd71384a6b5904a156bc"
+    },
+    {
+      "bytes": 404172,
+      "path": "workflows/preserve-20261114-01/recovery-history/423245806c51d8af0c5f0546609ecb8689db4b88.bundle",
+      "repo_id": "amulyaparthasarathy/Llama-3.2-3B-AgentLightning-Lab-Backup",
+      "required_commits": [
+        "7367380d77e86b15dfce8f0c30df0592d2b56024",
+        "423245806c51d8af0c5f0546609ecb8689db4b88"
+      ],
+      "revision": "1b93c8c5444aa556a138d39f9e7ae439ce3e2071",
+      "sha256": "139933dab84fb2f86114663216ed23e9c6c58caa47ddfd355d29300caee4310a"
+    }
+  ],
+  "identities": {
+    "original": {
+      "checkpoint": {
+        "manifest_sha256": "392b6171e05d3e7753b0427a9bf0764d942262d2606751576323a13b518636e1",
+        "model_sha256": "759da43707212ac4a52bd790babe65b84841cca1c1ea9f2800baece32d5e8a33",
+        "path": "runs/train-01/checkpoints/global_step_20"
+      },
+      "evaluated_export_manifest_sha256": "06218b1df7bf03c176fe8160f6da06a8092ace8ff8b6a97f6a985b5cfa433b91",
+      "tensor_validation": {
+        "all_tensors_equal": true,
+        "dtype_preserved": true,
+        "tensor_count": 255,
+        "export_files_sha256": "c9f2712b4261fe1d5422cddd8d622b93b15ec30412913cae7fd2d991f309995e",
+        "validated_alias_map": {
+          "lm_head.weight": "model.embed_tokens.weight"
+        }
+      },
+      "release": {
+        "at": "2026-11-14T09:16:31.328253+00:00",
+        "branch": "main",
+        "export_manifest_sha256": "f42e0bc2ab45e082a768febcccc330dbdee6c1e1f9e3adae34ba66a9d5c20049",
+        "private": true,
+        "repo_id": "amulyaparthasarathy/Llama-3.2-3B-AgentLightning-Lab-GRPO",
+        "revision": "ca9f4e3030854e81cf91f8e5211e709dea322a1a"
+      },
+      "files": {
+        "LICENSE": {
+          "bytes": 7712,
+          "sha256": "0b4284c1f87029e67654c7953afa16279961632cf73dcfe33374c4c2f298fa35"
+        },
+        "Notice": {
+          "bytes": 116,
+          "sha256": "3bc2d1a6b360a03d172058198631b931c9aadf01650892fb0d25b93c6b8f0025"
+        },
+        "README.md": {
+          "bytes": 1967,
+          "sha256": "cb0bb3c2cf4cb7b0e316fced9b93eaab28dbf558a8637c7ee1774b02122f8574"
+        },
+        "USE_POLICY.md": {
+          "bytes": 6021,
+          "sha256": "40e2777d7faa6beaf98400654170f414d8ab29b921b5163ad4ea0a1d39894201"
+        },
+        "chat_template.jinja": {
+          "bytes": 5294,
+          "sha256": "a718674808440b537a553c15e0557b5b45d6d76e49ad9ddbc1a9e92447843e2c"
+        },
+        "config.json": {
+          "bytes": 863,
+          "sha256": "3a129014de9578f3e602a4d982aab89387b25ce2f74529be5b463c29d5691b5d"
+        },
+        "generation_config.json": {
+          "bytes": 184,
+          "sha256": "358b67cf9a493e4fa27b80e4e368930caedde0a51b1f8fe6f5831e8bd434d024"
+        },
+        "model-00001-of-00008.safetensors": {
+          "bytes": 1576009856,
+          "sha256": "626a23f20969c3272f211f0fbd6628e6c35680e69fef351c522cd2fdee651059"
+        },
+        "model-00002-of-00008.safetensors": {
+          "bytes": 1978701056,
+          "sha256": "d4d4820819ce71afb9f89056c85630a12e6dac24a072a44f5367da22ed9a1d7f"
+        },
+        "model-00003-of-00008.safetensors": {
+          "bytes": 1963049704,
+          "sha256": "1fa5c20f8b84c6a38347486ba0827d4bbf383662b5ca70b9a98b00671777ae50"
+        },
+        "model-00004-of-00008.safetensors": {
+          "bytes": 1975645128,
+          "sha256": "de84290c5beda80bd6946e138bbaa1ee8ff2c05b812a983f4a3875a89f44d643"
+        },
+        "model-00005-of-00008.safetensors": {
+          "bytes": 1900135120,
+          "sha256": "908cfcff5130949941bd9dd17d6bce918645e7af2352dbacc9e48f3a4f8e2616"
+        },
+        "model-00006-of-00008.safetensors": {
+          "bytes": 1912730576,
+          "sha256": "b90f221407cab38f94d230c7c0ca47da69cf48961dabc7d7984406131c0e6cf2"
+        },
+        "model-00007-of-00008.safetensors": {
+          "bytes": 1912730544,
+          "sha256": "547348a3c3c3a31c49999bbbcbf30ce67bb93c9250b595fcde9be7d9a2ef728f"
+        },
+        "model-00008-of-00008.safetensors": {
+          "bytes": 1208036344,
+          "sha256": "7492e2962e5e8a95b83b7e49dd0f6676fa149f23eb30edad11b471a87b685e51"
+        },
+        "model.safetensors.index.json": {
+          "bytes": 19939,
+          "sha256": "45a336b552f1c1684c1429cc01d88624b25a550808c8a896203fea0a82756172"
+        },
+        "special_tokens_map.json": {
+          "bytes": 296,
+          "sha256": "6f38c73729248f6c127296386e3cdde96e254636cc58b4169d3fd32328d9a8ec"
+        },
+        "tokenizer.json": {
+          "bytes": 9085657,
+          "sha256": "79e3e522635f3171300913bb421464a87de6222182a0570b9b2ccba2a964b2b4"
+        },
+        "tokenizer_config.json": {
+          "bytes": 56032,
+          "sha256": "7fe399d0739ac28d562a04f0d294093d5d38ad3f00e6ea0e624f932ccf397116"
+        }
+      }
+    },
+    "replication": {
+      "checkpoint": {
+        "manifest_sha256": "70c98db2a9acda085802a35a831a5f31d78208faccb9c2e08a2422aa90e4e8f8",
+        "model_sha256": "342e715699a340ac82c2ae10c371d33a389aa3a1a5971ff1253d55bc34904e52",
+        "path": "runs/preserve-20261114-01-replication-train/checkpoints/global_step_20"
+      },
+      "evaluated_export_manifest_sha256": "e85d0bc827bb38d97b2894a458d282cc332bb78869be38c955c104d066b5463f",
+      "tensor_validation": {
+        "all_tensors_equal": true,
+        "dtype_preserved": true,
+        "tensor_count": 255,
+        "export_files_sha256": "b46ea487c22e89a1389fcd0f2c73ceab8900076cb0d39baac2c8bb90584800ef",
+        "validated_alias_map": {
+          "lm_head.weight": "model.embed_tokens.weight"
+        }
+      },
+      "release": {
+        "at": "2026-11-14T12:43:14.971697+00:00",
+        "branch": "replication-preserve-20261114-01",
+        "export_manifest_sha256": "1de8a98f21ab2a690728f5acb9d5eaa238a70be89302a4599350972b08e18968",
+        "private": true,
+        "repo_id": "amulyaparthasarathy/Llama-3.2-3B-AgentLightning-Lab-GRPO",
+        "revision": "29eec61c7c804c1e030097b4219ac6e38a88d414"
+      },
+      "files": {
+        "LICENSE": {
+          "bytes": 7712,
+          "sha256": "0b4284c1f87029e67654c7953afa16279961632cf73dcfe33374c4c2f298fa35"
+        },
+        "Notice": {
+          "bytes": 116,
+          "sha256": "3bc2d1a6b360a03d172058198631b931c9aadf01650892fb0d25b93c6b8f0025"
+        },
+        "README.md": {
+          "bytes": 1970,
+          "sha256": "26c873010658bc6fab20f815da7138006a4095f50b614ba03c4bd96bd7944283"
+        },
+        "USE_POLICY.md": {
+          "bytes": 6021,
+          "sha256": "40e2777d7faa6beaf98400654170f414d8ab29b921b5163ad4ea0a1d39894201"
+        },
+        "chat_template.jinja": {
+          "bytes": 5294,
+          "sha256": "a718674808440b537a553c15e0557b5b45d6d76e49ad9ddbc1a9e92447843e2c"
+        },
+        "config.json": {
+          "bytes": 863,
+          "sha256": "3a129014de9578f3e602a4d982aab89387b25ce2f74529be5b463c29d5691b5d"
+        },
+        "generation_config.json": {
+          "bytes": 184,
+          "sha256": "358b67cf9a493e4fa27b80e4e368930caedde0a51b1f8fe6f5831e8bd434d024"
+        },
+        "model-00001-of-00008.safetensors": {
+          "bytes": 1576009856,
+          "sha256": "9e40584dbd856d787dc60a3a4464047796751926d10e952683025807a5aa442a"
+        },
+        "model-00002-of-00008.safetensors": {
+          "bytes": 1978701056,
+          "sha256": "2d117f646c457ac8eaad95f24f6906caee1c73dcafdc11f2204854e5c7da45f8"
+        },
+        "model-00003-of-00008.safetensors": {
+          "bytes": 1963049704,
+          "sha256": "114e49c079e3a9cd76ca174d00e7c98ce31d9ab281044fe09c642dd5a935930f"
+        },
+        "model-00004-of-00008.safetensors": {
+          "bytes": 1975645128,
+          "sha256": "78d31b629a4034a480434a2aca11ed987f44b47c070dd6eb0712627cd2fc74ab"
+        },
+        "model-00005-of-00008.safetensors": {
+          "bytes": 1900135120,
+          "sha256": "71b786daa6eef28ab7f9612e7c412ae854886aee69f954c39695f6a6e6a2084d"
+        },
+        "model-00006-of-00008.safetensors": {
+          "bytes": 1912730576,
+          "sha256": "85be5556b3d2017e8518aeadd1d2948a6c0a7ccf44a97237431e9f0952b26524"
+        },
+        "model-00007-of-00008.safetensors": {
+          "bytes": 1912730544,
+          "sha256": "230152e9a003f3c38ea79845b0a95953eed8ec611a0a7d15483726bb2e299562"
+        },
+        "model-00008-of-00008.safetensors": {
+          "bytes": 1208036344,
+          "sha256": "466eb0e61ddf4a6192eee5937b3008ed357816aecc706392f16841755e86e621"
+        },
+        "model.safetensors.index.json": {
+          "bytes": 19939,
+          "sha256": "45a336b552f1c1684c1429cc01d88624b25a550808c8a896203fea0a82756172"
+        },
+        "special_tokens_map.json": {
+          "bytes": 296,
+          "sha256": "6f38c73729248f6c127296386e3cdde96e254636cc58b4169d3fd32328d9a8ec"
+        },
+        "tokenizer.json": {
+          "bytes": 9085657,
+          "sha256": "79e3e522635f3171300913bb421464a87de6222182a0570b9b2ccba2a964b2b4"
+        },
+        "tokenizer_config.json": {
+          "bytes": 56032,
+          "sha256": "7fe399d0739ac28d562a04f0d294093d5d38ad3f00e6ea0e624f932ccf397116"
+        }
+      }
+    }
+  },
+  "snapshots": {
+    "backup": {
+      "bytes": 167042922550,
+      "private": true,
+      "repo_id": "amulyaparthasarathy/Llama-3.2-3B-AgentLightning-Lab-Backup",
+      "revision": "04b0e8abd04b8f95edbd80436ee269cedacd1e57",
+      "snapshot_prefix": "snapshots/preserve-20261114-01-original"
+    },
+    "replication_backup": {
+      "bytes": 46597731148,
+      "private": true,
+      "repo_id": "amulyaparthasarathy/Llama-3.2-3B-AgentLightning-Lab-Backup",
+      "revision": "a43afaa681d5f03f294ceb5b99fbc4f686a2c1d1",
+      "snapshot_prefix": "snapshots/preserve-20261114-01-replication"
+    },
+    "original_evidence_backup": {
+      "bytes": 2894532,
+      "private": true,
+      "repo_id": "amulyaparthasarathy/Llama-3.2-3B-AgentLightning-Lab-Backup",
+      "revision": "987af8d788d4a73c32e15fae13ec09bddb6c6bbf",
+      "snapshot_prefix": "snapshots/preserve-20261114-01-original-evaluation"
+    },
+    "replication_evidence_backup": {
+      "bytes": 1637593,
+      "private": true,
+      "repo_id": "amulyaparthasarathy/Llama-3.2-3B-AgentLightning-Lab-Backup",
+      "revision": "98ccbe95580dd7310e6015e3a726540903c16832",
+      "snapshot_prefix": "snapshots/preserve-20261114-01-replication-evaluation"
+    }
+  },
+  "reviews": {
+    "original": {
+      "analysis": "No conversion or loading defect was identified within the recorded checks: all 255 FP32 tensors have exact byte/dtype/shape equality, tied aliases are equal, metadata semantics and preserved tokenizer/template hashes match, and package/data/launcher/harness records match. Native reload used selected step 20; export used the explicit trained export with resume disabled. Both have 64 completed cases and rewards, val_only=true and no new checkpoint files. Resolved configurations differ only in artifact/template paths, run identity, dynamic local port and intended checkpoint resume versus export loading. Native scored 35/64 and export 34/64; retain all 15 raw-answer differences and the one formatting-sensitive loss on svamp__chal-520. The extractor selects a quoted placeholder in the export output. This explains grading, not the changed wording. Numerical execution or sampling may differ, but the cause is not established; this review does not claim deterministic generation equivalence or retroactive historical identity. No scorer change, rescoring or preferred-score rerun.",
+      "comparison_sha256": "c870694f0fbfe77671ef2186d7d9800082db377b554b29ef5adef6c5ffc47ddc",
+      "disposition": "no_conversion_or_loading_defect",
+      "evaluation_execution_commits": {
+        "export_eval": "7367380d77e86b15dfce8f0c30df0592d2b56024",
+        "native_eval": "0c43f0c17c4a4082d3c390910183237988b06c42"
+      },
+      "evidence_locations": [
+        "amulyaparthasarathy/Llama-3.2-3B-AgentLightning-Lab-Backup/blob/0d0afe1c8aaf9d6d688692d441d067beab149215/workflows/preserve-20261114-01/receipts/compare-0.json",
+        "amulyaparthasarathy/Llama-3.2-3B-AgentLightning-Lab-Backup/blob/7edb845dafa0f1a708d1437c08916da511525969/workflows/preserve-20261114-01/receipts/convert-1.json",
+        "amulyaparthasarathy/Llama-3.2-3B-AgentLightning-Lab-Backup/blob/990d2e4f19c2c85fac7309fee4e075d49f573ad5/workflows/preserve-20261114-01/receipts/native_eval-1.json",
+        "amulyaparthasarathy/Llama-3.2-3B-AgentLightning-Lab-Backup/blob/8d2e9b9edc49fcc574b63843dd93b0452f45c45a/workflows/preserve-20261114-01/receipts/export_eval-0.json"
+      ],
+      "export_manifest_sha256": "06218b1df7bf03c176fe8160f6da06a8092ace8ff8b6a97f6a985b5cfa433b91",
+      "limitations": [
+        "Actual hosted W&B readback not executed",
+        "Changed wording remains unexplained",
+        "No independent mathematical grading or causal improvement claim"
+      ],
+      "receipt_path": "workflows/preserve-20261114-01/reviews/original-differences.json",
+      "receipt_revision": "611f38729ef96ce7a3bd5ea2be76b4d9d01ad912",
+      "reviewed_at": "2026-11-14T09:09:05.062129+00:00",
+      "reviewer": "Codex technical implementation review"
+    },
+    "replication": {
+      "analysis": "No conversion or loading defect identified within the preserved evidence. The independent backup verification and exact 255-tensor FP32 shape/dtype/value comparison, including the tied lm_head alias, pass. Native checkpoint config/generation bytes and prepared tokenizer/template hashes match the export. Native log identifies replication step 20; export loads 255/255 weights from the explicit trained export with resume disabled. Both evaluations are val_only, complete 64 rewarded cases, and produce no checkpoint files. Packages, frozen data, harness/source hashes match; the nine resolved-config differences are intended artifact/template paths, run names, checkpoint resume settings and local gateway port. Validation is configured greedy (temperature 0, do_sample=false, n=1, top_p=1, top_k=-1), with gateway val temperature 0. Training defaults at temperature 1 are not evidence of stochastic validation. Native 32/64 versus export 33/64 has one win, no losses, 63 ties and nine raw-answer differences: three changed calculator expressions, plus six changed responses following matching recorded tool arguments/results. Four extracted answers change; five are wording-only. The sole gain follows a changed calculator expression and numeric result, not placeholder extraction. The original first-match extractor remains unchanged; every recorded answer/reward was cross-checked against the preserved case receipts without rescoring. First model inputs match for all nine changed cases. BF16 numerical execution/batching or request-history differences are possible explanations, not established causes. Subsequent requests contain generated tool-call IDs; token-level/logit and in-memory loaded-weight equivalence were not recorded. Exact storage conversion does not prove deterministic generation equivalence. This bounded review supports publication with these uncertainties retained, not a claim that all loading defects are mathematically excluded.",
+      "case_difference_summary": [
+        {
+          "case_id": "ape210k__00007237",
+          "extracted_answer_changed": false,
+          "reward_changed": false,
+          "tool_arguments_changed": false,
+          "trace_sha256": {
+            "export": "83c767ce95862e2a94fa686353cea3365dd17060bba458e7957b5bce235e2b83",
+            "native": "46d9fcfbfd1242a7e0e2c68c89bcab2da5a6a0ca19a07b7b8c048214d51e434d"
+          }
+        },
+        {
+          "case_id": "ape210k__00562105",
+          "extracted_answer_changed": true,
+          "reward_changed": false,
+          "tool_arguments_changed": true,
+          "trace_sha256": {
+            "export": "4bb7bd6fa30719410883c28093e769715f0e35af0060954333f133c640d98428",
+            "native": "561acb55352ef44c816b02eac73fe20df3ff7d1af0ab0828c0d79be3c219814c"
+          }
+        },
+        {
+          "case_id": "ape210k__01104423",
+          "extracted_answer_changed": true,
+          "reward_changed": false,
+          "tool_arguments_changed": false,
+          "trace_sha256": {
+            "export": "4bd36f340a5f0bc632104e3c900c2df2d9333add1e02716885fd340c9cdba34e",
+            "native": "47a31733064070d868301c4e02b3aee68744ff0be146224751b4afa2bfca7f6c"
+          }
+        },
+        {
+          "case_id": "ape210k__01175153",
+          "extracted_answer_changed": false,
+          "reward_changed": false,
+          "tool_arguments_changed": false,
+          "trace_sha256": {
+            "export": "1fa0d43c0a229d73610cff73dfc21cbe837ceba1114def314ead8ea89e80d3bc",
+            "native": "77cdd31044d546f97b7ceeadcd60d001ef8ce79ff1775bb668988d14aaeb94c5"
+          }
+        },
+        {
+          "case_id": "aqua_rat__CLf74qM1zHeqQhnZ",
+          "extracted_answer_changed": false,
+          "reward_changed": false,
+          "tool_arguments_changed": false,
+          "trace_sha256": {
+            "export": "d9f929b9f10431024aff432239721aa390ae2dbec9f72a4c8c8af97566ed4759",
+            "native": "44f8370758de0a883bcb2f76114394b89e181f6053c97f633789f559189a7b5b"
+          }
+        },
+        {
+          "case_id": "aqua_rat__NvfvzSFRovmxZLlM",
+          "extracted_answer_changed": false,
+          "reward_changed": false,
+          "tool_arguments_changed": false,
+          "trace_sha256": {
+            "export": "1066530b2f8d351277b4fec8488d111af1622f33fb509aa8d1924b99dc0cf6ef",
+            "native": "ec31cc116cfb3ef579482b1f2b06743c979bb17c014f11e837f3c202b5593604"
+          }
+        },
+        {
+          "case_id": "gsm8k__XWa4gGg1MN1Xc87R",
+          "extracted_answer_changed": true,
+          "reward_changed": true,
+          "tool_arguments_changed": true,
+          "trace_sha256": {
+            "export": "d3d918153076b27984d7e35c9017447e7c1d0b7e8718b3c3c915973572706cce",
+            "native": "e278edd6ddf3cf6618e2385d67300203db9eba5b8b6458c55175d281dfbe97be"
+          }
+        },
+        {
+          "case_id": "gsm8k__g7xi7YZzwH9PW4jH",
+          "extracted_answer_changed": true,
+          "reward_changed": false,
+          "tool_arguments_changed": true,
+          "trace_sha256": {
+            "export": "da4994f891455a5a328e3bdf44657824b87a8e207392cd9b69f8b413d62acf9a",
+            "native": "d1f9f7c52ebb6bb74a9811ca6208c0f9234f0b6960e159e1d8a0b022dff676f2"
+          }
+        },
+        {
+          "case_id": "mawps__f9zo88ce7YOnCC8b",
+          "extracted_answer_changed": false,
+          "reward_changed": false,
+          "tool_arguments_changed": false,
+          "trace_sha256": {
+            "export": "104d19621f7f17341be89767cc77a6b04ba729e791eb830a439dcd9e2f4569a9",
+            "native": "3ecd921f982ca62929a6bd8d12c1e81216aa45d6c17db4ce857f29e0cb2df69e"
+          }
+        }
+      ],
+      "comparison_sha256": "21777f574c27c7e81af1d4684664913793f98d007148bff1220b60d7970d80cd",
+      "disposition": "no_conversion_or_loading_defect",
+      "evaluation_execution_commits": {
+        "replication_export_eval": "423245806c51d8af0c5f0546609ecb8689db4b88",
+        "replication_native": "423245806c51d8af0c5f0546609ecb8689db4b88"
+      },
+      "evidence_locations": [
+        "https://huggingface.co/amulyaparthasarathy/Llama-3.2-3B-AgentLightning-Lab-Backup/blob/5ad58b18538bc58c4f960b71d2e6677580685695/workflows/preserve-20261114-01/receipts/replication_native-0.json",
+        "https://huggingface.co/amulyaparthasarathy/Llama-3.2-3B-AgentLightning-Lab-Backup/blob/5fc86787d8ecc2a3d7dc0d118568b976d84dd352/workflows/preserve-20261114-01/receipts/replication_convert-0.json",
+        "https://huggingface.co/amulyaparthasarathy/Llama-3.2-3B-AgentLightning-Lab-Backup/blob/4a64511671dcafc056d1ff640e02f51e81a9b01f/workflows/preserve-20261114-01/receipts/replication_export_eval-0.json",
+        "https://huggingface.co/amulyaparthasarathy/Llama-3.2-3B-AgentLightning-Lab-Backup/blob/d3de857e10873e7b7014b25248974cab68afbfe2/workflows/preserve-20261114-01/receipts/replication_export_compare-0.json",
+        "https://huggingface.co/amulyaparthasarathy/Llama-3.2-3B-AgentLightning-Lab-Backup/blob/1bdd94b86bc3ae0f3a576ad0d428e5ab4d74e7a2/workflows/preserve-20261114-01/receipts/replication_verify-0.json",
+        "https://huggingface.co/amulyaparthasarathy/Llama-3.2-3B-AgentLightning-Lab-Backup/blob/9a60b7b44e4bc31fb1fa342734be24d1cd65877a/workflows/preserve-20261114-01/receipts/replication_evidence_verify-0.json"
+      ],
+      "export_manifest_sha256": "e85d0bc827bb38d97b2894a458d282cc332bb78869be38c955c104d066b5463f",
+      "limitations": [
+        "Root cause of greedy-generation differences unresolved; no token/logit replay or in-memory tensor comparison.",
+        "No scientific evaluation rerun, rescoring, training or conversion in closeout.",
+        "No independent mathematical grading, causal/general improvement or significance claim.",
+        "Hosted W&B readback and optimizer continuation not validated."
+      ],
+      "metadata_file_matches": {
+        "chat_template.jinja": {
+          "native_path": "models/llama3b/chat_template.jinja",
+          "sha256": "a718674808440b537a553c15e0557b5b45d6d76e49ad9ddbc1a9e92447843e2c"
+        },
+        "config.json": {
+          "native_path": "runs/preserve-20261114-01-replication-train/checkpoints/global_step_20/actor/huggingface/config.json",
+          "sha256": "3a129014de9578f3e602a4d982aab89387b25ce2f74529be5b463c29d5691b5d"
+        },
+        "generation_config.json": {
+          "native_path": "runs/preserve-20261114-01-replication-train/checkpoints/global_step_20/actor/huggingface/generation_config.json",
+          "sha256": "358b67cf9a493e4fa27b80e4e368930caedde0a51b1f8fe6f5831e8bd434d024"
+        },
+        "special_tokens_map.json": {
+          "native_path": "models/llama3b/special_tokens_map.json",
+          "sha256": "6f38c73729248f6c127296386e3cdde96e254636cc58b4169d3fd32328d9a8ec"
+        },
+        "tokenizer.json": {
+          "native_path": "models/llama3b/tokenizer.json",
+          "sha256": "79e3e522635f3171300913bb421464a87de6222182a0570b9b2ccba2a964b2b4"
+        },
+        "tokenizer_config.json": {
+          "native_path": "models/llama3b/tokenizer_config.json",
+          "sha256": "7fe399d0739ac28d562a04f0d294093d5d38ad3f00e6ea0e624f932ccf397116"
+        }
+      },
+      "receipt_path": "workflows/preserve-20261114-01/reviews/replication-differences.json",
+      "receipt_revision": "0a107d5bb52b7d12147182ab3d10c6a0b59392b1",
+      "reviewed_at": "2026-11-14T12:37:36.776613+00:00",
+      "reviewer": "OpenAI Codex assistant, evidence review in owner-authorized closeout session (not an independent human reviewer)",
+      "snapshot_locations": {
+        "export": {
+          "bytes": 1637593,
+          "private": true,
+          "repo_id": "amulyaparthasarathy/Llama-3.2-3B-AgentLightning-Lab-Backup",
+          "revision": "98ccbe95580dd7310e6015e3a726540903c16832",
+          "snapshot_prefix": "snapshots/preserve-20261114-01-replication-evaluation"
+        },
+        "native": {
+          "bytes": 46597731148,
+          "private": true,
+          "repo_id": "amulyaparthasarathy/Llama-3.2-3B-AgentLightning-Lab-Backup",
+          "revision": "a43afaa681d5f03f294ceb5b99fbc4f686a2c1d1",
+          "snapshot_prefix": "snapshots/preserve-20261114-01-replication"
+        }
+      }
+    }
+  },
+  "accounting": {
+    "before": {
+      "cost_usd": 52.2379357087785,
+      "cpu_seconds": 34545.212912658,
+      "egress_bytes": 469275508736,
+      "gpu_seconds": 8853.622748797,
+      "hf_bytes": 239799894016,
+      "modal_bytes": 175039840256,
+      "monthly_usd": 9
+    },
+    "adjustment_cpu_seconds": -4720.989769976,
+    "reconciled_before_launch": {
+      "cost_usd": 52.2379357087785,
+      "cpu_seconds": 29824.223142681996,
+      "egress_bytes": 469275508736,
+      "gpu_seconds": 8853.622748797,
+      "hf_bytes": 239799894016,
+      "modal_bytes": 175039840256,
+      "monthly_usd": 9
+    },
+    "projected_with_both_reservations": {
+      "cost_usd": 55.3903453087785,
+      "cpu_seconds": 34624.22314268199,
+      "gpu_seconds": 8853.622748797,
+      "egress_bytes": 489676603392,
+      "hf_bytes": 256996540416,
+      "modal_bytes": 175039840256,
+      "monthly_usd": 9
+    },
+    "final": {
+      "cost_usd": 53.911970762633764,
+      "cpu_seconds": 31456.856862205994,
+      "egress_bytes": 489676603392,
+      "gpu_seconds": 8853.622748797,
+      "hf_bytes": 256996540416,
+      "modal_bytes": 175039840256,
+      "monthly_usd": 9
+    },
+    "limits": {
+      "cost_usd": 100,
+      "cpu_seconds": 36000,
+      "gpu_seconds": 28800,
+      "egress_bytes": 536870912000,
+      "hf_bytes": 322122547200,
+      "modal_bytes": 214748364800,
+      "monthly_usd": 30
+    },
+    "basis": "Completed Modal call timestamps and measured startup; round upward plus 120 seconds per call. All failed attempts, diagnostic reservations, build/control allowance, GPU usage and USD/byte reservations remain unchanged. CPU seconds retain the existing CPU-worker elapsed-time metric, not core-seconds. Provider invoice totals are unknown."
+  },
+  "retrieval": {
+    "manifest_checksum_verified": true,
+    "evaluated_export_files_unchanged": true,
+    "independent_download_and_load_receipt": {
+      "receipt_path": "workflows/preserve-20261114-01/receipts/replication_retrieve-0.json",
+      "revision": "006c8bcc095f252a6b41d85a07e075543cfb4700"
+    },
+    "model_loaded": true,
+    "tokenizer_loaded": true,
+    "original_release_unchanged": true,
+    "completed_23_phase_records_unchanged": true,
+    "modal_calls": {
+      "replication_publish": {
+        "function_id": "fu-T4pt90sEoOYYMKqkVInbKi",
+        "app_id": "ap-FLIHJjDMhxix6JlaNOHOVL",
+        "function_call_id": "fc-01M7D13862MZ8TYCMCMM06T6R9",
+        "terminal_status": "SUCCESS",
+        "volumes": {
+          "/work": "VolumeMountInfo(name=None, volume_id='vo-rVO9GricBLVN10azwFVoYP', read_only=False, sub_path=None)",
+          "/validation": "VolumeMountInfo(name=None, volume_id='vo-GrkzD1k5PmQvNjbaFFcnPs', read_only=True, sub_path=None)"
+        },
+        "cpu": 8.0,
+        "memory_mib": 131072,
+        "timeout": 10860,
+        "max_retries": 0
+      },
+      "replication_retrieve": {
+        "function_id": "fu-HOY6ZM7DAkXEedV9SNV6e3",
+        "app_id": "ap-FLIHJjDMhxix6JlaNOHOVL",
+        "function_call_id": "fc-01M7D1AW6DQ8KZVRKDX45WSN7D",
+        "terminal_status": "SUCCESS",
+        "volumes": {},
+        "cpu": 8.0,
+        "memory_mib": 131072,
+        "timeout": 10860,
+        "max_retries": 0
+      }
+    },
+    "review_reference": {
+      "receipt_path": "workflows/preserve-20261114-01/reviews/replication-differences.json",
+      "receipt_revision": "0a107d5bb52b7d12147182ab3d10c6a0b59392b1"
+    }
+  },
+  "results": {
+    "original": {
+      "baseline": 27,
+      "train_initial": 27,
+      "train_final": 34,
+      "native": 35,
+      "export": 34,
+      "raw_native_export_differences": 15
+    },
+    "replication": {
+      "baseline": 27,
+      "train_initial": 27,
+      "train_final": 33,
+      "native": 32,
+      "export": 33,
+      "raw_native_export_differences": 9
+    }
+  },
+  "tests": {
+    "passed": 145,
+    "seconds": 6.95,
+    "log_sha256": "9ddae1dd112267957cd55100a3cb94ed1b4d62174a84f3722f0381a9a877c12c",
+    "initial_test_attempt": "Synthetic fixture shared initial_accounting with plan; fixture copied before mutation. No production change for that failure."
+  }
+}

@@ -1,0 +1,475 @@
+{
+  "date": "2026-11-11",
+  "base_commit": "c1ac97047b952e8b87d9949a3e76ae5e770d26c1",
+  "scope": "New detached infrastructure validation helpers only; existing training pipeline unchanged",
+  "offline_execution": {
+    "python": "3.13.5",
+    "command": "python -m unittest discover -s tests -p 'test_validation.py' -v",
+    "tests_run": 20,
+    "failures": 0,
+    "errors": 0,
+    "checks": [
+      "real local child-process success and nonzero failure",
+      "mocked Modal Volume persistence",
+      "duplicate run-name refusal",
+      "detached CLI construction with a fake uv executable",
+      "request/path bounds",
+      "private ignored/untracked dotenv hygiene without printing keys",
+      "mocked W&B initialization, failure and server readback",
+      "mocked HF access",
+      "training interpreter guard and CPU/GPU import separation",
+      "Python compilation and Bash syntax"
+    ],
+    "log": "validation/offline-tests.txt"
+  },
+  "local_sdk_attempt": {
+    "status": "blocked",
+    "reason": "Python 3.12 standalone download failed because the execution container could not resolve github.com. No new Python 3.12/Modal SDK execution was established."
+  },
+  "external_execution": {
+    "modal_image_builds": 0,
+    "modal_function_calls": 0,
+    "gpu_allocations": 0,
+    "wandb_projects_created": 0,
+    "wandb_runs_created": 0,
+    "hf_auth_requests": 0,
+    "secret_uploads": 0,
+    "real_credentials_read": 0
+  },
+  "not_verified": [
+    "live user Workbench configuration",
+    "new entrypoints running under the pinned Modal 1.6.3 SDK",
+    "services image resolution/build and real W&B/HF authentication",
+    "actual training image build and dependency closure",
+    "GPU import/kernel execution",
+    "laptop disconnect survival observed in a real run",
+    "Llama weight loading, RL updates, tool loop, checkpoint reload or hosted Weave delivery"
+  ],
+  "next_gate": "Run first supervised, bounded one-H100 two-step smoke using --action smoke --name smoke-01 --model-profile llama3b and W&B entity. Require actual MCP calculator tool-result continuation, nonzero/mixed reward evidence, finite actor updates, weight refresh, and native global_step_2 checkpoint. Inspect receipt, run result, trainer/controller/gateway logs and traces before separate smoke-reload-eval. No main/baseline/final evaluation before smoke qualification.",
+  "source_sha256": {
+    ".env.example": "44f9f4d16e7139a37f6ed0745352b0fe90af17faa00f5764b0c6cf656e7affab",
+    "validation_services.py": "a365b68ba82ce9feba130f9910c3482e3cd2f7661b85dc84b9082de5730fd01f",
+    "validation_training.py": "632677ab50c39aabd47aca625ada2641ec1962d2fd9549568ea133efcb80991f",
+    "validation_support.py": "fe6171ae817e82380d7f9988383dedfc0867585f4235ff278c1bba1d33c347bb",
+    "validation/runtime.py": "049df290b145e523b5337173c91370d21b85194ea53b8068708b9a2a4623f8de",
+    "scripts/check_validation_env.py": "330fa0416158e393b500dcbbe6c8efa3be5e9373afec3d0dc4d1a98655fe8b4a",
+    "scripts/validate_modal.sh": "4cc45decc4265ac466689f3ca8e385663f701b29f2a3e9844f2369716ecd28c6",
+    "tests/test_validation.py": "14e774fa2ac0aa6c7b22d64310156e595ebee35ec4c7a5eac95e15fff776c354",
+    "VALIDATION.md": "2b7395ab9734556840a7e95308747c8fe1a98bc7f7d99f697d2271ff8979fda1"
+  },
+  "current_note": "User-supplied completed prepare-01 receipt and manifests now confirm pinned Llama 3.2 3B Safetensors and frozen Calc-X splits following previously passed CPU image-06 and H100 gpu-01 preflights. Next proof boundary is first two-step GRPO smoke and checkpoint reload, not infrastructure.",
+  "user_observed_results": {
+    "source": "Terminal output supplied by user in this conversation; no assistant-run cloud requests",
+    "services_01": {
+      "status": "passed",
+      "wandb_run_id": "fcad072fd5116a5f",
+      "heartbeats": 61,
+      "python": "3.12.10",
+      "hf_gated_config_download": true,
+      "wandb_readback": true
+    },
+    "services_disconnect_01": {
+      "status": "passed",
+      "wandb_run_id": "263f5aa54aeb9fa0",
+      "heartbeats": 61,
+      "launcher_exit_code": 0,
+      "terminal_closed_by_user": true
+    },
+    "image_01": {
+      "status": "failed_during_image_build_before_function_submission",
+      "app_id": "ap-chK2LvajVifYbfjLsFWwZn",
+      "failed_image_id": "im-20D0nLAyjo1XEWBDMAY5nu",
+      "stage": "flash-attn==2.8.3 from-source extension compile",
+      "pytorch": "2.11.0+cu130",
+      "vllm": "0.22.0",
+      "verl": "0.8.0",
+      "host_compiler": "clang++",
+      "reported_compiler_version": "0.0.0",
+      "failure": "PyTorch rejects clang++ version 0.0.0 as below CUDA 13.0 compiler minimum 7.0",
+      "training_image_complete": false,
+      "gpu_allocations_observed": 0,
+      "hosted_wandb_validation": false
+    },
+    "image_02": {
+      "status": "failed_during_image_build_before_remote_validation",
+      "modal_app_id": "ap-IeA7DlK3TcaOQrWe9KZKr9",
+      "failed_image_layer": "im-hxs1APfbWW0IzlmG96fL7k",
+      "compiler": "/usr/bin/g++ 13.3.0",
+      "flash_attention_build": "passed",
+      "flash_attention_version": "2.8.3",
+      "flash_attention_build_seconds": 2326,
+      "failure": "strict uv pip check: 6 incompatible dependency requirements",
+      "conflicts": [
+        "ml-dtypes 0.6.0 requires numpy>=2, numpy 1.26.4 installed",
+        "opencv-python-headless 5.0.0.93 requires numpy>=2, numpy 1.26.4 installed",
+        "xgrammar 0.2.5.post1 requires transformers<5, transformers 5.22.2 installed",
+        "google-api-core 2.44.0 requires protobuf>=6.33.5,<8, protobuf 5.29.6 installed",
+        "tensorboard 2.21.0 requires protobuf>=6.31.1,<8, protobuf 5.29.6 installed",
+        "proto-plus 1.29.0 requires protobuf>=6.33.5,<8, protobuf 5.29.6 installed"
+      ],
+      "remote_worker_started": false,
+      "gpu_used": false,
+      "wandb_run_created": false
+    },
+    "image_03": {
+      "source": "User-provided Modal build and validation logs (November 11, 2026 PST), not independently queried account",
+      "status": "failed_after_successful_image_build",
+      "heavy_layer": "im-LpxtQel6JLA0GlsAl0DZ5U",
+      "heavy_layer_preemption": true,
+      "successful_flashattention_recompile_seconds": 3070,
+      "flashattention_2_8_3": "compiled_and_installed",
+      "agent_dependency_layer": "im-sJbJcNFnBlzkJWmMrn3aKO",
+      "agent_layer_status": "built",
+      "uv_pip_check": "six conflicts observed, recorded by overlay",
+      "cpu_validation_worker": "started",
+      "cpu_validation_result": "failed",
+      "failed_stage": "training_dependencies",
+      "error_type": "RuntimeError",
+      "remote_worker_python": "3.12.1",
+      "remote_image_id": "im-hBHqipmWmijbpXJjKhFjvk",
+      "model_loaded": false,
+      "gpu_allocated": false,
+      "wandb_run_started": false,
+      "necessary_diagnostics": [
+        "runs/image-03/dependency-progress.json",
+        "runs/image-03/dependency-conflicts.json",
+        "runs/image-03/dependency-check.txt",
+        "runs/image-03/runtime.log",
+        "runs/image-03/launcher.json"
+      ],
+      "precise_cause": "not yet established: top-level logs omit classifier decision and last import checkpoint",
+      "new_cloud_execution_by_assistant": 0
+    },
+    "image_05": {
+      "source": "User-provided run/image-05/import-failure.json and dashboard/Workbench logs, November 12 2026",
+      "status": "failed_in_cpu_training_dependencies_before_model_loading",
+      "local_unit_tests_preceding_attempt": {
+        "total": 67,
+        "passed": 67
+      },
+      "import_failure": {
+        "attempted_module": "datasets",
+        "exception_type": "ImportError",
+        "message": "pyarrow requires NumPy 2.0 or newer, found 1.26.4"
+      },
+      "determined_root_cause": "PyArrow 26 C extension requires NumPy >=2, while VERL 0.8.0 explicitly requires numpy<2; datasets 5.2.0 allows PyArrow>=24",
+      "model_loaded": false,
+      "gpu_training_executed": false,
+      "wandb_result_verified": false
+    },
+    "image_06": {
+      "source": "User-supplied Modal Volume result.json, data-smoke.json, dependency-conflicts.json, launcher.json for image-06",
+      "source_commit": "33753ecf9fbf4406f021b2cc68c9f13ae7ce2e3d",
+      "status": "diagnostic_passed_with_reviewed_exceptions",
+      "launcher_status": "completed",
+      "launcher_exit_code": 0,
+      "runtime": "Python 3.12.1, x86_64",
+      "cpu_imports_checked": true,
+      "data_interop": {
+        "verified": true,
+        "rows": 3,
+        "numpy": "1.26.4",
+        "pyarrow": "25.0.1",
+        "datasets": "5.2.0",
+        "numpy_values_roundtripped": true,
+        "datasets_parquet_roundtrip": true
+      },
+      "dependency_exceptions": {
+        "count": 6,
+        "exact_reviewed": true,
+        "closure_consistent": false,
+        "version_drift": false
+      },
+      "hf": {
+        "authenticated": true,
+        "gated_config_downloaded": true,
+        "model_weights_downloaded": false
+      },
+      "wandb": {
+        "summary_verified": true,
+        "finished_state_verified": true,
+        "last_heartbeat_verified": true,
+        "full_history_verified": false
+      },
+      "model_loaded": false,
+      "rl_update_verified": false
+    },
+    "gpu_01": {
+      "source": "User-supplied Modal Volume result.json, gpu_preflight.json, launcher.json for gpu-01",
+      "source_commit": "33753ecf9fbf4406f021b2cc68c9f13ae7ce2e3d",
+      "status": "diagnostic_passed_with_reviewed_exceptions",
+      "launcher_status": "completed",
+      "launcher_exit_code": 0,
+      "gpu_kernel_preflight_status": "gpu_kernel_preflight_passed",
+      "gpu": "NVIDIA H100 80GB HBM3",
+      "gpu_bytes": 85009367040,
+      "torch_cuda_runtime": "13.0",
+      "torch": "2.11.0+cu130",
+      "flash_attn": "2.8.3",
+      "vllm": "0.22.0",
+      "verl": "0.8.0",
+      "agentlightning": "1.0.3",
+      "native_gpu_imports_checked": true,
+      "gpu_kernels_checked": true,
+      "cpu_imports_checked": true,
+      "data_interop_checked": true,
+      "dependency_closure_consistent": false,
+      "reviewed_dependency_conflicts": 6,
+      "hf_authenticated": true,
+      "wandb_finished_and_summary_verified": true,
+      "weights_downloaded": false,
+      "model_loaded": false,
+      "rl_update_verified": false,
+      "checkpoint_reload_verified": false,
+      "weave_delivery_verified": false
+    },
+    "prepare_01": {
+      "observed_on": "2026-11-12",
+      "source": "User-provided Modal prepare-01 application output, persisted terminal receipt, model_manifest.json and data_manifest.json",
+      "source_commit": "7bc6daaa24ff09aad4dc7e71f280464dc7fa8500",
+      "status": "completed",
+      "gpu_used": false,
+      "model": {
+        "profile": "llama3b",
+        "repo_id": "meta-llama/Llama-3.2-3B-Instruct",
+        "revision": "0cb88a4f764b7a12671c53f0838cd831a0843b95",
+        "architecture": "LlamaForCausalLM",
+        "weights_files": [
+          "model-00001-of-00002.safetensors",
+          "model-00002-of-00002.safetensors"
+        ],
+        "manifest_weight_bytes": 6425529048,
+        "template_sha256": "a718674808440b537a553c15e0557b5b45d6d76e49ad9ddbc1a9e92447843e2c",
+        "prepared_tokenizer_config_sha256": "7fe399d0739ac28d562a04f0d294093d5d38ad3f00e6ea0e624f932ccf397116",
+        "gpu_compatibility_verified": false
+      },
+      "dataset": {
+        "seed": 329,
+        "train_main_rows": 256,
+        "final_heldout_rows": 64,
+        "train_smoke_rows": 16,
+        "eval_smoke_rows": 8,
+        "smoke_training_is_subset_of_main": true,
+        "smoke_evaluation_separate_from_final": true,
+        "training_rows_excluded_for_heldout_overlap": 0,
+        "train_duplicate_rows_removed": 1,
+        "source_checksums_recorded": true
+      },
+      "limitations": [
+        "Receipt and manifests provided, but assistant did not independently hash the remote weight files",
+        "No real Llama/vLLM model generation or MCP tool call yet",
+        "No RL gradient update, policy synchronization, checkpoint creation or reload yet",
+        "Six dependency metadata conflicts remain under reviewed academic diagnostic exception"
+      ]
+    }
+  },
+  "compiler_correction": {
+    "change": "scripts/install_modal_training.sh now selects CC=/usr/bin/gcc, CXX=/usr/bin/g++, CUDAHOSTCXX=/usr/bin/g++, checks executable paths, records host compiler version",
+    "preserves": [
+      "Agent Lightning source pin",
+      "VERL 0.8.0",
+      "vLLM 0.22.0",
+      "FlashAttention 2.8.3",
+      "CUDA 13.0 and SM90 architecture",
+      "training/evaluation code"
+    ],
+    "offline_evidence": {
+      "python": "3.13.5",
+      "command": "python -m unittest discover -s tests -p test_cuda_build_compiler.py -v",
+      "tests": 3,
+      "passed": 3,
+      "syntax_check": "bash -n scripts/install_modal_training.sh",
+      "scope": "Local standalone source copy only; no full repo suite or cloud compile executed by assistant"
+    },
+    "cloud_retest_status": "not_attempted",
+    "recommended_retry": "image-02"
+  },
+  "source_hash_scope": "source_sha256 entries below document original validation-package snapshot; updated code and documentation are identified by Git commits and remain unverified on Modal until image-02.",
+  "dependency_graph_analysis": {
+    "verified_from_published_metadata": true,
+    "version_pair": [
+      "verl==0.8.0",
+      "vllm==0.22.0"
+    ],
+    "incompatibility": [
+      "verl==0.8.0 requires numpy<2.0.0",
+      "vllm==0.22.0 requires opencv-python-headless>=4.13.0",
+      "opencv-python-headless==4.13.0.90 requires numpy>=2 on Python 3.12"
+    ],
+    "conclusion": "The exact single-venv dependency graph cannot satisfy all published metadata constraints.",
+    "sources": [
+      "https://pypi.org/pypi/verl/0.8.0/json",
+      "https://pypi.org/pypi/vllm/0.22.0/json",
+      "https://pypi.org/pypi/opencv-python-headless/4.13.0.90/json"
+    ],
+    "unsafe_pin_overlay": "A provisional pin-only overlay was reverted in commit 653cc40d after this contradiction was verified; do not run it.",
+    "decision_needed": "Bifurcate training and inference environments with verified Ray/runtime separation, switch to compatible framework versions after API review, or document a specifically approved metadata exception after independent functional evaluation.",
+    "no_cloud_retries_authorized": true
+  },
+  "pilot_diagnostic_exception_candidate": {
+    "status": "implemented_on_draft_branch_not_cloud_validated",
+    "scope": "Academic diagnostic only; NOT a clean dependency closure and NOT training approval",
+    "design": {
+      "expensive_image_layer": "Pinned upstream Agent Lightning 1.0.3 / VERL 0.8.0 / vLLM 0.22.0 / CUDA 13.0 / FlashAttention source compile / GCC13",
+      "light_overlay": "Installs unchanged experiment requirements, persists raw uv pip check output and exit code, fails unexpected CLI errors; flags known metadata conflicts for remote exact audit",
+      "qualification": "validation/compatibility.py accepts only six exact image-02 requirement strings, installed dependency versions and offending package versions under a matched Python3.12/x86-64/torch cu130/upstream source identity; zero drift accepted",
+      "remote_gate": "validation/runtime.py fails unexpected or changing conflicts and import failures; diagnostic result and W&B config+summary identify noncompliant dependency closure"
+    },
+    "offline_check_executed": {
+      "date": "2026-11-11",
+      "interpreter": "Python 3.13.5 in isolated local execution container (not user Workbench)",
+      "source_match": "Confirmed exact character length and FNV-1a fingerprints of published validation/compatibility.py, tests/test_dependency_exceptions.py, and scripts/finalize_modal_training.sh against independently executed local copies",
+      "command": "python -m unittest discover -s <isolated_validation_tests> -v",
+      "focused_tests": 15,
+      "passed": 15,
+      "failures": 0,
+      "errors": 0,
+      "shell_syntax": "bash -n scripts/finalize_modal_training.sh passed in independent local copy",
+      "full_repository_suite": "not executed from connected private checkout in this environment; user must rerun uv-managed discovery after pulling"
+    },
+    "remote_execution": {
+      "image_03": "NOT RUN",
+      "gpu_01": "NOT RUN",
+      "real_training": "NOT RUN",
+      "checkpoint_reload": "NOT RUN",
+      "weave": "NOT VERIFIED"
+    },
+    "known_limitations": [
+      "The six published package metadata conflicts remain, and strict version-qualified acceptance is not proof of binary or API compatibility",
+      "CUDA image cache will be invalidated once due to the changed expensive-layer script; subsequent overlay-only edits should reuse cache",
+      "The CPU import audit does not exercise vLLM tool-call parsing, multi-step agent rollout or gradient updates",
+      "One verified new GPU training job is needed before any numerical/throughput claims"
+    ]
+  },
+  "no_cloud_retries_authorized": true,
+  "image_03_volume_diagnosis": {
+    "source": "User copied read-only results from Modal Volume agent-lightning-validation/runs/image-03; images and top-level dashboard logs were separately supplied",
+    "original_run_status": "failed at training_dependencies, before W&B initiation",
+    "volume_files": [
+      "runtime.log",
+      "result.json",
+      "packages.json",
+      "launcher.json",
+      "dependency-progress.json",
+      "dependency-conflicts.json",
+      "dependency-check.txt"
+    ],
+    "dependency_progress": "checking_package=gdown (all original top-level pins completed)",
+    "classifier_observation": {
+      "accepted": false,
+      "report_parsed": false,
+      "identity_matches": false,
+      "observed_conflicts": 0,
+      "versions_drifted": {
+        "protobuf": {
+          "expected": "5.29.6",
+          "reported_by_unscoped_importlib_metadata": "6.31.1"
+        }
+      },
+      "uv_pip_check": "sees protobuf 5.29.6 and six original conflicts, with an extra Using Python 3.12.1 environment at: /opt/agent-lightning/.venv banner"
+    },
+    "confirmed_issue": "Parser required Checked as the first line; uv remote check emits a preceding venv banner",
+    "unresolved_issue": "Why unscoped Python metadata sees Protobuf 6.31.1 while uv pip check sees 5.29.6; could reflect an ambient distribution, duplicated dist-info, or a different package lookup",
+    "function_invoked": "image_check",
+    "function_requested_gpu": false,
+    "other_gpu_function_exists": true,
+    "other_gpu_allocations": "Not established by supplied function:image_check logs; check actual gpu_check invocations/billing separately"
+  },
+  "validation_only_correction": {
+    "status": "committed_to_draft_branch_not_remote_tested",
+    "paths": [
+      "validation/compatibility.py",
+      "validation/runtime.py",
+      "tests/test_validation.py",
+      "tests/test_image03_diagnostics.py",
+      "VALIDATION.md"
+    ],
+    "intent": [
+      "Exact pinned venv banner accepted without changing six reviewed conflict requirements",
+      "Inventory scoped to /opt/agent-lightning/.venv/lib/python3.12/site-packages",
+      "Ambient and scoped protobuf dist-info versions plus duplicate metadata recorded and ambiguous entries rejected",
+      "Imported google.protobuf version verified against scoped dist-info",
+      "Accepted reviewed-exception diagnostic exits with code zero only with W&B/HF/CPU evidence; failed statuses remain nonzero"
+    ],
+    "cached_build_layers_unmodified": true,
+    "independent_offline_checks": {
+      "parser_regex_fixture": "Passed a standalone Python regex/count test against the user-supplied nine-line uv check output (six conflicts); this was not a full repository unittest run",
+      "metadata_scoping_api": "Python importlib.metadata.distributions(path=[...]) read a synthetic isolated dist-info fixture",
+      "new_repository_tests": "Seven source tests added but not executed through user's WSL Workbench",
+      "full_tests": "Not executed by assistant"
+    },
+    "next_cloud_invocation": "Not submitted. Use image-04 only after local suite passes and explicit user authorization",
+    "trainer_gpu_allocated_by_assistant": false
+  },
+  "image_04_volume_diagnosis": {
+    "evidence_source": "User-supplied Modal Volume ls and files from runs/image-04 plus image-04 dashboard log and local 63-test report",
+    "evidence": {
+      "reviewed_conflicts_accepted": true,
+      "closure_consistent": false,
+      "exact_six_conflicts": true,
+      "identity_matches": true,
+      "protobuf_scoped_version": "5.29.6",
+      "protobuf_extra_ambient_version": "6.31.1",
+      "ambient_path": "/__modal/deps/protobuf-6.31.1.dist-info",
+      "imports_json_bytes": 56,
+      "imports_json_inference": "torch and transformers imported; datasets not yet marked imported",
+      "dependency_progress_json_bytes": 37,
+      "dependency_progress_inference": "Last attempted module is datasets",
+      "protobuf_import_json_absent": true,
+      "status": "failed",
+      "failed_stage": "training_dependencies",
+      "error_type": "ImportError",
+      "remote_gpu_used": false
+    },
+    "confidence": "High from exact JSON file byte lengths and module order, but user text did not show full dependency-progress.json body; specific missing symbol is not yet known.",
+    "root_cause": "A transitive import during 'datasets' initialization failed. Need ImportError.name and message before proposing dependency changes.",
+    "regression_scope": "Do not loosen dependency exception policy, upgrade packages, or change CUDA/FlashAttention build without evidence.",
+    "diagnostics_committed": {
+      "runtime_file": "validation/runtime.py",
+      "new_fixture": "tests/test_image04_import_failure.py",
+      "output": "runs/image-05/import-failure.json after next remotely executed CPU validation if ImportError recurs",
+      "fields": [
+        "attempted_module",
+        "exception_type",
+        "missing_name",
+        "exception_path",
+        "message",
+        "cause_type",
+        "cause_message"
+      ],
+      "sanitization": "Replace current HF_TOKEN and WANDB_API_KEY values; message limited to 800 characters",
+      "actual_remote_tested": false
+    }
+  },
+  "pyarrow_25_compatibility_fix_candidate": {
+    "status": "committed to draft branch; offline and remote execution not yet verified",
+    "design": {
+      "upstream_train_stack": "Unchanged: Agent Lightning 1.0.3 / VERL 0.8.0 / vLLM 0.22.0 / Torch CUDA 13 / FlashAttention 2.8.3",
+      "fast_layer": "scripts/finalize_modal_training.sh installs pyarrow==25.0.1 after agent requirements with uv pip --no-deps --no-build",
+      "exact_versions": [
+        "numpy==1.26.4",
+        "pyarrow==25.0.1",
+        "datasets==5.2.0"
+      ],
+      "remote_cpu_test": "Synthetic three-row Dataset.from_dict -> to_parquet -> PyArrow/NumPy read/compare -> Dataset.from_parquet",
+      "failure_artifact": "data-smoke-failure.json and existing import-failure.json",
+      "success_artifact": "data-smoke.json",
+      "reviewed_dependency_exceptions_unchanged": true,
+      "heavy_cuda_flashattention_build_unchanged": true
+    },
+    "sources": [
+      "https://arrow.apache.org/docs/25.0/python/install.html",
+      "https://github.com/apache/arrow/issues/53954",
+      "https://github.com/verl-project/verl/blob/v0.8.0/setup.py",
+      "https://github.com/huggingface/datasets/blob/5.2.0/setup.py"
+    ],
+    "tests_added": "tests/test_arrow_data_interop.py with seven stubbed/offline cases; existing CPU audit mock updated",
+    "tests_executed_in_user_workbench_after_fix": false,
+    "remote_image_06_executed": false,
+    "substantive_limitations": [
+      "A PyArrow 25 version pin is not a complete metadata-clean dependency closure; six earlier conflicts remain",
+      "Synthetic Python stubs cannot establish PyArrow binary compatibility; the remote CPU data smoke must run",
+      "Passing CPU data checks does not prove vLLM structured tool calls, GRPO training updates, model checkpoint or reload"
+    ]
+  }
+}

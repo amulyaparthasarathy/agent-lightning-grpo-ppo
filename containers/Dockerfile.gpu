@@ -1,0 +1,22 @@
+# Optional runtime for a native Linux x86_64 GPU host.
+# The primary Modal path uses modal_app.py and its NVIDIA base image instead.
+# This retained self-managed recipe is not used by any Modal command.
+# Tags are versioned recipes, not immutable image digests; record built identities.
+FROM ghcr.io/astral-sh/uv:0.12.13 AS uv_tools
+FROM runpod/pytorch:1.2.0-cu1300-torch291-ubuntu2404
+
+USER root
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        build-essential git curl unzip tmux python3-venv pkg-config \
+    && rm -rf /var/lib/apt/lists/*
+COPY --from=uv_tools /uv /uvx /usr/local/bin/
+
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    UV_LINK_MODE=copy
+WORKDIR /opt/agent-lightning-lab
+# Do not inherit the provider image's startup service or SSH entrypoint.
+ENTRYPOINT []
+CMD ["sleep", "infinity"]

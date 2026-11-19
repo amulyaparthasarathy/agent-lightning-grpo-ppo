@@ -1,0 +1,100 @@
+{
+  "checked_at": "2026-11-15T04:49:11.569394+00:00",
+  "registry": {
+    "exploratory-allocation:agl-explore-20-v1:exploratory-qualification": {
+      "plan_sha256": "4e57f7c0e43fe7c82734dc812923e968b4da3ae57b5c295caf9e3b5f598a8b42",
+      "source": "cb246a0c64c5eef0bea6994bbc876e1b9597e56f",
+      "funding": {
+        "maximum_additional_usd": 300,
+        "qualification_usd": 50,
+        "study_workers_usd": 150,
+        "other_overhead_usd": 25,
+        "reserve_usd": 75,
+        "reserve_released_usd": 0,
+        "operational_limit_usd": 225,
+        "worker_hourly_ceiling_usd": 10,
+        "supervisor_hourly_ceiling_usd": 1,
+        "new_storage_ceiling_gib": 600,
+        "storage_cost_horizon_days": 7,
+        "collection_ceiling_gib_per_phase": 10,
+        "automatic_retries": 0,
+        "automatic_timeout_extensions": false,
+        "seed_replacement": false,
+        "outcome_selection": false,
+        "checkpoint_policy": "one-final-per-run-no-deletion",
+        "qualification_required_once": true,
+        "standalone_pilot_required": false,
+        "admission_probe_required": false
+      }
+    },
+    "submission:agl-explore-20-v1/exploratory-qualification/a01": {
+      "status": "submitted",
+      "study_key": "agl-explore-20-v1/exploratory-qualification/a01",
+      "plan_sha256": "4e57f7c0e43fe7c82734dc812923e968b4da3ae57b5c295caf9e3b5f598a8b42",
+      "completion_proven": false,
+      "call_id": "fc-01M7EMCA0TS6QJTK72CXE19GHQ"
+    },
+    "owner:agl-explore-20-v1/exploratory-qualification/a01": {
+      "call_id": "fc-01M7EMCA0TS6QJTK72CXE19GHQ",
+      "plan_sha256": "4e57f7c0e43fe7c82734dc812923e968b4da3ae57b5c295caf9e3b5f598a8b42"
+    },
+    "index:agl-explore-20-v1/exploratory-qualification/a01": {
+      "status": "failed",
+      "sha256": "7dc7c11e41f9e320ee69d3c841555e2f0027e3f4c0d57e5d7225523b281dd1e4"
+    },
+    "exploratory-allocation:agl-explore-20-v1:exploratory": null,
+    "submission:agl-explore-20-v1/exploratory/a01": null,
+    "owner:agl-explore-20-v1/exploratory/a01": null,
+    "index:agl-explore-20-v1/exploratory/a01": null,
+    "exploratory-allocation:agl-explore-20-v1-r01:exploratory-qualification": null,
+    "submission:agl-explore-20-v1-r01/exploratory-qualification/a01": null,
+    "owner:agl-explore-20-v1-r01/exploratory-qualification/a01": null,
+    "index:agl-explore-20-v1-r01/exploratory-qualification/a01": null,
+    "exploratory-allocation:agl-explore-20-v1-r01:exploratory": null,
+    "submission:agl-explore-20-v1-r01/exploratory/a01": null,
+    "owner:agl-explore-20-v1-r01/exploratory/a01": null,
+    "index:agl-explore-20-v1-r01/exploratory/a01": null
+  },
+  "new_identity": "agl-explore-20-v1-r01",
+  "volume_collisions": [],
+  "call_graph": [
+    {
+      "call_id": "fc-01M7EMCA0TS6QJTK72CXE19GHQ",
+      "status": "SUCCESS",
+      "input_id": "in-01M7EMCA1B1HFMF59NSBMSTCNE",
+      "children": [
+        {
+          "call_id": "fc-01M7EMCQASD8JS0D65F4VYHA4R",
+          "status": "FAILURE",
+          "input_id": "in-01M7EMCQB048PAPG2XETNBX1V9",
+          "children": []
+        },
+        {
+          "call_id": "fc-01M7EMCY7KTTJR4GWH64NHX9XB",
+          "status": "FAILURE",
+          "input_id": "in-01M7EMCY7YFX94WD0MK26M811B",
+          "children": []
+        }
+      ]
+    }
+  ],
+  "get_results": [
+    {
+      "call_id": "fc-01M7EMCA0TS6QJTK72CXE19GHQ",
+      "checked_at": "2026-11-15T04:45:13.052992+00:00",
+      "status": "failed"
+    },
+    {
+      "call_id": "fc-01M7EMCQASD8JS0D65F4VYHA4R",
+      "checked_at": "2026-11-15T04:45:13.639743+00:00",
+      "exception": "RuntimeError",
+      "error": "Command exited 1; inspect /data/phase2/studies/agl-explore-20-v1/exploratory-qualification/agl-explore-20-v1-exploratory-qualification-grpo-matched-v2-s9101-a01/baseline/launcher.log"
+    },
+    {
+      "call_id": "fc-01M7EMCY7KTTJR4GWH64NHX9XB",
+      "checked_at": "2026-11-15T04:45:13.749895+00:00",
+      "exception": "RuntimeError",
+      "error": "Command exited 1; inspect /data/phase2/studies/agl-explore-20-v1/exploratory-qualification/agl-explore-20-v1-exploratory-qualification-ppo-mc-matched-v2-s9101-a01/baseline/launcher.log"
+    }
+  ]
+}

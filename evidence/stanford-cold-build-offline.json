@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "base_commit": "a8893264fc5a16ad62b7107b445932935d6d4b3f",
+  "branch": "fix/stanford-cold-image-build",
+  "reported_failure": {
+    "image_id": "im-fc2RdjhSAGjfhNX3zuDS5W",
+    "source": "owner-supplied; remote logs not retrieved",
+    "stage": "Image.run_function(build_training_stack) discovery, before installer",
+    "exception": "ModuleNotFoundError: No module named 'experiment'"
+  },
+  "reported_staging_blocker": {
+    "source": "owner-supplied; Volume not accessed or modified",
+    "regular_files_where_directories_required": [
+      "restored/models/llama3b",
+      "restored/data-small"
+    ],
+    "reported_cause": "Modal CLI directory download to a nonexistent local destination"
+  },
+  "base_offline_reproduction": [
+    {
+      "builder": "build_training_stack",
+      "exit_code": 1,
+      "exception": "ModuleNotFoundError: No module named 'experiment'",
+      "network": "blocked",
+      "installer": "not executed"
+    },
+    {
+      "builder": "finalize_training_stack",
+      "exit_code": 1,
+      "exception": "ModuleNotFoundError: No module named 'experiment'",
+      "network": "blocked",
+      "installer": "not executed"
+    }
+  ],
+  "tests": {
+    "command": "MODAL_CONFIG_PATH=/dev/null HF_HUB_OFFLINE=1 uv run --locked --offline python -m unittest discover -s tests -v",
+    "exit_code": 0,
+    "test_count": 192,
+    "suite_seconds": 8.14,
+    "log": "evidence/stanford-cold-build-unittest.txt",
+    "log_sha256": "0d80099655d054d3f66f0180eb795e1ca3b34658e05477bb37bebae342f8830b",
+    "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+    "platform": "Linux-5.15.167.4-microsoft-standard-WSL2-aarch64-with-glibc2.39",
+    "modal": "1.6.3",
+    "uv": "uv 0.12.13 (aarch64-unknown-linux-gnu)"
+  },
+  "tested_source_note": "Precommit source hashes below identify the exact tested implementation; commit also retains this record and its log.",
+  "tested_source_sha256": {
+    "modal_app.py": "9de29373f020503a55a5d8355121e3fe3aeb8889eed657b797839e49f8ae24e2",
+    "modal_build.py": "f7b5bcab586381389cf995c8a711177fd6080221ba96f66ae12a3986c2df251a",
+    "validation_support.py": "da3eb89df90f9a52dfbfbf798cd4b3ea8d1ab9c084266d9f0053c43f188bf2bf",
+    "tests/test_modal_build_import.py": "93659370f5d11bc7237cbc7999e5f11eca0a668b5ee5cc279a113c2fef9b4749",
+    "tests/test_modal_import.py": "08c0a47be6a226011a4a02729411109aad010c9be06864a5343180120192d7a3",
+    "tests/test_modal_runner.py": "1ee81083b86748dbba1cac0c7bbdfe962f7d59dd814d9b4ad2e5f748e1c5fb20",
+    "tests/test_ppo_mc.py": "23f1fea8b432c59e272908f0d1cbf2fa72251232316dc7a9654a00a15a0b4dda",
+    "tests/test_validation.py": "8f85730ab92b97aa6522aad5a4b5add28a3ee0133fedb8c1d322b78ad590ba73"
+  },
+  "invariants": {
+    "builder_function_ast_unchanged": true,
+    "cuda_python_runtime_file_list_and_runtime_resource_declarations_ast_unchanged": true,
+    "protected_files_byte_identical_to_base": {
+      "pyproject.toml": "cb763678c14a81ec98a3bf40fbf10515a248cd3c7893a293cc891ee9b5b3f9b1",
+      "uv.lock": "0075019d55ea5044830575bf36ba7a84b73eca02edfd26f41817068dc9367949",
+      "scripts/install_modal_training.sh": "d438898fa5d2e18d1c2dd83a1f74df1d32216fa5b860e1234c237c8d3601ce7f",
+      "scripts/finalize_modal_training.sh": "47e463e72669c6d014f75535c51acd7d3b9e0575698ea4ef7d3d71c5df7b3cee",
+      "experiment/LICENSE-AgentLightning.txt": "264f98a5bef291a661b9858593beb7c708022073c403f06fdd1e9be7bbbcb600",
+      "experiment/VERIFICATION.json": "d61b5ceb717644e985bf8867d007de93f5737c8b1cb92aa080377762e2c0e043",
+      "experiment/__init__.py": "e584f0f7ccc75d24c0fe1c3792c70466cd2d10faddb72938673b8a3a165d663c",
+      "experiment/bootstrap_gpu.sh": "4e703b7462ccac9bf43be45a22a5f6cf9b08b443cb88d82201c650ca6dbd98a8",
+      "experiment/check_gpu.py": "e21b7247e14ba00ae00a2b5e108aa35bdf1a9afa33c02909f497028de87ed8a0",
+      "experiment/cpu_accounting_demo.py": "70edf1383e968c6be075cecf47b4177743cef5710f92da8842aa00b5eae82e3e",
+      "experiment/example_outputs/cpu-accounting/cpu-accounting.json": "a8fb6425f1f9150a2e8a3a27ae747445dd8ff53e8f9248df1f5c917fae69c2ce",
+      "experiment/export_artifact.py": "be6849098ddf54695077f7149dba78a12294e4434db8f2ae2ba118c6072a07ec",
+      "experiment/launch.py": "1829ebe61938c45776467ed501e63516f758a9101b8cac3a4b57e42e41ab0a5e",
+      "experiment/observed_calc_agent.py": "e802a2324dab779ffaa49af678196a7cc5f02e3bb89936bd0ed1f1ed8c3a02fc",
+      "experiment/ppo_contract.py": "600477e58254e1afa21a7bcc8a06cc894ea8dd81b6e0308d0cc2c0d5b5f48f67",
+      "experiment/ppo_math.py": "a25b83662961623aaabd62620f01fa604ec2a3f255aeeaea0adaaec2bb93e40b",
+      "experiment/ppo_runtime.py": "2d67c6210ca515b404354ef6851a50074b70076d89b24e61b7517698948d33e8",
+      "experiment/ppo_source_lock.json": "9d211065a5dd984d5fdfc43c63cab6c38e86ff36a2f4cac9ff0b9ab63302665a",
+      "experiment/prepare_data.py": "5f255d6932f9f47f629a0c8ce24516226fd8e53f3f435766835fd6ae6e86b87b",
+      "experiment/prepare_model.py": "d5663d8056ca2b3a28f8b8980e0ea84b3c9ed684a660c6ec8dfd19e13c993269",
+      "experiment/requirements-agent.txt": "421b19b31e47b210ad1a511af4db5a6b09f559c0b83c6f76cb7831d57e0f1257",
+      "experiment/summarize.py": "a70fc41d08c60e95676ae02121f29f82b51b55ab0e2a84a717c86f4ab20dbc1d",
+      "experiment/templates/LICENSE-vllm.txt": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+      "experiment/templates/PROVENANCE.json": "5a64279f1baa52081669778729229bd31b5de96b44f4c6869386ed0e011d0ab6",
+      "experiment/templates/tool_chat_template_llama3.1_json.jinja": "8aedd05f7ab549b897b929c89da9b62e537f4f4197f33736e9d2f10fea53b1bf"
+    }
+  },
+  "checks": [
+    "Both builders discovered through Modal SDK with application/runtime package absent and network denied",
+    "Installer calls mocked; check=True and failure propagation verified",
+    "Build-only module imports only subprocess; application/PPO imports and Volume/Secret lookup denied",
+    "Early explicit module copy and both unchanged builder resource limits verified",
+    "Final-runtime full module import and missing-contract negative regression retained",
+    "Missing/wrong-type directories and manifests reject before commands; no legacy fallback; fixtures unchanged",
+    "git diff --check passed"
+  ],
+  "limitations": [
+    "No Modal API, jobs, image builds, GPU executions, infrastructure changes, merges or training performed",
+    "No Volume reads, writes, repairs or deletions performed",
+    "Cold image construction, dependency audit and GPU/runtime execution remain unqualified",
+    "Structural preflight checks path types and manifest presence; downstream launch still validates contents and identities"
+  ]
+}

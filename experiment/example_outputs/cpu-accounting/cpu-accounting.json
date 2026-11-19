@@ -1,0 +1,71 @@
+{
+  "synthetic_fixture": true,
+  "source": "https://arxiv.org/html/2608.17528v1#S2.SS3",
+  "scope": "Mathematical weight change only; no training, policy improvement, or stability measured.",
+  "unsplit": {
+    "rows": [
+      {
+        "rollout": "A",
+        "response_tokens": 6,
+        "predefined_mean_token_loss": 2.0
+      },
+      {
+        "rollout": "B",
+        "response_tokens": 6,
+        "predefined_mean_token_loss": 8.0
+      }
+    ],
+    "rewards": {
+      "A": 1,
+      "B": 0
+    },
+    "global_row_mean_loss": 5.0,
+    "equal_rollout_token_mean_loss": 5.0,
+    "global_row_rollout_weights": {
+      "A": 0.5,
+      "B": 0.5
+    },
+    "equal_rollout_weights": {
+      "A": 0.5,
+      "B": 0.5
+    }
+  },
+  "fragmented": {
+    "rows": [
+      {
+        "rollout": "A",
+        "response_tokens": 2,
+        "predefined_mean_token_loss": 1.0
+      },
+      {
+        "rollout": "A",
+        "response_tokens": 2,
+        "predefined_mean_token_loss": 2.0
+      },
+      {
+        "rollout": "A",
+        "response_tokens": 2,
+        "predefined_mean_token_loss": 3.0
+      },
+      {
+        "rollout": "B",
+        "response_tokens": 6,
+        "predefined_mean_token_loss": 8.0
+      }
+    ],
+    "rewards": {
+      "A": 1,
+      "B": 0
+    },
+    "global_row_mean_loss": 3.5,
+    "equal_rollout_token_mean_loss": 5.0,
+    "global_row_rollout_weights": {
+      "A": 0.75,
+      "B": 0.25
+    },
+    "equal_rollout_weights": {
+      "A": 0.5,
+      "B": 0.5
+    }
+  }
+}

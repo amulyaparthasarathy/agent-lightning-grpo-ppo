@@ -1,0 +1,114 @@
+{
+  "checked_at": "2026-11-15T06:13:38.906892+00:00",
+  "billing": {
+    "workspace": "amulyasp",
+    "cycle_start": "2026-11-01T00:00:00+00:00",
+    "cycle_end": "2026-12-01T00:00:00+00:00",
+    "metered_usd": "3.15125017",
+    "billed_usd": "0E-8"
+  },
+  "calls": {
+    "fc-01M7EMCA0TS6QJTK72CXE19GHQ": [
+      {
+        "call_id": "fc-01M7EMCA0TS6QJTK72CXE19GHQ",
+        "status": "SUCCESS",
+        "children": [
+          {
+            "call_id": "fc-01M7EMCQASD8JS0D65F4VYHA4R",
+            "status": "FAILURE",
+            "children": []
+          },
+          {
+            "call_id": "fc-01M7EMCY7KTTJR4GWH64NHX9XB",
+            "status": "FAILURE",
+            "children": []
+          }
+        ]
+      }
+    ],
+    "fc-01M7ETB3CY40QRKMRRBTR3CA0W": [
+      {
+        "call_id": "fc-01M7ETB3CY40QRKMRRBTR3CA0W",
+        "status": "SUCCESS",
+        "children": [
+          {
+            "call_id": "fc-01M7ETBCWRDXTYFS8QDAQNNFYD",
+            "status": "FAILURE",
+            "children": []
+          },
+          {
+            "call_id": "fc-01M7ETBFP8KWVT8GQNW80J3007",
+            "status": "FAILURE",
+            "children": []
+          }
+        ]
+      }
+    ],
+    "fc-01M7EWQFMCVQX2YHVNF22FQAAV": [
+      {
+        "call_id": "fc-01M7EWQFMCVQX2YHVNF22FQAAV",
+        "status": "SUCCESS",
+        "children": [
+          {
+            "call_id": "fc-01M7EWQR7Z7Y5RQBAF80A9SHPT",
+            "status": "FAILURE",
+            "children": []
+          },
+          {
+            "call_id": "fc-01M7EWQSX6NCP0TS1MVDKTVMGA",
+            "status": "FAILURE",
+            "children": []
+          }
+        ]
+      }
+    ]
+  },
+  "reservations": {
+    "owner:agl-explore-20-v1-r02/exploratory-qualification/a01": {
+      "call_id": "fc-01M7EWQFMCVQX2YHVNF22FQAAV",
+      "plan_sha256": "d319235a4768229daf8626104fca15c308ef591045ed354953188eecaf059fd7"
+    },
+    "submission:agl-explore-20-v1-r02/exploratory-qualification/a01": {
+      "status": "submitted",
+      "study_key": "agl-explore-20-v1-r02/exploratory-qualification/a01",
+      "plan_sha256": "d319235a4768229daf8626104fca15c308ef591045ed354953188eecaf059fd7",
+      "completion_proven": false,
+      "call_id": "fc-01M7EWQFMCVQX2YHVNF22FQAAV"
+    },
+    "exploratory-allocation:agl-explore-20-v1-r02:exploratory-qualification": {
+      "plan_sha256": "d319235a4768229daf8626104fca15c308ef591045ed354953188eecaf059fd7",
+      "source": "fa4dc93e973344c87fb914b15b5a9c07ce1ee4fc",
+      "funding": {
+        "maximum_additional_usd": 300,
+        "qualification_usd": 50,
+        "study_workers_usd": 150,
+        "other_overhead_usd": 25,
+        "reserve_usd": 75,
+        "reserve_released_usd": 0,
+        "operational_limit_usd": 225,
+        "worker_hourly_ceiling_usd": 10,
+        "supervisor_hourly_ceiling_usd": 1,
+        "new_storage_ceiling_gib": 600,
+        "storage_cost_horizon_days": 7,
+        "collection_ceiling_gib_per_phase": 10,
+        "automatic_retries": 0,
+        "automatic_timeout_extensions": false,
+        "seed_replacement": false,
+        "outcome_selection": false,
+        "checkpoint_policy": "one-final-per-run-no-deletion",
+        "qualification_required_once": true,
+        "standalone_pilot_required": false,
+        "admission_probe_required": false
+      }
+    },
+    "owner:agl-explore-20-v1-r02/exploratory/a01": null,
+    "submission:agl-explore-20-v1-r02/exploratory/a01": null,
+    "exploratory-allocation:agl-explore-20-v1-r02:exploratory": null,
+    "owner:agl-explore-20-v1-r03/exploratory-qualification/a01": null,
+    "submission:agl-explore-20-v1-r03/exploratory-qualification/a01": null,
+    "exploratory-allocation:agl-explore-20-v1-r03:exploratory-qualification": null,
+    "owner:agl-explore-20-v1-r03/exploratory/a01": null,
+    "submission:agl-explore-20-v1-r03/exploratory/a01": null,
+    "exploratory-allocation:agl-explore-20-v1-r03:exploratory": null
+  }
+}

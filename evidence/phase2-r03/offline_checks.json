@@ -1,0 +1,46 @@
+{
+  "executed_source_commit": "5fb6adfd48ee245509f7dff3ab1d849fcf707d86",
+  "runtime_unchanged": true,
+  "architecture": "aarch64",
+  "python": "3.12.3",
+  "network": "isolated network namespaces; loopback only; no external route",
+  "checks": [
+    {
+      "log_path": ".local/closeout-20261115/client-tests.txt",
+      "log_sha256": "e0b38c461b14ac7878656a77a4507b1f435d5462c4856bafddd53a48fb4f25f4",
+      "discovered": 286,
+      "passed": 273,
+      "failed": 0,
+      "skipped": 13,
+      "exit_code": 0
+    },
+    {
+      "log_path": ".local/closeout-20261115/pinned-tests.txt",
+      "log_sha256": "f1dde5a5c3f6c3d572c8e414c2d664af82e6a9bef06681fb8d78fa5af78b6fcc",
+      "discovered": 61,
+      "passed": 58,
+      "failed": 2,
+      "skipped": 1,
+      "exit_code": 1
+    },
+    {
+      "log_path": ".local/closeout-20261115/pinned-tests-corrected.txt",
+      "log_sha256": "189d955b34ea47ff596222dffb89aee34b7731d4cc125fb9967bf364da095832",
+      "discovered": 61,
+      "passed": 59,
+      "failed": 1,
+      "skipped": 1,
+      "exit_code": 1
+    },
+    {
+      "log_path": ".local/closeout-20261115/pinned-tests-final.txt",
+      "log_sha256": "7cc4779ef68e68e0e7a4690efc45f5e485ca29e1894d439c4a85a42fdda96b92",
+      "discovered": 61,
+      "passed": 60,
+      "failed": 0,
+      "skipped": 1,
+      "exit_code": 0
+    }
+  ],
+  "scope": "Local integration checks, not new scientific evaluation. Raw test logs remain local; exact commands and skip/retained-evidence boundaries are in INTEGRATION_CHECKS.md."
+}

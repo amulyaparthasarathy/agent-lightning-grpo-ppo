@@ -1,0 +1,130 @@
+{
+  "schema_version": 1,
+  "scope": "Selected derived evidence; paths resolve relative to this manifest. Input paths resolve from the original exploratory repository root and are private locators, not bundled artifacts. No raw/tensor revalidation is implied.",
+  "executed_source_commit": "5fb6adfd48ee245509f7dff3ab1d849fcf707d86",
+  "study_id": "agl-explore-20-v1-r03",
+  "qualification_plan_sha256": "00668b59c4943a1e5f450a41b733736ae858d591c4bdda99093bed5418747d55",
+  "study_plan_sha256": "979046370f524f59b838c12dd93f3f3da31acd5b6c52cd7fb41e2e9dd617144a",
+  "artifacts": [
+    {
+      "path": "per_seed_results.csv",
+      "sha256": "3357ebcba40a350c59aa00f6dbf52e4e272ec3a945bf561ef9228c2619416750",
+      "bytes": 1392,
+      "input_path": ".local/recovery-r03/scientific-review-20261115-02/final/per_seed_results.csv",
+      "input_sha256": "a4cdde63b8d4da4b4bb7ada438bd012bb6fe2dda241b8a9ee54fa220f37099c4",
+      "transformation": "Publication copy: normalized CRLF to LF for Git storage; CSV fields/values unchanged. Original audit file preserved."
+    },
+    {
+      "path": "paired_differences.csv",
+      "sha256": "3cd72cbd8aebed03bb893a99478a939d0cc065ce3df8b639b66b787159fe0b1b",
+      "bytes": 293,
+      "input_path": ".local/recovery-r03/scientific-review-20261115-02/final/paired_differences.csv",
+      "input_sha256": "4e1f85891ce03d82303abdf83d2125ad4773f8dccd9dc270efde69533bfc231d",
+      "transformation": "Publication copy: normalized CRLF to LF for Git storage; CSV fields/values unchanged. Original audit file preserved."
+    },
+    {
+      "path": "stage_receipts.csv",
+      "sha256": "d8b87887658280c3a6ff8daca23a620498f7b3c90b45f6709885047347ce17a2",
+      "bytes": 29735,
+      "input_path": ".local/recovery-r03/scientific-review-20261115-02/final/stage_receipts.csv",
+      "input_sha256": "eb29f5c809348cb99aca0301cb18baf34627e1c6545aeb211c75016bc2376707",
+      "transformation": "Publication copy: normalized CRLF to LF for Git storage; CSV fields/values unchanged. Original audit file preserved."
+    },
+    {
+      "path": "failed_attempts.csv",
+      "sha256": "8f54fc5a36dea533eaebca1df5d0d90903fba285abec31f6added602f508eae0",
+      "bytes": 1036,
+      "input_path": ".local/recovery-r03/scientific-review-20261115-02/final/failed_attempts.csv",
+      "input_sha256": "0a21302554dab00e854d93b9eadde80343d5c2ac1f47396dff5205ceaffceeed",
+      "transformation": "Publication copy: normalized CRLF to LF for Git storage; CSV fields/values unchanged. Original audit file preserved."
+    },
+    {
+      "path": "figures/paired_baseline_final_accuracy.svg",
+      "sha256": "95dc6cc14f58412b99a7e5422f2068cb758427093e3fac9c46979fcea29f959a",
+      "bytes": 5697,
+      "input_path": ".local/recovery-r03/scientific-review-20261115-02/final/figures/paired_baseline_final_accuracy.svg",
+      "input_sha256": "95dc6cc14f58412b99a7e5422f2068cb758427093e3fac9c46979fcea29f959a",
+      "transformation": "Byte-for-byte copy of the locally generated scalar-results figure."
+    },
+    {
+      "path": "VERIFICATION.md",
+      "sha256": "674a71a5e6b4de5e07b7c1f31796d511f01b63a926229c2ffe4437b53acebeee",
+      "bytes": 5064,
+      "input_path": ".local/recovery-r03/scientific-review-20261115-02/final/VERIFICATION.md",
+      "input_sha256": "eda8da360f10aecd2b5c6a923cf485128f5e413dad51dad5ee36500d79a046aa",
+      "transformation": "Prepended publication-copy/scope notice; original audit text unchanged."
+    },
+    {
+      "path": "SCIENTIFIC_ANALYSIS.md",
+      "sha256": "1d12b5ee7d2c352ea548faccf642f22935406f6eaf4bb3c76a864198db82c0a9",
+      "bytes": 25055,
+      "input_path": ".local/recovery-r03/scientific-review-20261115-02/final/SCIENTIFIC_ANALYSIS.md",
+      "input_sha256": "ba541f71cf77d668a5dc8cb7968d17f082c89416f595114b72e93c4cfaa322e2",
+      "transformation": "Publication copy: replaced stale local/Git status paragraphs with executed-source notice and closeout link; removed workspace/entity from reader overview; replaced full-atlas claim with selected-bundle scope. Numeric analysis unchanged."
+    },
+    {
+      "path": "EVIDENCE_INDEX.md",
+      "sha256": "848a8ecf9b250c3c984a8cbcb744a0f150cb5f11529e1b500e21ae859f8d15a7",
+      "bytes": 3816,
+      "transformation": "New closeout record, not an edited audit artifact."
+    },
+    {
+      "path": "INTEGRATION_CHECKS.md",
+      "sha256": "9258f813e8558428058e5cceee29a066824b3fab327b43c37507af7fc80da147",
+      "bytes": 7888,
+      "transformation": "New closeout record, not an edited audit artifact."
+    },
+    {
+      "path": "figures/INDEX.md",
+      "sha256": "2e11c926497bd8ae8e6b3285a86fa21eb5e73517367bb01cfbcac7300e08a100",
+      "bytes": 445,
+      "transformation": "New closeout record, not an edited audit artifact."
+    },
+    {
+      "path": "offline_checks.json",
+      "sha256": "11619144c116560573d9d617d33cb827d8f85c0e8a19da76eb0647219577ae1a",
+      "bytes": 1524,
+      "transformation": "New closeout record, not an edited audit artifact."
+    },
+    {
+      "path": "retained-wheel-test-scope.json",
+      "sha256": "3aa9625d9e117af5009e03d822dcd33dc265def106042ac791c2914846390428",
+      "bytes": 989,
+      "transformation": "Byte-for-byte copy of closeout source/wheel identity check.",
+      "input_path": ".local/closeout-20261115/retained-wheel-test-scope.json",
+      "input_sha256": "3aa9625d9e117af5009e03d822dcd33dc265def106042ac791c2914846390428"
+    }
+  ],
+  "omitted_local_artifacts": [
+    {
+      "input_path": ".local/recovery-r03/scientific-review-20261115-02/final/EVIDENCE_INDEX.md",
+      "input_sha256": "6113728a2bfccad158edbed8c48e1a53312143af856b27ca1a0a40d81e02ea6a",
+      "reason": "Retained locally; original paths/scope are not transplanted into this bundle."
+    },
+    {
+      "input_path": ".local/recovery-r03/scientific-review-20261115-02/final/input_hashes.csv",
+      "input_sha256": "6fddc1f110377eaab0fd33a282db8854a013a6386a21c3d8017153dbca3b897d",
+      "reason": "Retained locally; original paths/scope are not transplanted into this bundle."
+    },
+    {
+      "input_path": ".local/recovery-r03/scientific-review-20261115-02/final/artifact_hashes.csv",
+      "input_sha256": "3a4395a3ac0e37d2de38e0a7444a6078aed19cefdc5bf84b68116b19ed19350a",
+      "reason": "Retained locally; original paths/scope are not transplanted into this bundle."
+    },
+    {
+      "input_path": ".local/recovery-r03/scientific-review-20261115-02/final/training_metrics_long.csv",
+      "input_sha256": "4f08ebf1e0aa7e5e45081ad8a0c13749477fa896b6f81d12b2d563ba69328e18",
+      "reason": "Retained locally; original paths/scope are not transplanted into this bundle."
+    },
+    {
+      "input_path": ".local/recovery-r03/scientific-review-20261115-02/final/validation.json",
+      "input_sha256": "27f686b1ba1384c3e5a57ae640aa21dd48a8fecc82fb2be98c0a617edc732c69",
+      "reason": "Retained locally; original paths/scope are not transplanted into this bundle."
+    },
+    {
+      "input_path": ".local/recovery-r03/scientific-review-20261115-02/final/figures/INDEX.md",
+      "input_sha256": "3fe28a15d67cd218380e83679bc0b14e57c335e5a95b53503418517cdcef05ef",
+      "reason": "Retained locally; original paths/scope are not transplanted into this bundle."
+    }
+  ]
+}

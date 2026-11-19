@@ -1,0 +1,136 @@
+{
+  "prepared_date": "2026-11-11",
+  "purpose": "Agent Lightning course experiment using the existing Unix AI Workbench, a uv-managed local client, and a separate Modal training runtime",
+  "workbench": {
+    "repository": "amulyaparthasarathy/unix-ai-workbench",
+    "branch": "main",
+    "commit": "3e3951396bc23e05c4d95084e76ae6f5a60052c3",
+    "files": {
+      ".devcontainer/Dockerfile": {
+        "git_blob_sha": "5ad4fefc1c99c182e7bfd4918c06d5d77eef71d5",
+        "url": "https://github.com/amulyaparthasarathy/unix-ai-workbench/blob/3e3951396bc23e05c4d95084e76ae6f5a60052c3/.devcontainer/Dockerfile"
+      },
+      ".devcontainer/requirements.txt": {
+        "git_blob_sha": "948a1f1f4398d7e37e62898d5d4a228fbe817837",
+        "url": "https://github.com/amulyaparthasarathy/unix-ai-workbench/blob/3e3951396bc23e05c4d95084e76ae6f5a60052c3/.devcontainer/requirements.txt"
+      },
+      ".gitignore": {
+        "git_blob_sha": "e5dc28aae3a7f2f50e5bd8f512c9b6f29ddfa52f",
+        "url": "https://github.com/amulyaparthasarathy/unix-ai-workbench/blob/3e3951396bc23e05c4d95084e76ae6f5a60052c3/.gitignore"
+      },
+      "workbench": {
+        "git_blob_sha": "58714507d87861b6a7648cc8923cdd29e1469c6b",
+        "url": "https://github.com/amulyaparthasarathy/unix-ai-workbench/blob/3e3951396bc23e05c4d95084e76ae6f5a60052c3/workbench"
+      },
+      "scripts/prepare-host.sh": {
+        "git_blob_sha": "c51a76370de00de995a94fed5af9d7a4e7fe29f8",
+        "url": "https://github.com/amulyaparthasarathy/unix-ai-workbench/blob/3e3951396bc23e05c4d95084e76ae6f5a60052c3/scripts/prepare-host.sh"
+      },
+      "docs/repository-preparation.md": {
+        "git_blob_sha": "a57785df3523d2ee4ef480bbf26f461c37cd4993",
+        "url": "https://github.com/amulyaparthasarathy/unix-ai-workbench/blob/3e3951396bc23e05c4d95084e76ae6f5a60052c3/docs/repository-preparation.md"
+      },
+      "README.md": {
+        "git_blob_sha": "86231b04fa530d0e2e2132a552e36adc11eb2b1f",
+        "url": "https://github.com/amulyaparthasarathy/unix-ai-workbench/blob/3e3951396bc23e05c4d95084e76ae6f5a60052c3/README.md"
+      },
+      "AGENTS.md": {
+        "git_blob_sha": "2126f82d468bfd5b78f4243dd6fbbac4eec28fbd",
+        "url": "https://github.com/amulyaparthasarathy/unix-ai-workbench/blob/3e3951396bc23e05c4d95084e76ae6f5a60052c3/AGENTS.md"
+      },
+      ".devcontainer/devcontainer.json": {
+        "git_blob_sha": "3f73711563ef53eb630d104aa2698fd8a30708d1",
+        "url": "https://github.com/amulyaparthasarathy/unix-ai-workbench/blob/3e3951396bc23e05c4d95084e76ae6f5a60052c3/.devcontainer/devcontainer.json"
+      }
+    }
+  },
+  "course": {
+    "repository": "amulyaparthasarathy/cs329z-fall-2026",
+    "branch": "main",
+    "commit": "d0fb0ed3bcebe968126f06920e574e8681954334",
+    "files_read": [
+      "README.md",
+      "PROJECT_CONTEXT.md",
+      "playbook/decisions.md"
+    ]
+  },
+  "attachment": {
+    "filename": "Surface Laptop Ultra local model runbook 111126-0902.md",
+    "source": "User attachment; read as supplied, no live host verification",
+    "sha256": "718e8ab9ac1d4b4f5426645b6c7fbe7f18c2455a72e326f10dc73474476b91c7"
+  },
+  "earlier_starter": {
+    "filename": "Agent_Lightning_Weekend_Runbook.zip",
+    "sha256": "107e8070d57d3a311c70147f604b9e84664a469409dccb93a0517670c63f8f3a",
+    "new_location": "experiment/",
+    "changes": "Initial Workbench repackaging retained the training source. The dated Modal migration below records subsequent changes."
+  },
+  "file_sha256": {
+    ".gitattributes": "371053d5bc395649e18b2fa570119cc3c03e499ce4ee403a3d842d44f47993cf",
+    ".gitignore": "4a86b2dc5cfd99d74574615eccc227665b0767d6486c3dc76b87ef9fc7d22f52",
+    ".python-version": "7b55f8e67b5623c4bef3fa691288da9437d79d3aba156de48d481db32ac7d16d",
+    "README.md": "f3e61ba154a5bbbd85f524fd7fe46e9d70d851e7b7e34c2f8afb8655a562bc6c",
+    "VERIFICATION.json": "63f4a0c9588b40deb91ea5ea7340d2d1a6bbd4fa3dac8e98af0966359d2d6d90",
+    "containers/.dockerignore": "549b8fc02d08546f8b3017a353d8d4f76927a137524efd7752171b573b4d85f9",
+    "containers/Dockerfile.gpu": "e03996035278bf6838d282b491637839cd6d6a2910a5f6f39113d7225efdb4d9",
+    "containers/compose.gpu.yaml": "15847a37a7bf0745a88edb719a9cfc09efeebe006b58035e2f777117a04d698f",
+    "docs/WORKBENCH_REVIEW.md": "4eeec5238122b68d07ed7494958bed3b8cab89e993de02e8258ac99f0ab498a6",
+    "evidence/README.md": "32b99b632b362b9a4cdf129efe3c36f10350e1ad0ab5db59aac7ff8387a50a46",
+    "experiment/LICENSE-AgentLightning.txt": "264f98a5bef291a661b9858593beb7c708022073c403f06fdd1e9be7bbbcb600",
+    "experiment/README.md": "b1adccb0a1166a1b74ebd830288b5d83a8d24e723205a07adac0b92b522d0cf8",
+    "experiment/VERIFICATION.json": "d61b5ceb717644e985bf8867d007de93f5737c8b1cb92aa080377762e2c0e043",
+    "experiment/bootstrap_gpu.sh": "4e703b7462ccac9bf43be45a22a5f6cf9b08b443cb88d82201c650ca6dbd98a8",
+    "experiment/check_gpu.py": "e21b7247e14ba00ae00a2b5e108aa35bdf1a9afa33c02909f497028de87ed8a0",
+    "experiment/cpu_accounting_demo.py": "70edf1383e968c6be075cecf47b4177743cef5710f92da8842aa00b5eae82e3e",
+    "experiment/example_outputs/cpu-accounting/cpu-accounting.json": "a8fb6425f1f9150a2e8a3a27ae747445dd8ff53e8f9248df1f5c917fae69c2ce",
+    "experiment/launch.py": "207f2b2514f533e44bf92c5bdecc9c63f0d813e36f3117e716835776b561d09d",
+    "experiment/observed_calc_agent.py": "e802a2324dab779ffaa49af678196a7cc5f02e3bb89936bd0ed1f1ed8c3a02fc",
+    "experiment/prepare_data.py": "5f255d6932f9f47f629a0c8ce24516226fd8e53f3f435766835fd6ae6e86b87b",
+    "experiment/prepare_model.py": "d5663d8056ca2b3a28f8b8980e0ea84b3c9ed684a660c6ec8dfd19e13c993269",
+    "experiment/requirements-agent.txt": "421b19b31e47b210ad1a511af4db5a6b09f559c0b83c6f76cb7831d57e0f1257",
+    "experiment/summarize.py": "a70fc41d08c60e95676ae02121f29f82b51b55ab0e2a84a717c86f4ab20dbc1d",
+    "experiment/templates/LICENSE-vllm.txt": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+    "experiment/templates/PROVENANCE.json": "5a64279f1baa52081669778729229bd31b5de96b44f4c6869386ed0e011d0ab6",
+    "experiment/templates/tool_chat_template_llama3.1_json.jinja": "8aedd05f7ab549b897b929c89da9b62e537f4f4197f33736e9d2f10fea53b1bf",
+    "integration/README.md": "c018c625295ced9842793fd7d775cf60e3bab0a2d42e4c843c72bd880f3fc7c1",
+    "integration/optional-workbench-llm.patch": "1652ee1c1537d98ed8b0e0fb3a11198d6c328d1343c23af501b3b3f95bef040c",
+    "modal_app.py": "d914c293b102a08bb49a68ac0e04b976d713a4e3f4e1cf64d86111cef24ed6a6",
+    "pyproject.toml": "cb763678c14a81ec98a3bf40fbf10515a248cd3c7893a293cc891ee9b5b3f9b1",
+    "scripts/check_endpoint.py": "a44cca798769efcf42428b2b9bfd4c2d10935b70fb79c65f4fddcd8320e7f40c",
+    "scripts/gpu-runtime.sh": "36be77a9c82646685904c3cc8af406919889e0d327dac49e6af6949a3bf8f476",
+    "scripts/install_modal_training.sh": "7d22047bfae469b664f996569cb58ab904a6c0ee2b163d99274eeac2a931becb",
+    "tests/test_modal_runner.py": "eff8f2714af481cc656ae448e67f63017e2208bbeaff6e71e6b1e1a5a7d62172",
+    "tests/test_training_interpreter.py": "5157f12a13be39ce1ba6cbb50cf1f165442b7c240b9e06b92df94beb86d0a3fc",
+    "uv.lock": "0075019d55ea5044830575bf36ba7a84b73eca02edfd26f41817068dc9367949"
+  },
+  "updated_date": "2026-11-11",
+  "repository": "amulyaparthasarathy/agent-lightning-lab",
+  "initial_starter_github_mutations_performed": 0,
+  "modal_migration": {
+    "reviewed_base_commit": "1e849089fe503a40570f46a140e509a1799344e0",
+    "reviewed_base_tree": "e15a4f188b5053842b614aecc099a4d18e2b6538",
+    "source_snapshot": "All 30 baseline files matched their Git blob SHAs before modification.",
+    "local_client": {
+      "python": "3.12",
+      "uv": "0.12.13",
+      "modal": "1.6.3",
+      "lock_scope": "Local client dependencies only"
+    },
+    "training_image": {
+      "base": "nvidia/cuda:13.0.0-devel-ubuntu24.04",
+      "index_digest": "sha256:1e8ac7a54c184a1af8ef2167f28fa98281892a835c981ebcddb1fad04bdd452d",
+      "agent_lightning_commit": "cbc56e41e0eab643aa71d195e92e5bba652fa683",
+      "verl": "0.8.0",
+      "vllm": "0.22.0",
+      "flash_attention": "2.8.3",
+      "dependency_scope": "Pinned upstream base lock and installation recipe; installed GPU packages are recorded at image build time, not fully locked by the local uv.lock."
+    },
+    "flash_attention_arch_source": {
+      "url": "https://github.com/Dao-AILab/flash-attention/blob/v2.8.3/setup.py",
+      "git_blob_sha": "a108c412c00c8840c99bde6749e552d1fdbdc957"
+    },
+    "verification": "VERIFICATION.json",
+    "publication_identity": "The Git commit containing this file records the published migration; no self-referential commit SHA is embedded.",
+    "launcher_correction": "Preserve .venv/bin/python symlink when making its path absolute; verified by executing a temporary virtual environment."
+  }
+}

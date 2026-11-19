@@ -1,0 +1,11 @@
+{
+  "source_commit": "f01da0e7978b268794f1e9d77496f9697482787b",
+  "app_id": "ap-IZ5DyjATiXCKQ24RriasXN",
+  "failure": "ModuleNotFoundError: No module named 'modal_app'",
+  "file": "/root/matched_app.py",
+  "stage": "supervisor hydration",
+  "state": "stopped",
+  "active_tasks": 0,
+  "state_evidence": "Owner confirmed in task; not re-queried from Modal",
+  "reproduction": "tests/test_matched_import.py: real Modal 1.6.3 import_single_function_service, both functions, image-equivalent isolated filesystem, network blocked"
+}

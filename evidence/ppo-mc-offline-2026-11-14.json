@@ -1,0 +1,134 @@
+{
+  "command": "MODAL_CONFIG_PATH=/dev/null HF_HUB_OFFLINE=1 uv run --locked --offline python -m unittest discover -s tests -v",
+  "started_utc": "2026-11-14T18:12:58.540763+00:00",
+  "finished_utc": "2026-11-14T18:13:05.864494+00:00",
+  "source_head": "bca9303bba69e8af0f56e393ed1d938716eb45f1",
+  "tracked_dirty": true,
+  "exit_code": 0,
+  "test_count": 180,
+  "suite_seconds": 6.943,
+  "log_sha256": "d80c1ce5acaf830f0d7a416ef0eed8c1643391288201c4d048745ee8705830c3",
+  "environment": {
+    "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+    "platform": "Linux-5.15.167.4-microsoft-standard-WSL2-aarch64-with-glibc2.39",
+    "machine": "aarch64",
+    "uv": "uv 0.12.13 (aarch64-unknown-linux-gnu)",
+    "MODAL_CONFIG_PATH": "/dev/null",
+    "HF_HUB_OFFLINE": "1"
+  },
+  "tested_source_sha256": {
+    "modal_app.py": "68d06707ad77adc5c64b4312106a1765e139b7682ffcbe8ca7866c4cb02bc308",
+    "experiment/launch.py": "1829ebe61938c45776467ed501e63516f758a9101b8cac3a4b57e42e41ab0a5e",
+    "experiment/ppo_contract.py": "600477e58254e1afa21a7bcc8a06cc894ea8dd81b6e0308d0cc2c0d5b5f48f67",
+    "experiment/ppo_math.py": "a25b83662961623aaabd62620f01fa604ec2a3f255aeeaea0adaaec2bb93e40b",
+    "experiment/ppo_runtime.py": "2d67c6210ca515b404354ef6851a50074b70076d89b24e61b7517698948d33e8",
+    "experiment/ppo_source_lock.json": "9d211065a5dd984d5fdfc43c63cab6c38e86ff36a2f4cac9ff0b9ab63302665a",
+    "tests/test_ppo_mc.py": "e75071df370ef1c0e1bcda961a15b66b9c564612397f2797b0c35bf873f2e890"
+  },
+  "limitations": [
+    "Offline stdlib ports/static contracts and mocked dispatch; no Torch/VERL/NumPy/OmegaConf installed",
+    "No Modal API, image build, inference, model load, training, evaluation, GPU runtime, checkpoint or hosted W&B readback executed"
+  ],
+  "qualification": "Offline implementation evidence only; real runtime and comparison unqualified",
+  "branch": "feat/ppo-mc-smoke",
+  "source_note": "Precommit working tree based on source_head; tested file hashes identify exact implementation. Draft PR body records committed-head verification separately.",
+  "upstream_review": {
+    "lock_sha256": "7d98660af9bfdc24072081243fd7efeddf930807d0180925c439e49a1d8a33a5",
+    "agentlightning_commit": "cbc56e41e0eab643aa71d195e92e5bba652fa683",
+    "verl_source_commit": "7aed6b230776f963fa09509c10d9c3a767d1102c",
+    "files_verified": 36
+  },
+  "protected_inputs": {
+    "base_commit": "bca9303bba69e8af0f56e393ed1d938716eb45f1",
+    "protected_files_unchanged": 32,
+    "file_sha256": {
+      "docs/GITHUB_CLOSEOUT_REVIEW_2026-11-14.md": "3dfefa8808c195c9bbdefa08a24c6b47c8d0e2eaa367d9b7b23ab6099eef73bb",
+      "docs/PRESERVATION.md": "a72ff5a49ee3b57a2a59a56889a2a935cbb8e2b246a9ee8e794249b9879e80cc",
+      "docs/PRESERVATION_CLOSEOUT_2026-11-14.md": "69fbbd50f4f262e7bb3c19665406772740fcd55f4e57d3cc5193a71b7a92a27e",
+      "docs/PRESERVATION_EXECUTION.md": "c6157b82ccb70c1a522bbf46649d2ef425ad7a4862d5c25ada929ba0caab83d7",
+      "evidence/README.md": "a4a9125d63c079ca645188d84757a2970e9231cfee68229c4e46ea3952f8465a",
+      "evidence/grpo-main-01-cases.csv": "aebd609ca4e80ef0d76d1b9897b7b18dd1c16ffcaa9e0257e8ac453d7f49f84f",
+      "evidence/grpo-main-01.md": "24a11df7a2e0275ccd3fecf40c62ea41e5b27a6aab6525d980b7863854fe7f45",
+      "evidence/grpo-smoke-01.md": "a07ea5851cb52343021f491b96aafcdbcab1adc9287f7cf95e4f7cddb774817b",
+      "evidence/preservation-closeout-2026-11-14.json": "e4b179d3dfdc6d17478fc8d74d3b5ddc7b6d36d32844b37638f3ab9047c442a1",
+      "evidence/preservation-closeout-archive-2026-11-14.json": "2fd4471507444b90196c95010e735ce48b03a3532126b40afc9becd9a0b3010e",
+      "evidence/preservation-preflight-2026-11-14.json": "3364b933967698cfbc296ad1cf5b9db6c6174254bb41be426c9de7f52ac3de58",
+      "evidence/preservation-source-resources-2026-11-14.json": "e1e8c8525806dc43c0d900efcb7fff02bc78449fd7868597a8071c36d5fa8ee8",
+      "experiment/observed_calc_agent.py": "e802a2324dab779ffaa49af678196a7cc5f02e3bb89936bd0ed1f1ed8c3a02fc",
+      "experiment/prepare_data.py": "5f255d6932f9f47f629a0c8ce24516226fd8e53f3f435766835fd6ae6e86b87b",
+      "experiment/prepare_model.py": "d5663d8056ca2b3a28f8b8980e0ea84b3c9ed684a660c6ec8dfd19e13c993269",
+      "preservation_app.py": "5c6b73c438dab2a5ff1d00466d04f93a13d31af4df2d4113439e2dce3b7e1cb1",
+      "pyproject.toml": "cb763678c14a81ec98a3bf40fbf10515a248cd3c7893a293cc891ee9b5b3f9b1",
+      "scripts/finalize_modal_training.sh": "47e463e72669c6d014f75535c51acd7d3b9e0575698ea4ef7d3d71c5df7b3cee",
+      "scripts/install_modal_training.sh": "d438898fa5d2e18d1c2dd83a1f74df1d32216fa5b860e1234c237c8d3601ce7f",
+      "scripts/preservation_closeout.py": "4621ecec0bc17890bdcdabfa5aa5f10a616d356059c01e7c950cacc6f88e018d",
+      "scripts/preservation_http.py": "d897b075f63e4fa23cabe7d4cd77ba92e3931450426ad4da3550d5e822b8e2cf",
+      "scripts/preservation_manifest.py": "836233e73164234c6658a50c866a25adae9e7025428c818deb22370b21698119",
+      "scripts/preservation_phases.py": "944879532d014b648bfbcce0c933c59ac6e5fdafde2fe3925b2239dedc4349d0",
+      "scripts/preservation_plan.py": "1538270c551e0b96533ae0de8559af809d94b3cf94f4f8a61f94874db70bc097",
+      "scripts/preservation_preflight.py": "1314ef895d938353353d0b2b45421cb040f6afcd00eb9ab908c19616ca26ef8a",
+      "scripts/preservation_release.py": "900898520b1ef915af00d2680e5431b66c13c2408a8692243b267487c4998f8a",
+      "scripts/preservation_startup.py": "23d550bb3862be06f2020f2a3f3bcdb420c2dfb3e0cbd752ca3a2fc5907ec6c5",
+      "scripts/preservation_tensor.py": "8c2666e05d4404a8b52888bfba1fc123df994ae371b7ccc00045471b6b6e8c39",
+      "scripts/preservation_transfer.py": "8f677ecdd39d570aa1046899d3cbb898d97f2efa82e2764004006505a447ac22",
+      "scripts/preservation_worker.py": "5e542391e14da22989534a7affce4e633e98ba05a04f244fb138d5b17d3dd4d3",
+      "scripts/preservation_workflow.py": "c7761267dbc6be8eb92fd98554716176ccf7257e39b80c8a41384e040c5b0f01",
+      "uv.lock": "0075019d55ea5044830575bf36ba7a84b73eca02edfd26f41817068dc9367949"
+    }
+  },
+  "packet_verification": {
+    "zip_sha256": "5f389b80ca5845f99110fc5afa889607ef10e7ea1bcd968c589096d47b404c90",
+    "manifest_entries_checked": 15,
+    "batch_attempts": 64,
+    "selected_complete_traces": 8,
+    "question_groups": 16,
+    "existing_local_source_files_verified": 71,
+    "source_archive_independently_fetched_this_session": false,
+    "scripts_inspected_before_execution": true,
+    "verification_log_sha256": "d10e295308cf990ec873a79d7eb414e5770432fc32b46614519c6d13178d054c"
+  },
+  "prior_test_attempts": [
+    {
+      "kind": "py_compile",
+      "exit_code": 1,
+      "outcome": "SyntaxError in multiline test mock context; corrected before unittest execution",
+      "location": "tests/test_ppo_mc.py then-line 271",
+      "log": "conversation tool transcript; no standalone log file"
+    },
+    {
+      "private_log": ".local/ppo-review/offline-initial.log",
+      "test_count": 148,
+      "outcome": "OK",
+      "log_sha256": "a3d530cbe60c88e43e5170ceb0f993b522e275d2d515e73ded980dd54c979e5c",
+      "exit_code": "not separately captured by shell wrapper"
+    },
+    {
+      "private_log": ".local/ppo-review/offline-ppo-first.log",
+      "test_count": 28,
+      "outcome": "OK",
+      "log_sha256": "af5da1c9bd6f58ef4724b6ce2e7ad72083f086eb51e18d26a03bc1ba20e79859",
+      "exit_code": "not separately captured by shell wrapper"
+    },
+    {
+      "private_log": ".local/ppo-review/offline-ppo-second.log",
+      "test_count": 29,
+      "outcome": "OK",
+      "log_sha256": "9ee1faead43c2209ba04ce83383b395062bc5f5861b7fae0dd991a78540aeae6",
+      "exit_code": "not separately captured by shell wrapper"
+    },
+    {
+      "private_log": ".local/ppo-review/offline-full-review.log",
+      "test_count": 179,
+      "outcome": "OK",
+      "log_sha256": "da1308f63134e69a20e4b191259cbec47dc8059c574028c12f44d2f1648511b1",
+      "exit_code": "not separately captured by shell wrapper"
+    },
+    {
+      "private_log": ".local/ppo-review/final/unittest.log",
+      "test_count": 179,
+      "outcome": "OK",
+      "log_sha256": "efe7616ab73e2fc90fe7974069319b9303a02058e55134fd6e378505b52c4892",
+      "exit_code": 0
+    }
+  ]
+}

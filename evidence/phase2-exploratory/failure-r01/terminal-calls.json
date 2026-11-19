@@ -1,0 +1,39 @@
+{
+  "agl-explore-20-v1/exploratory-qualification/a01:graph": [
+    {
+      "call_id": "fc-01M7EMCA0TS6QJTK72CXE19GHQ",
+      "status": "SUCCESS",
+      "children": [
+        {
+          "call_id": "fc-01M7EMCQASD8JS0D65F4VYHA4R",
+          "status": "FAILURE",
+          "children": []
+        },
+        {
+          "call_id": "fc-01M7EMCY7KTTJR4GWH64NHX9XB",
+          "status": "FAILURE",
+          "children": []
+        }
+      ]
+    }
+  ],
+  "agl-explore-20-v1-r01/exploratory-qualification/a01:graph": [
+    {
+      "call_id": "fc-01M7ETB3CY40QRKMRRBTR3CA0W",
+      "status": "SUCCESS",
+      "children": [
+        {
+          "call_id": "fc-01M7ETBCWRDXTYFS8QDAQNNFYD",
+          "status": "FAILURE",
+          "children": []
+        },
+        {
+          "call_id": "fc-01M7ETBFP8KWVT8GQNW80J3007",
+          "status": "FAILURE",
+          "children": []
+        }
+      ]
+    }
+  ],
+  "checked_at": "2026-11-15T05:32:33.663351+00:00"
+}

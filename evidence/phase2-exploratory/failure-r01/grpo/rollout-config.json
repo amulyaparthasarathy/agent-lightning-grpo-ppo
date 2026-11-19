@@ -1,0 +1,183 @@
+{
+  "_target_": "verl.workers.config.RolloutConfig",
+  "name": "vllm",
+  "mode": "async",
+  "nnodes": 0,
+  "n_gpus_per_node": 1,
+  "temperature": 1.0,
+  "top_k": -1,
+  "top_p": 1,
+  "prompt_length": 2048,
+  "response_length": 1024,
+  "dtype": "bfloat16",
+  "gpu_memory_utilization": 0.5,
+  "ignore_eos": false,
+  "enforce_eager": true,
+  "cudagraph_capture_sizes": null,
+  "free_cache_engine": true,
+  "tensor_model_parallel_size": 1,
+  "data_parallel_size": 1,
+  "expert_parallel_size": 1,
+  "pipeline_model_parallel_size": 1,
+  "max_num_batched_tokens": 8192,
+  "max_model_len": 4096,
+  "max_num_seqs": 32,
+  "enable_chunked_prefill": true,
+  "enable_prefix_caching": true,
+  "logprobs_mode": "processed_logprobs",
+  "scheduling_policy": "fcfs",
+  "load_format": "dummy",
+  "layered_summon": false,
+  "log_prob_micro_batch_size": null,
+  "log_prob_micro_batch_size_per_gpu": 1,
+  "log_prob_use_dynamic_bsz": false,
+  "log_prob_max_token_len_per_gpu": 16384,
+  "disable_log_stats": true,
+  "do_sample": true,
+  "n": 4,
+  "over_sample_rate": 0,
+  "multi_stage_wake_up": false,
+  "engine_kwargs": {
+    "vllm": {
+      "enable_auto_tool_choice": true,
+      "tool_call_parser": "llama3_json",
+      "chat_template": "/data/restored/models/llama3b/chat_template.jinja"
+    },
+    "sglang": {},
+    "trtllm": {}
+  },
+  "val_kwargs": {
+    "_target_": "verl.workers.config.SamplingConfig",
+    "top_k": -1,
+    "top_p": 1.0,
+    "temperature": 0,
+    "n": 1,
+    "do_sample": false
+  },
+  "multi_turn": {
+    "_target_": "verl.workers.config.MultiTurnConfig",
+    "enable": false,
+    "max_assistant_turns": null,
+    "tool_config_path": null,
+    "function_tool_path": null,
+    "max_user_turns": null,
+    "max_parallel_calls": 1,
+    "max_tool_response_length": 256,
+    "tool_response_truncate_side": "middle",
+    "use_inference_chat_template": false,
+    "tokenization_sanity_check_mode": "strict",
+    "format": "hermes",
+    "num_repeat_rollouts": null
+  },
+  "calculate_log_probs": false,
+  "agent": {
+    "_target_": "verl.workers.config.AgentLoopConfig",
+    "num_workers": 8,
+    "default_agent_loop": "single_turn_agent",
+    "agent_loop_config_path": null,
+    "custom_async_server": {
+      "_target_": "verl.workers.config.CustomAsyncServerConfig",
+      "path": null,
+      "name": null
+    }
+  },
+  "checkpoint_engine": {
+    "_target_": "verl.workers.config.CheckpointEngineConfig",
+    "backend": "naive",
+    "update_weights_bucket_megabytes": 2048,
+    "engine_kwargs": {},
+    "custom_backend_module": null
+  },
+  "trace": {
+    "_target_": "verl.workers.config.TraceConfig",
+    "project_name": "cs329z-agent-lightning",
+    "experiment_name": "agl-explore-20-v1-r01-exploratory-qualification-grpo-matched-v2-s9101-a01-baseline",
+    "backend": null,
+    "token2text": false,
+    "max_samples_per_step_per_worker": null
+  },
+  "skip": {
+    "_target_": "verl.workers.config.SkipConfig",
+    "enable": false,
+    "dump_dir": "~/.verl/rollout_dump",
+    "max_dump_step": 1,
+    "action": "cache"
+  },
+  "skip_tokenizer_init": true,
+  "enable_rollout_routing_replay": false,
+  "profiler": {
+    "_target_": "verl.utils.profiler.ProfilerConfig",
+    "tool": null,
+    "enable": false,
+    "all_ranks": false,
+    "ranks": [],
+    "save_path": "outputs/profile",
+    "tool_config": {
+      "npu": {
+        "_target_": "verl.utils.profiler.config.NPUToolConfig",
+        "contents": [],
+        "level": "level0",
+        "analysis": true,
+        "discrete": false
+      },
+      "torch": {
+        "_target_": "verl.utils.profiler.config.TorchProfilerToolConfig",
+        "contents": [],
+        "discrete": false
+      },
+      "precision_debugger": {
+        "_target_": "verl.utils.profiler.config.PrecisionDebuggerToolConfig",
+        "config_path": null,
+        "steps": null,
+        "stages": null,
+        "strict": false
+      }
+    }
+  },
+  "prometheus": {
+    "_target_": "verl.workers.config.PrometheusConfig",
+    "enable": false,
+    "port": 9090,
+    "file": "/tmp/ray/session_latest/metrics/prometheus/prometheus.yml",
+    "served_model_name": "/data/restored/models/llama3b"
+  },
+  "quantization": null,
+  "quantization_config_file": null,
+  "mtp": {
+    "_target_": "verl.workers.config.MtpConfig",
+    "enable": false,
+    "enable_train": false,
+    "enable_rollout": false,
+    "detach_encoder": false,
+    "mtp_loss_scaling_factor": 0.1,
+    "speculative_algorithm": "EAGLE",
+    "speculative_num_steps": 3,
+    "speculative_eagle_topk": 1,
+    "speculative_num_draft_tokens": 4,
+    "method": "mtp",
+    "num_speculative_tokens": 1
+  },
+  "qat": {
+    "_target_": "verl.workers.config.QATEngineConfig",
+    "enable": false,
+    "mode": "w4a16",
+    "group_size": 16,
+    "ignore_patterns": [
+      "lm_head",
+      "embed_tokens",
+      "re:.*mlp.gate$"
+    ],
+    "activation_observer": "static_minmax",
+    "quantization_config_path": null
+  },
+  "disaggregation": {
+    "enabled": false,
+    "prefill_replicas": 1,
+    "decode_replicas": 1,
+    "decode_tensor_model_parallel_size": null,
+    "transfer_backend": "nixl",
+    "bootstrap_port": null,
+    "ib_device": null
+  },
+  "seed": 176784269
+}

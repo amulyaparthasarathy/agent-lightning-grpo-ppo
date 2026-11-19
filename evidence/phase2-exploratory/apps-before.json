@@ -1,0 +1,18 @@
+[
+  {
+    "app_id": "ap-IZ5DyjATiXCKQ24RriasXN",
+    "description": "cs329z-matched-study-v2",
+    "state": "stopped",
+    "tasks": "0",
+    "created_at": "2026-11-14 16:27:36-08:00",
+    "stopped_at": "2026-11-14 16:33:51-08:00"
+  },
+  {
+    "app_id": "ap-7CjhfCpJP5GopNt3R9mjVt",
+    "description": "swe-rex",
+    "state": "stopped",
+    "tasks": "0",
+    "created_at": "2026-09-17 21:23:12-08:00",
+    "stopped_at": "2026-11-14 16:09:48-08:00"
+  }
+]

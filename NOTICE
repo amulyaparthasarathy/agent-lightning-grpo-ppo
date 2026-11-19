@@ -1,0 +1,30 @@
+Agent Lightning Lab third-party attribution
+
+Agent Lightning portions
+Copyright (c) Microsoft. All rights reserved.
+MIT terms: experiment/LICENSE-AgentLightning.txt
+Source: microsoft/agent-lightning at cbc56e41e0eab643aa71d195e92e5bba652fa683
+
+VERL Notice.txt attribution (retained verbatim, except trailing whitespace)
+Copyright 2023-2024 Bytedance Ltd. and/or its affiliates
+Source: verl-project/verl at 7aed6b230776f963fa09509c10d9c3a767d1102c/Notice.txt
+
+Applicable VERL source notices
+Copyright 2024 Bytedance Ltd. and/or its affiliates
+Copyright 2025 Bytedance Ltd. and/or its affiliates
+Copyright 2022 The HuggingFace Team. All rights reserved.
+Apache-2.0 terms: LICENSES/Apache-2.0.txt
+The pinned VERL GAE/value-loss functions record Hugging Face TRL ancestry.
+The lab ports and adaptations are identified in docs/THIRD_PARTY_RIGHTS.md
+and in the three affected source-file headers.
+
+vLLM template
+Source: vllm-project/vllm v0.22.0, commit
+0b3ba88f165976e77ca5e6a7a3f5bba4562b80af
+Apache-2.0 terms: experiment/templates/LICENSE-vllm.txt
+Provenance: experiment/templates/PROVENANCE.json
+
+This attribution notice does not change any license. Original lab material
+has the separate scopes described in LICENSING.md. The original historical Git objects remain private and are not part of this
+publication. Every published source commit contains these corrected notices;
+PUBLICATION_PROVENANCE.json maps the original identities to this snapshot.

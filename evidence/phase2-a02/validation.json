@@ -1,0 +1,16 @@
+{
+  "valid": true,
+  "offline": true,
+  "plan_sha256": "534a9e1024d93a5cacb7fd21797ab29adb7eb317524886c7922b81c52bc4e8b6",
+  "authorization_token": "agl-matched-v2/qualification/a02:534a9e1024d93a5cacb7fd21797ab29adb7eb317524886c7922b81c52bc4e8b6",
+  "source_clean": true,
+  "bounds": {
+    "stage_seconds": 3600,
+    "startup_seconds": 600,
+    "supervisor_seconds": 11400,
+    "concurrency": 2,
+    "max_gpu_seconds": 21600,
+    "budget_usd": 100.0,
+    "all_resource_hourly_ceiling_usd": 10.0
+  }
+}

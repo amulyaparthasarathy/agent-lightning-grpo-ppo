@@ -1,0 +1,30 @@
+[
+  {
+    "file": ".local/failure-r01/phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-grpo-matched-v2-s9101-a01/baseline/resolved_config.json",
+    "sha256": "c3106fc4f913cc91de1859b713c5a085aeacbb8436a2bfbad69639d736c9c31c",
+    "algorithm": "grpo-matched-v2",
+    "old_exception_reproduced": true,
+    "corrected_native_types": {
+      "actor_rollout_ref.actor": "FSDPActorConfig",
+      "critic": "FSDPCriticConfig",
+      "actor_rollout_ref.rollout": "RolloutConfig",
+      "actor_rollout_ref.model": "HFModelConfig",
+      "actor_rollout_ref.rollout.checkpoint_engine": "CheckpointEngineConfig"
+    },
+    "actor_sampling": 176784269
+  },
+  {
+    "file": ".local/failure-r01/phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-ppo-mc-matched-v2-s9101-a01/baseline/resolved_config.json",
+    "sha256": "a63072cf50a319cd53e0ad777d85ad1f0c3f2768e54a61df654009850d9de5e5",
+    "algorithm": "ppo-mc-matched-v2",
+    "old_exception_reproduced": true,
+    "corrected_native_types": {
+      "actor_rollout_ref.actor": "FSDPActorConfig",
+      "critic": "FSDPCriticConfig",
+      "actor_rollout_ref.rollout": "RolloutConfig",
+      "actor_rollout_ref.model": "HFModelConfig",
+      "actor_rollout_ref.rollout.checkpoint_engine": "CheckpointEngineConfig"
+    },
+    "actor_sampling": 1628322757
+  }
+]

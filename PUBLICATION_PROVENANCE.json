@@ -1,0 +1,406 @@
+{
+  "schema": 1,
+  "publication_repository": "amulyaparthasarathy/agent-lightning-lab-public",
+  "publication_source_ref": "main (resolved to a fully attributed root commit in the subsequent link commit)",
+  "private_export": {
+    "repository": "amulyaparthasarathy/agent-lightning-lab",
+    "commit": "eef9c78707b33725847fb15ca19592733a84c6c3",
+    "tree": "e9964ad411bc44463b2764d621bd9f878032c79a",
+    "historical_objects_imported": false
+  },
+  "historical_execution": {
+    "commit": "5fb6adfd48ee245509f7dff3ab1d849fcf707d86",
+    "study": "agl-explore-20-v1-r03",
+    "protocol": "matched-rollout-mean-v2",
+    "publication_is_execution": false
+  },
+  "source_mappings": [
+    {
+      "historical_repository": "amulyaparthasarathy/agent-lightning-lab",
+      "historical_commit": "5fb6adfd48ee245509f7dff3ab1d849fcf707d86",
+      "historical_path": "experiment/cpu_accounting_demo.py",
+      "historical_git_blob": "d5737d8f82c54146d4a7644c6f8f62a2dbeb9e82",
+      "historical_sha256": "70edf1383e968c6be075cecf47b4177743cef5710f92da8842aa00b5eae82e3e",
+      "publication_path": "experiment/cpu_accounting_demo.py",
+      "publication_sha256": "70edf1383e968c6be075cecf47b4177743cef5710f92da8842aa00b5eae82e3e",
+      "transformation": {
+        "type": "byte-identical"
+      },
+      "line_mapping": {
+        "rule": "publication_line = historical_line + added_prefix_lines",
+        "added_prefix_lines": 0,
+        "cited_lines": [
+          {
+            "historical": 14,
+            "publication": 14
+          }
+        ]
+      },
+      "scope": "r03 executed source representation"
+    },
+    {
+      "historical_repository": "amulyaparthasarathy/agent-lightning-lab",
+      "historical_commit": "5fb6adfd48ee245509f7dff3ab1d849fcf707d86",
+      "historical_path": "experiment/launch.py",
+      "historical_git_blob": "3532cfeef10491fb6558e58ed81610b307b676f6",
+      "historical_sha256": "e9c86a51097ba83f9f483922618fbd42d0a750c59d85d88c504df99dca314d07",
+      "publication_path": "experiment/launch.py",
+      "publication_sha256": "e9c86a51097ba83f9f483922618fbd42d0a750c59d85d88c504df99dca314d07",
+      "transformation": {
+        "type": "byte-identical"
+      },
+      "line_mapping": {
+        "rule": "publication_line = historical_line + added_prefix_lines",
+        "added_prefix_lines": 0,
+        "cited_lines": [
+          {
+            "historical": 216,
+            "publication": 216
+          }
+        ]
+      },
+      "scope": "r03 executed source representation"
+    },
+    {
+      "historical_repository": "amulyaparthasarathy/agent-lightning-lab",
+      "historical_commit": "5fb6adfd48ee245509f7dff3ab1d849fcf707d86",
+      "historical_path": "experiment/matched_contract.py",
+      "historical_git_blob": "615554e8a82f7324d1d52c103494ff89b00d399b",
+      "historical_sha256": "3a301d7d38be81e4b697bb52931e3b7d8bd69cfd1a19cd8cec48c04be69cfde8",
+      "publication_path": "experiment/matched_contract.py",
+      "publication_sha256": "3a301d7d38be81e4b697bb52931e3b7d8bd69cfd1a19cd8cec48c04be69cfde8",
+      "transformation": {
+        "type": "byte-identical"
+      },
+      "line_mapping": {
+        "rule": "publication_line = historical_line + added_prefix_lines",
+        "added_prefix_lines": 0,
+        "cited_lines": [
+          {
+            "historical": 1,
+            "publication": 1
+          },
+          {
+            "historical": 37,
+            "publication": 37
+          },
+          {
+            "historical": 117,
+            "publication": 117
+          }
+        ]
+      },
+      "scope": "r03 executed source representation"
+    },
+    {
+      "historical_repository": "amulyaparthasarathy/agent-lightning-lab",
+      "historical_commit": "5fb6adfd48ee245509f7dff3ab1d849fcf707d86",
+      "historical_path": "experiment/matched_exploratory.py",
+      "historical_git_blob": "97213ce613e8064e1d3f7465ba9399854063abb7",
+      "historical_sha256": "f23b012b2c3567eb36420c63985db4b4f8f8a3cfd0fd0cdf16d3b4a8f4c6741b",
+      "publication_path": "experiment/matched_exploratory.py",
+      "publication_sha256": "f23b012b2c3567eb36420c63985db4b4f8f8a3cfd0fd0cdf16d3b4a8f4c6741b",
+      "transformation": {
+        "type": "byte-identical"
+      },
+      "line_mapping": {
+        "rule": "publication_line = historical_line + added_prefix_lines",
+        "added_prefix_lines": 0,
+        "cited_lines": [
+          {
+            "historical": 6,
+            "publication": 6
+          }
+        ]
+      },
+      "scope": "r03 executed source representation"
+    },
+    {
+      "historical_repository": "amulyaparthasarathy/agent-lightning-lab",
+      "historical_commit": "5fb6adfd48ee245509f7dff3ab1d849fcf707d86",
+      "historical_path": "experiment/matched_launch.py",
+      "historical_git_blob": "03eab549c7c6024a61fd9d41b9a5b094b2d49ec8",
+      "historical_sha256": "c4282c8b0126d54a44a1c25149561d4e8c3cc0d242856546b23f96d2836b9137",
+      "publication_path": "experiment/matched_launch.py",
+      "publication_sha256": "c4282c8b0126d54a44a1c25149561d4e8c3cc0d242856546b23f96d2836b9137",
+      "transformation": {
+        "type": "byte-identical"
+      },
+      "line_mapping": {
+        "rule": "publication_line = historical_line + added_prefix_lines",
+        "added_prefix_lines": 0,
+        "cited_lines": [
+          {
+            "historical": 49,
+            "publication": 49
+          },
+          {
+            "historical": 158,
+            "publication": 158
+          },
+          {
+            "historical": 183,
+            "publication": 183
+          }
+        ]
+      },
+      "scope": "r03 executed source representation"
+    },
+    {
+      "historical_repository": "amulyaparthasarathy/agent-lightning-lab",
+      "historical_commit": "5fb6adfd48ee245509f7dff3ab1d849fcf707d86",
+      "historical_path": "experiment/matched_runtime.py",
+      "historical_git_blob": "23348dec5c368ecbcaef7eb1f41b4fb8789d4e22",
+      "historical_sha256": "f4955008b4cc83bc2277478f248e8e7406e23c8ce279b1c1447fed25f09f6f83",
+      "publication_path": "experiment/matched_runtime.py",
+      "publication_sha256": "9fcca97214b2b66ee78281ada91843288dc43d71951f1fca02b3e6654930ef0d",
+      "transformation": {
+        "type": "notice-comment-prefix-only",
+        "inserted_bytes": 1963,
+        "inserted_lines": 30,
+        "inserted_sha256": "7c373692aa5b889f4d84bd0cec87b3c161a15feb42586e92e448c3ad63820ed7",
+        "exact_original_body_verified": true,
+        "ast_equal_excluding_locations": true
+      },
+      "line_mapping": {
+        "rule": "publication_line = historical_line + added_prefix_lines",
+        "added_prefix_lines": 30,
+        "cited_lines": [
+          {
+            "historical": 53,
+            "publication": 83
+          },
+          {
+            "historical": 66,
+            "publication": 96
+          },
+          {
+            "historical": 72,
+            "publication": 102
+          },
+          {
+            "historical": 83,
+            "publication": 113
+          },
+          {
+            "historical": 87,
+            "publication": 117
+          },
+          {
+            "historical": 137,
+            "publication": 167
+          },
+          {
+            "historical": 155,
+            "publication": 185
+          },
+          {
+            "historical": 179,
+            "publication": 209
+          },
+          {
+            "historical": 233,
+            "publication": 263
+          }
+        ]
+      },
+      "scope": "r03 executed source representation"
+    },
+    {
+      "historical_repository": "amulyaparthasarathy/agent-lightning-lab",
+      "historical_commit": "5fb6adfd48ee245509f7dff3ab1d849fcf707d86",
+      "historical_path": "experiment/observed_calc_agent.py",
+      "historical_git_blob": "c329721184f3fb356208f27a74129878984e2361",
+      "historical_sha256": "e802a2324dab779ffaa49af678196a7cc5f02e3bb89936bd0ed1f1ed8c3a02fc",
+      "publication_path": "experiment/observed_calc_agent.py",
+      "publication_sha256": "e802a2324dab779ffaa49af678196a7cc5f02e3bb89936bd0ed1f1ed8c3a02fc",
+      "transformation": {
+        "type": "byte-identical"
+      },
+      "line_mapping": {
+        "rule": "publication_line = historical_line + added_prefix_lines",
+        "added_prefix_lines": 0,
+        "cited_lines": [
+          {
+            "historical": 231,
+            "publication": 231
+          },
+          {
+            "historical": 236,
+            "publication": 236
+          },
+          {
+            "historical": 272,
+            "publication": 272
+          },
+          {
+            "historical": 301,
+            "publication": 301
+          }
+        ]
+      },
+      "scope": "r03 executed source representation"
+    },
+    {
+      "historical_repository": "amulyaparthasarathy/agent-lightning-lab",
+      "historical_commit": "5fb6adfd48ee245509f7dff3ab1d849fcf707d86",
+      "historical_path": "experiment/ppo_contract.py",
+      "historical_git_blob": "a7ce5412f1e36be96db41ffd14903b44b728dd87",
+      "historical_sha256": "600477e58254e1afa21a7bcc8a06cc894ea8dd81b6e0308d0cc2c0d5b5f48f67",
+      "publication_path": "experiment/ppo_contract.py",
+      "publication_sha256": "600477e58254e1afa21a7bcc8a06cc894ea8dd81b6e0308d0cc2c0d5b5f48f67",
+      "transformation": {
+        "type": "byte-identical"
+      },
+      "line_mapping": {
+        "rule": "publication_line = historical_line + added_prefix_lines",
+        "added_prefix_lines": 0,
+        "cited_lines": [
+          {
+            "historical": 69,
+            "publication": 69
+          }
+        ]
+      },
+      "scope": "r03 executed source representation"
+    },
+    {
+      "historical_repository": "amulyaparthasarathy/agent-lightning-lab",
+      "historical_commit": "5fb6adfd48ee245509f7dff3ab1d849fcf707d86",
+      "historical_path": "experiment/ppo_math.py",
+      "historical_git_blob": "2704d681ac93afd31574f7531249c9115d453013",
+      "historical_sha256": "a25b83662961623aaabd62620f01fa604ec2a3f255aeeaea0adaaec2bb93e40b",
+      "publication_path": "experiment/ppo_math.py",
+      "publication_sha256": "51554d9dadaa4eb4694e4089461cc2318f1504b091a40f27e892de61258d553d",
+      "transformation": {
+        "type": "notice-comment-prefix-only",
+        "inserted_bytes": 1680,
+        "inserted_lines": 27,
+        "inserted_sha256": "ff17386e27a133dbee4604f6df467ba1e454e14e91b2fc188c3eeac03d21513a",
+        "exact_original_body_verified": true,
+        "ast_equal_excluding_locations": true
+      },
+      "line_mapping": {
+        "rule": "publication_line = historical_line + added_prefix_lines",
+        "added_prefix_lines": 27,
+        "cited_lines": [
+          {
+            "historical": 45,
+            "publication": 72
+          },
+          {
+            "historical": 74,
+            "publication": 101
+          }
+        ]
+      },
+      "scope": "r03 executed source representation"
+    },
+    {
+      "historical_repository": "amulyaparthasarathy/agent-lightning-lab",
+      "historical_commit": "5fb6adfd48ee245509f7dff3ab1d849fcf707d86",
+      "historical_path": "experiment/ppo_runtime.py",
+      "historical_git_blob": "3d4961b83eae8331425079af945c41ee2468315f",
+      "historical_sha256": "2d67c6210ca515b404354ef6851a50074b70076d89b24e61b7517698948d33e8",
+      "publication_path": "experiment/ppo_runtime.py",
+      "publication_sha256": "9a245a0c80bc4b2e64532df8884bc07d3c079589d7876a74755abaa4e95e1fbf",
+      "transformation": {
+        "type": "notice-comment-prefix-only",
+        "inserted_bytes": 1426,
+        "inserted_lines": 22,
+        "inserted_sha256": "e651f8e04b9a59c97884702ed2f5743922d8c6de6b4f3c756ba5535ebe19e74e",
+        "exact_original_body_verified": true,
+        "ast_equal_excluding_locations": true
+      },
+      "line_mapping": {
+        "rule": "publication_line = historical_line + added_prefix_lines",
+        "added_prefix_lines": 22,
+        "cited_lines": [
+          {
+            "historical": 357,
+            "publication": 379
+          }
+        ]
+      },
+      "scope": "r03 executed source representation"
+    },
+    {
+      "historical_repository": "amulyaparthasarathy/agent-lightning-lab",
+      "historical_commit": "5fb6adfd48ee245509f7dff3ab1d849fcf707d86",
+      "historical_path": "matched_app.py",
+      "historical_git_blob": "ae2e0cf61799a7070dbb5ba2d5a6219bef578c96",
+      "historical_sha256": "c6667705a9ab401c95be4f17d37a5ffe7ec22dcb0792482f2503e580313f8ca4",
+      "publication_path": "matched_app.py",
+      "publication_sha256": "c6667705a9ab401c95be4f17d37a5ffe7ec22dcb0792482f2503e580313f8ca4",
+      "transformation": {
+        "type": "byte-identical"
+      },
+      "line_mapping": {
+        "rule": "publication_line = historical_line + added_prefix_lines",
+        "added_prefix_lines": 0,
+        "cited_lines": [
+          {
+            "historical": 1,
+            "publication": 1
+          },
+          {
+            "historical": 58,
+            "publication": 58
+          }
+        ]
+      },
+      "scope": "r03 executed source representation"
+    },
+    {
+      "historical_repository": "amulyaparthasarathy/agent-lightning-lab",
+      "historical_commit": "e2b57a590b9ea687fbb4c9001465eddd5b65ef70",
+      "historical_path": "scripts/check_phase2_results.py",
+      "historical_git_blob": "10f976b81414a47cd498b85d5f7e6a70ac109e1a",
+      "historical_sha256": "24a8f6b3728403a9cda408748564936f1676487559db9cb7842b97e2927465b3",
+      "publication_path": "scripts/check_phase2_results.py",
+      "publication_sha256": "24a8f6b3728403a9cda408748564936f1676487559db9cb7842b97e2927465b3",
+      "transformation": {
+        "type": "byte-identical"
+      },
+      "line_mapping": {
+        "rule": "publication_line = historical_line + added_prefix_lines",
+        "added_prefix_lines": 0,
+        "cited_lines": [
+          {
+            "historical": 33,
+            "publication": 33
+          }
+        ]
+      },
+      "scope": "post-execution verification tool"
+    }
+  ],
+  "publication_changes_from_export": [
+    "LICENSING.md",
+    "NOTICE",
+    "README.md",
+    "docs/PUBLIC_READINESS_2026-11-19.md",
+    "docs/PUBLIC_RELEASE_PLAN.md",
+    "docs/THIRD_PARTY_RIGHTS.md",
+    "docs/learning/01-agent-training-and-frameworks.md",
+    "docs/learning/02-follow-one-calculator-task.md",
+    "docs/learning/03-trajectories-tokens-and-fragments.md",
+    "docs/learning/04-grpo-step-by-step.md",
+    "docs/learning/05-ppo-mc-step-by-step.md",
+    "docs/learning/06-one-complete-training-update.md",
+    "docs/learning/07-read-the-experiment-results.md",
+    "docs/learning/08-reproduce-and-operate.md",
+    "docs/learning/README.md",
+    "docs/learning/glossary.md",
+    "docs/learning/source-map.md",
+    "experiment/README.md"
+  ],
+  "immutable_evidence_manifest_sha256": "4f69f5ecb54a98175f075e7bd70a05f7808e131cf0bcf99ff22e4d6de5b4c809",
+  "private_archival_locators": "Retained only as historical provenance in immutable evidence and historical records; use docs/learning/source-map.md for public equivalents.",
+  "preservation": {
+    "scope": "Every tracked file except publication_changes_from_export and this manifest; includes complete evidence, code, locks, tests, plans and dependencies",
+    "file_count": 260,
+    "aggregate_method": "SHA256 of sorted UTF-8 path + NUL + lowercase SHA256(file bytes) + LF records",
+    "sha256": "ef5269399e886be9724aa6fdad75c72283f9cb330f66a29c3b5f1d75f42edfbe"
+  }
+}

@@ -1,0 +1,66 @@
+diff --git a/.devcontainer/devcontainer.json b/.devcontainer/devcontainer.json
+--- a/.devcontainer/devcontainer.json
++++ b/.devcontainer/devcontainer.json
+@@ -8,8 +8,12 @@
+   "workspaceFolder": "/workspace",
+   "remoteUser": "vscode",
+     "runArgs": [
+-    "--security-opt=seccomp=unconfined"
++    "--security-opt=seccomp=unconfined",
++    "--network=llm"
+   ],
++  "containerEnv": {
++    "LOCAL_LLM_BASE_URL": "http://llama:9931/v1"
++  },
+   "updateRemoteUserUID": true,
+   "init": true,
+   "overrideCommand": true,
+diff --git a/scripts/prepare-host.sh b/scripts/prepare-host.sh
+--- a/scripts/prepare-host.sh
++++ b/scripts/prepare-host.sh
+@@ -1,5 +1,5 @@
+ #!/usr/bin/env bash
+-# Runs on the WSL HOST. Creates only this workbench's private state directories.
++# Runs on the WSL HOST. Prepares private state and the shared local llm bridge.
+ set -Eeuo pipefail
+ if [[ "${WORKBENCH_CONTAINER:-}" == 1 ]]; then
+     echo "Run prepare-host.sh in WSL, not inside the container." >&2
+@@ -25,3 +25,22 @@
+ mkdir -p "$state/local/bin" "$state/codex" "$state/claude" "$state/azure"
+ chmod 700 "$state" "$state/local" "$state/codex" "$state/claude" "$state/azure"
+ printf 'Workbench state: %s\n' "$state"
++
++# The same named bridge exists on both laptops; the model service is optional.
++# This runs on the Docker host. It does not expose Docker inside the workbench.
++command -v docker >/dev/null || {
++    echo "Docker CLI missing. Run prepare-host.sh in your Docker-enabled WSL distro." >&2
++    exit 1
++}
++if ! docker info >/dev/null 2>&1; then
++    echo "Docker is unavailable. Check your existing WSL Engine and Docker context." >&2
++    exit 1
++fi
++if ! docker network inspect llm >/dev/null 2>&1; then
++    docker network create --driver bridge llm >/dev/null
++fi
++llm_network_kind="$(docker network inspect --format '{{.Driver}} {{.Scope}} {{.Internal}}' llm)"
++if [[ "$llm_network_kind" != "bridge local false" ]]; then
++    echo "Existing llm network is '$llm_network_kind'; expected a local non-internal bridge. Inspect it before continuing." >&2
++    exit 1
++fi
+diff --git a/workbench b/workbench
+--- a/workbench
++++ b/workbench
+@@ -100,7 +100,11 @@
+         --mount "type=bind,source=$STATE,target=/state"
+         --mount "type=bind,source=$STATE/local,target=/home/vscode/.local"
+         --workdir /workspace)
+-    if [[ "$mode" == offline ]]; then args+=(--network none); fi
++    if [[ "$mode" == offline ]]; then
++        args+=(--network none)
++    else
++        args+=(--network llm --env LOCAL_LLM_BASE_URL=http://llama:9931/v1)
++    fi
+     if [[ "$mode" == interactive ]]; then args+=(-it); fi
+     docker "${args[@]}" "$IMAGE" "$@"
+ }

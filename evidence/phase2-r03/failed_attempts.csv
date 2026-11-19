@@ -1,0 +1,7 @@
+attempt,algorithm,call_id,status,started_at,finished_at,result_status,exit_code,receipt_path
+a01,grpo,fc-01M7EMCQASD8JS0D65F4VYHA4R,failed,1794713742.3957565,1794713765.796181,trainer_failed,1,evidence/phase2-exploratory/failure-a01/grpo/receipt.json
+a01,ppo,fc-01M7EMCY7KTTJR4GWH64NHX9XB,failed,1794713748.9562936,1794713772.983684,trainer_failed,1,evidence/phase2-exploratory/failure-a01/ppo/receipt.json
+r01,grpo,fc-01M7ETBCWRDXTYFS8QDAQNNFYD,failed,1794719993.0930529,1794720101.9746552,trainer_failed,1,evidence/phase2-exploratory/failure-r01/grpo/receipt.json
+r01,ppo,fc-01M7ETBFP8KWVT8GQNW80J3007,failed,1794719996.113207,1794720142.7017064,trainer_failed,1,evidence/phase2-exploratory/failure-r01/ppo/receipt.json
+r02,grpo,fc-01M7EWQR7Z7Y5RQBAF80A9SHPT,failed,1794722495.239542,1794722718.687192,trainer_failed,1,evidence/phase2-exploratory/failure-r02/grpo/receipt.json
+r02,ppo,fc-01M7EWQSX6NCP0TS1MVDKTVMGA,failed,1794722495.1216216,1794722666.1009686,trainer_failed,1,evidence/phase2-exploratory/failure-r02/ppo/receipt.json

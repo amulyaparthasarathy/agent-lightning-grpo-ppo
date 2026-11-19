@@ -1,0 +1,127 @@
+{
+  "schema": 1,
+  "status": "OFFLINE_TESTED_LIVE_QUALIFICATION_REQUIRED",
+  "protocol": "matched-rollout-mean-v2",
+  "commands": [
+    {
+      "command": "MODAL_CONFIG_PATH=/dev/null HF_HUB_OFFLINE=1 uv run --locked --offline python -m unittest discover -s tests",
+      "discovered": 224,
+      "passed": 215,
+      "skipped": 9,
+      "skip_reason": "Pinned Torch tests run in the separate CPU environment",
+      "exit_code": 0
+    },
+    {
+      "command": "scripts/test_matched_training.sh",
+      "passed": 24,
+      "skipped": 0,
+      "exit_code": 0
+    }
+  ],
+  "numeric_dependencies": {
+    "torch": "2.11.0+cpu",
+    "numpy": "1.26.4",
+    "tensordict": "0.10.0",
+    "omegaconf": "2.3.0"
+  },
+  "pinned_source_checks": "Every used upstream file SHA256 verified; additional VERL sources also compared with locked 0.8.0 wheel.",
+  "tested_training_paths": [
+    "real pinned rollout adapter, fragment maps, incomplete/constant groups",
+    "pinned GAE gamma=lambda=1 versus terminal MC and whitening",
+    "pinned ppo_loss dispatch and per-rollout clipped actor loss",
+    "pinned TrainingWorker minibatch iterator and BaseEngine train_batch",
+    "pinned FSDP forward_backward_batch and optimizer clipping/AdamW step",
+    "actual two-rank CPU Gloo sum/average with uneven shards for actor and critic",
+    "patched pinned trainer _train_step and actor/critic runtime batch dispatch",
+    "rollout-weighted native actor KL/clip and critic loss metric aggregation"
+  ],
+  "staged_data_check": {
+    "training_rows": 256,
+    "development_rows": 64,
+    "actual_parquet_id_order_verified": true,
+    "normalized_question_overlap": 0,
+    "pyarrow": "25.0.1",
+    "final_test_panel": false
+  },
+  "offline_cli_plan_validate": "passed; dirty source explicitly shown; launch remains blocked until committed and separately authorized",
+  "preserved": [
+    "Stanford completed image identity im-qPPicZgz64ekqF9AR9UKz1",
+    "Stanford baseline 26/64",
+    "original modal_app.py and modal_build.py; original image installer/finalizer",
+    "legacy GRPO defaults and ppo-mc-v1 smoke restrictions"
+  ],
+  "not_executed": [
+    "Modal API calls/jobs",
+    "image build",
+    "model download/load",
+    "H100/VERL/vLLM training",
+    "hosted W&B initialization/readback",
+    "Secret modification",
+    "merge",
+    "ten-job campaign"
+  ],
+  "limitations": [
+    "CPU model replaces transformer construction; Ray/CUDA transport and telemetry seams are supplied in pinned-code tests.",
+    "One H100 per job only; two-rank CPU arithmetic does not qualify multi-GPU FSDP.",
+    "Live qualification with matching clean source/data and separate exact-plan approval is required before a pilot.",
+    "Campaign launcher is disabled pending a new untouched panel and separate review."
+  ],
+  "source_sha256": {
+    "docs/PHASE2_MATCHED_BACKEND.md": "3ba97545a5940e0e6e59aae2f6c9491e093e4d4aa4567effbe43a903b17f4959",
+    "docs/PHASE2_MATCHED_STUDY_CONTRACT.md": "72a10a6b3a025cec8c89e77424017d14be5bd87f1a0ae4cdcdcc81c31fbf6532",
+    "experiment/launch.py": "3ec42204ba77b97d3245a3b835b384178da021674179563c2ecd5f0aca04e146",
+    "experiment/matched_contract.py": "558b930aaff45cb2c13af57d76235930a8db046a5a49ec45430e5016a796f9f5",
+    "experiment/matched_data_lock.json": "0c01a02b9ead317e9f205f11dd7b9ad67551c7f466cacbeb46d21de88826f04d",
+    "experiment/matched_launch.py": "56957397e4c7052a42d90c38acf11da29ad93a79615bd61a36e353a4ab2511a4",
+    "experiment/matched_runtime.py": "f4955008b4cc83bc2277478f248e8e7406e23c8ce279b1c1447fed25f09f6f83",
+    "experiment/matched_source_lock.json": "4060381b647177a4e603017918afae1aebb31f44e41c170c6fefcfa793d4a6d0",
+    "experiment/matched_supervisor.py": "f09af5b080211c2782a99620e17eb0d5e5212e680d2d92dc5de17578aad315ae",
+    "matched_app.py": "4418b69ef65490700bcd6c1d9394b58e7ec2c27eef2e09fa0308e40a61c5039a",
+    "scripts/phase2_study.py": "5a7bdd1be59a8701c60738988507f66a6fdee4baf45d72bf4d55bdeda5b7078a",
+    "scripts/prepare_matched_test_sources.py": "8d4c937cd217854c376f323c3bc306213e9f2de28ec02159d8f3d81d62f31e4a",
+    "scripts/test_matched_training.sh": "3ca3de366d22178fd42a144fa1f6acd82876b4ea8232ed0d63fa8e08bf76a0f4",
+    "tests/pinned_training_support.py": "f2b24a66152f3692b850df51be104cc9215052cfa867676e63218d175e03e41c",
+    "tests/test_matched_study.py": "31e02a4151f7a90cadc3d20686409a8dd5d55f91f1eebcd3fcc0d7c59cc49bcd",
+    "tests/test_matched_training_pinned.py": "3fde4e545e0af09416c4c0ea7206dd179179f1e8e264da2184c676396311e556"
+  },
+  "test_log_sha256": {
+    "evidence/phase2-matched-pinned-tests-2026-11-14.txt": "04a6fe618be39facdbcbfcbfe14af12d114d4fc4a4e55537e8c8787c276aa0e3",
+    "evidence/phase2-matched-client-tests-2026-11-14.txt": "5929a333369171f34fa58e9960d890d633c56356fda835a9575d5156ee2f1bb8"
+  },
+  "tested_parent_commit": "e0b07b2139b6bd659f6663f9e6854801a7d65a1a",
+  "test_snapshot_state": "Working tree before finalization commit; containing commit source blobs must match tested_git_blobs.",
+  "finalized_at_utc": "2026-11-15T00:21:02.385283+00:00",
+  "tested_git_blobs": {
+    "docs/PHASE2_MATCHED_BACKEND.md": "59c194dabe522867d68485a80360f6ec5ed23914",
+    "docs/PHASE2_MATCHED_STUDY_CONTRACT.md": "f561777b9e387b1c2f69e10190efe911c1cec82a",
+    "experiment/launch.py": "23e7b70e4aa3ad3ffe59e0e24796246298c221e2",
+    "experiment/matched_contract.py": "0036dfe2e82576da29e38851ffcc49129499434d",
+    "experiment/matched_data_lock.json": "b441a48c368453fdb8a2afd50acdf23e87d3243c",
+    "experiment/matched_launch.py": "ae143b20479f92b00672622abbfa287c5d29c4c6",
+    "experiment/matched_runtime.py": "23348dec5c368ecbcaef7eb1f41b4fb8789d4e22",
+    "experiment/matched_source_lock.json": "02423ebc0544ec7d5c77e56233072df74eff0c32",
+    "experiment/matched_supervisor.py": "8cb0d0222bfa4e37362029d14b78a857657e6d3d",
+    "matched_app.py": "79ed9653ff40bf160e865e131f882cdf2530a6c6",
+    "scripts/phase2_study.py": "93b607b6dd150cbde061f6ebdcf4b0924d3e86ef",
+    "scripts/prepare_matched_test_sources.py": "061d1ed04f797b208f749c168162965246ff94ac",
+    "scripts/test_matched_training.sh": "3197db4f02302e1f408895858e25d86722bea630",
+    "tests/pinned_training_support.py": "36154a57e94544f088297f310d7d719ff05d396a",
+    "tests/test_matched_study.py": "fa15c15d2512337e22cd953fd85419d28d74e6a7",
+    "tests/test_matched_training_pinned.py": "872cc239ac189943fdde6013ff6016281d5245e7"
+  },
+  "campaign_requirement_review": {
+    "requirement_url": "https://github.com/amulyaparthasarathy/agent-lightning-lab/pull/24#issuecomment-6886443424",
+    "required_concurrency": "configurable 1..10; target ten independent single-H100 jobs under one submission/supervisor",
+    "implemented_concurrency": 2,
+    "campaign_launch_supported": false,
+    "blockers": [
+      "CLI accepts qualification/pilot only",
+      "manifest requires two jobs, seed 9001, 2/20 steps, concurrency 2",
+      "stage_worker max_containers=2",
+      "terminal reconciliation expects six stages",
+      "frozen data lock has 64-case development panel, not new 256-case final holdout",
+      "ten-way quota/admission/storage/lifetime gates are not implemented or qualified"
+    ],
+    "finalization_scope": "Reviewed and committed existing implementation; no runtime redesign or campaign feature added."
+  }
+}

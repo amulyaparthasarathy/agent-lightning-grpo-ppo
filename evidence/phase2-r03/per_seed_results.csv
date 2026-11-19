@@ -1,0 +1,7 @@
+algorithm,seed,baseline_correct/64,final_correct/64,baseline_accuracy,final_accuracy,delta_percentage_points,actor_updates,critic_updates,stage_verification,elapsed_time_seconds,training_elapsed_seconds,checkpoint_bytes,tool_errors,baseline_tool_errors,final_tool_errors,training_tool_errors,malformed_or_missing,baseline_missing_marker,final_missing_marker,training_missing_marker,W&B_verification,wins,losses,ties,invalid_or_incomplete_episodes
+grpo-matched-v2,2001,27/64,36/64,0.421875,0.5625,14.0625,20,0,PASS,3331.9368414878845,2525.28954911232,40146400251,338,23,15,300,174,26,1,147,PASS,11,2,51,0
+ppo-mc-matched-v2,2001,26/64,30/64,0.40625,0.46875,6.25,20,20,PASS,2948.698053598404,2085.66383433342,78716827965,383,23,30,330,308,27,12,269,PASS,7,3,54,0
+grpo-matched-v2,2002,27/64,30/64,0.421875,0.46875,4.6875,20,0,PASS,2516.081524848938,1749.9804179668427,40146400187,337,23,10,304,177,26,1,150,PASS,7,4,53,0
+ppo-mc-matched-v2,2002,25/64,34/64,0.390625,0.53125,14.0625,20,20,PASS,3216.0406517982483,2329.2049005031586,78716827965,352,23,14,315,206,27,1,178,PASS,12,3,49,0
+grpo-matched-v2,2003,26/64,34/64,0.40625,0.53125,12.5,20,0,PASS,2526.1236565113068,1698.369690656662,40146400251,345,23,15,307,173,25,0,148,PASS,13,5,46,0
+ppo-mc-matched-v2,2003,26/64,34/64,0.40625,0.53125,12.5,20,20,PASS,4581.727237224579,3675.538913488388,78716827965,357,22,21,314,266,27,3,236,PASS,10,2,52,0

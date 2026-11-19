@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="480" viewBox="0 0 1080 480"><title>Paired baseline and final development accuracy</title><rect width="100%" height="100%" fill="white"/><g font-family="Arial,sans-serif">
+<text x="20" y="30" font-size="21" fill="#17212b" text-anchor="start">64-case legacy development panel: baseline → independent final reload</text>
+<text x="20" y="53" font-size="13" fill="#17212b" text-anchor="start">Three paired seeds; descriptive only. All six jobs and all 64 cases per evaluation included.</text>
+<text x="185.0" y="90" font-size="18" fill="#17212b" text-anchor="middle">Seed 2001</text>
+<path d="M80,400.0H290" stroke="#dce2e8"/>
+<text x="70" y="404.0" font-size="11" fill="#17212b" text-anchor="end">0%</text>
+<path d="M80,327.5H290" stroke="#dce2e8"/>
+<text x="70" y="331.5" font-size="11" fill="#17212b" text-anchor="end">25%</text>
+<path d="M80,255.0H290" stroke="#dce2e8"/>
+<text x="70" y="259.0" font-size="11" fill="#17212b" text-anchor="end">50%</text>
+<path d="M80,182.5H290" stroke="#dce2e8"/>
+<text x="70" y="186.5" font-size="11" fill="#17212b" text-anchor="end">75%</text>
+<path d="M80,110.0H290" stroke="#dce2e8"/>
+<text x="70" y="114.0" font-size="11" fill="#17212b" text-anchor="end">100%</text>
+<path d="M80,277.65625L290,236.875" fill="none" stroke="#1864ab" stroke-width="2.5"/>
+<circle cx="80" cy="277.65625" r="5" fill="#1864ab"/>
+<circle cx="290" cy="236.875" r="5" fill="#1864ab"/>
+<text x="84" y="268.65625" font-size="12" fill="#1864ab" text-anchor="start">27/64</text>
+<text x="296" y="227.875" font-size="12" fill="#1864ab" text-anchor="start">36/64</text>
+<path d="M80,282.1875L290,264.0625" fill="none" stroke="#b65000" stroke-width="2.5"/>
+<circle cx="80" cy="282.1875" r="5" fill="#b65000"/>
+<circle cx="290" cy="264.0625" r="5" fill="#b65000"/>
+<text x="84" y="296.1875" font-size="12" fill="#b65000" text-anchor="start">26/64</text>
+<text x="296" y="278.0625" font-size="12" fill="#b65000" text-anchor="start">30/64</text>
+<text x="80" y="425" font-size="12" fill="#17212b" text-anchor="middle">Baseline</text>
+<text x="290" y="425" font-size="12" fill="#17212b" text-anchor="middle">Final step 20</text>
+<text x="535.0" y="90" font-size="18" fill="#17212b" text-anchor="middle">Seed 2002</text>
+<path d="M430,400.0H640" stroke="#dce2e8"/>
+<text x="420" y="404.0" font-size="11" fill="#17212b" text-anchor="end">0%</text>
+<path d="M430,327.5H640" stroke="#dce2e8"/>
+<text x="420" y="331.5" font-size="11" fill="#17212b" text-anchor="end">25%</text>
+<path d="M430,255.0H640" stroke="#dce2e8"/>
+<text x="420" y="259.0" font-size="11" fill="#17212b" text-anchor="end">50%</text>
+<path d="M430,182.5H640" stroke="#dce2e8"/>
+<text x="420" y="186.5" font-size="11" fill="#17212b" text-anchor="end">75%</text>
+<path d="M430,110.0H640" stroke="#dce2e8"/>
+<text x="420" y="114.0" font-size="11" fill="#17212b" text-anchor="end">100%</text>
+<path d="M430,277.65625L640,264.0625" fill="none" stroke="#1864ab" stroke-width="2.5"/>
+<circle cx="430" cy="277.65625" r="5" fill="#1864ab"/>
+<circle cx="640" cy="264.0625" r="5" fill="#1864ab"/>
+<text x="434" y="268.65625" font-size="12" fill="#1864ab" text-anchor="start">27/64</text>
+<text x="646" y="255.0625" font-size="12" fill="#1864ab" text-anchor="start">30/64</text>
+<path d="M430,286.71875L640,245.9375" fill="none" stroke="#b65000" stroke-width="2.5"/>
+<circle cx="430" cy="286.71875" r="5" fill="#b65000"/>
+<circle cx="640" cy="245.9375" r="5" fill="#b65000"/>
+<text x="434" y="300.71875" font-size="12" fill="#b65000" text-anchor="start">25/64</text>
+<text x="646" y="259.9375" font-size="12" fill="#b65000" text-anchor="start">34/64</text>
+<text x="430" y="425" font-size="12" fill="#17212b" text-anchor="middle">Baseline</text>
+<text x="640" y="425" font-size="12" fill="#17212b" text-anchor="middle">Final step 20</text>
+<text x="885.0" y="90" font-size="18" fill="#17212b" text-anchor="middle">Seed 2003</text>
+<path d="M780,400.0H990" stroke="#dce2e8"/>
+<text x="770" y="404.0" font-size="11" fill="#17212b" text-anchor="end">0%</text>
+<path d="M780,327.5H990" stroke="#dce2e8"/>
+<text x="770" y="331.5" font-size="11" fill="#17212b" text-anchor="end">25%</text>
+<path d="M780,255.0H990" stroke="#dce2e8"/>
+<text x="770" y="259.0" font-size="11" fill="#17212b" text-anchor="end">50%</text>
+<path d="M780,182.5H990" stroke="#dce2e8"/>
+<text x="770" y="186.5" font-size="11" fill="#17212b" text-anchor="end">75%</text>
+<path d="M780,110.0H990" stroke="#dce2e8"/>
+<text x="770" y="114.0" font-size="11" fill="#17212b" text-anchor="end">100%</text>
+<path d="M780,282.1875L990,245.9375" fill="none" stroke="#1864ab" stroke-width="2.5"/>
+<circle cx="780" cy="282.1875" r="5" fill="#1864ab"/>
+<circle cx="990" cy="245.9375" r="5" fill="#1864ab"/>
+<text x="784" y="273.1875" font-size="12" fill="#1864ab" text-anchor="start">26/64</text>
+<text x="996" y="236.9375" font-size="12" fill="#1864ab" text-anchor="start">34/64</text>
+<path d="M780,282.1875L990,245.9375" fill="none" stroke="#b65000" stroke-width="2.5"/>
+<circle cx="780" cy="282.1875" r="5" fill="#b65000"/>
+<circle cx="990" cy="245.9375" r="5" fill="#b65000"/>
+<text x="784" y="296.1875" font-size="12" fill="#b65000" text-anchor="start">26/64</text>
+<text x="996" y="259.9375" font-size="12" fill="#b65000" text-anchor="start">34/64</text>
+<text x="780" y="425" font-size="12" fill="#17212b" text-anchor="middle">Baseline</text>
+<text x="990" y="425" font-size="12" fill="#17212b" text-anchor="middle">Final step 20</text>
+<text x="260" y="465" font-size="14" fill="#1864ab" text-anchor="start">GRPO</text>
+<text x="580" y="465" font-size="14" fill="#b65000" text-anchor="start">PPO-MC</text>
+</g></svg>

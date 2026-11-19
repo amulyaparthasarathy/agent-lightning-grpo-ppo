@@ -1,0 +1,92 @@
+{
+  "checked_at": "2026-11-15T05:42:11.711436+00:00",
+  "reservations": {
+    "exploratory-allocation:agl-explore-20-v1:exploratory-qualification": {
+      "plan_sha256": "4e57f7c0e43fe7c82734dc812923e968b4da3ae57b5c295caf9e3b5f598a8b42",
+      "source": "cb246a0c64c5eef0bea6994bbc876e1b9597e56f",
+      "funding": {
+        "maximum_additional_usd": 300,
+        "qualification_usd": 50,
+        "study_workers_usd": 150,
+        "other_overhead_usd": 25,
+        "reserve_usd": 75,
+        "reserve_released_usd": 0,
+        "operational_limit_usd": 225,
+        "worker_hourly_ceiling_usd": 10,
+        "supervisor_hourly_ceiling_usd": 1,
+        "new_storage_ceiling_gib": 600,
+        "storage_cost_horizon_days": 7,
+        "collection_ceiling_gib_per_phase": 10,
+        "automatic_retries": 0,
+        "automatic_timeout_extensions": false,
+        "seed_replacement": false,
+        "outcome_selection": false,
+        "checkpoint_policy": "one-final-per-run-no-deletion",
+        "qualification_required_once": true,
+        "standalone_pilot_required": false,
+        "admission_probe_required": false
+      }
+    },
+    "submission:agl-explore-20-v1/exploratory-qualification/a01": {
+      "status": "submitted",
+      "study_key": "agl-explore-20-v1/exploratory-qualification/a01",
+      "plan_sha256": "4e57f7c0e43fe7c82734dc812923e968b4da3ae57b5c295caf9e3b5f598a8b42",
+      "completion_proven": false,
+      "call_id": "fc-01M7EMCA0TS6QJTK72CXE19GHQ"
+    },
+    "owner:agl-explore-20-v1/exploratory-qualification/a01": {
+      "call_id": "fc-01M7EMCA0TS6QJTK72CXE19GHQ",
+      "plan_sha256": "4e57f7c0e43fe7c82734dc812923e968b4da3ae57b5c295caf9e3b5f598a8b42"
+    },
+    "exploratory-allocation:agl-explore-20-v1:exploratory": null,
+    "submission:agl-explore-20-v1/exploratory/a01": null,
+    "owner:agl-explore-20-v1/exploratory/a01": null,
+    "exploratory-allocation:agl-explore-20-v1-r01:exploratory-qualification": {
+      "plan_sha256": "aac8f9fed44d54143b52ba30ae9dd2a9b84aa56c3aa1d937ed18b37447754dee",
+      "source": "608a3e505767eb6bd32915920baa8820abecbfce",
+      "funding": {
+        "maximum_additional_usd": 300,
+        "qualification_usd": 50,
+        "study_workers_usd": 150,
+        "other_overhead_usd": 25,
+        "reserve_usd": 75,
+        "reserve_released_usd": 0,
+        "operational_limit_usd": 225,
+        "worker_hourly_ceiling_usd": 10,
+        "supervisor_hourly_ceiling_usd": 1,
+        "new_storage_ceiling_gib": 600,
+        "storage_cost_horizon_days": 7,
+        "collection_ceiling_gib_per_phase": 10,
+        "automatic_retries": 0,
+        "automatic_timeout_extensions": false,
+        "seed_replacement": false,
+        "outcome_selection": false,
+        "checkpoint_policy": "one-final-per-run-no-deletion",
+        "qualification_required_once": true,
+        "standalone_pilot_required": false,
+        "admission_probe_required": false
+      }
+    },
+    "submission:agl-explore-20-v1-r01/exploratory-qualification/a01": {
+      "status": "submitted",
+      "study_key": "agl-explore-20-v1-r01/exploratory-qualification/a01",
+      "plan_sha256": "aac8f9fed44d54143b52ba30ae9dd2a9b84aa56c3aa1d937ed18b37447754dee",
+      "completion_proven": false,
+      "call_id": "fc-01M7ETB3CY40QRKMRRBTR3CA0W"
+    },
+    "owner:agl-explore-20-v1-r01/exploratory-qualification/a01": {
+      "call_id": "fc-01M7ETB3CY40QRKMRRBTR3CA0W",
+      "plan_sha256": "aac8f9fed44d54143b52ba30ae9dd2a9b84aa56c3aa1d937ed18b37447754dee"
+    },
+    "exploratory-allocation:agl-explore-20-v1-r01:exploratory": null,
+    "submission:agl-explore-20-v1-r01/exploratory/a01": null,
+    "owner:agl-explore-20-v1-r01/exploratory/a01": null,
+    "exploratory-allocation:agl-explore-20-v1-r02:exploratory-qualification": null,
+    "submission:agl-explore-20-v1-r02/exploratory-qualification/a01": null,
+    "owner:agl-explore-20-v1-r02/exploratory-qualification/a01": null,
+    "exploratory-allocation:agl-explore-20-v1-r02:exploratory": null,
+    "submission:agl-explore-20-v1-r02/exploratory/a01": null,
+    "owner:agl-explore-20-v1-r02/exploratory/a01": null
+  },
+  "r02_volume_collisions": []
+}

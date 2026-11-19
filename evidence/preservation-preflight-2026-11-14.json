@@ -1,0 +1,72 @@
+{
+  "all_current_volume_file_metadata_bytes": 167042976738,
+  "backup_status": "not_executed",
+  "backup_verified": false,
+  "basis": "read-only Modal file-size metadata, not tensor SHA256 measurements",
+  "categories_bytes": {
+    "data_inputs_source_staging": 3668065,
+    "evidence_receipts_logs_markers": 18208454,
+    "native_actor_tensors": 57708572188,
+    "native_optimizer": 102808101616,
+    "native_other_native": 68971100,
+    "prepared_metadata_notices": 9225517,
+    "prepared_weights": 6425529048
+  },
+  "checkpoint_bytes": {
+    "runs/smoke-01/checkpoints/global_step_1": {
+      "actor_tensors": 14427143047,
+      "optimizer": 25702025404,
+      "other_native": 17239117
+    },
+    "runs/smoke-01/checkpoints/global_step_2": {
+      "actor_tensors": 14427143047,
+      "optimizer": 25702025404,
+      "other_native": 17239117
+    },
+    "runs/train-01/checkpoints/global_step_10": {
+      "other_native": 7316
+    },
+    "runs/train-01/checkpoints/global_step_15": {
+      "actor_tensors": 14427143047,
+      "optimizer": 25702025404,
+      "other_native": 17239117
+    },
+    "runs/train-01/checkpoints/global_step_20": {
+      "actor_tensors": 14427143047,
+      "optimizer": 25702025404,
+      "other_native": 17239117
+    },
+    "runs/train-01/checkpoints/global_step_5": {
+      "other_native": 7316
+    }
+  },
+  "checkpoint_structural_status": "not yet byte-inventoried; step 5/10 are data-only remnants",
+  "environment": "main",
+  "excluded_cache_bytes_within_selected_roots": 3906,
+  "hf_available_private_bytes": null,
+  "hf_identity": "amulyaparthasarathy",
+  "hf_pro_observed": true,
+  "hf_subscription_monthly_usd": 9,
+  "historical_sizes_are_not_hash_verification": true,
+  "historical_step20_bytes": 40146407568,
+  "license": {
+    "current_primary_sha256": "8cc15535a8a34b41888f644b339a1a9eb428af793a4f5e24df58a3e5b1487d74",
+    "observed_difference": "Documentation URL changed from llama.meta.com/doc/overview to www.llama.com/docs/overview; retain original agreement",
+    "retained_sha256": "0b4284c1f87029e67654c7953afa16279961632cf73dcfe33374c4c2f298fa35"
+  },
+  "recorded_at": "2026-11-14T03:39:18.600167+00:00",
+  "retained_post_runtime_dtype_fields": {
+    "actor_rollout_ref.actor.fsdp_config.dtype": "bfloat16",
+    "actor_rollout_ref.actor.fsdp_config.model_dtype": "fp32",
+    "actor_rollout_ref.ref.fsdp_config.dtype": "bfloat16",
+    "actor_rollout_ref.ref.fsdp_config.model_dtype": "fp32",
+    "actor_rollout_ref.rollout.dtype": "bfloat16"
+  },
+  "schema_version": 1,
+  "selected_primary_bytes": 167042275988,
+  "source_files_changed": false,
+  "source_volume_id": "vo-lCOCqrVwdlYV46hXMoHHws",
+  "validation_bytes": 302901,
+  "validation_volume_id": "vo-GrkzD1k5PmQvNjbaFFcnPs",
+  "workspace": "amulyap"
+}

@@ -1,0 +1,41 @@
+{
+  "repo_id": "amulyaparthasarathy/Llama-3.2-3B-AgentLightning-Lab-Backup",
+  "revision": "b04fe483b526d289f1f9e47a7c97f2b6d520ce55",
+  "report_path": "workflows/preserve-20261114-01/closeout-20261114/final/report.md",
+  "terminal_ledger_revision": "b19f5308aba912a7381310b87295fddbaa738399",
+  "source_report_sha256": "fdda969665a8b5db673a434b075d7d18331d6203427837e569ef248d92ce8924",
+  "archived_files": {
+    "report.md": {
+      "bytes": 25131,
+      "sha256": "e3adf7ff3baee3c5daebb91effed5afc5105b2b69188f566c18d08e747929e5f"
+    },
+    "revision-identity-index.json": {
+      "bytes": 45337,
+      "sha256": "e4b179d3dfdc6d17478fc8d74d3b5ddc7b6d36d32844b37638f3ab9047c442a1"
+    },
+    "final-verification.json": {
+      "bytes": 550306,
+      "sha256": "d16e98f1e54f3ad3b4527160746d5b82ddfa803b90b12b053235bd70ad58ae30"
+    },
+    "app-terminal-state.json": {
+      "bytes": 227,
+      "sha256": "30f751d6ca6a13098830bcf509b6032201c2367ee9a80264aa5c7bfff15092f2"
+    },
+    "coordinator-submission.log": {
+      "bytes": 6240,
+      "sha256": "eb761d33ec347be47b8d5c4723c7b4ab09f9cebc05cabf56fc46ee2d450974eb"
+    },
+    "early-terminal-fallbacks.json": {
+      "bytes": 1938846,
+      "sha256": "43ad424f443a2c01adec2d78d68f6154059cf541add7e0caca1b7e13e6fd2046"
+    },
+    "replication-training-metrics.json": {
+      "bytes": 2777,
+      "sha256": "9e18506ddc1e33747e32a228e2fa26aefec61124b765bc207c8bfccf33dcfb9c"
+    },
+    "verify_final.py": {
+      "bytes": 4704,
+      "sha256": "b2070bdc86c227d8f3a5cf471ae4cf72f8c40581b2cb4c67822da91d37ca2b9a"
+    }
+  }
+}

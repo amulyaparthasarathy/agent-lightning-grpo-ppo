@@ -1,0 +1,49 @@
+{
+  "experiment_id": "baseline",
+  "wandb_run_id": "4d020fbe003709d8780710c7",
+  "wandb_project": "cs329z-agent-lightning",
+  "ray_temp_directory": "/tmp/agl-4d020fbe0037-chcxqu4w",
+  "wandb": {
+    "entity": "amulyap-stanford-university",
+    "project": "cs329z-agent-lightning",
+    "group": "agl-explore-20-v1-r02-exploratory-qualification",
+    "id": "4d020fbe003709d8780710c7",
+    "name": "agl-explore-20-v1-r02-exploratory-qualification-ppo-mc-matched-v2-s9101-a01-baseline",
+    "job_type": "baseline",
+    "resume": "never",
+    "config": {
+      "pair_id": "agl-explore-20-v1-r02-exploratory-qualification-s9101",
+      "algorithm": "ppo-mc-matched-v2",
+      "stage": "baseline",
+      "run_seed": 9101,
+      "seed_streams": {
+        "python": 1332371190,
+        "numpy": 1784707792,
+        "torch_cpu": 404292319,
+        "torch_cuda": 1088327839,
+        "actor_sampling": 1628322757,
+        "actor_optimizer": 1417041083,
+        "row_batching": 1023751362,
+        "critic_init": 1380528041,
+        "paired_question_order": 962979653
+      },
+      "protocol": "matched-rollout-mean-v2",
+      "protocol_sha256": "a7fbbd4cd581c3dbf3eb33114ae64b928cde475126c5754c16e9ef608ca6dd0c",
+      "commit": "fa4dc93e973344c87fb914b15b5a9c07ce1ee4fc",
+      "source_sha256": "80396224fe4d62bf939da6d7a9c351a8f969a079aa2a07297a6b7035922fd648",
+      "data_manifest_sha256": "f0320992e0b650a73e3c069fbd745f7e024dc453ced7dd6f16aec7b059ccc33b",
+      "steps": 2,
+      "resources": {
+        "gpu": "H100!",
+        "cpu": 16,
+        "memory_mib": 196608
+      },
+      "evaluation": "exploratory-legacy-64",
+      "dataset_selection_seed": 329,
+      "study_protocol": "exploratory-matched-20-v1",
+      "stage_timeout_seconds": 1800,
+      "checkpoint_policy": "one-final-per-run-no-deletion"
+    }
+  },
+  "request_sha256": "882b9eb254013f00aac148581b22c1ef190114e7a83cbc7a34b5cc3d64d41a8a"
+}

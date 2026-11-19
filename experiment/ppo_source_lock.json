@@ -1,0 +1,126 @@
+{
+  "schema": 1,
+  "agentlightning_commit": "cbc56e41e0eab643aa71d195e92e5bba652fa683",
+  "verl_source_commit": "7aed6b230776f963fa09509c10d9c3a767d1102c",
+  "verl_wheel": {
+    "filename": "verl-0.8.0-py3-none-any.whl",
+    "url": "https://files.pythonhosted.org/packages/f2/5d/dd2275e9cf00b4887bcbb1f99c1a5f1c4fb57000cc7cc8e126f6d4f13579/verl-0.8.0-py3-none-any.whl",
+    "digests": {
+      "blake2b_256": "f25ddd2275e9cf00b4887bcbb1f99c1a5f1c4fb57000cc7cc8e126f6d4f13579",
+      "md5": "ee8c421d58fa11c58bc68b5d08e3c2df",
+      "sha256": "4e32830aae80771ee3b5f0d26a2b794d793f3bcece67aff07c2a7c62e948714f"
+    },
+    "size": 1294916
+  },
+  "transformers_wheel": {
+    "filename": "transformers-5.22.2-py3-none-any.whl",
+    "url": "https://files.pythonhosted.org/packages/ff/bb/cc0b27a3000ddcf4903d3a26983c8b4c9a36050bbaf05675f353e8bcb08c/transformers-5.22.2-py3-none-any.whl",
+    "digests": {
+      "blake2b_256": "ffbbcc0b27a3000ddcf4903d3a26983c8b4c9a36050bbaf05675f353e8bcb08c",
+      "md5": "04d83f5b7f90b9be736de79bf6b2d057",
+      "sha256": "829c2820aff91730b8ec45a4b8ff4be07f586a140b68a9073998b36fa35297dc"
+    },
+    "size": 13053178
+  },
+  "source_note": "PyPI VERL wheel matches tag for common source files; version/version differs. Installed runtime identity must pass file checks before any model construction. No remote installed revision inferred.",
+  "files": {
+    "agentlightning": {
+      "verl/config.yaml": "c3719129a7be8e40cf8f4021f26eaa91fa97fcacd3ce04065740ab0258edf23a",
+      "verl/entrypoint.py": "d43c2143777ad67a367af10edaef96b1962528d805f382d7c1312f0fe96a6d6e",
+      "verl/trainer.py": "6cfb5d19d373f4338d8300a4c1672e5a1b30cafbb2ac1d121dfbd868955c358d",
+      "verl/rollout_adapter.py": "42c1764e9d734a07e4fd5a44fe144a02eb0916e16d36bd9f302ddc25e3651ac9",
+      "verl/rollout_level_advantage.py": "fd5fc06ddf0da69c221f68ea8a097d1cdd5953b61bc4e70a838080b6ae41e898",
+      "verl/per_rollout_loss.py": "e3b727e62c779d9519df741474f60e57cb3a6bdaeead281dc0b01ab7ceee78d1",
+      "verl/agl_rollout_manager.py": "e60755f443d48f9c6a4a396d18499df63a0cefdfe63cb069c9ea5c6f346862ec"
+    },
+    "verl": {
+      "trainer/ppo/core_algos.py": "37fa248bdeeef4311dfa40b799786fd8bd6cd6013319223d2540685fce80f843",
+      "trainer/ppo/metric_utils.py": "f1199c24d6673716fd79bbd0857db594b44ca457d0bf595f21ccda6894dbdaa0",
+      "trainer/ppo/ray_trainer.py": "de58d295cf86656a28196b0718168d4a11666f3e30957b7e166914496c2a6d66",
+      "trainer/main_ppo.py": "e3fe6e73b18d63367402a2570c5ba054a2b05443ac40a168524dbf545b1da392",
+      "utils/torch_functional.py": "cb37d045dec2161d637e2633032cc97c97334e5547cea62dace42630c9683259",
+      "utils/model.py": "860bf8e488d2f59141e65261c254935ccab90e90bf96ecfd2c534bcaf9b68b71",
+      "utils/checkpoint/checkpoint_manager.py": "97ad2cf3d38ca6ba16449ad27772707a82cdfbee8fea5eeaae2c36b1cebcc38a",
+      "utils/checkpoint/fsdp_checkpoint_manager.py": "87036a65beac76806817362da8c58ae14131fa8dcb082f95568eaaa47eb37d10",
+      "workers/engine/fsdp/transformer_impl.py": "b4f6243471f22c08dbfa472d13f708e8de609705ecff13f23713258160cf7902",
+      "workers/engine/base.py": "11e0a338f5220021dab2b1b22213c42bd090e869f3b16fb6ee6f754ccf4462a3",
+      "workers/engine_workers.py": "721f866442475a08768854b58176a4dcd99de4564809e3d067dced7cba1122db",
+      "workers/utils/losses.py": "701a0bf7cd7c0fa3cde670379d44cce5755bcd44222e8866716e69d27a400b5d",
+      "workers/utils/padding.py": "f3cc823e6ef2099075406f6fe1244498f15a775f0fac90010c0babf1c82cbe7b",
+      "workers/config/critic.py": "8ac41a1fc0e82007eed1c0b9744765205484c27b1a07f79df4e3f4b8034fcbab",
+      "workers/config/engine.py": "28fde4c2bc09dc7f7bc7d7b23167de25187f046caf4163b4c24ff45b890a279c",
+      "workers/config/model.py": "4b382b0c06edf133c332822b61c5cf57f973f244d0f602f3f4e161956e6a775c",
+      "workers/config/optimizer.py": "d64c68e87b031e7d841d36a1d7ea1f6ee607c73e8d6b6b26511cd0b3497326ff",
+      "trainer/config/critic/critic.yaml": "fac7babe651d2a434668d691d8fe4cd09c65017869a32d72d009d0c691c4551f",
+      "trainer/config/critic/dp_critic.yaml": "bdd697565041c42604b1c9916b8a2ebb3831039a29acc8a2d74ad4711e5ec973",
+      "trainer/config/model/hf_model.yaml": "0dc5f388ab74cbb3b5dcf5a7fc85ec8a292c35eb1b4c47ee3722b3afd1618e66",
+      "trainer/config/ppo_trainer.yaml": "4190c39245427a0a4d19c39ef2070f6cc48c790d81f1c9991b66d76575152cab",
+      "trainer/config/engine/fsdp.yaml": "de1a0a79db70504fa0e5bd0c60af071450c89be6c763a5eadd6a2d243f8f590a",
+      "trainer/config/optim/fsdp.yaml": "a6f1dd55acd5f34a723ce664c74e53d497beba51c9dc65e4f6d5c445f571f7b4",
+      "trainer/constants_ppo.py": "c1da0ce4cddfc89c4be2f7488570fc3cd1ccf47256db84eaa8bf795c5019b831"
+    },
+    "transformers": {
+      "models/llama/modeling_llama.py": "46d35513266b2a232549531b9cefce1b87dc1632479e2497c36bf4c5ecef12f0",
+      "modeling_utils.py": "251aaae7733affbb7cdb5aa05a84157c46cac02518d868898cd6d6282cc14571",
+      "modeling_layers.py": "30fb87c5ddbd6634fdd8cb483441d3a94cd9eafe223c45908e35254702516dc2",
+      "models/auto/modeling_auto.py": "7e1d7f5da77efc95f11531ea2ed7270ffd4e19615c48ed44d9386229a8182988"
+    }
+  },
+  "prepared_assets": {
+    "chat_template.jinja": {
+      "bytes": 5294,
+      "sha256": "a718674808440b537a553c15e0557b5b45d6d76e49ad9ddbc1a9e92447843e2c"
+    },
+    "config.json": {
+      "bytes": 878,
+      "sha256": "39fb36dc5416f445ebc4e71cb71fbcf6727e80a35836d8ba1a1474c318467b7a"
+    },
+    "generation_config.json": {
+      "bytes": 189,
+      "sha256": "88effbb63300dbbc7390143fbbdd9d9fa50587b37e8bfd16c8c90d4970a74a36"
+    },
+    "model-00001-of-00002.safetensors": {
+      "bytes": 4965799096,
+      "sha256": "13cbd6d16e927a0c5bad54102514e6e18b4a47b3a6eb911e39d678d328d19f55"
+    },
+    "model-00002-of-00002.safetensors": {
+      "bytes": 1459729952,
+      "sha256": "7b770216613ac5c34d7c54bdff1fa616bc4e338a9d0b20af6303e48c295ee23c"
+    },
+    "model.safetensors.index.json": {
+      "bytes": 20919,
+      "sha256": "0a57c30afc07c81610ae7fe013bea3b9d50365f9a8145ae98e8714220f3d7c7c"
+    },
+    "special_tokens_map.json": {
+      "bytes": 296,
+      "sha256": "6f38c73729248f6c127296386e3cdde96e254636cc58b4169d3fd32328d9a8ec"
+    },
+    "tokenizer.json": {
+      "bytes": 9085657,
+      "sha256": "79e3e522635f3171300913bb421464a87de6222182a0570b9b2ccba2a964b2b4"
+    },
+    "tokenizer_config.json": {
+      "bytes": 56032,
+      "sha256": "7fe399d0739ac28d562a04f0d294093d5d38ad3f00e6ea0e624f932ccf397116"
+    }
+  },
+  "smoke_data": {
+    "train_smoke.parquet": {
+      "sha256": "065b218b8b2bb16f80edf7b4721e2cd98fc6188f603af02146182591ccba6182",
+      "count": 16
+    },
+    "eval_smoke.parquet": {
+      "sha256": "d0ceb9f4daea9af580e09b932493ee35ade4ad945127603da2c0f272d54c074e",
+      "count": 8
+    },
+    "eval_smoke.jsonl": {
+      "sha256": "703e6203df93c3741f0de843f22a22cf66237b44fb3267193484f79a7ad0f960",
+      "count": 8
+    }
+  },
+  "asset_hash_provenance": {
+    "local_preserved_source_manifest_sha256": "b011f5984724a0e056ab86c47bf445cd916dc2aab0bab46a9e0c963e1f446ea0",
+    "source_archive_independently_fetched_this_session": false
+  },
+  "calc_example_sha256": "a0ddd84022896cd34f1d2e30bf6b35897497df62847f94ade98703c22e02b368"
+}

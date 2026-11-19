@@ -1,0 +1,34 @@
+{
+  "sdk": "1.6.3",
+  "method": "Offline real SDK container importer; image-equivalent paths; RPC/network blocked; no billable Modal execution",
+  "results": [
+    {
+      "source_commit": "f01da0e7978b268794f1e9d77496f9697482787b",
+      "function": "supervise",
+      "returncode": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"<string>\", line 19, in <module>\n  File \"/workspace/projects/repos/agent-lightning-lab/.venv/lib/python3.12/site-packages/modal/_runtime/user_code_imports.py\", line 509, in import_single_function_service\n    module = importlib.import_module(function_def.module_name)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/importlib/__init__.py\", line 90, in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"<frozen importlib._bootstrap>\", line 1387, in _gcd_import\n  File \"<frozen importlib._bootstrap>\", line 1360, in _find_and_load\n  File \"<frozen importlib._bootstrap>\", line 1331, in _find_and_load_unlocked\n  File \"<frozen importlib._bootstrap>\", line 935, in _load_unlocked\n  File \"<frozen importlib._bootstrap_external>\", line 995, in exec_module\n  File \"<frozen importlib._bootstrap>\", line 488, in _call_with_frames_removed\n  File \"/tmp/tmp9za3hu4k/root/matched_app.py\", line 15, in <module>\n    import modal_app as base\nModuleNotFoundError: No module named 'modal_app'\n"
+    },
+    {
+      "source_commit": "f01da0e7978b268794f1e9d77496f9697482787b",
+      "function": "stage_worker",
+      "returncode": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"<string>\", line 19, in <module>\n  File \"/workspace/projects/repos/agent-lightning-lab/.venv/lib/python3.12/site-packages/modal/_runtime/user_code_imports.py\", line 509, in import_single_function_service\n    module = importlib.import_module(function_def.module_name)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/importlib/__init__.py\", line 90, in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"<frozen importlib._bootstrap>\", line 1387, in _gcd_import\n  File \"<frozen importlib._bootstrap>\", line 1360, in _find_and_load\n  File \"<frozen importlib._bootstrap>\", line 1331, in _find_and_load_unlocked\n  File \"<frozen importlib._bootstrap>\", line 935, in _load_unlocked\n  File \"<frozen importlib._bootstrap_external>\", line 995, in exec_module\n  File \"<frozen importlib._bootstrap>\", line 488, in _call_with_frames_removed\n  File \"/tmp/tmpxayv2m2g/root/matched_app.py\", line 15, in <module>\n    import modal_app as base\nModuleNotFoundError: No module named 'modal_app'\n"
+    },
+    {
+      "source_commit": "62f4de281737dc4e769a26339895a597b4aac32d",
+      "function": "supervise",
+      "returncode": 0,
+      "stdout": "{\"function\": \"supervise\", \"sdk\": \"1.6.3\", \"import\": \"passed\", \"network\": \"blocked\", \"builders\": \"absent\"}\n",
+      "stderr": ""
+    },
+    {
+      "source_commit": "62f4de281737dc4e769a26339895a597b4aac32d",
+      "function": "stage_worker",
+      "returncode": 0,
+      "stdout": "{\"function\": \"stage_worker\", \"sdk\": \"1.6.3\", \"import\": \"passed\", \"network\": \"blocked\", \"builders\": \"absent\"}\n",
+      "stderr": ""
+    }
+  ]
+}

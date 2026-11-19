@@ -1,0 +1,24 @@
+{
+  "comment_text": null,
+  "core-metadata": {
+    "sha256": "b161d1711bc4f40cc1604f51012256f55c740586a53fed10f8f79f4628ad700e"
+  },
+  "digests": {
+    "blake2b_256": "ca233f7f759763fb9b4cf5787bcb4a43f74904f8e644d53d4fdb4e19654a92fd",
+    "md5": "15e8636b172b18c7670b135f033e336d",
+    "sha256": "c387a977e35795e8f77b009e019e69722963819c26b55e4a679e09d4279ae35d"
+  },
+  "downloads": -1,
+  "filename": "vllm-0.22.0-cp38-abi3-manylinux_2_28_x86_64.whl",
+  "has_sig": false,
+  "md5_digest": "15e8636b172b18c7670b135f033e336d",
+  "packagetype": "bdist_wheel",
+  "python_version": "cp38",
+  "requires_python": "<3.15,>=3.10",
+  "size": 261034920,
+  "upload_time": "2026-05-29T10:33:10",
+  "upload_time_iso_8601": "2026-05-29T10:33:10.357145Z",
+  "url": "https://files.pythonhosted.org/packages/ca/23/3f7f759763fb9b4cf5787bcb4a43f74904f8e644d53d4fdb4e19654a92fd/vllm-0.22.0-cp38-abi3-manylinux_2_28_x86_64.whl",
+  "yanked": false,
+  "yanked_reason": null
+}

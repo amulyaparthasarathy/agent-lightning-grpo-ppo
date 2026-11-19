@@ -1,0 +1,12 @@
+{
+  "version": "0.22.0",
+  "filename": "vllm-0.22.0-cp38-abi3-manylinux_2_28_x86_64.whl",
+  "url": "https://files.pythonhosted.org/packages/ca/23/3f7f759763fb9b4cf5787bcb4a43f74904f8e644d53d4fdb4e19654a92fd/vllm-0.22.0-cp38-abi3-manylinux_2_28_x86_64.whl",
+  "sha256": "c387a977e35795e8f77b009e019e69722963819c26b55e4a679e09d4279ae35d",
+  "files": {
+    "vllm/envs.py": "620a7a75d056f9d405d8030886c97d843209e6996d1c3fe4cbadd2f9efd43e7e",
+    "vllm/utils/network_utils.py": "83b24f1e0026d1737e036a5abedc2f34ae234df5ccd7f1addab801c3cba55de9"
+  },
+  "ray": "2.60.0",
+  "pyzmq": "27.3.0"
+}

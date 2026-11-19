@@ -1,0 +1,828 @@
+[
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-grpo-matched-v2-s9101-a01/baseline/traces",
+    "type": "DIRECTORY",
+    "bytes": 0,
+    "mtime": 1794720002,
+    "mtime_utc": "2026-11-15T05:20:02+00:00"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-grpo-matched-v2-s9101-a01/baseline/temporary/xdg_cache_home",
+    "type": "DIRECTORY",
+    "bytes": 0,
+    "mtime": 1794720002,
+    "mtime_utc": "2026-11-15T05:20:02+00:00"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-grpo-matched-v2-s9101-a01/baseline/temporary/wandb_dir",
+    "type": "DIRECTORY",
+    "bytes": 0,
+    "mtime": 1794720002,
+    "mtime_utc": "2026-11-15T05:20:02+00:00"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-grpo-matched-v2-s9101-a01/baseline/temporary/vllm_cache_root",
+    "type": "DIRECTORY",
+    "bytes": 0,
+    "mtime": 1794720002,
+    "mtime_utc": "2026-11-15T05:20:02+00:00"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-ppo-mc-matched-v2-s9101-a01/baseline/traces",
+    "type": "DIRECTORY",
+    "bytes": 0,
+    "mtime": 1794720006,
+    "mtime_utc": "2026-11-15T05:20:06+00:00"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-ppo-mc-matched-v2-s9101-a01/baseline/temporary/xdg_cache_home",
+    "type": "DIRECTORY",
+    "bytes": 0,
+    "mtime": 1794720006,
+    "mtime_utc": "2026-11-15T05:20:06+00:00"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-ppo-mc-matched-v2-s9101-a01/baseline/temporary/wandb_dir",
+    "type": "DIRECTORY",
+    "bytes": 0,
+    "mtime": 1794720006,
+    "mtime_utc": "2026-11-15T05:20:06+00:00"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-ppo-mc-matched-v2-s9101-a01/baseline/temporary/vllm_cache_root",
+    "type": "DIRECTORY",
+    "bytes": 0,
+    "mtime": 1794720006,
+    "mtime_utc": "2026-11-15T05:20:06+00:00"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-grpo-matched-v2-s9101-a01/baseline/temporary/tmpdir/torchinductor_root",
+    "type": "DIRECTORY",
+    "bytes": 0,
+    "mtime": 1794720011,
+    "mtime_utc": "2026-11-15T05:20:11+00:00"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-ppo-mc-matched-v2-s9101-a01/baseline/temporary/tmpdir/torchinductor_root",
+    "type": "DIRECTORY",
+    "bytes": 0,
+    "mtime": 1794720016,
+    "mtime_utc": "2026-11-15T05:20:16+00:00"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-grpo-matched-v2-s9101-a01/baseline/temporary/hf_home",
+    "type": "DIRECTORY",
+    "bytes": 8,
+    "mtime": 1794720017,
+    "mtime_utc": "2026-11-15T05:20:17+00:00"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-grpo-matched-v2-s9101-a01/baseline/temporary/hf_home/datasets",
+    "type": "DIRECTORY",
+    "bytes": 517,
+    "mtime": 1794720017,
+    "mtime_utc": "2026-11-15T05:20:17+00:00"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-grpo-matched-v2-s9101-a01/baseline/temporary/hf_home/datasets/parquet",
+    "type": "DIRECTORY",
+    "bytes": 48,
+    "mtime": 1794720017,
+    "mtime_utc": "2026-11-15T05:20:17+00:00"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-grpo-matched-v2-s9101-a01/baseline/temporary/hf_home/datasets/parquet/default-b766586ee65589d6",
+    "type": "DIRECTORY",
+    "bytes": 5,
+    "mtime": 1794720017,
+    "mtime_utc": "2026-11-15T05:20:17+00:00"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-grpo-matched-v2-s9101-a01/baseline/temporary/hf_home/datasets/parquet/default-b766586ee65589d6/0.0.0",
+    "type": "DIRECTORY",
+    "bytes": 226,
+    "mtime": 1794720017,
+    "mtime_utc": "2026-11-15T05:20:17+00:00"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-grpo-matched-v2-s9101-a01/baseline/temporary/hf_home/datasets/parquet/default-b766586ee65589d6/0.0.0/a859584b6747f312c02efa800dcc0a33038f602cb670b65dc6103d3f269c5565",
+    "type": "DIRECTORY",
+    "bytes": 36,
+    "mtime": 1794720017,
+    "mtime_utc": "2026-11-15T05:20:17+00:00"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-grpo-matched-v2-s9101-a01/baseline/temporary/hf_home/datasets/parquet/default-99141a5a523fb321",
+    "type": "DIRECTORY",
+    "bytes": 5,
+    "mtime": 1794720017,
+    "mtime_utc": "2026-11-15T05:20:17+00:00"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-grpo-matched-v2-s9101-a01/baseline/temporary/hf_home/datasets/parquet/default-99141a5a523fb321/0.0.0",
+    "type": "DIRECTORY",
+    "bytes": 226,
+    "mtime": 1794720017,
+    "mtime_utc": "2026-11-15T05:20:17+00:00"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-grpo-matched-v2-s9101-a01/baseline/temporary/hf_home/datasets/parquet/default-99141a5a523fb321/0.0.0/a859584b6747f312c02efa800dcc0a33038f602cb670b65dc6103d3f269c5565",
+    "type": "DIRECTORY",
+    "bytes": 36,
+    "mtime": 1794720017,
+    "mtime_utc": "2026-11-15T05:20:17+00:00"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-ppo-mc-matched-v2-s9101-a01/baseline/temporary/hf_home",
+    "type": "DIRECTORY",
+    "bytes": 8,
+    "mtime": 1794720023,
+    "mtime_utc": "2026-11-15T05:20:23+00:00"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-ppo-mc-matched-v2-s9101-a01/baseline/temporary/hf_home/datasets",
+    "type": "DIRECTORY",
+    "bytes": 517,
+    "mtime": 1794720023,
+    "mtime_utc": "2026-11-15T05:20:23+00:00"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-ppo-mc-matched-v2-s9101-a01/baseline/temporary/hf_home/datasets/parquet",
+    "type": "DIRECTORY",
+    "bytes": 48,
+    "mtime": 1794720023,
+    "mtime_utc": "2026-11-15T05:20:23+00:00"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-ppo-mc-matched-v2-s9101-a01/baseline/temporary/hf_home/datasets/parquet/default-b766586ee65589d6",
+    "type": "DIRECTORY",
+    "bytes": 5,
+    "mtime": 1794720023,
+    "mtime_utc": "2026-11-15T05:20:23+00:00"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-ppo-mc-matched-v2-s9101-a01/baseline/temporary/hf_home/datasets/parquet/default-b766586ee65589d6/0.0.0",
+    "type": "DIRECTORY",
+    "bytes": 226,
+    "mtime": 1794720023,
+    "mtime_utc": "2026-11-15T05:20:23+00:00"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-ppo-mc-matched-v2-s9101-a01/baseline/temporary/hf_home/datasets/parquet/default-b766586ee65589d6/0.0.0/a859584b6747f312c02efa800dcc0a33038f602cb670b65dc6103d3f269c5565",
+    "type": "DIRECTORY",
+    "bytes": 36,
+    "mtime": 1794720023,
+    "mtime_utc": "2026-11-15T05:20:23+00:00"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-ppo-mc-matched-v2-s9101-a01/baseline/temporary/hf_home/datasets/parquet/default-99141a5a523fb321",
+    "type": "DIRECTORY",
+    "bytes": 5,
+    "mtime": 1794720023,
+    "mtime_utc": "2026-11-15T05:20:23+00:00"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-ppo-mc-matched-v2-s9101-a01/baseline/temporary/hf_home/datasets/parquet/default-99141a5a523fb321/0.0.0",
+    "type": "DIRECTORY",
+    "bytes": 226,
+    "mtime": 1794720023,
+    "mtime_utc": "2026-11-15T05:20:23+00:00"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-ppo-mc-matched-v2-s9101-a01/baseline/temporary/hf_home/datasets/parquet/default-99141a5a523fb321/0.0.0/a859584b6747f312c02efa800dcc0a33038f602cb670b65dc6103d3f269c5565",
+    "type": "DIRECTORY",
+    "bytes": 36,
+    "mtime": 1794720023,
+    "mtime_utc": "2026-11-15T05:20:23+00:00"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-grpo-matched-v2-s9101-a01/baseline/temporary/triton_cache_dir",
+    "type": "DIRECTORY",
+    "bytes": 52,
+    "mtime": 1794720048,
+    "mtime_utc": "2026-11-15T05:20:48+00:00"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-grpo-matched-v2-s9101-a01/baseline/temporary/triton_cache_dir/77NNNEUZ3IJOQFHAPQOAH2TMPI6XDVGAVLSETB3SUTUUIDAWX3OA",
+    "type": "DIRECTORY",
+    "bytes": 42,
+    "mtime": 1794720049,
+    "mtime_utc": "2026-11-15T05:20:49+00:00"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-grpo-matched-v2-s9101-a01/baseline/temporary/tmpdir/tmpii9swnyuwandb-artifacts",
+    "type": "DIRECTORY",
+    "bytes": 0,
+    "mtime": 1794720050,
+    "mtime_utc": "2026-11-15T05:20:50+00:00"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-grpo-matched-v2-s9101-a01/baseline/temporary/tmpdir/tmpdxb14ohrwandb-media",
+    "type": "DIRECTORY",
+    "bytes": 0,
+    "mtime": 1794720050,
+    "mtime_utc": "2026-11-15T05:20:50+00:00"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-ppo-mc-matched-v2-s9101-a01/baseline/temporary/triton_cache_dir",
+    "type": "DIRECTORY",
+    "bytes": 52,
+    "mtime": 1794720057,
+    "mtime_utc": "2026-11-15T05:20:57+00:00"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-ppo-mc-matched-v2-s9101-a01/baseline/temporary/triton_cache_dir/77NNNEUZ3IJOQFHAPQOAH2TMPI6XDVGAVLSETB3SUTUUIDAWX3OA",
+    "type": "DIRECTORY",
+    "bytes": 42,
+    "mtime": 1794720057,
+    "mtime_utc": "2026-11-15T05:20:57+00:00"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-ppo-mc-matched-v2-s9101-a01/baseline/temporary/tmpdir/tmpo1e_qnujwandb-media",
+    "type": "DIRECTORY",
+    "bytes": 0,
+    "mtime": 1794720059,
+    "mtime_utc": "2026-11-15T05:20:59+00:00"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-ppo-mc-matched-v2-s9101-a01/baseline/temporary/tmpdir/tmpzhowp4pawandb-artifacts",
+    "type": "DIRECTORY",
+    "bytes": 0,
+    "mtime": 1794720059,
+    "mtime_utc": "2026-11-15T05:20:59+00:00"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-grpo-matched-v2-s9101-a01/baseline/temporary/tmpdir/tmpmlt_e2pewandb-media",
+    "type": "DIRECTORY",
+    "bytes": 0,
+    "mtime": 1794720070,
+    "mtime_utc": "2026-11-15T05:21:10+00:00"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-grpo-matched-v2-s9101-a01/baseline/temporary/tmpdir/tmp3yfbso1dwandb-artifacts",
+    "type": "DIRECTORY",
+    "bytes": 0,
+    "mtime": 1794720070,
+    "mtime_utc": "2026-11-15T05:21:10+00:00"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-ppo-mc-matched-v2-s9101-a01/baseline/temporary/tmpdir/tmpxb9m6d2awandb-media",
+    "type": "DIRECTORY",
+    "bytes": 0,
+    "mtime": 1794720086,
+    "mtime_utc": "2026-11-15T05:21:26+00:00"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-ppo-mc-matched-v2-s9101-a01/baseline/temporary/tmpdir/tmps8yqjmqcwandb-artifacts",
+    "type": "DIRECTORY",
+    "bytes": 0,
+    "mtime": 1794720086,
+    "mtime_utc": "2026-11-15T05:21:26+00:00"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-grpo-matched-v2-s9101-a01/baseline/audit",
+    "type": "DIRECTORY",
+    "bytes": 51,
+    "mtime": 1794720090,
+    "mtime_utc": "2026-11-15T05:21:30+00:00"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-grpo-matched-v2-s9101-a01",
+    "type": "DIRECTORY",
+    "bytes": 8,
+    "mtime": 1794719993,
+    "mtime_utc": "2026-11-15T05:19:53+00:00"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-grpo-matched-v2-s9101-a01/baseline/temporary",
+    "type": "DIRECTORY",
+    "bytes": 67,
+    "mtime": 1794720002,
+    "mtime_utc": "2026-11-15T05:20:02+00:00"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-grpo-matched-v2-s9101-a01/baseline/logs",
+    "type": "DIRECTORY",
+    "bytes": 36,
+    "mtime": 1794720004,
+    "mtime_utc": "2026-11-15T05:20:04+00:00"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-grpo-matched-v2-s9101-a01/baseline",
+    "type": "DIRECTORY",
+    "bytes": 171,
+    "mtime": 1794720101,
+    "mtime_utc": "2026-11-15T05:21:41+00:00"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-grpo-matched-v2-s9101-a01/baseline/temporary/tmpdir",
+    "type": "DIRECTORY",
+    "bytes": 114,
+    "mtime": 1794720098,
+    "mtime_utc": "2026-11-15T05:21:38+00:00"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-ppo-mc-matched-v2-s9101-a01/baseline/audit",
+    "type": "DIRECTORY",
+    "bytes": 51,
+    "mtime": 1794720111,
+    "mtime_utc": "2026-11-15T05:21:51+00:00"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-ppo-mc-matched-v2-s9101-a01/baseline/temporary",
+    "type": "DIRECTORY",
+    "bytes": 67,
+    "mtime": 1794720006,
+    "mtime_utc": "2026-11-15T05:20:06+00:00"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-ppo-mc-matched-v2-s9101-a01/baseline/logs",
+    "type": "DIRECTORY",
+    "bytes": 36,
+    "mtime": 1794720008,
+    "mtime_utc": "2026-11-15T05:20:08+00:00"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-ppo-mc-matched-v2-s9101-a01/baseline/temporary/tmpdir",
+    "type": "DIRECTORY",
+    "bytes": 114,
+    "mtime": 1794720139,
+    "mtime_utc": "2026-11-15T05:22:19+00:00"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-ppo-mc-matched-v2-s9101-a01",
+    "type": "DIRECTORY",
+    "bytes": 8,
+    "mtime": 1794719996,
+    "mtime_utc": "2026-11-15T05:19:56+00:00"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-ppo-mc-matched-v2-s9101-a01/baseline",
+    "type": "DIRECTORY",
+    "bytes": 171,
+    "mtime": 1794720142,
+    "mtime_utc": "2026-11-15T05:22:22+00:00"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification",
+    "type": "DIRECTORY",
+    "bytes": 14,
+    "mtime": 1794719983,
+    "mtime_utc": "2026-11-15T05:19:43+00:00"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/supervisor-a01",
+    "type": "DIRECTORY",
+    "bytes": 19,
+    "mtime": 1794719983,
+    "mtime_utc": "2026-11-15T05:19:43+00:00"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/supervisor-a01/index.json",
+    "type": "FILE",
+    "bytes": 55221,
+    "mtime": 1794720154,
+    "mtime_utc": "2026-11-15T05:22:34+00:00",
+    "sha256": "e3cd25eb2fc4572c9467c7ab5eaae07dadabe78307f1782b4f07db4e9f500f74"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-ppo-mc-matched-v2-s9101-a01/baseline/receipt.json",
+    "type": "FILE",
+    "bytes": 527,
+    "mtime": 1794720142,
+    "mtime_utc": "2026-11-15T05:22:22+00:00",
+    "sha256": "9f6a7d5a49b5135485654faacbbf3ba4cc4a82cab977976485780f5d2db055fd"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-ppo-mc-matched-v2-s9101-a01/baseline/launcher.log",
+    "type": "FILE",
+    "bytes": 16582,
+    "mtime": 1794720142,
+    "mtime_utc": "2026-11-15T05:22:22+00:00",
+    "sha256": "b6441d5e0d42481317459655a2a8c85a49734f9a43e9350f4a3f8a24890e5c8c"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-ppo-mc-matched-v2-s9101-a01/baseline/result.json",
+    "type": "FILE",
+    "bytes": 318,
+    "mtime": 1794720142,
+    "mtime_utc": "2026-11-15T05:22:22+00:00",
+    "sha256": "a51e4427657f463afc979f376707e3ca5204f7915cbee30fe3476b6de0ecd7ad"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-ppo-mc-matched-v2-s9101-a01/baseline/logs/trainer.log",
+    "type": "FILE",
+    "bytes": 561277,
+    "mtime": 1794720140,
+    "mtime_utc": "2026-11-15T05:22:20+00:00",
+    "sha256": "4183b84f607772e83edebe7b37a7cd911044e423bfdfe1ba8c3bb5b107b14b9b"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-ppo-mc-matched-v2-s9101-a01/baseline/logs/gateway.log",
+    "type": "FILE",
+    "bytes": 14845,
+    "mtime": 1794720142,
+    "mtime_utc": "2026-11-15T05:22:22+00:00",
+    "sha256": "9916dd9036a221bde0a3346adf043f6a6952d1966f8caf9aa312379b4574d512"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-ppo-mc-matched-v2-s9101-a01/baseline/logs/controller.log",
+    "type": "FILE",
+    "bytes": 20988,
+    "mtime": 1794720142,
+    "mtime_utc": "2026-11-15T05:22:22+00:00",
+    "sha256": "c8ffe37a0d3115149d8e5853c35940b095f689f4fdcdf3dce7d4b0cafd08fc19"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-ppo-mc-matched-v2-s9101-a01/baseline/error.txt",
+    "type": "FILE",
+    "bytes": 197,
+    "mtime": 1794720142,
+    "mtime_utc": "2026-11-15T05:22:22+00:00",
+    "sha256": "bc93494feef8de0118d5db481c1230f2472364108248c2df2c95ed261bd63cb0"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-ppo-mc-matched-v2-s9101-a01/baseline/audit/events-1472.jsonl",
+    "type": "FILE",
+    "bytes": 4887,
+    "mtime": 1794720131,
+    "mtime_utc": "2026-11-15T05:22:11+00:00",
+    "sha256": "bc55b29ae9da19b16f4ac001480bfdfe7af2d704e9ad1811232f1e6ec47f61d8"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-grpo-matched-v2-s9101-a01/baseline/result.json",
+    "type": "FILE",
+    "bytes": 316,
+    "mtime": 1794720101,
+    "mtime_utc": "2026-11-15T05:21:41+00:00",
+    "sha256": "755110b3809fc09249f7cfc942c7f46943ca2af3a3abc5e41607cec3cbcc179a"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-grpo-matched-v2-s9101-a01/baseline/receipt.json",
+    "type": "FILE",
+    "bytes": 524,
+    "mtime": 1794720101,
+    "mtime_utc": "2026-11-15T05:21:41+00:00",
+    "sha256": "706959091e9dbc89c18e1a86d76d84122e27fc50a7f3acc7915a25557584a4cf"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-grpo-matched-v2-s9101-a01/baseline/logs/trainer.log",
+    "type": "FILE",
+    "bytes": 553248,
+    "mtime": 1794720099,
+    "mtime_utc": "2026-11-15T05:21:39+00:00",
+    "sha256": "9687932ae0af7ec1bf6e2298d45a14d033dd72cc90018d176b52e5b33d7e50b4"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-grpo-matched-v2-s9101-a01/baseline/logs/gateway.log",
+    "type": "FILE",
+    "bytes": 10886,
+    "mtime": 1794720101,
+    "mtime_utc": "2026-11-15T05:21:41+00:00",
+    "sha256": "84f0444d6b9cd61c672c5536c036a144120721375648737fddabcb4ba1447718"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-grpo-matched-v2-s9101-a01/baseline/logs/controller.log",
+    "type": "FILE",
+    "bytes": 15216,
+    "mtime": 1794720101,
+    "mtime_utc": "2026-11-15T05:21:41+00:00",
+    "sha256": "e71ec3e00fea1cb297941971b3bb669b88db88578d16f6b731b5a1194c856d77"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-grpo-matched-v2-s9101-a01/baseline/launcher.log",
+    "type": "FILE",
+    "bytes": 16580,
+    "mtime": 1794720101,
+    "mtime_utc": "2026-11-15T05:21:41+00:00",
+    "sha256": "4dcbdf8e4e074fe4ac64e7ba26bf27d654754adcba27381f4d673aa5fa4b672f"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-grpo-matched-v2-s9101-a01/baseline/error.txt",
+    "type": "FILE",
+    "bytes": 195,
+    "mtime": 1794720101,
+    "mtime_utc": "2026-11-15T05:21:41+00:00",
+    "sha256": "c3b1e06d393124f6ee576f22f55c12d7206421f282b9f3140a069b24002dcf95"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-grpo-matched-v2-s9101-a01/baseline/audit/events-1456.jsonl",
+    "type": "FILE",
+    "bytes": 2239,
+    "mtime": 1794720092,
+    "mtime_utc": "2026-11-15T05:21:32+00:00",
+    "sha256": "83d6381e75c0d8137286bd93c9b03eea1df31a17d760867334e3091b0ed8f327"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-ppo-mc-matched-v2-s9101-a01/baseline/audit/events-1323.jsonl",
+    "type": "FILE",
+    "bytes": 468,
+    "mtime": 1794720086,
+    "mtime_utc": "2026-11-15T05:21:26+00:00",
+    "sha256": "a73e8f0163053c377397e19ebb48d92dd6403618d0ce858091b72a6ca993222e"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-grpo-matched-v2-s9101-a01/baseline/audit/events-1323.jsonl",
+    "type": "FILE",
+    "bytes": 461,
+    "mtime": 1794720070,
+    "mtime_utc": "2026-11-15T05:21:10+00:00",
+    "sha256": "2182e2c146f69164454accfff407c23ea3a985651f603b6f48ff4ae262ce606c"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-ppo-mc-matched-v2-s9101-a01/baseline/audit/events-1164.jsonl",
+    "type": "FILE",
+    "bytes": 469,
+    "mtime": 1794720059,
+    "mtime_utc": "2026-11-15T05:20:59+00:00",
+    "sha256": "5806072a8f0f78f7f4c95e60ed3cb285c139186db7e66a589c31d5419dd35e4e"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-ppo-mc-matched-v2-s9101-a01/baseline/temporary/triton_cache_dir/77NNNEUZ3IJOQFHAPQOAH2TMPI6XDVGAVLSETB3SUTUUIDAWX3OA/cuda_utils.cpython-312-x86_64-linux-gnu.so",
+    "type": "FILE",
+    "bytes": 31944,
+    "mtime": 1794720057,
+    "mtime_utc": "2026-11-15T05:20:57+00:00",
+    "sha256": "f58b25b17a5ec3df717c7c78fc634a4deb4309952b0e66722e4586dc0e911b42"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-grpo-matched-v2-s9101-a01/baseline/temporary/triton_cache_dir/77NNNEUZ3IJOQFHAPQOAH2TMPI6XDVGAVLSETB3SUTUUIDAWX3OA/cuda_utils.cpython-312-x86_64-linux-gnu.so",
+    "type": "FILE",
+    "bytes": 31944,
+    "mtime": 1794720049,
+    "mtime_utc": "2026-11-15T05:20:49+00:00",
+    "sha256": "44c457236317c7315c45b914ed800bd5c61ae489b2dfe6f1388d5af37253c91f"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-grpo-matched-v2-s9101-a01/baseline/audit/events-1164.jsonl",
+    "type": "FILE",
+    "bytes": 461,
+    "mtime": 1794720050,
+    "mtime_utc": "2026-11-15T05:20:50+00:00",
+    "sha256": "f9e1351874fa2436cb3918731c60c4f72eb1bef00d92a001cca4b429d489ebdd"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-ppo-mc-matched-v2-s9101-a01/baseline/temporary/hf_home/datasets/parquet/default-b766586ee65589d6/0.0.0/a859584b6747f312c02efa800dcc0a33038f602cb670b65dc6103d3f269c5565_builder.lock",
+    "type": "FILE",
+    "bytes": 0,
+    "mtime": 1794720023,
+    "mtime_utc": "2026-11-15T05:20:23+00:00",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-ppo-mc-matched-v2-s9101-a01/baseline/temporary/hf_home/datasets/parquet/default-b766586ee65589d6/0.0.0/a859584b6747f312c02efa800dcc0a33038f602cb670b65dc6103d3f269c5565.incomplete_info.lock",
+    "type": "FILE",
+    "bytes": 0,
+    "mtime": 1794720023,
+    "mtime_utc": "2026-11-15T05:20:23+00:00",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-ppo-mc-matched-v2-s9101-a01/baseline/temporary/hf_home/datasets/parquet/default-b766586ee65589d6/0.0.0/a859584b6747f312c02efa800dcc0a33038f602cb670b65dc6103d3f269c5565/parquet-train.arrow",
+    "type": "FILE",
+    "bytes": 16648,
+    "mtime": 1794720023,
+    "mtime_utc": "2026-11-15T05:20:23+00:00",
+    "sha256": "7ec365d7211f5bcbc565e1168aaecfe2399c240c287aebce28bc025c48241826"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-ppo-mc-matched-v2-s9101-a01/baseline/temporary/hf_home/datasets/parquet/default-b766586ee65589d6/0.0.0/a859584b6747f312c02efa800dcc0a33038f602cb670b65dc6103d3f269c5565/dataset_info.json",
+    "type": "FILE",
+    "bytes": 609,
+    "mtime": 1794720023,
+    "mtime_utc": "2026-11-15T05:20:23+00:00",
+    "sha256": "38c0987ce080ede8d8a2070123ee74f96f355d4eadd88619a318be0c408110cb"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-ppo-mc-matched-v2-s9101-a01/baseline/temporary/hf_home/datasets/parquet/default-99141a5a523fb321/0.0.0/a859584b6747f312c02efa800dcc0a33038f602cb670b65dc6103d3f269c5565_builder.lock",
+    "type": "FILE",
+    "bytes": 0,
+    "mtime": 1794720023,
+    "mtime_utc": "2026-11-15T05:20:23+00:00",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-ppo-mc-matched-v2-s9101-a01/baseline/temporary/hf_home/datasets/parquet/default-99141a5a523fb321/0.0.0/a859584b6747f312c02efa800dcc0a33038f602cb670b65dc6103d3f269c5565.incomplete_info.lock",
+    "type": "FILE",
+    "bytes": 0,
+    "mtime": 1794720023,
+    "mtime_utc": "2026-11-15T05:20:23+00:00",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-ppo-mc-matched-v2-s9101-a01/baseline/temporary/hf_home/datasets/parquet/default-99141a5a523fb321/0.0.0/a859584b6747f312c02efa800dcc0a33038f602cb670b65dc6103d3f269c5565/parquet-train.arrow",
+    "type": "FILE",
+    "bytes": 62832,
+    "mtime": 1794720023,
+    "mtime_utc": "2026-11-15T05:20:23+00:00",
+    "sha256": "bc1986cc8bc8df0fe98d84636e29bd206fb99b38d07d2cda029744f3d2d13b14"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-ppo-mc-matched-v2-s9101-a01/baseline/temporary/hf_home/datasets/parquet/default-99141a5a523fb321/0.0.0/a859584b6747f312c02efa800dcc0a33038f602cb670b65dc6103d3f269c5565/dataset_info.json",
+    "type": "FILE",
+    "bytes": 610,
+    "mtime": 1794720023,
+    "mtime_utc": "2026-11-15T05:20:23+00:00",
+    "sha256": "95eae5d7cc39f95c4fd7e18ea5842f970df79939f87b79f391757960ccca501c"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-ppo-mc-matched-v2-s9101-a01/baseline/temporary/hf_home/datasets/_data_phase2_studies_agl-explore-20-v1-r01_exploratory-qualification_agl-explore-20-v1-r01-exploratory-qualification-ppo-mc-matched-v2-s9101-a01_baseline_temporary_hf_home_datasets_parquet_default-b766586ee65589d6_0.0.0_a859584b...-400951790630222749.lock",
+    "type": "FILE",
+    "bytes": 0,
+    "mtime": 1794720023,
+    "mtime_utc": "2026-11-15T05:20:23+00:00",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-ppo-mc-matched-v2-s9101-a01/baseline/temporary/hf_home/datasets/_data_phase2_studies_agl-explore-20-v1-r01_exploratory-qualification_agl-explore-20-v1-r01-exploratory-qualification-ppo-mc-matched-v2-s9101-a01_baseline_temporary_hf_home_datasets_parquet_default-99141a5a523fb321_0.0.0_a859584...-8750330348208286226.lock",
+    "type": "FILE",
+    "bytes": 0,
+    "mtime": 1794720023,
+    "mtime_utc": "2026-11-15T05:20:23+00:00",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-ppo-mc-matched-v2-s9101-a01/baseline/resolved_config.json",
+    "type": "FILE",
+    "bytes": 72738,
+    "mtime": 1794720021,
+    "mtime_utc": "2026-11-15T05:20:21+00:00",
+    "sha256": "a63072cf50a319cd53e0ad777d85ad1f0c3f2768e54a61df654009850d9de5e5"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-grpo-matched-v2-s9101-a01/baseline/temporary/hf_home/datasets/parquet/default-b766586ee65589d6/0.0.0/a859584b6747f312c02efa800dcc0a33038f602cb670b65dc6103d3f269c5565_builder.lock",
+    "type": "FILE",
+    "bytes": 0,
+    "mtime": 1794720017,
+    "mtime_utc": "2026-11-15T05:20:17+00:00",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-grpo-matched-v2-s9101-a01/baseline/temporary/hf_home/datasets/parquet/default-b766586ee65589d6/0.0.0/a859584b6747f312c02efa800dcc0a33038f602cb670b65dc6103d3f269c5565.incomplete_info.lock",
+    "type": "FILE",
+    "bytes": 0,
+    "mtime": 1794720017,
+    "mtime_utc": "2026-11-15T05:20:17+00:00",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-grpo-matched-v2-s9101-a01/baseline/temporary/hf_home/datasets/parquet/default-b766586ee65589d6/0.0.0/a859584b6747f312c02efa800dcc0a33038f602cb670b65dc6103d3f269c5565/parquet-train.arrow",
+    "type": "FILE",
+    "bytes": 16648,
+    "mtime": 1794720017,
+    "mtime_utc": "2026-11-15T05:20:17+00:00",
+    "sha256": "7ec365d7211f5bcbc565e1168aaecfe2399c240c287aebce28bc025c48241826"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-grpo-matched-v2-s9101-a01/baseline/temporary/hf_home/datasets/parquet/default-b766586ee65589d6/0.0.0/a859584b6747f312c02efa800dcc0a33038f602cb670b65dc6103d3f269c5565/dataset_info.json",
+    "type": "FILE",
+    "bytes": 609,
+    "mtime": 1794720017,
+    "mtime_utc": "2026-11-15T05:20:17+00:00",
+    "sha256": "38c0987ce080ede8d8a2070123ee74f96f355d4eadd88619a318be0c408110cb"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-grpo-matched-v2-s9101-a01/baseline/temporary/hf_home/datasets/parquet/default-99141a5a523fb321/0.0.0/a859584b6747f312c02efa800dcc0a33038f602cb670b65dc6103d3f269c5565_builder.lock",
+    "type": "FILE",
+    "bytes": 0,
+    "mtime": 1794720017,
+    "mtime_utc": "2026-11-15T05:20:17+00:00",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-grpo-matched-v2-s9101-a01/baseline/temporary/hf_home/datasets/parquet/default-99141a5a523fb321/0.0.0/a859584b6747f312c02efa800dcc0a33038f602cb670b65dc6103d3f269c5565.incomplete_info.lock",
+    "type": "FILE",
+    "bytes": 0,
+    "mtime": 1794720017,
+    "mtime_utc": "2026-11-15T05:20:17+00:00",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-grpo-matched-v2-s9101-a01/baseline/temporary/hf_home/datasets/parquet/default-99141a5a523fb321/0.0.0/a859584b6747f312c02efa800dcc0a33038f602cb670b65dc6103d3f269c5565/parquet-train.arrow",
+    "type": "FILE",
+    "bytes": 62832,
+    "mtime": 1794720017,
+    "mtime_utc": "2026-11-15T05:20:17+00:00",
+    "sha256": "bc1986cc8bc8df0fe98d84636e29bd206fb99b38d07d2cda029744f3d2d13b14"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-grpo-matched-v2-s9101-a01/baseline/temporary/hf_home/datasets/parquet/default-99141a5a523fb321/0.0.0/a859584b6747f312c02efa800dcc0a33038f602cb670b65dc6103d3f269c5565/dataset_info.json",
+    "type": "FILE",
+    "bytes": 610,
+    "mtime": 1794720017,
+    "mtime_utc": "2026-11-15T05:20:17+00:00",
+    "sha256": "95eae5d7cc39f95c4fd7e18ea5842f970df79939f87b79f391757960ccca501c"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-grpo-matched-v2-s9101-a01/baseline/temporary/hf_home/datasets/_data_phase2_studies_agl-explore-20-v1-r01_exploratory-qualification_agl-explore-20-v1-r01-exploratory-qualification-grpo-matched-v2-s9101-a01_baseline_temporary_hf_home_datasets_parquet_default-b766586ee65589d6_0.0.0_a859584b6...-1892238737033092271.lock",
+    "type": "FILE",
+    "bytes": 0,
+    "mtime": 1794720017,
+    "mtime_utc": "2026-11-15T05:20:17+00:00",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-grpo-matched-v2-s9101-a01/baseline/temporary/hf_home/datasets/_data_phase2_studies_agl-explore-20-v1-r01_exploratory-qualification_agl-explore-20-v1-r01-exploratory-qualification-grpo-matched-v2-s9101-a01_baseline_temporary_hf_home_datasets_parquet_default-99141a5a523fb321_0.0.0_a859584b6...-2499876513565185322.lock",
+    "type": "FILE",
+    "bytes": 0,
+    "mtime": 1794720017,
+    "mtime_utc": "2026-11-15T05:20:17+00:00",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-grpo-matched-v2-s9101-a01/baseline/resolved_config.json",
+    "type": "FILE",
+    "bytes": 72632,
+    "mtime": 1794720015,
+    "mtime_utc": "2026-11-15T05:20:15+00:00",
+    "sha256": "c3106fc4f913cc91de1859b713c5a085aeacbb8436a2bfbad69639d736c9c31c"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-ppo-mc-matched-v2-s9101-a01/baseline/trainer_worker.py",
+    "type": "FILE",
+    "bytes": 1062,
+    "mtime": 1794720006,
+    "mtime_utc": "2026-11-15T05:20:06+00:00",
+    "sha256": "1fd8c424993cb63f410f4e05498ab6b271310562dd12bcbf5413cd634d93a56f"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-ppo-mc-matched-v2-s9101-a01/baseline/run_plan.json",
+    "type": "FILE",
+    "bytes": 101874,
+    "mtime": 1794720006,
+    "mtime_utc": "2026-11-15T05:20:06+00:00",
+    "sha256": "3625bfa44e81fb3560bf19cb0d81e81a8362835f056eab773455f68b8dee88bc"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-ppo-mc-matched-v2-s9101-a01/baseline/observability.json",
+    "type": "FILE",
+    "bytes": 1902,
+    "mtime": 1794720006,
+    "mtime_utc": "2026-11-15T05:20:06+00:00",
+    "sha256": "3fc012bb7e7030300836bfe438a6001d1e6d4083d9e0ebb7c3433d5db38a8833"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-grpo-matched-v2-s9101-a01/baseline/trainer_worker.py",
+    "type": "FILE",
+    "bytes": 1062,
+    "mtime": 1794720002,
+    "mtime_utc": "2026-11-15T05:20:02+00:00",
+    "sha256": "1fd8c424993cb63f410f4e05498ab6b271310562dd12bcbf5413cd634d93a56f"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-grpo-matched-v2-s9101-a01/baseline/run_plan.json",
+    "type": "FILE",
+    "bytes": 101691,
+    "mtime": 1794720002,
+    "mtime_utc": "2026-11-15T05:20:02+00:00",
+    "sha256": "c4526fe2b84d1dae916488f05bb7fef6ded48a677561a2b65b319f3f34d133f8"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-grpo-matched-v2-s9101-a01/baseline/observability.json",
+    "type": "FILE",
+    "bytes": 1889,
+    "mtime": 1794720002,
+    "mtime_utc": "2026-11-15T05:20:02+00:00",
+    "sha256": "85fc2617713f6495455633d4d99f815a9f80fb2f1e7decf0d040f9939d6b9185"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-ppo-mc-matched-v2-s9101-a01/baseline/resource-preflight.json",
+    "type": "FILE",
+    "bytes": 149,
+    "mtime": 1794719997,
+    "mtime_utc": "2026-11-15T05:19:57+00:00",
+    "sha256": "e9583c791a5789b649c0005194fba02e6cda85587fddb83944d93e1370ecb932"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-grpo-matched-v2-s9101-a01/baseline/resource-preflight.json",
+    "type": "FILE",
+    "bytes": 149,
+    "mtime": 1794719994,
+    "mtime_utc": "2026-11-15T05:19:54+00:00",
+    "sha256": "e9583c791a5789b649c0005194fba02e6cda85587fddb83944d93e1370ecb932"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-ppo-mc-matched-v2-s9101-a01/baseline/request.json",
+    "type": "FILE",
+    "bytes": 48392,
+    "mtime": 1794719996,
+    "mtime_utc": "2026-11-15T05:19:56+00:00",
+    "sha256": "f630dc6be3d9d9a83e1e924227c5b1ab314cf585ec4aa26da72362848a33ac14"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/agl-explore-20-v1-r01-exploratory-qualification-grpo-matched-v2-s9101-a01/baseline/request.json",
+    "type": "FILE",
+    "bytes": 48317,
+    "mtime": 1794719993,
+    "mtime_utc": "2026-11-15T05:19:53+00:00",
+    "sha256": "562d401756d5cfb8c231d3f74eee36b4d3e84a3ec73d546cd36016439495cbe6"
+  },
+  {
+    "path": "phase2/studies/agl-explore-20-v1-r01/exploratory-qualification/supervisor-a01/plan.json",
+    "type": "FILE",
+    "bytes": 37478,
+    "mtime": 1794719983,
+    "mtime_utc": "2026-11-15T05:19:43+00:00",
+    "sha256": "2e08478ec97b940b8758051a7b943f9e92624edb7ee5c21403c4e90dd79744f1"
+  }
+]

@@ -1,0 +1,8 @@
+{
+  "status": "failed",
+  "call_id": "fc-01M7EWQR7Z7Y5RQBAF80A9SHPT",
+  "output": "phase2/studies/agl-explore-20-v1-r02/exploratory-qualification/agl-explore-20-v1-r02-exploratory-qualification-grpo-matched-v2-s9101-a01/baseline",
+  "started_at": 1794722495.239542,
+  "error": "RuntimeError: Command exited 1; inspect /data/phase2/studies/agl-explore-20-v1-r02/exploratory-qualification/agl-explore-20-v1-r02-exploratory-qualification-grpo-matched-v2-s9101-a01/baseline/launcher.log",
+  "finished_at": 1794722718.687192
+}

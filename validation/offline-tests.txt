@@ -1,0 +1,25 @@
+test_bad_values_and_duplicate_keys (test_validation.CredentialFile.test_bad_values_and_duplicate_keys) ... ok
+test_tracked_secret_rejected (test_validation.CredentialFile.test_tracked_secret_rejected) ... ok
+test_valid_ignored_private_file_and_no_value_output (test_validation.CredentialFile.test_valid_ignored_private_file_and_no_value_output) ... ok
+test_world_readable_rejected (test_validation.CredentialFile.test_world_readable_rejected) ... ok
+test_image_boundaries_and_remote_spawn (test_validation.Launcher.test_image_boundaries_and_remote_spawn) ... ok
+test_nonzero_child_failure_committed (test_validation.Launcher.test_nonzero_child_failure_committed) ... ok
+test_real_child_success_and_duplicate_guard (test_validation.Launcher.test_real_child_success_and_duplicate_guard) ... ok
+test_shell_enforces_detach_for_all_tests (test_validation.Launcher.test_shell_enforces_detach_for_all_tests) ... ok
+test_atomic_json (test_validation.Requests.test_atomic_json) ... ok
+test_bad_requests (test_validation.Requests.test_bad_requests) ... ok
+test_detach_required (test_validation.Requests.test_detach_required) ... ok
+test_source_hash_allowlist (test_validation.Requests.test_source_hash_allowlist) ... ok
+test_valid (test_validation.Requests.test_valid) ... ok
+test_cpu_audit_defers_native_gpu_imports (test_validation.Runtime.test_cpu_audit_defers_native_gpu_imports) ... ok
+test_hf_failure_marks_failed_wandb_run (test_validation.Runtime.test_hf_failure_marks_failed_wandb_run) ... ok
+test_missing_secret_no_sdk_call (test_validation.Runtime.test_missing_secret_no_sdk_call) ... ok
+test_readback_failure_not_success (test_validation.Runtime.test_readback_failure_not_success) ... ok
+test_readback_requires_server_finished_and_final_tick (test_validation.Runtime.test_readback_requires_server_finished_and_final_tick) ... ok
+test_services_success_is_synthetic_not_rl (test_validation.Runtime.test_services_success_is_synthetic_not_rl) ... ok
+test_training_audit_rejects_wrong_interpreter (test_validation.Runtime.test_training_audit_rejects_wrong_interpreter) ... ok
+
+----------------------------------------------------------------------
+Ran 20 tests in 2.149s
+
+OK

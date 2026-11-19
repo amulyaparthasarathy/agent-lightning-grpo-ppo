@@ -1,0 +1,56 @@
+5015:   File "uvloop/loop.pyx", line 1515, in uvloop.loop.Loop.run_until_complete
+5016:   File "/opt/agent-lightning/.venv/lib/python3.12/site-packages/verl/workers/rollout/llm_server.py", line 262, in create
+5017:     await instance._initialize_llm_servers()
+5018:   File "/opt/agent-lightning/.venv/lib/python3.12/site-packages/verl/workers/rollout/llm_server.py", line 315, in _initialize_llm_servers
+5019:     await asyncio.gather(*[server.init_hybrid(self.worker_group) for server in self.rollout_replicas])
+5020:   File "/opt/agent-lightning/.venv/lib/python3.12/site-packages/verl/workers/rollout/replica.py", line 141, in init_hybrid
+5021:     await self.launch_servers()
+5022:   File "/opt/agent-lightning/.venv/lib/python3.12/site-packages/verl/workers/rollout/vllm_rollout/vllm_async_server.py", line 1038, in launch_servers
+5023:     await asyncio.gather(
+5024:   File "/usr/local/lib/python3.12/asyncio/tasks.py", line 684, in _wrap_awaitable
+5025:     return await awaitable
+5026:            ^^^^^^^^^^^^^^^
+5027: ray.exceptions.RayTaskError(ZMQError): [36mray::vLLMHttpServer.launch_server()[39m (pid=1723, ip=172.20.13.65, actor_id=0c3b8eb005a152ef77563e0801000000, repr=<verl.workers.rollout.vllm_rollout.vllm_async_server.vLLMHttpServer object at 0x2b2fc58a3d40>)
+5028:   File "/usr/local/lib/python3.12/concurrent/futures/_base.py", line 449, in result
+5029:     return self.__get_result()
+5030:            ^^^^^^^^^^^^^^^^^^^
+5031:   File "/usr/local/lib/python3.12/concurrent/futures/_base.py", line 401, in __get_result
+5032:     raise self._exception
+5033:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+5034:   File "/opt/agent-lightning/.venv/lib/python3.12/site-packages/verl/workers/rollout/vllm_rollout/vllm_async_server.py", line 381, in launch_server
+5035:     await self.run_server(server_args)
+5036:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+5037:   File "/opt/agent-lightning/agentlightning/verl/vllm_compat.py", line 38, in run_server
+5038:     return await current(self, args, *positional, **kwargs)
+5039:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+5040:   File "/opt/agent-lightning/.venv/lib/python3.12/site-packages/verl/workers/rollout/vllm_rollout/vllm_async_server.py", line 398, in run_server
+5041:     engine_client = AsyncLLM.from_vllm_config(vllm_config=vllm_config, usage_context=usage_context, **kwargs)
+5042:                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+5043:   File "/opt/agent-lightning/.venv/lib/python3.12/site-packages/vllm/v1/engine/async_llm.py", line 217, in from_vllm_config
+5044:     return cls(
+5045:            ^^^^
+5046:   File "/opt/agent-lightning/.venv/lib/python3.12/site-packages/vllm/v1/engine/async_llm.py", line 146, in __init__
+5047:     self.engine_core = EngineCoreClient.make_async_mp_client(
+5048:                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+5049:   File "/opt/agent-lightning/.venv/lib/python3.12/site-packages/vllm/tracing/otel.py", line 178, in sync_wrapper
+5050:     return func(*args, **kwargs)
+5051:            ^^^^^^^^^^^^^^^^^^^^^
+5052:   File "/opt/agent-lightning/.venv/lib/python3.12/site-packages/vllm/v1/engine/core_client.py", line 131, in make_async_mp_client
+5053:     return AsyncMPClient(*client_args)
+5054:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+5055:   File "/opt/agent-lightning/.venv/lib/python3.12/site-packages/vllm/tracing/otel.py", line 178, in sync_wrapper
+5056:     return func(*args, **kwargs)
+5057:            ^^^^^^^^^^^^^^^^^^^^^
+5058:   File "/opt/agent-lightning/.venv/lib/python3.12/site-packages/vllm/v1/engine/core_client.py", line 932, in __init__
+5059:     super().__init__(
+5060:   File "/opt/agent-lightning/.venv/lib/python3.12/site-packages/vllm/v1/engine/core_client.py", line 547, in __init__
+5061:     self.input_socket = self.resources.input_socket = make_zmq_socket(
+5062:                                                       ^^^^^^^^^^^^^^^^
+5063:   File "/opt/agent-lightning/.venv/lib/python3.12/site-packages/vllm/utils/network_utils.py", line 338, in make_zmq_socket
+5064:     socket.bind(path)
+5065:   File "/opt/agent-lightning/.venv/lib/python3.12/site-packages/zmq/sugar/socket.py", line 322, in bind
+5066:     super().bind(addr)
+5067:   File "zmq/backend/cython/_zmq.py", line 1002, in zmq.backend.cython._zmq.Socket.bind
+5068:     raise ZMQError(msg=msg)
+5069:     ^^^^^^^^^^^
+5070: zmq.error.ZMQError: ipc path "/data/phase2/studies/agl-explore-20-v1-r02/exploratory-qualification/agl-explore-20-v1-r02-exploratory-qualification-grpo-matched-v2-s9101-a01/baseline/temporary/tmpdir/6cdb439f-f0d3-4438-b798-c395b5deb955" is longer than 107 characters (sizeof(sockaddr_un.sun_path)). zmq.IPC_PATH_MAX_LEN constant can be used to check addr length (if it is defined). (addr='ipc:///data/phase2/studies/agl-explore-20-v1-r02/exploratory-qualification/agl-explore-20-v1-r02-exploratory-qualification-grpo-matched-v2-s9101-a01/baseline/temporary/tmpdir/6cdb439f-f0d3-4438-b798-c395b5deb955')

@@ -1,0 +1,13 @@
+test_all_24_generated_worker_configs_instantiate (__main__.SchemaChecks.test_all_24_generated_worker_configs_instantiate) ... ok
+test_native_vllm_server_receives_the_declared_sampling_seed (__main__.SchemaChecks.test_native_vllm_server_receives_the_declared_sampling_seed) ... ok
+test_old_seed_override_reproduces_the_observed_exception (__main__.SchemaChecks.test_old_seed_override_reproduces_the_observed_exception) ... ok
+test_other_unknown_fields_are_rejected_not_filtered (__main__.SchemaChecks.test_other_unknown_fields_are_rejected_not_filtered) ... ok
+test_paired_seed_design_and_ray_setup_are_preserved (__main__.SchemaChecks.test_paired_seed_design_and_ray_setup_are_preserved) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 10.138s
+
+OK
+Verified VERL wheel SHA256 and 371 Python/YAML files; pinned AGL config/example hashes.
+24 complete composed configs: actor, critic, rollout, model (both conversion paths), reference and training/checkpoint configs passed.
+24 native VERL launch_server paths emit --seed=<actor_sampling>; stopped before vLLM parser/server/GPU startup.

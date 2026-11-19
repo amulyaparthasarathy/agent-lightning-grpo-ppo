@@ -1,0 +1,190 @@
+Pinned code and CPU numerical dependencies verified; no skipped training tests allowed.
+test_complete_generated_worker_configs_and_sampling_seed (test_matched_config.PinnedConfigTests.test_complete_generated_worker_configs_and_sampling_seed) ... ok
+test_a02_read_only_protection_never_cancels (test_matched_exploratory.ExploratoryContractTests.test_a02_read_only_protection_never_cancels) ... ok
+test_extra_checkpoint_fails_without_deleting_anything (test_matched_exploratory.ExploratoryContractTests.test_extra_checkpoint_fails_without_deleting_anything) ... ok
+test_funding_and_stage_limits_are_frozen_no_reserve_access (test_matched_exploratory.ExploratoryContractTests.test_funding_and_stage_limits_are_frozen_no_reserve_access) ... ok
+test_input_hashing_consumes_existing_stage_budget (test_matched_exploratory.ExploratoryContractTests.test_input_hashing_consumes_existing_stage_budget) ... ok
+test_one_short_same_source_qualification_suffices_without_pilot (test_matched_exploratory.ExploratoryContractTests.test_one_short_same_source_qualification_suffices_without_pilot) ... ok
+test_original_formal_plans_are_identical (test_matched_exploratory.ExploratoryContractTests.test_original_formal_plans_are_identical) ... ok
+test_six_fixed_fresh_jobs_and_eighteen_stage_identities (test_matched_exploratory.ExploratoryContractTests.test_six_fixed_fresh_jobs_and_eighteen_stage_identities) ... ok
+test_two_lane_rolling_simulation_and_exact_stage_deadlines (test_matched_exploratory.ExploratoryContractTests.test_two_lane_rolling_simulation_and_exact_stage_deadlines) ... ok
+test_budget_ceiling_override_cannot_weaken_formal_campaign (test_matched_exploratory.ExploratoryLaunchTests.test_budget_ceiling_override_cannot_weaken_formal_campaign) ... ok
+test_single_detached_launch_and_reservation_no_extra_pilot_or_probe (test_matched_exploratory.ExploratoryLaunchTests.test_single_detached_launch_and_reservation_no_extra_pilot_or_probe) ... ok
+test_rational_equivalence_and_untrusted_reward_bits (test_matched_grading.GradingTests.test_rational_equivalence_and_untrusted_reward_bits) ... ok
+test_units_malformed_extraction_and_missing_cases_require_review (test_matched_grading.GradingTests.test_units_malformed_extraction_and_missing_cases_require_review) ... ok
+test_a01_actual_sdk_import_failure_reproduced_for_both_functions (test_matched_import.MatchedImportTests.test_a01_actual_sdk_import_failure_reproduced_for_both_functions) ... ok
+test_both_remote_functions_import_without_build_application (test_matched_import.MatchedImportTests.test_both_remote_functions_import_without_build_application) ... ok
+test_missing_runtime_dependencies_fail_closed_for_both_functions (test_matched_import.MatchedImportTests.test_missing_runtime_dependencies_fail_closed_for_both_functions) ... ok
+test_long_stages_isolated_real_launcher_ray_and_ipc_children (test_matched_ipc.IPCTests.test_long_stages_isolated_real_launcher_ray_and_ipc_children) ... Verified VERL wheel SHA256 and 371 Python/YAML files; pinned AGL config/example hashes.
+24 complete composed configs: actor, critic, rollout, model (both conversion paths), reference and training/checkpoint configs passed.
+24 native VERL launch_server paths emit --seed=<actor_sampling>; stopped before vLLM parser/server/GPU startup.
+test_all_24_generated_worker_configs_instantiate (__main__.SchemaChecks.test_all_24_generated_worker_configs_instantiate) ... ok
+test_native_vllm_server_receives_the_declared_sampling_seed (__main__.SchemaChecks.test_native_vllm_server_receives_the_declared_sampling_seed) ... ok
+test_old_seed_override_reproduces_the_observed_exception (__main__.SchemaChecks.test_old_seed_override_reproduces_the_observed_exception) ... ok
+test_other_unknown_fields_are_rejected_not_filtered (__main__.SchemaChecks.test_other_unknown_fields_are_rejected_not_filtered) ... ok
+test_paired_seed_design_and_ray_setup_are_preserved (__main__.SchemaChecks.test_paired_seed_design_and_ray_setup_are_preserved) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 10.479s
+
+OK
+{
+  "status": "submitted",
+  "study_key": "explore-fixture/exploratory/a01",
+  "plan_sha256": "6d0de4669c153c3960da9dd91d7518a17e21d0772481dbcc36f3e49965e90982",
+  "completion_proven": false,
+  "call_id": "fc-exploratory"
+}
+{"pid": 578226, "tempfile": "/tmp/agl-4d020fbe0037-b1pwzc6h", "env": {"TMPDIR": "/tmp/agl-4d020fbe0037-b1pwzc6h", "RAY_TMPDIR": "/tmp/agl-4d020fbe0037-b1pwzc6h", "VLLM_RPC_BASE_PATH": "/tmp/agl-4d020fbe0037-b1pwzc6h", "AGL_TRACE_DIR": "/tmp/tmpu2sqrkcq/phase2/studies/agl-explore-20-v1-r02/exploratory-qualification/agl-explore-20-v1-r02-exploratory-qualification-ppo-mc-matched-v2-s9101-a01/baseline/traces", "WANDB_DIR": "/tmp/tmpu2sqrkcq/phase2/studies/agl-explore-20-v1-r02/exploratory-qualification/agl-explore-20-v1-r02-exploratory-qualification-ppo-mc-matched-v2-s9101-a01/baseline/temporary/wandb_dir"}, "endpoint": "ipc:///tmp/agl-4d020fbe0037-b1pwzc6h/5ee564ba-43b0-4274-95ad-4281630ec591", "path_bytes": 67, "peer": {"pid": 578311, "tempfile": "/tmp/agl-4d020fbe0037-b1pwzc6h", "env": {"TMPDIR": "/tmp/agl-4d020fbe0037-b1pwzc6h", "RAY_TMPDIR": "/tmp/agl-4d020fbe0037-b1pwzc6h", "VLLM_RPC_BASE_PATH": "/tmp/agl-4d020fbe0037-b1pwzc6h", "AGL_TRACE_DIR": "/tmp/tmpu2sqrkcq/phase2/studies/agl-explore-20-v1-r02/exploratory-qualification/agl-explore-20-v1-r02-exploratory-qualification-ppo-mc-matched-v2-s9101-a01/baseline/traces", "WANDB_DIR": "/tmp/tmpu2sqrkcq/phase2/studies/agl-explore-20-v1-r02/exploratory-qualification/agl-explore-20-v1-r02-exploratory-qualification-ppo-mc-matched-v2-s9101-a01/baseline/temporary/wandb_dir"}}, "driver": {"pid": 577432, "tempfile": "/tmp/agl-4d020fbe0037-b1pwzc6h", "env": {"TMPDIR": "/tmp/agl-4d020fbe0037-b1pwzc6h", "RAY_TMPDIR": "/tmp/agl-4d020fbe0037-b1pwzc6h", "VLLM_RPC_BASE_PATH": "/tmp/agl-4d020fbe0037-b1pwzc6h", "AGL_TRACE_DIR": "/tmp/tmpu2sqrkcq/phase2/studies/agl-explore-20-v1-r02/exploratory-qualification/agl-explore-20-v1-r02-exploratory-qualification-ppo-mc-matched-v2-s9101-a01/baseline/traces", "WANDB_DIR": "/tmp/tmpu2sqrkcq/phase2/studies/agl-explore-20-v1-r02/exploratory-qualification/agl-explore-20-v1-r02-exploratory-qualification-ppo-mc-matched-v2-s9101-a01/baseline/temporary/wandb_dir"}}}
+{"pid": 578227, "tempfile": "/tmp/agl-6e15e085a8e2-8zyb2jrh", "env": {"TMPDIR": "/tmp/agl-6e15e085a8e2-8zyb2jrh", "RAY_TMPDIR": "/tmp/agl-6e15e085a8e2-8zyb2jrh", "VLLM_RPC_BASE_PATH": "/tmp/agl-6e15e085a8e2-8zyb2jrh", "AGL_TRACE_DIR": "/tmp/tmpu2sqrkcq/phase2/studies/agl-explore-20-v1-r02/exploratory-qualification/agl-explore-20-v1-r02-exploratory-qualification-grpo-matched-v2-s9101-a01/baseline/traces", "WANDB_DIR": "/tmp/tmpu2sqrkcq/phase2/studies/agl-explore-20-v1-r02/exploratory-qualification/agl-explore-20-v1-r02-exploratory-qualification-grpo-matched-v2-s9101-a01/baseline/temporary/wandb_dir"}, "endpoint": "ipc:///tmp/agl-6e15e085a8e2-8zyb2jrh/bc739e56-6f1b-4018-8c60-eaf9c4c4c530", "path_bytes": 67, "peer": {"pid": 578314, "tempfile": "/tmp/agl-6e15e085a8e2-8zyb2jrh", "env": {"TMPDIR": "/tmp/agl-6e15e085a8e2-8zyb2jrh", "RAY_TMPDIR": "/tmp/agl-6e15e085a8e2-8zyb2jrh", "VLLM_RPC_BASE_PATH": "/tmp/agl-6e15e085a8e2-8zyb2jrh", "AGL_TRACE_DIR": "/tmp/tmpu2sqrkcq/phase2/studies/agl-explore-20-v1-r02/exploratory-qualification/agl-explore-20-v1-r02-exploratory-qualification-grpo-matched-v2-s9101-a01/baseline/traces", "WANDB_DIR": "/tmp/tmpu2sqrkcq/phase2/studies/agl-explore-20-v1-r02/exploratory-qualification/agl-explore-20-v1-r02-exploratory-qualification-grpo-matched-v2-s9101-a01/baseline/temporary/wandb_dir"}}, "driver": {"pid": 577431, "tempfile": "/tmp/agl-6e15e085a8e2-8zyb2jrh", "env": {"TMPDIR": "/tmp/agl-6e15e085a8e2-8zyb2jrh", "RAY_TMPDIR": "/tmp/agl-6e15e085a8e2-8zyb2jrh", "VLLM_RPC_BASE_PATH": "/tmp/agl-6e15e085a8e2-8zyb2jrh", "AGL_TRACE_DIR": "/tmp/tmpu2sqrkcq/phase2/studies/agl-explore-20-v1-r02/exploratory-qualification/agl-explore-20-v1-r02-exploratory-qualification-grpo-matched-v2-s9101-a01/baseline/traces", "WANDB_DIR": "/tmp/tmpu2sqrkcq/phase2/studies/agl-explore-20-v1-r02/exploratory-qualification/agl-explore-20-v1-r02-exploratory-qualification-grpo-matched-v2-s9101-a01/baseline/temporary/wandb_dir"}}}
+ok
+test_old_native_endpoint_bind_fails_for_both_algorithms (test_matched_ipc.IPCTests.test_old_native_endpoint_bind_fails_for_both_algorithms) ... {"pid": 578345, "tempfile": "/data/phase2/studies/agl-explore-20-v1-r02/exploratory-qualification/agl-explore-20-v1-r02-exploratory-qualification-grpo-matched-v2-s9101-a01/baseline/temporary/tmpdir", "env": {"TMPDIR": "/data/phase2/studies/agl-explore-20-v1-r02/exploratory-qualification/agl-explore-20-v1-r02-exploratory-qualification-grpo-matched-v2-s9101-a01/baseline/temporary/tmpdir", "RAY_TMPDIR": null, "VLLM_RPC_BASE_PATH": null, "AGL_TRACE_DIR": null, "WANDB_DIR": null}, "endpoint": "ipc:///data/phase2/studies/agl-explore-20-v1-r02/exploratory-qualification/agl-explore-20-v1-r02-exploratory-qualification-grpo-matched-v2-s9101-a01/baseline/temporary/tmpdir/1406b581-e845-4274-b148-9810bdb22979", "path_bytes": 205, "old_error": "ipc path \"/data/phase2/studies/agl-explore-20-v1-r02/exploratory-qualification/agl-explore-20-v1-r02-exploratory-qualification-grpo-matched-v2-s9101-a01/baseline/temporary/tmpdir/1406b581-e845-4274-b148-9810bdb22979\" is longer than 107 characters (sizeof(sockaddr_un.sun_path)). zmq.IPC_PATH_MAX_LEN constant can be used to check addr length (if it is defined). (addr='ipc:///data/phase2/studies/agl-explore-20-v1-r02/exploratory-qualification/agl-explore-20-v1-r02-exploratory-qualification-grpo-matched-v2-s9101-a01/baseline/temporary/tmpdir/1406b581-e845-4274-b148-9810bdb22979')"}
+{"pid": 578348, "tempfile": "/data/phase2/studies/agl-explore-20-v1-r02/exploratory-qualification/agl-explore-20-v1-r02-exploratory-qualification-ppo-mc-matched-v2-s9101-a01/baseline/temporary/tmpdir", "env": {"TMPDIR": "/data/phase2/studies/agl-explore-20-v1-r02/exploratory-qualification/agl-explore-20-v1-r02-exploratory-qualification-ppo-mc-matched-v2-s9101-a01/baseline/temporary/tmpdir", "RAY_TMPDIR": null, "VLLM_RPC_BASE_PATH": null, "AGL_TRACE_DIR": null, "WANDB_DIR": null}, "endpoint": "ipc:///data/phase2/studies/agl-explore-20-v1-r02/exploratory-qualification/agl-explore-20-v1-r02-exploratory-qualification-ppo-mc-matched-v2-s9101-a01/baseline/temporary/tmpdir/4788ecb7-5369-4695-9613-85997bbbf6d1", "path_bytes": 207, "old_error": "ipc path \"/data/phase2/studies/agl-explore-20-v1-r02/exploratory-qualification/agl-explore-20-v1-r02-exploratory-qualification-ppo-mc-matched-v2-s9101-a01/baseline/temporary/tmpdir/4788ecb7-5369-4695-9613-85997bbbf6d1\" is longer than 107 characters (sizeof(sockaddr_un.sun_path)). zmq.IPC_PATH_MAX_LEN constant can be used to check addr length (if it is defined). (addr='ipc:///data/phase2/studies/agl-explore-20-v1-r02/exploratory-qualification/agl-explore-20-v1-r02-exploratory-qualification-ppo-mc-matched-v2-s9101-a01/baseline/temporary/tmpdir/4788ecb7-5369-4695-9613-85997bbbf6d1')"}
+ok
+test_both_exploratory_phases_use_actual_admission_without_capacity_file (test_matched_overnight_admission.BoundedAdmissionTests.test_both_exploratory_phases_use_actual_admission_without_capacity_file) ... Bounded admission: quota/cache availability UNVERIFIED; provider will resolve it.
+Bounded admission: quota/cache availability UNVERIFIED; provider will resolve it.
+ok
+test_duplicate_success_cannot_reserve_another_submission (test_matched_overnight_admission.BoundedAdmissionTests.test_duplicate_success_cannot_reserve_another_submission) ... Bounded admission: quota/cache availability UNVERIFIED; provider will resolve it.
+Bounded admission: quota/cache availability UNVERIFIED; provider will resolve it.
+ok
+test_forbidden_phases_and_unknown_owner_budget_fail_before_cloud (test_matched_overnight_admission.BoundedAdmissionTests.test_forbidden_phases_and_unknown_owner_budget_fail_before_cloud) ... ok
+test_known_workspace_volume_and_billing_incompatibility_rejected (test_matched_overnight_admission.BoundedAdmissionTests.test_known_workspace_volume_and_billing_incompatibility_rejected) ... ok
+test_no_authorization_dirty_mismatched_source_or_reserve_bypass (test_matched_overnight_admission.BoundedAdmissionTests.test_no_authorization_dirty_mismatched_source_or_reserve_bypass) ... ok
+test_provider_failure_keeps_reservation_evidence_and_never_resubmits (test_matched_overnight_admission.BoundedAdmissionTests.test_provider_failure_keeps_reservation_evidence_and_never_resubmits) ... Bounded admission: quota/cache availability UNVERIFIED; provider will resolve it.
+Bounded admission: quota/cache availability UNVERIFIED; provider will resolve it.
+Bounded admission: quota/cache availability UNVERIFIED; provider will resolve it.
+Bounded admission: quota/cache availability UNVERIFIED; provider will resolve it.
+ok
+test_unavailable_billing_uses_owner_confirmation_not_invented_provider_numbers (test_matched_overnight_admission.BoundedAdmissionTests.test_unavailable_billing_uses_owner_confirmation_not_invented_provider_numbers) ... ok
+test_launch_dispatches_one_detached_bounded_supervisor (test_matched_study.CLIAndEvidenceTests.test_launch_dispatches_one_detached_bounded_supervisor) ... ok
+test_volume_missing_or_mismatched_receipts_keep_evidence_incomplete (test_matched_study.CLIAndEvidenceTests.test_volume_missing_or_mismatched_receipts_keep_evidence_incomplete) ... ok
+test_exact_final_identity_detects_byte_config_and_algorithm_changes (test_matched_study.CheckpointTests.test_exact_final_identity_detects_byte_config_and_algorithm_changes) ... ok
+test_exit_zero_without_terminal_audit_is_not_completion (test_matched_study.CheckpointTests.test_exit_zero_without_terminal_audit_is_not_completion) ... ok
+test_disjoint_paths_remote_identities_and_paired_schedule (test_matched_study.ManifestTests.test_disjoint_paths_remote_identities_and_paired_schedule) ... ok
+test_launch_is_explicit_clean_and_qualified (test_matched_study.ManifestTests.test_launch_is_explicit_clean_and_qualified) ... ok
+test_offline_plan_and_validate_do_not_import_modal (test_matched_study.ManifestTests.test_offline_plan_and_validate_do_not_import_modal) ... ok
+test_rejects_tampering_budget_collision_leakage_and_campaign (test_matched_study.ManifestTests.test_rejects_tampering_budget_collision_leakage_and_campaign) ... ok
+test_tracking_remote_init_and_terminal_flush (test_matched_study.ManifestTests.test_tracking_remote_init_and_terminal_flush) ... ok
+test_worker_program_and_remote_resource_dispatch (test_matched_study.ManifestTests.test_worker_program_and_remote_resource_dispatch) ... ok
+test_durable_stage_dispatch_and_no_campaign_chaining (test_matched_study.SupervisorTests.test_durable_stage_dispatch_and_no_campaign_chaining) ... ok
+test_hydration_loop_bounded_and_only_owned_calls_cancelled (test_matched_study.SupervisorTests.test_hydration_loop_bounded_and_only_owned_calls_cancelled) ... ok
+test_stalled_failure_owner_stop_and_uncertain_submission_never_retry (test_matched_study.SupervisorTests.test_stalled_failure_owner_stop_and_uncertain_submission_never_retry) ... ok
+test_status_does_not_convert_local_or_remote_exit_into_completion (test_matched_study.SupervisorTests.test_status_does_not_convert_local_or_remote_exit_into_completion) ... ok
+test_targeted_stop_filters_completed_calls (test_matched_study.SupervisorTests.test_targeted_stop_filters_completed_calls) ... ok
+test_lost_supervisor_lease_terminates_trainer_subprocess (test_matched_tenway.RuntimeControlTests.test_lost_supervisor_lease_terminates_trainer_subprocess) ... {
+  "status": "submitted",
+  "study_key": "explore-fixture/exploratory-qualification/a01",
+  "plan_sha256": "1678ae4f37e9e031dd361a3e81524dd0dd439a8c620081187f87ba0ee8d8e53b",
+  "completion_proven": false,
+  "call_id": "fc-synthetic"
+}
+{
+  "status": "submitted",
+  "study_key": "explore-fixture/exploratory/a01",
+  "plan_sha256": "6d0de4669c153c3960da9dd91d7518a17e21d0772481dbcc36f3e49965e90982",
+  "completion_proven": false,
+  "call_id": "fc-synthetic"
+}
+{
+  "status": "submitted",
+  "study_key": "explore-fixture/exploratory-qualification/a01",
+  "plan_sha256": "1678ae4f37e9e031dd361a3e81524dd0dd439a8c620081187f87ba0ee8d8e53b",
+  "completion_proven": false,
+  "call_id": "fc-synthetic"
+}
+{
+  "status": "submitted",
+  "study_key": "fixture/qualification/a01",
+  "plan_sha256": "d05489900f212ed6e1420ed9f692759a41ed24e045c7fb5b1a8538a9fcd6cf24",
+  "completion_proven": false,
+  "call_id": "fc-supervisor"
+}
+{
+  "valid": true,
+  "offline": true,
+  "plan_sha256": "d05489900f212ed6e1420ed9f692759a41ed24e045c7fb5b1a8538a9fcd6cf24",
+  "authorization_token": "fixture/qualification/a01:d05489900f212ed6e1420ed9f692759a41ed24e045c7fb5b1a8538a9fcd6cf24",
+  "source_clean": true,
+  "bounds": {
+    "stage_seconds": 3600,
+    "startup_seconds": 600,
+    "supervisor_seconds": 11400,
+    "concurrency": 2,
+    "max_gpu_seconds": 21600,
+    "budget_usd": 200,
+    "all_resource_hourly_ceiling_usd": 10
+  }
+}
+Running python; log: /tmp/tmput65i_r3/log.txt
+ok
+test_thirty_completion_proofs_reconcile_and_plan_drift_fails (test_matched_tenway.RuntimeControlTests.test_thirty_completion_proofs_reconcile_and_plan_drift_fails) ... ok
+test_all_concurrency_limits_and_30_distinct_receipts (test_matched_tenway.TenWayTests.test_all_concurrency_limits_and_30_distinct_receipts) ... ok
+test_campaign_legacy_holdout_and_capacity_fail_closed (test_matched_tenway.TenWayTests.test_campaign_legacy_holdout_and_capacity_fail_closed) ... ok
+test_failures_cancel_without_retry_and_leave_all_stage_receipts (test_matched_tenway.TenWayTests.test_failures_cancel_without_retry_and_leave_all_stage_receipts) ... ok
+test_holdout_rejects_id_question_and_template_contamination (test_matched_tenway.TenWayTests.test_holdout_rejects_id_question_and_template_contamination) ... ok
+test_no_relaunch_after_uncertain_atomic_reservation (test_matched_tenway.TenWayTests.test_no_relaunch_after_uncertain_atomic_reservation) ... ok
+test_probe_bound_is_independent_and_not_capacity_proof (test_matched_tenway.TenWayTests.test_probe_bound_is_independent_and_not_capacity_proof) ... ok
+test_queue_delays_and_completion_races_win_over_missing_heartbeat (test_matched_tenway.TenWayTests.test_queue_delays_and_completion_races_win_over_missing_heartbeat) ... ok
+test_ten_real_cpu_threads_reach_barrier_and_complete_thirty_stages (test_matched_tenway.TenWayTests.test_ten_real_cpu_threads_reach_barrier_and_complete_thirty_stages) ... ok
+test_actual_pinned_gae_mc_whitening_matches_and_targets_unchanged (test_matched_training_pinned.PinnedTrainingTests.test_actual_pinned_gae_mc_whitening_matches_and_targets_unchanged) ... ok
+test_critic_rng_does_not_change_paired_order (test_matched_training_pinned.PinnedTrainingTests.test_critic_rng_does_not_change_paired_order) ... ok
+test_dp_scaling_is_applied_once_before_average (test_matched_training_pinned.PinnedTrainingTests.test_dp_scaling_is_applied_once_before_average) ... ok
+test_full_pinned_microbatch_backward_clip_adamw_fragment_invariance (test_matched_training_pinned.PinnedTrainingTests.test_full_pinned_microbatch_backward_clip_adamw_fragment_invariance) ... ok
+test_incomplete_truncated_duplicate_and_missing_reward_fail_closed (test_matched_training_pinned.PinnedTrainingTests.test_incomplete_truncated_duplicate_and_missing_reward_fail_closed) ... ok
+test_pinned_trainer_step_retains_nonmultiple_and_constant_real_rollouts (test_matched_training_pinned.PinnedTrainingTests.test_pinned_trainer_step_retains_nonmultiple_and_constant_real_rollouts) ... ok
+test_real_adapter_constant_groups_and_fragment_counts (test_matched_training_pinned.PinnedTrainingTests.test_real_adapter_constant_groups_and_fragment_counts) ... ok
+test_runtime_update_dispatch_uses_actual_row_count (test_matched_training_pinned.PinnedTrainingTests.test_runtime_update_dispatch_uses_actual_row_count) ... ok
+test_two_rank_gloo_reduction_matches_single_rank_with_unequal_shards (test_matched_training_pinned.PinnedTrainingTests.test_two_rank_gloo_reduction_matches_single_rank_with_unequal_shards) ... {
+  "status": "submitted",
+  "study_key": "reservation/qualification/a01",
+  "plan_sha256": "1ff1c69962be3892aca19e9fd8fbb2686db93fe758c4fe47b29417789c2b73c8",
+  "completion_proven": false,
+  "call_id": "fc-only-one"
+}
+Warning: failed to upload trace merge mismatches to wandb: No module named 'wandb'
+Warning: failed to upload train trajectories to wandb: No module named 'wandb'
+Warning: failed to upload trace merge mismatches to wandb: No module named 'wandb'
+Warning: failed to upload train trajectories to wandb: No module named 'wandb'
+Warning: failed to upload trace merge mismatches to wandb: No module named 'wandb'
+Warning: failed to upload train trajectories to wandb: No module named 'wandb'
+Warning: failed to upload trace merge mismatches to wandb: No module named 'wandb'
+Warning: failed to upload train trajectories to wandb: No module named 'wandb'
+Warning: failed to upload trace merge mismatches to wandb: No module named 'wandb'
+Warning: failed to upload train trajectories to wandb: No module named 'wandb'
+Warning: failed to upload trace merge mismatches to wandb: No module named 'wandb'
+Warning: failed to upload train trajectories to wandb: No module named 'wandb'
+Warning: failed to upload trace merge mismatches to wandb: No module named 'wandb'
+Warning: failed to upload train trajectories to wandb: No module named 'wandb'
+Warning: failed to upload trace merge mismatches to wandb: No module named 'wandb'
+Warning: failed to upload train trajectories to wandb: No module named 'wandb'
+Warning: failed to upload trace merge mismatches to wandb: No module named 'wandb'
+Warning: failed to upload train trajectories to wandb: No module named 'wandb'
+Warning: failed to upload trace merge mismatches to wandb: No module named 'wandb'
+Warning: failed to upload train trajectories to wandb: No module named 'wandb'
+Warning: failed to upload trace merge mismatches to wandb: No module named 'wandb'
+Warning: failed to upload train trajectories to wandb: No module named 'wandb'
+Warning: failed to upload trace merge mismatches to wandb: No module named 'wandb'
+Warning: failed to upload train trajectories to wandb: No module named 'wandb'
+Warning: failed to upload trace merge mismatches to wandb: No module named 'wandb'
+Warning: failed to upload train trajectories to wandb: No module named 'wandb'
+Warning: No triplets found for training rollout r0, skipping.
+Warning: failed to upload trace merge mismatches to wandb: No module named 'wandb'
+Warning: failed to upload train trajectories to wandb: No module named 'wandb'
+Warning: failed to upload trace merge mismatches to wandb: No module named 'wandb'
+Warning: failed to upload train trajectories to wandb: No module named 'wandb'
+AgentLightningRayPPOTrainer: sleeping rollout replicas.
+AgentLightningRayPPOTrainer: rollout replicas slept.
+Warning: failed to upload trace merge mismatches to wandb: No module named 'wandb'
+Warning: failed to upload train trajectories to wandb: No module named 'wandb'
+Warning: failed to upload trace merge mismatches to wandb: No module named 'wandb'
+Warning: failed to upload train trajectories to wandb: No module named 'wandb'
+Warning: failed to upload trace merge mismatches to wandb: No module named 'wandb'
+Warning: failed to upload train trajectories to wandb: No module named 'wandb'
+ok
+test_only_locked_wheel_is_installed_in_training_venv (test_matched_transformers.MatchedTransformersImageTests.test_only_locked_wheel_is_installed_in_training_venv) ... ok
+test_actual_failed_wheel_then_image_install_passes_unchanged_guard (test_matched_transformers.MatchedTransformersWheelTests.test_actual_failed_wheel_then_image_install_passes_unchanged_guard) ... ok
+
+----------------------------------------------------------------------
+Ran 61 tests in 35.667s
+
+OK

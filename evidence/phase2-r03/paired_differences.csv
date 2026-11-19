@@ -1,0 +1,4 @@
+seed,grpo_minus_ppo_final_percentage_points,difference_in_improvements_percentage_points,final_grpo_only_correct,final_ppo_only_correct,final_both_correct,final_both_incorrect,question_batches_equal
+2001,9.375,7.8125,9,3,27,25,True
+2002,-6.25,-9.375,4,8,26,26,True
+2003,0.0,0.0,7,7,27,23,True

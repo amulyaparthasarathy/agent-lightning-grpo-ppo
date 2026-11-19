@@ -1,0 +1,183 @@
+{
+  "prepared_date": "2026-11-11",
+  "updated_date": "2026-11-11",
+  "scope": "Modal migration: canonical repository review, local client installation, and offline checks; no remote execution",
+  "reviewed_repository": "amulyaparthasarathy/agent-lightning-lab",
+  "reviewed_base_commit": "1e849089fe503a40570f46a140e509a1799344e0",
+  "publication_identity": "The containing Git commit identifies this update; counters in historical_initial_package apply only to the original starter.",
+  "external_work_during_migration": {
+    "modal_image_builds": 0,
+    "modal_function_calls": 0,
+    "gpu_training_steps": 0,
+    "model_downloads": 0,
+    "model_generation_requests": 0,
+    "hosted_trace_exports": 0,
+    "credentials_read": 0
+  },
+  "checks": [
+    {
+      "name": "Canonical GitHub source snapshot",
+      "result": "passed",
+      "scope": "All 30 original files were fetched at the reviewed commit and matched their Git blob SHAs."
+    },
+    {
+      "name": "Local client lock and dependency installation",
+      "result": "passed",
+      "uv": "0.12.13",
+      "python": "3.12.14",
+      "modal": "1.6.3",
+      "commands": [
+        "uv sync --locked",
+        "uv lock --check",
+        "uv pip check --python .venv/bin/python"
+      ],
+      "scope": "Public-PyPI uv.lock; 39 installed packages; no local torch module. This is not validation of the GPU dependency closure."
+    },
+    {
+      "name": "Modal SDK and command contract",
+      "result": "passed",
+      "scope": "Offline import and actual Modal 1.6.3 help for app entrypoint, profile, log following and Volume download; --model-profile avoids Modal authentication --profile collision."
+    },
+    {
+      "name": "Adapter boundary tests",
+      "result": "passed",
+      "count": 7,
+      "command": "uv run --locked python -m unittest discover -s tests -v",
+      "scope": "Invalid requests, checkpoint path boundaries, Weave opt-in, durable failure/name guards, evidence export exclusions, child timeout cleanup/log streaming and safe dataset member extraction. All Modal operations mocked; no RPC."
+    },
+    {
+      "name": "Python, shell, JSON and documentation checks",
+      "result": "passed",
+      "scope": "Python AST parsing, shell syntax, JSON parsing, 25 Bash documentation blocks, balanced fences and local links in README.md, experiment/README.md and docs/WORKBENCH_REVIEW.md."
+    },
+    {
+      "name": "CPU arithmetic exercise through uv",
+      "result": "passed",
+      "synthetic": true,
+      "row_means": [
+        5.0,
+        3.5
+      ],
+      "equal_rollout_means": [
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "name": "FlashAttention build architecture review",
+      "result": "passed",
+      "scope": "FlashAttention v2.8.3 setup.py uses FLASH_ATTN_CUDA_ARCHS; installer explicitly sets it to 90 alongside TORCH_CUDA_ARCH_LIST=9.0. No compiler/image build was run.",
+      "source": "https://github.com/Dao-AILab/flash-attention/blob/v2.8.3/setup.py",
+      "source_blob": "a108c412c00c8840c99bde6749e552d1fdbdc957"
+    },
+    {
+      "name": "Training interpreter symlink regression",
+      "result": "passed",
+      "scope": "Created a real symlink-backed stdlib venv, executed the launcher-selected Python and verified sys.prefix points to the venv and differs from sys.base_prefix. The complete unittest discovery run passed all 8 tests."
+    },
+    {
+      "name": "Experiment changes bounded to interpreter selection",
+      "result": "passed",
+      "scope": "Compared to the reviewed GitHub base: experiment code changed only in launch.py to preserve the training interpreter symlink. Model profiles, preparation, reward, agent instrumentation, data split and training configuration were not changed."
+    }
+  ],
+  "not_verified": [
+    "A live Surface Workbench or existing Modal credentials/workspace configuration",
+    "Modal image build, CPU FlashAttention compilation or full GPU dependency closure",
+    "GPU allocation, driver/kernel behavior, host/shared-memory sufficiency or model memory fit",
+    "Gated model access, model weight download or public dataset availability",
+    "Actual inference, MCP tool loop, reward delivery, gradient updates or weight synchronization in the cloud",
+    "Native checkpoint writing/reload, measured throughput, policy improvement or production transfer",
+    "Hosted W&B Models or Weave delivery, actual cloud cost or account-specific quota"
+  ],
+  "next_runtime_gate": "Run Modal prepare, then the two-step smoke and separate smoke-reload-eval actions before the baseline/main/final-evaluation sequence.",
+  "historical_initial_package": {
+    "prepared_date": "2026-11-11",
+    "scope": "Source review and local deployment-package checks only",
+    "github_mutations": 0,
+    "cloud_resources_created": 0,
+    "docker_images_built": 0,
+    "gpu_training_steps": 0,
+    "model_generation_requests": 0,
+    "checks": [
+      {
+        "name": "Python compilation, shell syntax and JSON parsing",
+        "result": "passed"
+      },
+      {
+        "name": "Training-code preservation",
+        "result": "passed",
+        "unchanged_files": [
+          "prepare_model.py",
+          "bootstrap_gpu.sh",
+          "prepare_data.py",
+          "launch.py",
+          "check_gpu.py",
+          "LICENSE-AgentLightning.txt",
+          "summarize.py",
+          "observed_calc_agent.py",
+          "cpu_accounting_demo.py",
+          "requirements-agent.txt",
+          "templates/tool_chat_template_llama3.1_json.jinja",
+          "templates/LICENSE-vllm.txt",
+          "templates/PROVENANCE.json",
+          "example_outputs/cpu-accounting/cpu-accounting.json"
+        ],
+        "changed_files": [
+          "experiment/README.md",
+          "experiment/VERIFICATION.json"
+        ]
+      },
+      {
+        "name": "CPU arithmetic illustration rerun",
+        "result": "passed",
+        "synthetic": true,
+        "row_means": [
+          5.0,
+          3.5
+        ],
+        "equal_rollout_means": [
+          5.0,
+          5.0
+        ]
+      },
+      {
+        "name": "Git exclusion and selected evidence eligibility",
+        "result": "passed",
+        "scope": "Temporary independent Git repository and six ignored/four eligible paths"
+      },
+      {
+        "name": "Compose YAML static structure",
+        "result": "passed",
+        "scope": "YAML parsed; one selected GPU, two narrow mounts, no published ports, socket, privileged mode or platform emulation"
+      },
+      {
+        "name": "GPU helper rejection cases",
+        "result": "passed",
+        "scope": "Scripted/local checks for Workbench and invalid runtime paths; no Docker daemon"
+      },
+      {
+        "name": "Endpoint probe local HTTP fixtures",
+        "result": "passed",
+        "scope": "Expected GET models only; normal JSON, invalid schema, oversized body, HTTP error, redirect rejection; credential/query URL rejection before requests"
+      },
+      {
+        "name": "Optional Workbench patch",
+        "result": "passed",
+        "scope": "Applied to exact Git blob-matching temporary originals; shell/JSON/mount checks; three scripted launcher modes and five scripted network cases"
+      }
+    ],
+    "not_verified": [
+      "A live Surface Pro or Ultra Workbench state",
+      "Live Docker network creation or the optional patch on the user machine",
+      "Actual Docker Compose rendering through the plugin, image build or runtime startup",
+      "NVIDIA container device visibility, memory capacity or ARM64 training support",
+      "Cloud allocation, private GitHub creation, authentication, source transfer or billing",
+      "Actual model inference, tool loop, training updates or checkpoint reload on this package",
+      "Hosted W&B Models logging or Weave delivery"
+    ],
+    "inherited_experiment_verification": "experiment/VERIFICATION.json",
+    "note": "Earlier experiment checks remain limited as recorded. Packaging portability is not proof of GPU execution compatibility."
+  },
+  "inherited_experiment_verification": "experiment/VERIFICATION.json"
+}

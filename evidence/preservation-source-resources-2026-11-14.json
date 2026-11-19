@@ -1,0 +1,157 @@
+{
+  "schema_version": 1,
+  "observed_at": "2026-11-14T06:39:19.913210+00:00",
+  "origin": "Modal 1.6.3 supported Function.info/get_current_stats/stats and durable ledger",
+  "function_id": "fu-cENFihHxXLT6czh5hU23EC",
+  "function_call_id": "fc-01M7C99BMAVTD66JKCPH3ZP2G4",
+  "app_id": "ap-4SY9VqTCm3sdpRjzqBQzL9",
+  "current_stats": {
+    "backlog": 0,
+    "num_total_runners": 0,
+    "num_running_inputs": 0,
+    "input_headroom": 0
+  },
+  "resources": {
+    "cpu": 8.0,
+    "memory_mib": 131072,
+    "ephemeral_disk_mib": 524288,
+    "gpus": [],
+    "regions": null,
+    "routing_region": "",
+    "cloud": null,
+    "timeout": 10860,
+    "max_retries": 0
+  },
+  "history": {
+    "since": "2026-11-14 04:00:00+00:00",
+    "until": "2026-11-14 06:39:20.017358+00:00",
+    "input_success_count": 1,
+    "input_failure_count": 0,
+    "input_timeout_count": 0,
+    "input_running_at_end_count": 0,
+    "input_percentile_stats": {
+      "End-to-end latency (s)": {
+        "unit": "seconds",
+        "percentiles": [
+          {
+            "percentile": 50.0,
+            "value": 2727.475995
+          },
+          {
+            "percentile": 90.0,
+            "value": 2727.475995
+          },
+          {
+            "percentile": 99.0,
+            "value": 2727.475995
+          }
+        ]
+      },
+      "Execution time (s)": {
+        "unit": "seconds",
+        "percentiles": [
+          {
+            "percentile": 50.0,
+            "value": 2718.434484
+          },
+          {
+            "percentile": 90.0,
+            "value": 2718.434484
+          },
+          {
+            "percentile": 99.0,
+            "value": 2718.434484
+          }
+        ]
+      }
+    },
+    "container_started_count": 1,
+    "container_error_count": 0,
+    "container_creating_at_end_count": 0,
+    "container_percentile_stats": {
+      "Memory Usage (GiB)": {
+        "unit": "GiB",
+        "percentiles": [
+          {
+            "percentile": 50.0,
+            "value": 0.09458541870117188
+          },
+          {
+            "percentile": 90.0,
+            "value": 0.09459304809570312
+          },
+          {
+            "percentile": 99.0,
+            "value": 0.09548187255859375
+          }
+        ]
+      },
+      "Startup time (s)": {
+        "unit": "seconds",
+        "percentiles": [
+          {
+            "percentile": 50.0,
+            "value": 8.351493
+          },
+          {
+            "percentile": 90.0,
+            "value": 8.351493
+          },
+          {
+            "percentile": 99.0,
+            "value": 8.351493
+          }
+        ]
+      },
+      "CPU Usage (cores)": {
+        "unit": "cores",
+        "percentiles": [
+          {
+            "percentile": 50.0,
+            "value": 0.28390331896815973
+          },
+          {
+            "percentile": 90.0,
+            "value": 0.3744745312699117
+          },
+          {
+            "percentile": 99.0,
+            "value": 0.5437388436559039
+          }
+        ]
+      }
+    },
+    "container_total_count": 1,
+    "variant_count": 0,
+    "all_variants": false
+  },
+  "ledger_revision": "8dd0e3cd1aa0462481cff0867dcf3c650405fe36",
+  "ledger_path": "workflows/preserve-20261114-01/ledger.json",
+  "phase_status": "failed",
+  "terminal_receipt_revision": "fbb2f383c0a4e5e74ce611acf761236f456b83eb",
+  "terminal_receipt_path": "workflows/preserve-20261114-01/receipts/backup-1.json",
+  "fallback_receipt": {
+    "elapsed_seconds": 2705.8250065909997,
+    "execution_commit": "738ce0da2c68b152157a49fa9ccf1e2247d5d589",
+    "function_call_id": "fc-01M7C99BMAVTD66JKCPH3ZP2G4",
+    "phase": "backup",
+    "result": {
+      "error_type": "ChildDidNotReturn"
+    },
+    "success": false
+  },
+  "operator_stop_evidence": {
+    "action": "terminate_slow_transfer_child",
+    "pid": 26,
+    "network_counters_before_stop": "Inter-|   Receive                                                |  Transmit\n face |bytes    packets errs drop fifo frame compressed multicast|bytes    packets errs drop fifo colls carrier compressed\n    lo:       0       0    0    0    0     0          0         0        0       0    0    0    0     0       0          0\n  eth0: 33081387967 4147819    0    0    0     0          0         0 174796904 2631892    0    0    0     0       0          0\n",
+    "at": 1794637706.0509486
+  },
+  "system_log_entries_returned": 0,
+  "limitations": [
+    "FunctionCall SUCCESS describes the wrapper returning a failed phase receipt, not backup success.",
+    "PENDING is a nonterminal input enum, not proof of scheduling delay.",
+    "Usage percentiles are not measured maximums or a profile of future concurrent readback.",
+    "No explicit quota or region shortage was returned; this does not prove none ever occurred.",
+    "Interface byte counters are not provider billing meters."
+  ]
+}

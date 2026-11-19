@@ -1,0 +1,3974 @@
+{
+  "scope": "Offline simulations only; not proof of Modal allocations",
+  "scenarios": {
+    "concurrency-1": {
+      "max_active": 1,
+      "calls": 30,
+      "cancelled": 0,
+      "elapsed": 300,
+      "receipts": 30,
+      "status": "completed"
+    },
+    "concurrency-2": {
+      "max_active": 2,
+      "calls": 30,
+      "cancelled": 0,
+      "elapsed": 150,
+      "receipts": 30,
+      "status": "completed"
+    },
+    "concurrency-3": {
+      "max_active": 3,
+      "calls": 30,
+      "cancelled": 0,
+      "elapsed": 120,
+      "receipts": 30,
+      "status": "completed"
+    },
+    "concurrency-4": {
+      "max_active": 4,
+      "calls": 30,
+      "cancelled": 0,
+      "elapsed": 90,
+      "receipts": 30,
+      "status": "completed"
+    },
+    "concurrency-5": {
+      "max_active": 5,
+      "calls": 30,
+      "cancelled": 0,
+      "elapsed": 60,
+      "receipts": 30,
+      "status": "completed"
+    },
+    "concurrency-6": {
+      "max_active": 6,
+      "calls": 30,
+      "cancelled": 0,
+      "elapsed": 60,
+      "receipts": 30,
+      "status": "completed"
+    },
+    "concurrency-7": {
+      "max_active": 7,
+      "calls": 30,
+      "cancelled": 0,
+      "elapsed": 60,
+      "receipts": 30,
+      "status": "completed"
+    },
+    "concurrency-8": {
+      "max_active": 8,
+      "calls": 30,
+      "cancelled": 0,
+      "elapsed": 60,
+      "receipts": 30,
+      "status": "completed"
+    },
+    "concurrency-9": {
+      "max_active": 9,
+      "calls": 30,
+      "cancelled": 0,
+      "elapsed": 60,
+      "receipts": 30,
+      "status": "completed"
+    },
+    "concurrency-10": {
+      "max_active": 10,
+      "calls": 30,
+      "cancelled": 0,
+      "elapsed": 30,
+      "receipts": 30,
+      "status": "completed"
+    },
+    "queue": {
+      "max_active": 10,
+      "calls": 30,
+      "cancelled": 0,
+      "elapsed": 180,
+      "receipts": 30,
+      "status": "completed"
+    },
+    "completion_race": {
+      "max_active": 10,
+      "calls": 30,
+      "cancelled": 0,
+      "elapsed": 180,
+      "receipts": 30,
+      "status": "completed"
+    },
+    "startup": {
+      "max_active": 10,
+      "calls": 10,
+      "cancelled": 10,
+      "elapsed": 60,
+      "receipts": 30,
+      "status": "failed"
+    },
+    "lost": {
+      "max_active": 10,
+      "calls": 10,
+      "cancelled": 10,
+      "elapsed": 185,
+      "receipts": 30,
+      "status": "failed"
+    },
+    "import": {
+      "max_active": 10,
+      "calls": 10,
+      "cancelled": 10,
+      "elapsed": 0,
+      "receipts": 30,
+      "status": "failed"
+    },
+    "stop": {
+      "max_active": 10,
+      "calls": 10,
+      "cancelled": 10,
+      "elapsed": 10,
+      "receipts": 30,
+      "status": "cancelled"
+    },
+    "cancel_error": {
+      "max_active": 10,
+      "calls": 10,
+      "cancelled": 0,
+      "elapsed": 60,
+      "receipts": 30,
+      "status": "unknown"
+    },
+    "ambiguous": {
+      "max_active": 0,
+      "calls": 0,
+      "cancelled": 0,
+      "elapsed": 0,
+      "receipts": 30,
+      "status": "unknown"
+    },
+    "interrupt": {
+      "max_active": 10,
+      "calls": 10,
+      "cancelled": 10,
+      "elapsed": 0,
+      "receipts": 30,
+      "status": "cancelled"
+    },
+    "stage_timeout": {
+      "max_active": 10,
+      "calls": 10,
+      "cancelled": 10,
+      "elapsed": 300,
+      "receipts": 30,
+      "status": "failed"
+    },
+    "budget": {
+      "max_active": 10,
+      "calls": 10,
+      "cancelled": 10,
+      "elapsed": 5,
+      "receipts": 30,
+      "status": "failed"
+    }
+  },
+  "completed_index": {
+    "study_key": "tenway-fixture/campaign/a01",
+    "status": "completed",
+    "started_at": 0,
+    "plan": {
+      "schema": "matched-rollout-mean-v2",
+      "study_id": "tenway-fixture",
+      "phase": "campaign",
+      "attempt": 1,
+      "workspace": "amulyasp",
+      "environment": "main",
+      "volume": "cs329z-agent-lightning-working-stanford-v2",
+      "jobs": [
+        {
+          "job_id": "tenway-fixture-campaign-grpo-matched-v2-s1001-a01",
+          "algorithm": "grpo-matched-v2",
+          "run_seed": 1001,
+          "steps": 60,
+          "pair_id": "tenway-fixture-campaign-s1001",
+          "seed_streams": {
+            "python": 2009727846,
+            "numpy": 407087157,
+            "torch_cpu": 71265934,
+            "torch_cuda": 831528244,
+            "actor_sampling": 191168760,
+            "actor_optimizer": 1231878590,
+            "row_batching": 1488708358,
+            "critic_init": null,
+            "paired_question_order": 1004434717
+          },
+          "output_root": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-grpo-matched-v2-s1001-a01",
+          "stages": [
+            {
+              "name": "baseline",
+              "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-grpo-matched-v2-s1001-a01/baseline",
+              "wandb": {
+                "entity": "amulyap-stanford-university",
+                "project": "cs329z-agent-lightning",
+                "group": "tenway-fixture-campaign",
+                "id": "5f7bfefc6c7bcd73ba8014f9",
+                "name": "tenway-fixture-campaign-grpo-matched-v2-s1001-a01-baseline",
+                "job_type": "baseline",
+                "resume": "never",
+                "config": {
+                  "pair_id": "tenway-fixture-campaign-s1001",
+                  "algorithm": "grpo-matched-v2",
+                  "stage": "baseline",
+                  "run_seed": 1001,
+                  "seed_streams": {
+                    "python": 2009727846,
+                    "numpy": 407087157,
+                    "torch_cpu": 71265934,
+                    "torch_cuda": 831528244,
+                    "actor_sampling": 191168760,
+                    "actor_optimizer": 1231878590,
+                    "row_batching": 1488708358,
+                    "critic_init": null,
+                    "paired_question_order": 1004434717
+                  },
+                  "protocol": "matched-rollout-mean-v2",
+                  "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                  "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                  "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+                  "data_manifest_sha256": "96b4de510e264c76c6e30ac50109d44491b3ac2a2182831850e8ce119415cb5b",
+                  "steps": 60,
+                  "resources": {
+                    "gpu": "H100!",
+                    "cpu": 16,
+                    "memory_mib": 196608
+                  },
+                  "evaluation": "exploratory-legacy-64",
+                  "dataset_selection_seed": 329
+                }
+              }
+            },
+            {
+              "name": "training",
+              "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-grpo-matched-v2-s1001-a01/training",
+              "wandb": {
+                "entity": "amulyap-stanford-university",
+                "project": "cs329z-agent-lightning",
+                "group": "tenway-fixture-campaign",
+                "id": "dd44b2486a1098b39641db6c",
+                "name": "tenway-fixture-campaign-grpo-matched-v2-s1001-a01-training",
+                "job_type": "training",
+                "resume": "never",
+                "config": {
+                  "pair_id": "tenway-fixture-campaign-s1001",
+                  "algorithm": "grpo-matched-v2",
+                  "stage": "training",
+                  "run_seed": 1001,
+                  "seed_streams": {
+                    "python": 2009727846,
+                    "numpy": 407087157,
+                    "torch_cpu": 71265934,
+                    "torch_cuda": 831528244,
+                    "actor_sampling": 191168760,
+                    "actor_optimizer": 1231878590,
+                    "row_batching": 1488708358,
+                    "critic_init": null,
+                    "paired_question_order": 1004434717
+                  },
+                  "protocol": "matched-rollout-mean-v2",
+                  "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                  "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                  "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+                  "data_manifest_sha256": "96b4de510e264c76c6e30ac50109d44491b3ac2a2182831850e8ce119415cb5b",
+                  "steps": 60,
+                  "resources": {
+                    "gpu": "H100!",
+                    "cpu": 16,
+                    "memory_mib": 196608
+                  },
+                  "evaluation": "exploratory-legacy-64",
+                  "dataset_selection_seed": 329
+                }
+              }
+            },
+            {
+              "name": "checkpoint-eval",
+              "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-grpo-matched-v2-s1001-a01/checkpoint-eval",
+              "wandb": {
+                "entity": "amulyap-stanford-university",
+                "project": "cs329z-agent-lightning",
+                "group": "tenway-fixture-campaign",
+                "id": "743c7fd98e630db86d69857e",
+                "name": "tenway-fixture-campaign-grpo-matched-v2-s1001-a01-checkpoint-eval",
+                "job_type": "checkpoint-eval",
+                "resume": "never",
+                "config": {
+                  "pair_id": "tenway-fixture-campaign-s1001",
+                  "algorithm": "grpo-matched-v2",
+                  "stage": "checkpoint-eval",
+                  "run_seed": 1001,
+                  "seed_streams": {
+                    "python": 2009727846,
+                    "numpy": 407087157,
+                    "torch_cpu": 71265934,
+                    "torch_cuda": 831528244,
+                    "actor_sampling": 191168760,
+                    "actor_optimizer": 1231878590,
+                    "row_batching": 1488708358,
+                    "critic_init": null,
+                    "paired_question_order": 1004434717
+                  },
+                  "protocol": "matched-rollout-mean-v2",
+                  "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                  "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                  "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+                  "data_manifest_sha256": "96b4de510e264c76c6e30ac50109d44491b3ac2a2182831850e8ce119415cb5b",
+                  "steps": 60,
+                  "resources": {
+                    "gpu": "H100!",
+                    "cpu": 16,
+                    "memory_mib": 196608
+                  },
+                  "evaluation": "exploratory-legacy-64",
+                  "dataset_selection_seed": 329
+                }
+              }
+            }
+          ]
+        },
+        {
+          "job_id": "tenway-fixture-campaign-ppo-mc-matched-v2-s1001-a01",
+          "algorithm": "ppo-mc-matched-v2",
+          "run_seed": 1001,
+          "steps": 60,
+          "pair_id": "tenway-fixture-campaign-s1001",
+          "seed_streams": {
+            "python": 1719098785,
+            "numpy": 1757552786,
+            "torch_cpu": 826152616,
+            "torch_cuda": 1187864390,
+            "actor_sampling": 1398736824,
+            "actor_optimizer": 480042483,
+            "row_batching": 1309851721,
+            "critic_init": 1098445746,
+            "paired_question_order": 1004434717
+          },
+          "output_root": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-ppo-mc-matched-v2-s1001-a01",
+          "stages": [
+            {
+              "name": "baseline",
+              "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-ppo-mc-matched-v2-s1001-a01/baseline",
+              "wandb": {
+                "entity": "amulyap-stanford-university",
+                "project": "cs329z-agent-lightning",
+                "group": "tenway-fixture-campaign",
+                "id": "d375e294199454c33d4dc45e",
+                "name": "tenway-fixture-campaign-ppo-mc-matched-v2-s1001-a01-baseline",
+                "job_type": "baseline",
+                "resume": "never",
+                "config": {
+                  "pair_id": "tenway-fixture-campaign-s1001",
+                  "algorithm": "ppo-mc-matched-v2",
+                  "stage": "baseline",
+                  "run_seed": 1001,
+                  "seed_streams": {
+                    "python": 1719098785,
+                    "numpy": 1757552786,
+                    "torch_cpu": 826152616,
+                    "torch_cuda": 1187864390,
+                    "actor_sampling": 1398736824,
+                    "actor_optimizer": 480042483,
+                    "row_batching": 1309851721,
+                    "critic_init": 1098445746,
+                    "paired_question_order": 1004434717
+                  },
+                  "protocol": "matched-rollout-mean-v2",
+                  "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                  "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                  "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+                  "data_manifest_sha256": "96b4de510e264c76c6e30ac50109d44491b3ac2a2182831850e8ce119415cb5b",
+                  "steps": 60,
+                  "resources": {
+                    "gpu": "H100!",
+                    "cpu": 16,
+                    "memory_mib": 196608
+                  },
+                  "evaluation": "exploratory-legacy-64",
+                  "dataset_selection_seed": 329
+                }
+              }
+            },
+            {
+              "name": "training",
+              "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-ppo-mc-matched-v2-s1001-a01/training",
+              "wandb": {
+                "entity": "amulyap-stanford-university",
+                "project": "cs329z-agent-lightning",
+                "group": "tenway-fixture-campaign",
+                "id": "fa0d262c44d885ebdd23e5e2",
+                "name": "tenway-fixture-campaign-ppo-mc-matched-v2-s1001-a01-training",
+                "job_type": "training",
+                "resume": "never",
+                "config": {
+                  "pair_id": "tenway-fixture-campaign-s1001",
+                  "algorithm": "ppo-mc-matched-v2",
+                  "stage": "training",
+                  "run_seed": 1001,
+                  "seed_streams": {
+                    "python": 1719098785,
+                    "numpy": 1757552786,
+                    "torch_cpu": 826152616,
+                    "torch_cuda": 1187864390,
+                    "actor_sampling": 1398736824,
+                    "actor_optimizer": 480042483,
+                    "row_batching": 1309851721,
+                    "critic_init": 1098445746,
+                    "paired_question_order": 1004434717
+                  },
+                  "protocol": "matched-rollout-mean-v2",
+                  "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                  "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                  "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+                  "data_manifest_sha256": "96b4de510e264c76c6e30ac50109d44491b3ac2a2182831850e8ce119415cb5b",
+                  "steps": 60,
+                  "resources": {
+                    "gpu": "H100!",
+                    "cpu": 16,
+                    "memory_mib": 196608
+                  },
+                  "evaluation": "exploratory-legacy-64",
+                  "dataset_selection_seed": 329
+                }
+              }
+            },
+            {
+              "name": "checkpoint-eval",
+              "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-ppo-mc-matched-v2-s1001-a01/checkpoint-eval",
+              "wandb": {
+                "entity": "amulyap-stanford-university",
+                "project": "cs329z-agent-lightning",
+                "group": "tenway-fixture-campaign",
+                "id": "fa790e5f8b8ebabdbe1ae43b",
+                "name": "tenway-fixture-campaign-ppo-mc-matched-v2-s1001-a01-checkpoint-eval",
+                "job_type": "checkpoint-eval",
+                "resume": "never",
+                "config": {
+                  "pair_id": "tenway-fixture-campaign-s1001",
+                  "algorithm": "ppo-mc-matched-v2",
+                  "stage": "checkpoint-eval",
+                  "run_seed": 1001,
+                  "seed_streams": {
+                    "python": 1719098785,
+                    "numpy": 1757552786,
+                    "torch_cpu": 826152616,
+                    "torch_cuda": 1187864390,
+                    "actor_sampling": 1398736824,
+                    "actor_optimizer": 480042483,
+                    "row_batching": 1309851721,
+                    "critic_init": 1098445746,
+                    "paired_question_order": 1004434717
+                  },
+                  "protocol": "matched-rollout-mean-v2",
+                  "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                  "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                  "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+                  "data_manifest_sha256": "96b4de510e264c76c6e30ac50109d44491b3ac2a2182831850e8ce119415cb5b",
+                  "steps": 60,
+                  "resources": {
+                    "gpu": "H100!",
+                    "cpu": 16,
+                    "memory_mib": 196608
+                  },
+                  "evaluation": "exploratory-legacy-64",
+                  "dataset_selection_seed": 329
+                }
+              }
+            }
+          ]
+        },
+        {
+          "job_id": "tenway-fixture-campaign-grpo-matched-v2-s1002-a01",
+          "algorithm": "grpo-matched-v2",
+          "run_seed": 1002,
+          "steps": 60,
+          "pair_id": "tenway-fixture-campaign-s1002",
+          "seed_streams": {
+            "python": 1409473496,
+            "numpy": 773679658,
+            "torch_cpu": 490243863,
+            "torch_cuda": 352329964,
+            "actor_sampling": 1578053642,
+            "actor_optimizer": 2036160318,
+            "row_batching": 960509008,
+            "critic_init": null,
+            "paired_question_order": 732254007
+          },
+          "output_root": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-grpo-matched-v2-s1002-a01",
+          "stages": [
+            {
+              "name": "baseline",
+              "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-grpo-matched-v2-s1002-a01/baseline",
+              "wandb": {
+                "entity": "amulyap-stanford-university",
+                "project": "cs329z-agent-lightning",
+                "group": "tenway-fixture-campaign",
+                "id": "b50aebc7f4b31c439b4ac424",
+                "name": "tenway-fixture-campaign-grpo-matched-v2-s1002-a01-baseline",
+                "job_type": "baseline",
+                "resume": "never",
+                "config": {
+                  "pair_id": "tenway-fixture-campaign-s1002",
+                  "algorithm": "grpo-matched-v2",
+                  "stage": "baseline",
+                  "run_seed": 1002,
+                  "seed_streams": {
+                    "python": 1409473496,
+                    "numpy": 773679658,
+                    "torch_cpu": 490243863,
+                    "torch_cuda": 352329964,
+                    "actor_sampling": 1578053642,
+                    "actor_optimizer": 2036160318,
+                    "row_batching": 960509008,
+                    "critic_init": null,
+                    "paired_question_order": 732254007
+                  },
+                  "protocol": "matched-rollout-mean-v2",
+                  "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                  "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                  "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+                  "data_manifest_sha256": "96b4de510e264c76c6e30ac50109d44491b3ac2a2182831850e8ce119415cb5b",
+                  "steps": 60,
+                  "resources": {
+                    "gpu": "H100!",
+                    "cpu": 16,
+                    "memory_mib": 196608
+                  },
+                  "evaluation": "exploratory-legacy-64",
+                  "dataset_selection_seed": 329
+                }
+              }
+            },
+            {
+              "name": "training",
+              "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-grpo-matched-v2-s1002-a01/training",
+              "wandb": {
+                "entity": "amulyap-stanford-university",
+                "project": "cs329z-agent-lightning",
+                "group": "tenway-fixture-campaign",
+                "id": "64561e607ec94d338547595f",
+                "name": "tenway-fixture-campaign-grpo-matched-v2-s1002-a01-training",
+                "job_type": "training",
+                "resume": "never",
+                "config": {
+                  "pair_id": "tenway-fixture-campaign-s1002",
+                  "algorithm": "grpo-matched-v2",
+                  "stage": "training",
+                  "run_seed": 1002,
+                  "seed_streams": {
+                    "python": 1409473496,
+                    "numpy": 773679658,
+                    "torch_cpu": 490243863,
+                    "torch_cuda": 352329964,
+                    "actor_sampling": 1578053642,
+                    "actor_optimizer": 2036160318,
+                    "row_batching": 960509008,
+                    "critic_init": null,
+                    "paired_question_order": 732254007
+                  },
+                  "protocol": "matched-rollout-mean-v2",
+                  "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                  "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                  "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+                  "data_manifest_sha256": "96b4de510e264c76c6e30ac50109d44491b3ac2a2182831850e8ce119415cb5b",
+                  "steps": 60,
+                  "resources": {
+                    "gpu": "H100!",
+                    "cpu": 16,
+                    "memory_mib": 196608
+                  },
+                  "evaluation": "exploratory-legacy-64",
+                  "dataset_selection_seed": 329
+                }
+              }
+            },
+            {
+              "name": "checkpoint-eval",
+              "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-grpo-matched-v2-s1002-a01/checkpoint-eval",
+              "wandb": {
+                "entity": "amulyap-stanford-university",
+                "project": "cs329z-agent-lightning",
+                "group": "tenway-fixture-campaign",
+                "id": "ce6bd38581fa770d52c7d484",
+                "name": "tenway-fixture-campaign-grpo-matched-v2-s1002-a01-checkpoint-eval",
+                "job_type": "checkpoint-eval",
+                "resume": "never",
+                "config": {
+                  "pair_id": "tenway-fixture-campaign-s1002",
+                  "algorithm": "grpo-matched-v2",
+                  "stage": "checkpoint-eval",
+                  "run_seed": 1002,
+                  "seed_streams": {
+                    "python": 1409473496,
+                    "numpy": 773679658,
+                    "torch_cpu": 490243863,
+                    "torch_cuda": 352329964,
+                    "actor_sampling": 1578053642,
+                    "actor_optimizer": 2036160318,
+                    "row_batching": 960509008,
+                    "critic_init": null,
+                    "paired_question_order": 732254007
+                  },
+                  "protocol": "matched-rollout-mean-v2",
+                  "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                  "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                  "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+                  "data_manifest_sha256": "96b4de510e264c76c6e30ac50109d44491b3ac2a2182831850e8ce119415cb5b",
+                  "steps": 60,
+                  "resources": {
+                    "gpu": "H100!",
+                    "cpu": 16,
+                    "memory_mib": 196608
+                  },
+                  "evaluation": "exploratory-legacy-64",
+                  "dataset_selection_seed": 329
+                }
+              }
+            }
+          ]
+        },
+        {
+          "job_id": "tenway-fixture-campaign-ppo-mc-matched-v2-s1002-a01",
+          "algorithm": "ppo-mc-matched-v2",
+          "run_seed": 1002,
+          "steps": 60,
+          "pair_id": "tenway-fixture-campaign-s1002",
+          "seed_streams": {
+            "python": 1877408543,
+            "numpy": 1306289802,
+            "torch_cpu": 1114184902,
+            "torch_cuda": 1092370477,
+            "actor_sampling": 1546889521,
+            "actor_optimizer": 1288087942,
+            "row_batching": 1281765944,
+            "critic_init": 915948106,
+            "paired_question_order": 732254007
+          },
+          "output_root": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-ppo-mc-matched-v2-s1002-a01",
+          "stages": [
+            {
+              "name": "baseline",
+              "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-ppo-mc-matched-v2-s1002-a01/baseline",
+              "wandb": {
+                "entity": "amulyap-stanford-university",
+                "project": "cs329z-agent-lightning",
+                "group": "tenway-fixture-campaign",
+                "id": "2117931099c35f31dcecd68a",
+                "name": "tenway-fixture-campaign-ppo-mc-matched-v2-s1002-a01-baseline",
+                "job_type": "baseline",
+                "resume": "never",
+                "config": {
+                  "pair_id": "tenway-fixture-campaign-s1002",
+                  "algorithm": "ppo-mc-matched-v2",
+                  "stage": "baseline",
+                  "run_seed": 1002,
+                  "seed_streams": {
+                    "python": 1877408543,
+                    "numpy": 1306289802,
+                    "torch_cpu": 1114184902,
+                    "torch_cuda": 1092370477,
+                    "actor_sampling": 1546889521,
+                    "actor_optimizer": 1288087942,
+                    "row_batching": 1281765944,
+                    "critic_init": 915948106,
+                    "paired_question_order": 732254007
+                  },
+                  "protocol": "matched-rollout-mean-v2",
+                  "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                  "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                  "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+                  "data_manifest_sha256": "96b4de510e264c76c6e30ac50109d44491b3ac2a2182831850e8ce119415cb5b",
+                  "steps": 60,
+                  "resources": {
+                    "gpu": "H100!",
+                    "cpu": 16,
+                    "memory_mib": 196608
+                  },
+                  "evaluation": "exploratory-legacy-64",
+                  "dataset_selection_seed": 329
+                }
+              }
+            },
+            {
+              "name": "training",
+              "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-ppo-mc-matched-v2-s1002-a01/training",
+              "wandb": {
+                "entity": "amulyap-stanford-university",
+                "project": "cs329z-agent-lightning",
+                "group": "tenway-fixture-campaign",
+                "id": "2bf94e93532f1e88356fa539",
+                "name": "tenway-fixture-campaign-ppo-mc-matched-v2-s1002-a01-training",
+                "job_type": "training",
+                "resume": "never",
+                "config": {
+                  "pair_id": "tenway-fixture-campaign-s1002",
+                  "algorithm": "ppo-mc-matched-v2",
+                  "stage": "training",
+                  "run_seed": 1002,
+                  "seed_streams": {
+                    "python": 1877408543,
+                    "numpy": 1306289802,
+                    "torch_cpu": 1114184902,
+                    "torch_cuda": 1092370477,
+                    "actor_sampling": 1546889521,
+                    "actor_optimizer": 1288087942,
+                    "row_batching": 1281765944,
+                    "critic_init": 915948106,
+                    "paired_question_order": 732254007
+                  },
+                  "protocol": "matched-rollout-mean-v2",
+                  "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                  "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                  "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+                  "data_manifest_sha256": "96b4de510e264c76c6e30ac50109d44491b3ac2a2182831850e8ce119415cb5b",
+                  "steps": 60,
+                  "resources": {
+                    "gpu": "H100!",
+                    "cpu": 16,
+                    "memory_mib": 196608
+                  },
+                  "evaluation": "exploratory-legacy-64",
+                  "dataset_selection_seed": 329
+                }
+              }
+            },
+            {
+              "name": "checkpoint-eval",
+              "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-ppo-mc-matched-v2-s1002-a01/checkpoint-eval",
+              "wandb": {
+                "entity": "amulyap-stanford-university",
+                "project": "cs329z-agent-lightning",
+                "group": "tenway-fixture-campaign",
+                "id": "ed54ee1f267f36282c5ed4e4",
+                "name": "tenway-fixture-campaign-ppo-mc-matched-v2-s1002-a01-checkpoint-eval",
+                "job_type": "checkpoint-eval",
+                "resume": "never",
+                "config": {
+                  "pair_id": "tenway-fixture-campaign-s1002",
+                  "algorithm": "ppo-mc-matched-v2",
+                  "stage": "checkpoint-eval",
+                  "run_seed": 1002,
+                  "seed_streams": {
+                    "python": 1877408543,
+                    "numpy": 1306289802,
+                    "torch_cpu": 1114184902,
+                    "torch_cuda": 1092370477,
+                    "actor_sampling": 1546889521,
+                    "actor_optimizer": 1288087942,
+                    "row_batching": 1281765944,
+                    "critic_init": 915948106,
+                    "paired_question_order": 732254007
+                  },
+                  "protocol": "matched-rollout-mean-v2",
+                  "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                  "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                  "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+                  "data_manifest_sha256": "96b4de510e264c76c6e30ac50109d44491b3ac2a2182831850e8ce119415cb5b",
+                  "steps": 60,
+                  "resources": {
+                    "gpu": "H100!",
+                    "cpu": 16,
+                    "memory_mib": 196608
+                  },
+                  "evaluation": "exploratory-legacy-64",
+                  "dataset_selection_seed": 329
+                }
+              }
+            }
+          ]
+        },
+        {
+          "job_id": "tenway-fixture-campaign-grpo-matched-v2-s1003-a01",
+          "algorithm": "grpo-matched-v2",
+          "run_seed": 1003,
+          "steps": 60,
+          "pair_id": "tenway-fixture-campaign-s1003",
+          "seed_streams": {
+            "python": 538669416,
+            "numpy": 442151327,
+            "torch_cpu": 514437995,
+            "torch_cuda": 627326466,
+            "actor_sampling": 2096506028,
+            "actor_optimizer": 1378422983,
+            "row_batching": 628544631,
+            "critic_init": null,
+            "paired_question_order": 519221977
+          },
+          "output_root": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-grpo-matched-v2-s1003-a01",
+          "stages": [
+            {
+              "name": "baseline",
+              "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-grpo-matched-v2-s1003-a01/baseline",
+              "wandb": {
+                "entity": "amulyap-stanford-university",
+                "project": "cs329z-agent-lightning",
+                "group": "tenway-fixture-campaign",
+                "id": "9e0df651283449c21b14b2bd",
+                "name": "tenway-fixture-campaign-grpo-matched-v2-s1003-a01-baseline",
+                "job_type": "baseline",
+                "resume": "never",
+                "config": {
+                  "pair_id": "tenway-fixture-campaign-s1003",
+                  "algorithm": "grpo-matched-v2",
+                  "stage": "baseline",
+                  "run_seed": 1003,
+                  "seed_streams": {
+                    "python": 538669416,
+                    "numpy": 442151327,
+                    "torch_cpu": 514437995,
+                    "torch_cuda": 627326466,
+                    "actor_sampling": 2096506028,
+                    "actor_optimizer": 1378422983,
+                    "row_batching": 628544631,
+                    "critic_init": null,
+                    "paired_question_order": 519221977
+                  },
+                  "protocol": "matched-rollout-mean-v2",
+                  "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                  "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                  "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+                  "data_manifest_sha256": "96b4de510e264c76c6e30ac50109d44491b3ac2a2182831850e8ce119415cb5b",
+                  "steps": 60,
+                  "resources": {
+                    "gpu": "H100!",
+                    "cpu": 16,
+                    "memory_mib": 196608
+                  },
+                  "evaluation": "exploratory-legacy-64",
+                  "dataset_selection_seed": 329
+                }
+              }
+            },
+            {
+              "name": "training",
+              "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-grpo-matched-v2-s1003-a01/training",
+              "wandb": {
+                "entity": "amulyap-stanford-university",
+                "project": "cs329z-agent-lightning",
+                "group": "tenway-fixture-campaign",
+                "id": "76b207ad99ac11866486be9e",
+                "name": "tenway-fixture-campaign-grpo-matched-v2-s1003-a01-training",
+                "job_type": "training",
+                "resume": "never",
+                "config": {
+                  "pair_id": "tenway-fixture-campaign-s1003",
+                  "algorithm": "grpo-matched-v2",
+                  "stage": "training",
+                  "run_seed": 1003,
+                  "seed_streams": {
+                    "python": 538669416,
+                    "numpy": 442151327,
+                    "torch_cpu": 514437995,
+                    "torch_cuda": 627326466,
+                    "actor_sampling": 2096506028,
+                    "actor_optimizer": 1378422983,
+                    "row_batching": 628544631,
+                    "critic_init": null,
+                    "paired_question_order": 519221977
+                  },
+                  "protocol": "matched-rollout-mean-v2",
+                  "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                  "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                  "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+                  "data_manifest_sha256": "96b4de510e264c76c6e30ac50109d44491b3ac2a2182831850e8ce119415cb5b",
+                  "steps": 60,
+                  "resources": {
+                    "gpu": "H100!",
+                    "cpu": 16,
+                    "memory_mib": 196608
+                  },
+                  "evaluation": "exploratory-legacy-64",
+                  "dataset_selection_seed": 329
+                }
+              }
+            },
+            {
+              "name": "checkpoint-eval",
+              "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-grpo-matched-v2-s1003-a01/checkpoint-eval",
+              "wandb": {
+                "entity": "amulyap-stanford-university",
+                "project": "cs329z-agent-lightning",
+                "group": "tenway-fixture-campaign",
+                "id": "d380a164ad6811354da66f7f",
+                "name": "tenway-fixture-campaign-grpo-matched-v2-s1003-a01-checkpoint-eval",
+                "job_type": "checkpoint-eval",
+                "resume": "never",
+                "config": {
+                  "pair_id": "tenway-fixture-campaign-s1003",
+                  "algorithm": "grpo-matched-v2",
+                  "stage": "checkpoint-eval",
+                  "run_seed": 1003,
+                  "seed_streams": {
+                    "python": 538669416,
+                    "numpy": 442151327,
+                    "torch_cpu": 514437995,
+                    "torch_cuda": 627326466,
+                    "actor_sampling": 2096506028,
+                    "actor_optimizer": 1378422983,
+                    "row_batching": 628544631,
+                    "critic_init": null,
+                    "paired_question_order": 519221977
+                  },
+                  "protocol": "matched-rollout-mean-v2",
+                  "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                  "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                  "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+                  "data_manifest_sha256": "96b4de510e264c76c6e30ac50109d44491b3ac2a2182831850e8ce119415cb5b",
+                  "steps": 60,
+                  "resources": {
+                    "gpu": "H100!",
+                    "cpu": 16,
+                    "memory_mib": 196608
+                  },
+                  "evaluation": "exploratory-legacy-64",
+                  "dataset_selection_seed": 329
+                }
+              }
+            }
+          ]
+        },
+        {
+          "job_id": "tenway-fixture-campaign-ppo-mc-matched-v2-s1003-a01",
+          "algorithm": "ppo-mc-matched-v2",
+          "run_seed": 1003,
+          "steps": 60,
+          "pair_id": "tenway-fixture-campaign-s1003",
+          "seed_streams": {
+            "python": 264405736,
+            "numpy": 1883574291,
+            "torch_cpu": 1934335767,
+            "torch_cuda": 1976163944,
+            "actor_sampling": 948347213,
+            "actor_optimizer": 1260294441,
+            "row_batching": 1984548214,
+            "critic_init": 516258909,
+            "paired_question_order": 519221977
+          },
+          "output_root": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-ppo-mc-matched-v2-s1003-a01",
+          "stages": [
+            {
+              "name": "baseline",
+              "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-ppo-mc-matched-v2-s1003-a01/baseline",
+              "wandb": {
+                "entity": "amulyap-stanford-university",
+                "project": "cs329z-agent-lightning",
+                "group": "tenway-fixture-campaign",
+                "id": "4cb0b9fa4da5d1f9a1532420",
+                "name": "tenway-fixture-campaign-ppo-mc-matched-v2-s1003-a01-baseline",
+                "job_type": "baseline",
+                "resume": "never",
+                "config": {
+                  "pair_id": "tenway-fixture-campaign-s1003",
+                  "algorithm": "ppo-mc-matched-v2",
+                  "stage": "baseline",
+                  "run_seed": 1003,
+                  "seed_streams": {
+                    "python": 264405736,
+                    "numpy": 1883574291,
+                    "torch_cpu": 1934335767,
+                    "torch_cuda": 1976163944,
+                    "actor_sampling": 948347213,
+                    "actor_optimizer": 1260294441,
+                    "row_batching": 1984548214,
+                    "critic_init": 516258909,
+                    "paired_question_order": 519221977
+                  },
+                  "protocol": "matched-rollout-mean-v2",
+                  "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                  "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                  "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+                  "data_manifest_sha256": "96b4de510e264c76c6e30ac50109d44491b3ac2a2182831850e8ce119415cb5b",
+                  "steps": 60,
+                  "resources": {
+                    "gpu": "H100!",
+                    "cpu": 16,
+                    "memory_mib": 196608
+                  },
+                  "evaluation": "exploratory-legacy-64",
+                  "dataset_selection_seed": 329
+                }
+              }
+            },
+            {
+              "name": "training",
+              "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-ppo-mc-matched-v2-s1003-a01/training",
+              "wandb": {
+                "entity": "amulyap-stanford-university",
+                "project": "cs329z-agent-lightning",
+                "group": "tenway-fixture-campaign",
+                "id": "366f0c4f9db8bde8c0ba119a",
+                "name": "tenway-fixture-campaign-ppo-mc-matched-v2-s1003-a01-training",
+                "job_type": "training",
+                "resume": "never",
+                "config": {
+                  "pair_id": "tenway-fixture-campaign-s1003",
+                  "algorithm": "ppo-mc-matched-v2",
+                  "stage": "training",
+                  "run_seed": 1003,
+                  "seed_streams": {
+                    "python": 264405736,
+                    "numpy": 1883574291,
+                    "torch_cpu": 1934335767,
+                    "torch_cuda": 1976163944,
+                    "actor_sampling": 948347213,
+                    "actor_optimizer": 1260294441,
+                    "row_batching": 1984548214,
+                    "critic_init": 516258909,
+                    "paired_question_order": 519221977
+                  },
+                  "protocol": "matched-rollout-mean-v2",
+                  "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                  "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                  "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+                  "data_manifest_sha256": "96b4de510e264c76c6e30ac50109d44491b3ac2a2182831850e8ce119415cb5b",
+                  "steps": 60,
+                  "resources": {
+                    "gpu": "H100!",
+                    "cpu": 16,
+                    "memory_mib": 196608
+                  },
+                  "evaluation": "exploratory-legacy-64",
+                  "dataset_selection_seed": 329
+                }
+              }
+            },
+            {
+              "name": "checkpoint-eval",
+              "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-ppo-mc-matched-v2-s1003-a01/checkpoint-eval",
+              "wandb": {
+                "entity": "amulyap-stanford-university",
+                "project": "cs329z-agent-lightning",
+                "group": "tenway-fixture-campaign",
+                "id": "4b358c1053ccd20a4227b5ce",
+                "name": "tenway-fixture-campaign-ppo-mc-matched-v2-s1003-a01-checkpoint-eval",
+                "job_type": "checkpoint-eval",
+                "resume": "never",
+                "config": {
+                  "pair_id": "tenway-fixture-campaign-s1003",
+                  "algorithm": "ppo-mc-matched-v2",
+                  "stage": "checkpoint-eval",
+                  "run_seed": 1003,
+                  "seed_streams": {
+                    "python": 264405736,
+                    "numpy": 1883574291,
+                    "torch_cpu": 1934335767,
+                    "torch_cuda": 1976163944,
+                    "actor_sampling": 948347213,
+                    "actor_optimizer": 1260294441,
+                    "row_batching": 1984548214,
+                    "critic_init": 516258909,
+                    "paired_question_order": 519221977
+                  },
+                  "protocol": "matched-rollout-mean-v2",
+                  "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                  "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                  "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+                  "data_manifest_sha256": "96b4de510e264c76c6e30ac50109d44491b3ac2a2182831850e8ce119415cb5b",
+                  "steps": 60,
+                  "resources": {
+                    "gpu": "H100!",
+                    "cpu": 16,
+                    "memory_mib": 196608
+                  },
+                  "evaluation": "exploratory-legacy-64",
+                  "dataset_selection_seed": 329
+                }
+              }
+            }
+          ]
+        },
+        {
+          "job_id": "tenway-fixture-campaign-grpo-matched-v2-s1004-a01",
+          "algorithm": "grpo-matched-v2",
+          "run_seed": 1004,
+          "steps": 60,
+          "pair_id": "tenway-fixture-campaign-s1004",
+          "seed_streams": {
+            "python": 1453430945,
+            "numpy": 1452215039,
+            "torch_cpu": 1928441668,
+            "torch_cuda": 565159747,
+            "actor_sampling": 2033148078,
+            "actor_optimizer": 639243784,
+            "row_batching": 840869552,
+            "critic_init": null,
+            "paired_question_order": 1230802848
+          },
+          "output_root": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-grpo-matched-v2-s1004-a01",
+          "stages": [
+            {
+              "name": "baseline",
+              "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-grpo-matched-v2-s1004-a01/baseline",
+              "wandb": {
+                "entity": "amulyap-stanford-university",
+                "project": "cs329z-agent-lightning",
+                "group": "tenway-fixture-campaign",
+                "id": "0a5b482a8106b7879f2c0c47",
+                "name": "tenway-fixture-campaign-grpo-matched-v2-s1004-a01-baseline",
+                "job_type": "baseline",
+                "resume": "never",
+                "config": {
+                  "pair_id": "tenway-fixture-campaign-s1004",
+                  "algorithm": "grpo-matched-v2",
+                  "stage": "baseline",
+                  "run_seed": 1004,
+                  "seed_streams": {
+                    "python": 1453430945,
+                    "numpy": 1452215039,
+                    "torch_cpu": 1928441668,
+                    "torch_cuda": 565159747,
+                    "actor_sampling": 2033148078,
+                    "actor_optimizer": 639243784,
+                    "row_batching": 840869552,
+                    "critic_init": null,
+                    "paired_question_order": 1230802848
+                  },
+                  "protocol": "matched-rollout-mean-v2",
+                  "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                  "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                  "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+                  "data_manifest_sha256": "96b4de510e264c76c6e30ac50109d44491b3ac2a2182831850e8ce119415cb5b",
+                  "steps": 60,
+                  "resources": {
+                    "gpu": "H100!",
+                    "cpu": 16,
+                    "memory_mib": 196608
+                  },
+                  "evaluation": "exploratory-legacy-64",
+                  "dataset_selection_seed": 329
+                }
+              }
+            },
+            {
+              "name": "training",
+              "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-grpo-matched-v2-s1004-a01/training",
+              "wandb": {
+                "entity": "amulyap-stanford-university",
+                "project": "cs329z-agent-lightning",
+                "group": "tenway-fixture-campaign",
+                "id": "325f83fe0dee79c548f4acb6",
+                "name": "tenway-fixture-campaign-grpo-matched-v2-s1004-a01-training",
+                "job_type": "training",
+                "resume": "never",
+                "config": {
+                  "pair_id": "tenway-fixture-campaign-s1004",
+                  "algorithm": "grpo-matched-v2",
+                  "stage": "training",
+                  "run_seed": 1004,
+                  "seed_streams": {
+                    "python": 1453430945,
+                    "numpy": 1452215039,
+                    "torch_cpu": 1928441668,
+                    "torch_cuda": 565159747,
+                    "actor_sampling": 2033148078,
+                    "actor_optimizer": 639243784,
+                    "row_batching": 840869552,
+                    "critic_init": null,
+                    "paired_question_order": 1230802848
+                  },
+                  "protocol": "matched-rollout-mean-v2",
+                  "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                  "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                  "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+                  "data_manifest_sha256": "96b4de510e264c76c6e30ac50109d44491b3ac2a2182831850e8ce119415cb5b",
+                  "steps": 60,
+                  "resources": {
+                    "gpu": "H100!",
+                    "cpu": 16,
+                    "memory_mib": 196608
+                  },
+                  "evaluation": "exploratory-legacy-64",
+                  "dataset_selection_seed": 329
+                }
+              }
+            },
+            {
+              "name": "checkpoint-eval",
+              "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-grpo-matched-v2-s1004-a01/checkpoint-eval",
+              "wandb": {
+                "entity": "amulyap-stanford-university",
+                "project": "cs329z-agent-lightning",
+                "group": "tenway-fixture-campaign",
+                "id": "d1d3105abc1c855398712111",
+                "name": "tenway-fixture-campaign-grpo-matched-v2-s1004-a01-checkpoint-eval",
+                "job_type": "checkpoint-eval",
+                "resume": "never",
+                "config": {
+                  "pair_id": "tenway-fixture-campaign-s1004",
+                  "algorithm": "grpo-matched-v2",
+                  "stage": "checkpoint-eval",
+                  "run_seed": 1004,
+                  "seed_streams": {
+                    "python": 1453430945,
+                    "numpy": 1452215039,
+                    "torch_cpu": 1928441668,
+                    "torch_cuda": 565159747,
+                    "actor_sampling": 2033148078,
+                    "actor_optimizer": 639243784,
+                    "row_batching": 840869552,
+                    "critic_init": null,
+                    "paired_question_order": 1230802848
+                  },
+                  "protocol": "matched-rollout-mean-v2",
+                  "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                  "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                  "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+                  "data_manifest_sha256": "96b4de510e264c76c6e30ac50109d44491b3ac2a2182831850e8ce119415cb5b",
+                  "steps": 60,
+                  "resources": {
+                    "gpu": "H100!",
+                    "cpu": 16,
+                    "memory_mib": 196608
+                  },
+                  "evaluation": "exploratory-legacy-64",
+                  "dataset_selection_seed": 329
+                }
+              }
+            }
+          ]
+        },
+        {
+          "job_id": "tenway-fixture-campaign-ppo-mc-matched-v2-s1004-a01",
+          "algorithm": "ppo-mc-matched-v2",
+          "run_seed": 1004,
+          "steps": 60,
+          "pair_id": "tenway-fixture-campaign-s1004",
+          "seed_streams": {
+            "python": 16251230,
+            "numpy": 220421970,
+            "torch_cpu": 667863957,
+            "torch_cuda": 677518139,
+            "actor_sampling": 1630981690,
+            "actor_optimizer": 158767695,
+            "row_batching": 412932214,
+            "critic_init": 1256060107,
+            "paired_question_order": 1230802848
+          },
+          "output_root": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-ppo-mc-matched-v2-s1004-a01",
+          "stages": [
+            {
+              "name": "baseline",
+              "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-ppo-mc-matched-v2-s1004-a01/baseline",
+              "wandb": {
+                "entity": "amulyap-stanford-university",
+                "project": "cs329z-agent-lightning",
+                "group": "tenway-fixture-campaign",
+                "id": "67c0659c7ae68c8d32097f0b",
+                "name": "tenway-fixture-campaign-ppo-mc-matched-v2-s1004-a01-baseline",
+                "job_type": "baseline",
+                "resume": "never",
+                "config": {
+                  "pair_id": "tenway-fixture-campaign-s1004",
+                  "algorithm": "ppo-mc-matched-v2",
+                  "stage": "baseline",
+                  "run_seed": 1004,
+                  "seed_streams": {
+                    "python": 16251230,
+                    "numpy": 220421970,
+                    "torch_cpu": 667863957,
+                    "torch_cuda": 677518139,
+                    "actor_sampling": 1630981690,
+                    "actor_optimizer": 158767695,
+                    "row_batching": 412932214,
+                    "critic_init": 1256060107,
+                    "paired_question_order": 1230802848
+                  },
+                  "protocol": "matched-rollout-mean-v2",
+                  "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                  "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                  "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+                  "data_manifest_sha256": "96b4de510e264c76c6e30ac50109d44491b3ac2a2182831850e8ce119415cb5b",
+                  "steps": 60,
+                  "resources": {
+                    "gpu": "H100!",
+                    "cpu": 16,
+                    "memory_mib": 196608
+                  },
+                  "evaluation": "exploratory-legacy-64",
+                  "dataset_selection_seed": 329
+                }
+              }
+            },
+            {
+              "name": "training",
+              "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-ppo-mc-matched-v2-s1004-a01/training",
+              "wandb": {
+                "entity": "amulyap-stanford-university",
+                "project": "cs329z-agent-lightning",
+                "group": "tenway-fixture-campaign",
+                "id": "748a8c0716c2e296c9b3dc7e",
+                "name": "tenway-fixture-campaign-ppo-mc-matched-v2-s1004-a01-training",
+                "job_type": "training",
+                "resume": "never",
+                "config": {
+                  "pair_id": "tenway-fixture-campaign-s1004",
+                  "algorithm": "ppo-mc-matched-v2",
+                  "stage": "training",
+                  "run_seed": 1004,
+                  "seed_streams": {
+                    "python": 16251230,
+                    "numpy": 220421970,
+                    "torch_cpu": 667863957,
+                    "torch_cuda": 677518139,
+                    "actor_sampling": 1630981690,
+                    "actor_optimizer": 158767695,
+                    "row_batching": 412932214,
+                    "critic_init": 1256060107,
+                    "paired_question_order": 1230802848
+                  },
+                  "protocol": "matched-rollout-mean-v2",
+                  "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                  "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                  "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+                  "data_manifest_sha256": "96b4de510e264c76c6e30ac50109d44491b3ac2a2182831850e8ce119415cb5b",
+                  "steps": 60,
+                  "resources": {
+                    "gpu": "H100!",
+                    "cpu": 16,
+                    "memory_mib": 196608
+                  },
+                  "evaluation": "exploratory-legacy-64",
+                  "dataset_selection_seed": 329
+                }
+              }
+            },
+            {
+              "name": "checkpoint-eval",
+              "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-ppo-mc-matched-v2-s1004-a01/checkpoint-eval",
+              "wandb": {
+                "entity": "amulyap-stanford-university",
+                "project": "cs329z-agent-lightning",
+                "group": "tenway-fixture-campaign",
+                "id": "57c5b1c785adfb667c51c169",
+                "name": "tenway-fixture-campaign-ppo-mc-matched-v2-s1004-a01-checkpoint-eval",
+                "job_type": "checkpoint-eval",
+                "resume": "never",
+                "config": {
+                  "pair_id": "tenway-fixture-campaign-s1004",
+                  "algorithm": "ppo-mc-matched-v2",
+                  "stage": "checkpoint-eval",
+                  "run_seed": 1004,
+                  "seed_streams": {
+                    "python": 16251230,
+                    "numpy": 220421970,
+                    "torch_cpu": 667863957,
+                    "torch_cuda": 677518139,
+                    "actor_sampling": 1630981690,
+                    "actor_optimizer": 158767695,
+                    "row_batching": 412932214,
+                    "critic_init": 1256060107,
+                    "paired_question_order": 1230802848
+                  },
+                  "protocol": "matched-rollout-mean-v2",
+                  "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                  "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                  "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+                  "data_manifest_sha256": "96b4de510e264c76c6e30ac50109d44491b3ac2a2182831850e8ce119415cb5b",
+                  "steps": 60,
+                  "resources": {
+                    "gpu": "H100!",
+                    "cpu": 16,
+                    "memory_mib": 196608
+                  },
+                  "evaluation": "exploratory-legacy-64",
+                  "dataset_selection_seed": 329
+                }
+              }
+            }
+          ]
+        },
+        {
+          "job_id": "tenway-fixture-campaign-grpo-matched-v2-s1005-a01",
+          "algorithm": "grpo-matched-v2",
+          "run_seed": 1005,
+          "steps": 60,
+          "pair_id": "tenway-fixture-campaign-s1005",
+          "seed_streams": {
+            "python": 488719112,
+            "numpy": 1662598979,
+            "torch_cpu": 404869252,
+            "torch_cuda": 1300791858,
+            "actor_sampling": 54266934,
+            "actor_optimizer": 799260513,
+            "row_batching": 2123767120,
+            "critic_init": null,
+            "paired_question_order": 195528320
+          },
+          "output_root": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-grpo-matched-v2-s1005-a01",
+          "stages": [
+            {
+              "name": "baseline",
+              "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-grpo-matched-v2-s1005-a01/baseline",
+              "wandb": {
+                "entity": "amulyap-stanford-university",
+                "project": "cs329z-agent-lightning",
+                "group": "tenway-fixture-campaign",
+                "id": "f89998ee7107f64f40c9109f",
+                "name": "tenway-fixture-campaign-grpo-matched-v2-s1005-a01-baseline",
+                "job_type": "baseline",
+                "resume": "never",
+                "config": {
+                  "pair_id": "tenway-fixture-campaign-s1005",
+                  "algorithm": "grpo-matched-v2",
+                  "stage": "baseline",
+                  "run_seed": 1005,
+                  "seed_streams": {
+                    "python": 488719112,
+                    "numpy": 1662598979,
+                    "torch_cpu": 404869252,
+                    "torch_cuda": 1300791858,
+                    "actor_sampling": 54266934,
+                    "actor_optimizer": 799260513,
+                    "row_batching": 2123767120,
+                    "critic_init": null,
+                    "paired_question_order": 195528320
+                  },
+                  "protocol": "matched-rollout-mean-v2",
+                  "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                  "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                  "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+                  "data_manifest_sha256": "96b4de510e264c76c6e30ac50109d44491b3ac2a2182831850e8ce119415cb5b",
+                  "steps": 60,
+                  "resources": {
+                    "gpu": "H100!",
+                    "cpu": 16,
+                    "memory_mib": 196608
+                  },
+                  "evaluation": "exploratory-legacy-64",
+                  "dataset_selection_seed": 329
+                }
+              }
+            },
+            {
+              "name": "training",
+              "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-grpo-matched-v2-s1005-a01/training",
+              "wandb": {
+                "entity": "amulyap-stanford-university",
+                "project": "cs329z-agent-lightning",
+                "group": "tenway-fixture-campaign",
+                "id": "317ca785aea3ba758f15ca2c",
+                "name": "tenway-fixture-campaign-grpo-matched-v2-s1005-a01-training",
+                "job_type": "training",
+                "resume": "never",
+                "config": {
+                  "pair_id": "tenway-fixture-campaign-s1005",
+                  "algorithm": "grpo-matched-v2",
+                  "stage": "training",
+                  "run_seed": 1005,
+                  "seed_streams": {
+                    "python": 488719112,
+                    "numpy": 1662598979,
+                    "torch_cpu": 404869252,
+                    "torch_cuda": 1300791858,
+                    "actor_sampling": 54266934,
+                    "actor_optimizer": 799260513,
+                    "row_batching": 2123767120,
+                    "critic_init": null,
+                    "paired_question_order": 195528320
+                  },
+                  "protocol": "matched-rollout-mean-v2",
+                  "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                  "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                  "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+                  "data_manifest_sha256": "96b4de510e264c76c6e30ac50109d44491b3ac2a2182831850e8ce119415cb5b",
+                  "steps": 60,
+                  "resources": {
+                    "gpu": "H100!",
+                    "cpu": 16,
+                    "memory_mib": 196608
+                  },
+                  "evaluation": "exploratory-legacy-64",
+                  "dataset_selection_seed": 329
+                }
+              }
+            },
+            {
+              "name": "checkpoint-eval",
+              "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-grpo-matched-v2-s1005-a01/checkpoint-eval",
+              "wandb": {
+                "entity": "amulyap-stanford-university",
+                "project": "cs329z-agent-lightning",
+                "group": "tenway-fixture-campaign",
+                "id": "c9961db98fc60e84864bff12",
+                "name": "tenway-fixture-campaign-grpo-matched-v2-s1005-a01-checkpoint-eval",
+                "job_type": "checkpoint-eval",
+                "resume": "never",
+                "config": {
+                  "pair_id": "tenway-fixture-campaign-s1005",
+                  "algorithm": "grpo-matched-v2",
+                  "stage": "checkpoint-eval",
+                  "run_seed": 1005,
+                  "seed_streams": {
+                    "python": 488719112,
+                    "numpy": 1662598979,
+                    "torch_cpu": 404869252,
+                    "torch_cuda": 1300791858,
+                    "actor_sampling": 54266934,
+                    "actor_optimizer": 799260513,
+                    "row_batching": 2123767120,
+                    "critic_init": null,
+                    "paired_question_order": 195528320
+                  },
+                  "protocol": "matched-rollout-mean-v2",
+                  "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                  "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                  "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+                  "data_manifest_sha256": "96b4de510e264c76c6e30ac50109d44491b3ac2a2182831850e8ce119415cb5b",
+                  "steps": 60,
+                  "resources": {
+                    "gpu": "H100!",
+                    "cpu": 16,
+                    "memory_mib": 196608
+                  },
+                  "evaluation": "exploratory-legacy-64",
+                  "dataset_selection_seed": 329
+                }
+              }
+            }
+          ]
+        },
+        {
+          "job_id": "tenway-fixture-campaign-ppo-mc-matched-v2-s1005-a01",
+          "algorithm": "ppo-mc-matched-v2",
+          "run_seed": 1005,
+          "steps": 60,
+          "pair_id": "tenway-fixture-campaign-s1005",
+          "seed_streams": {
+            "python": 2000606217,
+            "numpy": 2084931556,
+            "torch_cpu": 258048372,
+            "torch_cuda": 1708959489,
+            "actor_sampling": 890475785,
+            "actor_optimizer": 145193824,
+            "row_batching": 345265964,
+            "critic_init": 252826223,
+            "paired_question_order": 195528320
+          },
+          "output_root": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-ppo-mc-matched-v2-s1005-a01",
+          "stages": [
+            {
+              "name": "baseline",
+              "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-ppo-mc-matched-v2-s1005-a01/baseline",
+              "wandb": {
+                "entity": "amulyap-stanford-university",
+                "project": "cs329z-agent-lightning",
+                "group": "tenway-fixture-campaign",
+                "id": "84ee945b3449514235f3a912",
+                "name": "tenway-fixture-campaign-ppo-mc-matched-v2-s1005-a01-baseline",
+                "job_type": "baseline",
+                "resume": "never",
+                "config": {
+                  "pair_id": "tenway-fixture-campaign-s1005",
+                  "algorithm": "ppo-mc-matched-v2",
+                  "stage": "baseline",
+                  "run_seed": 1005,
+                  "seed_streams": {
+                    "python": 2000606217,
+                    "numpy": 2084931556,
+                    "torch_cpu": 258048372,
+                    "torch_cuda": 1708959489,
+                    "actor_sampling": 890475785,
+                    "actor_optimizer": 145193824,
+                    "row_batching": 345265964,
+                    "critic_init": 252826223,
+                    "paired_question_order": 195528320
+                  },
+                  "protocol": "matched-rollout-mean-v2",
+                  "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                  "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                  "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+                  "data_manifest_sha256": "96b4de510e264c76c6e30ac50109d44491b3ac2a2182831850e8ce119415cb5b",
+                  "steps": 60,
+                  "resources": {
+                    "gpu": "H100!",
+                    "cpu": 16,
+                    "memory_mib": 196608
+                  },
+                  "evaluation": "exploratory-legacy-64",
+                  "dataset_selection_seed": 329
+                }
+              }
+            },
+            {
+              "name": "training",
+              "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-ppo-mc-matched-v2-s1005-a01/training",
+              "wandb": {
+                "entity": "amulyap-stanford-university",
+                "project": "cs329z-agent-lightning",
+                "group": "tenway-fixture-campaign",
+                "id": "8460c46c9315dc175e977e89",
+                "name": "tenway-fixture-campaign-ppo-mc-matched-v2-s1005-a01-training",
+                "job_type": "training",
+                "resume": "never",
+                "config": {
+                  "pair_id": "tenway-fixture-campaign-s1005",
+                  "algorithm": "ppo-mc-matched-v2",
+                  "stage": "training",
+                  "run_seed": 1005,
+                  "seed_streams": {
+                    "python": 2000606217,
+                    "numpy": 2084931556,
+                    "torch_cpu": 258048372,
+                    "torch_cuda": 1708959489,
+                    "actor_sampling": 890475785,
+                    "actor_optimizer": 145193824,
+                    "row_batching": 345265964,
+                    "critic_init": 252826223,
+                    "paired_question_order": 195528320
+                  },
+                  "protocol": "matched-rollout-mean-v2",
+                  "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                  "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                  "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+                  "data_manifest_sha256": "96b4de510e264c76c6e30ac50109d44491b3ac2a2182831850e8ce119415cb5b",
+                  "steps": 60,
+                  "resources": {
+                    "gpu": "H100!",
+                    "cpu": 16,
+                    "memory_mib": 196608
+                  },
+                  "evaluation": "exploratory-legacy-64",
+                  "dataset_selection_seed": 329
+                }
+              }
+            },
+            {
+              "name": "checkpoint-eval",
+              "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-ppo-mc-matched-v2-s1005-a01/checkpoint-eval",
+              "wandb": {
+                "entity": "amulyap-stanford-university",
+                "project": "cs329z-agent-lightning",
+                "group": "tenway-fixture-campaign",
+                "id": "425380b853a9d8f6ecf0e1f1",
+                "name": "tenway-fixture-campaign-ppo-mc-matched-v2-s1005-a01-checkpoint-eval",
+                "job_type": "checkpoint-eval",
+                "resume": "never",
+                "config": {
+                  "pair_id": "tenway-fixture-campaign-s1005",
+                  "algorithm": "ppo-mc-matched-v2",
+                  "stage": "checkpoint-eval",
+                  "run_seed": 1005,
+                  "seed_streams": {
+                    "python": 2000606217,
+                    "numpy": 2084931556,
+                    "torch_cpu": 258048372,
+                    "torch_cuda": 1708959489,
+                    "actor_sampling": 890475785,
+                    "actor_optimizer": 145193824,
+                    "row_batching": 345265964,
+                    "critic_init": 252826223,
+                    "paired_question_order": 195528320
+                  },
+                  "protocol": "matched-rollout-mean-v2",
+                  "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                  "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                  "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+                  "data_manifest_sha256": "96b4de510e264c76c6e30ac50109d44491b3ac2a2182831850e8ce119415cb5b",
+                  "steps": 60,
+                  "resources": {
+                    "gpu": "H100!",
+                    "cpu": 16,
+                    "memory_mib": 196608
+                  },
+                  "evaluation": "exploratory-legacy-64",
+                  "dataset_selection_seed": 329
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "source": {
+        "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "dirty": false,
+        "files": {
+          "docs/PHASE2_MATCHED_STUDY_CONTRACT.md": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+        }
+      },
+      "data_manifest": {
+        "dataset_selection_seed": 329,
+        "provenance": "Frozen prepared Stanford v2 development data; historical 64-case panel is not final test.",
+        "files": {
+          "train_main.parquet": {
+            "rows": 256,
+            "sha256": "6010acaa4d4be314101a537d8fa3b3d0f7f3811ddc53b0162ff8a61300620178",
+            "case_ids": [
+              "ape210k__00282275",
+              "ape210k__00687591",
+              "ape210k__00177449",
+              "ape210k__00067949",
+              "ape210k__00556179",
+              "aqua_rat__Nx3FW2XeaeGgAakd",
+              "aqua_rat__7paAp411WQrpbW9q",
+              "ape210k__00936435",
+              "aqua_rat__iB4UW4K2LjHkkYtq",
+              "ape210k__00702551",
+              "aqua_rat__SgfpX5EzLDnxrLCO",
+              "ape210k__00513120",
+              "aqua_rat__GFV40U9ynqnYqJ39",
+              "ape210k__00693437",
+              "ape210k__00320638",
+              "ape210k__00229470",
+              "aqua_rat__ZFfC0Y6RvmQi623y",
+              "ape210k__00836133",
+              "ape210k__00436856",
+              "ape210k__00506708",
+              "math_qa__C5eV5hRv6dj50skO",
+              "ape210k__00089630",
+              "ape210k__00696703",
+              "aqua_rat__l0s2uIcSBl68wYrU",
+              "ape210k__00476834",
+              "ape210k__00455044",
+              "ape210k__00463293",
+              "math_qa__HFsaGXxAVfpxl95r",
+              "aqua_rat__rc0c0CBSTCHV5cpI",
+              "ape210k__00285030",
+              "aqua_rat__hpkizIwh4KePt598",
+              "ape210k__00626819",
+              "ape210k__00619606",
+              "ape210k__00028556",
+              "ape210k__00463372",
+              "aqua_rat__LdZnaQo9KxH02DDF",
+              "ape210k__00618065",
+              "ape210k__00234541",
+              "ape210k__01213681",
+              "ape210k__00910555",
+              "aqua_rat__9eLCWaRR8iuWfs3E",
+              "ape210k__00466841",
+              "aqua_rat__Suwvw78cKF8g4Mrt",
+              "ape210k__00542940",
+              "aqua_rat__mSqKoDhrr1fQWyUB",
+              "ape210k__01091995",
+              "ape210k__00312402",
+              "ape210k__00632182",
+              "ape210k__00190476",
+              "math_qa__jNzkTvlSAM0PYRdD",
+              "math_qa__VyjOQpds6zWjUniz",
+              "ape210k__00378937",
+              "ape210k__00123396",
+              "ape210k__00724579",
+              "aqua_rat__L30UvJO5geQImfBG",
+              "ape210k__00198485",
+              "aqua_rat__CXPQemtkRkWYymEc",
+              "ape210k__00399536",
+              "ape210k__00406266",
+              "ape210k__00256542",
+              "ape210k__01114287",
+              "aqua_rat__zcm3cDMpOeYu2wp3",
+              "ape210k__00902107",
+              "math_qa__frOSwm9T9BtZVYrL",
+              "aqua_rat__pMEG1xVmbCFvD5sT",
+              "aqua_rat__6cOBdawd3vuui8GF",
+              "ape210k__00356595",
+              "ape210k__00935839",
+              "ape210k__01164095",
+              "math_qa__owVmyewBnW77GqTz",
+              "ape210k__00952761",
+              "aqua_rat__uCS1JfM1BPj1Gb7C",
+              "aqua_rat__db1jTFSZ7XMnFGfd",
+              "ape210k__00817257",
+              "ape210k__00534837",
+              "ape210k__00490629",
+              "ape210k__00545462",
+              "ape210k__00496975",
+              "ape210k__01108915",
+              "aqua_rat__tSn3lF89TIn5Oklv",
+              "aqua_rat__bmCeW1aW3SsjmpR5",
+              "ape210k__00046404",
+              "ape210k__00148641",
+              "ape210k__00292787",
+              "gsm8k__c5RH2OpjgIHAozgS",
+              "math_qa__rsgLjQOTXWMCwpgl",
+              "math_qa__rzBmw5Q8xgHGyGTs",
+              "ape210k__00863809",
+              "ape210k__00536829",
+              "ape210k__00276640",
+              "aqua_rat__c4PICp3JckByn8fD",
+              "ape210k__00294886",
+              "ape210k__00217616",
+              "ape210k__00195923",
+              "aqua_rat__3RKHvw012mMllkAw",
+              "aqua_rat__DOMkbTi8qfr2P2UJ",
+              "math_qa__HNvvAn240yOfuRBo",
+              "ape210k__00782389",
+              "ape210k__00014964",
+              "aqua_rat__xDKNSZQpBGK5Zczh",
+              "aqua_rat__HvEs44fdPa0ChLpX",
+              "ape210k__01205853",
+              "ape210k__00924053",
+              "ape210k__00468874",
+              "ape210k__00393254",
+              "ape210k__00813613",
+              "ape210k__00437262",
+              "ape210k__00042018",
+              "aqua_rat__NV3QfXXwKsIJuTXy",
+              "aqua_rat__w47GDE7ZOKDSxBbL",
+              "aqua_rat__8a9MRNTd2bqBi9zy",
+              "ape210k__00635219",
+              "ape210k__01170085",
+              "ape210k__00151813",
+              "ape210k__00291684",
+              "gsm8k__6QrX9rY0cbCL9ahB",
+              "aqua_rat__JCm83WQ4ht9K7bwU",
+              "aqua_rat__oqXT6izPucttdWwy",
+              "ape210k__00542374",
+              "math_qa__LuSDzJVXRSfs1cyQ",
+              "ape210k__01205459",
+              "aqua_rat__6dVLxvH3l5jA6Vnn",
+              "ape210k__01127331",
+              "aqua_rat__laGu0je7BYs7PImr",
+              "ape210k__00324624",
+              "math_qa__Cx69HnF27uQ2FBGi",
+              "aqua_rat__7jFUQExgUseVcXbj",
+              "aqua_rat__x1P5FM1dXSzMy47v",
+              "aqua_rat__jdbqetb2wquJ4Rpn",
+              "ape210k__01120137",
+              "ape210k__00330894",
+              "aqua_rat__t3Gtxwc6j1kM5SLU",
+              "aqua_rat__746NhU409qulCTep",
+              "ape210k__01198125",
+              "aqua_rat__XISVYYL99Ilp2pTw",
+              "ape210k__00502352",
+              "ape210k__01193315",
+              "aqua_rat__0JqOnKCYCcexipmA",
+              "ape210k__00818385",
+              "aqua_rat__MqoCG4hedRKShjtq",
+              "ape210k__00010273",
+              "aqua_rat__rdarBaEYGvP6R4YR",
+              "ape210k__00220724",
+              "ape210k__00817881",
+              "aqua_rat__DUhMpC68zP93cwlx",
+              "ape210k__00152490",
+              "ape210k__00324931",
+              "aqua_rat__v9Elt31xfkkJaxnu",
+              "ape210k__00804135",
+              "ape210k__00170599",
+              "math_qa__PE6cV8gPLFSZuq5o",
+              "ape210k__00543410",
+              "ape210k__00864513",
+              "aqua_rat__8Ah3mNwNeeF6ukAe",
+              "aqua_rat__g5QXn1BLZKvpON3Z",
+              "ape210k__00218605",
+              "ape210k__00628931",
+              "ape210k__00440469",
+              "aqua_rat__gwlOvHlRlePkNOU3",
+              "ape210k__01011221",
+              "math_qa__i8PbfIcNK6z6WGz0",
+              "ape210k__00153499",
+              "ape210k__00357428",
+              "ape210k__00918009",
+              "ape210k__00892497",
+              "ape210k__00115812",
+              "ape210k__00841367",
+              "aqua_rat__d4Zl2XPpedGXmaSh",
+              "ape210k__00606396",
+              "aqua_rat__bdaRsMs9Y8btPyms",
+              "ape210k__00095507",
+              "ape210k__00352667",
+              "ape210k__00624315",
+              "ape210k__00444672",
+              "aqua_rat__yhsC9LIEFipfNMjo",
+              "aqua_rat__P7Vs8lSUj1mbZYz7",
+              "ape210k__00772911",
+              "ape210k__00710351",
+              "ape210k__00061444",
+              "aqua_rat__HBT4z1jSeVArGaa7",
+              "aqua_rat__iyyYPTaDdkJyOSoh",
+              "aqua_rat__ib4dBH51kfhenhQI",
+              "aqua_rat__j4IX6SSdFlvSj0KZ",
+              "math_qa__WJSPeLP9Pyuw9sXS",
+              "ape210k__00493256",
+              "math_qa__lnDHSedmNPEK8D2F",
+              "aqua_rat__YYFPQwcjx8STDXh9",
+              "ape210k__01116025",
+              "ape210k__00444259",
+              "ape210k__00597888",
+              "ape210k__00043516",
+              "aqua_rat__MTDJMmcAIa9hd9Cb",
+              "ape210k__01031589",
+              "math_qa__sgVn40mvbkON6cWC",
+              "ape210k__01166497",
+              "ape210k__01217259",
+              "ape210k__01183757",
+              "ape210k__00269552",
+              "ape210k__00485758",
+              "ape210k__01197841",
+              "ape210k__00952883",
+              "aqua_rat__vWte0BUkWIGzKhIz",
+              "math_qa__qYtE1MzW1PocDU8A",
+              "ape210k__01021681",
+              "ape210k__01215865",
+              "ape210k__00213820",
+              "ape210k__00198692",
+              "aqua_rat__euqTbqOKnZYPkS91",
+              "ape210k__01096885",
+              "ape210k__00692347",
+              "ape210k__00080523",
+              "ape210k__00612408",
+              "ape210k__00489706",
+              "ape210k__00528544",
+              "ape210k__00240560",
+              "aqua_rat__39ycgD119P9KXp7T",
+              "ape210k__00117225",
+              "ape210k__01196023",
+              "gsm8k__mrPzP2xCGHht2pUk",
+              "ape210k__00150777",
+              "gsm8k__T7IWvEYQ1qGQZdHt",
+              "ape210k__00261334",
+              "ape210k__00402088",
+              "aqua_rat__CyAWQ91PioSkgjKr",
+              "ape210k__00086709",
+              "gsm8k__sYpdM3jVywULoWbn",
+              "ape210k__00202840",
+              "aqua_rat__jQKNjykephc1gt3v",
+              "mawps__lnyUebwLAeb9bV6Y",
+              "aqua_rat__LHIlgV49XIatPJ45",
+              "ape210k__01022167",
+              "aqua_rat__0CfS0tqPBLmDsPrY",
+              "ape210k__00217552",
+              "aqua_rat__ypI7U8HnkMXQeASd",
+              "ape210k__00898247",
+              "ape210k__00098313",
+              "aqua_rat__kQtMeJf3hT7DxXwa",
+              "ape210k__00381827",
+              "aqua_rat__9gXnbtdvCjxg97FL",
+              "aqua_rat__grvepDtrCn3tsaln",
+              "aqua_rat__xFPgV6KdZjKTfFuQ",
+              "math_qa__oNC6UBZy93xmPbMJ",
+              "ape210k__00800745",
+              "ape210k__00426321",
+              "ape210k__00493097",
+              "aqua_rat__u8vP2nPue73K50cV",
+              "aqua_rat__B675x5f0KLsgQQy8",
+              "ape210k__00048060",
+              "ape210k__00626999",
+              "ape210k__00516883",
+              "math_qa__NYuzfi1gryJN5xna",
+              "math_qa__xDYqDrQYzESDUff9",
+              "ape210k__00608742",
+              "ape210k__00154447",
+              "ape210k__00283294",
+              "aqua_rat__7Pyp9JMh43nVgiGX"
+            ]
+          },
+          "eval_main.parquet": {
+            "rows": 64,
+            "sha256": "e90950dcb3daedea284091a54d40de5f2f59a8530e28bdd8e4e4f8ee53ecc0ba",
+            "case_ids": [
+              "svamp__chal-520",
+              "ape210k__00587990",
+              "ape210k__00219289",
+              "ape210k__01175153",
+              "ape210k__00746389",
+              "asdiv_a__nluds-1864",
+              "ape210k__00464844",
+              "ape210k__00631881",
+              "ape210k__00562105",
+              "gsm8k__4zUogtxm7nVYzSuT",
+              "ape210k__00299483",
+              "mawps__zE2mwlY6I1uhz1na",
+              "mawps__TELLTtpSwpSBex6e",
+              "ape210k__00623575",
+              "asdiv_a__nluds-2010",
+              "gsm8k__uOqzQhc0eyaAtxfI",
+              "ape210k__00517365",
+              "ape210k__01080905",
+              "gsm8k__RBn8bGGNuDjKawVx",
+              "svamp__chal-218",
+              "ape210k__01181581",
+              "svamp__chal-729",
+              "gsm8k__dvyGEVoAB3u0sPNe",
+              "asdiv_a__nluds-0849",
+              "ape210k__01104423",
+              "asdiv_a__nluds-0583",
+              "gsm8k__XWa4gGg1MN1Xc87R",
+              "asdiv_a__nluds-0023",
+              "ape210k__00999729",
+              "svamp__chal-259",
+              "gsm8k__YV1MoK0Vv45a8W2t",
+              "ape210k__00719991",
+              "mawps__f9zo88ce7YOnCC8b",
+              "gsm8k__MoNetYBg4wEcLEKQ",
+              "asdiv_a__nluds-0245",
+              "mawps__iV62d0dVBIbdyLtf",
+              "gsm8k__HXVrDSInuFQh4yse",
+              "aqua_rat__NvfvzSFRovmxZLlM",
+              "asdiv_a__nluds-0053",
+              "gsm8k__LpLtl8RO7J0qQSM7",
+              "asdiv_a__nluds-0991",
+              "asdiv_a__nluds-0110",
+              "gsm8k__TJzOPJJx8DdqKB5J",
+              "ape210k__00908655",
+              "asdiv_a__nluds-1935",
+              "svamp__chal-343",
+              "svamp__chal-402",
+              "ape210k__00007237",
+              "ape210k__00704785",
+              "gsm8k__g7xi7YZzwH9PW4jH",
+              "svamp__chal-968",
+              "asdiv_a__nluds-0415",
+              "ape210k__00012290",
+              "asdiv_a__nluds-1938",
+              "svamp__chal-477",
+              "ape210k__00048169",
+              "ape210k__00075882",
+              "gsm8k__saGeHaP9cKhpLmUz",
+              "ape210k__00296059",
+              "ape210k__00566786",
+              "svamp__chal-939",
+              "ape210k__00163219",
+              "aqua_rat__CLf74qM1zHeqQhnZ",
+              "ape210k__00003246"
+            ]
+          },
+          "eval_main.jsonl": {
+            "rows": 64,
+            "sha256": "27445758e42fd93c062ce297515869af2a372e1edd66cd7e1f853c37fbc96850",
+            "case_ids": [
+              "svamp__chal-520",
+              "ape210k__00587990",
+              "ape210k__00219289",
+              "ape210k__01175153",
+              "ape210k__00746389",
+              "asdiv_a__nluds-1864",
+              "ape210k__00464844",
+              "ape210k__00631881",
+              "ape210k__00562105",
+              "gsm8k__4zUogtxm7nVYzSuT",
+              "ape210k__00299483",
+              "mawps__zE2mwlY6I1uhz1na",
+              "mawps__TELLTtpSwpSBex6e",
+              "ape210k__00623575",
+              "asdiv_a__nluds-2010",
+              "gsm8k__uOqzQhc0eyaAtxfI",
+              "ape210k__00517365",
+              "ape210k__01080905",
+              "gsm8k__RBn8bGGNuDjKawVx",
+              "svamp__chal-218",
+              "ape210k__01181581",
+              "svamp__chal-729",
+              "gsm8k__dvyGEVoAB3u0sPNe",
+              "asdiv_a__nluds-0849",
+              "ape210k__01104423",
+              "asdiv_a__nluds-0583",
+              "gsm8k__XWa4gGg1MN1Xc87R",
+              "asdiv_a__nluds-0023",
+              "ape210k__00999729",
+              "svamp__chal-259",
+              "gsm8k__YV1MoK0Vv45a8W2t",
+              "ape210k__00719991",
+              "mawps__f9zo88ce7YOnCC8b",
+              "gsm8k__MoNetYBg4wEcLEKQ",
+              "asdiv_a__nluds-0245",
+              "mawps__iV62d0dVBIbdyLtf",
+              "gsm8k__HXVrDSInuFQh4yse",
+              "aqua_rat__NvfvzSFRovmxZLlM",
+              "asdiv_a__nluds-0053",
+              "gsm8k__LpLtl8RO7J0qQSM7",
+              "asdiv_a__nluds-0991",
+              "asdiv_a__nluds-0110",
+              "gsm8k__TJzOPJJx8DdqKB5J",
+              "ape210k__00908655",
+              "asdiv_a__nluds-1935",
+              "svamp__chal-343",
+              "svamp__chal-402",
+              "ape210k__00007237",
+              "ape210k__00704785",
+              "gsm8k__g7xi7YZzwH9PW4jH",
+              "svamp__chal-968",
+              "asdiv_a__nluds-0415",
+              "ape210k__00012290",
+              "asdiv_a__nluds-1938",
+              "svamp__chal-477",
+              "ape210k__00048169",
+              "ape210k__00075882",
+              "gsm8k__saGeHaP9cKhpLmUz",
+              "ape210k__00296059",
+              "ape210k__00566786",
+              "svamp__chal-939",
+              "ape210k__00163219",
+              "aqua_rat__CLf74qM1zHeqQhnZ",
+              "ape210k__00003246"
+            ]
+          }
+        }
+      },
+      "model_revision": "0cb88a4f764b7a12671c53f0838cd831a0843b95",
+      "bounds": {
+        "stage_seconds": 300,
+        "startup_seconds": 60,
+        "supervisor_seconds": 1500,
+        "concurrency": 10,
+        "max_gpu_seconds": 9000,
+        "budget_usd": 100,
+        "all_resource_hourly_ceiling_usd": 10
+      },
+      "automatic_retries": 0,
+      "campaign_chaining": false,
+      "qualification_receipt": null,
+      "evaluation": "exploratory-legacy-64"
+    },
+    "jobs": {
+      "tenway-fixture-campaign-grpo-matched-v2-s1001-a01": {
+        "status": "completed",
+        "stages": [
+          {
+            "stage": "baseline",
+            "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-grpo-matched-v2-s1001-a01/baseline",
+            "status": "completed",
+            "wandb": {
+              "entity": "amulyap-stanford-university",
+              "project": "cs329z-agent-lightning",
+              "group": "tenway-fixture-campaign",
+              "id": "5f7bfefc6c7bcd73ba8014f9",
+              "name": "tenway-fixture-campaign-grpo-matched-v2-s1001-a01-baseline",
+              "job_type": "baseline",
+              "resume": "never",
+              "config": {
+                "pair_id": "tenway-fixture-campaign-s1001",
+                "algorithm": "grpo-matched-v2",
+                "stage": "baseline",
+                "run_seed": 1001,
+                "seed_streams": {
+                  "python": 2009727846,
+                  "numpy": 407087157,
+                  "torch_cpu": 71265934,
+                  "torch_cuda": 831528244,
+                  "actor_sampling": 191168760,
+                  "actor_optimizer": 1231878590,
+                  "row_batching": 1488708358,
+                  "critic_init": null,
+                  "paired_question_order": 1004434717
+                },
+                "protocol": "matched-rollout-mean-v2",
+                "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+                "data_manifest_sha256": "96b4de510e264c76c6e30ac50109d44491b3ac2a2182831850e8ce119415cb5b",
+                "steps": 60,
+                "resources": {
+                  "gpu": "H100!",
+                  "cpu": 16,
+                  "memory_mib": 196608
+                },
+                "evaluation": "exploratory-legacy-64",
+                "dataset_selection_seed": 329
+              }
+            },
+            "submitted_at": 0,
+            "call_id": "fc-0",
+            "heartbeat": {
+              "call_id": "fc-0",
+              "time": 10
+            },
+            "result": {
+              "status": "completed",
+              "call_id": "fc-0",
+              "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-grpo-matched-v2-s1001-a01/baseline",
+              "completion": {
+                "plan_sha256": "77ff01836d0c43e3c0371b5c054dad92722e427a495cb79ec4ba9d83a62171d6",
+                "stage": "baseline"
+              }
+            },
+            "finished_at": 10
+          },
+          {
+            "stage": "training",
+            "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-grpo-matched-v2-s1001-a01/training",
+            "status": "completed",
+            "wandb": {
+              "entity": "amulyap-stanford-university",
+              "project": "cs329z-agent-lightning",
+              "group": "tenway-fixture-campaign",
+              "id": "dd44b2486a1098b39641db6c",
+              "name": "tenway-fixture-campaign-grpo-matched-v2-s1001-a01-training",
+              "job_type": "training",
+              "resume": "never",
+              "config": {
+                "pair_id": "tenway-fixture-campaign-s1001",
+                "algorithm": "grpo-matched-v2",
+                "stage": "training",
+                "run_seed": 1001,
+                "seed_streams": {
+                  "python": 2009727846,
+                  "numpy": 407087157,
+                  "torch_cpu": 71265934,
+                  "torch_cuda": 831528244,
+                  "actor_sampling": 191168760,
+                  "actor_optimizer": 1231878590,
+                  "row_batching": 1488708358,
+                  "critic_init": null,
+                  "paired_question_order": 1004434717
+                },
+                "protocol": "matched-rollout-mean-v2",
+                "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+                "data_manifest_sha256": "96b4de510e264c76c6e30ac50109d44491b3ac2a2182831850e8ce119415cb5b",
+                "steps": 60,
+                "resources": {
+                  "gpu": "H100!",
+                  "cpu": 16,
+                  "memory_mib": 196608
+                },
+                "evaluation": "exploratory-legacy-64",
+                "dataset_selection_seed": 329
+              }
+            },
+            "submitted_at": 10,
+            "call_id": "fc-19",
+            "heartbeat": {
+              "call_id": "fc-19",
+              "time": 20
+            },
+            "result": {
+              "status": "completed",
+              "call_id": "fc-19",
+              "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-grpo-matched-v2-s1001-a01/training",
+              "completion": {
+                "plan_sha256": "77ff01836d0c43e3c0371b5c054dad92722e427a495cb79ec4ba9d83a62171d6",
+                "stage": "training"
+              }
+            },
+            "finished_at": 20
+          },
+          {
+            "stage": "checkpoint-eval",
+            "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-grpo-matched-v2-s1001-a01/checkpoint-eval",
+            "status": "completed",
+            "wandb": {
+              "entity": "amulyap-stanford-university",
+              "project": "cs329z-agent-lightning",
+              "group": "tenway-fixture-campaign",
+              "id": "743c7fd98e630db86d69857e",
+              "name": "tenway-fixture-campaign-grpo-matched-v2-s1001-a01-checkpoint-eval",
+              "job_type": "checkpoint-eval",
+              "resume": "never",
+              "config": {
+                "pair_id": "tenway-fixture-campaign-s1001",
+                "algorithm": "grpo-matched-v2",
+                "stage": "checkpoint-eval",
+                "run_seed": 1001,
+                "seed_streams": {
+                  "python": 2009727846,
+                  "numpy": 407087157,
+                  "torch_cpu": 71265934,
+                  "torch_cuda": 831528244,
+                  "actor_sampling": 191168760,
+                  "actor_optimizer": 1231878590,
+                  "row_batching": 1488708358,
+                  "critic_init": null,
+                  "paired_question_order": 1004434717
+                },
+                "protocol": "matched-rollout-mean-v2",
+                "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+                "data_manifest_sha256": "96b4de510e264c76c6e30ac50109d44491b3ac2a2182831850e8ce119415cb5b",
+                "steps": 60,
+                "resources": {
+                  "gpu": "H100!",
+                  "cpu": 16,
+                  "memory_mib": 196608
+                },
+                "evaluation": "exploratory-legacy-64",
+                "dataset_selection_seed": 329
+              }
+            },
+            "submitted_at": 20,
+            "call_id": "fc-20",
+            "heartbeat": {
+              "call_id": "fc-20",
+              "time": 30
+            },
+            "result": {
+              "status": "completed",
+              "call_id": "fc-20",
+              "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-grpo-matched-v2-s1001-a01/checkpoint-eval",
+              "completion": {
+                "plan_sha256": "77ff01836d0c43e3c0371b5c054dad92722e427a495cb79ec4ba9d83a62171d6",
+                "stage": "checkpoint-eval"
+              }
+            },
+            "finished_at": 30
+          }
+        ]
+      },
+      "tenway-fixture-campaign-ppo-mc-matched-v2-s1001-a01": {
+        "status": "completed",
+        "stages": [
+          {
+            "stage": "baseline",
+            "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-ppo-mc-matched-v2-s1001-a01/baseline",
+            "status": "completed",
+            "wandb": {
+              "entity": "amulyap-stanford-university",
+              "project": "cs329z-agent-lightning",
+              "group": "tenway-fixture-campaign",
+              "id": "d375e294199454c33d4dc45e",
+              "name": "tenway-fixture-campaign-ppo-mc-matched-v2-s1001-a01-baseline",
+              "job_type": "baseline",
+              "resume": "never",
+              "config": {
+                "pair_id": "tenway-fixture-campaign-s1001",
+                "algorithm": "ppo-mc-matched-v2",
+                "stage": "baseline",
+                "run_seed": 1001,
+                "seed_streams": {
+                  "python": 1719098785,
+                  "numpy": 1757552786,
+                  "torch_cpu": 826152616,
+                  "torch_cuda": 1187864390,
+                  "actor_sampling": 1398736824,
+                  "actor_optimizer": 480042483,
+                  "row_batching": 1309851721,
+                  "critic_init": 1098445746,
+                  "paired_question_order": 1004434717
+                },
+                "protocol": "matched-rollout-mean-v2",
+                "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+                "data_manifest_sha256": "96b4de510e264c76c6e30ac50109d44491b3ac2a2182831850e8ce119415cb5b",
+                "steps": 60,
+                "resources": {
+                  "gpu": "H100!",
+                  "cpu": 16,
+                  "memory_mib": 196608
+                },
+                "evaluation": "exploratory-legacy-64",
+                "dataset_selection_seed": 329
+              }
+            },
+            "submitted_at": 0,
+            "call_id": "fc-1",
+            "heartbeat": {
+              "call_id": "fc-1",
+              "time": 10
+            },
+            "result": {
+              "status": "completed",
+              "call_id": "fc-1",
+              "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-ppo-mc-matched-v2-s1001-a01/baseline",
+              "completion": {
+                "plan_sha256": "77ff01836d0c43e3c0371b5c054dad92722e427a495cb79ec4ba9d83a62171d6",
+                "stage": "baseline"
+              }
+            },
+            "finished_at": 10
+          },
+          {
+            "stage": "training",
+            "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-ppo-mc-matched-v2-s1001-a01/training",
+            "status": "completed",
+            "wandb": {
+              "entity": "amulyap-stanford-university",
+              "project": "cs329z-agent-lightning",
+              "group": "tenway-fixture-campaign",
+              "id": "fa0d262c44d885ebdd23e5e2",
+              "name": "tenway-fixture-campaign-ppo-mc-matched-v2-s1001-a01-training",
+              "job_type": "training",
+              "resume": "never",
+              "config": {
+                "pair_id": "tenway-fixture-campaign-s1001",
+                "algorithm": "ppo-mc-matched-v2",
+                "stage": "training",
+                "run_seed": 1001,
+                "seed_streams": {
+                  "python": 1719098785,
+                  "numpy": 1757552786,
+                  "torch_cpu": 826152616,
+                  "torch_cuda": 1187864390,
+                  "actor_sampling": 1398736824,
+                  "actor_optimizer": 480042483,
+                  "row_batching": 1309851721,
+                  "critic_init": 1098445746,
+                  "paired_question_order": 1004434717
+                },
+                "protocol": "matched-rollout-mean-v2",
+                "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+                "data_manifest_sha256": "96b4de510e264c76c6e30ac50109d44491b3ac2a2182831850e8ce119415cb5b",
+                "steps": 60,
+                "resources": {
+                  "gpu": "H100!",
+                  "cpu": 16,
+                  "memory_mib": 196608
+                },
+                "evaluation": "exploratory-legacy-64",
+                "dataset_selection_seed": 329
+              }
+            },
+            "submitted_at": 10,
+            "call_id": "fc-18",
+            "heartbeat": {
+              "call_id": "fc-18",
+              "time": 20
+            },
+            "result": {
+              "status": "completed",
+              "call_id": "fc-18",
+              "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-ppo-mc-matched-v2-s1001-a01/training",
+              "completion": {
+                "plan_sha256": "77ff01836d0c43e3c0371b5c054dad92722e427a495cb79ec4ba9d83a62171d6",
+                "stage": "training"
+              }
+            },
+            "finished_at": 20
+          },
+          {
+            "stage": "checkpoint-eval",
+            "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-ppo-mc-matched-v2-s1001-a01/checkpoint-eval",
+            "status": "completed",
+            "wandb": {
+              "entity": "amulyap-stanford-university",
+              "project": "cs329z-agent-lightning",
+              "group": "tenway-fixture-campaign",
+              "id": "fa790e5f8b8ebabdbe1ae43b",
+              "name": "tenway-fixture-campaign-ppo-mc-matched-v2-s1001-a01-checkpoint-eval",
+              "job_type": "checkpoint-eval",
+              "resume": "never",
+              "config": {
+                "pair_id": "tenway-fixture-campaign-s1001",
+                "algorithm": "ppo-mc-matched-v2",
+                "stage": "checkpoint-eval",
+                "run_seed": 1001,
+                "seed_streams": {
+                  "python": 1719098785,
+                  "numpy": 1757552786,
+                  "torch_cpu": 826152616,
+                  "torch_cuda": 1187864390,
+                  "actor_sampling": 1398736824,
+                  "actor_optimizer": 480042483,
+                  "row_batching": 1309851721,
+                  "critic_init": 1098445746,
+                  "paired_question_order": 1004434717
+                },
+                "protocol": "matched-rollout-mean-v2",
+                "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+                "data_manifest_sha256": "96b4de510e264c76c6e30ac50109d44491b3ac2a2182831850e8ce119415cb5b",
+                "steps": 60,
+                "resources": {
+                  "gpu": "H100!",
+                  "cpu": 16,
+                  "memory_mib": 196608
+                },
+                "evaluation": "exploratory-legacy-64",
+                "dataset_selection_seed": 329
+              }
+            },
+            "submitted_at": 20,
+            "call_id": "fc-21",
+            "heartbeat": {
+              "call_id": "fc-21",
+              "time": 30
+            },
+            "result": {
+              "status": "completed",
+              "call_id": "fc-21",
+              "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-ppo-mc-matched-v2-s1001-a01/checkpoint-eval",
+              "completion": {
+                "plan_sha256": "77ff01836d0c43e3c0371b5c054dad92722e427a495cb79ec4ba9d83a62171d6",
+                "stage": "checkpoint-eval"
+              }
+            },
+            "finished_at": 30
+          }
+        ]
+      },
+      "tenway-fixture-campaign-grpo-matched-v2-s1002-a01": {
+        "status": "completed",
+        "stages": [
+          {
+            "stage": "baseline",
+            "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-grpo-matched-v2-s1002-a01/baseline",
+            "status": "completed",
+            "wandb": {
+              "entity": "amulyap-stanford-university",
+              "project": "cs329z-agent-lightning",
+              "group": "tenway-fixture-campaign",
+              "id": "b50aebc7f4b31c439b4ac424",
+              "name": "tenway-fixture-campaign-grpo-matched-v2-s1002-a01-baseline",
+              "job_type": "baseline",
+              "resume": "never",
+              "config": {
+                "pair_id": "tenway-fixture-campaign-s1002",
+                "algorithm": "grpo-matched-v2",
+                "stage": "baseline",
+                "run_seed": 1002,
+                "seed_streams": {
+                  "python": 1409473496,
+                  "numpy": 773679658,
+                  "torch_cpu": 490243863,
+                  "torch_cuda": 352329964,
+                  "actor_sampling": 1578053642,
+                  "actor_optimizer": 2036160318,
+                  "row_batching": 960509008,
+                  "critic_init": null,
+                  "paired_question_order": 732254007
+                },
+                "protocol": "matched-rollout-mean-v2",
+                "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+                "data_manifest_sha256": "96b4de510e264c76c6e30ac50109d44491b3ac2a2182831850e8ce119415cb5b",
+                "steps": 60,
+                "resources": {
+                  "gpu": "H100!",
+                  "cpu": 16,
+                  "memory_mib": 196608
+                },
+                "evaluation": "exploratory-legacy-64",
+                "dataset_selection_seed": 329
+              }
+            },
+            "submitted_at": 0,
+            "call_id": "fc-2",
+            "heartbeat": {
+              "call_id": "fc-2",
+              "time": 10
+            },
+            "result": {
+              "status": "completed",
+              "call_id": "fc-2",
+              "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-grpo-matched-v2-s1002-a01/baseline",
+              "completion": {
+                "plan_sha256": "77ff01836d0c43e3c0371b5c054dad92722e427a495cb79ec4ba9d83a62171d6",
+                "stage": "baseline"
+              }
+            },
+            "finished_at": 10
+          },
+          {
+            "stage": "training",
+            "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-grpo-matched-v2-s1002-a01/training",
+            "status": "completed",
+            "wandb": {
+              "entity": "amulyap-stanford-university",
+              "project": "cs329z-agent-lightning",
+              "group": "tenway-fixture-campaign",
+              "id": "64561e607ec94d338547595f",
+              "name": "tenway-fixture-campaign-grpo-matched-v2-s1002-a01-training",
+              "job_type": "training",
+              "resume": "never",
+              "config": {
+                "pair_id": "tenway-fixture-campaign-s1002",
+                "algorithm": "grpo-matched-v2",
+                "stage": "training",
+                "run_seed": 1002,
+                "seed_streams": {
+                  "python": 1409473496,
+                  "numpy": 773679658,
+                  "torch_cpu": 490243863,
+                  "torch_cuda": 352329964,
+                  "actor_sampling": 1578053642,
+                  "actor_optimizer": 2036160318,
+                  "row_batching": 960509008,
+                  "critic_init": null,
+                  "paired_question_order": 732254007
+                },
+                "protocol": "matched-rollout-mean-v2",
+                "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+                "data_manifest_sha256": "96b4de510e264c76c6e30ac50109d44491b3ac2a2182831850e8ce119415cb5b",
+                "steps": 60,
+                "resources": {
+                  "gpu": "H100!",
+                  "cpu": 16,
+                  "memory_mib": 196608
+                },
+                "evaluation": "exploratory-legacy-64",
+                "dataset_selection_seed": 329
+              }
+            },
+            "submitted_at": 10,
+            "call_id": "fc-17",
+            "heartbeat": {
+              "call_id": "fc-17",
+              "time": 20
+            },
+            "result": {
+              "status": "completed",
+              "call_id": "fc-17",
+              "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-grpo-matched-v2-s1002-a01/training",
+              "completion": {
+                "plan_sha256": "77ff01836d0c43e3c0371b5c054dad92722e427a495cb79ec4ba9d83a62171d6",
+                "stage": "training"
+              }
+            },
+            "finished_at": 20
+          },
+          {
+            "stage": "checkpoint-eval",
+            "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-grpo-matched-v2-s1002-a01/checkpoint-eval",
+            "status": "completed",
+            "wandb": {
+              "entity": "amulyap-stanford-university",
+              "project": "cs329z-agent-lightning",
+              "group": "tenway-fixture-campaign",
+              "id": "ce6bd38581fa770d52c7d484",
+              "name": "tenway-fixture-campaign-grpo-matched-v2-s1002-a01-checkpoint-eval",
+              "job_type": "checkpoint-eval",
+              "resume": "never",
+              "config": {
+                "pair_id": "tenway-fixture-campaign-s1002",
+                "algorithm": "grpo-matched-v2",
+                "stage": "checkpoint-eval",
+                "run_seed": 1002,
+                "seed_streams": {
+                  "python": 1409473496,
+                  "numpy": 773679658,
+                  "torch_cpu": 490243863,
+                  "torch_cuda": 352329964,
+                  "actor_sampling": 1578053642,
+                  "actor_optimizer": 2036160318,
+                  "row_batching": 960509008,
+                  "critic_init": null,
+                  "paired_question_order": 732254007
+                },
+                "protocol": "matched-rollout-mean-v2",
+                "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+                "data_manifest_sha256": "96b4de510e264c76c6e30ac50109d44491b3ac2a2182831850e8ce119415cb5b",
+                "steps": 60,
+                "resources": {
+                  "gpu": "H100!",
+                  "cpu": 16,
+                  "memory_mib": 196608
+                },
+                "evaluation": "exploratory-legacy-64",
+                "dataset_selection_seed": 329
+              }
+            },
+            "submitted_at": 20,
+            "call_id": "fc-22",
+            "heartbeat": {
+              "call_id": "fc-22",
+              "time": 30
+            },
+            "result": {
+              "status": "completed",
+              "call_id": "fc-22",
+              "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-grpo-matched-v2-s1002-a01/checkpoint-eval",
+              "completion": {
+                "plan_sha256": "77ff01836d0c43e3c0371b5c054dad92722e427a495cb79ec4ba9d83a62171d6",
+                "stage": "checkpoint-eval"
+              }
+            },
+            "finished_at": 30
+          }
+        ]
+      },
+      "tenway-fixture-campaign-ppo-mc-matched-v2-s1002-a01": {
+        "status": "completed",
+        "stages": [
+          {
+            "stage": "baseline",
+            "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-ppo-mc-matched-v2-s1002-a01/baseline",
+            "status": "completed",
+            "wandb": {
+              "entity": "amulyap-stanford-university",
+              "project": "cs329z-agent-lightning",
+              "group": "tenway-fixture-campaign",
+              "id": "2117931099c35f31dcecd68a",
+              "name": "tenway-fixture-campaign-ppo-mc-matched-v2-s1002-a01-baseline",
+              "job_type": "baseline",
+              "resume": "never",
+              "config": {
+                "pair_id": "tenway-fixture-campaign-s1002",
+                "algorithm": "ppo-mc-matched-v2",
+                "stage": "baseline",
+                "run_seed": 1002,
+                "seed_streams": {
+                  "python": 1877408543,
+                  "numpy": 1306289802,
+                  "torch_cpu": 1114184902,
+                  "torch_cuda": 1092370477,
+                  "actor_sampling": 1546889521,
+                  "actor_optimizer": 1288087942,
+                  "row_batching": 1281765944,
+                  "critic_init": 915948106,
+                  "paired_question_order": 732254007
+                },
+                "protocol": "matched-rollout-mean-v2",
+                "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+                "data_manifest_sha256": "96b4de510e264c76c6e30ac50109d44491b3ac2a2182831850e8ce119415cb5b",
+                "steps": 60,
+                "resources": {
+                  "gpu": "H100!",
+                  "cpu": 16,
+                  "memory_mib": 196608
+                },
+                "evaluation": "exploratory-legacy-64",
+                "dataset_selection_seed": 329
+              }
+            },
+            "submitted_at": 0,
+            "call_id": "fc-3",
+            "heartbeat": {
+              "call_id": "fc-3",
+              "time": 10
+            },
+            "result": {
+              "status": "completed",
+              "call_id": "fc-3",
+              "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-ppo-mc-matched-v2-s1002-a01/baseline",
+              "completion": {
+                "plan_sha256": "77ff01836d0c43e3c0371b5c054dad92722e427a495cb79ec4ba9d83a62171d6",
+                "stage": "baseline"
+              }
+            },
+            "finished_at": 10
+          },
+          {
+            "stage": "training",
+            "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-ppo-mc-matched-v2-s1002-a01/training",
+            "status": "completed",
+            "wandb": {
+              "entity": "amulyap-stanford-university",
+              "project": "cs329z-agent-lightning",
+              "group": "tenway-fixture-campaign",
+              "id": "2bf94e93532f1e88356fa539",
+              "name": "tenway-fixture-campaign-ppo-mc-matched-v2-s1002-a01-training",
+              "job_type": "training",
+              "resume": "never",
+              "config": {
+                "pair_id": "tenway-fixture-campaign-s1002",
+                "algorithm": "ppo-mc-matched-v2",
+                "stage": "training",
+                "run_seed": 1002,
+                "seed_streams": {
+                  "python": 1877408543,
+                  "numpy": 1306289802,
+                  "torch_cpu": 1114184902,
+                  "torch_cuda": 1092370477,
+                  "actor_sampling": 1546889521,
+                  "actor_optimizer": 1288087942,
+                  "row_batching": 1281765944,
+                  "critic_init": 915948106,
+                  "paired_question_order": 732254007
+                },
+                "protocol": "matched-rollout-mean-v2",
+                "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+                "data_manifest_sha256": "96b4de510e264c76c6e30ac50109d44491b3ac2a2182831850e8ce119415cb5b",
+                "steps": 60,
+                "resources": {
+                  "gpu": "H100!",
+                  "cpu": 16,
+                  "memory_mib": 196608
+                },
+                "evaluation": "exploratory-legacy-64",
+                "dataset_selection_seed": 329
+              }
+            },
+            "submitted_at": 10,
+            "call_id": "fc-16",
+            "heartbeat": {
+              "call_id": "fc-16",
+              "time": 20
+            },
+            "result": {
+              "status": "completed",
+              "call_id": "fc-16",
+              "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-ppo-mc-matched-v2-s1002-a01/training",
+              "completion": {
+                "plan_sha256": "77ff01836d0c43e3c0371b5c054dad92722e427a495cb79ec4ba9d83a62171d6",
+                "stage": "training"
+              }
+            },
+            "finished_at": 20
+          },
+          {
+            "stage": "checkpoint-eval",
+            "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-ppo-mc-matched-v2-s1002-a01/checkpoint-eval",
+            "status": "completed",
+            "wandb": {
+              "entity": "amulyap-stanford-university",
+              "project": "cs329z-agent-lightning",
+              "group": "tenway-fixture-campaign",
+              "id": "ed54ee1f267f36282c5ed4e4",
+              "name": "tenway-fixture-campaign-ppo-mc-matched-v2-s1002-a01-checkpoint-eval",
+              "job_type": "checkpoint-eval",
+              "resume": "never",
+              "config": {
+                "pair_id": "tenway-fixture-campaign-s1002",
+                "algorithm": "ppo-mc-matched-v2",
+                "stage": "checkpoint-eval",
+                "run_seed": 1002,
+                "seed_streams": {
+                  "python": 1877408543,
+                  "numpy": 1306289802,
+                  "torch_cpu": 1114184902,
+                  "torch_cuda": 1092370477,
+                  "actor_sampling": 1546889521,
+                  "actor_optimizer": 1288087942,
+                  "row_batching": 1281765944,
+                  "critic_init": 915948106,
+                  "paired_question_order": 732254007
+                },
+                "protocol": "matched-rollout-mean-v2",
+                "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+                "data_manifest_sha256": "96b4de510e264c76c6e30ac50109d44491b3ac2a2182831850e8ce119415cb5b",
+                "steps": 60,
+                "resources": {
+                  "gpu": "H100!",
+                  "cpu": 16,
+                  "memory_mib": 196608
+                },
+                "evaluation": "exploratory-legacy-64",
+                "dataset_selection_seed": 329
+              }
+            },
+            "submitted_at": 20,
+            "call_id": "fc-23",
+            "heartbeat": {
+              "call_id": "fc-23",
+              "time": 30
+            },
+            "result": {
+              "status": "completed",
+              "call_id": "fc-23",
+              "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-ppo-mc-matched-v2-s1002-a01/checkpoint-eval",
+              "completion": {
+                "plan_sha256": "77ff01836d0c43e3c0371b5c054dad92722e427a495cb79ec4ba9d83a62171d6",
+                "stage": "checkpoint-eval"
+              }
+            },
+            "finished_at": 30
+          }
+        ]
+      },
+      "tenway-fixture-campaign-grpo-matched-v2-s1003-a01": {
+        "status": "completed",
+        "stages": [
+          {
+            "stage": "baseline",
+            "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-grpo-matched-v2-s1003-a01/baseline",
+            "status": "completed",
+            "wandb": {
+              "entity": "amulyap-stanford-university",
+              "project": "cs329z-agent-lightning",
+              "group": "tenway-fixture-campaign",
+              "id": "9e0df651283449c21b14b2bd",
+              "name": "tenway-fixture-campaign-grpo-matched-v2-s1003-a01-baseline",
+              "job_type": "baseline",
+              "resume": "never",
+              "config": {
+                "pair_id": "tenway-fixture-campaign-s1003",
+                "algorithm": "grpo-matched-v2",
+                "stage": "baseline",
+                "run_seed": 1003,
+                "seed_streams": {
+                  "python": 538669416,
+                  "numpy": 442151327,
+                  "torch_cpu": 514437995,
+                  "torch_cuda": 627326466,
+                  "actor_sampling": 2096506028,
+                  "actor_optimizer": 1378422983,
+                  "row_batching": 628544631,
+                  "critic_init": null,
+                  "paired_question_order": 519221977
+                },
+                "protocol": "matched-rollout-mean-v2",
+                "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+                "data_manifest_sha256": "96b4de510e264c76c6e30ac50109d44491b3ac2a2182831850e8ce119415cb5b",
+                "steps": 60,
+                "resources": {
+                  "gpu": "H100!",
+                  "cpu": 16,
+                  "memory_mib": 196608
+                },
+                "evaluation": "exploratory-legacy-64",
+                "dataset_selection_seed": 329
+              }
+            },
+            "submitted_at": 0,
+            "call_id": "fc-4",
+            "heartbeat": {
+              "call_id": "fc-4",
+              "time": 10
+            },
+            "result": {
+              "status": "completed",
+              "call_id": "fc-4",
+              "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-grpo-matched-v2-s1003-a01/baseline",
+              "completion": {
+                "plan_sha256": "77ff01836d0c43e3c0371b5c054dad92722e427a495cb79ec4ba9d83a62171d6",
+                "stage": "baseline"
+              }
+            },
+            "finished_at": 10
+          },
+          {
+            "stage": "training",
+            "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-grpo-matched-v2-s1003-a01/training",
+            "status": "completed",
+            "wandb": {
+              "entity": "amulyap-stanford-university",
+              "project": "cs329z-agent-lightning",
+              "group": "tenway-fixture-campaign",
+              "id": "76b207ad99ac11866486be9e",
+              "name": "tenway-fixture-campaign-grpo-matched-v2-s1003-a01-training",
+              "job_type": "training",
+              "resume": "never",
+              "config": {
+                "pair_id": "tenway-fixture-campaign-s1003",
+                "algorithm": "grpo-matched-v2",
+                "stage": "training",
+                "run_seed": 1003,
+                "seed_streams": {
+                  "python": 538669416,
+                  "numpy": 442151327,
+                  "torch_cpu": 514437995,
+                  "torch_cuda": 627326466,
+                  "actor_sampling": 2096506028,
+                  "actor_optimizer": 1378422983,
+                  "row_batching": 628544631,
+                  "critic_init": null,
+                  "paired_question_order": 519221977
+                },
+                "protocol": "matched-rollout-mean-v2",
+                "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+                "data_manifest_sha256": "96b4de510e264c76c6e30ac50109d44491b3ac2a2182831850e8ce119415cb5b",
+                "steps": 60,
+                "resources": {
+                  "gpu": "H100!",
+                  "cpu": 16,
+                  "memory_mib": 196608
+                },
+                "evaluation": "exploratory-legacy-64",
+                "dataset_selection_seed": 329
+              }
+            },
+            "submitted_at": 10,
+            "call_id": "fc-15",
+            "heartbeat": {
+              "call_id": "fc-15",
+              "time": 20
+            },
+            "result": {
+              "status": "completed",
+              "call_id": "fc-15",
+              "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-grpo-matched-v2-s1003-a01/training",
+              "completion": {
+                "plan_sha256": "77ff01836d0c43e3c0371b5c054dad92722e427a495cb79ec4ba9d83a62171d6",
+                "stage": "training"
+              }
+            },
+            "finished_at": 20
+          },
+          {
+            "stage": "checkpoint-eval",
+            "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-grpo-matched-v2-s1003-a01/checkpoint-eval",
+            "status": "completed",
+            "wandb": {
+              "entity": "amulyap-stanford-university",
+              "project": "cs329z-agent-lightning",
+              "group": "tenway-fixture-campaign",
+              "id": "d380a164ad6811354da66f7f",
+              "name": "tenway-fixture-campaign-grpo-matched-v2-s1003-a01-checkpoint-eval",
+              "job_type": "checkpoint-eval",
+              "resume": "never",
+              "config": {
+                "pair_id": "tenway-fixture-campaign-s1003",
+                "algorithm": "grpo-matched-v2",
+                "stage": "checkpoint-eval",
+                "run_seed": 1003,
+                "seed_streams": {
+                  "python": 538669416,
+                  "numpy": 442151327,
+                  "torch_cpu": 514437995,
+                  "torch_cuda": 627326466,
+                  "actor_sampling": 2096506028,
+                  "actor_optimizer": 1378422983,
+                  "row_batching": 628544631,
+                  "critic_init": null,
+                  "paired_question_order": 519221977
+                },
+                "protocol": "matched-rollout-mean-v2",
+                "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+                "data_manifest_sha256": "96b4de510e264c76c6e30ac50109d44491b3ac2a2182831850e8ce119415cb5b",
+                "steps": 60,
+                "resources": {
+                  "gpu": "H100!",
+                  "cpu": 16,
+                  "memory_mib": 196608
+                },
+                "evaluation": "exploratory-legacy-64",
+                "dataset_selection_seed": 329
+              }
+            },
+            "submitted_at": 20,
+            "call_id": "fc-24",
+            "heartbeat": {
+              "call_id": "fc-24",
+              "time": 30
+            },
+            "result": {
+              "status": "completed",
+              "call_id": "fc-24",
+              "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-grpo-matched-v2-s1003-a01/checkpoint-eval",
+              "completion": {
+                "plan_sha256": "77ff01836d0c43e3c0371b5c054dad92722e427a495cb79ec4ba9d83a62171d6",
+                "stage": "checkpoint-eval"
+              }
+            },
+            "finished_at": 30
+          }
+        ]
+      },
+      "tenway-fixture-campaign-ppo-mc-matched-v2-s1003-a01": {
+        "status": "completed",
+        "stages": [
+          {
+            "stage": "baseline",
+            "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-ppo-mc-matched-v2-s1003-a01/baseline",
+            "status": "completed",
+            "wandb": {
+              "entity": "amulyap-stanford-university",
+              "project": "cs329z-agent-lightning",
+              "group": "tenway-fixture-campaign",
+              "id": "4cb0b9fa4da5d1f9a1532420",
+              "name": "tenway-fixture-campaign-ppo-mc-matched-v2-s1003-a01-baseline",
+              "job_type": "baseline",
+              "resume": "never",
+              "config": {
+                "pair_id": "tenway-fixture-campaign-s1003",
+                "algorithm": "ppo-mc-matched-v2",
+                "stage": "baseline",
+                "run_seed": 1003,
+                "seed_streams": {
+                  "python": 264405736,
+                  "numpy": 1883574291,
+                  "torch_cpu": 1934335767,
+                  "torch_cuda": 1976163944,
+                  "actor_sampling": 948347213,
+                  "actor_optimizer": 1260294441,
+                  "row_batching": 1984548214,
+                  "critic_init": 516258909,
+                  "paired_question_order": 519221977
+                },
+                "protocol": "matched-rollout-mean-v2",
+                "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+                "data_manifest_sha256": "96b4de510e264c76c6e30ac50109d44491b3ac2a2182831850e8ce119415cb5b",
+                "steps": 60,
+                "resources": {
+                  "gpu": "H100!",
+                  "cpu": 16,
+                  "memory_mib": 196608
+                },
+                "evaluation": "exploratory-legacy-64",
+                "dataset_selection_seed": 329
+              }
+            },
+            "submitted_at": 0,
+            "call_id": "fc-5",
+            "heartbeat": {
+              "call_id": "fc-5",
+              "time": 10
+            },
+            "result": {
+              "status": "completed",
+              "call_id": "fc-5",
+              "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-ppo-mc-matched-v2-s1003-a01/baseline",
+              "completion": {
+                "plan_sha256": "77ff01836d0c43e3c0371b5c054dad92722e427a495cb79ec4ba9d83a62171d6",
+                "stage": "baseline"
+              }
+            },
+            "finished_at": 10
+          },
+          {
+            "stage": "training",
+            "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-ppo-mc-matched-v2-s1003-a01/training",
+            "status": "completed",
+            "wandb": {
+              "entity": "amulyap-stanford-university",
+              "project": "cs329z-agent-lightning",
+              "group": "tenway-fixture-campaign",
+              "id": "366f0c4f9db8bde8c0ba119a",
+              "name": "tenway-fixture-campaign-ppo-mc-matched-v2-s1003-a01-training",
+              "job_type": "training",
+              "resume": "never",
+              "config": {
+                "pair_id": "tenway-fixture-campaign-s1003",
+                "algorithm": "ppo-mc-matched-v2",
+                "stage": "training",
+                "run_seed": 1003,
+                "seed_streams": {
+                  "python": 264405736,
+                  "numpy": 1883574291,
+                  "torch_cpu": 1934335767,
+                  "torch_cuda": 1976163944,
+                  "actor_sampling": 948347213,
+                  "actor_optimizer": 1260294441,
+                  "row_batching": 1984548214,
+                  "critic_init": 516258909,
+                  "paired_question_order": 519221977
+                },
+                "protocol": "matched-rollout-mean-v2",
+                "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+                "data_manifest_sha256": "96b4de510e264c76c6e30ac50109d44491b3ac2a2182831850e8ce119415cb5b",
+                "steps": 60,
+                "resources": {
+                  "gpu": "H100!",
+                  "cpu": 16,
+                  "memory_mib": 196608
+                },
+                "evaluation": "exploratory-legacy-64",
+                "dataset_selection_seed": 329
+              }
+            },
+            "submitted_at": 10,
+            "call_id": "fc-14",
+            "heartbeat": {
+              "call_id": "fc-14",
+              "time": 20
+            },
+            "result": {
+              "status": "completed",
+              "call_id": "fc-14",
+              "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-ppo-mc-matched-v2-s1003-a01/training",
+              "completion": {
+                "plan_sha256": "77ff01836d0c43e3c0371b5c054dad92722e427a495cb79ec4ba9d83a62171d6",
+                "stage": "training"
+              }
+            },
+            "finished_at": 20
+          },
+          {
+            "stage": "checkpoint-eval",
+            "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-ppo-mc-matched-v2-s1003-a01/checkpoint-eval",
+            "status": "completed",
+            "wandb": {
+              "entity": "amulyap-stanford-university",
+              "project": "cs329z-agent-lightning",
+              "group": "tenway-fixture-campaign",
+              "id": "4b358c1053ccd20a4227b5ce",
+              "name": "tenway-fixture-campaign-ppo-mc-matched-v2-s1003-a01-checkpoint-eval",
+              "job_type": "checkpoint-eval",
+              "resume": "never",
+              "config": {
+                "pair_id": "tenway-fixture-campaign-s1003",
+                "algorithm": "ppo-mc-matched-v2",
+                "stage": "checkpoint-eval",
+                "run_seed": 1003,
+                "seed_streams": {
+                  "python": 264405736,
+                  "numpy": 1883574291,
+                  "torch_cpu": 1934335767,
+                  "torch_cuda": 1976163944,
+                  "actor_sampling": 948347213,
+                  "actor_optimizer": 1260294441,
+                  "row_batching": 1984548214,
+                  "critic_init": 516258909,
+                  "paired_question_order": 519221977
+                },
+                "protocol": "matched-rollout-mean-v2",
+                "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+                "data_manifest_sha256": "96b4de510e264c76c6e30ac50109d44491b3ac2a2182831850e8ce119415cb5b",
+                "steps": 60,
+                "resources": {
+                  "gpu": "H100!",
+                  "cpu": 16,
+                  "memory_mib": 196608
+                },
+                "evaluation": "exploratory-legacy-64",
+                "dataset_selection_seed": 329
+              }
+            },
+            "submitted_at": 20,
+            "call_id": "fc-25",
+            "heartbeat": {
+              "call_id": "fc-25",
+              "time": 30
+            },
+            "result": {
+              "status": "completed",
+              "call_id": "fc-25",
+              "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-ppo-mc-matched-v2-s1003-a01/checkpoint-eval",
+              "completion": {
+                "plan_sha256": "77ff01836d0c43e3c0371b5c054dad92722e427a495cb79ec4ba9d83a62171d6",
+                "stage": "checkpoint-eval"
+              }
+            },
+            "finished_at": 30
+          }
+        ]
+      },
+      "tenway-fixture-campaign-grpo-matched-v2-s1004-a01": {
+        "status": "completed",
+        "stages": [
+          {
+            "stage": "baseline",
+            "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-grpo-matched-v2-s1004-a01/baseline",
+            "status": "completed",
+            "wandb": {
+              "entity": "amulyap-stanford-university",
+              "project": "cs329z-agent-lightning",
+              "group": "tenway-fixture-campaign",
+              "id": "0a5b482a8106b7879f2c0c47",
+              "name": "tenway-fixture-campaign-grpo-matched-v2-s1004-a01-baseline",
+              "job_type": "baseline",
+              "resume": "never",
+              "config": {
+                "pair_id": "tenway-fixture-campaign-s1004",
+                "algorithm": "grpo-matched-v2",
+                "stage": "baseline",
+                "run_seed": 1004,
+                "seed_streams": {
+                  "python": 1453430945,
+                  "numpy": 1452215039,
+                  "torch_cpu": 1928441668,
+                  "torch_cuda": 565159747,
+                  "actor_sampling": 2033148078,
+                  "actor_optimizer": 639243784,
+                  "row_batching": 840869552,
+                  "critic_init": null,
+                  "paired_question_order": 1230802848
+                },
+                "protocol": "matched-rollout-mean-v2",
+                "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+                "data_manifest_sha256": "96b4de510e264c76c6e30ac50109d44491b3ac2a2182831850e8ce119415cb5b",
+                "steps": 60,
+                "resources": {
+                  "gpu": "H100!",
+                  "cpu": 16,
+                  "memory_mib": 196608
+                },
+                "evaluation": "exploratory-legacy-64",
+                "dataset_selection_seed": 329
+              }
+            },
+            "submitted_at": 0,
+            "call_id": "fc-6",
+            "heartbeat": {
+              "call_id": "fc-6",
+              "time": 10
+            },
+            "result": {
+              "status": "completed",
+              "call_id": "fc-6",
+              "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-grpo-matched-v2-s1004-a01/baseline",
+              "completion": {
+                "plan_sha256": "77ff01836d0c43e3c0371b5c054dad92722e427a495cb79ec4ba9d83a62171d6",
+                "stage": "baseline"
+              }
+            },
+            "finished_at": 10
+          },
+          {
+            "stage": "training",
+            "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-grpo-matched-v2-s1004-a01/training",
+            "status": "completed",
+            "wandb": {
+              "entity": "amulyap-stanford-university",
+              "project": "cs329z-agent-lightning",
+              "group": "tenway-fixture-campaign",
+              "id": "325f83fe0dee79c548f4acb6",
+              "name": "tenway-fixture-campaign-grpo-matched-v2-s1004-a01-training",
+              "job_type": "training",
+              "resume": "never",
+              "config": {
+                "pair_id": "tenway-fixture-campaign-s1004",
+                "algorithm": "grpo-matched-v2",
+                "stage": "training",
+                "run_seed": 1004,
+                "seed_streams": {
+                  "python": 1453430945,
+                  "numpy": 1452215039,
+                  "torch_cpu": 1928441668,
+                  "torch_cuda": 565159747,
+                  "actor_sampling": 2033148078,
+                  "actor_optimizer": 639243784,
+                  "row_batching": 840869552,
+                  "critic_init": null,
+                  "paired_question_order": 1230802848
+                },
+                "protocol": "matched-rollout-mean-v2",
+                "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+                "data_manifest_sha256": "96b4de510e264c76c6e30ac50109d44491b3ac2a2182831850e8ce119415cb5b",
+                "steps": 60,
+                "resources": {
+                  "gpu": "H100!",
+                  "cpu": 16,
+                  "memory_mib": 196608
+                },
+                "evaluation": "exploratory-legacy-64",
+                "dataset_selection_seed": 329
+              }
+            },
+            "submitted_at": 10,
+            "call_id": "fc-13",
+            "heartbeat": {
+              "call_id": "fc-13",
+              "time": 20
+            },
+            "result": {
+              "status": "completed",
+              "call_id": "fc-13",
+              "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-grpo-matched-v2-s1004-a01/training",
+              "completion": {
+                "plan_sha256": "77ff01836d0c43e3c0371b5c054dad92722e427a495cb79ec4ba9d83a62171d6",
+                "stage": "training"
+              }
+            },
+            "finished_at": 20
+          },
+          {
+            "stage": "checkpoint-eval",
+            "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-grpo-matched-v2-s1004-a01/checkpoint-eval",
+            "status": "completed",
+            "wandb": {
+              "entity": "amulyap-stanford-university",
+              "project": "cs329z-agent-lightning",
+              "group": "tenway-fixture-campaign",
+              "id": "d1d3105abc1c855398712111",
+              "name": "tenway-fixture-campaign-grpo-matched-v2-s1004-a01-checkpoint-eval",
+              "job_type": "checkpoint-eval",
+              "resume": "never",
+              "config": {
+                "pair_id": "tenway-fixture-campaign-s1004",
+                "algorithm": "grpo-matched-v2",
+                "stage": "checkpoint-eval",
+                "run_seed": 1004,
+                "seed_streams": {
+                  "python": 1453430945,
+                  "numpy": 1452215039,
+                  "torch_cpu": 1928441668,
+                  "torch_cuda": 565159747,
+                  "actor_sampling": 2033148078,
+                  "actor_optimizer": 639243784,
+                  "row_batching": 840869552,
+                  "critic_init": null,
+                  "paired_question_order": 1230802848
+                },
+                "protocol": "matched-rollout-mean-v2",
+                "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+                "data_manifest_sha256": "96b4de510e264c76c6e30ac50109d44491b3ac2a2182831850e8ce119415cb5b",
+                "steps": 60,
+                "resources": {
+                  "gpu": "H100!",
+                  "cpu": 16,
+                  "memory_mib": 196608
+                },
+                "evaluation": "exploratory-legacy-64",
+                "dataset_selection_seed": 329
+              }
+            },
+            "submitted_at": 20,
+            "call_id": "fc-26",
+            "heartbeat": {
+              "call_id": "fc-26",
+              "time": 30
+            },
+            "result": {
+              "status": "completed",
+              "call_id": "fc-26",
+              "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-grpo-matched-v2-s1004-a01/checkpoint-eval",
+              "completion": {
+                "plan_sha256": "77ff01836d0c43e3c0371b5c054dad92722e427a495cb79ec4ba9d83a62171d6",
+                "stage": "checkpoint-eval"
+              }
+            },
+            "finished_at": 30
+          }
+        ]
+      },
+      "tenway-fixture-campaign-ppo-mc-matched-v2-s1004-a01": {
+        "status": "completed",
+        "stages": [
+          {
+            "stage": "baseline",
+            "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-ppo-mc-matched-v2-s1004-a01/baseline",
+            "status": "completed",
+            "wandb": {
+              "entity": "amulyap-stanford-university",
+              "project": "cs329z-agent-lightning",
+              "group": "tenway-fixture-campaign",
+              "id": "67c0659c7ae68c8d32097f0b",
+              "name": "tenway-fixture-campaign-ppo-mc-matched-v2-s1004-a01-baseline",
+              "job_type": "baseline",
+              "resume": "never",
+              "config": {
+                "pair_id": "tenway-fixture-campaign-s1004",
+                "algorithm": "ppo-mc-matched-v2",
+                "stage": "baseline",
+                "run_seed": 1004,
+                "seed_streams": {
+                  "python": 16251230,
+                  "numpy": 220421970,
+                  "torch_cpu": 667863957,
+                  "torch_cuda": 677518139,
+                  "actor_sampling": 1630981690,
+                  "actor_optimizer": 158767695,
+                  "row_batching": 412932214,
+                  "critic_init": 1256060107,
+                  "paired_question_order": 1230802848
+                },
+                "protocol": "matched-rollout-mean-v2",
+                "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+                "data_manifest_sha256": "96b4de510e264c76c6e30ac50109d44491b3ac2a2182831850e8ce119415cb5b",
+                "steps": 60,
+                "resources": {
+                  "gpu": "H100!",
+                  "cpu": 16,
+                  "memory_mib": 196608
+                },
+                "evaluation": "exploratory-legacy-64",
+                "dataset_selection_seed": 329
+              }
+            },
+            "submitted_at": 0,
+            "call_id": "fc-7",
+            "heartbeat": {
+              "call_id": "fc-7",
+              "time": 10
+            },
+            "result": {
+              "status": "completed",
+              "call_id": "fc-7",
+              "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-ppo-mc-matched-v2-s1004-a01/baseline",
+              "completion": {
+                "plan_sha256": "77ff01836d0c43e3c0371b5c054dad92722e427a495cb79ec4ba9d83a62171d6",
+                "stage": "baseline"
+              }
+            },
+            "finished_at": 10
+          },
+          {
+            "stage": "training",
+            "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-ppo-mc-matched-v2-s1004-a01/training",
+            "status": "completed",
+            "wandb": {
+              "entity": "amulyap-stanford-university",
+              "project": "cs329z-agent-lightning",
+              "group": "tenway-fixture-campaign",
+              "id": "748a8c0716c2e296c9b3dc7e",
+              "name": "tenway-fixture-campaign-ppo-mc-matched-v2-s1004-a01-training",
+              "job_type": "training",
+              "resume": "never",
+              "config": {
+                "pair_id": "tenway-fixture-campaign-s1004",
+                "algorithm": "ppo-mc-matched-v2",
+                "stage": "training",
+                "run_seed": 1004,
+                "seed_streams": {
+                  "python": 16251230,
+                  "numpy": 220421970,
+                  "torch_cpu": 667863957,
+                  "torch_cuda": 677518139,
+                  "actor_sampling": 1630981690,
+                  "actor_optimizer": 158767695,
+                  "row_batching": 412932214,
+                  "critic_init": 1256060107,
+                  "paired_question_order": 1230802848
+                },
+                "protocol": "matched-rollout-mean-v2",
+                "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+                "data_manifest_sha256": "96b4de510e264c76c6e30ac50109d44491b3ac2a2182831850e8ce119415cb5b",
+                "steps": 60,
+                "resources": {
+                  "gpu": "H100!",
+                  "cpu": 16,
+                  "memory_mib": 196608
+                },
+                "evaluation": "exploratory-legacy-64",
+                "dataset_selection_seed": 329
+              }
+            },
+            "submitted_at": 10,
+            "call_id": "fc-12",
+            "heartbeat": {
+              "call_id": "fc-12",
+              "time": 20
+            },
+            "result": {
+              "status": "completed",
+              "call_id": "fc-12",
+              "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-ppo-mc-matched-v2-s1004-a01/training",
+              "completion": {
+                "plan_sha256": "77ff01836d0c43e3c0371b5c054dad92722e427a495cb79ec4ba9d83a62171d6",
+                "stage": "training"
+              }
+            },
+            "finished_at": 20
+          },
+          {
+            "stage": "checkpoint-eval",
+            "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-ppo-mc-matched-v2-s1004-a01/checkpoint-eval",
+            "status": "completed",
+            "wandb": {
+              "entity": "amulyap-stanford-university",
+              "project": "cs329z-agent-lightning",
+              "group": "tenway-fixture-campaign",
+              "id": "57c5b1c785adfb667c51c169",
+              "name": "tenway-fixture-campaign-ppo-mc-matched-v2-s1004-a01-checkpoint-eval",
+              "job_type": "checkpoint-eval",
+              "resume": "never",
+              "config": {
+                "pair_id": "tenway-fixture-campaign-s1004",
+                "algorithm": "ppo-mc-matched-v2",
+                "stage": "checkpoint-eval",
+                "run_seed": 1004,
+                "seed_streams": {
+                  "python": 16251230,
+                  "numpy": 220421970,
+                  "torch_cpu": 667863957,
+                  "torch_cuda": 677518139,
+                  "actor_sampling": 1630981690,
+                  "actor_optimizer": 158767695,
+                  "row_batching": 412932214,
+                  "critic_init": 1256060107,
+                  "paired_question_order": 1230802848
+                },
+                "protocol": "matched-rollout-mean-v2",
+                "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+                "data_manifest_sha256": "96b4de510e264c76c6e30ac50109d44491b3ac2a2182831850e8ce119415cb5b",
+                "steps": 60,
+                "resources": {
+                  "gpu": "H100!",
+                  "cpu": 16,
+                  "memory_mib": 196608
+                },
+                "evaluation": "exploratory-legacy-64",
+                "dataset_selection_seed": 329
+              }
+            },
+            "submitted_at": 20,
+            "call_id": "fc-27",
+            "heartbeat": {
+              "call_id": "fc-27",
+              "time": 30
+            },
+            "result": {
+              "status": "completed",
+              "call_id": "fc-27",
+              "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-ppo-mc-matched-v2-s1004-a01/checkpoint-eval",
+              "completion": {
+                "plan_sha256": "77ff01836d0c43e3c0371b5c054dad92722e427a495cb79ec4ba9d83a62171d6",
+                "stage": "checkpoint-eval"
+              }
+            },
+            "finished_at": 30
+          }
+        ]
+      },
+      "tenway-fixture-campaign-grpo-matched-v2-s1005-a01": {
+        "status": "completed",
+        "stages": [
+          {
+            "stage": "baseline",
+            "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-grpo-matched-v2-s1005-a01/baseline",
+            "status": "completed",
+            "wandb": {
+              "entity": "amulyap-stanford-university",
+              "project": "cs329z-agent-lightning",
+              "group": "tenway-fixture-campaign",
+              "id": "f89998ee7107f64f40c9109f",
+              "name": "tenway-fixture-campaign-grpo-matched-v2-s1005-a01-baseline",
+              "job_type": "baseline",
+              "resume": "never",
+              "config": {
+                "pair_id": "tenway-fixture-campaign-s1005",
+                "algorithm": "grpo-matched-v2",
+                "stage": "baseline",
+                "run_seed": 1005,
+                "seed_streams": {
+                  "python": 488719112,
+                  "numpy": 1662598979,
+                  "torch_cpu": 404869252,
+                  "torch_cuda": 1300791858,
+                  "actor_sampling": 54266934,
+                  "actor_optimizer": 799260513,
+                  "row_batching": 2123767120,
+                  "critic_init": null,
+                  "paired_question_order": 195528320
+                },
+                "protocol": "matched-rollout-mean-v2",
+                "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+                "data_manifest_sha256": "96b4de510e264c76c6e30ac50109d44491b3ac2a2182831850e8ce119415cb5b",
+                "steps": 60,
+                "resources": {
+                  "gpu": "H100!",
+                  "cpu": 16,
+                  "memory_mib": 196608
+                },
+                "evaluation": "exploratory-legacy-64",
+                "dataset_selection_seed": 329
+              }
+            },
+            "submitted_at": 0,
+            "call_id": "fc-8",
+            "heartbeat": {
+              "call_id": "fc-8",
+              "time": 10
+            },
+            "result": {
+              "status": "completed",
+              "call_id": "fc-8",
+              "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-grpo-matched-v2-s1005-a01/baseline",
+              "completion": {
+                "plan_sha256": "77ff01836d0c43e3c0371b5c054dad92722e427a495cb79ec4ba9d83a62171d6",
+                "stage": "baseline"
+              }
+            },
+            "finished_at": 10
+          },
+          {
+            "stage": "training",
+            "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-grpo-matched-v2-s1005-a01/training",
+            "status": "completed",
+            "wandb": {
+              "entity": "amulyap-stanford-university",
+              "project": "cs329z-agent-lightning",
+              "group": "tenway-fixture-campaign",
+              "id": "317ca785aea3ba758f15ca2c",
+              "name": "tenway-fixture-campaign-grpo-matched-v2-s1005-a01-training",
+              "job_type": "training",
+              "resume": "never",
+              "config": {
+                "pair_id": "tenway-fixture-campaign-s1005",
+                "algorithm": "grpo-matched-v2",
+                "stage": "training",
+                "run_seed": 1005,
+                "seed_streams": {
+                  "python": 488719112,
+                  "numpy": 1662598979,
+                  "torch_cpu": 404869252,
+                  "torch_cuda": 1300791858,
+                  "actor_sampling": 54266934,
+                  "actor_optimizer": 799260513,
+                  "row_batching": 2123767120,
+                  "critic_init": null,
+                  "paired_question_order": 195528320
+                },
+                "protocol": "matched-rollout-mean-v2",
+                "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+                "data_manifest_sha256": "96b4de510e264c76c6e30ac50109d44491b3ac2a2182831850e8ce119415cb5b",
+                "steps": 60,
+                "resources": {
+                  "gpu": "H100!",
+                  "cpu": 16,
+                  "memory_mib": 196608
+                },
+                "evaluation": "exploratory-legacy-64",
+                "dataset_selection_seed": 329
+              }
+            },
+            "submitted_at": 10,
+            "call_id": "fc-11",
+            "heartbeat": {
+              "call_id": "fc-11",
+              "time": 20
+            },
+            "result": {
+              "status": "completed",
+              "call_id": "fc-11",
+              "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-grpo-matched-v2-s1005-a01/training",
+              "completion": {
+                "plan_sha256": "77ff01836d0c43e3c0371b5c054dad92722e427a495cb79ec4ba9d83a62171d6",
+                "stage": "training"
+              }
+            },
+            "finished_at": 20
+          },
+          {
+            "stage": "checkpoint-eval",
+            "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-grpo-matched-v2-s1005-a01/checkpoint-eval",
+            "status": "completed",
+            "wandb": {
+              "entity": "amulyap-stanford-university",
+              "project": "cs329z-agent-lightning",
+              "group": "tenway-fixture-campaign",
+              "id": "c9961db98fc60e84864bff12",
+              "name": "tenway-fixture-campaign-grpo-matched-v2-s1005-a01-checkpoint-eval",
+              "job_type": "checkpoint-eval",
+              "resume": "never",
+              "config": {
+                "pair_id": "tenway-fixture-campaign-s1005",
+                "algorithm": "grpo-matched-v2",
+                "stage": "checkpoint-eval",
+                "run_seed": 1005,
+                "seed_streams": {
+                  "python": 488719112,
+                  "numpy": 1662598979,
+                  "torch_cpu": 404869252,
+                  "torch_cuda": 1300791858,
+                  "actor_sampling": 54266934,
+                  "actor_optimizer": 799260513,
+                  "row_batching": 2123767120,
+                  "critic_init": null,
+                  "paired_question_order": 195528320
+                },
+                "protocol": "matched-rollout-mean-v2",
+                "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+                "data_manifest_sha256": "96b4de510e264c76c6e30ac50109d44491b3ac2a2182831850e8ce119415cb5b",
+                "steps": 60,
+                "resources": {
+                  "gpu": "H100!",
+                  "cpu": 16,
+                  "memory_mib": 196608
+                },
+                "evaluation": "exploratory-legacy-64",
+                "dataset_selection_seed": 329
+              }
+            },
+            "submitted_at": 20,
+            "call_id": "fc-28",
+            "heartbeat": {
+              "call_id": "fc-28",
+              "time": 30
+            },
+            "result": {
+              "status": "completed",
+              "call_id": "fc-28",
+              "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-grpo-matched-v2-s1005-a01/checkpoint-eval",
+              "completion": {
+                "plan_sha256": "77ff01836d0c43e3c0371b5c054dad92722e427a495cb79ec4ba9d83a62171d6",
+                "stage": "checkpoint-eval"
+              }
+            },
+            "finished_at": 30
+          }
+        ]
+      },
+      "tenway-fixture-campaign-ppo-mc-matched-v2-s1005-a01": {
+        "status": "completed",
+        "stages": [
+          {
+            "stage": "baseline",
+            "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-ppo-mc-matched-v2-s1005-a01/baseline",
+            "status": "completed",
+            "wandb": {
+              "entity": "amulyap-stanford-university",
+              "project": "cs329z-agent-lightning",
+              "group": "tenway-fixture-campaign",
+              "id": "84ee945b3449514235f3a912",
+              "name": "tenway-fixture-campaign-ppo-mc-matched-v2-s1005-a01-baseline",
+              "job_type": "baseline",
+              "resume": "never",
+              "config": {
+                "pair_id": "tenway-fixture-campaign-s1005",
+                "algorithm": "ppo-mc-matched-v2",
+                "stage": "baseline",
+                "run_seed": 1005,
+                "seed_streams": {
+                  "python": 2000606217,
+                  "numpy": 2084931556,
+                  "torch_cpu": 258048372,
+                  "torch_cuda": 1708959489,
+                  "actor_sampling": 890475785,
+                  "actor_optimizer": 145193824,
+                  "row_batching": 345265964,
+                  "critic_init": 252826223,
+                  "paired_question_order": 195528320
+                },
+                "protocol": "matched-rollout-mean-v2",
+                "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+                "data_manifest_sha256": "96b4de510e264c76c6e30ac50109d44491b3ac2a2182831850e8ce119415cb5b",
+                "steps": 60,
+                "resources": {
+                  "gpu": "H100!",
+                  "cpu": 16,
+                  "memory_mib": 196608
+                },
+                "evaluation": "exploratory-legacy-64",
+                "dataset_selection_seed": 329
+              }
+            },
+            "submitted_at": 0,
+            "call_id": "fc-9",
+            "heartbeat": {
+              "call_id": "fc-9",
+              "time": 10
+            },
+            "result": {
+              "status": "completed",
+              "call_id": "fc-9",
+              "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-ppo-mc-matched-v2-s1005-a01/baseline",
+              "completion": {
+                "plan_sha256": "77ff01836d0c43e3c0371b5c054dad92722e427a495cb79ec4ba9d83a62171d6",
+                "stage": "baseline"
+              }
+            },
+            "finished_at": 10
+          },
+          {
+            "stage": "training",
+            "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-ppo-mc-matched-v2-s1005-a01/training",
+            "status": "completed",
+            "wandb": {
+              "entity": "amulyap-stanford-university",
+              "project": "cs329z-agent-lightning",
+              "group": "tenway-fixture-campaign",
+              "id": "8460c46c9315dc175e977e89",
+              "name": "tenway-fixture-campaign-ppo-mc-matched-v2-s1005-a01-training",
+              "job_type": "training",
+              "resume": "never",
+              "config": {
+                "pair_id": "tenway-fixture-campaign-s1005",
+                "algorithm": "ppo-mc-matched-v2",
+                "stage": "training",
+                "run_seed": 1005,
+                "seed_streams": {
+                  "python": 2000606217,
+                  "numpy": 2084931556,
+                  "torch_cpu": 258048372,
+                  "torch_cuda": 1708959489,
+                  "actor_sampling": 890475785,
+                  "actor_optimizer": 145193824,
+                  "row_batching": 345265964,
+                  "critic_init": 252826223,
+                  "paired_question_order": 195528320
+                },
+                "protocol": "matched-rollout-mean-v2",
+                "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+                "data_manifest_sha256": "96b4de510e264c76c6e30ac50109d44491b3ac2a2182831850e8ce119415cb5b",
+                "steps": 60,
+                "resources": {
+                  "gpu": "H100!",
+                  "cpu": 16,
+                  "memory_mib": 196608
+                },
+                "evaluation": "exploratory-legacy-64",
+                "dataset_selection_seed": 329
+              }
+            },
+            "submitted_at": 10,
+            "call_id": "fc-10",
+            "heartbeat": {
+              "call_id": "fc-10",
+              "time": 20
+            },
+            "result": {
+              "status": "completed",
+              "call_id": "fc-10",
+              "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-ppo-mc-matched-v2-s1005-a01/training",
+              "completion": {
+                "plan_sha256": "77ff01836d0c43e3c0371b5c054dad92722e427a495cb79ec4ba9d83a62171d6",
+                "stage": "training"
+              }
+            },
+            "finished_at": 20
+          },
+          {
+            "stage": "checkpoint-eval",
+            "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-ppo-mc-matched-v2-s1005-a01/checkpoint-eval",
+            "status": "completed",
+            "wandb": {
+              "entity": "amulyap-stanford-university",
+              "project": "cs329z-agent-lightning",
+              "group": "tenway-fixture-campaign",
+              "id": "425380b853a9d8f6ecf0e1f1",
+              "name": "tenway-fixture-campaign-ppo-mc-matched-v2-s1005-a01-checkpoint-eval",
+              "job_type": "checkpoint-eval",
+              "resume": "never",
+              "config": {
+                "pair_id": "tenway-fixture-campaign-s1005",
+                "algorithm": "ppo-mc-matched-v2",
+                "stage": "checkpoint-eval",
+                "run_seed": 1005,
+                "seed_streams": {
+                  "python": 2000606217,
+                  "numpy": 2084931556,
+                  "torch_cpu": 258048372,
+                  "torch_cuda": 1708959489,
+                  "actor_sampling": 890475785,
+                  "actor_optimizer": 145193824,
+                  "row_batching": 345265964,
+                  "critic_init": 252826223,
+                  "paired_question_order": 195528320
+                },
+                "protocol": "matched-rollout-mean-v2",
+                "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+                "data_manifest_sha256": "96b4de510e264c76c6e30ac50109d44491b3ac2a2182831850e8ce119415cb5b",
+                "steps": 60,
+                "resources": {
+                  "gpu": "H100!",
+                  "cpu": 16,
+                  "memory_mib": 196608
+                },
+                "evaluation": "exploratory-legacy-64",
+                "dataset_selection_seed": 329
+              }
+            },
+            "submitted_at": 20,
+            "call_id": "fc-29",
+            "heartbeat": {
+              "call_id": "fc-29",
+              "time": 30
+            },
+            "result": {
+              "status": "completed",
+              "call_id": "fc-29",
+              "output": "phase2/studies/tenway-fixture/campaign/tenway-fixture-campaign-ppo-mc-matched-v2-s1005-a01/checkpoint-eval",
+              "completion": {
+                "plan_sha256": "77ff01836d0c43e3c0371b5c054dad92722e427a495cb79ec4ba9d83a62171d6",
+                "stage": "checkpoint-eval"
+              }
+            },
+            "finished_at": 30
+          }
+        ]
+      }
+    },
+    "updated_at": 30,
+    "gpu_seconds_upper_bound_used": 300,
+    "cost_usd_upper_bound_used": 0.9166666666666666,
+    "finished_at": 30
+  }
+}

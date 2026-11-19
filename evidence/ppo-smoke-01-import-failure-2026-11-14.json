@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "run_name": "ppo-mc-v1-smoke-01",
+  "source_commit": "11dd5a261615f57b86213477f14eb7bc53bc0683",
+  "source_tracked_dirty": false,
+  "app_id": "ap-viboiu2YehpFAeMk35Opbo",
+  "function_call_id": "fc-01M7DQYFAT0JBKN5QRG26DAFP4",
+  "submitted_at": "2026-11-14T19:18:34.042982+00:00",
+  "working_volume": "cs329z-agent-lightning-working-20261114",
+  "submission_receipt": {
+    "path": ".local/experiment-submissions/ppo-mc-v1-smoke-01-1794683914059132255.json",
+    "sha256": "a11c95f8258f850b6d844d6a0abb1bcff49bba4e3e8d248fecb0b07bc7445fbc",
+    "status": "submitted_not_validated"
+  },
+  "reported_failure": {
+    "source": "owner-supplied error; no remote terminal log retrieved in this fix",
+    "stage": "Modal function hydration before training",
+    "exception": "ModuleNotFoundError",
+    "message": "No module named 'experiment'",
+    "location": "/root/modal_app.py:24",
+    "statement": "from experiment import ppo_contract"
+  },
+  "offline_reproduction": {
+    "source_commit": "11dd5a261615f57b86213477f14eb7bc53bc0683",
+    "method": "isolated Python process; application outside repository; only contract copied to runtime bundle; full module import using installed Modal SDK; network blocked",
+    "result": "same ModuleNotFoundError at the failed import",
+    "log_sha256": "b3cb48bb020aeda2f96b86a31e03e4339c5d4482a8cf37924f645afc9d652bd5"
+  },
+  "preservation": "failed name remains reserved; submission acknowledgment is not completion; no retry performed",
+  "recommended_next_run_name": "ppo-mc-v1-smoke-02",
+  "next_submission_authorized": false
+}

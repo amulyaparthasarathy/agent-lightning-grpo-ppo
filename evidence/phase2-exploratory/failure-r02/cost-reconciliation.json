@@ -1,0 +1,54 @@
+{
+  "checked_at": "2026-11-15T06:18:25.564009+00:00",
+  "workspace": "amulyasp",
+  "rows": [
+    {
+      "object_id": "ap-wBSCIZIwZ4MU9KlMgmZEQS",
+      "description": "cs329z-matched-study-v2",
+      "environment_name": "main",
+      "interval_start": "2026-11-15 03:00:00+00:00",
+      "cost": "0.11218301",
+      "cost_by_resource": {
+        "Memory": "0.02758543",
+        "Network Egress": "0.00000307",
+        "CPU": "0.01436380",
+        "H100": "0.07023071"
+      }
+    },
+    {
+      "object_id": "ap-UOvpKoVWEyNwJIV1FVi1qS",
+      "description": "cs329z-matched-study-v2",
+      "environment_name": "main",
+      "interval_start": "2026-11-15 05:00:00+00:00",
+      "cost": "0.55511538",
+      "cost_by_resource": {
+        "Memory": "0.13653148",
+        "Network Egress": "0.00000546",
+        "CPU": "0.06957916",
+        "H100": "0.34899927"
+      }
+    },
+    {
+      "object_id": "ap-OifcQ8vlY3AQP5EeRJirV6",
+      "description": "cs329z-matched-study-v2",
+      "environment_name": "main",
+      "interval_start": "2026-11-15 06:00:00+00:00",
+      "cost": "0.79442062",
+      "cost_by_resource": {
+        "Memory": "0.19548657",
+        "Network Egress": "0.00000209",
+        "CPU": "0.09899463",
+        "H100": "0.49993734"
+      }
+    }
+  ],
+  "attributed_qualification_usd": "1.46171901",
+  "workspace_metered_usd": "3.15125017",
+  "remaining_qualification_usd": "46.84874983",
+  "next_bound_usd": 45,
+  "total_bound_usd": "48.15125017",
+  "allowed": true,
+  "report_usd": 175,
+  "reserve_usd": 75,
+  "reserve_released_usd": 0
+}

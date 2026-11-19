@@ -1,0 +1,53 @@
+# Local environments and generated runtime state
+.venv/
+.venv-*/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.local/
+.cache/
+/runtime/
+/runs/
+/outputs/
+/checkpoints/
+/models/
+/data/
+/wandb/
+
+# Credentials and local settings
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+id_rsa
+id_ed25519
+.ssh/
+.aws/
+.azure/
+.config/
+auth.json
+credentials.json
+.git-credentials
+.netrc
+
+# Large weights and raw archives belong outside Git
+*.safetensors
+*.gguf
+*.pt
+*.pth
+*.bin
+*.zip
+*.tar
+*.tgz
+*.tar.gz
+
+# Editor / Windows metadata
+.DS_Store
+Thumbs.db
+*:Zone.Identifier
+*.swp
+*.swo
+
+# Small reviewed evidence under evidence/ is deliberately eligible for Git.
+# Review text for sensitive material before adding it.

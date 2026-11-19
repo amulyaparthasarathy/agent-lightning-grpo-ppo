@@ -1,0 +1,12 @@
+{
+  "phase": "baseline",
+  "status": "trainer_failed",
+  "exit_code": 1,
+  "algorithm": "grpo-matched-v2",
+  "protocol": "matched-rollout-mean-v2",
+  "finished_at": "2026-11-15T05:21:41.872974+00:00",
+  "checkpoints": [],
+  "latest_checkpoint": null,
+  "restored_checkpoint": null,
+  "resolved_config_saved": true
+}

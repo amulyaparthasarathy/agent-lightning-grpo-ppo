@@ -1,0 +1,2989 @@
+{
+  "scope": "offline only; no GPU capacity claim",
+  "scenarios": {
+    "exploratory-qualification/complete": {
+      "metrics": {
+        "max_active": 2,
+        "calls": 6,
+        "cancelled": 0,
+        "elapsed_seconds": 30.0
+      },
+      "status": "completed",
+      "stages": [
+        {
+          "job_id": "explore-fixture-exploratory-qualification-grpo-matched-v2-s9101-a01",
+          "stage": "baseline",
+          "status": "completed",
+          "call_id": "fc-0",
+          "output": "phase2/studies/explore-fixture/exploratory-qualification/explore-fixture-exploratory-qualification-grpo-matched-v2-s9101-a01/baseline",
+          "wandb": {
+            "entity": "amulyap-stanford-university",
+            "project": "cs329z-agent-lightning",
+            "group": "explore-fixture-exploratory-qualification",
+            "id": "b74f7bc28a23ed31ed128da9",
+            "name": "explore-fixture-exploratory-qualification-grpo-matched-v2-s9101-a01-baseline",
+            "job_type": "baseline",
+            "resume": "never",
+            "config": {
+              "pair_id": "explore-fixture-exploratory-qualification-s9101",
+              "algorithm": "grpo-matched-v2",
+              "stage": "baseline",
+              "run_seed": 9101,
+              "seed_streams": {
+                "python": 1959772233,
+                "numpy": 68938646,
+                "torch_cpu": 1089843940,
+                "torch_cuda": 1256289425,
+                "actor_sampling": 176784269,
+                "actor_optimizer": 1652946982,
+                "row_batching": 921010553,
+                "critic_init": null,
+                "paired_question_order": 962979653
+              },
+              "protocol": "matched-rollout-mean-v2",
+              "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+              "data_manifest_sha256": "f0320992e0b650a73e3c069fbd745f7e024dc453ced7dd6f16aec7b059ccc33b",
+              "steps": 2,
+              "resources": {
+                "gpu": "H100!",
+                "cpu": 16,
+                "memory_mib": 196608
+              },
+              "evaluation": "exploratory-legacy-64",
+              "dataset_selection_seed": 329,
+              "study_protocol": "exploratory-matched-20-v1",
+              "stage_timeout_seconds": 1800,
+              "checkpoint_policy": "one-final-per-run-no-deletion"
+            }
+          }
+        },
+        {
+          "job_id": "explore-fixture-exploratory-qualification-grpo-matched-v2-s9101-a01",
+          "stage": "training",
+          "status": "completed",
+          "call_id": "fc-3",
+          "output": "phase2/studies/explore-fixture/exploratory-qualification/explore-fixture-exploratory-qualification-grpo-matched-v2-s9101-a01/training",
+          "wandb": {
+            "entity": "amulyap-stanford-university",
+            "project": "cs329z-agent-lightning",
+            "group": "explore-fixture-exploratory-qualification",
+            "id": "9c08a2e812da2eec93254726",
+            "name": "explore-fixture-exploratory-qualification-grpo-matched-v2-s9101-a01-training",
+            "job_type": "training",
+            "resume": "never",
+            "config": {
+              "pair_id": "explore-fixture-exploratory-qualification-s9101",
+              "algorithm": "grpo-matched-v2",
+              "stage": "training",
+              "run_seed": 9101,
+              "seed_streams": {
+                "python": 1959772233,
+                "numpy": 68938646,
+                "torch_cpu": 1089843940,
+                "torch_cuda": 1256289425,
+                "actor_sampling": 176784269,
+                "actor_optimizer": 1652946982,
+                "row_batching": 921010553,
+                "critic_init": null,
+                "paired_question_order": 962979653
+              },
+              "protocol": "matched-rollout-mean-v2",
+              "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+              "data_manifest_sha256": "f0320992e0b650a73e3c069fbd745f7e024dc453ced7dd6f16aec7b059ccc33b",
+              "steps": 2,
+              "resources": {
+                "gpu": "H100!",
+                "cpu": 16,
+                "memory_mib": 196608
+              },
+              "evaluation": "exploratory-legacy-64",
+              "dataset_selection_seed": 329,
+              "study_protocol": "exploratory-matched-20-v1",
+              "stage_timeout_seconds": 900,
+              "checkpoint_policy": "one-final-per-run-no-deletion"
+            }
+          }
+        },
+        {
+          "job_id": "explore-fixture-exploratory-qualification-grpo-matched-v2-s9101-a01",
+          "stage": "checkpoint-eval",
+          "status": "completed",
+          "call_id": "fc-4",
+          "output": "phase2/studies/explore-fixture/exploratory-qualification/explore-fixture-exploratory-qualification-grpo-matched-v2-s9101-a01/checkpoint-eval",
+          "wandb": {
+            "entity": "amulyap-stanford-university",
+            "project": "cs329z-agent-lightning",
+            "group": "explore-fixture-exploratory-qualification",
+            "id": "a5fbd55c8be97f49bb308430",
+            "name": "explore-fixture-exploratory-qualification-grpo-matched-v2-s9101-a01-checkpoint-eval",
+            "job_type": "checkpoint-eval",
+            "resume": "never",
+            "config": {
+              "pair_id": "explore-fixture-exploratory-qualification-s9101",
+              "algorithm": "grpo-matched-v2",
+              "stage": "checkpoint-eval",
+              "run_seed": 9101,
+              "seed_streams": {
+                "python": 1959772233,
+                "numpy": 68938646,
+                "torch_cpu": 1089843940,
+                "torch_cuda": 1256289425,
+                "actor_sampling": 176784269,
+                "actor_optimizer": 1652946982,
+                "row_batching": 921010553,
+                "critic_init": null,
+                "paired_question_order": 962979653
+              },
+              "protocol": "matched-rollout-mean-v2",
+              "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+              "data_manifest_sha256": "f0320992e0b650a73e3c069fbd745f7e024dc453ced7dd6f16aec7b059ccc33b",
+              "steps": 2,
+              "resources": {
+                "gpu": "H100!",
+                "cpu": 16,
+                "memory_mib": 196608
+              },
+              "evaluation": "exploratory-legacy-64",
+              "dataset_selection_seed": 329,
+              "study_protocol": "exploratory-matched-20-v1",
+              "stage_timeout_seconds": 1800,
+              "checkpoint_policy": "one-final-per-run-no-deletion"
+            }
+          }
+        },
+        {
+          "job_id": "explore-fixture-exploratory-qualification-ppo-mc-matched-v2-s9101-a01",
+          "stage": "baseline",
+          "status": "completed",
+          "call_id": "fc-1",
+          "output": "phase2/studies/explore-fixture/exploratory-qualification/explore-fixture-exploratory-qualification-ppo-mc-matched-v2-s9101-a01/baseline",
+          "wandb": {
+            "entity": "amulyap-stanford-university",
+            "project": "cs329z-agent-lightning",
+            "group": "explore-fixture-exploratory-qualification",
+            "id": "cebd52a208f74c1c35a73900",
+            "name": "explore-fixture-exploratory-qualification-ppo-mc-matched-v2-s9101-a01-baseline",
+            "job_type": "baseline",
+            "resume": "never",
+            "config": {
+              "pair_id": "explore-fixture-exploratory-qualification-s9101",
+              "algorithm": "ppo-mc-matched-v2",
+              "stage": "baseline",
+              "run_seed": 9101,
+              "seed_streams": {
+                "python": 1332371190,
+                "numpy": 1784707792,
+                "torch_cpu": 404292319,
+                "torch_cuda": 1088327839,
+                "actor_sampling": 1628322757,
+                "actor_optimizer": 1417041083,
+                "row_batching": 1023751362,
+                "critic_init": 1380528041,
+                "paired_question_order": 962979653
+              },
+              "protocol": "matched-rollout-mean-v2",
+              "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+              "data_manifest_sha256": "f0320992e0b650a73e3c069fbd745f7e024dc453ced7dd6f16aec7b059ccc33b",
+              "steps": 2,
+              "resources": {
+                "gpu": "H100!",
+                "cpu": 16,
+                "memory_mib": 196608
+              },
+              "evaluation": "exploratory-legacy-64",
+              "dataset_selection_seed": 329,
+              "study_protocol": "exploratory-matched-20-v1",
+              "stage_timeout_seconds": 1800,
+              "checkpoint_policy": "one-final-per-run-no-deletion"
+            }
+          }
+        },
+        {
+          "job_id": "explore-fixture-exploratory-qualification-ppo-mc-matched-v2-s9101-a01",
+          "stage": "training",
+          "status": "completed",
+          "call_id": "fc-2",
+          "output": "phase2/studies/explore-fixture/exploratory-qualification/explore-fixture-exploratory-qualification-ppo-mc-matched-v2-s9101-a01/training",
+          "wandb": {
+            "entity": "amulyap-stanford-university",
+            "project": "cs329z-agent-lightning",
+            "group": "explore-fixture-exploratory-qualification",
+            "id": "3bf0deb474c451e75cb898e1",
+            "name": "explore-fixture-exploratory-qualification-ppo-mc-matched-v2-s9101-a01-training",
+            "job_type": "training",
+            "resume": "never",
+            "config": {
+              "pair_id": "explore-fixture-exploratory-qualification-s9101",
+              "algorithm": "ppo-mc-matched-v2",
+              "stage": "training",
+              "run_seed": 9101,
+              "seed_streams": {
+                "python": 1332371190,
+                "numpy": 1784707792,
+                "torch_cpu": 404292319,
+                "torch_cuda": 1088327839,
+                "actor_sampling": 1628322757,
+                "actor_optimizer": 1417041083,
+                "row_batching": 1023751362,
+                "critic_init": 1380528041,
+                "paired_question_order": 962979653
+              },
+              "protocol": "matched-rollout-mean-v2",
+              "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+              "data_manifest_sha256": "f0320992e0b650a73e3c069fbd745f7e024dc453ced7dd6f16aec7b059ccc33b",
+              "steps": 2,
+              "resources": {
+                "gpu": "H100!",
+                "cpu": 16,
+                "memory_mib": 196608
+              },
+              "evaluation": "exploratory-legacy-64",
+              "dataset_selection_seed": 329,
+              "study_protocol": "exploratory-matched-20-v1",
+              "stage_timeout_seconds": 900,
+              "checkpoint_policy": "one-final-per-run-no-deletion"
+            }
+          }
+        },
+        {
+          "job_id": "explore-fixture-exploratory-qualification-ppo-mc-matched-v2-s9101-a01",
+          "stage": "checkpoint-eval",
+          "status": "completed",
+          "call_id": "fc-5",
+          "output": "phase2/studies/explore-fixture/exploratory-qualification/explore-fixture-exploratory-qualification-ppo-mc-matched-v2-s9101-a01/checkpoint-eval",
+          "wandb": {
+            "entity": "amulyap-stanford-university",
+            "project": "cs329z-agent-lightning",
+            "group": "explore-fixture-exploratory-qualification",
+            "id": "6d7d2ca2e11dd50c827b5af4",
+            "name": "explore-fixture-exploratory-qualification-ppo-mc-matched-v2-s9101-a01-checkpoint-eval",
+            "job_type": "checkpoint-eval",
+            "resume": "never",
+            "config": {
+              "pair_id": "explore-fixture-exploratory-qualification-s9101",
+              "algorithm": "ppo-mc-matched-v2",
+              "stage": "checkpoint-eval",
+              "run_seed": 9101,
+              "seed_streams": {
+                "python": 1332371190,
+                "numpy": 1784707792,
+                "torch_cpu": 404292319,
+                "torch_cuda": 1088327839,
+                "actor_sampling": 1628322757,
+                "actor_optimizer": 1417041083,
+                "row_batching": 1023751362,
+                "critic_init": 1380528041,
+                "paired_question_order": 962979653
+              },
+              "protocol": "matched-rollout-mean-v2",
+              "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+              "data_manifest_sha256": "f0320992e0b650a73e3c069fbd745f7e024dc453ced7dd6f16aec7b059ccc33b",
+              "steps": 2,
+              "resources": {
+                "gpu": "H100!",
+                "cpu": 16,
+                "memory_mib": 196608
+              },
+              "evaluation": "exploratory-legacy-64",
+              "dataset_selection_seed": 329,
+              "study_protocol": "exploratory-matched-20-v1",
+              "stage_timeout_seconds": 1800,
+              "checkpoint_policy": "one-final-per-run-no-deletion"
+            }
+          }
+        }
+      ]
+    },
+    "exploratory/complete": {
+      "metrics": {
+        "max_active": 6,
+        "calls": 18,
+        "cancelled": 0,
+        "elapsed_seconds": 30.0
+      },
+      "status": "completed",
+      "stages": [
+        {
+          "job_id": "explore-fixture-exploratory-grpo-matched-v2-s2001-a01",
+          "stage": "baseline",
+          "status": "completed",
+          "call_id": "fc-0",
+          "output": "phase2/studies/explore-fixture/exploratory/explore-fixture-exploratory-grpo-matched-v2-s2001-a01/baseline",
+          "wandb": {
+            "entity": "amulyap-stanford-university",
+            "project": "cs329z-agent-lightning",
+            "group": "explore-fixture-exploratory",
+            "id": "33eeb725e129a6845ff742dd",
+            "name": "explore-fixture-exploratory-grpo-matched-v2-s2001-a01-baseline",
+            "job_type": "baseline",
+            "resume": "never",
+            "config": {
+              "pair_id": "explore-fixture-exploratory-s2001",
+              "algorithm": "grpo-matched-v2",
+              "stage": "baseline",
+              "run_seed": 2001,
+              "seed_streams": {
+                "python": 739147057,
+                "numpy": 765475253,
+                "torch_cpu": 1042113840,
+                "torch_cuda": 1528039489,
+                "actor_sampling": 1985310317,
+                "actor_optimizer": 1965135422,
+                "row_batching": 1492168271,
+                "critic_init": null,
+                "paired_question_order": 1771565522
+              },
+              "protocol": "matched-rollout-mean-v2",
+              "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+              "data_manifest_sha256": "f0320992e0b650a73e3c069fbd745f7e024dc453ced7dd6f16aec7b059ccc33b",
+              "steps": 20,
+              "resources": {
+                "gpu": "H100!",
+                "cpu": 16,
+                "memory_mib": 196608
+              },
+              "evaluation": "exploratory-legacy-64",
+              "dataset_selection_seed": 329,
+              "study_protocol": "exploratory-matched-20-v1",
+              "stage_timeout_seconds": 1800,
+              "checkpoint_policy": "one-final-per-run-no-deletion"
+            }
+          }
+        },
+        {
+          "job_id": "explore-fixture-exploratory-grpo-matched-v2-s2001-a01",
+          "stage": "training",
+          "status": "completed",
+          "call_id": "fc-11",
+          "output": "phase2/studies/explore-fixture/exploratory/explore-fixture-exploratory-grpo-matched-v2-s2001-a01/training",
+          "wandb": {
+            "entity": "amulyap-stanford-university",
+            "project": "cs329z-agent-lightning",
+            "group": "explore-fixture-exploratory",
+            "id": "0667910aaa7d0bdd1ed4f21d",
+            "name": "explore-fixture-exploratory-grpo-matched-v2-s2001-a01-training",
+            "job_type": "training",
+            "resume": "never",
+            "config": {
+              "pair_id": "explore-fixture-exploratory-s2001",
+              "algorithm": "grpo-matched-v2",
+              "stage": "training",
+              "run_seed": 2001,
+              "seed_streams": {
+                "python": 739147057,
+                "numpy": 765475253,
+                "torch_cpu": 1042113840,
+                "torch_cuda": 1528039489,
+                "actor_sampling": 1985310317,
+                "actor_optimizer": 1965135422,
+                "row_batching": 1492168271,
+                "critic_init": null,
+                "paired_question_order": 1771565522
+              },
+              "protocol": "matched-rollout-mean-v2",
+              "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+              "data_manifest_sha256": "f0320992e0b650a73e3c069fbd745f7e024dc453ced7dd6f16aec7b059ccc33b",
+              "steps": 20,
+              "resources": {
+                "gpu": "H100!",
+                "cpu": 16,
+                "memory_mib": 196608
+              },
+              "evaluation": "exploratory-legacy-64",
+              "dataset_selection_seed": 329,
+              "study_protocol": "exploratory-matched-20-v1",
+              "stage_timeout_seconds": 5400,
+              "checkpoint_policy": "one-final-per-run-no-deletion"
+            }
+          }
+        },
+        {
+          "job_id": "explore-fixture-exploratory-grpo-matched-v2-s2001-a01",
+          "stage": "checkpoint-eval",
+          "status": "completed",
+          "call_id": "fc-12",
+          "output": "phase2/studies/explore-fixture/exploratory/explore-fixture-exploratory-grpo-matched-v2-s2001-a01/checkpoint-eval",
+          "wandb": {
+            "entity": "amulyap-stanford-university",
+            "project": "cs329z-agent-lightning",
+            "group": "explore-fixture-exploratory",
+            "id": "0d6fec0cbb94f090ca07f4cf",
+            "name": "explore-fixture-exploratory-grpo-matched-v2-s2001-a01-checkpoint-eval",
+            "job_type": "checkpoint-eval",
+            "resume": "never",
+            "config": {
+              "pair_id": "explore-fixture-exploratory-s2001",
+              "algorithm": "grpo-matched-v2",
+              "stage": "checkpoint-eval",
+              "run_seed": 2001,
+              "seed_streams": {
+                "python": 739147057,
+                "numpy": 765475253,
+                "torch_cpu": 1042113840,
+                "torch_cuda": 1528039489,
+                "actor_sampling": 1985310317,
+                "actor_optimizer": 1965135422,
+                "row_batching": 1492168271,
+                "critic_init": null,
+                "paired_question_order": 1771565522
+              },
+              "protocol": "matched-rollout-mean-v2",
+              "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+              "data_manifest_sha256": "f0320992e0b650a73e3c069fbd745f7e024dc453ced7dd6f16aec7b059ccc33b",
+              "steps": 20,
+              "resources": {
+                "gpu": "H100!",
+                "cpu": 16,
+                "memory_mib": 196608
+              },
+              "evaluation": "exploratory-legacy-64",
+              "dataset_selection_seed": 329,
+              "study_protocol": "exploratory-matched-20-v1",
+              "stage_timeout_seconds": 1800,
+              "checkpoint_policy": "one-final-per-run-no-deletion"
+            }
+          }
+        },
+        {
+          "job_id": "explore-fixture-exploratory-ppo-mc-matched-v2-s2001-a01",
+          "stage": "baseline",
+          "status": "completed",
+          "call_id": "fc-1",
+          "output": "phase2/studies/explore-fixture/exploratory/explore-fixture-exploratory-ppo-mc-matched-v2-s2001-a01/baseline",
+          "wandb": {
+            "entity": "amulyap-stanford-university",
+            "project": "cs329z-agent-lightning",
+            "group": "explore-fixture-exploratory",
+            "id": "38e70a5dad2462461cdaaa8b",
+            "name": "explore-fixture-exploratory-ppo-mc-matched-v2-s2001-a01-baseline",
+            "job_type": "baseline",
+            "resume": "never",
+            "config": {
+              "pair_id": "explore-fixture-exploratory-s2001",
+              "algorithm": "ppo-mc-matched-v2",
+              "stage": "baseline",
+              "run_seed": 2001,
+              "seed_streams": {
+                "python": 9599114,
+                "numpy": 1601258701,
+                "torch_cpu": 553990097,
+                "torch_cuda": 1884451394,
+                "actor_sampling": 973110461,
+                "actor_optimizer": 683842814,
+                "row_batching": 705947965,
+                "critic_init": 207224476,
+                "paired_question_order": 1771565522
+              },
+              "protocol": "matched-rollout-mean-v2",
+              "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+              "data_manifest_sha256": "f0320992e0b650a73e3c069fbd745f7e024dc453ced7dd6f16aec7b059ccc33b",
+              "steps": 20,
+              "resources": {
+                "gpu": "H100!",
+                "cpu": 16,
+                "memory_mib": 196608
+              },
+              "evaluation": "exploratory-legacy-64",
+              "dataset_selection_seed": 329,
+              "study_protocol": "exploratory-matched-20-v1",
+              "stage_timeout_seconds": 1800,
+              "checkpoint_policy": "one-final-per-run-no-deletion"
+            }
+          }
+        },
+        {
+          "job_id": "explore-fixture-exploratory-ppo-mc-matched-v2-s2001-a01",
+          "stage": "training",
+          "status": "completed",
+          "call_id": "fc-10",
+          "output": "phase2/studies/explore-fixture/exploratory/explore-fixture-exploratory-ppo-mc-matched-v2-s2001-a01/training",
+          "wandb": {
+            "entity": "amulyap-stanford-university",
+            "project": "cs329z-agent-lightning",
+            "group": "explore-fixture-exploratory",
+            "id": "a49d6d7ad3de7b53b5923045",
+            "name": "explore-fixture-exploratory-ppo-mc-matched-v2-s2001-a01-training",
+            "job_type": "training",
+            "resume": "never",
+            "config": {
+              "pair_id": "explore-fixture-exploratory-s2001",
+              "algorithm": "ppo-mc-matched-v2",
+              "stage": "training",
+              "run_seed": 2001,
+              "seed_streams": {
+                "python": 9599114,
+                "numpy": 1601258701,
+                "torch_cpu": 553990097,
+                "torch_cuda": 1884451394,
+                "actor_sampling": 973110461,
+                "actor_optimizer": 683842814,
+                "row_batching": 705947965,
+                "critic_init": 207224476,
+                "paired_question_order": 1771565522
+              },
+              "protocol": "matched-rollout-mean-v2",
+              "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+              "data_manifest_sha256": "f0320992e0b650a73e3c069fbd745f7e024dc453ced7dd6f16aec7b059ccc33b",
+              "steps": 20,
+              "resources": {
+                "gpu": "H100!",
+                "cpu": 16,
+                "memory_mib": 196608
+              },
+              "evaluation": "exploratory-legacy-64",
+              "dataset_selection_seed": 329,
+              "study_protocol": "exploratory-matched-20-v1",
+              "stage_timeout_seconds": 5400,
+              "checkpoint_policy": "one-final-per-run-no-deletion"
+            }
+          }
+        },
+        {
+          "job_id": "explore-fixture-exploratory-ppo-mc-matched-v2-s2001-a01",
+          "stage": "checkpoint-eval",
+          "status": "completed",
+          "call_id": "fc-13",
+          "output": "phase2/studies/explore-fixture/exploratory/explore-fixture-exploratory-ppo-mc-matched-v2-s2001-a01/checkpoint-eval",
+          "wandb": {
+            "entity": "amulyap-stanford-university",
+            "project": "cs329z-agent-lightning",
+            "group": "explore-fixture-exploratory",
+            "id": "8a0d1334fc7bb40bb2044b67",
+            "name": "explore-fixture-exploratory-ppo-mc-matched-v2-s2001-a01-checkpoint-eval",
+            "job_type": "checkpoint-eval",
+            "resume": "never",
+            "config": {
+              "pair_id": "explore-fixture-exploratory-s2001",
+              "algorithm": "ppo-mc-matched-v2",
+              "stage": "checkpoint-eval",
+              "run_seed": 2001,
+              "seed_streams": {
+                "python": 9599114,
+                "numpy": 1601258701,
+                "torch_cpu": 553990097,
+                "torch_cuda": 1884451394,
+                "actor_sampling": 973110461,
+                "actor_optimizer": 683842814,
+                "row_batching": 705947965,
+                "critic_init": 207224476,
+                "paired_question_order": 1771565522
+              },
+              "protocol": "matched-rollout-mean-v2",
+              "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+              "data_manifest_sha256": "f0320992e0b650a73e3c069fbd745f7e024dc453ced7dd6f16aec7b059ccc33b",
+              "steps": 20,
+              "resources": {
+                "gpu": "H100!",
+                "cpu": 16,
+                "memory_mib": 196608
+              },
+              "evaluation": "exploratory-legacy-64",
+              "dataset_selection_seed": 329,
+              "study_protocol": "exploratory-matched-20-v1",
+              "stage_timeout_seconds": 1800,
+              "checkpoint_policy": "one-final-per-run-no-deletion"
+            }
+          }
+        },
+        {
+          "job_id": "explore-fixture-exploratory-grpo-matched-v2-s2002-a01",
+          "stage": "baseline",
+          "status": "completed",
+          "call_id": "fc-2",
+          "output": "phase2/studies/explore-fixture/exploratory/explore-fixture-exploratory-grpo-matched-v2-s2002-a01/baseline",
+          "wandb": {
+            "entity": "amulyap-stanford-university",
+            "project": "cs329z-agent-lightning",
+            "group": "explore-fixture-exploratory",
+            "id": "75df95425c1a80c1bd68518a",
+            "name": "explore-fixture-exploratory-grpo-matched-v2-s2002-a01-baseline",
+            "job_type": "baseline",
+            "resume": "never",
+            "config": {
+              "pair_id": "explore-fixture-exploratory-s2002",
+              "algorithm": "grpo-matched-v2",
+              "stage": "baseline",
+              "run_seed": 2002,
+              "seed_streams": {
+                "python": 1965329281,
+                "numpy": 704083147,
+                "torch_cpu": 337984257,
+                "torch_cuda": 1348510432,
+                "actor_sampling": 1612695726,
+                "actor_optimizer": 188145402,
+                "row_batching": 290452874,
+                "critic_init": null,
+                "paired_question_order": 159418719
+              },
+              "protocol": "matched-rollout-mean-v2",
+              "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+              "data_manifest_sha256": "f0320992e0b650a73e3c069fbd745f7e024dc453ced7dd6f16aec7b059ccc33b",
+              "steps": 20,
+              "resources": {
+                "gpu": "H100!",
+                "cpu": 16,
+                "memory_mib": 196608
+              },
+              "evaluation": "exploratory-legacy-64",
+              "dataset_selection_seed": 329,
+              "study_protocol": "exploratory-matched-20-v1",
+              "stage_timeout_seconds": 1800,
+              "checkpoint_policy": "one-final-per-run-no-deletion"
+            }
+          }
+        },
+        {
+          "job_id": "explore-fixture-exploratory-grpo-matched-v2-s2002-a01",
+          "stage": "training",
+          "status": "completed",
+          "call_id": "fc-9",
+          "output": "phase2/studies/explore-fixture/exploratory/explore-fixture-exploratory-grpo-matched-v2-s2002-a01/training",
+          "wandb": {
+            "entity": "amulyap-stanford-university",
+            "project": "cs329z-agent-lightning",
+            "group": "explore-fixture-exploratory",
+            "id": "602791422fd565b68b4f1870",
+            "name": "explore-fixture-exploratory-grpo-matched-v2-s2002-a01-training",
+            "job_type": "training",
+            "resume": "never",
+            "config": {
+              "pair_id": "explore-fixture-exploratory-s2002",
+              "algorithm": "grpo-matched-v2",
+              "stage": "training",
+              "run_seed": 2002,
+              "seed_streams": {
+                "python": 1965329281,
+                "numpy": 704083147,
+                "torch_cpu": 337984257,
+                "torch_cuda": 1348510432,
+                "actor_sampling": 1612695726,
+                "actor_optimizer": 188145402,
+                "row_batching": 290452874,
+                "critic_init": null,
+                "paired_question_order": 159418719
+              },
+              "protocol": "matched-rollout-mean-v2",
+              "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+              "data_manifest_sha256": "f0320992e0b650a73e3c069fbd745f7e024dc453ced7dd6f16aec7b059ccc33b",
+              "steps": 20,
+              "resources": {
+                "gpu": "H100!",
+                "cpu": 16,
+                "memory_mib": 196608
+              },
+              "evaluation": "exploratory-legacy-64",
+              "dataset_selection_seed": 329,
+              "study_protocol": "exploratory-matched-20-v1",
+              "stage_timeout_seconds": 5400,
+              "checkpoint_policy": "one-final-per-run-no-deletion"
+            }
+          }
+        },
+        {
+          "job_id": "explore-fixture-exploratory-grpo-matched-v2-s2002-a01",
+          "stage": "checkpoint-eval",
+          "status": "completed",
+          "call_id": "fc-14",
+          "output": "phase2/studies/explore-fixture/exploratory/explore-fixture-exploratory-grpo-matched-v2-s2002-a01/checkpoint-eval",
+          "wandb": {
+            "entity": "amulyap-stanford-university",
+            "project": "cs329z-agent-lightning",
+            "group": "explore-fixture-exploratory",
+            "id": "17452ef217e4ba7260df003e",
+            "name": "explore-fixture-exploratory-grpo-matched-v2-s2002-a01-checkpoint-eval",
+            "job_type": "checkpoint-eval",
+            "resume": "never",
+            "config": {
+              "pair_id": "explore-fixture-exploratory-s2002",
+              "algorithm": "grpo-matched-v2",
+              "stage": "checkpoint-eval",
+              "run_seed": 2002,
+              "seed_streams": {
+                "python": 1965329281,
+                "numpy": 704083147,
+                "torch_cpu": 337984257,
+                "torch_cuda": 1348510432,
+                "actor_sampling": 1612695726,
+                "actor_optimizer": 188145402,
+                "row_batching": 290452874,
+                "critic_init": null,
+                "paired_question_order": 159418719
+              },
+              "protocol": "matched-rollout-mean-v2",
+              "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+              "data_manifest_sha256": "f0320992e0b650a73e3c069fbd745f7e024dc453ced7dd6f16aec7b059ccc33b",
+              "steps": 20,
+              "resources": {
+                "gpu": "H100!",
+                "cpu": 16,
+                "memory_mib": 196608
+              },
+              "evaluation": "exploratory-legacy-64",
+              "dataset_selection_seed": 329,
+              "study_protocol": "exploratory-matched-20-v1",
+              "stage_timeout_seconds": 1800,
+              "checkpoint_policy": "one-final-per-run-no-deletion"
+            }
+          }
+        },
+        {
+          "job_id": "explore-fixture-exploratory-ppo-mc-matched-v2-s2002-a01",
+          "stage": "baseline",
+          "status": "completed",
+          "call_id": "fc-3",
+          "output": "phase2/studies/explore-fixture/exploratory/explore-fixture-exploratory-ppo-mc-matched-v2-s2002-a01/baseline",
+          "wandb": {
+            "entity": "amulyap-stanford-university",
+            "project": "cs329z-agent-lightning",
+            "group": "explore-fixture-exploratory",
+            "id": "0245192f6718b3cfa495d7bf",
+            "name": "explore-fixture-exploratory-ppo-mc-matched-v2-s2002-a01-baseline",
+            "job_type": "baseline",
+            "resume": "never",
+            "config": {
+              "pair_id": "explore-fixture-exploratory-s2002",
+              "algorithm": "ppo-mc-matched-v2",
+              "stage": "baseline",
+              "run_seed": 2002,
+              "seed_streams": {
+                "python": 67202963,
+                "numpy": 398412575,
+                "torch_cpu": 184986633,
+                "torch_cuda": 1011855766,
+                "actor_sampling": 1523780133,
+                "actor_optimizer": 302575343,
+                "row_batching": 1059016305,
+                "critic_init": 841342930,
+                "paired_question_order": 159418719
+              },
+              "protocol": "matched-rollout-mean-v2",
+              "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+              "data_manifest_sha256": "f0320992e0b650a73e3c069fbd745f7e024dc453ced7dd6f16aec7b059ccc33b",
+              "steps": 20,
+              "resources": {
+                "gpu": "H100!",
+                "cpu": 16,
+                "memory_mib": 196608
+              },
+              "evaluation": "exploratory-legacy-64",
+              "dataset_selection_seed": 329,
+              "study_protocol": "exploratory-matched-20-v1",
+              "stage_timeout_seconds": 1800,
+              "checkpoint_policy": "one-final-per-run-no-deletion"
+            }
+          }
+        },
+        {
+          "job_id": "explore-fixture-exploratory-ppo-mc-matched-v2-s2002-a01",
+          "stage": "training",
+          "status": "completed",
+          "call_id": "fc-8",
+          "output": "phase2/studies/explore-fixture/exploratory/explore-fixture-exploratory-ppo-mc-matched-v2-s2002-a01/training",
+          "wandb": {
+            "entity": "amulyap-stanford-university",
+            "project": "cs329z-agent-lightning",
+            "group": "explore-fixture-exploratory",
+            "id": "58921c7a1656d448778427bb",
+            "name": "explore-fixture-exploratory-ppo-mc-matched-v2-s2002-a01-training",
+            "job_type": "training",
+            "resume": "never",
+            "config": {
+              "pair_id": "explore-fixture-exploratory-s2002",
+              "algorithm": "ppo-mc-matched-v2",
+              "stage": "training",
+              "run_seed": 2002,
+              "seed_streams": {
+                "python": 67202963,
+                "numpy": 398412575,
+                "torch_cpu": 184986633,
+                "torch_cuda": 1011855766,
+                "actor_sampling": 1523780133,
+                "actor_optimizer": 302575343,
+                "row_batching": 1059016305,
+                "critic_init": 841342930,
+                "paired_question_order": 159418719
+              },
+              "protocol": "matched-rollout-mean-v2",
+              "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+              "data_manifest_sha256": "f0320992e0b650a73e3c069fbd745f7e024dc453ced7dd6f16aec7b059ccc33b",
+              "steps": 20,
+              "resources": {
+                "gpu": "H100!",
+                "cpu": 16,
+                "memory_mib": 196608
+              },
+              "evaluation": "exploratory-legacy-64",
+              "dataset_selection_seed": 329,
+              "study_protocol": "exploratory-matched-20-v1",
+              "stage_timeout_seconds": 5400,
+              "checkpoint_policy": "one-final-per-run-no-deletion"
+            }
+          }
+        },
+        {
+          "job_id": "explore-fixture-exploratory-ppo-mc-matched-v2-s2002-a01",
+          "stage": "checkpoint-eval",
+          "status": "completed",
+          "call_id": "fc-15",
+          "output": "phase2/studies/explore-fixture/exploratory/explore-fixture-exploratory-ppo-mc-matched-v2-s2002-a01/checkpoint-eval",
+          "wandb": {
+            "entity": "amulyap-stanford-university",
+            "project": "cs329z-agent-lightning",
+            "group": "explore-fixture-exploratory",
+            "id": "dc82b140679aefdc60751d9e",
+            "name": "explore-fixture-exploratory-ppo-mc-matched-v2-s2002-a01-checkpoint-eval",
+            "job_type": "checkpoint-eval",
+            "resume": "never",
+            "config": {
+              "pair_id": "explore-fixture-exploratory-s2002",
+              "algorithm": "ppo-mc-matched-v2",
+              "stage": "checkpoint-eval",
+              "run_seed": 2002,
+              "seed_streams": {
+                "python": 67202963,
+                "numpy": 398412575,
+                "torch_cpu": 184986633,
+                "torch_cuda": 1011855766,
+                "actor_sampling": 1523780133,
+                "actor_optimizer": 302575343,
+                "row_batching": 1059016305,
+                "critic_init": 841342930,
+                "paired_question_order": 159418719
+              },
+              "protocol": "matched-rollout-mean-v2",
+              "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+              "data_manifest_sha256": "f0320992e0b650a73e3c069fbd745f7e024dc453ced7dd6f16aec7b059ccc33b",
+              "steps": 20,
+              "resources": {
+                "gpu": "H100!",
+                "cpu": 16,
+                "memory_mib": 196608
+              },
+              "evaluation": "exploratory-legacy-64",
+              "dataset_selection_seed": 329,
+              "study_protocol": "exploratory-matched-20-v1",
+              "stage_timeout_seconds": 1800,
+              "checkpoint_policy": "one-final-per-run-no-deletion"
+            }
+          }
+        },
+        {
+          "job_id": "explore-fixture-exploratory-grpo-matched-v2-s2003-a01",
+          "stage": "baseline",
+          "status": "completed",
+          "call_id": "fc-4",
+          "output": "phase2/studies/explore-fixture/exploratory/explore-fixture-exploratory-grpo-matched-v2-s2003-a01/baseline",
+          "wandb": {
+            "entity": "amulyap-stanford-university",
+            "project": "cs329z-agent-lightning",
+            "group": "explore-fixture-exploratory",
+            "id": "6713c3237f3365d6c9fd4f9f",
+            "name": "explore-fixture-exploratory-grpo-matched-v2-s2003-a01-baseline",
+            "job_type": "baseline",
+            "resume": "never",
+            "config": {
+              "pair_id": "explore-fixture-exploratory-s2003",
+              "algorithm": "grpo-matched-v2",
+              "stage": "baseline",
+              "run_seed": 2003,
+              "seed_streams": {
+                "python": 1144113409,
+                "numpy": 1507765173,
+                "torch_cpu": 1964028339,
+                "torch_cuda": 2105002205,
+                "actor_sampling": 2087687882,
+                "actor_optimizer": 2106954347,
+                "row_batching": 617093520,
+                "critic_init": null,
+                "paired_question_order": 480664013
+              },
+              "protocol": "matched-rollout-mean-v2",
+              "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+              "data_manifest_sha256": "f0320992e0b650a73e3c069fbd745f7e024dc453ced7dd6f16aec7b059ccc33b",
+              "steps": 20,
+              "resources": {
+                "gpu": "H100!",
+                "cpu": 16,
+                "memory_mib": 196608
+              },
+              "evaluation": "exploratory-legacy-64",
+              "dataset_selection_seed": 329,
+              "study_protocol": "exploratory-matched-20-v1",
+              "stage_timeout_seconds": 1800,
+              "checkpoint_policy": "one-final-per-run-no-deletion"
+            }
+          }
+        },
+        {
+          "job_id": "explore-fixture-exploratory-grpo-matched-v2-s2003-a01",
+          "stage": "training",
+          "status": "completed",
+          "call_id": "fc-7",
+          "output": "phase2/studies/explore-fixture/exploratory/explore-fixture-exploratory-grpo-matched-v2-s2003-a01/training",
+          "wandb": {
+            "entity": "amulyap-stanford-university",
+            "project": "cs329z-agent-lightning",
+            "group": "explore-fixture-exploratory",
+            "id": "1b43156ce61d6dd4d2f76bfd",
+            "name": "explore-fixture-exploratory-grpo-matched-v2-s2003-a01-training",
+            "job_type": "training",
+            "resume": "never",
+            "config": {
+              "pair_id": "explore-fixture-exploratory-s2003",
+              "algorithm": "grpo-matched-v2",
+              "stage": "training",
+              "run_seed": 2003,
+              "seed_streams": {
+                "python": 1144113409,
+                "numpy": 1507765173,
+                "torch_cpu": 1964028339,
+                "torch_cuda": 2105002205,
+                "actor_sampling": 2087687882,
+                "actor_optimizer": 2106954347,
+                "row_batching": 617093520,
+                "critic_init": null,
+                "paired_question_order": 480664013
+              },
+              "protocol": "matched-rollout-mean-v2",
+              "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+              "data_manifest_sha256": "f0320992e0b650a73e3c069fbd745f7e024dc453ced7dd6f16aec7b059ccc33b",
+              "steps": 20,
+              "resources": {
+                "gpu": "H100!",
+                "cpu": 16,
+                "memory_mib": 196608
+              },
+              "evaluation": "exploratory-legacy-64",
+              "dataset_selection_seed": 329,
+              "study_protocol": "exploratory-matched-20-v1",
+              "stage_timeout_seconds": 5400,
+              "checkpoint_policy": "one-final-per-run-no-deletion"
+            }
+          }
+        },
+        {
+          "job_id": "explore-fixture-exploratory-grpo-matched-v2-s2003-a01",
+          "stage": "checkpoint-eval",
+          "status": "completed",
+          "call_id": "fc-16",
+          "output": "phase2/studies/explore-fixture/exploratory/explore-fixture-exploratory-grpo-matched-v2-s2003-a01/checkpoint-eval",
+          "wandb": {
+            "entity": "amulyap-stanford-university",
+            "project": "cs329z-agent-lightning",
+            "group": "explore-fixture-exploratory",
+            "id": "be864815319aa1f74954b450",
+            "name": "explore-fixture-exploratory-grpo-matched-v2-s2003-a01-checkpoint-eval",
+            "job_type": "checkpoint-eval",
+            "resume": "never",
+            "config": {
+              "pair_id": "explore-fixture-exploratory-s2003",
+              "algorithm": "grpo-matched-v2",
+              "stage": "checkpoint-eval",
+              "run_seed": 2003,
+              "seed_streams": {
+                "python": 1144113409,
+                "numpy": 1507765173,
+                "torch_cpu": 1964028339,
+                "torch_cuda": 2105002205,
+                "actor_sampling": 2087687882,
+                "actor_optimizer": 2106954347,
+                "row_batching": 617093520,
+                "critic_init": null,
+                "paired_question_order": 480664013
+              },
+              "protocol": "matched-rollout-mean-v2",
+              "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+              "data_manifest_sha256": "f0320992e0b650a73e3c069fbd745f7e024dc453ced7dd6f16aec7b059ccc33b",
+              "steps": 20,
+              "resources": {
+                "gpu": "H100!",
+                "cpu": 16,
+                "memory_mib": 196608
+              },
+              "evaluation": "exploratory-legacy-64",
+              "dataset_selection_seed": 329,
+              "study_protocol": "exploratory-matched-20-v1",
+              "stage_timeout_seconds": 1800,
+              "checkpoint_policy": "one-final-per-run-no-deletion"
+            }
+          }
+        },
+        {
+          "job_id": "explore-fixture-exploratory-ppo-mc-matched-v2-s2003-a01",
+          "stage": "baseline",
+          "status": "completed",
+          "call_id": "fc-5",
+          "output": "phase2/studies/explore-fixture/exploratory/explore-fixture-exploratory-ppo-mc-matched-v2-s2003-a01/baseline",
+          "wandb": {
+            "entity": "amulyap-stanford-university",
+            "project": "cs329z-agent-lightning",
+            "group": "explore-fixture-exploratory",
+            "id": "029c24e06dafe6fe7aa3ba4f",
+            "name": "explore-fixture-exploratory-ppo-mc-matched-v2-s2003-a01-baseline",
+            "job_type": "baseline",
+            "resume": "never",
+            "config": {
+              "pair_id": "explore-fixture-exploratory-s2003",
+              "algorithm": "ppo-mc-matched-v2",
+              "stage": "baseline",
+              "run_seed": 2003,
+              "seed_streams": {
+                "python": 1258554796,
+                "numpy": 1843857333,
+                "torch_cpu": 628919167,
+                "torch_cuda": 202834184,
+                "actor_sampling": 1476577634,
+                "actor_optimizer": 41617273,
+                "row_batching": 233215546,
+                "critic_init": 1307817716,
+                "paired_question_order": 480664013
+              },
+              "protocol": "matched-rollout-mean-v2",
+              "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+              "data_manifest_sha256": "f0320992e0b650a73e3c069fbd745f7e024dc453ced7dd6f16aec7b059ccc33b",
+              "steps": 20,
+              "resources": {
+                "gpu": "H100!",
+                "cpu": 16,
+                "memory_mib": 196608
+              },
+              "evaluation": "exploratory-legacy-64",
+              "dataset_selection_seed": 329,
+              "study_protocol": "exploratory-matched-20-v1",
+              "stage_timeout_seconds": 1800,
+              "checkpoint_policy": "one-final-per-run-no-deletion"
+            }
+          }
+        },
+        {
+          "job_id": "explore-fixture-exploratory-ppo-mc-matched-v2-s2003-a01",
+          "stage": "training",
+          "status": "completed",
+          "call_id": "fc-6",
+          "output": "phase2/studies/explore-fixture/exploratory/explore-fixture-exploratory-ppo-mc-matched-v2-s2003-a01/training",
+          "wandb": {
+            "entity": "amulyap-stanford-university",
+            "project": "cs329z-agent-lightning",
+            "group": "explore-fixture-exploratory",
+            "id": "05fbc8cb72b2b8334d225206",
+            "name": "explore-fixture-exploratory-ppo-mc-matched-v2-s2003-a01-training",
+            "job_type": "training",
+            "resume": "never",
+            "config": {
+              "pair_id": "explore-fixture-exploratory-s2003",
+              "algorithm": "ppo-mc-matched-v2",
+              "stage": "training",
+              "run_seed": 2003,
+              "seed_streams": {
+                "python": 1258554796,
+                "numpy": 1843857333,
+                "torch_cpu": 628919167,
+                "torch_cuda": 202834184,
+                "actor_sampling": 1476577634,
+                "actor_optimizer": 41617273,
+                "row_batching": 233215546,
+                "critic_init": 1307817716,
+                "paired_question_order": 480664013
+              },
+              "protocol": "matched-rollout-mean-v2",
+              "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+              "data_manifest_sha256": "f0320992e0b650a73e3c069fbd745f7e024dc453ced7dd6f16aec7b059ccc33b",
+              "steps": 20,
+              "resources": {
+                "gpu": "H100!",
+                "cpu": 16,
+                "memory_mib": 196608
+              },
+              "evaluation": "exploratory-legacy-64",
+              "dataset_selection_seed": 329,
+              "study_protocol": "exploratory-matched-20-v1",
+              "stage_timeout_seconds": 5400,
+              "checkpoint_policy": "one-final-per-run-no-deletion"
+            }
+          }
+        },
+        {
+          "job_id": "explore-fixture-exploratory-ppo-mc-matched-v2-s2003-a01",
+          "stage": "checkpoint-eval",
+          "status": "completed",
+          "call_id": "fc-17",
+          "output": "phase2/studies/explore-fixture/exploratory/explore-fixture-exploratory-ppo-mc-matched-v2-s2003-a01/checkpoint-eval",
+          "wandb": {
+            "entity": "amulyap-stanford-university",
+            "project": "cs329z-agent-lightning",
+            "group": "explore-fixture-exploratory",
+            "id": "aab95b76921d773a4cf44938",
+            "name": "explore-fixture-exploratory-ppo-mc-matched-v2-s2003-a01-checkpoint-eval",
+            "job_type": "checkpoint-eval",
+            "resume": "never",
+            "config": {
+              "pair_id": "explore-fixture-exploratory-s2003",
+              "algorithm": "ppo-mc-matched-v2",
+              "stage": "checkpoint-eval",
+              "run_seed": 2003,
+              "seed_streams": {
+                "python": 1258554796,
+                "numpy": 1843857333,
+                "torch_cpu": 628919167,
+                "torch_cuda": 202834184,
+                "actor_sampling": 1476577634,
+                "actor_optimizer": 41617273,
+                "row_batching": 233215546,
+                "critic_init": 1307817716,
+                "paired_question_order": 480664013
+              },
+              "protocol": "matched-rollout-mean-v2",
+              "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+              "data_manifest_sha256": "f0320992e0b650a73e3c069fbd745f7e024dc453ced7dd6f16aec7b059ccc33b",
+              "steps": 20,
+              "resources": {
+                "gpu": "H100!",
+                "cpu": 16,
+                "memory_mib": 196608
+              },
+              "evaluation": "exploratory-legacy-64",
+              "dataset_selection_seed": 329,
+              "study_protocol": "exploratory-matched-20-v1",
+              "stage_timeout_seconds": 1800,
+              "checkpoint_policy": "one-final-per-run-no-deletion"
+            }
+          }
+        }
+      ]
+    },
+    "exploratory/baseline_timeout": {
+      "metrics": {
+        "max_active": 6,
+        "calls": 6,
+        "cancelled": 6,
+        "elapsed_seconds": 1800.0
+      },
+      "status": "failed",
+      "stages": [
+        {
+          "job_id": "explore-fixture-exploratory-grpo-matched-v2-s2001-a01",
+          "stage": "baseline",
+          "status": "failed",
+          "call_id": "fc-0",
+          "output": "phase2/studies/explore-fixture/exploratory/explore-fixture-exploratory-grpo-matched-v2-s2001-a01/baseline",
+          "wandb": {
+            "entity": "amulyap-stanford-university",
+            "project": "cs329z-agent-lightning",
+            "group": "explore-fixture-exploratory",
+            "id": "33eeb725e129a6845ff742dd",
+            "name": "explore-fixture-exploratory-grpo-matched-v2-s2001-a01-baseline",
+            "job_type": "baseline",
+            "resume": "never",
+            "config": {
+              "pair_id": "explore-fixture-exploratory-s2001",
+              "algorithm": "grpo-matched-v2",
+              "stage": "baseline",
+              "run_seed": 2001,
+              "seed_streams": {
+                "python": 739147057,
+                "numpy": 765475253,
+                "torch_cpu": 1042113840,
+                "torch_cuda": 1528039489,
+                "actor_sampling": 1985310317,
+                "actor_optimizer": 1965135422,
+                "row_batching": 1492168271,
+                "critic_init": null,
+                "paired_question_order": 1771565522
+              },
+              "protocol": "matched-rollout-mean-v2",
+              "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+              "data_manifest_sha256": "f0320992e0b650a73e3c069fbd745f7e024dc453ced7dd6f16aec7b059ccc33b",
+              "steps": 20,
+              "resources": {
+                "gpu": "H100!",
+                "cpu": 16,
+                "memory_mib": 196608
+              },
+              "evaluation": "exploratory-legacy-64",
+              "dataset_selection_seed": 329,
+              "study_protocol": "exploratory-matched-20-v1",
+              "stage_timeout_seconds": 1800,
+              "checkpoint_policy": "one-final-per-run-no-deletion"
+            }
+          }
+        },
+        {
+          "job_id": "explore-fixture-exploratory-grpo-matched-v2-s2001-a01",
+          "stage": "training",
+          "status": "skipped",
+          "call_id": null,
+          "output": "phase2/studies/explore-fixture/exploratory/explore-fixture-exploratory-grpo-matched-v2-s2001-a01/training",
+          "wandb": {
+            "entity": "amulyap-stanford-university",
+            "project": "cs329z-agent-lightning",
+            "group": "explore-fixture-exploratory",
+            "id": "0667910aaa7d0bdd1ed4f21d",
+            "name": "explore-fixture-exploratory-grpo-matched-v2-s2001-a01-training",
+            "job_type": "training",
+            "resume": "never",
+            "config": {
+              "pair_id": "explore-fixture-exploratory-s2001",
+              "algorithm": "grpo-matched-v2",
+              "stage": "training",
+              "run_seed": 2001,
+              "seed_streams": {
+                "python": 739147057,
+                "numpy": 765475253,
+                "torch_cpu": 1042113840,
+                "torch_cuda": 1528039489,
+                "actor_sampling": 1985310317,
+                "actor_optimizer": 1965135422,
+                "row_batching": 1492168271,
+                "critic_init": null,
+                "paired_question_order": 1771565522
+              },
+              "protocol": "matched-rollout-mean-v2",
+              "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+              "data_manifest_sha256": "f0320992e0b650a73e3c069fbd745f7e024dc453ced7dd6f16aec7b059ccc33b",
+              "steps": 20,
+              "resources": {
+                "gpu": "H100!",
+                "cpu": 16,
+                "memory_mib": 196608
+              },
+              "evaluation": "exploratory-legacy-64",
+              "dataset_selection_seed": 329,
+              "study_protocol": "exploratory-matched-20-v1",
+              "stage_timeout_seconds": 5400,
+              "checkpoint_policy": "one-final-per-run-no-deletion"
+            }
+          }
+        },
+        {
+          "job_id": "explore-fixture-exploratory-grpo-matched-v2-s2001-a01",
+          "stage": "checkpoint-eval",
+          "status": "skipped",
+          "call_id": null,
+          "output": "phase2/studies/explore-fixture/exploratory/explore-fixture-exploratory-grpo-matched-v2-s2001-a01/checkpoint-eval",
+          "wandb": {
+            "entity": "amulyap-stanford-university",
+            "project": "cs329z-agent-lightning",
+            "group": "explore-fixture-exploratory",
+            "id": "0d6fec0cbb94f090ca07f4cf",
+            "name": "explore-fixture-exploratory-grpo-matched-v2-s2001-a01-checkpoint-eval",
+            "job_type": "checkpoint-eval",
+            "resume": "never",
+            "config": {
+              "pair_id": "explore-fixture-exploratory-s2001",
+              "algorithm": "grpo-matched-v2",
+              "stage": "checkpoint-eval",
+              "run_seed": 2001,
+              "seed_streams": {
+                "python": 739147057,
+                "numpy": 765475253,
+                "torch_cpu": 1042113840,
+                "torch_cuda": 1528039489,
+                "actor_sampling": 1985310317,
+                "actor_optimizer": 1965135422,
+                "row_batching": 1492168271,
+                "critic_init": null,
+                "paired_question_order": 1771565522
+              },
+              "protocol": "matched-rollout-mean-v2",
+              "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+              "data_manifest_sha256": "f0320992e0b650a73e3c069fbd745f7e024dc453ced7dd6f16aec7b059ccc33b",
+              "steps": 20,
+              "resources": {
+                "gpu": "H100!",
+                "cpu": 16,
+                "memory_mib": 196608
+              },
+              "evaluation": "exploratory-legacy-64",
+              "dataset_selection_seed": 329,
+              "study_protocol": "exploratory-matched-20-v1",
+              "stage_timeout_seconds": 1800,
+              "checkpoint_policy": "one-final-per-run-no-deletion"
+            }
+          }
+        },
+        {
+          "job_id": "explore-fixture-exploratory-ppo-mc-matched-v2-s2001-a01",
+          "stage": "baseline",
+          "status": "failed",
+          "call_id": "fc-1",
+          "output": "phase2/studies/explore-fixture/exploratory/explore-fixture-exploratory-ppo-mc-matched-v2-s2001-a01/baseline",
+          "wandb": {
+            "entity": "amulyap-stanford-university",
+            "project": "cs329z-agent-lightning",
+            "group": "explore-fixture-exploratory",
+            "id": "38e70a5dad2462461cdaaa8b",
+            "name": "explore-fixture-exploratory-ppo-mc-matched-v2-s2001-a01-baseline",
+            "job_type": "baseline",
+            "resume": "never",
+            "config": {
+              "pair_id": "explore-fixture-exploratory-s2001",
+              "algorithm": "ppo-mc-matched-v2",
+              "stage": "baseline",
+              "run_seed": 2001,
+              "seed_streams": {
+                "python": 9599114,
+                "numpy": 1601258701,
+                "torch_cpu": 553990097,
+                "torch_cuda": 1884451394,
+                "actor_sampling": 973110461,
+                "actor_optimizer": 683842814,
+                "row_batching": 705947965,
+                "critic_init": 207224476,
+                "paired_question_order": 1771565522
+              },
+              "protocol": "matched-rollout-mean-v2",
+              "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+              "data_manifest_sha256": "f0320992e0b650a73e3c069fbd745f7e024dc453ced7dd6f16aec7b059ccc33b",
+              "steps": 20,
+              "resources": {
+                "gpu": "H100!",
+                "cpu": 16,
+                "memory_mib": 196608
+              },
+              "evaluation": "exploratory-legacy-64",
+              "dataset_selection_seed": 329,
+              "study_protocol": "exploratory-matched-20-v1",
+              "stage_timeout_seconds": 1800,
+              "checkpoint_policy": "one-final-per-run-no-deletion"
+            }
+          }
+        },
+        {
+          "job_id": "explore-fixture-exploratory-ppo-mc-matched-v2-s2001-a01",
+          "stage": "training",
+          "status": "skipped",
+          "call_id": null,
+          "output": "phase2/studies/explore-fixture/exploratory/explore-fixture-exploratory-ppo-mc-matched-v2-s2001-a01/training",
+          "wandb": {
+            "entity": "amulyap-stanford-university",
+            "project": "cs329z-agent-lightning",
+            "group": "explore-fixture-exploratory",
+            "id": "a49d6d7ad3de7b53b5923045",
+            "name": "explore-fixture-exploratory-ppo-mc-matched-v2-s2001-a01-training",
+            "job_type": "training",
+            "resume": "never",
+            "config": {
+              "pair_id": "explore-fixture-exploratory-s2001",
+              "algorithm": "ppo-mc-matched-v2",
+              "stage": "training",
+              "run_seed": 2001,
+              "seed_streams": {
+                "python": 9599114,
+                "numpy": 1601258701,
+                "torch_cpu": 553990097,
+                "torch_cuda": 1884451394,
+                "actor_sampling": 973110461,
+                "actor_optimizer": 683842814,
+                "row_batching": 705947965,
+                "critic_init": 207224476,
+                "paired_question_order": 1771565522
+              },
+              "protocol": "matched-rollout-mean-v2",
+              "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+              "data_manifest_sha256": "f0320992e0b650a73e3c069fbd745f7e024dc453ced7dd6f16aec7b059ccc33b",
+              "steps": 20,
+              "resources": {
+                "gpu": "H100!",
+                "cpu": 16,
+                "memory_mib": 196608
+              },
+              "evaluation": "exploratory-legacy-64",
+              "dataset_selection_seed": 329,
+              "study_protocol": "exploratory-matched-20-v1",
+              "stage_timeout_seconds": 5400,
+              "checkpoint_policy": "one-final-per-run-no-deletion"
+            }
+          }
+        },
+        {
+          "job_id": "explore-fixture-exploratory-ppo-mc-matched-v2-s2001-a01",
+          "stage": "checkpoint-eval",
+          "status": "skipped",
+          "call_id": null,
+          "output": "phase2/studies/explore-fixture/exploratory/explore-fixture-exploratory-ppo-mc-matched-v2-s2001-a01/checkpoint-eval",
+          "wandb": {
+            "entity": "amulyap-stanford-university",
+            "project": "cs329z-agent-lightning",
+            "group": "explore-fixture-exploratory",
+            "id": "8a0d1334fc7bb40bb2044b67",
+            "name": "explore-fixture-exploratory-ppo-mc-matched-v2-s2001-a01-checkpoint-eval",
+            "job_type": "checkpoint-eval",
+            "resume": "never",
+            "config": {
+              "pair_id": "explore-fixture-exploratory-s2001",
+              "algorithm": "ppo-mc-matched-v2",
+              "stage": "checkpoint-eval",
+              "run_seed": 2001,
+              "seed_streams": {
+                "python": 9599114,
+                "numpy": 1601258701,
+                "torch_cpu": 553990097,
+                "torch_cuda": 1884451394,
+                "actor_sampling": 973110461,
+                "actor_optimizer": 683842814,
+                "row_batching": 705947965,
+                "critic_init": 207224476,
+                "paired_question_order": 1771565522
+              },
+              "protocol": "matched-rollout-mean-v2",
+              "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+              "data_manifest_sha256": "f0320992e0b650a73e3c069fbd745f7e024dc453ced7dd6f16aec7b059ccc33b",
+              "steps": 20,
+              "resources": {
+                "gpu": "H100!",
+                "cpu": 16,
+                "memory_mib": 196608
+              },
+              "evaluation": "exploratory-legacy-64",
+              "dataset_selection_seed": 329,
+              "study_protocol": "exploratory-matched-20-v1",
+              "stage_timeout_seconds": 1800,
+              "checkpoint_policy": "one-final-per-run-no-deletion"
+            }
+          }
+        },
+        {
+          "job_id": "explore-fixture-exploratory-grpo-matched-v2-s2002-a01",
+          "stage": "baseline",
+          "status": "failed",
+          "call_id": "fc-2",
+          "output": "phase2/studies/explore-fixture/exploratory/explore-fixture-exploratory-grpo-matched-v2-s2002-a01/baseline",
+          "wandb": {
+            "entity": "amulyap-stanford-university",
+            "project": "cs329z-agent-lightning",
+            "group": "explore-fixture-exploratory",
+            "id": "75df95425c1a80c1bd68518a",
+            "name": "explore-fixture-exploratory-grpo-matched-v2-s2002-a01-baseline",
+            "job_type": "baseline",
+            "resume": "never",
+            "config": {
+              "pair_id": "explore-fixture-exploratory-s2002",
+              "algorithm": "grpo-matched-v2",
+              "stage": "baseline",
+              "run_seed": 2002,
+              "seed_streams": {
+                "python": 1965329281,
+                "numpy": 704083147,
+                "torch_cpu": 337984257,
+                "torch_cuda": 1348510432,
+                "actor_sampling": 1612695726,
+                "actor_optimizer": 188145402,
+                "row_batching": 290452874,
+                "critic_init": null,
+                "paired_question_order": 159418719
+              },
+              "protocol": "matched-rollout-mean-v2",
+              "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+              "data_manifest_sha256": "f0320992e0b650a73e3c069fbd745f7e024dc453ced7dd6f16aec7b059ccc33b",
+              "steps": 20,
+              "resources": {
+                "gpu": "H100!",
+                "cpu": 16,
+                "memory_mib": 196608
+              },
+              "evaluation": "exploratory-legacy-64",
+              "dataset_selection_seed": 329,
+              "study_protocol": "exploratory-matched-20-v1",
+              "stage_timeout_seconds": 1800,
+              "checkpoint_policy": "one-final-per-run-no-deletion"
+            }
+          }
+        },
+        {
+          "job_id": "explore-fixture-exploratory-grpo-matched-v2-s2002-a01",
+          "stage": "training",
+          "status": "skipped",
+          "call_id": null,
+          "output": "phase2/studies/explore-fixture/exploratory/explore-fixture-exploratory-grpo-matched-v2-s2002-a01/training",
+          "wandb": {
+            "entity": "amulyap-stanford-university",
+            "project": "cs329z-agent-lightning",
+            "group": "explore-fixture-exploratory",
+            "id": "602791422fd565b68b4f1870",
+            "name": "explore-fixture-exploratory-grpo-matched-v2-s2002-a01-training",
+            "job_type": "training",
+            "resume": "never",
+            "config": {
+              "pair_id": "explore-fixture-exploratory-s2002",
+              "algorithm": "grpo-matched-v2",
+              "stage": "training",
+              "run_seed": 2002,
+              "seed_streams": {
+                "python": 1965329281,
+                "numpy": 704083147,
+                "torch_cpu": 337984257,
+                "torch_cuda": 1348510432,
+                "actor_sampling": 1612695726,
+                "actor_optimizer": 188145402,
+                "row_batching": 290452874,
+                "critic_init": null,
+                "paired_question_order": 159418719
+              },
+              "protocol": "matched-rollout-mean-v2",
+              "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+              "data_manifest_sha256": "f0320992e0b650a73e3c069fbd745f7e024dc453ced7dd6f16aec7b059ccc33b",
+              "steps": 20,
+              "resources": {
+                "gpu": "H100!",
+                "cpu": 16,
+                "memory_mib": 196608
+              },
+              "evaluation": "exploratory-legacy-64",
+              "dataset_selection_seed": 329,
+              "study_protocol": "exploratory-matched-20-v1",
+              "stage_timeout_seconds": 5400,
+              "checkpoint_policy": "one-final-per-run-no-deletion"
+            }
+          }
+        },
+        {
+          "job_id": "explore-fixture-exploratory-grpo-matched-v2-s2002-a01",
+          "stage": "checkpoint-eval",
+          "status": "skipped",
+          "call_id": null,
+          "output": "phase2/studies/explore-fixture/exploratory/explore-fixture-exploratory-grpo-matched-v2-s2002-a01/checkpoint-eval",
+          "wandb": {
+            "entity": "amulyap-stanford-university",
+            "project": "cs329z-agent-lightning",
+            "group": "explore-fixture-exploratory",
+            "id": "17452ef217e4ba7260df003e",
+            "name": "explore-fixture-exploratory-grpo-matched-v2-s2002-a01-checkpoint-eval",
+            "job_type": "checkpoint-eval",
+            "resume": "never",
+            "config": {
+              "pair_id": "explore-fixture-exploratory-s2002",
+              "algorithm": "grpo-matched-v2",
+              "stage": "checkpoint-eval",
+              "run_seed": 2002,
+              "seed_streams": {
+                "python": 1965329281,
+                "numpy": 704083147,
+                "torch_cpu": 337984257,
+                "torch_cuda": 1348510432,
+                "actor_sampling": 1612695726,
+                "actor_optimizer": 188145402,
+                "row_batching": 290452874,
+                "critic_init": null,
+                "paired_question_order": 159418719
+              },
+              "protocol": "matched-rollout-mean-v2",
+              "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+              "data_manifest_sha256": "f0320992e0b650a73e3c069fbd745f7e024dc453ced7dd6f16aec7b059ccc33b",
+              "steps": 20,
+              "resources": {
+                "gpu": "H100!",
+                "cpu": 16,
+                "memory_mib": 196608
+              },
+              "evaluation": "exploratory-legacy-64",
+              "dataset_selection_seed": 329,
+              "study_protocol": "exploratory-matched-20-v1",
+              "stage_timeout_seconds": 1800,
+              "checkpoint_policy": "one-final-per-run-no-deletion"
+            }
+          }
+        },
+        {
+          "job_id": "explore-fixture-exploratory-ppo-mc-matched-v2-s2002-a01",
+          "stage": "baseline",
+          "status": "failed",
+          "call_id": "fc-3",
+          "output": "phase2/studies/explore-fixture/exploratory/explore-fixture-exploratory-ppo-mc-matched-v2-s2002-a01/baseline",
+          "wandb": {
+            "entity": "amulyap-stanford-university",
+            "project": "cs329z-agent-lightning",
+            "group": "explore-fixture-exploratory",
+            "id": "0245192f6718b3cfa495d7bf",
+            "name": "explore-fixture-exploratory-ppo-mc-matched-v2-s2002-a01-baseline",
+            "job_type": "baseline",
+            "resume": "never",
+            "config": {
+              "pair_id": "explore-fixture-exploratory-s2002",
+              "algorithm": "ppo-mc-matched-v2",
+              "stage": "baseline",
+              "run_seed": 2002,
+              "seed_streams": {
+                "python": 67202963,
+                "numpy": 398412575,
+                "torch_cpu": 184986633,
+                "torch_cuda": 1011855766,
+                "actor_sampling": 1523780133,
+                "actor_optimizer": 302575343,
+                "row_batching": 1059016305,
+                "critic_init": 841342930,
+                "paired_question_order": 159418719
+              },
+              "protocol": "matched-rollout-mean-v2",
+              "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+              "data_manifest_sha256": "f0320992e0b650a73e3c069fbd745f7e024dc453ced7dd6f16aec7b059ccc33b",
+              "steps": 20,
+              "resources": {
+                "gpu": "H100!",
+                "cpu": 16,
+                "memory_mib": 196608
+              },
+              "evaluation": "exploratory-legacy-64",
+              "dataset_selection_seed": 329,
+              "study_protocol": "exploratory-matched-20-v1",
+              "stage_timeout_seconds": 1800,
+              "checkpoint_policy": "one-final-per-run-no-deletion"
+            }
+          }
+        },
+        {
+          "job_id": "explore-fixture-exploratory-ppo-mc-matched-v2-s2002-a01",
+          "stage": "training",
+          "status": "skipped",
+          "call_id": null,
+          "output": "phase2/studies/explore-fixture/exploratory/explore-fixture-exploratory-ppo-mc-matched-v2-s2002-a01/training",
+          "wandb": {
+            "entity": "amulyap-stanford-university",
+            "project": "cs329z-agent-lightning",
+            "group": "explore-fixture-exploratory",
+            "id": "58921c7a1656d448778427bb",
+            "name": "explore-fixture-exploratory-ppo-mc-matched-v2-s2002-a01-training",
+            "job_type": "training",
+            "resume": "never",
+            "config": {
+              "pair_id": "explore-fixture-exploratory-s2002",
+              "algorithm": "ppo-mc-matched-v2",
+              "stage": "training",
+              "run_seed": 2002,
+              "seed_streams": {
+                "python": 67202963,
+                "numpy": 398412575,
+                "torch_cpu": 184986633,
+                "torch_cuda": 1011855766,
+                "actor_sampling": 1523780133,
+                "actor_optimizer": 302575343,
+                "row_batching": 1059016305,
+                "critic_init": 841342930,
+                "paired_question_order": 159418719
+              },
+              "protocol": "matched-rollout-mean-v2",
+              "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+              "data_manifest_sha256": "f0320992e0b650a73e3c069fbd745f7e024dc453ced7dd6f16aec7b059ccc33b",
+              "steps": 20,
+              "resources": {
+                "gpu": "H100!",
+                "cpu": 16,
+                "memory_mib": 196608
+              },
+              "evaluation": "exploratory-legacy-64",
+              "dataset_selection_seed": 329,
+              "study_protocol": "exploratory-matched-20-v1",
+              "stage_timeout_seconds": 5400,
+              "checkpoint_policy": "one-final-per-run-no-deletion"
+            }
+          }
+        },
+        {
+          "job_id": "explore-fixture-exploratory-ppo-mc-matched-v2-s2002-a01",
+          "stage": "checkpoint-eval",
+          "status": "skipped",
+          "call_id": null,
+          "output": "phase2/studies/explore-fixture/exploratory/explore-fixture-exploratory-ppo-mc-matched-v2-s2002-a01/checkpoint-eval",
+          "wandb": {
+            "entity": "amulyap-stanford-university",
+            "project": "cs329z-agent-lightning",
+            "group": "explore-fixture-exploratory",
+            "id": "dc82b140679aefdc60751d9e",
+            "name": "explore-fixture-exploratory-ppo-mc-matched-v2-s2002-a01-checkpoint-eval",
+            "job_type": "checkpoint-eval",
+            "resume": "never",
+            "config": {
+              "pair_id": "explore-fixture-exploratory-s2002",
+              "algorithm": "ppo-mc-matched-v2",
+              "stage": "checkpoint-eval",
+              "run_seed": 2002,
+              "seed_streams": {
+                "python": 67202963,
+                "numpy": 398412575,
+                "torch_cpu": 184986633,
+                "torch_cuda": 1011855766,
+                "actor_sampling": 1523780133,
+                "actor_optimizer": 302575343,
+                "row_batching": 1059016305,
+                "critic_init": 841342930,
+                "paired_question_order": 159418719
+              },
+              "protocol": "matched-rollout-mean-v2",
+              "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+              "data_manifest_sha256": "f0320992e0b650a73e3c069fbd745f7e024dc453ced7dd6f16aec7b059ccc33b",
+              "steps": 20,
+              "resources": {
+                "gpu": "H100!",
+                "cpu": 16,
+                "memory_mib": 196608
+              },
+              "evaluation": "exploratory-legacy-64",
+              "dataset_selection_seed": 329,
+              "study_protocol": "exploratory-matched-20-v1",
+              "stage_timeout_seconds": 1800,
+              "checkpoint_policy": "one-final-per-run-no-deletion"
+            }
+          }
+        },
+        {
+          "job_id": "explore-fixture-exploratory-grpo-matched-v2-s2003-a01",
+          "stage": "baseline",
+          "status": "failed",
+          "call_id": "fc-4",
+          "output": "phase2/studies/explore-fixture/exploratory/explore-fixture-exploratory-grpo-matched-v2-s2003-a01/baseline",
+          "wandb": {
+            "entity": "amulyap-stanford-university",
+            "project": "cs329z-agent-lightning",
+            "group": "explore-fixture-exploratory",
+            "id": "6713c3237f3365d6c9fd4f9f",
+            "name": "explore-fixture-exploratory-grpo-matched-v2-s2003-a01-baseline",
+            "job_type": "baseline",
+            "resume": "never",
+            "config": {
+              "pair_id": "explore-fixture-exploratory-s2003",
+              "algorithm": "grpo-matched-v2",
+              "stage": "baseline",
+              "run_seed": 2003,
+              "seed_streams": {
+                "python": 1144113409,
+                "numpy": 1507765173,
+                "torch_cpu": 1964028339,
+                "torch_cuda": 2105002205,
+                "actor_sampling": 2087687882,
+                "actor_optimizer": 2106954347,
+                "row_batching": 617093520,
+                "critic_init": null,
+                "paired_question_order": 480664013
+              },
+              "protocol": "matched-rollout-mean-v2",
+              "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+              "data_manifest_sha256": "f0320992e0b650a73e3c069fbd745f7e024dc453ced7dd6f16aec7b059ccc33b",
+              "steps": 20,
+              "resources": {
+                "gpu": "H100!",
+                "cpu": 16,
+                "memory_mib": 196608
+              },
+              "evaluation": "exploratory-legacy-64",
+              "dataset_selection_seed": 329,
+              "study_protocol": "exploratory-matched-20-v1",
+              "stage_timeout_seconds": 1800,
+              "checkpoint_policy": "one-final-per-run-no-deletion"
+            }
+          }
+        },
+        {
+          "job_id": "explore-fixture-exploratory-grpo-matched-v2-s2003-a01",
+          "stage": "training",
+          "status": "skipped",
+          "call_id": null,
+          "output": "phase2/studies/explore-fixture/exploratory/explore-fixture-exploratory-grpo-matched-v2-s2003-a01/training",
+          "wandb": {
+            "entity": "amulyap-stanford-university",
+            "project": "cs329z-agent-lightning",
+            "group": "explore-fixture-exploratory",
+            "id": "1b43156ce61d6dd4d2f76bfd",
+            "name": "explore-fixture-exploratory-grpo-matched-v2-s2003-a01-training",
+            "job_type": "training",
+            "resume": "never",
+            "config": {
+              "pair_id": "explore-fixture-exploratory-s2003",
+              "algorithm": "grpo-matched-v2",
+              "stage": "training",
+              "run_seed": 2003,
+              "seed_streams": {
+                "python": 1144113409,
+                "numpy": 1507765173,
+                "torch_cpu": 1964028339,
+                "torch_cuda": 2105002205,
+                "actor_sampling": 2087687882,
+                "actor_optimizer": 2106954347,
+                "row_batching": 617093520,
+                "critic_init": null,
+                "paired_question_order": 480664013
+              },
+              "protocol": "matched-rollout-mean-v2",
+              "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+              "data_manifest_sha256": "f0320992e0b650a73e3c069fbd745f7e024dc453ced7dd6f16aec7b059ccc33b",
+              "steps": 20,
+              "resources": {
+                "gpu": "H100!",
+                "cpu": 16,
+                "memory_mib": 196608
+              },
+              "evaluation": "exploratory-legacy-64",
+              "dataset_selection_seed": 329,
+              "study_protocol": "exploratory-matched-20-v1",
+              "stage_timeout_seconds": 5400,
+              "checkpoint_policy": "one-final-per-run-no-deletion"
+            }
+          }
+        },
+        {
+          "job_id": "explore-fixture-exploratory-grpo-matched-v2-s2003-a01",
+          "stage": "checkpoint-eval",
+          "status": "skipped",
+          "call_id": null,
+          "output": "phase2/studies/explore-fixture/exploratory/explore-fixture-exploratory-grpo-matched-v2-s2003-a01/checkpoint-eval",
+          "wandb": {
+            "entity": "amulyap-stanford-university",
+            "project": "cs329z-agent-lightning",
+            "group": "explore-fixture-exploratory",
+            "id": "be864815319aa1f74954b450",
+            "name": "explore-fixture-exploratory-grpo-matched-v2-s2003-a01-checkpoint-eval",
+            "job_type": "checkpoint-eval",
+            "resume": "never",
+            "config": {
+              "pair_id": "explore-fixture-exploratory-s2003",
+              "algorithm": "grpo-matched-v2",
+              "stage": "checkpoint-eval",
+              "run_seed": 2003,
+              "seed_streams": {
+                "python": 1144113409,
+                "numpy": 1507765173,
+                "torch_cpu": 1964028339,
+                "torch_cuda": 2105002205,
+                "actor_sampling": 2087687882,
+                "actor_optimizer": 2106954347,
+                "row_batching": 617093520,
+                "critic_init": null,
+                "paired_question_order": 480664013
+              },
+              "protocol": "matched-rollout-mean-v2",
+              "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+              "data_manifest_sha256": "f0320992e0b650a73e3c069fbd745f7e024dc453ced7dd6f16aec7b059ccc33b",
+              "steps": 20,
+              "resources": {
+                "gpu": "H100!",
+                "cpu": 16,
+                "memory_mib": 196608
+              },
+              "evaluation": "exploratory-legacy-64",
+              "dataset_selection_seed": 329,
+              "study_protocol": "exploratory-matched-20-v1",
+              "stage_timeout_seconds": 1800,
+              "checkpoint_policy": "one-final-per-run-no-deletion"
+            }
+          }
+        },
+        {
+          "job_id": "explore-fixture-exploratory-ppo-mc-matched-v2-s2003-a01",
+          "stage": "baseline",
+          "status": "failed",
+          "call_id": "fc-5",
+          "output": "phase2/studies/explore-fixture/exploratory/explore-fixture-exploratory-ppo-mc-matched-v2-s2003-a01/baseline",
+          "wandb": {
+            "entity": "amulyap-stanford-university",
+            "project": "cs329z-agent-lightning",
+            "group": "explore-fixture-exploratory",
+            "id": "029c24e06dafe6fe7aa3ba4f",
+            "name": "explore-fixture-exploratory-ppo-mc-matched-v2-s2003-a01-baseline",
+            "job_type": "baseline",
+            "resume": "never",
+            "config": {
+              "pair_id": "explore-fixture-exploratory-s2003",
+              "algorithm": "ppo-mc-matched-v2",
+              "stage": "baseline",
+              "run_seed": 2003,
+              "seed_streams": {
+                "python": 1258554796,
+                "numpy": 1843857333,
+                "torch_cpu": 628919167,
+                "torch_cuda": 202834184,
+                "actor_sampling": 1476577634,
+                "actor_optimizer": 41617273,
+                "row_batching": 233215546,
+                "critic_init": 1307817716,
+                "paired_question_order": 480664013
+              },
+              "protocol": "matched-rollout-mean-v2",
+              "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+              "data_manifest_sha256": "f0320992e0b650a73e3c069fbd745f7e024dc453ced7dd6f16aec7b059ccc33b",
+              "steps": 20,
+              "resources": {
+                "gpu": "H100!",
+                "cpu": 16,
+                "memory_mib": 196608
+              },
+              "evaluation": "exploratory-legacy-64",
+              "dataset_selection_seed": 329,
+              "study_protocol": "exploratory-matched-20-v1",
+              "stage_timeout_seconds": 1800,
+              "checkpoint_policy": "one-final-per-run-no-deletion"
+            }
+          }
+        },
+        {
+          "job_id": "explore-fixture-exploratory-ppo-mc-matched-v2-s2003-a01",
+          "stage": "training",
+          "status": "skipped",
+          "call_id": null,
+          "output": "phase2/studies/explore-fixture/exploratory/explore-fixture-exploratory-ppo-mc-matched-v2-s2003-a01/training",
+          "wandb": {
+            "entity": "amulyap-stanford-university",
+            "project": "cs329z-agent-lightning",
+            "group": "explore-fixture-exploratory",
+            "id": "05fbc8cb72b2b8334d225206",
+            "name": "explore-fixture-exploratory-ppo-mc-matched-v2-s2003-a01-training",
+            "job_type": "training",
+            "resume": "never",
+            "config": {
+              "pair_id": "explore-fixture-exploratory-s2003",
+              "algorithm": "ppo-mc-matched-v2",
+              "stage": "training",
+              "run_seed": 2003,
+              "seed_streams": {
+                "python": 1258554796,
+                "numpy": 1843857333,
+                "torch_cpu": 628919167,
+                "torch_cuda": 202834184,
+                "actor_sampling": 1476577634,
+                "actor_optimizer": 41617273,
+                "row_batching": 233215546,
+                "critic_init": 1307817716,
+                "paired_question_order": 480664013
+              },
+              "protocol": "matched-rollout-mean-v2",
+              "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+              "data_manifest_sha256": "f0320992e0b650a73e3c069fbd745f7e024dc453ced7dd6f16aec7b059ccc33b",
+              "steps": 20,
+              "resources": {
+                "gpu": "H100!",
+                "cpu": 16,
+                "memory_mib": 196608
+              },
+              "evaluation": "exploratory-legacy-64",
+              "dataset_selection_seed": 329,
+              "study_protocol": "exploratory-matched-20-v1",
+              "stage_timeout_seconds": 5400,
+              "checkpoint_policy": "one-final-per-run-no-deletion"
+            }
+          }
+        },
+        {
+          "job_id": "explore-fixture-exploratory-ppo-mc-matched-v2-s2003-a01",
+          "stage": "checkpoint-eval",
+          "status": "skipped",
+          "call_id": null,
+          "output": "phase2/studies/explore-fixture/exploratory/explore-fixture-exploratory-ppo-mc-matched-v2-s2003-a01/checkpoint-eval",
+          "wandb": {
+            "entity": "amulyap-stanford-university",
+            "project": "cs329z-agent-lightning",
+            "group": "explore-fixture-exploratory",
+            "id": "aab95b76921d773a4cf44938",
+            "name": "explore-fixture-exploratory-ppo-mc-matched-v2-s2003-a01-checkpoint-eval",
+            "job_type": "checkpoint-eval",
+            "resume": "never",
+            "config": {
+              "pair_id": "explore-fixture-exploratory-s2003",
+              "algorithm": "ppo-mc-matched-v2",
+              "stage": "checkpoint-eval",
+              "run_seed": 2003,
+              "seed_streams": {
+                "python": 1258554796,
+                "numpy": 1843857333,
+                "torch_cpu": 628919167,
+                "torch_cuda": 202834184,
+                "actor_sampling": 1476577634,
+                "actor_optimizer": 41617273,
+                "row_batching": 233215546,
+                "critic_init": 1307817716,
+                "paired_question_order": 480664013
+              },
+              "protocol": "matched-rollout-mean-v2",
+              "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+              "data_manifest_sha256": "f0320992e0b650a73e3c069fbd745f7e024dc453ced7dd6f16aec7b059ccc33b",
+              "steps": 20,
+              "resources": {
+                "gpu": "H100!",
+                "cpu": 16,
+                "memory_mib": 196608
+              },
+              "evaluation": "exploratory-legacy-64",
+              "dataset_selection_seed": 329,
+              "study_protocol": "exploratory-matched-20-v1",
+              "stage_timeout_seconds": 1800,
+              "checkpoint_policy": "one-final-per-run-no-deletion"
+            }
+          }
+        }
+      ]
+    },
+    "exploratory/training_timeout": {
+      "metrics": {
+        "max_active": 6,
+        "calls": 12,
+        "cancelled": 6,
+        "elapsed_seconds": 5410.0
+      },
+      "status": "failed",
+      "stages": [
+        {
+          "job_id": "explore-fixture-exploratory-grpo-matched-v2-s2001-a01",
+          "stage": "baseline",
+          "status": "completed",
+          "call_id": "fc-0",
+          "output": "phase2/studies/explore-fixture/exploratory/explore-fixture-exploratory-grpo-matched-v2-s2001-a01/baseline",
+          "wandb": {
+            "entity": "amulyap-stanford-university",
+            "project": "cs329z-agent-lightning",
+            "group": "explore-fixture-exploratory",
+            "id": "33eeb725e129a6845ff742dd",
+            "name": "explore-fixture-exploratory-grpo-matched-v2-s2001-a01-baseline",
+            "job_type": "baseline",
+            "resume": "never",
+            "config": {
+              "pair_id": "explore-fixture-exploratory-s2001",
+              "algorithm": "grpo-matched-v2",
+              "stage": "baseline",
+              "run_seed": 2001,
+              "seed_streams": {
+                "python": 739147057,
+                "numpy": 765475253,
+                "torch_cpu": 1042113840,
+                "torch_cuda": 1528039489,
+                "actor_sampling": 1985310317,
+                "actor_optimizer": 1965135422,
+                "row_batching": 1492168271,
+                "critic_init": null,
+                "paired_question_order": 1771565522
+              },
+              "protocol": "matched-rollout-mean-v2",
+              "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+              "data_manifest_sha256": "f0320992e0b650a73e3c069fbd745f7e024dc453ced7dd6f16aec7b059ccc33b",
+              "steps": 20,
+              "resources": {
+                "gpu": "H100!",
+                "cpu": 16,
+                "memory_mib": 196608
+              },
+              "evaluation": "exploratory-legacy-64",
+              "dataset_selection_seed": 329,
+              "study_protocol": "exploratory-matched-20-v1",
+              "stage_timeout_seconds": 1800,
+              "checkpoint_policy": "one-final-per-run-no-deletion"
+            }
+          }
+        },
+        {
+          "job_id": "explore-fixture-exploratory-grpo-matched-v2-s2001-a01",
+          "stage": "training",
+          "status": "failed",
+          "call_id": "fc-11",
+          "output": "phase2/studies/explore-fixture/exploratory/explore-fixture-exploratory-grpo-matched-v2-s2001-a01/training",
+          "wandb": {
+            "entity": "amulyap-stanford-university",
+            "project": "cs329z-agent-lightning",
+            "group": "explore-fixture-exploratory",
+            "id": "0667910aaa7d0bdd1ed4f21d",
+            "name": "explore-fixture-exploratory-grpo-matched-v2-s2001-a01-training",
+            "job_type": "training",
+            "resume": "never",
+            "config": {
+              "pair_id": "explore-fixture-exploratory-s2001",
+              "algorithm": "grpo-matched-v2",
+              "stage": "training",
+              "run_seed": 2001,
+              "seed_streams": {
+                "python": 739147057,
+                "numpy": 765475253,
+                "torch_cpu": 1042113840,
+                "torch_cuda": 1528039489,
+                "actor_sampling": 1985310317,
+                "actor_optimizer": 1965135422,
+                "row_batching": 1492168271,
+                "critic_init": null,
+                "paired_question_order": 1771565522
+              },
+              "protocol": "matched-rollout-mean-v2",
+              "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+              "data_manifest_sha256": "f0320992e0b650a73e3c069fbd745f7e024dc453ced7dd6f16aec7b059ccc33b",
+              "steps": 20,
+              "resources": {
+                "gpu": "H100!",
+                "cpu": 16,
+                "memory_mib": 196608
+              },
+              "evaluation": "exploratory-legacy-64",
+              "dataset_selection_seed": 329,
+              "study_protocol": "exploratory-matched-20-v1",
+              "stage_timeout_seconds": 5400,
+              "checkpoint_policy": "one-final-per-run-no-deletion"
+            }
+          }
+        },
+        {
+          "job_id": "explore-fixture-exploratory-grpo-matched-v2-s2001-a01",
+          "stage": "checkpoint-eval",
+          "status": "skipped",
+          "call_id": null,
+          "output": "phase2/studies/explore-fixture/exploratory/explore-fixture-exploratory-grpo-matched-v2-s2001-a01/checkpoint-eval",
+          "wandb": {
+            "entity": "amulyap-stanford-university",
+            "project": "cs329z-agent-lightning",
+            "group": "explore-fixture-exploratory",
+            "id": "0d6fec0cbb94f090ca07f4cf",
+            "name": "explore-fixture-exploratory-grpo-matched-v2-s2001-a01-checkpoint-eval",
+            "job_type": "checkpoint-eval",
+            "resume": "never",
+            "config": {
+              "pair_id": "explore-fixture-exploratory-s2001",
+              "algorithm": "grpo-matched-v2",
+              "stage": "checkpoint-eval",
+              "run_seed": 2001,
+              "seed_streams": {
+                "python": 739147057,
+                "numpy": 765475253,
+                "torch_cpu": 1042113840,
+                "torch_cuda": 1528039489,
+                "actor_sampling": 1985310317,
+                "actor_optimizer": 1965135422,
+                "row_batching": 1492168271,
+                "critic_init": null,
+                "paired_question_order": 1771565522
+              },
+              "protocol": "matched-rollout-mean-v2",
+              "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+              "data_manifest_sha256": "f0320992e0b650a73e3c069fbd745f7e024dc453ced7dd6f16aec7b059ccc33b",
+              "steps": 20,
+              "resources": {
+                "gpu": "H100!",
+                "cpu": 16,
+                "memory_mib": 196608
+              },
+              "evaluation": "exploratory-legacy-64",
+              "dataset_selection_seed": 329,
+              "study_protocol": "exploratory-matched-20-v1",
+              "stage_timeout_seconds": 1800,
+              "checkpoint_policy": "one-final-per-run-no-deletion"
+            }
+          }
+        },
+        {
+          "job_id": "explore-fixture-exploratory-ppo-mc-matched-v2-s2001-a01",
+          "stage": "baseline",
+          "status": "completed",
+          "call_id": "fc-1",
+          "output": "phase2/studies/explore-fixture/exploratory/explore-fixture-exploratory-ppo-mc-matched-v2-s2001-a01/baseline",
+          "wandb": {
+            "entity": "amulyap-stanford-university",
+            "project": "cs329z-agent-lightning",
+            "group": "explore-fixture-exploratory",
+            "id": "38e70a5dad2462461cdaaa8b",
+            "name": "explore-fixture-exploratory-ppo-mc-matched-v2-s2001-a01-baseline",
+            "job_type": "baseline",
+            "resume": "never",
+            "config": {
+              "pair_id": "explore-fixture-exploratory-s2001",
+              "algorithm": "ppo-mc-matched-v2",
+              "stage": "baseline",
+              "run_seed": 2001,
+              "seed_streams": {
+                "python": 9599114,
+                "numpy": 1601258701,
+                "torch_cpu": 553990097,
+                "torch_cuda": 1884451394,
+                "actor_sampling": 973110461,
+                "actor_optimizer": 683842814,
+                "row_batching": 705947965,
+                "critic_init": 207224476,
+                "paired_question_order": 1771565522
+              },
+              "protocol": "matched-rollout-mean-v2",
+              "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+              "data_manifest_sha256": "f0320992e0b650a73e3c069fbd745f7e024dc453ced7dd6f16aec7b059ccc33b",
+              "steps": 20,
+              "resources": {
+                "gpu": "H100!",
+                "cpu": 16,
+                "memory_mib": 196608
+              },
+              "evaluation": "exploratory-legacy-64",
+              "dataset_selection_seed": 329,
+              "study_protocol": "exploratory-matched-20-v1",
+              "stage_timeout_seconds": 1800,
+              "checkpoint_policy": "one-final-per-run-no-deletion"
+            }
+          }
+        },
+        {
+          "job_id": "explore-fixture-exploratory-ppo-mc-matched-v2-s2001-a01",
+          "stage": "training",
+          "status": "failed",
+          "call_id": "fc-10",
+          "output": "phase2/studies/explore-fixture/exploratory/explore-fixture-exploratory-ppo-mc-matched-v2-s2001-a01/training",
+          "wandb": {
+            "entity": "amulyap-stanford-university",
+            "project": "cs329z-agent-lightning",
+            "group": "explore-fixture-exploratory",
+            "id": "a49d6d7ad3de7b53b5923045",
+            "name": "explore-fixture-exploratory-ppo-mc-matched-v2-s2001-a01-training",
+            "job_type": "training",
+            "resume": "never",
+            "config": {
+              "pair_id": "explore-fixture-exploratory-s2001",
+              "algorithm": "ppo-mc-matched-v2",
+              "stage": "training",
+              "run_seed": 2001,
+              "seed_streams": {
+                "python": 9599114,
+                "numpy": 1601258701,
+                "torch_cpu": 553990097,
+                "torch_cuda": 1884451394,
+                "actor_sampling": 973110461,
+                "actor_optimizer": 683842814,
+                "row_batching": 705947965,
+                "critic_init": 207224476,
+                "paired_question_order": 1771565522
+              },
+              "protocol": "matched-rollout-mean-v2",
+              "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+              "data_manifest_sha256": "f0320992e0b650a73e3c069fbd745f7e024dc453ced7dd6f16aec7b059ccc33b",
+              "steps": 20,
+              "resources": {
+                "gpu": "H100!",
+                "cpu": 16,
+                "memory_mib": 196608
+              },
+              "evaluation": "exploratory-legacy-64",
+              "dataset_selection_seed": 329,
+              "study_protocol": "exploratory-matched-20-v1",
+              "stage_timeout_seconds": 5400,
+              "checkpoint_policy": "one-final-per-run-no-deletion"
+            }
+          }
+        },
+        {
+          "job_id": "explore-fixture-exploratory-ppo-mc-matched-v2-s2001-a01",
+          "stage": "checkpoint-eval",
+          "status": "skipped",
+          "call_id": null,
+          "output": "phase2/studies/explore-fixture/exploratory/explore-fixture-exploratory-ppo-mc-matched-v2-s2001-a01/checkpoint-eval",
+          "wandb": {
+            "entity": "amulyap-stanford-university",
+            "project": "cs329z-agent-lightning",
+            "group": "explore-fixture-exploratory",
+            "id": "8a0d1334fc7bb40bb2044b67",
+            "name": "explore-fixture-exploratory-ppo-mc-matched-v2-s2001-a01-checkpoint-eval",
+            "job_type": "checkpoint-eval",
+            "resume": "never",
+            "config": {
+              "pair_id": "explore-fixture-exploratory-s2001",
+              "algorithm": "ppo-mc-matched-v2",
+              "stage": "checkpoint-eval",
+              "run_seed": 2001,
+              "seed_streams": {
+                "python": 9599114,
+                "numpy": 1601258701,
+                "torch_cpu": 553990097,
+                "torch_cuda": 1884451394,
+                "actor_sampling": 973110461,
+                "actor_optimizer": 683842814,
+                "row_batching": 705947965,
+                "critic_init": 207224476,
+                "paired_question_order": 1771565522
+              },
+              "protocol": "matched-rollout-mean-v2",
+              "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+              "data_manifest_sha256": "f0320992e0b650a73e3c069fbd745f7e024dc453ced7dd6f16aec7b059ccc33b",
+              "steps": 20,
+              "resources": {
+                "gpu": "H100!",
+                "cpu": 16,
+                "memory_mib": 196608
+              },
+              "evaluation": "exploratory-legacy-64",
+              "dataset_selection_seed": 329,
+              "study_protocol": "exploratory-matched-20-v1",
+              "stage_timeout_seconds": 1800,
+              "checkpoint_policy": "one-final-per-run-no-deletion"
+            }
+          }
+        },
+        {
+          "job_id": "explore-fixture-exploratory-grpo-matched-v2-s2002-a01",
+          "stage": "baseline",
+          "status": "completed",
+          "call_id": "fc-2",
+          "output": "phase2/studies/explore-fixture/exploratory/explore-fixture-exploratory-grpo-matched-v2-s2002-a01/baseline",
+          "wandb": {
+            "entity": "amulyap-stanford-university",
+            "project": "cs329z-agent-lightning",
+            "group": "explore-fixture-exploratory",
+            "id": "75df95425c1a80c1bd68518a",
+            "name": "explore-fixture-exploratory-grpo-matched-v2-s2002-a01-baseline",
+            "job_type": "baseline",
+            "resume": "never",
+            "config": {
+              "pair_id": "explore-fixture-exploratory-s2002",
+              "algorithm": "grpo-matched-v2",
+              "stage": "baseline",
+              "run_seed": 2002,
+              "seed_streams": {
+                "python": 1965329281,
+                "numpy": 704083147,
+                "torch_cpu": 337984257,
+                "torch_cuda": 1348510432,
+                "actor_sampling": 1612695726,
+                "actor_optimizer": 188145402,
+                "row_batching": 290452874,
+                "critic_init": null,
+                "paired_question_order": 159418719
+              },
+              "protocol": "matched-rollout-mean-v2",
+              "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+              "data_manifest_sha256": "f0320992e0b650a73e3c069fbd745f7e024dc453ced7dd6f16aec7b059ccc33b",
+              "steps": 20,
+              "resources": {
+                "gpu": "H100!",
+                "cpu": 16,
+                "memory_mib": 196608
+              },
+              "evaluation": "exploratory-legacy-64",
+              "dataset_selection_seed": 329,
+              "study_protocol": "exploratory-matched-20-v1",
+              "stage_timeout_seconds": 1800,
+              "checkpoint_policy": "one-final-per-run-no-deletion"
+            }
+          }
+        },
+        {
+          "job_id": "explore-fixture-exploratory-grpo-matched-v2-s2002-a01",
+          "stage": "training",
+          "status": "failed",
+          "call_id": "fc-9",
+          "output": "phase2/studies/explore-fixture/exploratory/explore-fixture-exploratory-grpo-matched-v2-s2002-a01/training",
+          "wandb": {
+            "entity": "amulyap-stanford-university",
+            "project": "cs329z-agent-lightning",
+            "group": "explore-fixture-exploratory",
+            "id": "602791422fd565b68b4f1870",
+            "name": "explore-fixture-exploratory-grpo-matched-v2-s2002-a01-training",
+            "job_type": "training",
+            "resume": "never",
+            "config": {
+              "pair_id": "explore-fixture-exploratory-s2002",
+              "algorithm": "grpo-matched-v2",
+              "stage": "training",
+              "run_seed": 2002,
+              "seed_streams": {
+                "python": 1965329281,
+                "numpy": 704083147,
+                "torch_cpu": 337984257,
+                "torch_cuda": 1348510432,
+                "actor_sampling": 1612695726,
+                "actor_optimizer": 188145402,
+                "row_batching": 290452874,
+                "critic_init": null,
+                "paired_question_order": 159418719
+              },
+              "protocol": "matched-rollout-mean-v2",
+              "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+              "data_manifest_sha256": "f0320992e0b650a73e3c069fbd745f7e024dc453ced7dd6f16aec7b059ccc33b",
+              "steps": 20,
+              "resources": {
+                "gpu": "H100!",
+                "cpu": 16,
+                "memory_mib": 196608
+              },
+              "evaluation": "exploratory-legacy-64",
+              "dataset_selection_seed": 329,
+              "study_protocol": "exploratory-matched-20-v1",
+              "stage_timeout_seconds": 5400,
+              "checkpoint_policy": "one-final-per-run-no-deletion"
+            }
+          }
+        },
+        {
+          "job_id": "explore-fixture-exploratory-grpo-matched-v2-s2002-a01",
+          "stage": "checkpoint-eval",
+          "status": "skipped",
+          "call_id": null,
+          "output": "phase2/studies/explore-fixture/exploratory/explore-fixture-exploratory-grpo-matched-v2-s2002-a01/checkpoint-eval",
+          "wandb": {
+            "entity": "amulyap-stanford-university",
+            "project": "cs329z-agent-lightning",
+            "group": "explore-fixture-exploratory",
+            "id": "17452ef217e4ba7260df003e",
+            "name": "explore-fixture-exploratory-grpo-matched-v2-s2002-a01-checkpoint-eval",
+            "job_type": "checkpoint-eval",
+            "resume": "never",
+            "config": {
+              "pair_id": "explore-fixture-exploratory-s2002",
+              "algorithm": "grpo-matched-v2",
+              "stage": "checkpoint-eval",
+              "run_seed": 2002,
+              "seed_streams": {
+                "python": 1965329281,
+                "numpy": 704083147,
+                "torch_cpu": 337984257,
+                "torch_cuda": 1348510432,
+                "actor_sampling": 1612695726,
+                "actor_optimizer": 188145402,
+                "row_batching": 290452874,
+                "critic_init": null,
+                "paired_question_order": 159418719
+              },
+              "protocol": "matched-rollout-mean-v2",
+              "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+              "data_manifest_sha256": "f0320992e0b650a73e3c069fbd745f7e024dc453ced7dd6f16aec7b059ccc33b",
+              "steps": 20,
+              "resources": {
+                "gpu": "H100!",
+                "cpu": 16,
+                "memory_mib": 196608
+              },
+              "evaluation": "exploratory-legacy-64",
+              "dataset_selection_seed": 329,
+              "study_protocol": "exploratory-matched-20-v1",
+              "stage_timeout_seconds": 1800,
+              "checkpoint_policy": "one-final-per-run-no-deletion"
+            }
+          }
+        },
+        {
+          "job_id": "explore-fixture-exploratory-ppo-mc-matched-v2-s2002-a01",
+          "stage": "baseline",
+          "status": "completed",
+          "call_id": "fc-3",
+          "output": "phase2/studies/explore-fixture/exploratory/explore-fixture-exploratory-ppo-mc-matched-v2-s2002-a01/baseline",
+          "wandb": {
+            "entity": "amulyap-stanford-university",
+            "project": "cs329z-agent-lightning",
+            "group": "explore-fixture-exploratory",
+            "id": "0245192f6718b3cfa495d7bf",
+            "name": "explore-fixture-exploratory-ppo-mc-matched-v2-s2002-a01-baseline",
+            "job_type": "baseline",
+            "resume": "never",
+            "config": {
+              "pair_id": "explore-fixture-exploratory-s2002",
+              "algorithm": "ppo-mc-matched-v2",
+              "stage": "baseline",
+              "run_seed": 2002,
+              "seed_streams": {
+                "python": 67202963,
+                "numpy": 398412575,
+                "torch_cpu": 184986633,
+                "torch_cuda": 1011855766,
+                "actor_sampling": 1523780133,
+                "actor_optimizer": 302575343,
+                "row_batching": 1059016305,
+                "critic_init": 841342930,
+                "paired_question_order": 159418719
+              },
+              "protocol": "matched-rollout-mean-v2",
+              "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+              "data_manifest_sha256": "f0320992e0b650a73e3c069fbd745f7e024dc453ced7dd6f16aec7b059ccc33b",
+              "steps": 20,
+              "resources": {
+                "gpu": "H100!",
+                "cpu": 16,
+                "memory_mib": 196608
+              },
+              "evaluation": "exploratory-legacy-64",
+              "dataset_selection_seed": 329,
+              "study_protocol": "exploratory-matched-20-v1",
+              "stage_timeout_seconds": 1800,
+              "checkpoint_policy": "one-final-per-run-no-deletion"
+            }
+          }
+        },
+        {
+          "job_id": "explore-fixture-exploratory-ppo-mc-matched-v2-s2002-a01",
+          "stage": "training",
+          "status": "failed",
+          "call_id": "fc-8",
+          "output": "phase2/studies/explore-fixture/exploratory/explore-fixture-exploratory-ppo-mc-matched-v2-s2002-a01/training",
+          "wandb": {
+            "entity": "amulyap-stanford-university",
+            "project": "cs329z-agent-lightning",
+            "group": "explore-fixture-exploratory",
+            "id": "58921c7a1656d448778427bb",
+            "name": "explore-fixture-exploratory-ppo-mc-matched-v2-s2002-a01-training",
+            "job_type": "training",
+            "resume": "never",
+            "config": {
+              "pair_id": "explore-fixture-exploratory-s2002",
+              "algorithm": "ppo-mc-matched-v2",
+              "stage": "training",
+              "run_seed": 2002,
+              "seed_streams": {
+                "python": 67202963,
+                "numpy": 398412575,
+                "torch_cpu": 184986633,
+                "torch_cuda": 1011855766,
+                "actor_sampling": 1523780133,
+                "actor_optimizer": 302575343,
+                "row_batching": 1059016305,
+                "critic_init": 841342930,
+                "paired_question_order": 159418719
+              },
+              "protocol": "matched-rollout-mean-v2",
+              "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+              "data_manifest_sha256": "f0320992e0b650a73e3c069fbd745f7e024dc453ced7dd6f16aec7b059ccc33b",
+              "steps": 20,
+              "resources": {
+                "gpu": "H100!",
+                "cpu": 16,
+                "memory_mib": 196608
+              },
+              "evaluation": "exploratory-legacy-64",
+              "dataset_selection_seed": 329,
+              "study_protocol": "exploratory-matched-20-v1",
+              "stage_timeout_seconds": 5400,
+              "checkpoint_policy": "one-final-per-run-no-deletion"
+            }
+          }
+        },
+        {
+          "job_id": "explore-fixture-exploratory-ppo-mc-matched-v2-s2002-a01",
+          "stage": "checkpoint-eval",
+          "status": "skipped",
+          "call_id": null,
+          "output": "phase2/studies/explore-fixture/exploratory/explore-fixture-exploratory-ppo-mc-matched-v2-s2002-a01/checkpoint-eval",
+          "wandb": {
+            "entity": "amulyap-stanford-university",
+            "project": "cs329z-agent-lightning",
+            "group": "explore-fixture-exploratory",
+            "id": "dc82b140679aefdc60751d9e",
+            "name": "explore-fixture-exploratory-ppo-mc-matched-v2-s2002-a01-checkpoint-eval",
+            "job_type": "checkpoint-eval",
+            "resume": "never",
+            "config": {
+              "pair_id": "explore-fixture-exploratory-s2002",
+              "algorithm": "ppo-mc-matched-v2",
+              "stage": "checkpoint-eval",
+              "run_seed": 2002,
+              "seed_streams": {
+                "python": 67202963,
+                "numpy": 398412575,
+                "torch_cpu": 184986633,
+                "torch_cuda": 1011855766,
+                "actor_sampling": 1523780133,
+                "actor_optimizer": 302575343,
+                "row_batching": 1059016305,
+                "critic_init": 841342930,
+                "paired_question_order": 159418719
+              },
+              "protocol": "matched-rollout-mean-v2",
+              "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+              "data_manifest_sha256": "f0320992e0b650a73e3c069fbd745f7e024dc453ced7dd6f16aec7b059ccc33b",
+              "steps": 20,
+              "resources": {
+                "gpu": "H100!",
+                "cpu": 16,
+                "memory_mib": 196608
+              },
+              "evaluation": "exploratory-legacy-64",
+              "dataset_selection_seed": 329,
+              "study_protocol": "exploratory-matched-20-v1",
+              "stage_timeout_seconds": 1800,
+              "checkpoint_policy": "one-final-per-run-no-deletion"
+            }
+          }
+        },
+        {
+          "job_id": "explore-fixture-exploratory-grpo-matched-v2-s2003-a01",
+          "stage": "baseline",
+          "status": "completed",
+          "call_id": "fc-4",
+          "output": "phase2/studies/explore-fixture/exploratory/explore-fixture-exploratory-grpo-matched-v2-s2003-a01/baseline",
+          "wandb": {
+            "entity": "amulyap-stanford-university",
+            "project": "cs329z-agent-lightning",
+            "group": "explore-fixture-exploratory",
+            "id": "6713c3237f3365d6c9fd4f9f",
+            "name": "explore-fixture-exploratory-grpo-matched-v2-s2003-a01-baseline",
+            "job_type": "baseline",
+            "resume": "never",
+            "config": {
+              "pair_id": "explore-fixture-exploratory-s2003",
+              "algorithm": "grpo-matched-v2",
+              "stage": "baseline",
+              "run_seed": 2003,
+              "seed_streams": {
+                "python": 1144113409,
+                "numpy": 1507765173,
+                "torch_cpu": 1964028339,
+                "torch_cuda": 2105002205,
+                "actor_sampling": 2087687882,
+                "actor_optimizer": 2106954347,
+                "row_batching": 617093520,
+                "critic_init": null,
+                "paired_question_order": 480664013
+              },
+              "protocol": "matched-rollout-mean-v2",
+              "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+              "data_manifest_sha256": "f0320992e0b650a73e3c069fbd745f7e024dc453ced7dd6f16aec7b059ccc33b",
+              "steps": 20,
+              "resources": {
+                "gpu": "H100!",
+                "cpu": 16,
+                "memory_mib": 196608
+              },
+              "evaluation": "exploratory-legacy-64",
+              "dataset_selection_seed": 329,
+              "study_protocol": "exploratory-matched-20-v1",
+              "stage_timeout_seconds": 1800,
+              "checkpoint_policy": "one-final-per-run-no-deletion"
+            }
+          }
+        },
+        {
+          "job_id": "explore-fixture-exploratory-grpo-matched-v2-s2003-a01",
+          "stage": "training",
+          "status": "failed",
+          "call_id": "fc-7",
+          "output": "phase2/studies/explore-fixture/exploratory/explore-fixture-exploratory-grpo-matched-v2-s2003-a01/training",
+          "wandb": {
+            "entity": "amulyap-stanford-university",
+            "project": "cs329z-agent-lightning",
+            "group": "explore-fixture-exploratory",
+            "id": "1b43156ce61d6dd4d2f76bfd",
+            "name": "explore-fixture-exploratory-grpo-matched-v2-s2003-a01-training",
+            "job_type": "training",
+            "resume": "never",
+            "config": {
+              "pair_id": "explore-fixture-exploratory-s2003",
+              "algorithm": "grpo-matched-v2",
+              "stage": "training",
+              "run_seed": 2003,
+              "seed_streams": {
+                "python": 1144113409,
+                "numpy": 1507765173,
+                "torch_cpu": 1964028339,
+                "torch_cuda": 2105002205,
+                "actor_sampling": 2087687882,
+                "actor_optimizer": 2106954347,
+                "row_batching": 617093520,
+                "critic_init": null,
+                "paired_question_order": 480664013
+              },
+              "protocol": "matched-rollout-mean-v2",
+              "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+              "data_manifest_sha256": "f0320992e0b650a73e3c069fbd745f7e024dc453ced7dd6f16aec7b059ccc33b",
+              "steps": 20,
+              "resources": {
+                "gpu": "H100!",
+                "cpu": 16,
+                "memory_mib": 196608
+              },
+              "evaluation": "exploratory-legacy-64",
+              "dataset_selection_seed": 329,
+              "study_protocol": "exploratory-matched-20-v1",
+              "stage_timeout_seconds": 5400,
+              "checkpoint_policy": "one-final-per-run-no-deletion"
+            }
+          }
+        },
+        {
+          "job_id": "explore-fixture-exploratory-grpo-matched-v2-s2003-a01",
+          "stage": "checkpoint-eval",
+          "status": "skipped",
+          "call_id": null,
+          "output": "phase2/studies/explore-fixture/exploratory/explore-fixture-exploratory-grpo-matched-v2-s2003-a01/checkpoint-eval",
+          "wandb": {
+            "entity": "amulyap-stanford-university",
+            "project": "cs329z-agent-lightning",
+            "group": "explore-fixture-exploratory",
+            "id": "be864815319aa1f74954b450",
+            "name": "explore-fixture-exploratory-grpo-matched-v2-s2003-a01-checkpoint-eval",
+            "job_type": "checkpoint-eval",
+            "resume": "never",
+            "config": {
+              "pair_id": "explore-fixture-exploratory-s2003",
+              "algorithm": "grpo-matched-v2",
+              "stage": "checkpoint-eval",
+              "run_seed": 2003,
+              "seed_streams": {
+                "python": 1144113409,
+                "numpy": 1507765173,
+                "torch_cpu": 1964028339,
+                "torch_cuda": 2105002205,
+                "actor_sampling": 2087687882,
+                "actor_optimizer": 2106954347,
+                "row_batching": 617093520,
+                "critic_init": null,
+                "paired_question_order": 480664013
+              },
+              "protocol": "matched-rollout-mean-v2",
+              "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+              "data_manifest_sha256": "f0320992e0b650a73e3c069fbd745f7e024dc453ced7dd6f16aec7b059ccc33b",
+              "steps": 20,
+              "resources": {
+                "gpu": "H100!",
+                "cpu": 16,
+                "memory_mib": 196608
+              },
+              "evaluation": "exploratory-legacy-64",
+              "dataset_selection_seed": 329,
+              "study_protocol": "exploratory-matched-20-v1",
+              "stage_timeout_seconds": 1800,
+              "checkpoint_policy": "one-final-per-run-no-deletion"
+            }
+          }
+        },
+        {
+          "job_id": "explore-fixture-exploratory-ppo-mc-matched-v2-s2003-a01",
+          "stage": "baseline",
+          "status": "completed",
+          "call_id": "fc-5",
+          "output": "phase2/studies/explore-fixture/exploratory/explore-fixture-exploratory-ppo-mc-matched-v2-s2003-a01/baseline",
+          "wandb": {
+            "entity": "amulyap-stanford-university",
+            "project": "cs329z-agent-lightning",
+            "group": "explore-fixture-exploratory",
+            "id": "029c24e06dafe6fe7aa3ba4f",
+            "name": "explore-fixture-exploratory-ppo-mc-matched-v2-s2003-a01-baseline",
+            "job_type": "baseline",
+            "resume": "never",
+            "config": {
+              "pair_id": "explore-fixture-exploratory-s2003",
+              "algorithm": "ppo-mc-matched-v2",
+              "stage": "baseline",
+              "run_seed": 2003,
+              "seed_streams": {
+                "python": 1258554796,
+                "numpy": 1843857333,
+                "torch_cpu": 628919167,
+                "torch_cuda": 202834184,
+                "actor_sampling": 1476577634,
+                "actor_optimizer": 41617273,
+                "row_batching": 233215546,
+                "critic_init": 1307817716,
+                "paired_question_order": 480664013
+              },
+              "protocol": "matched-rollout-mean-v2",
+              "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+              "data_manifest_sha256": "f0320992e0b650a73e3c069fbd745f7e024dc453ced7dd6f16aec7b059ccc33b",
+              "steps": 20,
+              "resources": {
+                "gpu": "H100!",
+                "cpu": 16,
+                "memory_mib": 196608
+              },
+              "evaluation": "exploratory-legacy-64",
+              "dataset_selection_seed": 329,
+              "study_protocol": "exploratory-matched-20-v1",
+              "stage_timeout_seconds": 1800,
+              "checkpoint_policy": "one-final-per-run-no-deletion"
+            }
+          }
+        },
+        {
+          "job_id": "explore-fixture-exploratory-ppo-mc-matched-v2-s2003-a01",
+          "stage": "training",
+          "status": "failed",
+          "call_id": "fc-6",
+          "output": "phase2/studies/explore-fixture/exploratory/explore-fixture-exploratory-ppo-mc-matched-v2-s2003-a01/training",
+          "wandb": {
+            "entity": "amulyap-stanford-university",
+            "project": "cs329z-agent-lightning",
+            "group": "explore-fixture-exploratory",
+            "id": "05fbc8cb72b2b8334d225206",
+            "name": "explore-fixture-exploratory-ppo-mc-matched-v2-s2003-a01-training",
+            "job_type": "training",
+            "resume": "never",
+            "config": {
+              "pair_id": "explore-fixture-exploratory-s2003",
+              "algorithm": "ppo-mc-matched-v2",
+              "stage": "training",
+              "run_seed": 2003,
+              "seed_streams": {
+                "python": 1258554796,
+                "numpy": 1843857333,
+                "torch_cpu": 628919167,
+                "torch_cuda": 202834184,
+                "actor_sampling": 1476577634,
+                "actor_optimizer": 41617273,
+                "row_batching": 233215546,
+                "critic_init": 1307817716,
+                "paired_question_order": 480664013
+              },
+              "protocol": "matched-rollout-mean-v2",
+              "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+              "data_manifest_sha256": "f0320992e0b650a73e3c069fbd745f7e024dc453ced7dd6f16aec7b059ccc33b",
+              "steps": 20,
+              "resources": {
+                "gpu": "H100!",
+                "cpu": 16,
+                "memory_mib": 196608
+              },
+              "evaluation": "exploratory-legacy-64",
+              "dataset_selection_seed": 329,
+              "study_protocol": "exploratory-matched-20-v1",
+              "stage_timeout_seconds": 5400,
+              "checkpoint_policy": "one-final-per-run-no-deletion"
+            }
+          }
+        },
+        {
+          "job_id": "explore-fixture-exploratory-ppo-mc-matched-v2-s2003-a01",
+          "stage": "checkpoint-eval",
+          "status": "skipped",
+          "call_id": null,
+          "output": "phase2/studies/explore-fixture/exploratory/explore-fixture-exploratory-ppo-mc-matched-v2-s2003-a01/checkpoint-eval",
+          "wandb": {
+            "entity": "amulyap-stanford-university",
+            "project": "cs329z-agent-lightning",
+            "group": "explore-fixture-exploratory",
+            "id": "aab95b76921d773a4cf44938",
+            "name": "explore-fixture-exploratory-ppo-mc-matched-v2-s2003-a01-checkpoint-eval",
+            "job_type": "checkpoint-eval",
+            "resume": "never",
+            "config": {
+              "pair_id": "explore-fixture-exploratory-s2003",
+              "algorithm": "ppo-mc-matched-v2",
+              "stage": "checkpoint-eval",
+              "run_seed": 2003,
+              "seed_streams": {
+                "python": 1258554796,
+                "numpy": 1843857333,
+                "torch_cpu": 628919167,
+                "torch_cuda": 202834184,
+                "actor_sampling": 1476577634,
+                "actor_optimizer": 41617273,
+                "row_batching": 233215546,
+                "critic_init": 1307817716,
+                "paired_question_order": 480664013
+              },
+              "protocol": "matched-rollout-mean-v2",
+              "protocol_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "source_sha256": "0317ad30008029f6e203da96fb3d2a6667aa9d5a9e4ba1422d04234397bb5445",
+              "data_manifest_sha256": "f0320992e0b650a73e3c069fbd745f7e024dc453ced7dd6f16aec7b059ccc33b",
+              "steps": 20,
+              "resources": {
+                "gpu": "H100!",
+                "cpu": 16,
+                "memory_mib": 196608
+              },
+              "evaluation": "exploratory-legacy-64",
+              "dataset_selection_seed": 329,
+              "study_protocol": "exploratory-matched-20-v1",
+              "stage_timeout_seconds": 1800,
+              "checkpoint_policy": "one-final-per-run-no-deletion"
+            }
+          }
+        }
+      ]
+    }
+  }
+}
