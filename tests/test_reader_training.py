@@ -1,4 +1,5 @@
 """Synthetic local fixtures and explicitly mocked submissions; never GPU qualification."""
+import ast
 import builtins
 import copy
 from contextlib import redirect_stdout, nullcontext
@@ -10,6 +11,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import time
 from types import SimpleNamespace
 import unittest
 from unittest.mock import Mock, patch
@@ -350,6 +352,43 @@ class ReaderImportTests(unittest.TestCase):
             self.assertEqual(obs['wandb'], stage['wandb'])
             self.assertEqual(obs['wandb_project'], p['profile']['wandb']['project'])
             self.assertEqual(obs['experiment_id'], job['job_id'])
+
+    def test_cpu_receipts_on_resolved_volume_mount_and_command_failure(self):
+        # Execute the actual CPU entrypoint body against a real symlinked mount.
+        # Acquisition/cloud handles are mocked; filesystem ownership/receipts are real.
+        tree = ast.parse((ROOT/'reader_app.py').read_text())
+        function = next(n for n in tree.body if isinstance(n, ast.FunctionDef) and n.name == 'cpu_action')
+        function.decorator_list = []
+        for fail in (False, True):
+            with tempfile.TemporaryDirectory() as tmp:
+                root = Path(tmp); physical = root/'volume'; physical.mkdir()
+                mount = root/'data'; mount.symlink_to(physical, target_is_directory=True)
+                p = plan(); registry = Registry(); volume = Mock()
+                owned = lambda _mount, relative: assets.owned_path(mount, relative)
+                fake_assets = SimpleNamespace(owned_path=owned, write_new=assets.write_new,
+                    read=assets.read, storage_exceeded=lambda _profile: False)
+                def run_command(command, log, env, timeout, **kwargs):
+                    self.assertGreater(timeout, 0)
+                    if fail:
+                        raise RuntimeError('Synthetic acquisition failure')
+                    assets.write_new(Path(command[-1])/'assets.json', {'synthetic_fixture': True})
+                namespace = {'check': Mock(), 'profile': p['profile'], 'time': time, 'c': c,
+                    'modal': SimpleNamespace(current_function_call_id=lambda: 'fc-synthetic'),
+                    'registry': registry, 'volume': volume, 'assets': fake_assets, 'BUNDLE': ROOT/'experiment',
+                    'remote': SimpleNamespace(write=lambda path, data: path.write_text(json.dumps(data)),
+                        verify_package=Mock(), capture_build=Mock()),
+                    'runtime': SimpleNamespace(PYTHON=Path(sys.executable), environment=lambda _settings: {}, run_command=run_command)}
+                exec(compile(ast.Module(body=[function], type_ignores=[]), 'reader_app.py', 'exec'), namespace)
+                invoke = lambda: namespace['cpu_action'](p, 'prepare', time.time()+300, image_id='im-synthetic')
+                if fail:
+                    with self.assertRaisesRegex(RuntimeError, 'Synthetic acquisition failure'): invoke()
+                else:
+                    self.assertEqual(invoke()['status'], 'completed')
+                receipt = assets.read(physical/p['root']/'prepare/receipt.json')
+                self.assertEqual(receipt['output'], p['root']+'/prepare')
+                self.assertEqual(receipt['status'], 'failed' if fail else 'completed')
+                self.assertEqual(registry['result:prepare:'+p['root']], receipt)
+                self.assertEqual(volume.commit.call_count, 2)
 
     def test_existing_launcher_failure_with_explicitly_mocked_health_response(self):
         from test_launcher_failure import LauncherFailureTests

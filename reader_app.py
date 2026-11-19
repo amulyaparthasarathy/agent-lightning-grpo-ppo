@@ -81,8 +81,9 @@ def cpu_action(plan, action, deadline_epoch, image_id=None):
     volume.reload()
     run = assets.owned_path('/data', plan['root']+'/'+action)
     run.mkdir(parents=True, exist_ok=False)
+    # owned_path resolves Modal's /data symlink; receipts retain the logical Volume path.
     receipt = {'status': 'started', 'action': action, 'plan_sha256': c.digest(plan),
-               'call_id': call_id, 'output': str(run.relative_to('/data'))}
+               'call_id': call_id, 'output': plan['root']+'/'+action}
     assets.write_new(run/'plan.json', plan)
     remote.write(run/'receipt.json', receipt)
     volume.commit()
