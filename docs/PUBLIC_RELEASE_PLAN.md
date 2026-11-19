@@ -1,6 +1,6 @@
 # First public educational release: Option B
 
-Destination: **amulyaparthasarathy/agent-lightning-lab-public**, a standalone corrected snapshot. Original **amulyaparthasarathy/agent-lightning-lab** remains PRIVATE with its full history and execution identities unchanged. The owner authorized this new repository's publication after verification; no further general confirmation is required.
+**PUBLIC, verified 2026-11-19:** [amulyaparthasarathy/agent-lightning-lab-public](https://github.com/amulyaparthasarathy/agent-lightning-lab-public), a standalone corrected snapshot. Original **amulyaparthasarathy/agent-lightning-lab** remains PRIVATE with its full history and execution identities unchanged. The owner authorized this new repository's publication after verification; no further general confirmation is required.
 
 | Requirement | Disposition |
 |---|---|
@@ -10,7 +10,7 @@ Destination: **amulyaparthasarathy/agent-lightning-lab-public**, a standalone co
 | Scientific provenance | Execution `5fb6adfd48ee245509f7dff3ab1d849fcf707d86` retained as identity, not imported history. [Publication manifest](../PUBLICATION_PROVENANCE.json) maps exact files and line offsets. |
 | Reader paths | Learn through the retained guide and public source representations; run two standard-library checks; inspect historical training. Private evidence locators are labeled archival, not prerequisites. |
 | Evidence and safeguards | Frozen evidence, source/data locks, runtime/scorer/math/configuration and admission safeguards remain byte-identical to the corrected private export. No new training qualification. |
-| Verification / publication | [Current receipt](PUBLIC_READINESS_2026-11-19.md#snapshot-verification-and-publication-receipt) records candidate, checks and actual anonymous access. Publication is claimed only after observed success. |
+| Verification / publication | Complete. [Current receipt](PUBLIC_READINESS_2026-11-19.md#snapshot-verification-and-publication-receipt) records the published candidate, anonymous clone/download/link checks, passing offline commands and preserved original. First public educational release complete. |
 
 The first release contains no model weights, full datasets, raw trajectories, private editorial packet, external cloud artifacts, original PR discussions or historical Git objects. Reader-owned training, paid cold builds and checkpoint-tensor reproduction remain outside this milestone. Preserve the [exact portability inventory](PUBLIC_READINESS_2026-11-19.md#portability-and-supported-workflows).
 

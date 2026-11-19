@@ -2,7 +2,7 @@
 
 The question for this guide is: **How does one calculator-agent experience become a model-weight update, and what changes between GRPO and this lab's PPO-MC?**
 
-You need Python and basic machine learning. The educational publication needs no account to read after publication; the private historical repository is not a prerequisite. The exercises use Python's standard library, with no model, cloud service or dataset download.
+You need Python and basic machine learning. The public educational snapshot needs no account to read; the private historical repository is not a prerequisite. The exercises use Python's standard library, with no model, cloud service or dataset download.
 
 ## Reading paths and chapter contracts
 

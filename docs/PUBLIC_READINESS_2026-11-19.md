@@ -2,7 +2,7 @@
 
 ## Option B publication snapshot
 
-**Candidate prepared for the owner's authorized publication; publication success is recorded only after anonymous verification.** Destination: `amulyaparthasarathy/agent-lightning-lab-public`. The original repository remains private and unchanged. Exported committed main: `eef9c78707b33725847fb15ca19592733a84c6c3`, tree `e9964ad411bc44463b2764d621bd9f878032c79a`.
+**PUBLIC: first educational release complete, verified anonymously on 2026-11-19.** Destination: `amulyaparthasarathy/agent-lightning-lab-public`. The original repository remains private and unchanged. Exported committed main: `eef9c78707b33725847fb15ca19592733a84c6c3`, tree `e9964ad411bc44463b2764d621bd9f878032c79a`.
 
 Owner decisions and current source-notice remedies are complete. **B2c is resolved for this candidate by excluding the old Git distributions**, not by claiming old archives were corrected or cleared. The fresh non-bare repository contains only a fully attributed publication root and bounded source-link/receipt commits. No historical commit objects, refs, PR discussions, wiki pages or archives are imported. No additional historical source copies are needed: nine active code targets are byte-identical and three have only the reviewed notice prefixes, verified by exact original-body and AST equality. The post-execution checker remains distinct from r03 source.
 
@@ -33,7 +33,15 @@ On 2026-11-19, a fresh network clone of the **new** repository tested content co
 
 Verification scripts, scanner reports and browser screenshots remain temporary authoring tools, not reader dependencies. No GPU/backend integration, model/data download, new execution, raw-trace/tensor audit or complete historical client suite was run. The existing 54-test suites were rerun; the broader limitations and original dated receipts below remain explicit.
 
-**Publication observation:** pending the authorized visibility operation and credential-free checks. This receipt does not yet claim public access.
+**Publication observation, 2026-11-19 (checked by 14:30 UTC):** GitHub repository **1464245500**, `amulyaparthasarathy/agent-lightning-lab-public`, changed from PRIVATE to **PUBLIC** after the checks above and the bounded receipt corrections passed. Published candidate: `85c51752bb58ebd513bc0a14c38efd9ec5071111`, tree `1a301e6ff54081f1bf1963e09d52cb8d119b4a7e`. Its three-commit history contains only the new attributed root, source-link commit and verification/correction commit. Archives of all three include the required licenses and current-file notices. The three uncorrected legacy source blobs are also absent from its object database.
+
+Anonymous verification used `env -i`, disabled system/global Git configuration, an empty credential helper and askpass, and `GIT_TERMINAL_PROMPT=0` for a fresh HTTPS clone. Separate Python HTTP requests used no authorization, cookies, credential reader or proxy authentication. Anonymous GitHub metadata reports `visibility=public`, `private=false`, the expected repository ID and exact main SHA. The repository page loads; **32 file downloads** (README, complete guide, licensing/provenance, checker and complete r03 selected bundle) match the candidate bytes. All **29 unique pinned GitHub lab source links return HTTP 200**; all **12 mapped source downloads** match manifest SHA256s. Required public upstream references passed the earlier 28-link check.
+
+Both advertised commands were executed again under Python 3.12.3 with an empty environment from this anonymous clone, exit 0: synthetic arithmetic unchanged; **12 hashes / 24 summaries / six runs / three contrasts**, with both algorithm means and all six results unchanged. Local-link, source/archive/manifest and whitespace checks also passed after the receipt's prose corrections; all seven retained root anchors were rerendered and checked. The final documentation-only closeout commit records this observation and is checked for its own link/diff changes rather than claiming a self-referential tested SHA.
+
+Original repository **1454300839** remains PRIVATE at `eef9c78707b33725847fb15ca19592733a84c6c3`. Compared with the task-start receipt, its remote refs, local refs, working-tree status and Git configuration are unchanged. No original PR, issue, wiki, setting or visibility write was performed. The new tree differs from the pinned export only in **17 mutable publication text files plus PUBLICATION_PROVENANCE.json**; no runtime, evidence, plan, lock or dependency bytes changed. No tag, GitHub Release, Actions workflow, model artifact or external cloud resource was created.
+
+**Verdict: first public educational release complete.** No identified substantive blocker remains for this bounded snapshot distribution. This does not clear the excluded original historical archives, qualify reader-owned training, or expand the scientific claims.
 
 ---
 
