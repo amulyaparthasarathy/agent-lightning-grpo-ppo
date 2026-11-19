@@ -6,9 +6,35 @@ from pathlib import Path
 import socket
 
 try:
-    from . import reader_contract as c
+    from . import reader_contract as c, reader_integration
 except ImportError:
     import reader_contract as c
+    import reader_integration
+
+
+def loss_evidence(metrics, roles):
+    # Pinned VERL reduces minibatch Metric values before Tracking.log(data, global_steps).
+    # A logger may split role keys across records; join by (global step, exact metric).
+    required = {'actor': 'actor/pg_loss', 'critic': 'critic/vf_loss'}
+    found = {}
+    for row in metrics:
+        for key, value in row['metrics'].items():
+            if 'loss' not in key:
+                continue
+            if type(value) not in (int, float) or not math.isfinite(value):
+                raise ValueError('Invalid/nonfinite loss evidence')
+            if key not in [required[r] for r in roles]:
+                continue
+            step = row.get('step')
+            if type(step) is not int or step not in (1, 2):
+                raise ValueError('Loss evidence outside declared updates')
+            pair = (step, key)
+            if pair in found and found[pair] != value:
+                raise ValueError('Conflicting duplicate loss evidence')
+            found[pair] = value
+    if set(found) != {(step, required[role]) for role in roles for step in (1, 2)}:
+        raise ValueError('Missing update/role loss evidence')
+    return [{'step': step, 'metric': key, 'value': value} for (step, key), value in sorted(found.items())]
 
 
 def complete(run, request, completion):
@@ -53,12 +79,11 @@ def complete(run, request, completion):
         if [e['step'] for e in events if e['event'] == 'native_checkpoint_saved'] != [2]:
             raise ValueError('Missing/extra final native checkpoint save')
         metrics = [json.loads(x) for x in (run/'metrics.jsonl').read_text().splitlines()]
-        losses = [v for row in metrics for k, v in row['metrics'].items() if 'loss' in k]
-        if not losses or any(type(v) not in (int, float) or not math.isfinite(v) for v in losses):
-            raise ValueError('Missing or nonfinite loss evidence')
+        losses = loss_evidence(metrics, roles)
         result['learning_diagnostics'] = {'collections': [{k: e[k] for k in ('iteration', 'generated_tokens', 'real_rollouts', 'constant_groups')} for e in collections],
             'informative_reward_groups': sum(8-e['constant_groups'] for e in collections),
-            'finite_loss_values': len(losses), 'accuracy_improvement_required': False}
+            'informative_group_relative_task_advantage': ('observed' if any(e['constant_groups'] < 8 for e in collections) else 'not observed') if job['algorithm'] == c.ALGORITHMS[0] else 'not applicable',
+            'losses_by_update': losses, 'finite_loss_values': len(losses), 'accuracy_improvement_required': False}
     if stage['name'] == 'checkpoint-eval':
         training = json.loads((run.parent/'training/completion.json').read_text())
         if (training['plan_sha256'] != request['plan_sha256']
@@ -67,6 +92,7 @@ def complete(run, request, completion):
                 or training['worker']['hostname'] == result['worker']['hostname']):
             raise ValueError('Reload requires the exact training checkpoint in a distinct worker/process')
         result['training_worker'] = training['worker']
+    result['model_tool_integration'] = reader_integration.report(run, request)
     return result
 
 
@@ -76,7 +102,9 @@ def validate_collection(plan, index, read):
         raise ValueError('Incomplete or mismatched supervisor index')
     calls = set()
     checkpoints = {}
+    outcomes = {}
     for job in plan['jobs']:
+        outcome = outcomes[job['algorithm']] = {'operational_stage_completion': {}, 'model_tool_integration': {}}
         receipts = index['jobs'][job['job_id']]['stages']
         if len(receipts) != 3 or [r['stage'] for r in receipts] != ['baseline', 'training', 'checkpoint-eval']:
             raise ValueError('Missing/duplicate stage receipts')
@@ -96,12 +124,32 @@ def validate_collection(plan, index, read):
                     or proof['wandb_id'] != stage['wandb']['id'] or obs['wandb'] != stage['wandb']):
                 raise ValueError('Durable receipt/completion/observability identity mismatch')
             calls.add(receipt['call_id'])
+            outcome['operational_stage_completion'][stage['name']] = 'completed'
+            integration = proof.get('model_tool_integration')
+            if integration is None:
+                integration = {'qualified': False, 'gaps': ['Missing integration report']}
+            elif (integration['schema'] != 'reader-integration-v1' or integration['algorithm'] != job['algorithm']
+                    or integration['stage'] != stage['name']
+                    or integration['qualified'] != (integration['episodes_with_valid_chain'] > 0)
+                    or integration['episodes_with_valid_chain'] != sum(bool(e['chains']) for e in integration['coverage'])
+                    or integration['trace_files'] != len(integration['coverage'])):
+                raise ValueError('Invalid integration coverage report')
+            outcome['model_tool_integration'][stage['name']] = integration
             if stage['name'] == 'training':
                 checkpoints[job['job_id']] = proof
+                diagnostics = proof.get('learning_diagnostics', {})
+                outcome['informative_grpo_reward_groups'] = (diagnostics.get('informative_reward_groups')
+                    if job['algorithm'] == c.ALGORITHMS[0] else 'not applicable')
             elif stage['name'] == 'checkpoint-eval':
                 previous = checkpoints[job['job_id']]
                 if (proof['checkpoint_sha256'] != previous['checkpoint_sha256']
                         or proof['training_worker'] != previous['worker']
                         or proof['worker']['hostname'] == previous['worker']['hostname']):
                     raise ValueError('Training/reload evidence differs')
-    return {'evidence_complete': True, 'live_qualification': 'completed', 'hosted_wandb_history': 'not independently queried'}
+        outcome['harness_integration_qualified'] = any(r['qualified'] for r in outcome['model_tool_integration'].values())
+        outcome['qualification_gaps'] = [] if outcome['harness_integration_qualified'] else ['Model/tool integration unqualified: no valid chain in this algorithm workflow']
+        if job['algorithm'] == c.ALGORITHMS[0] and not outcome['informative_grpo_reward_groups']:
+            outcome['qualification_gaps'].append('Informative group-relative task-advantage evidence was not observed')
+    return {'evidence_complete': True, 'operational_completion': 'completed', 'algorithms': outcomes,
+            'live_qualification': 'gaps remain' if any(o['qualification_gaps'] for o in outcomes.values()) else 'operational and harness evidence observed; learning success not established',
+            'hosted_wandb_history': 'not independently queried'}

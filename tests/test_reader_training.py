@@ -417,7 +417,9 @@ class CompletionTests(unittest.TestCase):
                          'source_sha256': c.digest(p['source']), 'configuration_sha256': p['configuration_sha256'],
                          'assets_sha256': c.digest(p['assets']), 'task_sha256': c.digest(p['task_identity']),
                          'wandb_id': stage['wandb']['id'], 'checkpoint_sha256': 'd'*64}
-                if stage['name'] == 'training': previous = proof['worker']
+                if stage['name'] == 'training':
+                    previous = proof['worker']
+                    proof['learning_diagnostics'] = {'informative_reward_groups': 0}
                 if stage['name'] == 'checkpoint-eval': proof['training_worker'] = previous
                 receipt = {'call_id': call, 'status': 'completed', 'completion': proof, 'output': stage['output']}
                 files[stage['output']+'/receipt.json'] = receipt
@@ -425,7 +427,24 @@ class CompletionTests(unittest.TestCase):
                 files[stage['output']+'/observability.json'] = {'wandb': stage['wandb']}
                 receipts.append({'stage': stage['name'], 'status': 'completed', 'call_id': call, 'result': receipt, 'output': stage['output']})
             index['jobs'][job['job_id']] = {'stages': receipts}
-        self.assertTrue(evidence.validate_collection(p, index, files.__getitem__)['evidence_complete'])
+        report = evidence.validate_collection(p, index, files.__getitem__)
+        self.assertTrue(report['evidence_complete'])
+        self.assertEqual(report['operational_completion'], 'completed')
+        self.assertEqual(report['live_qualification'], 'gaps remain')
+        grpo = report['algorithms'][c.ALGORITHMS[0]]
+        self.assertEqual(grpo['informative_grpo_reward_groups'], 0)
+        self.assertFalse(grpo['harness_integration_qualified'])
+        self.assertIn('Informative group-relative task-advantage evidence was not observed', grpo['qualification_gaps'])
+        # Synthetic receipt aggregation: GRPO integration cannot qualify PPO-MC.
+        stage = p['jobs'][0]['stages'][0]
+        proof = files[stage['output']+'/completion.json']
+        proof['model_tool_integration'] = {'schema': 'reader-integration-v1', 'algorithm': c.ALGORITHMS[0],
+            'stage': stage['name'], 'qualified': True, 'episodes_with_valid_chain': 1, 'trace_files': 1,
+            'coverage': [{'chains': [{'synthetic_test_only': True}]}]}
+        report = evidence.validate_collection(p, index, files.__getitem__)
+        self.assertTrue(report['algorithms'][c.ALGORITHMS[0]]['harness_integration_qualified'])
+        self.assertFalse(report['algorithms'][c.ALGORITHMS[1]]['harness_integration_qualified'])
+        self.assertEqual(report['live_qualification'], 'gaps remain')
         bad = copy.deepcopy(index); bad['jobs'][p['jobs'][0]['job_id']]['stages'].append(bad['jobs'][p['jobs'][0]['job_id']]['stages'][0])
         with self.assertRaisesRegex(ValueError, 'duplicate'): evidence.validate_collection(p, bad, files.__getitem__)
         file = p['jobs'][0]['stages'][2]['output']+'/completion.json'
@@ -443,7 +462,7 @@ class CompletionTests(unittest.TestCase):
             events += [{'event': 'optimizer_step', 'role': 'actor', 'count': i},
                        {'event': 'gradient_step', 'role': 'actor', 'preclip_finite': True, 'optimizer_called': True},
                        {'event': 'matched_advantages', 'iteration': i, 'real_rollouts': 32, 'generated_tokens': 100, 'constant_groups': 8}]
-        (root/'audit').mkdir(); (root/'metrics.jsonl').write_text(json.dumps({'step': 1, 'metrics': {'actor/pg_loss': 0.0}})+'\n')
+        (root/'audit').mkdir(); (root/'metrics.jsonl').write_text(''.join(json.dumps({'step': i, 'metrics': {'actor/pg_loss': 0.0}})+'\n' for i in (1, 2)))
         assets.write_new(root/'checkpoints/global_step_2/matched_identity.json', {'roles': {'actor': {
             f'{kind}_world_size_1_rank_0.pt': {'bytes': 1, 'sha256': 'f'*64} for kind in ('model', 'optim', 'extra_state')}}})
         return request, events
@@ -455,6 +474,12 @@ class CompletionTests(unittest.TestCase):
             save(events)
             result = evidence.complete(root, request, {})
             self.assertEqual(result['learning_diagnostics']['informative_reward_groups'], 0)
+            self.assertEqual(result['learning_diagnostics']['informative_group_relative_task_advantage'], 'not observed')
+            self.assertFalse(result['model_tool_integration']['qualified'])
+            saved_metrics = (root/'metrics.jsonl').read_text()
+            (root/'metrics.jsonl').write_text(saved_metrics.splitlines()[0]+'\n')
+            with self.assertRaisesRegex(ValueError, 'Missing update/role'): evidence.complete(root, request, {})
+            (root/'metrics.jsonl').write_text(saved_metrics)
             for edit in (lambda es: es.append(es[0]), lambda es: es[3].update(count=2),
                          lambda es: es[4].update(preclip_finite=False), lambda es: es[5].update(real_rollouts=31)):
                 changed = copy.deepcopy(events); edit(changed); save(changed)
@@ -462,6 +487,25 @@ class CompletionTests(unittest.TestCase):
             save(events)
             (root/'metrics.jsonl').write_text(json.dumps({'metrics': {'actor/pg_loss': float('nan')}})+'\n')
             with self.assertRaises(ValueError): evidence.complete(root, request, {})
+
+    def test_ppo_completion_requires_both_critic_losses(self):
+        with tempfile.TemporaryDirectory() as tmp, patch.dict(os.environ, {'AGL_READER_CALL_ID': 'fc-synthetic'}):
+            root = Path(tmp); request, events = self.fixture(root)
+            job = request['plan']['jobs'][1]
+            request = c.stage_request(request['plan'], job, job['stages'][1])
+            events[0]['id'] = request['stage']['wandb']['id']
+            events += [{**e, 'role': 'critic'} for e in events if e['event'] in ('optimizer_step', 'gradient_step')]
+            checkpoint = root/'checkpoints/global_step_2/matched_identity.json'
+            identity = assets.read(checkpoint); identity['roles']['critic'] = identity['roles']['actor']
+            checkpoint.write_text(json.dumps(identity))
+            (root/'audit/events-1.jsonl').write_text(''.join(json.dumps(e)+'\n' for e in events))
+            with self.assertRaisesRegex(ValueError, 'Missing update/role'): evidence.complete(root, request, {})
+            with (root/'metrics.jsonl').open('a') as f:
+                f.write(json.dumps({'step': 1, 'metrics': {'critic/vf_loss': 0.0}})+'\n')
+            with self.assertRaisesRegex(ValueError, 'Missing update/role'): evidence.complete(root, request, {})
+            with (root/'metrics.jsonl').open('a') as f:
+                f.write(json.dumps({'step': 2, 'metrics': {'critic/vf_loss': 0.0}})+'\n')
+            self.assertEqual(len(evidence.complete(root, request, {})['learning_diagnostics']['losses_by_update']), 4)
 
     def test_shared_checkpoint_inventory_rejects_missing_role_and_changed_bytes(self):
         p = plan(); j = p['jobs'][1]; request = c.stage_request(p, j, j['stages'][1])

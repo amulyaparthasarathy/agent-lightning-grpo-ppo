@@ -1,5 +1,4 @@
 """Paid CPU preflight in the pinned image. No model weights loaded or GPU used."""
-import asyncio
 import json
 import os
 from pathlib import Path
@@ -66,17 +65,14 @@ def main(plan, run):
     from observed_calc_agent import scalar_are_results_same
     if not scalar_are_results_same('2', '2', 1e-2) or scalar_are_results_same('3', '2', 1e-2):
         raise ValueError('Calculator verifier sanity failed')
-    from autogen_ext.tools.mcp import McpWorkbench, StdioServerParams
-    async def harness():
-        async with McpWorkbench(StdioServerParams(command=sys.executable, args=['-m', 'mcp_server_calculator'], read_timeout_seconds=30)) as workbench:
-            names = [t['name'] for t in await workbench.list_tools()]
-            if not names:
-                raise ValueError('No calculator tools')
-            return names
-    tools = asyncio.run(harness())
+    try:
+        from .reader_calculator import check
+    except ImportError:
+        from reader_calculator import check
+    calculator = check(run/'calculator-preflight.json')
     assets.write_new(run/'preflight.json', {'status': 'passed', 'plan_sha256': c.digest(plan),
         'backend': backend, 'dependencies': dependency, 'packages': versions, 'tokenizer_verified': True, 'model_access': True,
-        'wandb_project_readable': True, 'calculator_mcp_tools': tools,
+        'wandb_project_readable': True, 'calculator': calculator,
         'model_inference': 'unqualified', 'training': 'unqualified', 'reload': 'unqualified'})
 
 
