@@ -1,12 +1,12 @@
 # Reader-owned reference training
 
-**Reader-owned reference workflow implemented and verified offline; live model integration, training, and fresh-process reload remain unqualified.** An authorized live campaign acquired and prepared the inputs but stopped after CPU preflight failures; see the [dated qualification report](READER_QUALIFICATION_2026-11-19.md). This guide is the canonical reader procedure. It does not reopen the completed educational release or attribute its results to new code.
+**The reference Llama/calculator workflow has completed real baseline evaluation, two-update training, native checkpoint saving and fresh-worker reload for both algorithms.** CPU preflight and model/tool integration passed. GRPO observed zero informative reward groups; useful learning and reliable accuracy improvement are not established. See the [dated qualification report](READER_QUALIFICATION_2026-11-19.md) for exact executed source, evidence, earlier failures and costs. This guide is the canonical reader procedure. It does not reopen the completed educational release or attribute its results to new code.
 
 The implemented execution schema is `reader-reference-v1`. Its numerical protocol remains `matched-rollout-mean-v2`: terminal binary rewards; eight question presentations and four distinct complete rollouts per presentation; generated-token conservation, observation masking and equal-rollout loss weighting. Missing rewards, invalid context, incomplete groups and truncation remain errors. PPO-MC retains the learned critic, gamma/lambda one, true-terminal zero bootstrap, terminal Monte Carlo returns, tokenwise residual advantages and valid-token whitening. The calculator prompt, extractor and verifier are unchanged.
 
 | Required configuration | GRPO | PPO-MC |
 |---|---|---|
-| Reference Llama + calculator | Implemented; offline verified; live pending | Implemented; offline verified; live pending |
+| Reference Llama + calculator | Live operational, integration and reload checks passed; 0/16 informative groups | Live operational, integration and reload checks passed; learning benefit not established |
 | Alternate compatible model + calculator | Subsequent implementation and qualification | Subsequent implementation and qualification |
 | Reference Llama + synthetic alternate MCP task | Subsequent implementation and qualification | Subsequent implementation and qualification |
 
@@ -74,7 +74,7 @@ The example permits six stage calls of at most 3600 seconds, startup heartbeat w
 
 ## Explicit online setup and preparation
 
-**Everything from here requires live authorization.** The dated qualification report records the authorized CPU attempts; it does not establish a passing preflight or GPU qualification. Obtain gated model access under the applicable model terms and configure Modal/HF/W&B through their normal private stores. Create a W&B project and an existing named Modal Secret containing `HF_TOKEN` and `WANDB_API_KEY` through your normal account setup. Never place their values in the profile, commands, Git, logs or chat. This workflow does not create or modify Secrets or environments.
+**Everything from here requires live authorization.** The dated qualification report records the completed reference allocation; it does not authorize another reader allocation or establish compatibility of a future image/build. Obtain gated model access under the applicable model terms and configure Modal/HF/W&B through their normal private stores. Create a W&B project and an existing named Modal Secret containing `HF_TOKEN` and `WANDB_API_KEY` through your normal account setup. Never place their values in the profile, commands, Git, logs or chat. This workflow does not create or modify Secrets or environments.
 
 Set `MODAL_PROFILE` to exactly the profile value you chose. The CLI checks `Workspace.from_context().hydrate().name` against the intended workspace before resource operations; an environment variable alone is not ownership evidence. Remote entrypoints check the workspace again. The profile's environment scopes every resource lookup. API token environment overrides that authenticate to a different workspace are rejected.
 
