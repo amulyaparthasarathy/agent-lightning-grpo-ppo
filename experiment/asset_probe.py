@@ -39,26 +39,51 @@ async def probe():
 
 
 def check(output, timeout=90):
-    with Path(output).open('x') as out, tempfile.TemporaryDirectory(prefix='asset-probe-') as owners:
+    with Path(output).open('x') as out:
+        # Retain ownership records beside the result, especially when cleanup is unresolved.
+        owners = tempfile.mkdtemp(prefix=Path(output).name+'-mcp-', dir=Path(output).parent)
         env = dict(os.environ, AGL_MCP_OWNERS=owners)
-        proc = subprocess.Popen([sys.executable, str(Path(__file__).resolve()), '--worker'],
-                                env=env, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, start_new_session=True)
+        proc = None
+        result = {'status': 'failed', 'reason': 'MCP worker did not complete'}
+        anomalies = []
         try:
+            proc = subprocess.Popen([sys.executable, str(Path(__file__).resolve()), '--worker'],
+                                    env=env, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, start_new_session=True)
             stdout, _ = proc.communicate(timeout=timeout)
-            result = json.loads(stdout) if proc.returncode == 0 else {'status': 'failed', 'reason': 'MCP worker failed'}
-        except (subprocess.TimeoutExpired, ValueError):
-            result = {'status': 'failed', 'reason': 'MCP worker timeout or invalid receipt'}
+            candidate = json.loads(stdout) if proc.returncode == 0 else {'status': 'failed', 'reason': 'MCP worker failed'}
+            if not isinstance(candidate, dict) or candidate.get('status') not in ('passed', 'failed'):
+                raise ValueError('Invalid worker receipt')
+            result = candidate
+        except Exception as exc:
+            result = {'status': 'failed', 'reason': 'MCP worker startup, execution, timeout or receipt failure',
+                      'error_type': type(exc).__name__}
         finally:
             import signal
+            if proc is not None:
+                try:
+                    os.killpg(proc.pid, signal.SIGKILL)
+                except ProcessLookupError:
+                    pass
+                except Exception as exc:
+                    anomalies.append({'action': 'worker_signal', 'error_type': type(exc).__name__})
+                try:
+                    proc.communicate(timeout=10)
+                except Exception as exc:
+                    anomalies.append({'action': 'worker_reap', 'error_type': type(exc).__name__})
             try:
-                os.killpg(proc.pid, signal.SIGKILL)
-            except ProcessLookupError:
-                pass
-            proc.communicate(timeout=10)
-            cleanup(owners)
-        result['owned_process_cleanup_completed'] = True
-        json.dump(result, out, indent=2)
-        out.write('\n')
+                ownership = cleanup(owners)
+            except Exception as exc:
+                ownership = {'complete': False, 'anomalies': [{'error_type': type(exc).__name__}]}
+            result['ownership_receipts_directory'] = owners
+            result['owned_process_cleanup'] = ownership
+            result['worker_cleanup_anomalies'] = anomalies
+            result['owned_process_cleanup_completed'] = ownership['complete'] and not anomalies
+            if not result['owned_process_cleanup_completed']:
+                result['status'] = 'failed'
+                result.setdefault('reason', 'Owned process cleanup unresolved')
+            # Even interrupted execution retains failure evidence before propagation.
+            json.dump(result, out, indent=2)
+            out.write('\n')
     if result['status'] != 'passed':
         raise ValueError('Asset MCP probe failed; inspect local receipt')
     return result

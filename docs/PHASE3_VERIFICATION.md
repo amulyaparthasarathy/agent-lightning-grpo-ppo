@@ -11,7 +11,97 @@ The draft PR's final commit and the generated candidate receipt identify this
 implementation. This report is an offline engineering record, not new experimental
 results. The completed reference source/plan and r03 results remain unchanged.
 
-## Executed verification
+## PR #4 correction pass (2026-11-20)
+
+Started from reviewed head `8bac110184b4e5e102256cb1004386f8823dad38` on
+`phase3-reader-task-adaptation`. The public origin, live PR head/base, draft/open
+status and clean checkout were rechecked before editing. The sections below this
+correction record preserve the prior candidate's verification history; their earlier
+counts are not attributed to this correction candidate.
+
+Implemented corrections:
+
+- **Raw Git provenance:** temporary repositories reproduced all three admission
+  failures against the prior implementation: replacement A→B admitted B's runtime
+  bytes under A; a local graft and inherited `GIT_GRAFT_FILE` each admitted an unrelated
+  root. The new regression run initially failed with three “ValueError not raised”
+  assertions. All Git operations now use one controlled invocation, disabling
+  replacement objects, graft files and cached commit-graph ancestry. Raw working
+  bytes are checked against recorded HEAD. The regressions now reject all three;
+  linked worktrees, normal forks/direct clones and shallow remediation still pass.
+  No reader Git metadata is modified.
+- **Crash-safe ownership:** the prior implementation reproduced `JSONDecodeError`
+  before reaching a later valid owned process. Registration now flushes/fsyncs a
+  private `.pending` file and atomically publishes JSON. Cleanup validates each
+  receipt, rejects duplicate/ambiguous ownership and continues independently after
+  malformed or interrupted receipts. PID/start ticks/group ownership remain required.
+  Real subprocess tests terminate a later separately created group and explicitly
+  reap it. Invalid/stale/symlink/duplicate receipts never authorize signaling.
+  Group termination, requested signals and unresolved anomalies are reported
+  separately. Launcher errors and logs survive cleanup anomalies; probe failure
+  receipts and their ownership directory remain available even after timeout or
+  cleanup failure. No global process-killing operation is used.
+- **Baseline dependency:** `baseline-live-integration-v2` gates dependent training for
+  reader v2 qualification. Completed baseline evidence is persisted before the gate;
+  an unqualified report fails only that algorithm's dependency and records skipped
+  training/reload reasons. Mocked worker-completion tests show one failed algorithm
+  submits only baseline while the other runs all three stages. Valid zero-reward
+  integration permits both algorithms to continue. Missing/inconsistent/scripted or
+  cross-environment reports fail; historical/v1 scheduling remains unchanged. This
+  gate does not require accuracy, informative groups, gradients or improvement.
+
+Executed correction commands:
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=.:tests .venv-reader-cpu/bin/python -m unittest test_phase3_source test_phase3_corrections -v
+bash scripts/test_task_local.sh
+bash scripts/test_reader_offline.sh
+# Full cached CPU/pinned-source invocation: exactly the environment command below.
+PYTHONDONTWRITEBYTECODE=1 .venv-reader-cpu/bin/python scripts/task_local.py probe --out outputs/phase3/correction-asset-probe.json
+PYTHONDONTWRITEBYTECODE=1 .venv-reader-cpu/bin/python scripts/task_local.py scripted --out outputs/phase3/correction-scripted.json
+```
+
+Results: **19 targeted tests**, **22 task/source tests**, **39 + 15 + 81 reader/offline
+tests**, and **61 matched tests plus six pinned-config subprocess tests** passed,
+with no skips. The reader gate includes the new correction suite; historical evidence
+and accounting checks also passed. The matched gate again exercises 12 reader and
+24 historical configurations, unchanged native CPU numerics and real Ray/ZeroMQ.
+Expected MCP startup-error diagnostics and missing-hosted-W&B warnings in isolated
+fixtures are not hidden. The standalone real asset probe and scripted harness CLI
+passed with cleanup receipts. Scripts and local results are not remote qualification.
+
+After committing intended source, both offline fixture plans were regenerated and
+validated using the exact commands below. Prior candidate receipt and plans remain
+under ignored `outputs/phase3/`; the new `candidate.json` records the final commit,
+source/task/environment/configuration and example-plan hashes. No source-bound plan
+is added to Git. The final delivery and PR description supply the exact commit/hash
+values, avoiding a document that claims to identify its own containing commit.
+
+```bash
+uv run --locked python scripts/reader_training.py plan --profile examples/reader-profile.asset.synthetic.json --out outputs/phase3/correction-asset-plan.json
+uv run --locked python scripts/reader_training.py validate --profile examples/reader-profile.asset.synthetic.json --plan outputs/phase3/correction-asset-plan.json
+uv run --locked python scripts/reader_training.py plan --profile examples/reader-profile.synthetic.json --out outputs/phase3/correction-calculator-plan.json
+uv run --locked python scripts/reader_training.py validate --profile examples/reader-profile.synthetic.json --plan outputs/phase3/correction-calculator-plan.json
+```
+
+The final tree/index/staged patch, all branch-introduced blobs (including deleted and
+intermediate versions), commit metadata and updated PR text undergo the redacted
+publication audit described below. Only the existing intentional synthetic credential
+and unsafe-URL rejection fixtures require adjudication. Historical reports, source
+locks, licenses, model/data locks and numerical algorithms are unchanged.
+
+**No paid work ran.** Real local Git/process/MCP execution, scripted model responses,
+simulated trace validation and mocked cloud completion are separate evidence classes.
+Local MCP **1.26.0** differs from reference remote **1.30.0**. Fresh remote package
+inventory and the real task probe remain mandatory. The unchanged tool-error policy
+keeps errors incomplete; this pass changes no task/reward semantics. The single
+**$300** aggregate proposal remains unapproved, with no change to its estimate or
+contingency. Neither the closed reference authorization nor historical results are
+reused or attributed to this candidate.
+
+## Prior candidate verification (8bac110)
+
+### Executed verification
 
 ```bash
 UV_PROJECT_ENVIRONMENT=.venv-reader-cpu uv sync --locked --only-group reader-harness

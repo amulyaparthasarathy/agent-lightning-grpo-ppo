@@ -1,6 +1,7 @@
 """Offline source admission. Git ancestry is not GitHub ownership or push proof."""
 from pathlib import Path, PurePosixPath
 import json
+import os
 import re
 import subprocess
 
@@ -33,11 +34,25 @@ def safe_path(value):
     return value
 
 
-def git(root, *args):
-    result = subprocess.run(['git', '-C', str(root), *args], capture_output=True, text=True)
-    if result.returncode:
+def run_git(root, *args, input=None, check=True):
+    """Read the checkout's raw objects, never inherited alternate Git views.
+
+    NO_REPLACE_OBJECTS does not disable grafts. Override the graft file as well,
+    and bypass cached commit graphs when proving ancestry. Linked worktrees are
+    discovered normally through -C; no reader metadata is changed.
+    """
+    env = {k: v for k, v in os.environ.items() if not k.startswith('GIT_')}
+    env.update(GIT_NO_REPLACE_OBJECTS='1', GIT_GRAFT_FILE=os.devnull)
+    result = subprocess.run(['git', '--no-replace-objects', '-c', 'core.commitGraph=false',
+                             '-C', str(root), *args], input=input, env=env,
+                            capture_output=True, text=True)
+    if check and result.returncode:
         raise ValueError('Local Git check failed; verify checkout and origin (details suppressed)')
-    return result.stdout.strip()
+    return result
+
+
+def git(root, *args):
+    return run_git(root, *args).stdout.strip()
 
 
 def inventory(root):
@@ -60,12 +75,10 @@ def identity(root, file_hash, clean=False):
         raise ValueError('Requires clean committed source; commit and regenerate the plan')
     origin = repository(git(root, 'remote', 'get-url', 'origin'))
     head = git(root, 'rev-parse', 'HEAD')
-    if subprocess.run(['git', '-C', str(root), 'cat-file', '-e', BASELINE['commit']+'^{commit}'],
-                      capture_output=True).returncode:
+    if run_git(root, 'cat-file', '-e', BASELINE['commit']+'^{commit}', check=False).returncode:
         raise ValueError('Canonical baseline object missing (possibly shallow clone). Fetch public main/history '
                          'from the canonical repository, then regenerate; fork HEAD is not a baseline.')
-    if subprocess.run(['git', '-C', str(root), 'merge-base', '--is-ancestor', BASELINE['commit'], head],
-                      capture_output=True).returncode:
+    if run_git(root, 'merge-base', '--is-ancestor', BASELINE['commit'], head, check=False).returncode:
         raise ValueError('Execution commit does not descend from the pinned canonical baseline; '
                          'fetch full history if shallow, or rebase the derivative onto public main')
     runtime = inventory(root)
@@ -86,8 +99,8 @@ def identity(root, file_hash, clean=False):
         if entry:
             info, name = entry.split('\t', 1)
             head_files[name] = info.split()[2]
-    hashes = subprocess.run(['git', '-C', str(root), 'hash-object', '--no-filters', '--stdin-paths'],
-                            input=''.join(n+'\n' for n in files), capture_output=True, text=True, check=True)
+    hashes = run_git(root, 'hash-object', '--no-filters', '--stdin-paths',
+                     input=''.join(n+'\n' for n in files))
     dirty = dirty or any(head_files.get(n) != h for n, h in zip(files, hashes.stdout.splitlines(), strict=True))
     if clean and dirty:
         raise ValueError('Requires clean committed source bytes; commit and regenerate the plan')

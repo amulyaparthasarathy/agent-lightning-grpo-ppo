@@ -16,5 +16,5 @@ offline python3 scripts/check_phase2_results.py
 offline uv run --locked python -m unittest discover -s tests -p 'test_ppo_mc.py' -v
 offline uv run --locked python -m unittest discover -s tests -p 'test_matched_study.py' -v
 offline uv run --locked --group reader-test python -m unittest \
-  test_reader_training test_reader_evidence test_modal_build_import test_modal_import test_modal_runner \
+  test_reader_training test_reader_evidence test_phase3_corrections test_modal_build_import test_modal_import test_modal_runner \
   test_cuda_build_compiler test_training_interpreter test_dependency_exceptions -v

@@ -93,10 +93,10 @@ def run_case(root, final=None, mode='normal', request=None):
                 error = type(exc).__name__
     finally:
         server.shutdown(); server.server_close(); thread.join(5)
-        owned_processes.cleanup(root/'owners')
+        cleanup = owned_processes.cleanup(root/'owners')
     records = [json.loads(line) for p in (root/'traces').glob('*.jsonl') for line in p.read_text().splitlines()]
     children = [json.loads(p.read_text()) for p in (root/'owners').glob('*.json')]
-    return {'posts': posts, 'inputs': inputs, 'records': records, 'children': children, 'error': error}
+    return {'posts': posts, 'inputs': inputs, 'records': records, 'children': children, 'error': error, 'cleanup': cleanup}
 
 
 def demonstration(output):
@@ -108,12 +108,12 @@ def demonstration(output):
     with Path(output).open('x') as receipt, tempfile.TemporaryDirectory(prefix='asset-scripted-') as root:
         result = run_case(root, request=request)
         chains = reader_integration.chains(result['records'], request, evidence_class='scripted-inference')
-        passed = result['error'] is None and len(chains) == 1 and result['posts'] == [{'event_type': 'reward', 'data': {'value': 1.0}}]
+        passed = result['cleanup']['complete'] and result['error'] is None and len(chains) == 1 and result['posts'] == [{'event_type': 'reward', 'data': {'value': 1.0}}]
         report = {'schema': 'asset-scripted-harness-v1', 'task': task.TASK,
             'environment_sha256': task.digest(task.environment()), 'status': 'passed' if passed else 'failed',
             'evidence_class': 'scripted-inference', 'transport': 'real local stdio MCP',
             'reward_boundary': 'real loopback HTTP, test-only receiver', 'live_qualification': False,
-            'chains': chains, 'records': result['records']}
+            'chains': chains, 'records': result['records'], 'owned_process_cleanup': result['cleanup']}
         json.dump(report, receipt, indent=2)
         receipt.write('\n')
     if not passed:

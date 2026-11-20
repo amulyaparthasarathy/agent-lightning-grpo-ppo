@@ -209,7 +209,7 @@ asyncio.run(main())
                 deadline = time.monotonic()+10
                 while not list(Path(tmp).glob('*.json')) and proc.poll() is None and time.monotonic()<deadline:
                     time.sleep(.02)
-                self.assertEqual(owned_processes.cleanup(tmp), 1)
+                self.assertEqual(owned_processes.cleanup(tmp)['signalled'], 1)
                 proc.wait(timeout=5)
                 self.assertLess(proc.returncode, 0)
             finally:

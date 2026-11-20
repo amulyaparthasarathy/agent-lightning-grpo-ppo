@@ -96,7 +96,13 @@ before importing task code. Only `PYTHONUNBUFFERED` and `PYTHONDONTWRITEBYTECODE
 remain. No labels, HF/W&B credentials or gateway keys reach it. Linux parent-death
 signaling and owned PID/start-time receipts cover separately created MCP process
 groups; cleanup never uses a global process-killing command. This implementation
-requires the Linux/WSL2 environment used by the lab.
+requires the Linux/WSL2 environment used by the lab. Receipts are flushed and atomically
+published; interrupted `.pending` files and malformed/ambiguous receipts never authorize
+a signal. Cleanup continues through independently valid receipts and reports unresolved
+ownership separately from successful group termination. Launcher/probe failure receipts
+retain the original execution error and cleanup anomalies; unresolved cleanup is not a
+successful result. Reaping belongs to the direct parent. Preserve anomalous receipts
+for diagnosis; do not guess a PID or clear ownership records to retry.
 
 Rows intentionally retain the upstream-compatible string fields `question`, `result`,
 `case_id`, `split`. `QUESTION` transports the request; `RESULT` transports a canonical
@@ -160,7 +166,11 @@ The distinct identities are:
 5. Profile/configuration hash, task/environment manifests, assets and resolved config.
    Remote preflight separately records actual installed runtime distributions.
 
-Local Git objects must prove baseline ancestry. Parsing and ancestry do **not**
+Local **raw** Git objects must prove baseline ancestry. Every admission Git command
+uses a controlled environment: replacement refs and both local/inherited graft files
+are disabled, as is cached commit-graph ancestry. Working bytes are compared with the
+recorded HEAD's raw tree, even when index flags hide modifications. Reader Git metadata
+is never deleted or rewritten, and linked worktrees remain supported. Parsing and ancestry do **not**
 authenticate GitHub ownership or establish that HEAD has been pushed. All planning
 checks work offline. If the baseline object is missing, fetch canonical public history
 explicitly; for a shallow clone fetch enough history or unshallow before retrying:
@@ -210,6 +220,14 @@ W&B identities and a reconciled fresh attempt.
 The CLI validates source/profile, then reserves and prepares owned assets. Preflight
 verifies the exact package, upstream and assets and executes the selected probe.
 The supervisor schedules baseline → training → checkpoint-eval for each algorithm.
+For `reader-task-v2` qualification, `baseline-live-integration-v2` is an automatic
+dependency gate: a durably completed baseline must declare a valid live integration
+chain before its training can be submitted. The supervisor records the gate decision.
+An unqualified baseline remains completed with its diagnostic evidence; that algorithm's
+training and reload receive skipped receipts with `baseline_integration_unqualified`.
+The other algorithm is independent. Zero terminal reward can pass; accuracy, informative
+GRPO groups, nonzero task gradients and improvement are not admission criteria.
+Historical/v1 scheduling is unchanged.
 The stage worker validates identities and invokes `matched_launch`; its generated
 worker calls the unmodified hash-guarded `examples/calc_x/train_calc_agent.py`.
 That trainer loads the chosen Parquet files and calls Agent Lightning `run_ppo`.
@@ -230,6 +248,11 @@ fail the join. A chain can have terminal reward zero: integration and correctnes
 separate outcomes. `reader-integration-v2` requires at least one valid live chain in
 **each** of baseline, training and fresh reload, separately for each algorithm.
 Coverage counts remain visible; one successful baseline cannot certify other routes.
+Local harness tests pin MCP **1.26.0**; the completed reference recorded remote MCP
+**1.30.0**. These are different environments. Local passes do not establish exact remote
+compatibility: the later campaign requires a fresh remote package inventory and real
+task probe before GPU stages. Tool errors retain the declared failed/incomplete policy;
+this correction pass does not change task or reward semantics.
 
 `reader-task-v2` replaces executable v1 plans. Old plans fail with a regeneration
 message rather than accidentally entering historical routing. Archived v1 reports
@@ -244,6 +267,8 @@ both tasks.
 |---|---|
 | Dirty or stale source | Commit intended source, preserve unrelated work, regenerate plans into ignored outputs |
 | Baseline missing / unrelated | Fetch sufficient canonical history; check ancestry; never invent a baseline |
+| Baseline integration unqualified | Preserve completed baseline/trace diagnostics; reconcile the attempt before any corrected plan; do not bypass the gate |
+| Cleanup unresolved | Inspect receipt anomalies and owned provider/process state; never infer signal targets from partial JSON |
 | Runtime inventory/hash mismatch | Add intended tracked inputs to the inventory and rebuild from the committed source |
 | Missing MCP/Arrow dependency | Sync the isolated locked CPU group; essential tests fail rather than silently skip |
 | Dataset mismatch | Preserve the bad output; generate into a new directory from the intended version |

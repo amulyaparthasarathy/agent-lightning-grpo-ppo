@@ -298,17 +298,22 @@ def make_plan(args, bundle: Path, repo: Path, model: Path, data: Path, python: P
     return plan, commands
 
 
-def stop_owned(processes: list[subprocess.Popen]) -> None:
+def stop_owned(processes: list[subprocess.Popen]):
     """Signal only process groups created by this launcher; never global pkill/ray stop."""
+    anomalies = []
     for sig, seconds in ((signal.SIGINT, 12), (signal.SIGTERM, 5), (signal.SIGKILL, 2)):
         for proc in reversed(processes):
             try:
                 os.killpg(proc.pid, sig)
             except ProcessLookupError:
                 pass
+            except Exception as exc:
+                anomalies.append({"pid": proc.pid, "action": "signal", "error_type": type(exc).__name__})
         deadline = time.monotonic() + seconds
         while any(proc.poll() is None for proc in processes) and time.monotonic() < deadline:
             time.sleep(0.2)
+
+    return {"complete": not anomalies and all(p.poll() is not None for p in processes), "anomalies": anomalies}
 
 
 def run_services(commands, plan, run: Path, repo: Path, bundle: Path, walltime: float):
@@ -414,15 +419,28 @@ def run_services(commands, plan, run: Path, repo: Path, bundle: Path, walltime: 
         status, exit_code = "failed", 1
         (run / "error.txt").write_text(str(exc) + "\n")
     finally:
-        stop_owned(processes)
+        cleanup_report = {}
+        try:
+            cleanup_report['services'] = stop_owned(processes)
+        except Exception as exc:
+            cleanup_report['services'] = {'complete': False, 'error_type': type(exc).__name__}
         if (run/'mcp-processes').exists():
             try:
-                from .owned_processes import cleanup
-            except ImportError:
-                from owned_processes import cleanup
-            cleanup(run/'mcp-processes')
-        for handle in log_handles:
-            handle.close()
+                try:
+                    from .owned_processes import cleanup
+                except ImportError:
+                    from owned_processes import cleanup
+                cleanup_report['mcp'] = cleanup(run/'mcp-processes')
+            except Exception as exc:
+                cleanup_report['mcp'] = {'complete': False, 'error_type': type(exc).__name__}
+        for number, handle in enumerate(log_handles):
+            try:
+                handle.close()
+            except Exception as exc:
+                cleanup_report[f'log_{number}'] = {'complete': False, 'error_type': type(exc).__name__}
+        cleanup_complete = all(r['complete'] for r in cleanup_report.values())
+        if not cleanup_complete and status == 'completed':
+            status, exit_code = 'cleanup_failed', 1
         checkpoints = sorted((run / "checkpoints").glob("global_step_*"), key=lambda p: int(p.name.rsplit("_", 1)[1]))
         tracker = run / "checkpoints/latest_checkpointed_iteration.txt"
         latest_completed = None
@@ -436,6 +454,7 @@ def run_services(commands, plan, run: Path, repo: Path, bundle: Path, walltime: 
                                        **({"algorithm": plan["algorithm"], "protocol": plan["protocol"]} if matched
                                           else ppo_contract.identity(plan.get("algorithm", ppo_contract.GRPO))),
                                        "finished_at": datetime.now(timezone.utc).isoformat(),
+                                       "owned_process_cleanup_completed": cleanup_complete, "cleanup": cleanup_report,
                                        "checkpoints": [str(p) for p in checkpoints],
                                        "latest_checkpoint": str(latest_completed) if latest_completed else None,
                                        "restored_checkpoint": next((json.loads(v.split("=", 1)[1]) for v in plan["overrides"] if v.startswith("trainer.resume_from_path=")), None),

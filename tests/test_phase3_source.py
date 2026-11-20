@@ -1,6 +1,7 @@
 """Real temporary Git histories and closed image trees; no provider calls."""
 import copy
 import json
+import os
 from pathlib import Path
 import shutil
 import subprocess
@@ -102,6 +103,50 @@ class SourceTests(unittest.TestCase):
             self.git(shallow, 'remote', 'set-url', 'origin', 'https://github.com/reader/lab')
             with patch.object(source, 'BASELINE', baseline), self.assertRaisesRegex(ValueError, 'possibly shallow'):
                 source.identity(shallow, c.file_hash)
+
+    def test_replacement_cannot_admit_different_runtime_bytes(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp); baseline = self.checkout(root)
+            (root/'experiment/task.py').write_text('value = 999\n')
+            self.git(root, 'commit', '-qam', 'Replacement bytes')
+            replacement = self.git(root, 'rev-parse', 'HEAD')
+            self.git(root, 'checkout', '--detach', baseline['commit'])
+            self.git(root, 'replace', baseline['commit'], replacement)
+            self.git(root, 'read-tree', '--reset', '-u', 'HEAD')
+            self.assertEqual((root/'experiment/task.py').read_text(), 'value = 999\n')
+            with patch.object(source, 'BASELINE', baseline), self.assertRaisesRegex(ValueError, 'clean committed'):
+                source.identity(root, c.file_hash, clean=True)
+            self.assertEqual(self.git(root, 'replace', '-l'), baseline['commit'])
+
+    def test_grafts_cannot_fabricate_baseline_ancestry(self):
+        for inherited in (False, True):
+            with self.subTest(inherited=inherited), tempfile.TemporaryDirectory() as tmp:
+                root = Path(tmp)/'repo'; root.mkdir(); baseline = self.checkout(root)
+                self.git(root, 'checkout', '--orphan', 'unrelated')
+                self.git(root, 'commit', '-qm', 'Unrelated root')
+                head = self.git(root, 'rev-parse', 'HEAD')
+                with patch.object(source, 'BASELINE', baseline):
+                    with self.assertRaisesRegex(ValueError, 'does not descend'):
+                        source.identity(root, c.file_hash, clean=True)
+                    graft = Path(tmp)/'grafts' if inherited else root/'.git/info/grafts'
+                    content = head+' '+baseline['commit']+'\n'
+                    graft.write_text(content)
+                    with patch.dict(os.environ, {'GIT_GRAFT_FILE': str(graft)} if inherited else {}):
+                        # The uncontrolled Git view accepts this fabricated relationship.
+                        self.git(root, 'merge-base', '--is-ancestor', baseline['commit'], head)
+                        with self.assertRaisesRegex(ValueError, 'does not descend'):
+                            source.identity(root, c.file_hash, clean=True)
+                    self.assertEqual(graft.read_text(), content)
+
+    def test_linked_worktree_raw_admission(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)/'repo'; root.mkdir(); baseline = self.checkout(root)
+            linked = Path(tmp)/'linked'
+            self.git(root, 'worktree', 'add', '-b', 'reader', str(linked))
+            with patch.object(source, 'BASELINE', baseline):
+                admitted = source.identity(linked, c.file_hash, clean=True)
+            self.assertEqual(admitted['commit'], baseline['commit'])
+            self.assertEqual(admitted['repository'], 'reader/lab')
 
     def test_package_closed_set_hashes_and_symlinks(self):
         with tempfile.TemporaryDirectory() as tmp:

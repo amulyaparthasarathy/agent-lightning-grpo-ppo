@@ -31,7 +31,11 @@ itself in an executable plan.
 After approval, bind an explicit owned profile and fresh resource/path/attempt
 identities, verify ownership and existing credential handles, and reserve the exact
 plan before image resolution. Retain local and remote submission receipts. Generated
-remote Parquet bytes and actual package inventory must be verified; local byte hashes
+remote Parquet bytes and actual package inventory must be verified;
+local tests pin MCP 1.26.0 while the reference remote inventory recorded 1.30.0.
+A fresh remote package inventory and real asset task probe are mandatory; local
+passes do not prove exact remote compatibility. The declared tool-error policy remains
+failed/incomplete, with no terminal-zero conversion. No semantic relaxation is proposed. Local byte hashes
 are not assumed to prove a future remote artifact. No calculator training is proposed.
 
 ## Campaign and acceptance
@@ -41,7 +45,11 @@ paired seed 9001, their existing independent sampling streams and the unchanged
 matched protocol. For each algorithm run:
 
 1. Baseline on all 64 frozen heldout assets, exactly one completed rewarded attempt
-   per case, with no optimizer calls.
+   per case, with no optimizer calls. The automatic `baseline-live-integration-v2`
+   supervisor gate must pass before that algorithm's training submission: at least one
+   valid live tool/observation/continuation/delivered-reward chain. A zero-reward chain
+   can pass. An unqualified baseline retains completed evidence, skips that algorithm's
+   dependents, and requires diagnosis/reconciliation before a corrected attempt.
 2. Two updates: eight questions × four rollouts each collection, complete generated
    tokens and observation masks, equal-rollout weighting. GRPO: two actor calls;
    PPO-MC: two actor and two critic calls, terminal MC targets/residual advantages
@@ -118,7 +126,7 @@ permission for them. Reconcile storage before continued retention.
 
 ## Stop conditions and uncertainty
 
-Stop on lost ownership/lease, heartbeat/startup/deadline failure, identity/source or
+Stop dependent stages on failed baseline integration; stop on unresolved cleanup/ownership receipts, lost ownership/lease, heartbeat/startup/deadline failure, identity/source or
 package drift, incomplete rollouts/evaluation, nonfinite training evidence, failed
 reward delivery, wrong checkpoint/worker identity, storage bound or insufficient
 unreserved balance. Preserve evidence and request cancellation only for known owned
