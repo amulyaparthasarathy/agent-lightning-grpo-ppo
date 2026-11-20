@@ -335,8 +335,16 @@ def run_services(commands, plan, run: Path, repo: Path, bundle: Path, walltime: 
         env["PYTHONHASHSEED"] = str(plan["request"]["job"]["seed_streams"]["python"])
         env['WANDB_ENTITY'] = plan['request']['stage']['wandb']['entity']
         env['WANDB_PROJECT'] = plan['request']['stage']['wandb']['project']
-        if plan['request']['plan'].get('schema') == 'reader-reference-v1':
+        if plan['request']['plan'].get('schema') in ('reader-reference-v1', 'reader-task-v2'):
             env['AGL_EXPERIMENT_ID'] = plan['request']['job']['job_id']
+            reader = plan['request']['plan']
+            task = reader['task_identity']
+            env.update(AGL_TASK_ID=task['name'], AGL_TASK_SHA256=hashlib.sha256(json.dumps(task, sort_keys=True, separators=(',', ':')).encode()).hexdigest(),
+                       AGL_ENVIRONMENT_SHA256=task.get('environment_sha256') or hashlib.sha256(json.dumps(reader['data_manifest'], sort_keys=True, separators=(',', ':')).encode()).hexdigest(),
+                       AGL_SOURCE_SHA256=hashlib.sha256(json.dumps(reader['source'], sort_keys=True, separators=(',', ':')).encode()).hexdigest(),
+                       AGL_CONFIGURATION_SHA256=reader['configuration_sha256'],
+                       AGL_MCP_OWNERS=str(run/'mcp-processes'))
+            (run/'mcp-processes').mkdir(exist_ok=True)
     # Ray and vLLM Unix sockets must fit sockaddr_un.sun_path. Set these before
     # exec so children initialize tempfile/vLLM caches with short local paths.
     # Explicit /tmp also avoids an inherited or cached long tempfile directory.
@@ -407,6 +415,12 @@ def run_services(commands, plan, run: Path, repo: Path, bundle: Path, walltime: 
         (run / "error.txt").write_text(str(exc) + "\n")
     finally:
         stop_owned(processes)
+        if (run/'mcp-processes').exists():
+            try:
+                from .owned_processes import cleanup
+            except ImportError:
+                from owned_processes import cleanup
+            cleanup(run/'mcp-processes')
         for handle in log_handles:
             handle.close()
         checkpoints = sorted((run / "checkpoints").glob("global_step_*"), key=lambda p: int(p.name.rsplit("_", 1)[1]))

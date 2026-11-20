@@ -259,6 +259,45 @@ class SchemaChecks(unittest.TestCase):
             self.assertEqual(json.loads(env.env_vars.AGL_MATCHED_REQUEST), req)
 
 
+class ReaderTaskConfigs(unittest.TestCase):
+    def test_two_tasks_two_algorithms_three_stages_composed(self):
+        from experiment import reader_contract as reader
+        from test_reader_training import profile, source
+        checked = 0
+        for task in ('calculator-v1', 'asset-status-v1'):
+            p = profile(); p['task'] = task
+            plan = reader.make_plan(p, source())
+            for job in plan['jobs']:
+                for stage in job['stages']:
+                    req = reader.stage_request(plan, job, stage)
+                    rp, _ = matched_launch.make_plan(req, ROOT/'experiment', SOURCES/'agent-lightning',
+                        Path('/data')/p['paths']['model'], Path('/data')/p['paths']['data'], Path(sys.executable),
+                        Path('/data')/stage['output'], 12345)
+                    cfg = calc.build_config(model=rp['model'], agl_base_url=rp['gateway'], agl_key=rp['local_key'],
+                        run_name=rp['run_name'], config_overrides=ppo_contract.runtime_env_overrides(rp['overrides'], get_ppo_ray_runtime_env()))
+                    resolved = OmegaConf.to_container(cfg, resolve=True)
+                    matched_launch.validate_resolved(resolved, rp)
+                    self.assertEqual(resolved['agentlightning']['local']['agent_class'], plan['task_identity']['agent_class'])
+                    self.assertEqual(resolved['agentlightning']['local']['env_map'], plan['task_identity']['data_mapping'])
+                    self.assertEqual(set(resolved['agentlightning']['local']['env_map']), {'QUESTION', 'RESULT', 'AGL_CASE_ID', 'AGL_DATA_SPLIT', 'EVAL_SPLIT'})
+                    self.assertTrue(rp['train_file'].endswith('/train_main.parquet'))
+                    self.assertTrue(rp['eval_file'].endswith('/eval_main.parquet'))
+                    self.assertEqual(cfg.trainer.val_only, stage['name'] != 'training')
+                    self.assertEqual(cfg.trainer.resume_mode, 'resume_path' if stage['name'] == 'checkpoint-eval' else 'disable')
+                    if stage['name'] == 'checkpoint-eval':
+                        self.assertTrue(cfg.trainer.resume_from_path.endswith('/training/checkpoints/global_step_2'))
+                    # Instantiate the real native config classes for both tasks and roles.
+                    for node in (cfg.actor_rollout_ref.actor, cfg.actor_rollout_ref.rollout, cfg.critic):
+                        omega_conf_to_dataclass(node)
+                    bad = OmegaConf.to_container(cfg, resolve=True)
+                    bad['agentlightning']['local']['env_map']['OBSOLETE'] = 'input.result'
+                    with self.assertRaisesRegex(ValueError, 'env_map'):
+                        matched_launch.validate_resolved(bad, rp)
+                    checked += 1
+        self.assertEqual(checked, 12)
+        print('12 reader configs: complete task agent/env_map, datasets, native roles and fresh-reload routing passed.')
+
+
 if __name__ == '__main__':
     def deny_network(event, args):
         if event in ('socket.connect', 'socket.getaddrinfo', 'socket.sendto'):

@@ -17,7 +17,12 @@ try:
 except ImportError:
     import matched_contract as historical
 
-SCHEMA = 'reader-reference-v1'
+SCHEMA = 'reader-task-v2'
+LEGACY_SCHEMA = 'reader-reference-v1'
+
+def is_reader(plan):
+    return plan.get('schema') in (SCHEMA, LEGACY_SCHEMA)
+
 PROTOCOL = historical.PROTOCOL
 ALGORITHMS = historical.ALGORITHMS
 BASE_REVISION = historical.BASE_REVISION
@@ -64,7 +69,7 @@ def path(value):
 def validate_profile(p):
     exact(p, 'schema fixture modal paths experiment attempt wandb model task algorithms resources bounds', 'profile')
     if p['schema'] != SCHEMA or type(p['fixture']) is not bool:
-        raise ValueError('Unsupported reader schema/fixture label')
+        raise ValueError('Unsupported reader schema/fixture label; migrate profile to reader-task-v2 and regenerate plans')
     exact(p['modal'], 'profile workspace environment app registry volume secret', 'Modal')
     for value in p['modal'].values():
         slug(value)
@@ -82,8 +87,8 @@ def validate_profile(p):
         slug(v)
     if p['model'] != {'id': MODEL, 'revision': BASE_REVISION, 'profile': 'llama3b', 'parser': 'llama3_json'}:
         raise ValueError('Unsupported immutable model/tokenizer/parser/critic combination')
-    if p['task'] != 'calculator-v1' or p['algorithms'] != list(ALGORITHMS) or p['resources'] != RESOURCES:
-        raise ValueError('Only reference calculator, both matched algorithms and the continuity worker shape are supported')
+    if p['task'] not in ('calculator-v1', 'asset-status-v1') or p['algorithms'] != list(ALGORITHMS) or p['resources'] != RESOURCES:
+        raise ValueError('Only registered tasks, both matched algorithms and the continuity worker shape are supported')
     b = p['bounds']
     exact(b, 'stage_seconds startup_seconds preparation_seconds preflight_seconds concurrency '
           'worker_hourly_usd supervisor_hourly_usd preparation_budget_usd training_budget_usd '
@@ -109,20 +114,11 @@ def validate_profile(p):
 
 
 def source_identity(root=ROOT, clean=False):
-    def git(*args):
-        return subprocess.check_output(['git', '-C', str(root), *args], text=True).strip()
-    dirty = bool(git('status', '--porcelain'))
-    if clean and dirty:
-        raise ValueError('Requires clean committed source; commit and regenerate the plan')
-    origin = git('remote', 'get-url', 'origin')
-    if origin not in ('https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo.git',
-                      'git@github.com:amulyaparthasarathy/agent-lightning-grpo-ppo.git'):
-        raise ValueError('Executable source must be the public repository checkout')
-    files = [p for p in git('ls-files').splitlines() if Path(p).suffix in ('.py', '.sh', '.json', '.jinja', '.txt')
-             or p in ('uv.lock', 'pyproject.toml', 'docs/READER_TRAINING.md', 'docs/PHASE2_MATCHED_STUDY_CONTRACT.md')]
-    return {'commit': git('rev-parse', 'HEAD'), 'dirty': dirty,
-            'repository': 'amulyaparthasarathy/agent-lightning-grpo-ppo',
-            'files': {f: file_hash(root/f) for f in files}}
+    try:
+        from .reader_source import identity
+    except ImportError:
+        from reader_source import identity
+    return identity(root, file_hash, clean)
 
 
 def packaged(files):
@@ -131,7 +127,13 @@ def packaged(files):
                      'scripts/install_modal_training.sh', 'scripts/finalize_modal_training.sh')}
 
 
-def task_identity(source):
+def task_identity(source, task="calculator-v1"):
+    if task == "asset-status-v1":
+        try:
+            from .asset_task import identity
+        except ImportError:
+            from asset_task import identity
+        return identity(source)
     return {'name': 'calculator-v1', 'visible_fields': ['question'], 'label_fields': ['result'],
             'data_mapping': {'QUESTION': 'input.question', 'RESULT': 'input.result',
                              'AGL_CASE_ID': 'input.case_id', 'AGL_DATA_SPLIT': 'input.split', 'EVAL_SPLIT': 'input.split'},
@@ -143,6 +145,7 @@ def task_identity(source):
             'terminal_policy': 'binary reward only after complete response; errors propagate without reward',
             'tracing_reward_cleanup': 'existing observed_calc_agent.Agent and launch.run_services',
             'harness_sha256': source['files']['experiment/observed_calc_agent.py'],
+            'tracing_sha256': source['files']['experiment/observed_runtime.py'],
             'entrypoint_lock_sha256': source['files']['experiment/ppo_source_lock.json'],
             'launcher_sha256': source['files']['experiment/launch.py']}
 
@@ -155,12 +158,14 @@ def make_plan(profile, source, assets=None):
             from .reader_assets import validate_manifest
         except ImportError:
             from reader_assets import validate_manifest
-        validate_manifest(assets)
+        validate_manifest(assets, p['task'])
+    lock = json.loads((Path(__file__).parent/'ppo_source_lock.json').read_text())
+    upstream = {k: lock[k] for k in ('agentlightning_commit', 'verl_source_commit', 'verl_wheel', 'calc_example_sha256')}
     root = f"{p['paths']['output']}/{p['experiment']}/a{p['attempt']:02d}"
-    plan = {'schema': SCHEMA, 'protocol': PROTOCOL, 'profile': p, 'source': source,
-            'configuration_sha256': digest(p), 'packaged_sha256': digest(packaged(source['files'])),
+    plan = {'schema': SCHEMA, 'protocol': PROTOCOL, 'profile': p, 'source': source, 'upstream': upstream,
+            'configuration_sha256': digest(p), 'packaged_sha256': digest(source['runtime_files']),
             'assets': assets, 'data_manifest': assets['data'] if assets else None,
-            'task_identity': task_identity(source), 'study_id': p['experiment'], 'phase': 'qualification',
+            'task_identity': task_identity(source, p['task']), 'study_id': p['experiment'], 'phase': 'qualification',
             'attempt': p['attempt'], 'root': root, 'jobs': [], 'automatic_retries': 0,
             'remote_ownership': 'UNVERIFIED offline', 'availability': 'UNVERIFIED offline',
             'training_admissible': bool(assets and not p['fixture'] and not source['dirty']),
@@ -181,18 +186,30 @@ def make_plan(profile, source, assets=None):
                 **p['wandb'], 'group': job['pair_id'], 'id': digest(identity)[:24], 'name': f'{name}-{kind}',
                 'job_type': kind, 'resume': 'never', 'config': {**identity, 'protocol': PROTOCOL,
                     'seed_streams': job['seed_streams'], 'resources': RESOURCES, 'steps': 2,
-                    'task': plan['task_identity'], 'model': p['model'], 'evaluation': 'reader-calculator-64'}}})
+                    'task': plan['task_identity'], 'model': p['model'], 'evaluation': p['task']+'-64'}}})
         plan['jobs'].append(job)
     return plan
 
 
 def validate(plan):
+    if plan.get('schema') != SCHEMA:
+        raise ValueError('Old/incompatible reader plan: migrate profile to reader-task-v2 and regenerate; historical reports remain archival')
     if plan != make_plan(plan['profile'], plan['source'], plan['assets']):
         raise ValueError('Plan identities/configuration/dependencies changed; regenerate')
     source = plan['source']
+    exact(source, 'commit dirty repository baseline files runtime_files', 'source')
+    try:
+        from .reader_source import repository, safe_path, BASELINE
+    except ImportError:
+        from reader_source import repository, safe_path, BASELINE
+    if repository('https://github.com/'+source['repository']) != source['repository'] or source['baseline'] != BASELINE:
+        raise ValueError('Source repository or canonical baseline changed')
+    if not source['runtime_files'] or any(source['files'].get(n) != h for n, h in source['runtime_files'].items()):
+        raise ValueError('Runtime inventory differs from admitted source')
     if not re.fullmatch('[a-f0-9]{40}', source['commit']) or type(source['dirty']) is not bool:
         raise ValueError('Invalid source identity')
     for name, sha in source['files'].items():
+        safe_path(name)
         if Path(name).is_absolute() or '..' in Path(name).parts or not re.fullmatch('[a-f0-9]{64}', sha):
             raise ValueError('Unsafe source inventory')
 

@@ -53,7 +53,7 @@ def complete(run, request, completion):
     terminal = [e for e in events if e['event'] == 'trainer_returned']
     if len(terminal) != 1 or terminal[0]['validation_only'] != (stage['name'] != 'training'):
         raise ValueError('Wrong trainer evaluation mode')
-    result = {**completion, 'execution_schema': c.SCHEMA,
+    result = {**completion, 'execution_schema': request['plan']['schema'],
               'source_sha256': c.digest(request['plan']['source']),
               'configuration_sha256': request['plan']['configuration_sha256'],
               'assets_sha256': c.digest(request['plan']['assets']),
@@ -120,7 +120,7 @@ def validate_collection(plan, index, read):
             receipt, proof, obs = (read(stage['output']+'/'+n) for n in ('receipt.json', 'completion.json', 'observability.json'))
             if (entry['status'] != 'completed' or receipt['status'] != 'completed'
                     or entry['output'] != stage['output'] or receipt['output'] != stage['output']
-                    or receipt != entry['result'] or proof['execution_schema'] != c.SCHEMA
+                    or receipt != entry['result'] or proof['execution_schema'] != plan['schema']
                     or receipt['call_id'] != entry['call_id'] or receipt['call_id'] in calls
                     or receipt['completion'] != proof or proof != entry['result']['completion']
                     or proof['plan_sha256'] != c.digest(plan) or proof['stage'] != stage['name']
@@ -137,7 +137,7 @@ def validate_collection(plan, index, read):
             integration = proof.get('model_tool_integration')
             if integration is None:
                 integration = {'qualified': False, 'gaps': ['Missing integration report']}
-            elif (integration['schema'] != 'reader-integration-v1' or integration['algorithm'] != job['algorithm']
+            elif (integration['schema'] != ('reader-integration-v2' if plan['schema'] == c.SCHEMA else 'reader-integration-v1') or integration['algorithm'] != job['algorithm']
                     or integration['stage'] != stage['name']
                     or integration['qualified'] != (integration['episodes_with_valid_chain'] > 0)
                     or integration['episodes_with_valid_chain'] != sum(bool(e['chains']) for e in integration['coverage'])
@@ -155,8 +155,9 @@ def validate_collection(plan, index, read):
                         or proof['training_worker'] != previous['worker']
                         or proof['worker']['container_id'] == previous['worker']['container_id']):
                     raise ValueError('Training/reload evidence differs')
-        outcome['harness_integration_qualified'] = any(r['qualified'] for r in outcome['model_tool_integration'].values())
-        outcome['qualification_gaps'] = [] if outcome['harness_integration_qualified'] else ['Model/tool integration unqualified: no valid chain in this algorithm workflow']
+        outcome['integration_rule'] = 'all-three-stages-v2' if plan['schema'] == c.SCHEMA else 'any-stage-v1'
+        outcome['harness_integration_qualified'] = (all if plan['schema'] == c.SCHEMA else any)(r['qualified'] for r in outcome['model_tool_integration'].values())
+        outcome['qualification_gaps'] = [] if outcome['harness_integration_qualified'] else ['Model/tool integration unqualified: required stage coverage missing in this algorithm workflow']
         if job['algorithm'] == c.ALGORITHMS[0] and not outcome['informative_grpo_reward_groups']:
             outcome['qualification_gaps'].append('Informative group-relative task-advantage evidence was not observed')
     return {'evidence_complete': True, 'operational_completion': 'completed', 'algorithms': outcomes,

@@ -11,6 +11,7 @@ Training through the harness matters because the model must act on the same kind
 | **A. Learn** | [Eight-chapter guide](docs/learning/README.md) and [source map](docs/learning/source-map.md) | Follow one synthetic task through tokens, rewards, GRPO/PPO-MC losses, a weight update and checkpoint evaluation. |
 | **B. Verify offline** | Quick start below and [selected evidence index](evidence/phase2-r03/EVIDENCE_INDEX.md) | Check synthetic arithmetic and committed derived results using Python's standard library. |
 | **Reader-owned training** | [Canonical reader procedure](docs/READER_TRAINING.md) and [live qualification report](docs/READER_QUALIFICATION_2026-11-19.md) | The reference Llama/calculator workflow completed live operational validation for both GRPO and PPO-MC: baseline, two-update training execution, native checkpoint saving, fresh-worker evaluation reload and model/tool integration. |
+| **Customize a fork or task** | [Task adaptation guide](docs/TASK_ADAPTATION.md) | Run real local MCP checks, validate a scripted asset harness, and prepare fork-aware source-bound plans. Asset live qualification remains unexecuted. |
 | **C. Inspect historical training** | [Experiment runbook](experiment/README.md) and [r03 closeout](docs/PHASE2_CLOSEOUT_2026-11-15.md) | Study historical owner-bound integration, configuration, scientific results and operational records. Use the separate reader procedure for new execution. |
 
 ## Credential-free offline quick start

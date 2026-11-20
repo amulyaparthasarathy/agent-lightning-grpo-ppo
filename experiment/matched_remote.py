@@ -20,10 +20,8 @@ def write(path, data, exclusive=False):
 
 def verify_package(plan):
     from . import reader_contract as reader
-    for relative, expected in reader.packaged(plan['source']['files']).items():
-        path = runtime.BUNDLE.parent/relative
-        if reader.file_hash(path) != expected:
-            raise ValueError(f'Packaged source differs: {relative}')
+    from .reader_source import verify_package as verify
+    verify(runtime.BUNDLE.parent, plan['source']['runtime_files'], reader.file_hash)
 
 
 def capture_build(run, image_id=None):
@@ -36,7 +34,7 @@ def capture_build(run, image_id=None):
 def stage_worker(request, deadline_epoch, *, c, registry, volume, call_id, image_id=None):
     entered_at = time.time()
     c.validate(request['plan'])
-    reader = request['plan'].get('schema') == 'reader-reference-v1'
+    reader = request['plan'].get('schema') in ('reader-reference-v1', 'reader-task-v2')
     if request != c.stage_request(request['plan'], request['job'], request['stage']):
         raise ValueError('Invalid stage request')
     if registry.get('stop:'+supervisor.key(request['plan'])):
@@ -129,7 +127,7 @@ def stage_worker(request, deadline_epoch, *, c, registry, volume, call_id, image
 
 def supervise(plan, *, c, registry, volume, modal, stage_worker, image_id=None):
     c.validate(plan)
-    reader = plan.get('schema') == 'reader-reference-v1'
+    reader = plan.get('schema') in ('reader-reference-v1', 'reader-task-v2')
     study_key = supervisor.key(plan)
     owner = {'call_id': modal.current_function_call_id(), 'plan_sha256': c.digest(plan)}
     if not registry.put('owner:'+study_key, owner, skip_if_exists=True):

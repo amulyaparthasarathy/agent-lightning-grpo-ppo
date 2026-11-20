@@ -147,21 +147,39 @@ def historical_match(data):
             'claim': 'methodology rerun; historical identity never reassigned'}
 
 
-def validate_manifest(m):
+def validate_manifest(m, task="calculator-v1"):
     c.exact(m, 'schema fixture model data historical_match', 'asset manifest')
     if m['schema'] != 'reader-assets-v1' or m['fixture'] is not False:
-        raise ValueError('Synthetic/unverified assets cannot be launch-admissible')
+        raise ValueError('Fixture/unverified model assets cannot be launch-admissible')
     model = m['model']
     if (model['id'] != c.MODEL or model['revision'] != c.BASE_REVISION
             or model['parser'] != 'llama3_json' or model['files'] != model_lock()
             or not re.fullmatch('[a-f0-9]{64}', model['manifest_sha256'])):
         raise ValueError('Model identity does not match supported reference')
+    if task == 'asset-status-v1':
+        try:
+            from .asset_task import validate_manifest as validate_asset_data
+        except ImportError:
+            from asset_task import validate_manifest as validate_asset_data
+        validate_asset_data(m['data'])
+        if m['historical_match'] != {'claim': 'synthetic asset task; no calculator-data equivalence'}:
+            raise ValueError('Incorrect historical data claim')
+        return
     validate_data_manifest(m['data'])
     if m['historical_match'] != historical_match(m['data']):
         raise ValueError('Historical comparison differs')
 
 
-def inspect(model, data, staging=None):
+def inspect(model, data, staging=None, task="calculator-v1"):
+    if task == 'asset-status-v1':
+        try:
+            from .asset_task import verify
+        except ImportError:
+            from asset_task import verify
+        m = {'schema': 'reader-assets-v1', 'fixture': False, 'model': verify_model(model),
+             'data': verify(data), 'historical_match': {'claim': 'synthetic asset task; no calculator-data equivalence'}}
+        validate_manifest(m, task)
+        return m
     m = {'schema': 'reader-assets-v1', 'fixture': False, 'model': verify_model(model), 'data': verify_data(data, staging)}
     m['historical_match'] = historical_match(m['data'])
     validate_manifest(m)
@@ -199,18 +217,26 @@ def prepare(plan, root, run_command, log, env):
         run_command([sys.executable, *args], log/f'{name}.log', env, 2700)
     run([BUNDLE/'prepare_model.py', '--profile', 'llama3b', '--output-dir', staging/'model'], 'model')
     verify_model(staging/'model')
-    archive = staging/'calc-x.zip'
-    run(['-m', 'gdown', DATA_ID, '-O', archive], 'acquire-data')
-    with zipfile.ZipFile(archive) as z:
-        for name in ('train.parquet', 'test.parquet'):
-            entries = [m for m in z.infolist() if Path(m.filename).name == name]
-            if len(entries) != 1 or entries[0].file_size > 2*1024**3:
-                raise ValueError('Ambiguous/oversized calculator source archive')
-            with z.open(entries[0]) as source, (staging/name).open('xb') as dest:
-                shutil.copyfileobj(source, dest)
-    run([BUNDLE/'prepare_data.py', '--train-parquet', staging/'train.parquet',
-         '--eval-parquet', staging/'test.parquet', '--out', staging/'data', '--seed', '329'], 'data')
-    assets = inspect(staging/'model', staging/'data', staging)
+    task = plan['profile']['task']
+    if task == 'asset-status-v1':
+        try:
+            from .asset_task import generate
+        except ImportError:
+            from asset_task import generate
+        generate(staging/'data')
+    else:
+        archive = staging/'calc-x.zip'
+        run(['-m', 'gdown', DATA_ID, '-O', archive], 'acquire-data')
+        with zipfile.ZipFile(archive) as z:
+            for name in ('train.parquet', 'test.parquet'):
+                entries = [m for m in z.infolist() if Path(m.filename).name == name]
+                if len(entries) != 1 or entries[0].file_size > 2*1024**3:
+                    raise ValueError('Ambiguous/oversized calculator source archive')
+                with z.open(entries[0]) as source, (staging/name).open('xb') as dest:
+                    shutil.copyfileobj(source, dest)
+        run([BUNDLE/'prepare_data.py', '--train-parquet', staging/'train.parquet',
+             '--eval-parquet', staging/'test.parquet', '--out', staging/'data', '--seed', '329'], 'data')
+    assets = inspect(staging/'model', staging/'data', staging, task)
     write_new(staging/'assets.json', assets)
     # Parent attempts are serialized by the durable remote preparation reservation.
     for k in ('model', 'data'):

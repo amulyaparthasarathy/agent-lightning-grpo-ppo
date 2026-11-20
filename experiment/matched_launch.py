@@ -84,8 +84,11 @@ def configuration(request, model, run):
         'lab_protocol': {'protocol': c.PROTOCOL, 'algorithm': job['algorithm'],
                          'seed_streams': s, 'comparison_qualified': False},
     })
-    if request['plan'].get('schema') == 'reader-reference-v1':
+    if request['plan'].get('schema') in ('reader-reference-v1', 'reader-task-v2'):
         cfg['trainer.project_name'] = stage['wandb']['project']
+        task = plan['task_identity']
+        cfg['agentlightning.local.agent_class'] = task['agent_class']
+        cfg['agentlightning.local.env_map'] = task['data_mapping']
     if stage['name'] == 'checkpoint-eval':
         checkpoint = run.parent/'training/checkpoints'/f"global_step_{job['steps']}"
         cfg.update({'trainer.resume_mode': 'resume_path', 'trainer.resume_from_path': str(checkpoint)})
@@ -117,6 +120,11 @@ def validate_resolved(config, plan):
                 raise ValueError('Ray environment drift')
         elif node != value:
             raise ValueError(f'Matched resolved configuration drift: {key}')
+    if plan['request']['plan'].get('schema') == 'reader-task-v2':
+        paths = plan['request']['plan']['profile']['paths']
+        for key, name in (('train_file', 'train_main.parquet'), ('eval_file', 'eval_main.parquet')):
+            if Path(plan[key]) != Path('/data')/paths['data']/name:
+                raise ValueError('Task dataset routing changed')
     if config['actor_rollout_ref']['model']['path'] != plan['model']:
         raise ValueError('Actor base changed')
 
@@ -134,7 +142,7 @@ def validate_inputs(request, model, data, repo, bundle, contract=c):
             from .reader_assets import inspect, owned_path
         except ImportError:
             from reader_assets import inspect, owned_path
-        if inspect(model, data, owned_path('/data', request['plan']['profile']['paths']['staging'])) != request['plan']['assets']:
+        if inspect(model, data, owned_path('/data', request['plan']['profile']['paths']['staging']), task=request['plan']['profile']['task']) != request['plan']['assets']:
             raise ValueError('Actual reader assets differ from exact plan manifests')
         return
     lock = json.loads((bundle/'ppo_source_lock.json').read_text())
@@ -240,7 +248,7 @@ def main():
     run = args.request.parent
     contract = c
     repo, model, data = Path('/opt/agent-lightning'), Path('/data/restored/models/llama3b'), Path('/data/restored/data-small')
-    if request['plan'].get('schema') == 'reader-reference-v1':
+    if request['plan'].get('schema') in ('reader-reference-v1', 'reader-task-v2'):
         try:
             from . import reader_contract as contract
         except ImportError:
