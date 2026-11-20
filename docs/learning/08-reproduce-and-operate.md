@@ -46,17 +46,21 @@ Optional CPU backend tests are described in the [matched backend document](../PH
 
 ## Existing runbooks and publication boundaries
 
+For new reader-owned execution, use the [canonical reader training procedure](../READER_TRAINING.md). The reference Llama/calculator workflow passed live operational, integration, checkpoint and fresh-worker evaluation-reload checks on the [recorded configuration](../READER_QUALIFICATION_2026-11-19.md), for both GRPO and PPO-MC. This includes baseline evaluation and two-update training execution. Its execution identities are separate from the completed release and historical results; later documentation and merge commits did not produce the live run.
+
+GRPO had 0/16 informative reward groups and no observed task-directed policy-gradient signal. PPO-MC made nonzero updates, but the short run did not establish useful critic convergence or reliable improvement. Evaluation-only reload does not qualify resumed training. Alternate-model/task work remains open; this run does not universally qualify future environments or cold builds.
+
 The [historical experiment runbook](../../experiment/README.md), [matched backend](../PHASE2_MATCHED_BACKEND.md), [exploratory protocol](../PHASE2_EXPLORATORY.md) and [ten-way runbook](../PHASE2_TENWAY.md) preserve their original scopes. New execution requires separately authorized access, source identity, data/model rights, capacity and budget. Cached-image r03 success does not establish a fresh cold build. The formal ten-job campaign remains unexecuted/unqualified; its untouched-holdout route is not the reused-panel r03 study.
 
 The [evidence index](../../evidence/phase2-r03/EVIDENCE_INDEX.md) lists retained private raw/checkpoint locators. They are not included artifacts or paths promised to exist in a clone. No backup, tensor download, deletion or model redistribution follows from reading this guide.
 
-This educational snapshot excludes the original private Git history. Scoped licenses and notices are included; the [release plan](../PUBLIC_RELEASE_PLAN.md) records publication verification. Its [source map](source-map.md#public-source-representations) supplies publicly usable implementation representations. Reader-owned training and private artifact access remain separate, unqualified operations.
+This educational snapshot excludes the original private Git history. Scoped licenses and notices are included; the [release plan](../PUBLIC_RELEASE_PLAN.md) records publication verification. Its [source map](source-map.md#public-source-representations) supplies publicly usable implementation representations. The recorded reader-owned validation does not establish access to private historical artifacts; that remains a separate, unqualified operation.
 
 ## Exact source and evidence limits
 
 [`cpu_accounting_demo.scenario`](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/blob/89fe32f92f29209803c13264baed951713741d42/experiment/cpu_accounting_demo.py#L14) is an existing synthetic fixture. [`check_phase2_results.main`](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/blob/89fe32f92f29209803c13264baed951713741d42/scripts/check_phase2_results.py#L33) maps to the post-execution verification revision because it was added after the executed source. [`checkpoint_identity`, `verify_checkpoint` and `complete_stage`](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/blob/89fe32f92f29209803c13264baed951713741d42/experiment/matched_launch.py#L158) define the recorded runtime requirements; the offline checker reads their derived summaries rather than rerunning them.
 
-The [source map](source-map.md) records editorial packet hashes, historical discrepancies and unavailable series. The [learning index](README.md) records this documentation revision's verification scope separately from the historical audit.
+The [source map](source-map.md) records editorial context, historical discrepancies and unavailable series; it does not publish editorial packet hashes. The [learning index](README.md) records this documentation revision's verification scope separately from the historical audit.
 
 ## Offline exercise and answer
 

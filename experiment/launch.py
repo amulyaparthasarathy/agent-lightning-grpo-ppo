@@ -333,14 +333,18 @@ def run_services(commands, plan, run: Path, repo: Path, bundle: Path, walltime: 
             env[key] = str(directory)
     if matched:
         env["PYTHONHASHSEED"] = str(plan["request"]["job"]["seed_streams"]["python"])
+        env['WANDB_ENTITY'] = plan['request']['stage']['wandb']['entity']
+        env['WANDB_PROJECT'] = plan['request']['stage']['wandb']['project']
+        if plan['request']['plan'].get('schema') == 'reader-reference-v1':
+            env['AGL_EXPERIMENT_ID'] = plan['request']['job']['job_id']
     # Ray and vLLM Unix sockets must fit sockaddr_un.sun_path. Set these before
     # exec so children initialize tempfile/vLLM caches with short local paths.
     # Explicit /tmp also avoids an inherited or cached long tempfile directory.
     ray_tmp = Path(tempfile.mkdtemp(prefix=("agl-"+run_id[:12]+"-") if matched else "agl-ray-", dir="/tmp"))
     env["RAY_TMPDIR"] = str(ray_tmp)
     env["TMPDIR"] = env["VLLM_RPC_BASE_PATH"] = str(ray_tmp)
-    dump_json(run / "observability.json", {"experiment_id": run.name, "wandb_run_id": run_id,
-                                          "wandb_project": "cs329z-agent-lightning", "ray_temp_directory": str(ray_tmp),
+    dump_json(run / "observability.json", {"experiment_id": env['AGL_EXPERIMENT_ID'], "wandb_run_id": run_id,
+                                          "wandb_project": plan['request']['stage']['wandb']['project'] if matched else "cs329z-agent-lightning", "ray_temp_directory": str(ray_tmp),
                                           **({"wandb": plan["request"]["stage"]["wandb"], "request_sha256":
                                               hashlib.sha256(json.dumps(plan["request"], sort_keys=True).encode()).hexdigest()}
                                              if matched else {})})
