@@ -125,9 +125,15 @@ def identity(source):
             'data_mapping': {'QUESTION': 'input.question', 'RESULT': 'input.result',
                 'AGL_CASE_ID': 'input.case_id', 'AGL_DATA_SPLIT': 'input.split', 'EVAL_SPLIT': 'input.split'},
             'agent_class': 'asset_agent.Agent', 'cwd': 'examples/calc_x',
+            'mcp': {'command': 'training-python', 'args': ['-I', 'asset_stdio.py'],
+                    'environment': {'PYTHONUNBUFFERED': '1', 'PYTHONDONTWRITEBYTECODE': '1'},
+                    'ownership_receipt': 'optional absolute directory argument; never a model input'},
+            'local_probe': 'asset_probe.check',
+            'integration_rule': 'reader-integration-v2; live chain required in all three stages per algorithm',
             'environment': environment(), 'environment_sha256': digest(environment()),
             'source_sha256': {n: source['files'][f'experiment/{n}'] for n in
-                ('asset_task.py', 'asset_server.py', 'asset_agent.py', 'observed_runtime.py')},
+                ('asset_task.py', 'asset_server.py', 'asset_stdio.py', 'asset_agent.py', 'asset_probe.py',
+                 'owned_processes.py', 'observed_runtime.py')},
             'entrypoint_lock_sha256': source['files']['experiment/ppo_source_lock.json'],
             'launcher_sha256': source['files']['experiment/launch.py']}
 

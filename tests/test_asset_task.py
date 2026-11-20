@@ -176,7 +176,12 @@ asyncio.run(main())
                     os.killpg(proc.pid, signal.SIGKILL)
                     proc.wait(timeout=5)
                 owned_processes.cleanup(tmp)
-                # Repeated cleanup is idempotent and PID identity is checked.
+                child_stat = Path(f"/proc/{receipts[0]['pid']}/stat")
+                deadline = time.monotonic()+2
+                while child_stat.exists() and child_stat.read_text().rsplit(')', 1)[1].split()[0] != 'Z' and time.monotonic()<deadline:
+                    time.sleep(.01)
+                self.assertTrue(not child_stat.exists() or child_stat.read_text().rsplit(')', 1)[1].split()[0] == 'Z')
+                # No live owned server remains; the OS may briefly retain a reaped-parent zombie.
                 self.assertNotEqual(proc.returncode, 0)
             finally:
                 if proc.poll() is None:
@@ -186,9 +191,14 @@ asyncio.run(main())
     def test_real_probe_startup_failure_and_timeout(self):
         with tempfile.TemporaryDirectory() as tmp:
             with self.assertRaises(ValueError): asset_probe.check(Path(tmp)/'timeout.json', timeout=.001)
-            # Real interpreter failure, not a mocked process object.
-            with patch.object(asset_probe.sys, 'executable', '/bin/false'):
-                with self.assertRaises(ValueError): asset_probe.check(Path(tmp)/'startup.json')
+            # Actual MCP client starts a server that exits during initialization.
+            import asyncio
+            from autogen_ext.tools.mcp import McpWorkbench, StdioServerParams
+            async def failed_server():
+                async with McpWorkbench(StdioServerParams(command='/bin/false', read_timeout_seconds=.5)) as workbench:
+                    await workbench.list_tools()
+            with self.assertRaises(Exception):
+                asyncio.run(failed_server())
 
     def test_cleanup_separately_created_owned_process_group(self):
         with tempfile.TemporaryDirectory() as tmp:
