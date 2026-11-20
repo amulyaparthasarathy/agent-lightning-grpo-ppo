@@ -1,0 +1,48 @@
+{
+  "schema": "reader-task-v2",
+  "fixture": true,
+  "modal": {
+    "profile": "example-reader",
+    "workspace": "example-reader-workspace",
+    "environment": "reader-lab",
+    "app": "reader-reference-app",
+    "registry": "reader-reference-registry",
+    "volume": "reader-reference-volume",
+    "secret": "reader-reference-secret"
+  },
+  "paths": {
+    "model": "reader-assets/llama3b-v1",
+    "data": "reader-assets/asset-status-v1",
+    "staging": "reader-staging/preparation-a01",
+    "output": "reader-runs"
+  },
+  "experiment": "reader-asset-001",
+  "attempt": 1,
+  "wandb": {"entity": "example-reader-team", "project": "reader-reference"},
+  "model": {
+    "id": "meta-llama/Llama-3.2-3B-Instruct",
+    "revision": "0cb88a4f764b7a12671c53f0838cd831a0843b95",
+    "profile": "llama3b",
+    "parser": "llama3_json"
+  },
+  "task": "asset-status-v1",
+  "algorithms": ["grpo-matched-v2", "ppo-mc-matched-v2"],
+  "resources": {"gpu": "H100!", "cpu": 16, "memory_mib": 196608},
+  "bounds": {
+    "stage_seconds": 3600,
+    "startup_seconds": 600,
+    "preparation_seconds": 3600,
+    "preflight_seconds": 900,
+    "concurrency": 1,
+    "worker_hourly_usd": 10,
+    "supervisor_hourly_usd": 0.1,
+    "preparation_budget_usd": 5,
+    "training_budget_usd": 125,
+    "build_budget_usd": 10,
+    "storage_gib": 300,
+    "retention_days": 7,
+    "storage_budget_usd": 7,
+    "collection_gib": 2,
+    "total_budget_usd": 148
+  }
+}

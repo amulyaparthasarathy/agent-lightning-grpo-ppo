@@ -9,7 +9,6 @@ import tempfile
 import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
-CANONICAL = 'f01da0e7978b268794f1e9d77496f9697482787b'
 
 
 class MatchedImportTests(unittest.TestCase):
@@ -18,11 +17,14 @@ class MatchedImportTests(unittest.TestCase):
             root = Path(tmp)/'root'; root.mkdir()
             bundle = Path(tmp)/'opt/agent-lightning-lab/experiment'
             bundle.mkdir(parents=True)
-            source = (subprocess.check_output(['git', 'show', CANONICAL+':matched_app.py'], cwd=ROOT, text=True)
-                      if original else (ROOT/'matched_app.py').read_text())
+            source = (ROOT/'matched_app.py').read_text()
+            if original:
+                # Explicit fault injection reproduces the missing-builder import mechanism;
+                # it is not a claim to execute the private historical source.
+                source = source.replace('import modal', 'import modal\nimport modal_app', 1)
             source = source.replace("Path('/opt/agent-lightning-lab/experiment')", f'Path({str(bundle)!r})')
             (root/'matched_app.py').write_text(source)
-            for name in ('matched_container.py', 'matched_contract.py', 'matched_supervisor.py', 'matched_exploratory.py', 'matched_data_lock.json'):
+            for name in ('matched_container.py', 'matched_contract.py', 'matched_supervisor.py', 'matched_exploratory.py', 'matched_data_lock.json', 'matched_remote.py'):
                 if name != missing:
                     shutil.copyfile(ROOT/'experiment'/name, bundle/name)
             script = r'''
@@ -45,6 +47,8 @@ assert importlib.util.find_spec('experiment') is None
 with patch.object(modal, 'is_local', return_value=False), patch.object(modal.Image, 'from_registry', side_effect=AssertionError('build side effect')):
     service = import_single_function_service(api_pb2.Function(module_name='matched_app', function_name=sys.argv[2]), None)
 assert service._user_defined_callable.__name__ == sys.argv[2]
+# Common lifecycle modules are loaded lazily at function entry after discovery.
+from experiment import matched_remote
 assert 'modal_app' not in sys.modules and 'modal_build' not in sys.modules
 assert not any(n in sys.modules for n in ('torch', 'ray', 'transformers'))
 print(json.dumps({'function': sys.argv[2], 'sdk': modal.__version__, 'import': 'passed', 'network': 'blocked', 'builders': 'absent'}))
@@ -54,7 +58,7 @@ print(json.dumps({'function': sys.argv[2], 'sdk': modal.__version__, 'import': '
             return subprocess.run([sys.executable, '-I', '-c', script, str(root), function],
                                   cwd=root, env=env, text=True, capture_output=True, timeout=30)
 
-    def test_a01_actual_sdk_import_failure_reproduced_for_both_functions(self):
+    def test_fault_injected_builder_import_fails_under_real_sdk(self):
         for function in ('supervise', 'stage_worker'):
             with self.subTest(function=function):
                 result = self.discover(function, original=True)

@@ -1,5 +1,5 @@
 {
-  "schema": "reader-reference-v1",
+  "schema": "reader-task-v2",
   "fixture": true,
   "modal": {
     "profile": "example-reader",

@@ -20,3 +20,14 @@ default = true
 reader-test = [
     "pyarrow==25.0.1",
 ]
+
+# CPU-only real transport/harness tests; CUDA/vLLM are never installed here.
+reader-harness = [
+    "autogen-agentchat==0.7.5",
+    "autogen-ext[openai,mcp]==0.7.5",
+    "mcp==1.26.0",
+    "mcp-server-calculator==0.2.1",
+    "openai==2.54.0",
+    "httpx==0.28.1",
+    "pyarrow==25.0.1",
+]

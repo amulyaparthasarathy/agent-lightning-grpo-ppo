@@ -28,9 +28,11 @@ def profile():
 
 
 def source():
+    from experiment.reader_source import BASELINE
+    files = {str(p.relative_to(ROOT)): 'c'*64 for p in (ROOT/'experiment').glob('*.py')}
+    files.update({'experiment/ppo_source_lock.json': 'c'*64, 'reader_app.py': 'c'*64})
     return {'commit': 'b'*40, 'dirty': False, 'repository': 'amulyaparthasarathy/agent-lightning-grpo-ppo',
-            'files': {p: 'c'*64 for p in ('experiment/observed_calc_agent.py', 'experiment/ppo_source_lock.json',
-                                         'experiment/launch.py', 'experiment/reader_contract.py', 'reader_app.py')}}
+            'baseline': dict(BASELINE), 'files': files, 'runtime_files': c.packaged(files)}
 
 
 def plan():
@@ -353,8 +355,26 @@ class ReaderImportTests(unittest.TestCase):
         with (patch.object(modal.Volume, 'from_name', side_effect=AssertionError('Volume')),
              patch.object(modal.Dict, 'from_name', side_effect=AssertionError('Dict')),
              patch.object(modal.Secret, 'from_name', side_effect=AssertionError('Secret'))):
-            image = matched_image(reader=True)
-            self.assertIsInstance(image, modal.Image)
+            from experiment.reader_source import inventory
+            copies = []
+            original = modal.Image.add_local_file
+            def capture(image, local, remote, **kwargs):
+                copies.append((Path(local), remote))
+                return original(image, local, remote, **kwargs)
+            extra = ROOT/'experiment/__pycache__/phase3_ignored_extra.py'
+            extra.parent.mkdir(exist_ok=True)
+            with extra.open('x') as f:
+                f.write('raise RuntimeError("must never be packaged")')
+            try:
+                with patch.object(modal.Image, 'add_local_file', autospec=True, side_effect=capture):
+                    image = matched_image(reader=True)
+                self.assertIsInstance(image, modal.Image)
+                self.assertNotIn(extra, [local for local, _ in copies])
+                self.assertEqual({str(local.relative_to(ROOT)) for local, remote in copies
+                                  if remote.startswith('/opt/agent-lightning-lab/experiment/')},
+                                 {n for n in inventory(ROOT) if n.startswith('experiment/')})
+            finally:
+                extra.unlink()
 
     def test_real_child_process_receives_reader_settings_and_observability(self):
         from experiment import launch
@@ -366,13 +386,18 @@ class ReaderImportTests(unittest.TestCase):
             configured['calc_dir'] = str(root)
             commands['gateway'] = [sys.executable, '-c', 'import time; time.sleep(30)']
             commands['controller'] = commands['gateway'][:]
-            commands['trainer'] = [sys.executable, '-c', "import json,os;from pathlib import Path;Path('child-env.json').write_text(json.dumps({k:os.environ[k] for k in ['WANDB_ENTITY','WANDB_PROJECT','WANDB_RUN_ID','AGL_MATCHED_REQUEST']}))"]
+            commands['trainer'] = [sys.executable, '-c', "import json,os;from pathlib import Path;Path('child-env.json').write_text(json.dumps({k:os.environ[k] for k in ['WANDB_ENTITY','WANDB_PROJECT','WANDB_RUN_ID','AGL_MATCHED_REQUEST','AGL_TASK_ID','AGL_TASK_SHA256','AGL_ENVIRONMENT_SHA256','AGL_SOURCE_SHA256','AGL_CONFIGURATION_SHA256']}))"]
             ready = Mock(); ready.__enter__ = Mock(return_value=SimpleNamespace(status=200)); ready.__exit__ = Mock(return_value=False)
             # Service health response is explicitly mocked; process creation, environment,
             # logs, observability and owned process-group cleanup are real CPU operations.
             with patch.object(launch.urllib.request, 'urlopen', return_value=ready):
                 self.assertEqual(launch.run_services(commands, configured, root, root, root, .5), 0)
             env = assets.read(root/'child-env.json'); obs = assets.read(root/'observability.json')
+            self.assertEqual(env['AGL_TASK_ID'], p['profile']['task'])
+            self.assertEqual(env['AGL_TASK_SHA256'], c.digest(p['task_identity']))
+            self.assertEqual(env['AGL_ENVIRONMENT_SHA256'], c.digest(p['data_manifest']))
+            self.assertEqual(env['AGL_SOURCE_SHA256'], c.digest(p['source']))
+            self.assertEqual(env['AGL_CONFIGURATION_SHA256'], p['configuration_sha256'])
             self.assertEqual(env['WANDB_PROJECT'], p['profile']['wandb']['project'])
             self.assertEqual(env['WANDB_ENTITY'], p['profile']['wandb']['entity'])
             self.assertEqual(json.loads(env['AGL_MATCHED_REQUEST']), request)
@@ -504,13 +529,26 @@ class CompletionTests(unittest.TestCase):
         # Synthetic receipt aggregation: GRPO integration cannot qualify PPO-MC.
         stage = p['jobs'][0]['stages'][0]
         proof = files[stage['output']+'/completion.json']
-        proof['model_tool_integration'] = {'schema': 'reader-integration-v1', 'algorithm': c.ALGORITHMS[0],
+        proof['model_tool_integration'] = {'schema': 'reader-integration-v2', 'algorithm': c.ALGORITHMS[0],
             'stage': stage['name'], 'qualified': True, 'episodes_with_valid_chain': 1, 'trace_files': 1,
             'coverage': [{'chains': [{'synthetic_test_only': True}]}]}
         report = evidence.validate_collection(p, index, files.__getitem__)
-        self.assertTrue(report['algorithms'][c.ALGORITHMS[0]]['harness_integration_qualified'])
+        self.assertFalse(report['algorithms'][c.ALGORITHMS[0]]['harness_integration_qualified'])  # all three stages required in v2
         self.assertFalse(report['algorithms'][c.ALGORITHMS[1]]['harness_integration_qualified'])
         self.assertEqual(report['live_qualification'], 'gaps remain')
+        # Read-only historical interpretation preserves the published v1 any-stage rule.
+        legacy_plan, legacy_index, legacy_files = copy.deepcopy((p, index, files))
+        legacy_plan['schema'] = c.LEGACY_SCHEMA
+        legacy_index['plan'] = legacy_plan
+        for name, item in legacy_files.items():
+            if name.endswith('/completion.json'):
+                item['execution_schema'] = c.LEGACY_SCHEMA
+                item['plan_sha256'] = c.digest(legacy_plan)
+                if item.get('model_tool_integration'):
+                    item['model_tool_integration']['schema'] = 'reader-integration-v1'
+        legacy_report = evidence.validate_collection(legacy_plan, legacy_index, legacy_files.__getitem__)
+        self.assertTrue(legacy_report['algorithms'][c.ALGORITHMS[0]]['harness_integration_qualified'])
+        self.assertEqual(legacy_report['algorithms'][c.ALGORITHMS[0]]['integration_rule'], 'any-stage-v1')
         bad = copy.deepcopy(index); bad['jobs'][p['jobs'][0]['job_id']]['stages'].append(bad['jobs'][p['jobs'][0]['job_id']]['stages'][0])
         with self.assertRaisesRegex(ValueError, 'duplicate'): evidence.validate_collection(p, bad, files.__getitem__)
         file = p['jobs'][0]['stages'][2]['output']+'/completion.json'

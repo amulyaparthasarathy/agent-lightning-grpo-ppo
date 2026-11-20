@@ -80,3 +80,7 @@ Full-batch raw token advantages, entropy, reference-policy KL, exhaustive parser
 - [Supervised stage workers](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/blob/89fe32f92f29209803c13264baed951713741d42/matched_app.py#L58): `stage_worker` and `supervise`.
 
 Return to the [learning index](README.md).
+
+## Current adaptation implementation
+
+[Task adaptation](../TASK_ADAPTATION.md) maps the calculator and synthetic asset workflows, shared instrumentation, fork provenance and v2 evidence rules. These later changes did not execute r03 or the completed reference qualification; the frozen citations above retain their original source identities.

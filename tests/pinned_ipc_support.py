@@ -20,7 +20,7 @@ from urllib3.util import parse_url
 
 ROOT = Path(__file__).resolve().parents[1]
 LOCK = json.loads((ROOT/'tests/pinned_ipc_lock.json').read_text())
-WHEEL = Path(os.environ.get('AGL_VLLM_WHEEL', ROOT/'.local/ppo-review'/LOCK['filename']))
+WHEEL = Path(os.environ.get('AGL_VLLM_WHEEL', Path(os.environ.get('AGL_PINNED_SOURCES', ROOT/'.local/ppo-review'))/LOCK['filename']))
 
 
 def wheel_sources():
@@ -62,7 +62,9 @@ def snapshot():
 def connect(endpoint):
     n = native_network()
     with zmq.Context() as ctx:
-        with n['make_zmq_socket'](ctx, endpoint, zmq.PUSH, linger=0) as sock:
+        # Allow the real PUSH queue to flush before this short-lived test peer exits.
+        # Zero linger can discard the only message after send_json returns.
+        with n['make_zmq_socket'](ctx, endpoint, zmq.PUSH, linger=10000) as sock:
             sock.setsockopt(zmq.SNDTIMEO, 10000)
             sock.send_json(snapshot())
 

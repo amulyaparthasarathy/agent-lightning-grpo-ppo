@@ -12,6 +12,35 @@ def key(plan):
     return f"{plan['study_id']}/{plan['phase']}/a{plan['attempt']:02d}"
 
 
+def baseline_integration_admitted(plan, job, completion):
+    """V2 qualification dependency, independent of task correctness/learning.
+
+    The worker owns the trace joins; the supervisor checks its declared coverage
+    before spending on dependent stages. Collection still rechecks all stages.
+    Historical and archived-v1 scheduling is unchanged.
+    """
+    if plan.get('schema') != 'reader-task-v2' or plan['phase'] != 'qualification':
+        return True
+    report = completion.get('model_tool_integration')
+    try:
+        coverage = report['coverage']
+        chains = [chain for entry in coverage for chain in entry['chains']]
+        environment = plan['task_identity'].get('environment_sha256') or hashlib.sha256(
+            json.dumps(plan['data_manifest'], sort_keys=True, separators=(',', ':')).encode()).hexdigest()
+        return (report['schema'] == 'reader-integration-v2' and report['algorithm'] == job['algorithm']
+                and report['stage'] == 'baseline' and report['qualified'] is True
+                and type(report['episodes_with_valid_chain']) is int
+                and report['episodes_with_valid_chain'] == sum(bool(e['chains']) for e in coverage) > 0
+                and report['trace_files'] == len(coverage)
+                and all(chain['evidence_class'] == 'live-model'
+                        and chain['task_id'] == plan['task_identity']['name']
+                        and chain['environment_sha256'] == environment
+                        and type(chain['terminal_reward']) in (int, float)
+                        and chain['terminal_reward'] in (0, 1) for chain in chains))
+    except (KeyError, TypeError, AttributeError):
+        return False
+
+
 def run(plan, dispatch, get_result, cancel, read_heartbeat, stop_requested, persist,
         clock=time.time, sleep=time.sleep):
     """Sole aggregate-index writer. Every spawn is recorded before polling another call.
@@ -130,7 +159,20 @@ def run(plan, dispatch, get_result, cancel, read_heartbeat, stop_requested, pers
                 index['jobs'][jid]['status'] = receipt['status']
                 save()
                 if receipt['status']=='completed' and position+1 < len(job['stages']):
-                    pending.insert(0, (job, position+1))
+                    gated = (receipt['stage'] == 'baseline' and plan.get('schema') == 'reader-task-v2'
+                             and plan['phase'] == 'qualification')
+                    admitted = not gated or baseline_integration_admitted(plan, job, receipt['result']['completion'])
+                    if gated:
+                        index['jobs'][jid]['dependency_gate'] = {
+                            'rule': 'baseline-live-integration-v2', 'stage': 'baseline', 'admitted': admitted,
+                            'reason': 'baseline_integration_qualified' if admitted else 'baseline_integration_unqualified'}
+                    if not admitted:
+                        # Preserve the durable completed baseline and diagnostics. Only
+                        # its dependent stages are denied; the other algorithm is independent.
+                        index['jobs'][jid]['status'] = 'failed'
+                    save()
+                    if admitted:
+                        pending.insert(0, (job, position+1))
             if active:
                 sleep(5)
     except BaseException:
@@ -155,7 +197,8 @@ def run(plan, dispatch, get_result, cancel, read_heartbeat, stop_requested, pers
             for stage in job['stages']:
                 if stage['name'] not in seen:
                     state['stages'].append({'stage':stage['name'], 'output':stage['output'], 'wandb':stage['wandb'],
-                                            'status':'skipped', 'call_id':None, 'reason':'dependency_or_supervisor_failed'})
+                                            'status':'skipped', 'call_id':None, 'reason':('baseline_integration_unqualified' if state.get('dependency_gate', {}).get('admitted') is False
+                                                      else 'dependency_or_supervisor_failed')})
         states = {v['status'] for v in index['jobs'].values()}
         index['status'] = ('completed' if states == {'completed'} else
                            'unknown' if 'unknown' in states else 'cancelled' if 'cancelled' in states else 'failed')

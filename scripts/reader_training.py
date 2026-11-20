@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Reader-owned calculator workflow. plan/validate are strictly offline."""
+"""Reader-owned task workflow. plan/validate are strictly offline."""
 from __future__ import annotations
 import argparse
 import json
@@ -219,7 +219,12 @@ def main(argv=None):
     if args.command == 'plan':
         if not args.out or args.plan:
             raise ValueError('plan requires new --out, not --plan')
-        plan = c.make_plan(profile, c.source_identity(), assets.read(args.assets) if args.assets else None)
+        plan = c.make_plan(profile, c.source_identity(clean=True), assets.read(args.assets) if args.assets else None)
+        output = args.out.resolve()
+        if output.is_relative_to(c.ROOT):
+            import subprocess
+            if subprocess.run(['git', '-C', str(c.ROOT), 'check-ignore', '-q', str(output)], capture_output=True).returncode:
+                raise ValueError('Source-bound plans must be written to ignored output paths, e.g. outputs/phase3/plan.json')
         assets.write_new(args.out, plan)
     else:
         if not args.plan or args.assets:

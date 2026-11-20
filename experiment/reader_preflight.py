@@ -21,7 +21,7 @@ def main(plan, run):
     c.validate(plan)
     # Match preparation's canonical Volume paths while retaining nested-symlink rejection.
     actual = assets.inspect(*(assets.owned_path('/data', plan['profile']['paths'][key])
-                              for key in ('model', 'data', 'staging')))
+                              for key in ('model', 'data', 'staging')), task=plan['profile']['task'])
     if actual != plan['assets']:
         raise ValueError('Preflight assets differ from plan')
     head = subprocess.check_output(['git', '-C', '/opt/agent-lightning', 'rev-parse', 'HEAD'], text=True).strip()
@@ -61,19 +61,26 @@ def main(plan, run):
     projects = api.projects(entity=plan['profile']['wandb']['entity'])
     if not any(p.name == plan['profile']['wandb']['project'] for p in projects):
         raise ValueError('W&B project must already exist and be readable')
-    sys.path.insert(0, '/opt/agent-lightning/examples/calc_x')
-    os.chdir('/opt/agent-lightning/examples/calc_x')
-    from observed_calc_agent import scalar_are_results_same
-    if not scalar_are_results_same('2', '2', 1e-2) or scalar_are_results_same('3', '2', 1e-2):
-        raise ValueError('Calculator verifier sanity failed')
-    try:
-        from .reader_calculator import check
-    except ImportError:
-        from reader_calculator import check
-    calculator = check(run/'calculator-preflight.json')
+    if plan['profile']['task'] == 'asset-status-v1':
+        try:
+            from .asset_probe import check
+        except ImportError:
+            from asset_probe import check
+        calculator = check(run/'asset-preflight.json')
+    else:
+        sys.path.insert(0, '/opt/agent-lightning/examples/calc_x')
+        os.chdir('/opt/agent-lightning/examples/calc_x')
+        from observed_calc_agent import scalar_are_results_same
+        if not scalar_are_results_same('2', '2', 1e-2) or scalar_are_results_same('3', '2', 1e-2):
+            raise ValueError('Calculator verifier sanity failed')
+        try:
+            from .reader_calculator import check
+        except ImportError:
+            from reader_calculator import check
+        calculator = check(run/'calculator-preflight.json')
     assets.write_new(run/'preflight.json', {'status': 'passed', 'plan_sha256': c.digest(plan),
         'backend': backend, 'dependencies': dependency, 'packages': versions, 'tokenizer_verified': True, 'model_access': True,
-        'wandb_project_readable': True, 'calculator': calculator,
+        'wandb_project_readable': True, 'task_probe': calculator, 'task': plan['task_identity'],
         'model_inference': 'unqualified', 'training': 'unqualified', 'reload': 'unqualified'})
 
 

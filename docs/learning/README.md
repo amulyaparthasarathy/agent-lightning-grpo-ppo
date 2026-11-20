@@ -75,3 +75,5 @@ Rendering tools, downloaded browser libraries, assets and screenshots stayed out
 The wide source-map tables require horizontal scrolling. The frozen accuracy SVG has crowded endpoint labels; Chapter 7 directs readers to the exact-count table. Neither prevents documentation review. The SVG and all frozen evidence remain unchanged.
 
 Optional CPU backend integration tests, raw-trace/tensor verification, training/inference, paid cold builds and public-release checks remain unrun. The repository remains **PRIVATE**; licensing, privacy, redistribution and other publication gates are separate, unverified requirements. The missing metric series and chart collection remain unavailable as recorded in the source map.
+
+For an implemented second task and reader-owned forks, see [Task adaptation](../TASK_ADAPTATION.md). Its asset-status checks are local; they do not add learning results to this guide.

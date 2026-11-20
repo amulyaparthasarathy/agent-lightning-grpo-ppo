@@ -14,7 +14,8 @@ from experiment import matched_launch as launch
 from scripts import phase2_study as cli
 
 ROOT = Path(__file__).resolve().parents[1]
-PARENT = 'd56581041b2fcd428d1e9e5e9ca6d915ba425264'
+# Public baseline; private pre-exploratory history is not a reader dependency.
+PARENT = '5c069f7e9cc23d03050d13360ce43e27e47e54aa'
 
 
 def plan(phase='exploratory'):
@@ -104,8 +105,8 @@ class ExploratoryContractTests(unittest.TestCase):
             bad=copy.deepcopy(result);next(iter(bad['jobs'].values()))['stages'][2]['result']['completion']['plan_sha256']='a'*64
             with self.assertRaises(ValueError):cli.validate_launch(p,s.key(p)+':'+c.digest(p),bad)
 
-    def test_original_formal_plans_are_identical(self):
-        namespace={'__file__':str(ROOT/'experiment/matched_contract.py'),'__name__':'original_contract'}
+    def test_public_baseline_formal_plans_are_identical(self):
+        namespace={'__file__':str(ROOT/'experiment/matched_contract.py'),'__name__':'original_contract', '__package__':'experiment'}
         original=subprocess.check_output(['git','show',PARENT+':experiment/matched_contract.py'],cwd=ROOT,text=True)
         exec(compile(original,'original_contract','exec'),namespace)
         p=plan()
