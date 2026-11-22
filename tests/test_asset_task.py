@@ -113,7 +113,11 @@ class RealHarnessTests(unittest.TestCase):
             self.assertEqual(users, [task.cases()['eval_main.parquet'][0]['question']+'\n'+task.PROMPT])
             for messages in result['inputs']:
                 systems = [m['content'] for m in messages if m['type'] == 'SystemMessage']
-                self.assertEqual(systems, [task.PROMPT])
+                self.assertEqual(len(systems), 1)
+                self.assertIn('Call lookup_asset with exactly one argument: asset_id.', systems[0])
+                self.assertIn('Do not supply service_state or backup_health as tool arguments', systems[0])
+                self.assertIn('final answer in the format requested by the user', systems[0])
+                self.assertNotIn('TERMINATE', systems[0])
             self.assertEqual(len(reader_integration.chains(result['records'], request, evidence_class='scripted-inference')), 1)
             with self.assertRaises(ValueError): reader_integration.chains(result['records'], request)
             for field in ('task_id', 'environment_sha256', 'configuration_sha256', 'source_sha256'):

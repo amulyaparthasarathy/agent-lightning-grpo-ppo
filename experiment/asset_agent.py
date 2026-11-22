@@ -16,6 +16,16 @@ except ImportError:
     from observed_runtime import Recorder, ObservedClient, ObservedWorkbench
 
 
+SYSTEM_MESSAGE = (
+    'You are an assistant that answers asset questions using the provided tool. '
+    'Call lookup_asset with exactly one argument: asset_id. '
+    'Do not supply service_state or backup_health as tool arguments; those fields '
+    'are observations returned by the tool. '
+    'After receiving the tool result, provide the final answer in the format '
+    'requested by the user.'
+)
+
+
 def server_params():
     # MCP's stdio client adds a small OS default environment. The server wrapper
     # clears that too, before importing task code (see asset_stdio.py).
@@ -40,7 +50,7 @@ class Agent:
                                     'family': ModelFamily.UNKNOWN, 'structured_output': False},
                         max_retries=6, parallel_tool_calls=False, max_tokens=int(os.getenv('AGL_MAX_TOKENS', '1024')))
                     agent = AssistantAgent(name='asset', model_client=client, workbench=workbench,
-                                           system_message=task.PROMPT,
+                                           system_message=SYSTEM_MESSAGE,
                                            reflect_on_tool_use=True, max_tool_iterations=2)
                     response = await asyncio.wait_for(agent.run(task=question+'\n'+task.PROMPT), 300)
                 # A tool summary, truncation, cancellation or transport error is not terminal zero.
