@@ -40,6 +40,7 @@ class Agent:
                                     'family': ModelFamily.UNKNOWN, 'structured_output': False},
                         max_retries=6, parallel_tool_calls=False, max_tokens=int(os.getenv('AGL_MAX_TOKENS', '1024')))
                     agent = AssistantAgent(name='asset', model_client=client, workbench=workbench,
+                                           system_message=task.PROMPT,
                                            reflect_on_tool_use=True, max_tool_iterations=2)
                     response = await asyncio.wait_for(agent.run(task=question+'\n'+task.PROMPT), 300)
                 # A tool summary, truncation, cancellation or transport error is not terminal zero.

@@ -111,6 +111,9 @@ class RealHarnessTests(unittest.TestCase):
             self.assertNotIn(task.cases()['eval_main.parquet'][0]['result'], first)
             users = [m['content'] for m in result['inputs'][0] if m['type'] == 'UserMessage']
             self.assertEqual(users, [task.cases()['eval_main.parquet'][0]['question']+'\n'+task.PROMPT])
+            for messages in result['inputs']:
+                systems = [m['content'] for m in messages if m['type'] == 'SystemMessage']
+                self.assertEqual(systems, [task.PROMPT])
             self.assertEqual(len(reader_integration.chains(result['records'], request, evidence_class='scripted-inference')), 1)
             with self.assertRaises(ValueError): reader_integration.chains(result['records'], request)
             for field in ('task_id', 'environment_sha256', 'configuration_sha256', 'source_sha256'):
