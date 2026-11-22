@@ -8,6 +8,48 @@ IDENTITY = ('trace_id', 'experiment_id', 'wandb_run_id', 'case_id', 'phase', 'po
             'eval_split', 'model_profile', 'rollout_id', 'attempt_id', 'route_mode')
 
 
+def episode_outcome(records):
+    """Execution outcome is separate from a successful live tool chain."""
+    episodes = [r for r in records if r.get('kind') == 'episode']
+    if len(episodes) != 1:
+        return 'incomplete'
+    e = episodes[0]; out = e.get('outputs') or {}
+    if e.get('execution_status') != 'ok' or out.get('reward_posted') is not True:
+        return 'incomplete'
+    if e.get('episode_policy') != 'asset-episode-v2':
+        return 'historical_complete'
+    models = [r for r in records if r['kind'] == 'llm']
+    actions = [r for r in records if r['kind'] == 'action_outcome']
+    terminations = [r for r in records if r['kind'] == 'termination']
+    if (not models or any(r['execution_status'] != 'ok' or not r.get('outputs')
+                         or r['outputs'].get('finish_reason') not in ('stop', 'function_calls') for r in models)
+            or type(out.get('reward')) not in (int, float) or out['reward'] not in (0, 1)):
+        return 'incomplete'
+    calls = [call for r in models if isinstance(r['outputs']['content'], list) for call in r['outputs']['content']]
+    observed = [r['inputs']['call'] for r in actions]
+    if calls != observed or len({c['id'] for c in calls}) != len(calls):
+        return 'incomplete'
+    errors = sum(bool(r['outputs']['policy_error']) for r in actions)
+    if errors != out.get('policy_errors'):
+        return 'incomplete'
+    outcome = out.get('outcome')
+    if outcome == 'terminal_policy_failure':
+        if (errors < 2 or out['reward'] != 0 or out.get('raw_answer') is not None
+                or len(terminations) != 1 or terminations[0]['name'] != 'policy_error_limit'):
+            return 'incomplete'
+        return outcome
+    final = models[-1]['outputs']
+    if (terminations or final['finish_reason'] != 'stop' or final['content'] != out.get('raw_answer')
+            or not isinstance(final['content'], str) or not final['content'].strip()):
+        return 'incomplete'
+    recovered = False; seen_error = False
+    for action in actions:
+        seen_error |= bool(action['outputs']['policy_error'])
+        recovered |= seen_error and action['outputs']['successful_tool_call']
+    expected = 'complete_recovered' if recovered else 'complete_final'
+    return expected if outcome == expected else 'incomplete'
+
+
 def chains(records, request, *, evidence_class="live-model"):
     """Join AutoGen 0.7.5 FunctionCall/ToolResult/FunctionExecutionResult records."""
     stage, job = request['stage'], request['job']
@@ -58,6 +100,8 @@ def chains(records, request, *, evidence_class="live-model"):
     def ok(record):
         return record['execution_status'] == 'ok' and record['exception'] is None
     output = episode['outputs'] or {}
+    if episode.get('episode_policy') == 'asset-episode-v2' and episode_outcome(records) in ('incomplete', 'terminal_policy_failure'):
+        return []
     if not ok(episode) or output.get('reward_posted') is not True or type(output.get('reward')) not in (int, float) or output['reward'] not in (0, 1):
         return []
     def before(left, right):
@@ -126,6 +170,9 @@ def report(run, request):
             if not records or any(r['trace_id'] != path.stem.removeprefix('trajectory-') for r in records):
                 raise ValueError('Trace filename identity differs')
             entry['chains'] = chains(records, request)
+            entry['episode_outcome'] = episode_outcome(records)
+            episode = next(r for r in records if r['kind'] == 'episode')
+            entry['diagnostics'] = (episode.get('outputs') or {}).get('diagnostics')
         except (ValueError, KeyError, TypeError, AttributeError) as exc:
             entry.update(chains=[], invalid_trace=type(exc).__name__)
         valid += bool(entry['chains'])

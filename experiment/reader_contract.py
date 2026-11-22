@@ -67,7 +67,10 @@ def path(value):
 
 
 def validate_profile(p):
-    exact(p, 'schema fixture modal paths experiment attempt wandb model task algorithms resources bounds', 'profile')
+    exact(p, 'schema fixture modal paths experiment attempt wandb model task algorithms resources bounds'
+          + (' purpose' if 'purpose' in p else ''), 'profile')
+    if 'purpose' in p and (p['purpose'] != 'collection-only' or p['task'] != 'asset-status-v1'):
+        raise ValueError('Only the bounded asset collection-only development purpose is supported')
     if p['schema'] != SCHEMA or type(p['fixture']) is not bool:
         raise ValueError('Unsupported reader schema/fixture label; migrate profile to reader-task-v2 and regenerate plans')
     exact(p['modal'], 'profile workspace environment app registry volume secret', 'Modal')
@@ -153,6 +156,7 @@ def task_identity(source, task="calculator-v1"):
 def make_plan(profile, source, assets=None):
     validate_profile(profile)
     p = copy.deepcopy(profile)
+    development = p.get('purpose') == 'collection-only'
     if assets is not None:
         try:
             from .reader_assets import validate_manifest
@@ -165,7 +169,8 @@ def make_plan(profile, source, assets=None):
     plan = {'schema': SCHEMA, 'protocol': PROTOCOL, 'profile': p, 'source': source, 'upstream': upstream,
             'configuration_sha256': digest(p), 'packaged_sha256': digest(source['runtime_files']),
             'assets': assets, 'data_manifest': assets['data'] if assets else None,
-            'task_identity': task_identity(source, p['task']), 'study_id': p['experiment'], 'phase': 'qualification',
+            'task_identity': task_identity(source, p['task']), 'study_id': p['experiment'],
+            'phase': 'collection-only' if development else 'qualification',
             'attempt': p['attempt'], 'root': root, 'jobs': [], 'automatic_retries': 0,
             'remote_ownership': 'UNVERIFIED offline', 'availability': 'UNVERIFIED offline',
             'training_admissible': bool(assets and not p['fixture'] and not source['dirty']),
@@ -174,18 +179,27 @@ def make_plan(profile, source, assets=None):
                        'max_gpu_seconds': 6*p['bounds']['stage_seconds'],
                        'budget_usd': p['bounds']['training_budget_usd'],
                        'all_resource_hourly_ceiling_usd': p['bounds']['worker_hourly_usd']}}
+    if development:
+        from importlib import import_module
+        task = import_module('.asset_task', __package__) if __package__ else import_module('asset_task')
+        plan['development'] = {'schema': 'asset-collection-only-v1', 'questions': 8, 'rollouts_per_question': 4,
+            'case_ids': [r['case_id'] for r in task.cases()['train_smoke.parquet'][:8]],
+            'optimizer_updates': 0, 'collections_per_algorithm': 1, 'temperature': 1,
+            'qualification_evidence': False}
+        plan['bounds'].update(supervisor_seconds=2*p['bounds']['stage_seconds']+600,
+                              max_gpu_seconds=2*p['bounds']['stage_seconds'])
     for algorithm in ALGORITHMS:
         name = f"{p['experiment']}-a{p['attempt']:02d}-{algorithm}"
         job = {'job_id': name, 'algorithm': algorithm, 'run_seed': 9001, 'steps': 2,
                'pair_id': f"{p['experiment']}-a{p['attempt']:02d}",
                'seed_streams': historical.streams(9001, algorithm), 'output_root': f'{root}/{algorithm}', 'stages': []}
-        for kind in historical.STAGES:
+        for kind in (('training',) if development else historical.STAGES):
             identity = {'schema': SCHEMA, 'source': digest(source), 'profile': digest(p),
                         'assets': digest(assets), 'algorithm': algorithm, 'stage': kind}
             job['stages'].append({'name': kind, 'output': f'{job["output_root"]}/{kind}', 'wandb': {
                 **p['wandb'], 'group': job['pair_id'], 'id': digest(identity)[:24], 'name': f'{name}-{kind}',
                 'job_type': kind, 'resume': 'never', 'config': {**identity, 'protocol': PROTOCOL,
-                    'seed_streams': job['seed_streams'], 'resources': RESOURCES, 'steps': 2,
+                    'seed_streams': job['seed_streams'], 'resources': RESOURCES, 'steps': 0 if development else 2,
                     'task': plan['task_identity'], 'model': p['model'], 'evaluation': p['task']+'-64'}}})
         plan['jobs'].append(job)
     return plan

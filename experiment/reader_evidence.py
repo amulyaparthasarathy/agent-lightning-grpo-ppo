@@ -62,7 +62,7 @@ def complete(run, request, completion):
                          'container_id': container_identity(os.environ.get('MODAL_TASK_ID')),
                          'launcher_pid': os.getpid(), 'trainer_pid': terminal[0]['pid']},
               'wandb_id': stage['wandb']['id']}
-    if stage['name'] == 'training':
+    if stage['name'] == 'training' and request['plan']['phase'] != 'collection-only':
         roles = ('actor', 'critic') if job['algorithm'] == c.ALGORITHMS[1] else ('actor',)
         checkpoint = json.loads((run/'checkpoints/global_step_2/matched_identity.json').read_text())
         if set(checkpoint['roles']) != set(roles):
@@ -114,7 +114,9 @@ def validate_collection(plan, index, read):
     for job in plan['jobs']:
         outcome = outcomes[job['algorithm']] = {'operational_stage_completion': {}, 'model_tool_integration': {}}
         receipts = index['jobs'][job['job_id']]['stages']
-        if len(receipts) != 3 or [r['stage'] for r in receipts] != ['baseline', 'training', 'checkpoint-eval']:
+        development = plan['phase'] == 'collection-only'
+        expected_stages = ['training'] if development else ['baseline', 'training', 'checkpoint-eval']
+        if len(receipts) != len(expected_stages) or [r['stage'] for r in receipts] != expected_stages:
             raise ValueError('Missing/duplicate stage receipts')
         for stage, entry in zip(job['stages'], receipts, strict=True):
             receipt, proof, obs = (read(stage['output']+'/'+n) for n in ('receipt.json', 'completion.json', 'observability.json'))
@@ -144,7 +146,11 @@ def validate_collection(plan, index, read):
                     or integration['trace_files'] != len(integration['coverage'])):
                 raise ValueError('Invalid integration coverage report')
             outcome['model_tool_integration'][stage['name']] = integration
-            if stage['name'] == 'training':
+            if development:
+                if proof.get('optimizer_updates') != {'actor': 0, 'critic': 0} or proof.get('development', {}).get('real_rollouts') != 32:
+                    raise ValueError('Missing collection-only no-update evidence')
+                outcome['development'] = proof['development']
+            elif stage['name'] == 'training':
                 checkpoints[job['job_id']] = proof
                 diagnostics = proof.get('learning_diagnostics', {})
                 outcome['informative_grpo_reward_groups'] = (diagnostics.get('informative_reward_groups')
@@ -158,8 +164,11 @@ def validate_collection(plan, index, read):
         outcome['integration_rule'] = 'all-three-stages-v2' if plan['schema'] == c.SCHEMA else 'any-stage-v1'
         outcome['harness_integration_qualified'] = (all if plan['schema'] == c.SCHEMA else any)(r['qualified'] for r in outcome['model_tool_integration'].values())
         outcome['qualification_gaps'] = [] if outcome['harness_integration_qualified'] else ['Model/tool integration unqualified: required stage coverage missing in this algorithm workflow']
-        if job['algorithm'] == c.ALGORITHMS[0] and not outcome['informative_grpo_reward_groups']:
+        if not development and job['algorithm'] == c.ALGORITHMS[0] and not outcome['informative_grpo_reward_groups']:
             outcome['qualification_gaps'].append('Informative group-relative task-advantage evidence was not observed')
     return {'evidence_complete': True, 'operational_completion': 'completed', 'algorithms': outcomes,
-            'live_qualification': 'gaps remain' if any(o['qualification_gaps'] for o in outcomes.values()) else 'operational and harness evidence observed; learning success not established',
+            'qualification_evidence': plan['phase'] != 'collection-only',
+            'live_qualification': ('development only; not six-stage qualification' if plan['phase'] == 'collection-only'
+                else 'gaps remain' if any(o['qualification_gaps'] for o in outcomes.values())
+                else 'operational and harness evidence observed; learning success not established'),
             'hosted_wandb_history': 'not independently queried'}

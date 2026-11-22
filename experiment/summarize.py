@@ -85,6 +85,15 @@ def summarize(directory, phase=None, route=None):
         "tool_operation_ms": stats([r.get("operation_elapsed_ms") for r in tools]),
         "timing_scope": "Inclusive episode duration; model/tool operation durations are separate and may overlap.",
     }
+    # Prospective fields only: do not reinterpret historical failures or rewards.
+    if any(e.get('episode_policy') == 'asset-episode-v2' for e in episodes):
+        report['episode_outcomes'] = dict(Counter(
+            (e.get('outputs') or {}).get('outcome', 'incomplete')
+            if e.get('execution_status') == 'ok' and (e.get('outputs') or {}).get('reward_posted') is True
+            else 'incomplete' for e in episodes))
+        report['format_compliant_finals'] = sum(o.get('diagnostics', {}).get('format_compliant') is True for o in outputs)
+        report['policy_errors'] = sum(o.get('policy_errors', 0) for o in outputs)
+        report['diagnostic_scope'] = 'Final-format and policy diagnostics; no added reward terms'
     return report, attempts
 
 

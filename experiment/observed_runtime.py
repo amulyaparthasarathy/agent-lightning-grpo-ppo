@@ -240,7 +240,11 @@ class ObservedClient(OpenAIChatCompletionClient):
         r = self.recorder
         r.counts["llm_calls"] += 1
         inputs = r.safe("serialize_llm_input", lambda: {
-            "messages": public_data(messages), "tools": public_data(kwargs.get("tools", []))})
+            "messages": public_data(messages), "tools": public_data(kwargs.get("tools", [])),
+            "generation_options": public_data({k: v for k, v in kwargs.items()
+                if k in ("tool_choice", "json_output", "extra_create_args")}),
+            "client_generation_defaults": public_data({k: v for k, v in self._create_args.items()
+                if k in ("max_tokens", "parallel_tool_calls", "temperature", "top_p", "seed")})})
         with r.stage("llm", "model_generation", inputs,
                      lambda: r.weave.start_llm(model="auto", provider_name="vllm")) as (record, span):
             if span is not None:

@@ -34,7 +34,7 @@ def run_case(root, final=None, mode='normal', request=None):
     truth = task.lookup({'asset_id': aid})
     if final is None:
         final = task.dumps(truth)
-    posts, inputs = [], []
+    posts, inputs, options = [], [], []
     class Handler(BaseHTTPRequestHandler):
         def do_POST(self):
             posts.append(json.loads(self.rfile.read(int(self.headers['Content-Length']))))
@@ -50,17 +50,35 @@ def run_case(root, final=None, mode='normal', request=None):
             self.common.update(synthetic_fixture=True, evidence_class='scripted-inference')
     async def create(_self, messages, **kwargs):
         inputs.append([m.model_dump() for m in messages])
+        options.append({k: v for k, v in kwargs.items() if k in ('tools', 'tool_choice', 'json_output', 'extra_create_args')})
         if mode == 'transport-failure':
             raise ConnectionError('test-only model transport failure')
         if mode == 'timeout':
             raise asyncio.TimeoutError('test-only model timeout')
         if mode == 'cancelled':
             raise asyncio.CancelledError()
-        if len(inputs) == 1:
-            return CreateResult(content=[FunctionCall(id='scripted-call-1', name='lookup_asset', arguments=task.dumps({'asset_id': aid}))],
-                                finish_reason='function_calls', usage=RequestUsage(prompt_tokens=0, completion_tokens=0), cached=False)
+        step = len(inputs)
+        if mode.endswith('-second') and step == 2 or mode.endswith('-reflection') and step == 3:
+            if mode.startswith('cancelled'):
+                raise asyncio.CancelledError()
+            if mode.startswith('transport-failure'):
+                raise ConnectionError('test-only model transport failure after tool')
+            if mode.startswith('missing'):
+                return CreateResult(content='', finish_reason='stop', usage=RequestUsage(prompt_tokens=0, completion_tokens=0), cached=False)
+        two_calls = mode in ('two-tools', 'recover', 'policy-limit', 'malformed-recover', 'unknown-recover', 'infrastructure-after-tool') or mode.endswith('-reflection')
+        if step == 1 or (two_calls and step == 2):
+            arguments = task.dumps({'asset_id': aid})
+            name = 'lookup_asset'
+            if (mode in ('recover', 'policy-limit') and step == 1) or (mode == 'policy-limit' and step == 2):
+                arguments = task.dumps({'asset_id': aid, 'extra': 'keep this invalid action'})
+            if mode == 'malformed-recover' and step == 1:
+                arguments = '{'
+            if mode == 'unknown-recover' and step == 1:
+                name = 'missing_tool'
+            return CreateResult(content=[FunctionCall(id=f'scripted-call-{step}', name=name, arguments=arguments)],
+                                finish_reason='length' if mode == 'truncated-action' else 'function_calls', usage=RequestUsage(prompt_tokens=0, completion_tokens=0), cached=False)
         answer = task.dumps({**truth, 'service_state': next(x for x in task.SERVICE if x != truth['service_state'])}) if mode == 'corrupt-observation' else final
-        return CreateResult(content=answer, finish_reason='length' if mode == 'truncated' else 'stop',
+        return CreateResult(content=answer, finish_reason='length' if mode in ('truncated', 'truncated-reflection') else 'stop',
                             usage=RequestUsage(prompt_tokens=0, completion_tokens=0), cached=False)
     env = {'QUESTION': row['question'], 'RESULT': row['result'], 'AGL_CASE_ID': row['case_id'],
            'AGL_DATA_SPLIT': 'heldout', 'EVAL_SPLIT': 'heldout', 'AGL_KEY': 'local-test-only',
@@ -79,13 +97,17 @@ def run_case(root, final=None, mode='normal', request=None):
     original_call = asset_agent.ObservedWorkbench.call_tool
     async def corrupt_call(workbench, *args, **kwargs):
         result = await original_call(workbench, *args, **kwargs)  # actual MCP execution still occurs
+        if mode == 'infrastructure-after-tool' and len(inputs) == 2:
+            result.is_error = True
+            result.result[0].content = 'backend unavailable'
+            return result
         if not result.is_error:
             result.result[0].content = task.dumps({**truth, 'service_state': next(x for x in task.SERVICE if x != truth['service_state'])})
         return result
     error = None
     try:
         with ExitStack() as stack, patch.dict(os.environ, env), patch.object(asset_agent, 'Recorder', ScriptedRecorder), patch.object(OpenAIChatCompletionClient, 'create', create):
-            if mode == 'corrupt-observation':
+            if mode in ('corrupt-observation', 'infrastructure-after-tool'):
                 stack.enter_context(patch.object(asset_agent.ObservedWorkbench, 'call_tool', corrupt_call))
             try:
                 asyncio.run(asset_agent.Agent().run())
@@ -96,7 +118,7 @@ def run_case(root, final=None, mode='normal', request=None):
         cleanup = owned_processes.cleanup(root/'owners')
     records = [json.loads(line) for p in (root/'traces').glob('*.jsonl') for line in p.read_text().splitlines()]
     children = [json.loads(p.read_text()) for p in (root/'owners').glob('*.json')]
-    return {'posts': posts, 'inputs': inputs, 'records': records, 'children': children, 'error': error, 'cleanup': cleanup}
+    return {'posts': posts, 'inputs': inputs, 'options': options, 'records': records, 'children': children, 'error': error, 'cleanup': cleanup}
 
 
 def demonstration(output):

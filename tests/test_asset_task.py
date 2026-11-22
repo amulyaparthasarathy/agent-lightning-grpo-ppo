@@ -15,6 +15,10 @@ from test_reader_training import source, profile
 
 
 class DatasetTests(unittest.TestCase):
+    def test_episode_revision_preserves_registry_and_dataset_identity(self):
+        self.assertEqual(task.digest(task.registry()), '241b5672d43b7dff7db7d203f2805d91e0a541e7a20e18d4edb608419e670e44')
+        self.assertEqual(task.digest(task.environment()), 'd683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089')
+        self.assertEqual(task.identity(source())['episode_policy']['version'], 'asset-episode-v2')
     def test_generation_verification_order_and_identity_isolation(self):
         with tempfile.TemporaryDirectory() as tmp:
             a, b = Path(tmp)/'a', Path(tmp)/'b'
@@ -85,6 +89,51 @@ class DatasetTests(unittest.TestCase):
 
 
 class RealHarnessTests(unittest.TestCase):
+    def test_two_calls_reflection_context_and_strict_final(self):
+        from experiment.asset_agent import FINAL_INSTRUCTION
+        for final, reward in ((None, 1), ('The asset is operational.', 0)):
+            with self.subTest(final=final), tempfile.TemporaryDirectory() as tmp:
+                result = run_case(tmp, mode='two-tools', final=final, request=self.request())
+                self.assertIsNone(result['error'])
+                self.assertEqual(result['posts'], [{'event_type': 'reward', 'data': {'value': reward}}])
+                self.assertEqual([len(x) for x in result['inputs']], [2, 4, 7])
+                self.assertEqual(result['inputs'][2][:4], result['inputs'][1])
+                self.assertEqual(result['inputs'][2][-1]['content'], FINAL_INSTRUCTION)
+                self.assertEqual(result['options'][2]['tool_choice'], 'none')
+                self.assertIsNone(result['options'][2]['json_output'])
+                self.assertFalse(result['options'][2].get('tools'))
+                self.assertEqual(len(reader_integration.chains(result['records'], self.request(), evidence_class='scripted-inference')), 2)
+
+    def test_recovery_and_explicit_terminal_failure(self):
+        for mode in ('recover', 'malformed-recover', 'unknown-recover', 'policy-limit'):
+            with self.subTest(mode=mode), tempfile.TemporaryDirectory() as tmp:
+                req = self.request(); result = run_case(tmp, mode=mode, request=req)
+                self.assertIsNone(result['error'])
+                terminal = mode == 'policy-limit'
+                self.assertEqual(result['posts'], [{'event_type': 'reward', 'data': {'value': 0 if terminal else 1}}])
+                episode = next(r for r in result['records'] if r['kind'] == 'episode')['outputs']
+                self.assertEqual(episode['outcome'], 'terminal_policy_failure' if terminal else 'complete_recovered')
+                self.assertEqual(episode['policy_errors'], 2 if terminal else 1)
+                self.assertEqual(reader_integration.episode_outcome(result['records']), episode['outcome'])
+                actions = [r for r in result['records'] if r['kind'] == 'action_outcome']
+                self.assertEqual(len(actions), 2)
+                self.assertTrue(actions[0]['inputs']['observation']['is_error'])
+                self.assertEqual(len(result['inputs']), 2 if terminal else 3)
+                if terminal:
+                    self.assertIsNone(episode['raw_answer'])
+                    self.assertEqual(len([r for r in result['records'] if r['kind'] == 'termination']), 1)
+                self.assertEqual(len(reader_integration.chains(result['records'], req, evidence_class='scripted-inference')), 0 if terminal else 1)
+
+    def test_incomplete_at_each_generation_boundary(self):
+        for mode in ('truncated-action', 'truncated-reflection', 'missing-second', 'missing-reflection',
+                     'transport-failure-second', 'transport-failure-reflection', 'cancelled-second',
+                     'cancelled-reflection', 'infrastructure-after-tool'):
+            with self.subTest(mode=mode), tempfile.TemporaryDirectory() as tmp:
+                result = run_case(tmp, mode=mode)
+                self.assertIsNotNone(result['error'])
+                self.assertEqual(result['posts'], [])
+                self.assertTrue(result['cleanup']['complete'])
+
     def request(self):
         p = profile(); p['task'] = task.TASK
         plan = c.make_plan(p, source()); j = plan['jobs'][0]

@@ -67,7 +67,8 @@ responses and the reward destination are test boundaries. Its receipt and traces
 This is distinct from `reader_training.py preflight`, which runs a **billable remote
 CPU worker** in the training image and checks model bytes, dependencies, tokenizer,
 HF/W&B access and the selected task probe. Do not run that command without a new
-approved Phase 3 spending envelope.
+approved Phase 3 spending envelope. The current continuation uses the already
+approved aggregate $300 ceiling, after ledger reconciliation; it is not a new allocation.
 
 ## Asset data, tool and answer contracts
 
@@ -120,12 +121,88 @@ Whitespace around it is allowed. Duplicate keys (including escaped equivalents),
 extra fields, wrong types or enums, wrong target IDs, missing fields, code fences,
 multiple objects, NaN and surrounding prose are rejected. A genuinely completed but
 incorrect/malformed response gets zero. No partial credit is given for a tool call.
-Empty/missing terminal text, truncation, cancellation, timeout, transport/tool errors,
+Empty/missing terminal text, truncation, cancellation, timeout, infrastructure errors,
 or failed reward delivery remain failed/incomplete, not valid terminal-zero samples.
 The harness accepts a terminal assistant text response only after a `stop` finish
 reason and posts once. Failed delivery retains `reward_posted: false`; no retry can
 silently fabricate delivery. JSON is requested through the prompt, not an unverified
 `response_format` option.
+
+### Prospective episode policy: asset-episode-v2
+
+The task identity now includes `episode_policy`. The dataset ID, deterministic
+recipe, registry, ordered membership, dataset bytes and environment hash stay fixed.
+Source and task hashes change, so all execution plans must be regenerated. Attempts
+a01–a04 retain their original policy, missing rewards and qualification status.
+
+A policy mistake is a sampled action that explicitly violates the tool contract.
+The server returns a typed `asset_policy_action_v2` error with an allowlisted code;
+the harness also verifies the original arguments violate the same rule. Extra
+arguments are rejected, never stripped. AutoGen's exact malformed-argument JSON
+and unknown-tool observations are recognized only with the matching sampled call.
+An arbitrary MCP error, parser exception or backend failure is insufficient evidence
+of a policy mistake and remains incomplete.
+
+After an invalid call the model can correct it. A complete final answer after
+recovery receives the same strict independent zero-or-one reward. After two
+observed invalid actions, the environment records `policy_error_limit` termination
+and delivers one zero reward, without generating or inventing a final answer.
+The termination receipt includes the complete context and error observations.
+Every original action remains in the gateway trajectory and policy loss; tool and
+error observations retain observation masking. Reward delivery must be confirmed.
+
+The a04 raw traces show that AutoGen reflection retained both original system and
+user instructions. Two valid calls were often followed by prose. Inspect the full
+effective context, advertised tools, generation options, finish reasons and exact
+final text; seeing an instruction in source is not proof the model complied.
+The revised system message states the whole-response JSON contract explicitly.
+At AutoGen's final reflection call, the same observed model client appends a fixed
+JSON reminder after the complete tool context. It supplies no expected values,
+does not repair generated text and does not change decoding or likelihood math.
+Format, target, correctness, recovery and execution outcomes are diagnostic fields
+outside model inputs. They do not add reward shaping.
+
+### Sampled development collection before qualification
+
+Greedy baseline evaluation (temperature 0) does not test the sampled training
+boundary (temperature 1, four rollouts per question). For development, set
+`"purpose": "collection-only"` in a fresh asset profile. The generated plan declares
+the first eight training-smoke cases, seed streams, source/task hashes and bounds.
+It creates one training-stage collection per algorithm. The production adapter
+checks rewards, context, token conservation, fragmentation and all eight four-member
+groups, then stops before advantages or actor/critic optimization. Audit completion
+requires no optimizer/gradient/checkpoint events and only the step-zero refresh.
+Artifact-history step 1 remains distinct from an optimizer update.
+
+```bash
+uv run --locked python scripts/reader_training.py plan --profile outputs/phase3/dev-profile.json --out outputs/phase3/dev-preparation-plan.json
+uv run --locked python scripts/reader_training.py setup --profile outputs/phase3/dev-profile.json --plan outputs/phase3/dev-preparation-plan.json
+uv run --locked python scripts/reader_training.py prepare --profile outputs/phase3/dev-profile.json --plan outputs/phase3/dev-preparation-plan.json --out outputs/phase3/dev-preparation-submission.json
+# Collect the completed preparation through the same CLI into a fresh directory.
+uv run --locked python scripts/reader_training.py collect --profile outputs/phase3/dev-profile.json --plan outputs/phase3/dev-preparation-plan.json --out outputs/phase3/dev-prepared
+uv run --locked python scripts/reader_training.py plan --profile outputs/phase3/dev-profile.json --assets outputs/phase3/dev-prepared/prepare/assets.json --out outputs/phase3/dev-plan.json
+uv run --locked python scripts/reader_training.py preflight --profile outputs/phase3/dev-profile.json --plan outputs/phase3/dev-plan.json --out outputs/phase3/dev-preflight-submission.json
+# Wait for the same-plan preflight receipt to pass before launch.
+uv run --locked python scripts/reader_training.py launch --profile outputs/phase3/dev-profile.json --plan outputs/phase3/dev-plan.json --out outputs/phase3/dev-submission.json
+uv run --locked python scripts/reader_training.py collect --profile outputs/phase3/dev-profile.json --plan outputs/phase3/dev-plan.json --out outputs/phase3/dev-results
+```
+
+These online commands need the explicit configured `MODAL_PROFILE`, owned resource
+bindings and a reserved campaign budget. Preparation collection can exit 2 because
+the training stages have not run; inspect the completed preparation receipt rather
+than interpreting that exit as successful qualification. Never repeat a submission
+with uncertain acknowledgement.
+
+Accept development only after reviewing every attempted rollout, valid JSON/reward
+counts, recovery, terminal failures, missing rewards and group informativeness.
+Valid constant-zero groups are retained. Universal format failure or all-zero
+performance requires a substantive correction before optimization. Missing rewards
+cannot be filled with zero. A terminal task failure is not a successful tool chain;
+each qualification algorithm/stage still needs actual successful tool-path evidence.
+Remove `purpose` and use fresh identities/plans for the full six-stage qualification.
+The repeatedly inspected 64-case panel is qualification/regression evidence, not an
+untouched generalization benchmark. Operational completion and informative learning
+are separate conclusions; two updates need not improve accuracy.
 
 For example (illustrative, not a model transcript):
 
@@ -253,8 +330,8 @@ Coverage counts remain visible; one successful baseline cannot certify other rou
 Local harness tests pin MCP **1.26.0**; the completed reference recorded remote MCP
 **1.30.0**. These are different environments. Local passes do not establish exact remote
 compatibility: the later campaign requires a fresh remote package inventory and real
-task probe before GPU stages. Tool errors retain the declared failed/incomplete policy;
-this correction pass does not change task or reward semantics.
+task probe before GPU stages. New asset plans use `asset-episode-v2`; archived
+attempts retain their original error policy. Numerical reward verification is unchanged.
 
 `reader-task-v2` replaces executable v1 plans. Old plans fail with a regeneration
 message rather than accidentally entering historical routing. Archived v1 reports

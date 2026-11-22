@@ -49,6 +49,51 @@ class Registry(dict):
 
 
 class ContractTests(unittest.TestCase):
+    def test_collection_only_completion_rejects_optimizer_or_wrong_panel(self):
+        p = profile(); p.update(task='asset-status-v1', purpose='collection-only')
+        plan = c.make_plan(p, source()); j = plan['jobs'][0]
+        req = c.stage_request(plan, j, j['stages'][0])
+        events = [{'event': 'wandb_finished'}, {'event': 'weight_refresh', 'step': 0},
+            {'event': 'trainer_returned', 'global_step': 1, 'collection_only': True, 'optimizer_updates': 0},
+            {'event': 'development_collection_admitted', 'real_rollouts': 32},
+            {'event': 'collection_manifest', 'trajectories': [{'case_id': cid}
+                for cid in plan['development']['case_ids'] for _ in range(4)]}]
+        for mutation in ('none', 'optimizer', 'gradient', 'checkpoint', 'panel', 'missing'):
+            with self.subTest(mutation=mutation), tempfile.TemporaryDirectory() as tmp:
+                run = Path(tmp); (run/'audit').mkdir(); rows = copy.deepcopy(events)
+                if mutation in ('optimizer', 'gradient'):
+                    rows.append({'event': mutation+'_step'})
+                if mutation == 'checkpoint': rows.append({'event': 'native_checkpoint_saved'})
+                if mutation == 'panel': rows[-1]['trajectories'][0]['case_id'] = 'wrong'
+                if mutation == 'missing': rows.pop()
+                (run/'audit/events-fixture.jsonl').write_text(''.join(json.dumps(e)+'\n' for e in rows))
+                with patch.object(matched_launch.summarize, 'summarize', return_value=({
+                        'attempts_selected': 32, 'completed': 32, 'reward_posts_confirmed': 32}, [])):
+                    if mutation == 'none':
+                        result = matched_launch.complete_stage(run, req, Path('/data'))
+                        self.assertEqual(result['optimizer_updates'], {'actor': 0, 'critic': 0})
+                    else:
+                        with self.assertRaises(ValueError): matched_launch.complete_stage(run, req, Path('/data'))
+
+    def test_declared_collection_only_panel_and_real_training_configuration(self):
+        from experiment import asset_task
+        p = profile(); p.update(task=asset_task.TASK, purpose='collection-only')
+        development = c.make_plan(p, source()); c.validate(development)
+        self.assertEqual(development['phase'], 'collection-only')
+        self.assertEqual(development['development']['case_ids'], [r['case_id'] for r in asset_task.cases()['train_smoke.parquet'][:8]])
+        self.assertFalse(set(development['development']['case_ids']) & {r['case_id'] for r in asset_task.cases()['eval_main.parquet']})
+        self.assertEqual(development['task_identity']['episode_policy'], asset_task.EPISODE_POLICY)
+        for job in development['jobs']:
+            self.assertEqual([s['name'] for s in job['stages']], ['training'])
+            req = c.stage_request(development, job, job['stages'][0])
+            with tempfile.TemporaryDirectory() as tmp:
+                cfg = matched_launch.configuration(req, Path('/model'), Path(tmp))
+                self.assertFalse(cfg['trainer.val_only'])
+                self.assertFalse(cfg['trainer.val_before_train'])
+                self.assertEqual(cfg['data.train_batch_size'], 8)
+        changed = copy.deepcopy(development); changed['development']['case_ids'].reverse()
+        with self.assertRaises(ValueError): c.validate(changed)
+
     def test_synthetic_profile_and_plan_are_offline_non_executable(self):
         p = plan()
         c.validate(p)

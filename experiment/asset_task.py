@@ -9,6 +9,11 @@ import json
 import re
 
 TASK = 'asset-status-v1'
+# Dataset identity is deliberately stable; the prospective harness contract is separate.
+EPISODE_POLICY = {'version': 'asset-episode-v2', 'max_tool_iterations': 2,
+                  'policy_error_limit': 2, 'final_generation': 'context-json-reminder-v1',
+                  'recovered_final': 'strict-verifier', 'policy_limit': 'terminal-zero',
+                  'infrastructure_or_missing_evidence': 'incomplete-no-reward'}
 SEED = 'asset-status-v1/2026-11-20/329'
 SERVICE = ('operational', 'degraded', 'offline')
 BACKUP = ('healthy', 'stale', 'failed')
@@ -44,14 +49,18 @@ def registry():
     return result
 
 
+class PolicyActionError(ValueError):
+    """Only explicit model input validation failures; never transport/server errors."""
+
+
 def lookup(arguments):
     if not isinstance(arguments, dict) or set(arguments) != {'asset_id'} or not isinstance(arguments['asset_id'], str):
-        raise ValueError('invalid_arguments')
+        raise PolicyActionError('invalid_arguments')
     aid = arguments['asset_id']
     if not re.fullmatch(r'asset-[0-9]{3}', aid):
-        raise ValueError('invalid_asset_id')
+        raise PolicyActionError('invalid_asset_id')
     if aid not in registry():
-        raise ValueError('unknown_asset')
+        raise PolicyActionError('unknown_asset')
     return registry()[aid]
 
 
@@ -122,6 +131,7 @@ def environment():
 
 def identity(source):
     return {'name': TASK, 'visible_fields': ['question'], 'label_fields': ['result'],
+            'episode_policy': EPISODE_POLICY,
             'data_mapping': {'QUESTION': 'input.question', 'RESULT': 'input.result',
                 'AGL_CASE_ID': 'input.case_id', 'AGL_DATA_SPLIT': 'input.split', 'EVAL_SPLIT': 'input.split'},
             'agent_class': 'asset_agent.Agent', 'cwd': 'examples/calc_x',
