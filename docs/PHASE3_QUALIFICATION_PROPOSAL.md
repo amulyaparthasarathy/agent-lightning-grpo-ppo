@@ -1,10 +1,14 @@
-# Proposed asset-task live qualification — not authorized
+# Asset-task live qualification — original proposal
 
-Propose one new **US$300 aggregate Phase 3 ceiling**, covering the initial campaign
-and evidence-driven corrections. This is a proposal only. No build, remote CPU
-preparation/preflight, GPU stage or other billable Phase 3 work has been executed.
-The completed reference campaign's $250 authorization is closed and is not reused.
-Approval of this numerical envelope is required before any paid action.
+**Status (2026-11-22):** The user authorized this new **US$300 aggregate Phase 3
+ceiling**, including evidence-driven corrections. Execution and reconciliation are
+complete; see the [dated report](PHASE3_QUALIFICATION_2026-11-22.md). Both baselines
+passed integration, but incomplete training collections prevented any optimizer
+updates or checkpoint qualification. The completed reference campaign's earlier
+$250 authorization remains closed and was not reused.
+
+The remaining text preserves the original proposal and its prospective acceptance
+criteria. It is not a new authorization, executable plan, or claim that every stage passed.
 
 ## Candidate and prerequisites
 

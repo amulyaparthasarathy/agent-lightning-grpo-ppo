@@ -1,0 +1,1039 @@
+[
+  {
+    "attempt": 1,
+    "algorithm": "grpo-matched-v2",
+    "stage": "baseline",
+    "supervisor": {
+      "status": "failed",
+      "call_id": "fc-01M80G1D8F9JTC026TAM6VNZGN",
+      "submitted_at": 1795313150.0174642,
+      "finished_at": 1795313575.7546425,
+      "reason": null,
+      "cancellation_requested": true
+    },
+    "provider_reconciliation": {
+      "queried_at": "2026-11-22T04:01:17.629550+00:00",
+      "id": "fc-01M80G1D8F9JTC026TAM6VNZGN",
+      "provider_status": "failed",
+      "error_type": "RuntimeError"
+    },
+    "observed_optimizer_events": {
+      "actor": 0,
+      "critic": 0
+    },
+    "policy_refreshes": [],
+    "trajectories": null,
+    "integration": null
+  },
+  {
+    "attempt": 1,
+    "algorithm": "grpo-matched-v2",
+    "stage": "training",
+    "supervisor": {
+      "status": "skipped",
+      "call_id": null,
+      "submitted_at": null,
+      "finished_at": null,
+      "reason": "dependency_or_supervisor_failed",
+      "cancellation_requested": null
+    },
+    "provider_reconciliation": null,
+    "observed_optimizer_events": {
+      "actor": 0,
+      "critic": 0
+    },
+    "policy_refreshes": [],
+    "trajectories": null,
+    "integration": null
+  },
+  {
+    "attempt": 1,
+    "algorithm": "grpo-matched-v2",
+    "stage": "checkpoint-eval",
+    "supervisor": {
+      "status": "skipped",
+      "call_id": null,
+      "submitted_at": null,
+      "finished_at": null,
+      "reason": "dependency_or_supervisor_failed",
+      "cancellation_requested": null
+    },
+    "provider_reconciliation": null,
+    "observed_optimizer_events": {
+      "actor": 0,
+      "critic": 0
+    },
+    "policy_refreshes": [],
+    "trajectories": null,
+    "integration": null
+  },
+  {
+    "attempt": 1,
+    "algorithm": "ppo-mc-matched-v2",
+    "stage": "baseline",
+    "supervisor": {
+      "status": "submitted",
+      "call_id": "fc-01M80GEDFW1QH2HH5K98GZJ8YD",
+      "submitted_at": 1795313577.395757,
+      "finished_at": null,
+      "reason": null,
+      "cancellation_requested": null
+    },
+    "provider_reconciliation": {
+      "queried_at": "2026-11-22T04:01:17.629550+00:00",
+      "id": "fc-01M80GEDFW1QH2HH5K98GZJ8YD",
+      "provider_status": "provider_cancelled",
+      "error_type": "RemoteError"
+    },
+    "observed_optimizer_events": {
+      "actor": 0,
+      "critic": 0
+    },
+    "policy_refreshes": [],
+    "trajectories": null,
+    "integration": null
+  },
+  {
+    "attempt": 1,
+    "algorithm": "ppo-mc-matched-v2",
+    "stage": "training",
+    "supervisor": {
+      "status": "skipped",
+      "call_id": null,
+      "submitted_at": null,
+      "finished_at": null,
+      "reason": "dependency_or_supervisor_failed",
+      "cancellation_requested": null
+    },
+    "provider_reconciliation": null,
+    "observed_optimizer_events": {
+      "actor": 0,
+      "critic": 0
+    },
+    "policy_refreshes": [],
+    "trajectories": null,
+    "integration": null
+  },
+  {
+    "attempt": 1,
+    "algorithm": "ppo-mc-matched-v2",
+    "stage": "checkpoint-eval",
+    "supervisor": {
+      "status": "skipped",
+      "call_id": null,
+      "submitted_at": null,
+      "finished_at": null,
+      "reason": "dependency_or_supervisor_failed",
+      "cancellation_requested": null
+    },
+    "provider_reconciliation": null,
+    "observed_optimizer_events": {
+      "actor": 0,
+      "critic": 0
+    },
+    "policy_refreshes": [],
+    "trajectories": null,
+    "integration": null
+  },
+  {
+    "attempt": 2,
+    "algorithm": "grpo-matched-v2",
+    "stage": "baseline",
+    "supervisor": {
+      "status": "failed",
+      "call_id": "fc-01M80HC6M1R2DP69DSC07CN9HP",
+      "submitted_at": 1795314552.948497,
+      "finished_at": 1795314967.0070148,
+      "reason": null,
+      "cancellation_requested": true
+    },
+    "provider_reconciliation": {
+      "queried_at": "2026-11-22T04:01:17.629550+00:00",
+      "id": "fc-01M80HC6M1R2DP69DSC07CN9HP",
+      "provider_status": "failed",
+      "error_type": "RuntimeError"
+    },
+    "observed_optimizer_events": {
+      "actor": 0,
+      "critic": 0
+    },
+    "policy_refreshes": [
+      0
+    ],
+    "trajectories": {
+      "phase_filter": "baseline",
+      "route_filter": "val",
+      "attempt_files_total": 64,
+      "attempts_selected": 64,
+      "unclassified_attempt_files": 0,
+      "invalid_records": [],
+      "completed": 57,
+      "failed": 7,
+      "incomplete_or_ambiguous": 0,
+      "phase_route_counts": {
+        "baseline/val": 64
+      },
+      "observed_reward": {
+        "count": 57,
+        "sum": 0.0,
+        "mean": 0.0,
+        "max": 0.0
+      },
+      "attempts_without_numeric_reward": 7,
+      "reward_denominator": "Only observed numeric episode rewards, including failed reward posts; no zero fills.",
+      "reward_posts_confirmed": 57,
+      "model_calls_recorded": 135,
+      "model_errors_recorded": 0,
+      "tool_calls_recorded": 71,
+      "tool_errors_recorded": 14,
+      "call_count_scope": "Recorded spans, not transport retries; unfinished or dropped spans may be absent.",
+      "model_calls_with_usage": 135,
+      "model_calls_without_usage": 0,
+      "usage_source": "Recorded response usage only; AutoGen zero/absent ambiguity remains unknown.",
+      "usage": {
+        "prompt_tokens": {
+          "count": 135,
+          "sum": 43866,
+          "mean": 324.93333333333334,
+          "max": 358
+        },
+        "completion_tokens": {
+          "count": 135,
+          "sum": 1892,
+          "mean": 14.014814814814814,
+          "max": 36
+        }
+      },
+      "episode_elapsed_ms": {
+        "count": 64,
+        "sum": 322136.181,
+        "mean": 5033.377828125,
+        "max": 7755.02
+      },
+      "model_operation_ms": {
+        "count": 135,
+        "sum": 143733.049,
+        "mean": 1064.6892518518519,
+        "max": 3805.389
+      },
+      "tool_operation_ms": {
+        "count": 71,
+        "sum": 520.783,
+        "mean": 7.334971830985916,
+        "max": 13.738
+      },
+      "timing_scope": "Inclusive episode duration; model/tool operation durations are separate and may overlap."
+    },
+    "integration": {
+      "qualified": true,
+      "episodes_with_valid_chain": 57,
+      "trace_files": 64
+    }
+  },
+  {
+    "attempt": 2,
+    "algorithm": "grpo-matched-v2",
+    "stage": "training",
+    "supervisor": {
+      "status": "skipped",
+      "call_id": null,
+      "submitted_at": null,
+      "finished_at": null,
+      "reason": "dependency_or_supervisor_failed",
+      "cancellation_requested": null
+    },
+    "provider_reconciliation": null,
+    "observed_optimizer_events": {
+      "actor": 0,
+      "critic": 0
+    },
+    "policy_refreshes": [],
+    "trajectories": null,
+    "integration": null
+  },
+  {
+    "attempt": 2,
+    "algorithm": "grpo-matched-v2",
+    "stage": "checkpoint-eval",
+    "supervisor": {
+      "status": "skipped",
+      "call_id": null,
+      "submitted_at": null,
+      "finished_at": null,
+      "reason": "dependency_or_supervisor_failed",
+      "cancellation_requested": null
+    },
+    "provider_reconciliation": null,
+    "observed_optimizer_events": {
+      "actor": 0,
+      "critic": 0
+    },
+    "policy_refreshes": [],
+    "trajectories": null,
+    "integration": null
+  },
+  {
+    "attempt": 2,
+    "algorithm": "ppo-mc-matched-v2",
+    "stage": "baseline",
+    "supervisor": {
+      "status": "started",
+      "call_id": "fc-01M80HRVX9HVK590EEB3FR452W",
+      "submitted_at": 1795314968.4745502,
+      "finished_at": null,
+      "reason": null,
+      "cancellation_requested": null
+    },
+    "provider_reconciliation": {
+      "queried_at": "2026-11-22T04:01:17.629550+00:00",
+      "id": "fc-01M80HRVX9HVK590EEB3FR452W",
+      "provider_status": "provider_cancelled",
+      "error_type": "RemoteError"
+    },
+    "observed_optimizer_events": {
+      "actor": 0,
+      "critic": 0
+    },
+    "policy_refreshes": [],
+    "trajectories": null,
+    "integration": null
+  },
+  {
+    "attempt": 2,
+    "algorithm": "ppo-mc-matched-v2",
+    "stage": "training",
+    "supervisor": {
+      "status": "skipped",
+      "call_id": null,
+      "submitted_at": null,
+      "finished_at": null,
+      "reason": "dependency_or_supervisor_failed",
+      "cancellation_requested": null
+    },
+    "provider_reconciliation": null,
+    "observed_optimizer_events": {
+      "actor": 0,
+      "critic": 0
+    },
+    "policy_refreshes": [],
+    "trajectories": null,
+    "integration": null
+  },
+  {
+    "attempt": 2,
+    "algorithm": "ppo-mc-matched-v2",
+    "stage": "checkpoint-eval",
+    "supervisor": {
+      "status": "skipped",
+      "call_id": null,
+      "submitted_at": null,
+      "finished_at": null,
+      "reason": "dependency_or_supervisor_failed",
+      "cancellation_requested": null
+    },
+    "provider_reconciliation": null,
+    "observed_optimizer_events": {
+      "actor": 0,
+      "critic": 0
+    },
+    "policy_refreshes": [],
+    "trajectories": null,
+    "integration": null
+  },
+  {
+    "attempt": 3,
+    "algorithm": "grpo-matched-v2",
+    "stage": "baseline",
+    "supervisor": {
+      "status": "failed",
+      "call_id": "fc-01M80JJKR40G5ZGN61EBZTQBCQ",
+      "submitted_at": 1795315812.7867541,
+      "finished_at": 1795316270.5374033,
+      "reason": null,
+      "cancellation_requested": true
+    },
+    "provider_reconciliation": {
+      "queried_at": "2026-11-22T04:01:17.629550+00:00",
+      "id": "fc-01M80JJKR40G5ZGN61EBZTQBCQ",
+      "provider_status": "failed",
+      "error_type": "RuntimeError"
+    },
+    "observed_optimizer_events": {
+      "actor": 0,
+      "critic": 0
+    },
+    "policy_refreshes": [
+      0
+    ],
+    "trajectories": {
+      "phase_filter": "baseline",
+      "route_filter": "val",
+      "attempt_files_total": 64,
+      "attempts_selected": 64,
+      "unclassified_attempt_files": 0,
+      "invalid_records": [],
+      "completed": 0,
+      "failed": 64,
+      "incomplete_or_ambiguous": 0,
+      "phase_route_counts": {
+        "baseline/val": 64
+      },
+      "observed_reward": {
+        "count": 0,
+        "sum": null,
+        "mean": null,
+        "max": null
+      },
+      "attempts_without_numeric_reward": 64,
+      "reward_denominator": "Only observed numeric episode rewards, including failed reward posts; no zero fills.",
+      "reward_posts_confirmed": 0,
+      "model_calls_recorded": 192,
+      "model_errors_recorded": 0,
+      "tool_calls_recorded": 128,
+      "tool_errors_recorded": 128,
+      "call_count_scope": "Recorded spans, not transport retries; unfinished or dropped spans may be absent.",
+      "model_calls_with_usage": 192,
+      "model_calls_without_usage": 0,
+      "usage_source": "Recorded response usage only; AutoGen zero/absent ambiguity remains unknown.",
+      "usage": {
+        "prompt_tokens": {
+          "count": 192,
+          "sum": 63488,
+          "mean": 330.6666666666667,
+          "max": 388
+        },
+        "completion_tokens": {
+          "count": 192,
+          "sum": 15511,
+          "mean": 80.78645833333333,
+          "max": 253
+        }
+      },
+      "episode_elapsed_ms": {
+        "count": 64,
+        "sum": 595961.519,
+        "mean": 9311.898734375,
+        "max": 15017.571
+      },
+      "model_operation_ms": {
+        "count": 192,
+        "sum": 436043.761,
+        "mean": 2271.0612552083335,
+        "max": 5630.659
+      },
+      "tool_operation_ms": {
+        "count": 128,
+        "sum": 374.481,
+        "mean": 2.9256328125,
+        "max": 7.372
+      },
+      "timing_scope": "Inclusive episode duration; model/tool operation durations are separate and may overlap."
+    },
+    "integration": {
+      "qualified": false,
+      "episodes_with_valid_chain": 0,
+      "trace_files": 64
+    }
+  },
+  {
+    "attempt": 3,
+    "algorithm": "grpo-matched-v2",
+    "stage": "training",
+    "supervisor": {
+      "status": "skipped",
+      "call_id": null,
+      "submitted_at": null,
+      "finished_at": null,
+      "reason": "dependency_or_supervisor_failed",
+      "cancellation_requested": null
+    },
+    "provider_reconciliation": null,
+    "observed_optimizer_events": {
+      "actor": 0,
+      "critic": 0
+    },
+    "policy_refreshes": [],
+    "trajectories": null,
+    "integration": null
+  },
+  {
+    "attempt": 3,
+    "algorithm": "grpo-matched-v2",
+    "stage": "checkpoint-eval",
+    "supervisor": {
+      "status": "skipped",
+      "call_id": null,
+      "submitted_at": null,
+      "finished_at": null,
+      "reason": "dependency_or_supervisor_failed",
+      "cancellation_requested": null
+    },
+    "provider_reconciliation": null,
+    "observed_optimizer_events": {
+      "actor": 0,
+      "critic": 0
+    },
+    "policy_refreshes": [],
+    "trajectories": null,
+    "integration": null
+  },
+  {
+    "attempt": 3,
+    "algorithm": "ppo-mc-matched-v2",
+    "stage": "baseline",
+    "supervisor": {
+      "status": "failed",
+      "call_id": "fc-01M80K0JSPRXR0BS5B7CFGPK0G",
+      "submitted_at": 1795316271.2157714,
+      "finished_at": 1795316637.6216562,
+      "reason": null,
+      "cancellation_requested": true
+    },
+    "provider_reconciliation": {
+      "queried_at": "2026-11-22T04:01:17.629550+00:00",
+      "id": "fc-01M80K0JSPRXR0BS5B7CFGPK0G",
+      "provider_status": "failed",
+      "error_type": "RuntimeError"
+    },
+    "observed_optimizer_events": {
+      "actor": 0,
+      "critic": 0
+    },
+    "policy_refreshes": [
+      0
+    ],
+    "trajectories": {
+      "phase_filter": "baseline",
+      "route_filter": "val",
+      "attempt_files_total": 64,
+      "attempts_selected": 64,
+      "unclassified_attempt_files": 0,
+      "invalid_records": [],
+      "completed": 0,
+      "failed": 64,
+      "incomplete_or_ambiguous": 0,
+      "phase_route_counts": {
+        "baseline/val": 64
+      },
+      "observed_reward": {
+        "count": 0,
+        "sum": null,
+        "mean": null,
+        "max": null
+      },
+      "attempts_without_numeric_reward": 64,
+      "reward_denominator": "Only observed numeric episode rewards, including failed reward posts; no zero fills.",
+      "reward_posts_confirmed": 0,
+      "model_calls_recorded": 192,
+      "model_errors_recorded": 0,
+      "tool_calls_recorded": 128,
+      "tool_errors_recorded": 128,
+      "call_count_scope": "Recorded spans, not transport retries; unfinished or dropped spans may be absent.",
+      "model_calls_with_usage": 192,
+      "model_calls_without_usage": 0,
+      "usage_source": "Recorded response usage only; AutoGen zero/absent ambiguity remains unknown.",
+      "usage": {
+        "prompt_tokens": {
+          "count": 192,
+          "sum": 63488,
+          "mean": 330.6666666666667,
+          "max": 388
+        },
+        "completion_tokens": {
+          "count": 192,
+          "sum": 15683,
+          "mean": 81.68229166666667,
+          "max": 253
+        }
+      },
+      "episode_elapsed_ms": {
+        "count": 64,
+        "sum": 375760.363,
+        "mean": 5871.255671875,
+        "max": 9164.492
+      },
+      "model_operation_ms": {
+        "count": 192,
+        "sum": 256399.509,
+        "mean": 1335.414109375,
+        "max": 3596.33
+      },
+      "tool_operation_ms": {
+        "count": 128,
+        "sum": 269.01,
+        "mean": 2.101640625,
+        "max": 2.706
+      },
+      "timing_scope": "Inclusive episode duration; model/tool operation durations are separate and may overlap."
+    },
+    "integration": {
+      "qualified": false,
+      "episodes_with_valid_chain": 0,
+      "trace_files": 64
+    }
+  },
+  {
+    "attempt": 3,
+    "algorithm": "ppo-mc-matched-v2",
+    "stage": "training",
+    "supervisor": {
+      "status": "skipped",
+      "call_id": null,
+      "submitted_at": null,
+      "finished_at": null,
+      "reason": "dependency_or_supervisor_failed",
+      "cancellation_requested": null
+    },
+    "provider_reconciliation": null,
+    "observed_optimizer_events": {
+      "actor": 0,
+      "critic": 0
+    },
+    "policy_refreshes": [],
+    "trajectories": null,
+    "integration": null
+  },
+  {
+    "attempt": 3,
+    "algorithm": "ppo-mc-matched-v2",
+    "stage": "checkpoint-eval",
+    "supervisor": {
+      "status": "skipped",
+      "call_id": null,
+      "submitted_at": null,
+      "finished_at": null,
+      "reason": "dependency_or_supervisor_failed",
+      "cancellation_requested": null
+    },
+    "provider_reconciliation": null,
+    "observed_optimizer_events": {
+      "actor": 0,
+      "critic": 0
+    },
+    "policy_refreshes": [],
+    "trajectories": null,
+    "integration": null
+  },
+  {
+    "attempt": 4,
+    "algorithm": "grpo-matched-v2",
+    "stage": "baseline",
+    "supervisor": {
+      "status": "completed",
+      "call_id": "fc-01M80N4C60XMPWRNNC7F08MCYM",
+      "submitted_at": 1795318491.878554,
+      "finished_at": 1795318910.75376,
+      "reason": null,
+      "cancellation_requested": null
+    },
+    "provider_reconciliation": {
+      "queried_at": "2026-11-22T04:01:17.629550+00:00",
+      "id": "fc-01M80N4C60XMPWRNNC7F08MCYM",
+      "provider_status": "completed",
+      "error_type": null
+    },
+    "observed_optimizer_events": {
+      "actor": 0,
+      "critic": 0
+    },
+    "policy_refreshes": [
+      0
+    ],
+    "trajectories": {
+      "phase_filter": "baseline",
+      "route_filter": "val",
+      "attempt_files_total": 64,
+      "attempts_selected": 64,
+      "unclassified_attempt_files": 0,
+      "invalid_records": [],
+      "completed": 64,
+      "failed": 0,
+      "incomplete_or_ambiguous": 0,
+      "phase_route_counts": {
+        "baseline/val": 64
+      },
+      "observed_reward": {
+        "count": 64,
+        "sum": 0.0,
+        "mean": 0.0,
+        "max": 0.0
+      },
+      "attempts_without_numeric_reward": 0,
+      "reward_denominator": "Only observed numeric episode rewards, including failed reward posts; no zero fills.",
+      "reward_posts_confirmed": 64,
+      "model_calls_recorded": 192,
+      "model_errors_recorded": 0,
+      "tool_calls_recorded": 128,
+      "tool_errors_recorded": 0,
+      "call_count_scope": "Recorded spans, not transport retries; unfinished or dropped spans may be absent.",
+      "model_calls_with_usage": 192,
+      "model_calls_without_usage": 0,
+      "usage_source": "Recorded response usage only; AutoGen zero/absent ambiguity remains unknown.",
+      "usage": {
+        "prompt_tokens": {
+          "count": 192,
+          "sum": 65009,
+          "mean": 338.5885416666667,
+          "max": 397
+        },
+        "completion_tokens": {
+          "count": 192,
+          "sum": 4922,
+          "mean": 25.635416666666668,
+          "max": 39
+        }
+      },
+      "episode_elapsed_ms": {
+        "count": 64,
+        "sum": 336044.553,
+        "mean": 5250.696140625,
+        "max": 8726.484
+      },
+      "model_operation_ms": {
+        "count": 192,
+        "sum": 191936.196,
+        "mean": 999.6676874999999,
+        "max": 4315.693
+      },
+      "tool_operation_ms": {
+        "count": 128,
+        "sum": 926.201,
+        "mean": 7.2359453125,
+        "max": 10.384
+      },
+      "timing_scope": "Inclusive episode duration; model/tool operation durations are separate and may overlap."
+    },
+    "integration": {
+      "qualified": true,
+      "episodes_with_valid_chain": 64,
+      "trace_files": 64
+    }
+  },
+  {
+    "attempt": 4,
+    "algorithm": "grpo-matched-v2",
+    "stage": "training",
+    "supervisor": {
+      "status": "failed",
+      "call_id": "fc-01M80NH6FPPEE7C497987XB7W4",
+      "submitted_at": 1795318912.6065938,
+      "finished_at": 1795319240.0955954,
+      "reason": null,
+      "cancellation_requested": true
+    },
+    "provider_reconciliation": {
+      "queried_at": "2026-11-22T04:01:17.629550+00:00",
+      "id": "fc-01M80NH6FPPEE7C497987XB7W4",
+      "provider_status": "failed",
+      "error_type": "RuntimeError"
+    },
+    "observed_optimizer_events": {
+      "actor": 0,
+      "critic": 0
+    },
+    "policy_refreshes": [
+      0
+    ],
+    "trajectories": {
+      "phase_filter": "training",
+      "route_filter": "train",
+      "attempt_files_total": 32,
+      "attempts_selected": 32,
+      "unclassified_attempt_files": 0,
+      "invalid_records": [],
+      "completed": 29,
+      "failed": 3,
+      "incomplete_or_ambiguous": 0,
+      "phase_route_counts": {
+        "training/train": 32
+      },
+      "observed_reward": {
+        "count": 29,
+        "sum": 0.0,
+        "mean": 0.0,
+        "max": 0.0
+      },
+      "attempts_without_numeric_reward": 3,
+      "reward_denominator": "Only observed numeric episode rewards, including failed reward posts; no zero fills.",
+      "reward_posts_confirmed": 29,
+      "model_calls_recorded": 91,
+      "model_errors_recorded": 0,
+      "tool_calls_recorded": 59,
+      "tool_errors_recorded": 4,
+      "call_count_scope": "Recorded spans, not transport retries; unfinished or dropped spans may be absent.",
+      "model_calls_with_usage": 91,
+      "model_calls_without_usage": 0,
+      "usage_source": "Recorded response usage only; AutoGen zero/absent ambiguity remains unknown.",
+      "usage": {
+        "prompt_tokens": {
+          "count": 91,
+          "sum": 31116,
+          "mean": 341.9340659340659,
+          "max": 397
+        },
+        "completion_tokens": {
+          "count": 91,
+          "sum": 2678,
+          "mean": 29.428571428571427,
+          "max": 130
+        }
+      },
+      "episode_elapsed_ms": {
+        "count": 32,
+        "sum": 183918.012,
+        "mean": 5747.437875,
+        "max": 11278.623
+      },
+      "model_operation_ms": {
+        "count": 91,
+        "sum": 115371.145,
+        "mean": 1267.8147802197802,
+        "max": 7490.591
+      },
+      "tool_operation_ms": {
+        "count": 59,
+        "sum": 380.078,
+        "mean": 6.441999999999999,
+        "max": 8.519
+      },
+      "timing_scope": "Inclusive episode duration; model/tool operation durations are separate and may overlap."
+    },
+    "integration": {
+      "qualified": true,
+      "episodes_with_valid_chain": 29,
+      "trace_files": 32
+    }
+  },
+  {
+    "attempt": 4,
+    "algorithm": "grpo-matched-v2",
+    "stage": "checkpoint-eval",
+    "supervisor": {
+      "status": "skipped",
+      "call_id": null,
+      "submitted_at": null,
+      "finished_at": null,
+      "reason": "dependency_or_supervisor_failed",
+      "cancellation_requested": null
+    },
+    "provider_reconciliation": null,
+    "observed_optimizer_events": {
+      "actor": 0,
+      "critic": 0
+    },
+    "policy_refreshes": [],
+    "trajectories": null,
+    "integration": null
+  },
+  {
+    "attempt": 4,
+    "algorithm": "ppo-mc-matched-v2",
+    "stage": "baseline",
+    "supervisor": {
+      "status": "completed",
+      "call_id": "fc-01M80NV73HN89GBQ23X9CTK69S",
+      "submitted_at": 1795319240.8908308,
+      "finished_at": 1795319560.4641225,
+      "reason": null,
+      "cancellation_requested": null
+    },
+    "provider_reconciliation": {
+      "queried_at": "2026-11-22T04:01:17.629550+00:00",
+      "id": "fc-01M80NV73HN89GBQ23X9CTK69S",
+      "provider_status": "completed",
+      "error_type": null
+    },
+    "observed_optimizer_events": {
+      "actor": 0,
+      "critic": 0
+    },
+    "policy_refreshes": [
+      0
+    ],
+    "trajectories": {
+      "phase_filter": "baseline",
+      "route_filter": "val",
+      "attempt_files_total": 64,
+      "attempts_selected": 64,
+      "unclassified_attempt_files": 0,
+      "invalid_records": [],
+      "completed": 64,
+      "failed": 0,
+      "incomplete_or_ambiguous": 0,
+      "phase_route_counts": {
+        "baseline/val": 64
+      },
+      "observed_reward": {
+        "count": 64,
+        "sum": 0.0,
+        "mean": 0.0,
+        "max": 0.0
+      },
+      "attempts_without_numeric_reward": 0,
+      "reward_denominator": "Only observed numeric episode rewards, including failed reward posts; no zero fills.",
+      "reward_posts_confirmed": 64,
+      "model_calls_recorded": 192,
+      "model_errors_recorded": 0,
+      "tool_calls_recorded": 128,
+      "tool_errors_recorded": 0,
+      "call_count_scope": "Recorded spans, not transport retries; unfinished or dropped spans may be absent.",
+      "model_calls_with_usage": 192,
+      "model_calls_without_usage": 0,
+      "usage_source": "Recorded response usage only; AutoGen zero/absent ambiguity remains unknown.",
+      "usage": {
+        "prompt_tokens": {
+          "count": 192,
+          "sum": 65009,
+          "mean": 338.5885416666667,
+          "max": 397
+        },
+        "completion_tokens": {
+          "count": 192,
+          "sum": 4928,
+          "mean": 25.666666666666668,
+          "max": 39
+        }
+      },
+      "episode_elapsed_ms": {
+        "count": 64,
+        "sum": 249358.906,
+        "mean": 3896.23290625,
+        "max": 6786.781
+      },
+      "model_operation_ms": {
+        "count": 192,
+        "sum": 131581.799,
+        "mean": 685.3218697916667,
+        "max": 2845.796
+      },
+      "tool_operation_ms": {
+        "count": 128,
+        "sum": 753.854,
+        "mean": 5.889484375,
+        "max": 8.144
+      },
+      "timing_scope": "Inclusive episode duration; model/tool operation durations are separate and may overlap."
+    },
+    "integration": {
+      "qualified": true,
+      "episodes_with_valid_chain": 64,
+      "trace_files": 64
+    }
+  },
+  {
+    "attempt": 4,
+    "algorithm": "ppo-mc-matched-v2",
+    "stage": "training",
+    "supervisor": {
+      "status": "failed",
+      "call_id": "fc-01M80P50Z5XM34VEBCK8R5Z773",
+      "submitted_at": 1795319562.1307442,
+      "finished_at": 1795319960.726706,
+      "reason": null,
+      "cancellation_requested": true
+    },
+    "provider_reconciliation": {
+      "queried_at": "2026-11-22T04:01:17.629550+00:00",
+      "id": "fc-01M80P50Z5XM34VEBCK8R5Z773",
+      "provider_status": "failed",
+      "error_type": "RuntimeError"
+    },
+    "observed_optimizer_events": {
+      "actor": 0,
+      "critic": 0
+    },
+    "policy_refreshes": [
+      0
+    ],
+    "trajectories": {
+      "phase_filter": "training",
+      "route_filter": "train",
+      "attempt_files_total": 32,
+      "attempts_selected": 32,
+      "unclassified_attempt_files": 0,
+      "invalid_records": [],
+      "completed": 30,
+      "failed": 2,
+      "incomplete_or_ambiguous": 0,
+      "phase_route_counts": {
+        "training/train": 32
+      },
+      "observed_reward": {
+        "count": 30,
+        "sum": 0.0,
+        "mean": 0.0,
+        "max": 0.0
+      },
+      "attempts_without_numeric_reward": 2,
+      "reward_denominator": "Only observed numeric episode rewards, including failed reward posts; no zero fills.",
+      "reward_posts_confirmed": 30,
+      "model_calls_recorded": 93,
+      "model_errors_recorded": 0,
+      "tool_calls_recorded": 61,
+      "tool_errors_recorded": 2,
+      "call_count_scope": "Recorded spans, not transport retries; unfinished or dropped spans may be absent.",
+      "model_calls_with_usage": 93,
+      "model_calls_without_usage": 0,
+      "usage_source": "Recorded response usage only; AutoGen zero/absent ambiguity remains unknown.",
+      "usage": {
+        "prompt_tokens": {
+          "count": 93,
+          "sum": 31680,
+          "mean": 340.64516129032256,
+          "max": 397
+        },
+        "completion_tokens": {
+          "count": 93,
+          "sum": 2731,
+          "mean": 29.365591397849464,
+          "max": 84
+        }
+      },
+      "episode_elapsed_ms": {
+        "count": 32,
+        "sum": 258617.283,
+        "mean": 8081.79009375,
+        "max": 15894.653
+      },
+      "model_operation_ms": {
+        "count": 93,
+        "sum": 167984.552,
+        "mean": 1806.285505376344,
+        "max": 9874.173
+      },
+      "tool_operation_ms": {
+        "count": 61,
+        "sum": 457.908,
+        "mean": 7.506688524590164,
+        "max": 9.085
+      },
+      "timing_scope": "Inclusive episode duration; model/tool operation durations are separate and may overlap."
+    },
+    "integration": {
+      "qualified": true,
+      "episodes_with_valid_chain": 30,
+      "trace_files": 32
+    }
+  },
+  {
+    "attempt": 4,
+    "algorithm": "ppo-mc-matched-v2",
+    "stage": "checkpoint-eval",
+    "supervisor": {
+      "status": "skipped",
+      "call_id": null,
+      "submitted_at": null,
+      "finished_at": null,
+      "reason": "dependency_or_supervisor_failed",
+      "cancellation_requested": null
+    },
+    "provider_reconciliation": null,
+    "observed_optimizer_events": {
+      "actor": 0,
+      "critic": 0
+    },
+    "policy_refreshes": [],
+    "trajectories": null,
+    "integration": null
+  }
+]

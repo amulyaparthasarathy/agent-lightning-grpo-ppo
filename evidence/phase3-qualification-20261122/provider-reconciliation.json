@@ -1,0 +1,498 @@
+{
+  "at": "2026-11-22T04:01:17.629550+00:00",
+  "calls": [
+    {
+      "id": "fc-01M80FQ3QAKHHDATABC697684S",
+      "attempt": 1,
+      "kind": "prepare",
+      "provider_status": "completed"
+    },
+    {
+      "id": "fc-01M80FWCVMAK8X2EQC0BMAGZA2",
+      "attempt": 1,
+      "kind": "preflight",
+      "provider_status": "completed"
+    },
+    {
+      "id": "fc-01M80G13HY5V5B928YE4EVF7RN",
+      "attempt": 1,
+      "kind": "launch",
+      "error_type": "RemoteError",
+      "provider_status": "provider_cancelled",
+      "error_summary": "Function call was cancelled by user or a failure."
+    },
+    {
+      "id": "fc-01M80G1D8F9JTC026TAM6VNZGN",
+      "attempt": 1,
+      "kind": "baseline",
+      "durable_status": "failed",
+      "error_type": "RuntimeError",
+      "provider_status": "failed",
+      "error_summary": "Command exited 1; inspect /__modal/volumes/vo-KtIYfz0ZCf5RVNpWjB6LMB/phase3-runs/reader-asset-20261121/a01/grpo-matched-v2/baseline/launcher.log"
+    },
+    {
+      "id": "fc-01M80GEDFW1QH2HH5K98GZJ8YD",
+      "attempt": 1,
+      "kind": "baseline",
+      "durable_status": "submitted",
+      "error_type": "RemoteError",
+      "provider_status": "provider_cancelled",
+      "error_summary": "Function call was cancelled by user or a failure."
+    },
+    {
+      "id": "fc-01M80H2R69E9PRPN5RYNX3QQJN",
+      "attempt": 2,
+      "kind": "prepare",
+      "provider_status": "completed"
+    },
+    {
+      "id": "fc-01M80H7C2AT38ASTW98V2HRJ9H",
+      "attempt": 2,
+      "kind": "preflight",
+      "provider_status": "completed"
+    },
+    {
+      "id": "fc-01M80HC07CKTV2983RHG0SH1VT",
+      "attempt": 2,
+      "kind": "launch",
+      "error_type": "RemoteError",
+      "provider_status": "provider_cancelled",
+      "error_summary": "Function call was cancelled by user or a failure."
+    },
+    {
+      "id": "fc-01M80HC6M1R2DP69DSC07CN9HP",
+      "attempt": 2,
+      "kind": "baseline",
+      "durable_status": "failed",
+      "error_type": "RuntimeError",
+      "provider_status": "failed",
+      "error_summary": "Command exited 1; inspect /__modal/volumes/vo-KtzGn1oPG8LfXOztBi04Jr/phase3-runs/reader-asset-20261121-r02/a02/grpo-matched-v2/baseline/launcher.log"
+    },
+    {
+      "id": "fc-01M80HRVX9HVK590EEB3FR452W",
+      "attempt": 2,
+      "kind": "baseline",
+      "durable_status": "started",
+      "error_type": "RemoteError",
+      "provider_status": "provider_cancelled",
+      "error_summary": "Function call was cancelled by user or a failure."
+    },
+    {
+      "id": "fc-01M80J9W73BMV4KZRK537SVCRD",
+      "attempt": 3,
+      "kind": "prepare",
+      "provider_status": "completed"
+    },
+    {
+      "id": "fc-01M80JJF51RTYEVNQAGMQGAQ8S",
+      "attempt": 3,
+      "kind": "launch",
+      "provider_status": "failed"
+    },
+    {
+      "id": "fc-01M80JECN42AEVZVHQGS2J37W5",
+      "attempt": 3,
+      "kind": "preflight",
+      "provider_status": "completed"
+    },
+    {
+      "id": "fc-01M80JJKR40G5ZGN61EBZTQBCQ",
+      "attempt": 3,
+      "kind": "baseline",
+      "durable_status": "failed",
+      "error_type": "RuntimeError",
+      "provider_status": "failed",
+      "error_summary": "Command exited 1; inspect /__modal/volumes/vo-WFtwoXPWkiS6yOwCoFfSz8/phase3-runs/reader-asset-20261121-r03/a03/grpo-matched-v2/baseline/launcher.log"
+    },
+    {
+      "id": "fc-01M80K0JSPRXR0BS5B7CFGPK0G",
+      "attempt": 3,
+      "kind": "baseline",
+      "durable_status": "failed",
+      "error_type": "RuntimeError",
+      "provider_status": "failed",
+      "error_summary": "Command exited 1; inspect /__modal/volumes/vo-WFtwoXPWkiS6yOwCoFfSz8/phase3-runs/reader-asset-20261121-r03/a03/ppo-mc-matched-v2/baseline/launcher.log"
+    },
+    {
+      "id": "fc-01M80KNQH880GNB60GQH2BB6MY",
+      "attempt": 4,
+      "kind": "prepare",
+      "provider_status": "completed"
+    },
+    {
+      "id": "fc-01M80N46X1EJBJ4BNC1A5ZAK5Q",
+      "attempt": 4,
+      "kind": "launch",
+      "provider_status": "failed"
+    },
+    {
+      "id": "fc-01M80MZVDMAW0X098Q6N137CNY",
+      "attempt": 4,
+      "kind": "preflight",
+      "provider_status": "completed"
+    },
+    {
+      "id": "fc-01M80N4C60XMPWRNNC7F08MCYM",
+      "attempt": 4,
+      "kind": "baseline",
+      "durable_status": "completed",
+      "provider_status": "completed"
+    },
+    {
+      "id": "fc-01M80NH6FPPEE7C497987XB7W4",
+      "attempt": 4,
+      "kind": "training",
+      "durable_status": "failed",
+      "error_type": "RuntimeError",
+      "provider_status": "failed",
+      "error_summary": "Command exited 1; inspect /__modal/volumes/vo-1DponfTcYKI9q3oxLt3NIn/phase3-runs/reader-asset-20261121-r04/a04/grpo-matched-v2/training/launcher.log"
+    },
+    {
+      "id": "fc-01M80NV73HN89GBQ23X9CTK69S",
+      "attempt": 4,
+      "kind": "baseline",
+      "durable_status": "completed",
+      "provider_status": "completed"
+    },
+    {
+      "id": "fc-01M80P50Z5XM34VEBCK8R5Z773",
+      "attempt": 4,
+      "kind": "training",
+      "durable_status": "failed",
+      "error_type": "RuntimeError",
+      "provider_status": "failed",
+      "error_summary": "Command exited 1; inspect /__modal/volumes/vo-1DponfTcYKI9q3oxLt3NIn/phase3-runs/reader-asset-20261121-r04/a04/ppo-mc-matched-v2/training/launcher.log"
+    }
+  ],
+  "owned_app_rows": [
+    {
+      "app_id": "ap-Hyx2Wvy7fmvHIoMl1QuzBV",
+      "description": "reader-asset-20261121-a04-app",
+      "state": "stopped",
+      "tasks": "0",
+      "created_at": "2026-11-21 19:34:25-08:00",
+      "stopped_at": "2026-11-21 19:59:23-08:00"
+    },
+    {
+      "app_id": "ap-BGMPNHSYye3VIZxUsJlF9S",
+      "description": "reader-asset-20261121-a04-app",
+      "state": "stopped",
+      "tasks": "0",
+      "created_at": "2026-11-21 19:32:01-08:00",
+      "stopped_at": "2026-11-21 19:33:16-08:00"
+    },
+    {
+      "app_id": "ap-F8qe1OG36s6L7UyjtHwiOn",
+      "description": "reader-asset-20261121-a04-app",
+      "state": "stopped",
+      "tasks": "0",
+      "created_at": "2026-11-21 19:06:03-08:00",
+      "stopped_at": "2026-11-21 19:31:07-08:00"
+    },
+    {
+      "app_id": "ap-Z6exDUUlaK7MsPwkd7hCh3",
+      "description": "reader-asset-20261121-a03-app",
+      "state": "stopped",
+      "tasks": "0",
+      "created_at": "2026-11-21 18:49:45-08:00",
+      "stopped_at": "2026-11-21 19:04:00-08:00"
+    },
+    {
+      "app_id": "ap-RmnV1X3wMhw3bDZYovJCp2",
+      "description": "reader-asset-20261121-a03-app",
+      "state": "stopped",
+      "tasks": "0",
+      "created_at": "2026-11-21 18:47:31-08:00",
+      "stopped_at": "2026-11-21 18:48:46-08:00"
+    },
+    {
+      "app_id": "ap-939jSnArvoP02v5LA0VlW4",
+      "description": "reader-asset-20261121-a03-app",
+      "state": "stopped",
+      "tasks": "0",
+      "created_at": "2026-11-21 18:41:29-08:00",
+      "stopped_at": "2026-11-21 18:46:34-08:00"
+    },
+    {
+      "app_id": "ap-VtUpY3MyDL6rAQoVdwSkSX",
+      "description": "reader-asset-20261121-a02-app",
+      "state": "stopped",
+      "tasks": "0",
+      "created_at": "2026-11-21 18:28:44-08:00",
+      "stopped_at": "2026-11-21 18:38:20-08:00"
+    },
+    {
+      "app_id": "ap-90zP2nIT3wvWhQ7NBNGVDj",
+      "description": "reader-asset-20261121-a02-app",
+      "state": "stopped",
+      "tasks": "0",
+      "created_at": "2026-11-21 18:26:12-08:00",
+      "stopped_at": "2026-11-21 18:27:38-08:00"
+    },
+    {
+      "app_id": "ap-n5ALTEy6TQGVkvrJh42l1J",
+      "description": "reader-asset-20261121-a02-app",
+      "state": "stopped",
+      "tasks": "0",
+      "created_at": "2026-11-21 18:19:04-08:00",
+      "stopped_at": "2026-11-21 18:25:11-08:00"
+    },
+    {
+      "app_id": "ap-e0xC2Z8WstnI6LnyT42eM6",
+      "description": "reader-asset-20261121-a01-app",
+      "state": "stopped",
+      "tasks": "0",
+      "created_at": "2026-11-21 18:05:17-08:00",
+      "stopped_at": "2026-11-21 18:13:10-08:00"
+    },
+    {
+      "app_id": "ap-GpTPM2HqEdXFOtbEAlzjGn",
+      "description": "reader-asset-20261121-a01-app",
+      "state": "stopped",
+      "tasks": "0",
+      "created_at": "2026-11-21 18:02:42-08:00",
+      "stopped_at": "2026-11-21 18:04:06-08:00"
+    },
+    {
+      "app_id": "ap-9IcoABtSJC2w9XBIYab7QG",
+      "description": "reader-asset-20261121-a01-app",
+      "state": "stopped",
+      "tasks": "0",
+      "created_at": "2026-11-21 17:54:43-08:00",
+      "stopped_at": "2026-11-21 18:01:25-08:00"
+    }
+  ],
+  "volumes": [
+    {
+      "kind": "volume",
+      "name": "reader-asset-20261121-a01-volume",
+      "id": "vo-KtIYfz0ZCf5RVNpWjB6LMB",
+      "bytes": 6437603580,
+      "files": 202,
+      "checkpoint_tensor_files": 0
+    },
+    {
+      "kind": "volume",
+      "name": "reader-asset-20261121-a02-volume",
+      "id": "vo-KtzGn1oPG8LfXOztBi04Jr",
+      "bytes": 6444280823,
+      "files": 471,
+      "checkpoint_tensor_files": 0
+    },
+    {
+      "kind": "volume",
+      "name": "reader-asset-20261121-a03-volume",
+      "id": "vo-WFtwoXPWkiS6yOwCoFfSz8",
+      "bytes": 6452127500,
+      "files": 696,
+      "checkpoint_tensor_files": 0
+    },
+    {
+      "kind": "volume",
+      "name": "reader-asset-20261121-a04-volume",
+      "id": "vo-1DponfTcYKI9q3oxLt3NIn",
+      "bytes": 6468612838,
+      "files": 1162,
+      "checkpoint_tensor_files": 0
+    }
+  ],
+  "retained_bytes": 25802624741,
+  "attributed_closed_hour_usd": 5.76165025,
+  "attributed_rows": [
+    {
+      "object_id": "ap-9IcoABtSJC2w9XBIYab7QG",
+      "description": "reader-asset-20261121-a01-app",
+      "environment_name": "main",
+      "interval_start": "2026-11-22 01:00:00+00:00",
+      "cost": "0.00117049",
+      "cost_by_resource": {
+        "CPU": "0.00084581",
+        "Memory": "0.00032334",
+        "Network Egress": "0.00000133"
+      },
+      "tags": {}
+    },
+    {
+      "object_id": "ap-90zP2nIT3wvWhQ7NBNGVDj",
+      "description": "reader-asset-20261121-a02-app",
+      "environment_name": "main",
+      "interval_start": "2026-11-22 02:00:00+00:00",
+      "cost": "0.00500003",
+      "cost_by_resource": {
+        "CPU": "0.00298204",
+        "Memory": "0.00201745",
+        "Network Egress": "5.3E-7"
+      },
+      "tags": {}
+    },
+    {
+      "object_id": "ap-939jSnArvoP02v5LA0VlW4",
+      "description": "reader-asset-20261121-a03-app",
+      "environment_name": "main",
+      "interval_start": "2026-11-22 02:00:00+00:00",
+      "cost": "0.00618175",
+      "cost_by_resource": {
+        "CPU": "0.00358740",
+        "Memory": "0.00227422",
+        "Network Egress": "0.00032013"
+      },
+      "tags": {}
+    },
+    {
+      "object_id": "ap-9IcoABtSJC2w9XBIYab7QG",
+      "description": "reader-asset-20261121-a01-app",
+      "environment_name": "main",
+      "interval_start": "2026-11-22 02:00:00+00:00",
+      "cost": "0.00597001",
+      "cost_by_resource": {
+        "CPU": "0.00328738",
+        "Memory": "0.00221210",
+        "Network Egress": "0.00047053"
+      },
+      "tags": {}
+    },
+    {
+      "object_id": "ap-GpTPM2HqEdXFOtbEAlzjGn",
+      "description": "reader-asset-20261121-a01-app",
+      "environment_name": "main",
+      "interval_start": "2026-11-22 02:00:00+00:00",
+      "cost": "0.00467217",
+      "cost_by_resource": {
+        "CPU": "0.00278650",
+        "Memory": "0.00188516",
+        "Network Egress": "5.2E-7"
+      },
+      "tags": {}
+    },
+    {
+      "object_id": "ap-RmnV1X3wMhw3bDZYovJCp2",
+      "description": "reader-asset-20261121-a03-app",
+      "environment_name": "main",
+      "interval_start": "2026-11-22 02:00:00+00:00",
+      "cost": "0.00411827",
+      "cost_by_resource": {
+        "CPU": "0.00245611",
+        "Memory": "0.00166164",
+        "Network Egress": "5.3E-7"
+      },
+      "tags": {}
+    },
+    {
+      "object_id": "ap-VtUpY3MyDL6rAQoVdwSkSX",
+      "description": "reader-asset-20261121-a02-app",
+      "environment_name": "main",
+      "interval_start": "2026-11-22 02:00:00+00:00",
+      "cost": "0.93265775",
+      "cost_by_resource": {
+        "CPU": "0.11904968",
+        "Memory": "0.22953414",
+        "Network Egress": "0.00001816",
+        "H100": "0.58405577"
+      },
+      "tags": {}
+    },
+    {
+      "object_id": "ap-Z6exDUUlaK7MsPwkd7hCh3",
+      "description": "reader-asset-20261121-a03-app",
+      "environment_name": "main",
+      "interval_start": "2026-11-22 02:00:00+00:00",
+      "cost": "1.00575771",
+      "cost_by_resource": {
+        "CPU": "0.12841455",
+        "Memory": "0.24751972",
+        "Network Egress": "0.00001860",
+        "H100": "0.62980484"
+      },
+      "tags": {}
+    },
+    {
+      "object_id": "ap-e0xC2Z8WstnI6LnyT42eM6",
+      "description": "reader-asset-20261121-a01-app",
+      "environment_name": "main",
+      "interval_start": "2026-11-22 02:00:00+00:00",
+      "cost": "0.73612825",
+      "cost_by_resource": {
+        "CPU": "0.09411563",
+        "Memory": "0.18117004",
+        "Network Egress": "0.00000756",
+        "H100": "0.46083502"
+      },
+      "tags": {}
+    },
+    {
+      "object_id": "ap-n5ALTEy6TQGVkvrJh42l1J",
+      "description": "reader-asset-20261121-a02-app",
+      "environment_name": "main",
+      "interval_start": "2026-11-22 02:00:00+00:00",
+      "cost": "0.00856630",
+      "cost_by_resource": {
+        "CPU": "0.00396418",
+        "Memory": "0.00246642",
+        "Network Egress": "0.00213569"
+      },
+      "tags": {}
+    },
+    {
+      "object_id": "ap-BGMPNHSYye3VIZxUsJlF9S",
+      "description": "reader-asset-20261121-a04-app",
+      "environment_name": "main",
+      "interval_start": "2026-11-22 03:00:00+00:00",
+      "cost": "0.00407114",
+      "cost_by_resource": {
+        "CPU": "0.00242800",
+        "Memory": "0.00164262",
+        "Network Egress": "5.3E-7"
+      },
+      "tags": {}
+    },
+    {
+      "object_id": "ap-F8qe1OG36s6L7UyjtHwiOn",
+      "description": "reader-asset-20261121-a04-app",
+      "environment_name": "main",
+      "interval_start": "2026-11-22 03:00:00+00:00",
+      "cost": "0.11798561",
+      "cost_by_resource": {
+        "CPU": "0.06855957",
+        "Memory": "0.04623043",
+        "Network Egress": "0.00319561"
+      },
+      "tags": {}
+    },
+    {
+      "object_id": "ap-Hyx2Wvy7fmvHIoMl1QuzBV",
+      "description": "reader-asset-20261121-a04-app",
+      "environment_name": "main",
+      "interval_start": "2026-11-22 03:00:00+00:00",
+      "cost": "2.51132367",
+      "cost_by_resource": {
+        "CPU": "0.32061468",
+        "Memory": "0.61804424",
+        "Network Egress": "0.00009457",
+        "H100": "1.57257017"
+      },
+      "tags": {}
+    },
+    {
+      "object_id": "ap-Z6exDUUlaK7MsPwkd7hCh3",
+      "description": "reader-asset-20261121-a03-app",
+      "environment_name": "main",
+      "interval_start": "2026-11-22 03:00:00+00:00",
+      "cost": "0.41804710",
+      "cost_by_resource": {
+        "CPU": "0.05329734",
+        "Memory": "0.10288330",
+        "Network Egress": "0.00001048",
+        "H100": "0.26185599"
+      },
+      "tags": {}
+    }
+  ],
+  "rates": {
+    "egress_gib_cost": "0.04000",
+    "gpu_hour_cost_h100": "3.95000",
+    "cpu_hour_cost": "0.04730",
+    "cpu_hour_cost_sandbox": "0.141900",
+    "volume_storage_gib_month_cost": "0.09000"
+  },
+  "billing_caveat": "Completed-hour report; current hour and delayed/unattributed charges remain unresolved. Credits not deducted."
+}

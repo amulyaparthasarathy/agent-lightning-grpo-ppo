@@ -1,6 +1,6 @@
 # Reader-owned reference training
 
-**Phase 3 update:** New plans use `reader-task-v2`, support reader-owned GitHub forks and the synthetic `asset-status-v1` task. See [Task adaptation](TASK_ADAPTATION.md) for the offline workflow, migration and all-stage integration rule. The dated qualification report retains its original v1 semantics and exact execution identities. No asset-task live qualification has run.
+**Phase 3 update:** New plans use `reader-task-v2`, support reader-owned GitHub forks and the synthetic `asset-status-v1` task. See [Task adaptation](TASK_ADAPTATION.md) for the workflow, migration and all-stage integration rule. The [asset live report](PHASE3_QUALIFICATION_2026-11-22.md) records 64/64 baseline integration for both algorithms, followed by incomplete training collections and zero optimizer updates. Native asset checkpoints and fresh-worker reload remain unqualified. The earlier calculator report retains its original v1 semantics and exact execution identities.
 
 **The reference Llama/calculator workflow has completed real baseline evaluation, two-update training, native checkpoint saving and fresh-worker reload for both algorithms.** CPU preflight and model/tool integration passed. GRPO observed zero informative reward groups; useful learning and reliable accuracy improvement are not established. See the [dated qualification report](READER_QUALIFICATION_2026-11-19.md) for exact executed source, evidence, earlier failures and costs. This guide is the canonical reader procedure. It does not reopen the completed educational release or attribute its results to new code.
 
@@ -10,7 +10,7 @@ The current execution schema is `reader-task-v2`; archived `reader-reference-v1`
 |---|---|---|
 | Reference Llama + calculator | Live operational, integration and reload checks passed; 0/16 informative groups | Live operational, integration and reload checks passed; learning benefit not established |
 | Alternate compatible model + calculator | Subsequent implementation and qualification | Subsequent implementation and qualification |
-| Reference Llama + asset-status-v1 | Offline implementation and real local MCP/scripted harness checks passed; live qualification pending | Offline implementation and real local MCP/scripted harness checks passed; live qualification pending |
+| Reference Llama + asset-status-v1 | Live baseline integration 64/64; training rejected at 29/32 complete trajectories, zero updates; checkpoint/reload unqualified | Live baseline integration 64/64; training rejected at 30/32 complete trajectories, zero updates; checkpoint/reload unqualified |
 
 Every cell needs actual baseline, training, checkpoint and fresh-reload evidence before the milestone is complete. Qualifying the alternate rows does not qualify their cross-product. Short qualification does not require accuracy improvement and does not establish resumed-training support.
 

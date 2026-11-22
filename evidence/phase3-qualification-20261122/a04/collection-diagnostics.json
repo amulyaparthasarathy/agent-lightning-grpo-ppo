@@ -1,0 +1,82 @@
+[
+  {
+    "algorithm": "grpo-matched-v2",
+    "scope": "first collection only, rejected before advantage/optimizer execution",
+    "collections": [
+      {
+        "iteration": 1,
+        "rollouts": 32,
+        "groups": 8,
+        "complete_reward_groups": 7,
+        "informative_complete_reward_groups": 0,
+        "fragment_rows": 91,
+        "original_generated_tokens": 2678,
+        "fragment_generated_tokens": 2678,
+        "rewards_missing": 3,
+        "selection_or_gradient_computation_reached": false
+      }
+    ],
+    "critic_initialization": []
+  },
+  {
+    "algorithm": "ppo-mc-matched-v2",
+    "scope": "first collection only, rejected before advantage/optimizer execution",
+    "collections": [
+      {
+        "iteration": 1,
+        "rollouts": 32,
+        "groups": 8,
+        "complete_reward_groups": 6,
+        "informative_complete_reward_groups": 0,
+        "fragment_rows": 90,
+        "original_generated_tokens": 2731,
+        "fragment_generated_tokens": 2731,
+        "rewards_missing": 2,
+        "selection_or_gradient_computation_reached": false
+      }
+    ],
+    "critic_initialization": [
+      {
+        "event": "critic_loading_info",
+        "pid": 1509,
+        "time": 1795319709.8632803,
+        "class_name": "LlamaForTokenClassification",
+        "info": {
+          "missing_keys": "{'score.bias', 'score.weight'}",
+          "unexpected_keys": "set()",
+          "mismatched_keys": "set()",
+          "error_msgs": []
+        },
+        "seed": 1864040309,
+        "fresh_parameters": [
+          "score.weight",
+          "score.bias"
+        ]
+      },
+      {
+        "event": "critic_head_initialization",
+        "pid": 1509,
+        "time": 1795319709.864995,
+        "parameters": {
+          "score.weight": {
+            "shape": [
+              1,
+              3072
+            ],
+            "dtype": "torch.float32",
+            "sha256": "6240acef6b84b7cc4a11b242e7d398fd4478666454629c7cd7afdd44069c9367"
+          },
+          "score.bias": {
+            "shape": [
+              1
+            ],
+            "dtype": "torch.float32",
+            "sha256": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119"
+          }
+        },
+        "weight_initializer": "Transformers normal(0, config.initializer_range); bias=zeros",
+        "seed": 1864040309
+      }
+    ]
+  }
+]

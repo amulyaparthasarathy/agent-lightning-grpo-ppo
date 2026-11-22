@@ -1,0 +1,69 @@
+{
+  "schema": "asset-local-probe-v1",
+  "task": "asset-status-v1",
+  "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+  "transport": "real stdio MCP",
+  "checks": [
+    {
+      "arguments": {
+        "asset_id": "asset-047"
+      },
+      "expected_error": false,
+      "valid": true
+    },
+    {
+      "arguments": {},
+      "expected_error": true,
+      "valid": true
+    },
+    {
+      "arguments": {
+        "asset_id": 47
+      },
+      "expected_error": true,
+      "valid": true
+    },
+    {
+      "arguments": {
+        "asset_id": "asset-047",
+        "extra": 1
+      },
+      "expected_error": true,
+      "valid": true
+    },
+    {
+      "arguments": {
+        "asset_id": "../047"
+      },
+      "expected_error": true,
+      "valid": true
+    },
+    {
+      "arguments": {
+        "asset_id": "asset-999"
+      },
+      "expected_error": true,
+      "valid": true
+    }
+  ],
+  "status": "passed",
+  "workbench_context_exited": true,
+  "model_inference": "not executed",
+  "live_qualification": false,
+  "ownership_receipts_directory": "/__modal/volumes/vo-KtIYfz0ZCf5RVNpWjB6LMB/phase3-runs/reader-asset-20261121/a01/preflight/asset-preflight.json-mcp-2wvca7ko",
+  "owned_process_cleanup": {
+    "complete": true,
+    "signalled": 0,
+    "receipts": [
+      {
+        "file": "bf39a7ea3ccb4169a202044777a98afd.json",
+        "pid": 55,
+        "start_ticks": "4785",
+        "status": "already_exited"
+      }
+    ],
+    "anomalies": []
+  },
+  "worker_cleanup_anomalies": [],
+  "owned_process_cleanup_completed": true
+}

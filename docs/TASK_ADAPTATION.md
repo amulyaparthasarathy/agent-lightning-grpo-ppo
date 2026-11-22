@@ -1,11 +1,13 @@
 # Reader customization and task adaptation
 
 Phase 3 implements two tasks through the same matched training workflow. The new
-`asset-status-v1` task has **offline integration evidence only**. Local MCP execution
-is real; the harness demonstration uses scripted inference and a loopback reward
-receiver. Neither demonstrates live-model behavior, GPU training, checkpoint reload,
-or learning improvement. See [verification](PHASE3_VERIFICATION.md) and the
-[proposed live qualification](PHASE3_QUALIFICATION_PROPOSAL.md).
+`asset-status-v1` task has **live baseline integration evidence for both algorithms**:
+64/64 heldout cases each. The first training collections completed 29/32 GRPO and
+30/32 PPO-MC trajectories; incomplete groups stopped both before optimization.
+Training, native checkpoint saving and fresh-worker reload remain unqualified.
+See the [dated live report](PHASE3_QUALIFICATION_2026-11-22.md) and
+[offline verification](PHASE3_VERIFICATION.md). The local harness demonstration
+still uses explicitly scripted inference and does not establish live-model behavior.
 
 The completed calculator qualification remains bound to execution source
 `5daff64cefd348fb731094cf465b223ddceb5fb2` and plan SHA-256
@@ -270,6 +272,9 @@ both tasks.
 | Baseline integration unqualified | Preserve completed baseline/trace diagnostics; reconcile the attempt before any corrected plan; do not bypass the gate |
 | Cleanup unresolved | Inspect receipt anomalies and owned provider/process state; never infer signal targets from partial JSON |
 | Runtime inventory/hash mismatch | Add intended tracked inputs to the inventory and rebuild from the committed source |
+| Large reader request prevents Ray startup | Use the bounded, hash-bound request-file transport; do not put the full request into a runtime environment variable |
+| Model supplies answer fields as tool arguments | Inspect the actual system message and tool schema; the asset instruction explicitly separates the sole `asset_id` argument from returned observations |
+| Training collection has incomplete groups | Retain every attempt and stop before optimization; do not fill missing rewards, filter failures or weaken admission |
 | Missing MCP/Arrow dependency | Sync the isolated locked CPU group; essential tests fail rather than silently skip |
 | Dataset mismatch | Preserve the bad output; generate into a new directory from the intended version |
 | Tool success but reward zero | Inspect the whole terminal JSON and independent expected record |
@@ -287,5 +292,5 @@ transport and harness checks, strict parser/failure tests and cross-task evidenc
 rejections. Keep numerical mathematics and lifecycle safeguards shared. Qualify the
 new route separately before making live execution or learning claims.
 
-Arbitrary model compatibility, resumed training, GPU asset-task qualification and
+Arbitrary model compatibility, resumed training, asset-task optimizer/checkpoint qualification and
 accuracy improvement are not established by this implementation.

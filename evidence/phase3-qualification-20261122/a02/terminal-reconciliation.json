@@ -1,0 +1,58 @@
+{
+  "at": "2026-11-22T02:40:52.764620+00:00",
+  "terminal_calls": [
+    {
+      "id": "fc-01M80H7C2AT38ASTW98V2HRJ9H",
+      "status": "completed"
+    },
+    {
+      "id": "fc-01M80HC07CKTV2983RHG0SH1VT",
+      "status": "provider_cancelled"
+    },
+    {
+      "id": "fc-01M80HC6M1R2DP69DSC07CN9HP",
+      "status": "failed"
+    },
+    {
+      "id": "fc-01M80HRVX9HVK590EEB3FR452W",
+      "status": "provider_cancelled"
+    }
+  ],
+  "active_owned_apps": [],
+  "volumes": [
+    {
+      "id": "vo-KtIYfz0ZCf5RVNpWjB6LMB",
+      "bytes": 6437603580
+    },
+    {
+      "id": "vo-KtzGn1oPG8LfXOztBi04Jr",
+      "bytes": 6444280823
+    }
+  ],
+  "retained_bytes": 12881884403,
+  "attributed_closed_hour_usd": 0.00117049,
+  "attributed_rows": [
+    {
+      "object_id": "ap-9IcoABtSJC2w9XBIYab7QG",
+      "description": "reader-asset-20261121-a01-app",
+      "environment_name": "main",
+      "interval_start": "2026-11-22 01:00:00+00:00",
+      "cost": "0.00117049",
+      "cost_by_resource": {
+        "CPU": "0.00084581",
+        "Memory": "0.00032334",
+        "Network Egress": "0.00000133"
+      },
+      "tags": {}
+    }
+  ],
+  "rates": {
+    "egress_gib_cost": "0.04000",
+    "gpu_hour_cost_h100": "3.95000",
+    "cpu_hour_cost": "0.04730",
+    "cpu_hour_cost_sandbox": "0.141900",
+    "volume_storage_gib_month_cost": "0.09000"
+  },
+  "prior_attempts_hold_usd": 120,
+  "basis": "Each prior attempt: 30 builds + 10 CPU + 7 storage + 3 collection + 10 GPU/supervision. Completed/cancelled calls confirmed; conservative supervisor accounts ~2.42 and ~3.01; no credits; incomplete billing retained as hold."
+}

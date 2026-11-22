@@ -1,0 +1,7 @@
+{
+  "image_id": "im-a7M1vxet2jtMPeU7RPMawl",
+  "cache_hit": "unverified",
+  "python": "/opt/agent-lightning/.venv/bin/python",
+  "container_id": "ta-01M80MZW0GZP989H5B94K50NSR",
+  "worker_hostname": "modal"
+}

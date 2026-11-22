@@ -1,5 +1,20 @@
 # Phase 3 offline verification
 
+**Live follow-up (2026-11-22):** The authorized US$300 campaign is recorded in the
+[dated qualification report](PHASE3_QUALIFICATION_2026-11-22.md). Both baselines
+passed integration; incomplete training collections prevented optimizer updates
+and checkpoint evaluation. The offline sections below preserve their original
+verification dates and do not describe the final live execution state.
+
+Live corrections were committed as `de867130ff35afb287d6bf11f83a33f4951014bb`
+(bounded request-file transport), `e00dc14bb9777dd644b8384be3f18b97c69b972c`
+(explicit asset system message), and `07ddf1bad56c10c6b8b4d144293aec4f911df706`
+(separate tool arguments from returned answer fields). Each correction passed
+22 task/source, 39 PPO-MC, 15 matched-study and 84 reader/refactor tests, plus six
+pinned configuration checks and 62 matched-runtime tests, with no skips.
+The live report records the actual remote package inventory and separate evidence;
+these CPU tests alone do not qualify live training.
+
 Implementation base: public main `5c069f7e9cc23d03050d13360ce43e27e47e54aa`.
 The checkout's origin was verified as the public `agent-lightning-grpo-ppo`
 repository; GitHub reported no open PRs at implementation start. PR #3 is merged.
@@ -186,7 +201,7 @@ stale. No source-bound plan is committed.
 - Calculator `Agent` AST matches the public baseline. Its prompt, scorer, data and
   reward behavior are retained; common tracing was extracted with attribution.
 
-## Evidence boundaries
+## Evidence boundaries at the original offline verification
 
 | Category | What ran |
 |---|---|
@@ -219,5 +234,6 @@ or raw private traces were added, and historical evidence and source locks were 
 modified. Local generated data/plans/receipts stay ignored. The final delivery records
 the actual review outcome and PR head.
 
-Live qualification remains proposed under a separate [US$300 aggregate
-envelope](PHASE3_QUALIFICATION_PROPOSAL.md). No provider spending cap is claimed.
+The separate [US$300 aggregate envelope](PHASE3_QUALIFICATION_PROPOSAL.md) was
+subsequently authorized and executed; see the [live closeout](PHASE3_QUALIFICATION_2026-11-22.md).
+No provider spending cap is claimed.

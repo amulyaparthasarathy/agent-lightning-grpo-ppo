@@ -1,0 +1,82 @@
+{
+  "deadline": "2026-11-29T01:54:46.522052+00:00",
+  "resources": [
+    {
+      "kind": "volume",
+      "name": "reader-asset-20261121-a01-volume",
+      "id": "vo-KtIYfz0ZCf5RVNpWjB6LMB"
+    },
+    {
+      "kind": "registry",
+      "name": "reader-asset-20261121-a01-registry",
+      "id": "di-89aPaR7B9aNx1EDw4oOAlt"
+    },
+    {
+      "kind": "volume",
+      "name": "reader-asset-20261121-a02-volume",
+      "id": "vo-KtzGn1oPG8LfXOztBi04Jr"
+    },
+    {
+      "kind": "registry",
+      "name": "reader-asset-20261121-a02-registry",
+      "id": "di-1IIFqOxyn9KjM9WBGLShAb"
+    },
+    {
+      "kind": "volume",
+      "name": "reader-asset-20261121-a03-volume",
+      "id": "vo-WFtwoXPWkiS6yOwCoFfSz8"
+    },
+    {
+      "kind": "registry",
+      "name": "reader-asset-20261121-a03-registry",
+      "id": "di-D9PAc1yJElVDI86YsYounv"
+    },
+    {
+      "kind": "volume",
+      "name": "reader-asset-20261121-a04-volume",
+      "id": "vo-1DponfTcYKI9q3oxLt3NIn"
+    },
+    {
+      "kind": "registry",
+      "name": "reader-asset-20261121-a04-registry",
+      "id": "di-FXBB2Msz3kJC0BBE2pcJjH"
+    }
+  ],
+  "images": [
+    {
+      "attempt": 1,
+      "image_id": "im-YgJB9ZeIqUyuQXvUD8HQrx"
+    },
+    {
+      "attempt": 2,
+      "image_id": "im-buzZvebIURyGYvJVe3ed0g"
+    },
+    {
+      "attempt": 3,
+      "image_id": "im-7SRnhIai3ZHWvdFWHLYw3e"
+    },
+    {
+      "attempt": 4,
+      "image_id": "im-a7M1vxet2jtMPeU7RPMawl"
+    }
+  ],
+  "apps": {
+    "state": "all stopped",
+    "ids": [
+      "ap-9IcoABtSJC2w9XBIYab7QG",
+      "ap-GpTPM2HqEdXFOtbEAlzjGn",
+      "ap-e0xC2Z8WstnI6LnyT42eM6",
+      "ap-n5ALTEy6TQGVkvrJh42l1J",
+      "ap-90zP2nIT3wvWhQ7NBNGVDj",
+      "ap-VtUpY3MyDL6rAQoVdwSkSX",
+      "ap-939jSnArvoP02v5LA0VlW4",
+      "ap-RmnV1X3wMhw3bDZYovJCp2",
+      "ap-Z6exDUUlaK7MsPwkd7hCh3",
+      "ap-F8qe1OG36s6L7UyjtHwiOn",
+      "ap-BGMPNHSYye3VIZxUsJlF9S",
+      "ap-Hyx2Wvy7fmvHIoMl1QuzBV"
+    ]
+  },
+  "volume_bytes": 25802624741,
+  "no_scheduled_deletion": true
+}
