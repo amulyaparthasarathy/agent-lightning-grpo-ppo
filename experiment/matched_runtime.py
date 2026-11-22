@@ -271,7 +271,11 @@ def register_in_worker():
         for relative, expected in files.items():
             if hashlib.sha256((root/relative).read_bytes()).hexdigest() != expected:
                 raise ValueError(f'Unreviewed matched runtime source: {package}/{relative}')
-    request = json.loads(os.environ['AGL_MATCHED_REQUEST'])
+    try:
+        from .request_transport import load
+    except ImportError:
+        from request_transport import load
+    request = load()
     run = Path(os.environ['AGL_PPO_RUN_DIR'])
     streams = request['job']['seed_streams']
     seed_process(streams)

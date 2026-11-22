@@ -330,8 +330,15 @@ def run_services(commands, plan, run: Path, repo: Path, bundle: Path, walltime: 
         env.update(HF_HUB_OFFLINE="1", TRANSFORMERS_OFFLINE="1", AGL_PPO_RUN_DIR=str(run),
                    AGL_PPO_AUDIT_DIR=str(run / "ppo-audit"))
     if matched:
+        try:
+            from .request_transport import environment as request_environment
+        except ImportError:
+            from request_transport import environment as request_environment
+        # Do not inherit another attempt's representation or a large inline value.
+        for name in ('AGL_MATCHED_REQUEST', 'AGL_MATCHED_REQUEST_FILE', 'AGL_MATCHED_REQUEST_SHA256'):
+            env.pop(name, None)
         env.update(HF_HUB_OFFLINE="1", TRANSFORMERS_OFFLINE="1", AGL_PPO_RUN_DIR=str(run),
-                   AGL_PPO_AUDIT_DIR=str(run / "audit"), AGL_MATCHED_REQUEST=json.dumps(plan["request"]))
+                   AGL_PPO_AUDIT_DIR=str(run / "audit"), **request_environment(plan['request'], run))
         for key in ("XDG_CACHE_HOME", "TRITON_CACHE_DIR", "VLLM_CACHE_ROOT", "HF_HOME", "WANDB_DIR"):
             directory = run / "temporary" / key.lower()
             directory.mkdir(parents=True)

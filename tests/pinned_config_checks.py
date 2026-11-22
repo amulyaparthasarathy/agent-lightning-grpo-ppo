@@ -280,6 +280,12 @@ class ReaderTaskConfigs(unittest.TestCase):
                     self.assertEqual(resolved['agentlightning']['local']['agent_class'], plan['task_identity']['agent_class'])
                     self.assertEqual(resolved['agentlightning']['local']['env_map'], plan['task_identity']['data_mapping'])
                     self.assertEqual(set(resolved['agentlightning']['local']['env_map']), {'QUESTION', 'RESULT', 'AGL_CASE_ID', 'AGL_DATA_SPLIT', 'EVAL_SPLIT'})
+                    from experiment.request_transport import digest
+                    runtime_env = resolved['ray_kwargs']['ray_init']['runtime_env']['env_vars']
+                    self.assertNotIn('AGL_MATCHED_REQUEST', runtime_env)
+                    self.assertEqual(runtime_env['AGL_MATCHED_REQUEST_SHA256'], digest(req))
+                    self.assertEqual(runtime_env['AGL_MATCHED_REQUEST_FILE'], str(Path('/data')/stage['output']/'request.json'))
+                    self.assertLess(len(json.dumps(runtime_env)), 8192)
                     self.assertTrue(rp['train_file'].endswith('/train_main.parquet'))
                     self.assertTrue(rp['eval_file'].endswith('/eval_main.parquet'))
                     self.assertEqual(cfg.trainer.val_only, stage['name'] != 'training')

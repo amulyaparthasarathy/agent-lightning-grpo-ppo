@@ -42,6 +42,7 @@
   "experiment/reader_preflight.py",
   "experiment/reader_runtime.json",
   "experiment/reader_source.py",
+  "experiment/request_transport.py",
   "experiment/requirements-agent.txt",
   "experiment/summarize.py",
   "experiment/templates/LICENSE-vllm.txt",

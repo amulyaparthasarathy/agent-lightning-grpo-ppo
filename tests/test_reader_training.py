@@ -386,7 +386,7 @@ class ReaderImportTests(unittest.TestCase):
             configured['calc_dir'] = str(root)
             commands['gateway'] = [sys.executable, '-c', 'import time; time.sleep(30)']
             commands['controller'] = commands['gateway'][:]
-            commands['trainer'] = [sys.executable, '-c', "import json,os;from pathlib import Path;Path('child-env.json').write_text(json.dumps({k:os.environ[k] for k in ['WANDB_ENTITY','WANDB_PROJECT','WANDB_RUN_ID','AGL_MATCHED_REQUEST','AGL_TASK_ID','AGL_TASK_SHA256','AGL_ENVIRONMENT_SHA256','AGL_SOURCE_SHA256','AGL_CONFIGURATION_SHA256']}))"]
+            commands['trainer'] = [sys.executable, '-c', "import json,os;from pathlib import Path;Path('child-env.json').write_text(json.dumps({k:os.environ[k] for k in ['WANDB_ENTITY','WANDB_PROJECT','WANDB_RUN_ID','AGL_MATCHED_REQUEST_FILE','AGL_MATCHED_REQUEST_SHA256','AGL_TASK_ID','AGL_TASK_SHA256','AGL_ENVIRONMENT_SHA256','AGL_SOURCE_SHA256','AGL_CONFIGURATION_SHA256']}))"]
             ready = Mock(); ready.__enter__ = Mock(return_value=SimpleNamespace(status=200)); ready.__exit__ = Mock(return_value=False)
             # Service health response is explicitly mocked; process creation, environment,
             # logs, observability and owned process-group cleanup are real CPU operations.
@@ -400,7 +400,8 @@ class ReaderImportTests(unittest.TestCase):
             self.assertEqual(env['AGL_CONFIGURATION_SHA256'], p['configuration_sha256'])
             self.assertEqual(env['WANDB_PROJECT'], p['profile']['wandb']['project'])
             self.assertEqual(env['WANDB_ENTITY'], p['profile']['wandb']['entity'])
-            self.assertEqual(json.loads(env['AGL_MATCHED_REQUEST']), request)
+            self.assertEqual(env['AGL_MATCHED_REQUEST_FILE'], str(root/'request.json'))
+            self.assertEqual(env['AGL_MATCHED_REQUEST_SHA256'], c.digest(request))
             self.assertEqual(obs['wandb'], stage['wandb'])
             self.assertEqual(obs['wandb_project'], p['profile']['wandb']['project'])
             self.assertEqual(obs['experiment_id'], job['job_id'])

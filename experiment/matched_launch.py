@@ -13,11 +13,13 @@ from types import SimpleNamespace
 
 try:
     from . import launch, matched_contract as c, ppo_contract, summarize
+    from .request_transport import environment as request_environment
 except ImportError:
     import launch
     import matched_contract as c
     import ppo_contract
     import summarize
+    from request_transport import environment as request_environment
 
 WORKER = '''import json, os, sys
 from pathlib import Path
@@ -78,7 +80,7 @@ def configuration(request, model, run):
         'trainer.default_local_dir': str(run/'checkpoints'),
         'ray_kwargs.ray_init.runtime_env.worker_process_setup_hook': 'matched_runtime.register_in_worker',
         'ray_kwargs.ray_init.runtime_env.env_vars': {
-            'AGL_MATCHED_REQUEST': json.dumps(request), 'AGL_PPO_RUN_DIR': str(run),
+            **request_environment(request, run), 'AGL_PPO_RUN_DIR': str(run),
             'PYTHONHASHSEED': str(s['python']),
             'AGL_PPO_AUDIT_DIR': str(run/'audit'), 'HF_HUB_OFFLINE': '1', 'TRANSFORMERS_OFFLINE': '1'},
         'lab_protocol': {'protocol': c.PROTOCOL, 'algorithm': job['algorithm'],
