@@ -11,7 +11,9 @@ evidence of learning; the corrected baseline leaves no headroom. See the
 The four earlier attempts failed, and how they failed is the main lesson of this
 guide. They are preserved unchanged in the
 [2026-11-22 report](PHASE3_QUALIFICATION_2026-11-22.md) under their original
-episode policy. See also [offline verification](PHASE3_VERIFICATION.md). The local
+episode policy. The [engineering checklist](PHASE3_ENGINEERING_CHECKLIST.md) condenses
+what they taught into checks to run before a new attempt. See also
+[offline verification](PHASE3_VERIFICATION.md). The local
 harness demonstration uses explicitly scripted inference and does not establish
 live-model behavior.
 

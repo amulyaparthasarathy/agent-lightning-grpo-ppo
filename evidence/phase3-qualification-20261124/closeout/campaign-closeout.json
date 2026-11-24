@@ -1,0 +1,42 @@
+{
+  "at": "2026-11-24T05:28:15.625362+00:00",
+  "authorized_gross_usd": 300,
+  "execution_status": "closed: qualification complete; no further dispatch planned or authorized by this closeout",
+  "observed_charges": {
+    "usd": 12.30982472,
+    "by_attempt_usd": {
+      "a01-a04": 5.76165025,
+      "a05": 0.00105,
+      "a06": 1.39074,
+      "a07": 5.15639
+    },
+    "basis": "Modal completed-hour usage report read at 2026-11-24T05:23:07.323712+00:00; unchanged since 2026-11-24T04:02:53Z",
+    "unattributed_usd": 0
+  },
+  "unresolved_billing": [
+    "Usage report is not a settled invoice; credits are not deducted.",
+    "Volume storage does not appear as per-object rows in the usage report. Accrued storage to this point is estimated at about US$0.19.",
+    "Delayed build, startup or egress rows could still appear."
+  ],
+  "continuing_storage": {
+    "retained_bytes": 157612506976,
+    "gib": 146.79,
+    "rate_usd_per_gib_month": 0.09,
+    "usd_per_month_all": 13.21,
+    "usd_per_month_a07_only": 10.51
+  },
+  "holds_usd": {
+    "campaign-closeout-inclusive-hold": 40,
+    "a05-inclusive": 1,
+    "a06-inclusive": 8,
+    "a07-inclusive": 25
+  },
+  "inclusive_hold_total_usd": 74,
+  "held_above_observed_usd": 61.69,
+  "unused_execution_authorization_usd": 226,
+  "note": "The unused balance is not a reason for further experiments. Holds stay until billing settles and retention is decided.",
+  "known_calls": 36,
+  "non_terminal_calls": 0,
+  "workspace_apps_with_running_tasks": 0,
+  "paid_work_in_closeout": "none: read-only provider queries and a 51 KB evidence read"
+}

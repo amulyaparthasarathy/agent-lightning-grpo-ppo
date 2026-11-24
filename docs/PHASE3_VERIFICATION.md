@@ -1,5 +1,11 @@
 # Phase 3 offline verification
 
+**Closeout (2026-11-24):** no implementation source changed after
+`7f1e13d7bacb477c9e5e95a16868a2b0f2484ee6`. The three gates below were run once
+more on the closeout documentation tree with the same counts (26; 39, 15 and 86;
+63 plus six) and no skips, together with the documented credential-free local
+commands. See the [closeout](PHASE3_CLOSEOUT_2026-11-24.md).
+
 **Episode-policy correction and qualification (2026-11-24):** The asset task is
 operationally qualified for both algorithms under `asset-episode-v2`; see the
 [dated report](PHASE3_QUALIFICATION_2026-11-24.md). Both live attempts executed

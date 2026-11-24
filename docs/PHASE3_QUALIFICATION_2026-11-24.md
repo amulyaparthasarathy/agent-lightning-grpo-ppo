@@ -19,6 +19,8 @@ The earlier campaign is preserved unchanged in the
 keep their original rewards, missing rewards, classifications, source identities
 and unqualified status. Reviewed evidence for this continuation is in
 [`evidence/phase3-qualification-20261124`](../evidence/phase3-qualification-20261124/README.md).
+The later [closeout](PHASE3_CLOSEOUT_2026-11-24.md) records the final review,
+preservation inventory and campaign accounting.
 
 ## Starting state
 
@@ -357,8 +359,10 @@ container. The same procedure reproduced the a06 development result.
    resolution, before any function was spawned. Read-only reconciliation found an
    app with zero functions and zero tasks, no `entered` or `result` registry row,
    an empty volume 43 hours after the 3600-second preparation limit, and one
-   billing row of US$0.00105. A durable stop marker was placed with the public
-   `stop-owned` command, run from the exact planned source. The submission was not
+   billing row of US$0.00105. A stop marker was placed with the public
+   `stop-owned` command, run from the exact planned source. The provider keeps
+   such an entry only while it is read or written within seven days; the lasting
+   record is the local receipt and the committed reconciliation. The submission was not
    retried, and its two planned W&B identities are absent. The reservation was
    reduced from US$175 to a US$1 hold.
 3. **a06 — `7f1e13d`.** Development collection; completed and accepted.

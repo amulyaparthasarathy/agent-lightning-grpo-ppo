@@ -1,0 +1,465 @@
+{
+  "at": "2026-11-24T05:23:07.323712+00:00",
+  "calls": [
+    {
+      "id": "fc-01M80FWCVMAK8X2EQC0BMAGZA2",
+      "attempt": 1,
+      "kind": "preflight",
+      "provider_status": "completed"
+    },
+    {
+      "id": "fc-01M80FQ3QAKHHDATABC697684S",
+      "attempt": 1,
+      "kind": "prepare",
+      "provider_status": "completed"
+    },
+    {
+      "id": "fc-01M80G13HY5V5B928YE4EVF7RN",
+      "attempt": 1,
+      "kind": "launch",
+      "error_type": "RemoteError",
+      "provider_status": "provider_cancelled",
+      "error_summary": "Function call was cancelled by user or a failure."
+    },
+    {
+      "id": "fc-01M80G1D8F9JTC026TAM6VNZGN",
+      "attempt": 1,
+      "kind": "baseline",
+      "durable_status": "failed",
+      "error_type": "RuntimeError",
+      "provider_status": "failed",
+      "error_summary": "Command exited 1; inspect /__modal/volumes/vo-KtIYfz0ZCf5RVNpWjB6LMB/phase3-runs/reader-asset-20261121/a01/grpo-matched-v2/baseline/launcher.log"
+    },
+    {
+      "id": "fc-01M80GEDFW1QH2HH5K98GZJ8YD",
+      "attempt": 1,
+      "kind": "baseline",
+      "durable_status": "submitted",
+      "error_type": "RemoteError",
+      "provider_status": "provider_cancelled",
+      "error_summary": "Function call was cancelled by user or a failure."
+    },
+    {
+      "id": "fc-01M80H7C2AT38ASTW98V2HRJ9H",
+      "attempt": 2,
+      "kind": "preflight",
+      "provider_status": "completed"
+    },
+    {
+      "id": "fc-01M80H2R69E9PRPN5RYNX3QQJN",
+      "attempt": 2,
+      "kind": "prepare",
+      "provider_status": "completed"
+    },
+    {
+      "id": "fc-01M80HC07CKTV2983RHG0SH1VT",
+      "attempt": 2,
+      "kind": "launch",
+      "error_type": "RemoteError",
+      "provider_status": "provider_cancelled",
+      "error_summary": "Function call was cancelled by user or a failure."
+    },
+    {
+      "id": "fc-01M80HC6M1R2DP69DSC07CN9HP",
+      "attempt": 2,
+      "kind": "baseline",
+      "durable_status": "failed",
+      "error_type": "RuntimeError",
+      "provider_status": "failed",
+      "error_summary": "Command exited 1; inspect /__modal/volumes/vo-KtzGn1oPG8LfXOztBi04Jr/phase3-runs/reader-asset-20261121-r02/a02/grpo-matched-v2/baseline/launcher.log"
+    },
+    {
+      "id": "fc-01M80HRVX9HVK590EEB3FR452W",
+      "attempt": 2,
+      "kind": "baseline",
+      "durable_status": "started",
+      "error_type": "RemoteError",
+      "provider_status": "provider_cancelled",
+      "error_summary": "Function call was cancelled by user or a failure."
+    },
+    {
+      "id": "fc-01M80JJF51RTYEVNQAGMQGAQ8S",
+      "attempt": 3,
+      "kind": "launch",
+      "provider_status": "failed"
+    },
+    {
+      "id": "fc-01M80JECN42AEVZVHQGS2J37W5",
+      "attempt": 3,
+      "kind": "preflight",
+      "provider_status": "completed"
+    },
+    {
+      "id": "fc-01M80J9W73BMV4KZRK537SVCRD",
+      "attempt": 3,
+      "kind": "prepare",
+      "provider_status": "completed"
+    },
+    {
+      "id": "fc-01M80JJKR40G5ZGN61EBZTQBCQ",
+      "attempt": 3,
+      "kind": "baseline",
+      "durable_status": "failed",
+      "error_type": "RuntimeError",
+      "provider_status": "failed",
+      "error_summary": "Command exited 1; inspect /__modal/volumes/vo-WFtwoXPWkiS6yOwCoFfSz8/phase3-runs/reader-asset-20261121-r03/a03/grpo-matched-v2/baseline/launcher.log"
+    },
+    {
+      "id": "fc-01M80K0JSPRXR0BS5B7CFGPK0G",
+      "attempt": 3,
+      "kind": "baseline",
+      "durable_status": "failed",
+      "error_type": "RuntimeError",
+      "provider_status": "failed",
+      "error_summary": "Command exited 1; inspect /__modal/volumes/vo-WFtwoXPWkiS6yOwCoFfSz8/phase3-runs/reader-asset-20261121-r03/a03/ppo-mc-matched-v2/baseline/launcher.log"
+    },
+    {
+      "id": "fc-01M80N46X1EJBJ4BNC1A5ZAK5Q",
+      "attempt": 4,
+      "kind": "launch",
+      "provider_status": "failed"
+    },
+    {
+      "id": "fc-01M80MZVDMAW0X098Q6N137CNY",
+      "attempt": 4,
+      "kind": "preflight",
+      "provider_status": "completed"
+    },
+    {
+      "id": "fc-01M80KNQH880GNB60GQH2BB6MY",
+      "attempt": 4,
+      "kind": "prepare",
+      "provider_status": "completed"
+    },
+    {
+      "id": "fc-01M80N4C60XMPWRNNC7F08MCYM",
+      "attempt": 4,
+      "kind": "baseline",
+      "durable_status": "completed",
+      "provider_status": "completed"
+    },
+    {
+      "id": "fc-01M80NH6FPPEE7C497987XB7W4",
+      "attempt": 4,
+      "kind": "training",
+      "durable_status": "failed",
+      "error_type": "RuntimeError",
+      "provider_status": "failed",
+      "error_summary": "Command exited 1; inspect /__modal/volumes/vo-1DponfTcYKI9q3oxLt3NIn/phase3-runs/reader-asset-20261121-r04/a04/grpo-matched-v2/training/launcher.log"
+    },
+    {
+      "id": "fc-01M80NV73HN89GBQ23X9CTK69S",
+      "attempt": 4,
+      "kind": "baseline",
+      "durable_status": "completed",
+      "provider_status": "completed"
+    },
+    {
+      "id": "fc-01M80P50Z5XM34VEBCK8R5Z773",
+      "attempt": 4,
+      "kind": "training",
+      "durable_status": "failed",
+      "error_type": "RuntimeError",
+      "provider_status": "failed",
+      "error_summary": "Command exited 1; inspect /__modal/volumes/vo-1DponfTcYKI9q3oxLt3NIn/phase3-runs/reader-asset-20261121-r04/a04/ppo-mc-matched-v2/training/launcher.log"
+    },
+    {
+      "id": "fc-01M85NK5YXAAWR7AH4PNPPGSSH",
+      "attempt": 6,
+      "kind": "launch",
+      "provider_status": "completed"
+    },
+    {
+      "id": "fc-01M85NG911SGKKJXR55J3EAQQ2",
+      "attempt": 6,
+      "kind": "preflight",
+      "provider_status": "completed"
+    },
+    {
+      "id": "fc-01M85NDDE44AHPQ583JPGZY7Q7",
+      "attempt": 6,
+      "kind": "prepare",
+      "provider_status": "completed"
+    },
+    {
+      "id": "fc-01M85NKC9YZ5Z1QRGN64CRH7MD",
+      "attempt": 6,
+      "kind": "training",
+      "durable_status": "completed",
+      "provider_status": "completed"
+    },
+    {
+      "id": "fc-01M85NZXD7EVTND6B2Z68CY1WF",
+      "attempt": 6,
+      "kind": "training",
+      "durable_status": "completed",
+      "provider_status": "completed"
+    },
+    {
+      "id": "fc-01M85PW9JMA4EDMR3JWJSYH7YF",
+      "attempt": 7,
+      "kind": "launch",
+      "provider_status": "completed"
+    },
+    {
+      "id": "fc-01M85PSW1ZRT030CAF8EM48T80",
+      "attempt": 7,
+      "kind": "preflight",
+      "provider_status": "completed"
+    },
+    {
+      "id": "fc-01M85PPFK94TCG12T2G27KSFDA",
+      "attempt": 7,
+      "kind": "prepare",
+      "provider_status": "completed"
+    },
+    {
+      "id": "fc-01M85PWS2XD738252CZQ7028P0",
+      "attempt": 7,
+      "kind": "baseline",
+      "durable_status": "completed",
+      "provider_status": "completed"
+    },
+    {
+      "id": "fc-01M85Q6SY0QDXNSVS3E1HTP114",
+      "attempt": 7,
+      "kind": "training",
+      "durable_status": "completed",
+      "provider_status": "completed"
+    },
+    {
+      "id": "fc-01M85QNTY8P8G4PJBK5NM8ZCZ3",
+      "attempt": 7,
+      "kind": "checkpoint-eval",
+      "durable_status": "completed",
+      "provider_status": "completed"
+    },
+    {
+      "id": "fc-01M85R22KKJ2G4GTF566GVFE01",
+      "attempt": 7,
+      "kind": "baseline",
+      "durable_status": "completed",
+      "provider_status": "completed"
+    },
+    {
+      "id": "fc-01M85RDRYA8HG9SHYMKQTGK47S",
+      "attempt": 7,
+      "kind": "training",
+      "durable_status": "completed",
+      "provider_status": "completed"
+    },
+    {
+      "id": "fc-01M85SB696RBKYQYS9AMF9620K",
+      "attempt": 7,
+      "kind": "checkpoint-eval",
+      "durable_status": "completed",
+      "provider_status": "completed"
+    }
+  ],
+  "submissions_without_call_id": [
+    {
+      "attempt": 5,
+      "file": ".local/phase3-live-20261121/a05/prepare-submission.json",
+      "status": "unknown",
+      "action": "prepare"
+    }
+  ],
+  "owned_app_rows": [
+    {
+      "app_id": "ap-9IcoABtSJC2w9XBIYab7QG",
+      "listed": false,
+      "tasks_listed": 0
+    },
+    {
+      "app_id": "ap-GpTPM2HqEdXFOtbEAlzjGn",
+      "listed": false,
+      "tasks_listed": 0
+    },
+    {
+      "app_id": "ap-e0xC2Z8WstnI6LnyT42eM6",
+      "listed": false,
+      "tasks_listed": 0
+    },
+    {
+      "app_id": "ap-n5ALTEy6TQGVkvrJh42l1J",
+      "listed": false,
+      "tasks_listed": 0
+    },
+    {
+      "app_id": "ap-90zP2nIT3wvWhQ7NBNGVDj",
+      "listed": false,
+      "tasks_listed": 0
+    },
+    {
+      "app_id": "ap-VtUpY3MyDL6rAQoVdwSkSX",
+      "listed": false,
+      "tasks_listed": 0
+    },
+    {
+      "app_id": "ap-939jSnArvoP02v5LA0VlW4",
+      "listed": false,
+      "tasks_listed": 0
+    },
+    {
+      "app_id": "ap-RmnV1X3wMhw3bDZYovJCp2",
+      "listed": false,
+      "tasks_listed": 0
+    },
+    {
+      "app_id": "ap-Z6exDUUlaK7MsPwkd7hCh3",
+      "listed": false,
+      "tasks_listed": 0
+    },
+    {
+      "app_id": "ap-F8qe1OG36s6L7UyjtHwiOn",
+      "listed": false,
+      "tasks_listed": 0
+    },
+    {
+      "app_id": "ap-BGMPNHSYye3VIZxUsJlF9S",
+      "listed": false,
+      "tasks_listed": 0
+    },
+    {
+      "app_id": "ap-Hyx2Wvy7fmvHIoMl1QuzBV",
+      "listed": false,
+      "tasks_listed": 0
+    },
+    {
+      "app_id": "ap-ZK29JoQTxVpICBAg7T86Yl",
+      "listed": false,
+      "tasks_listed": 0
+    },
+    {
+      "app_id": "ap-IOCi4ZZKnkSAp2dmeBDqFD",
+      "listed": false,
+      "tasks_listed": 0
+    },
+    {
+      "app_id": "ap-PK5X9Z00GBfPu1FkgKqjuO",
+      "listed": false,
+      "tasks_listed": 0
+    },
+    {
+      "app_id": "ap-G4DqftLedEiSbCOvbqFltn",
+      "listed": false,
+      "tasks_listed": 0
+    },
+    {
+      "app_id": "ap-g9NNkEPPD7GfNkQtCFmOyq",
+      "listed": false,
+      "tasks_listed": 0
+    },
+    {
+      "app_id": "ap-k7xTQL096d7vsif6HK1jjb",
+      "listed": false,
+      "tasks_listed": 0
+    },
+    {
+      "app_id": "ap-fsAlpjXpAwTK4eku101CGT",
+      "listed": true,
+      "state": 5,
+      "running_tasks": 0,
+      "tasks_listed": 0
+    }
+  ],
+  "workspace_apps_with_running_tasks": [],
+  "volumes": [
+    {
+      "kind": "volume",
+      "name": "reader-asset-20261121-a01-volume",
+      "id": "vo-KtIYfz0ZCf5RVNpWjB6LMB",
+      "bytes": 6437603580,
+      "files": 202,
+      "checkpoint_tensor_files": 0,
+      "checkpoint_bytes": 0
+    },
+    {
+      "kind": "volume",
+      "name": "reader-asset-20261121-a02-volume",
+      "id": "vo-KtzGn1oPG8LfXOztBi04Jr",
+      "bytes": 6444280823,
+      "files": 471,
+      "checkpoint_tensor_files": 0,
+      "checkpoint_bytes": 0
+    },
+    {
+      "kind": "volume",
+      "name": "reader-asset-20261121-a03-volume",
+      "id": "vo-WFtwoXPWkiS6yOwCoFfSz8",
+      "bytes": 6452127500,
+      "files": 696,
+      "checkpoint_tensor_files": 0,
+      "checkpoint_bytes": 0
+    },
+    {
+      "kind": "volume",
+      "name": "reader-asset-20261121-a04-volume",
+      "id": "vo-1DponfTcYKI9q3oxLt3NIn",
+      "bytes": 6468612838,
+      "files": 1162,
+      "checkpoint_tensor_files": 0,
+      "checkpoint_bytes": 0
+    },
+    {
+      "kind": "volume",
+      "name": "reader-asset-20261122-a05-volume",
+      "id": "vo-WqMMuCiJaLx8qWg8NiyqGj",
+      "bytes": 0,
+      "files": 0,
+      "checkpoint_tensor_files": 0,
+      "checkpoint_bytes": 0
+    },
+    {
+      "kind": "volume",
+      "name": "reader-asset-20261122-a06-volume",
+      "id": "vo-IiG0se8E2kgzVyvte5pHAR",
+      "bytes": 6452406118,
+      "files": 594,
+      "checkpoint_tensor_files": 0,
+      "checkpoint_bytes": 0
+    },
+    {
+      "kind": "volume",
+      "name": "reader-asset-20261122-a07-volume",
+      "id": "vo-aNf9E4heLEnwhGuv6pFxDD",
+      "bytes": 125357476117,
+      "files": 1978,
+      "checkpoint_tensor_files": 11,
+      "checkpoint_bytes": 118863248277
+    }
+  ],
+  "retained_bytes": 157612506976,
+  "attributed_closed_hour_usd": 12.30982472,
+  "unattributed_workspace_rows_since_campaign_start": 0,
+  "unattributed_workspace_usd_since_campaign_start": 0,
+  "attributed_by_object": {
+    "ap-9IcoABtSJC2w9XBIYab7QG": 0.0071405,
+    "ap-90zP2nIT3wvWhQ7NBNGVDj": 0.00500003,
+    "ap-939jSnArvoP02v5LA0VlW4": 0.00618175,
+    "ap-GpTPM2HqEdXFOtbEAlzjGn": 0.00467217,
+    "ap-RmnV1X3wMhw3bDZYovJCp2": 0.00411827,
+    "ap-VtUpY3MyDL6rAQoVdwSkSX": 0.93265775,
+    "ap-Z6exDUUlaK7MsPwkd7hCh3": 1.42380481,
+    "ap-e0xC2Z8WstnI6LnyT42eM6": 0.73612825,
+    "ap-n5ALTEy6TQGVkvrJh42l1J": 0.0085663,
+    "ap-BGMPNHSYye3VIZxUsJlF9S": 0.00407114,
+    "ap-F8qe1OG36s6L7UyjtHwiOn": 0.11798561,
+    "ap-Hyx2Wvy7fmvHIoMl1QuzBV": 2.51132367,
+    "ap-ZK29JoQTxVpICBAg7T86Yl": 0.00104676,
+    "ap-G4DqftLedEiSbCOvbqFltn": 1.38284635,
+    "ap-IOCi4ZZKnkSAp2dmeBDqFD": 0.00357446,
+    "ap-PK5X9Z00GBfPu1FkgKqjuO": 0.00431944,
+    "ap-fsAlpjXpAwTK4eku101CGT": 5.14835024,
+    "ap-g9NNkEPPD7GfNkQtCFmOyq": 0.00486467,
+    "ap-k7xTQL096d7vsif6HK1jjb": 0.00317255
+  },
+  "rates": {
+    "egress_gib_cost": "0.04000",
+    "gpu_hour_cost_h100": "3.95000",
+    "cpu_hour_cost": "0.04730",
+    "cpu_hour_cost_sandbox": "0.141900",
+    "volume_storage_gib_month_cost": "0.09000"
+  },
+  "billing_caveat": "Completed-hour report; current hour and delayed/unattributed charges remain unresolved. Credits not deducted."
+}

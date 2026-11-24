@@ -1,0 +1,970 @@
+{
+  "schema": "phase3-campaign-ledger-v1",
+  "campaign": "phase3-asset-20261121",
+  "created_at": "2026-11-22T01:54:20.276472+00:00",
+  "authorized_gross_usd": 300,
+  "authorization": "Explicit user instruction for new aggregate Phase 3 campaign; reference $250 authorization closed and excluded",
+  "allocation_usd": {
+    "training_supervision": 125,
+    "builds": 30,
+    "cpu_preparation_preflight": 10,
+    "storage": 7,
+    "collection_reconciliation": 3,
+    "corrections": 125
+  },
+  "credits_assumed_usd": 0,
+  "observed_provider_charges_usd": null,
+  "known_submitted_work_usd": null,
+  "reservations": [
+    {
+      "id": "campaign-closeout-inclusive-hold",
+      "status": "terminal_work_pending_billing_and_retention",
+      "amount_usd": 40,
+      "record": ".local/phase3-live-20261121/cost-closeout.json"
+    },
+    {
+      "id": "a05-inclusive",
+      "status": "terminal_never_executed_conservative_hold",
+      "amount_usd": 1,
+      "source_commit": "484e51d9182c3fa56849661270fcd3e8c58f08ca",
+      "plan_sha256": "522a9dff6dfdfb0e6f9b115b1d03a48a0d205fff958ecce914fbd91e59684b23",
+      "purpose": "collection-only",
+      "at": "2026-11-22T06:42:42.975398+00:00",
+      "covers": "build, CPU preparation/preflight, full stage limits/supervision, recovery, collection and retention",
+      "original_amount_usd": 175,
+      "released_usd": 174,
+      "resolved_at": "2026-11-24T02:09:50.647814+00:00",
+      "evidence": {
+        "provider_reconciliation": "provider-reconciliation-20261124T020912Z.json",
+        "stop_marker": "a05/stop-owned-01.json",
+        "observed_attributed_usd": 0.00105,
+        "basis": "Prepare client was interrupted during image build before any function spawn: app layout has zero functions and zero tasks, the app is stopped, the registry has no entered/result row, the volume is empty 43 hours after the 3600-second preparation limit, and the only billing row is $0.00105 in the initialization hour. A durable stop:reader marker now prevents restart of plan 522a9dff. $1 is held against delayed build/startup billing."
+      }
+    },
+    {
+      "id": "a06-inclusive",
+      "status": "terminal_conservative_hold",
+      "amount_usd": 8,
+      "source_commit": "7f1e13d7bacb477c9e5e95a16868a2b0f2484ee6",
+      "plan_sha256": "6bb254084913ded03abc12e3a7b9f2556aa883536921e03c65f8cfe7ad794e5d",
+      "purpose": "collection-only",
+      "at": "2026-11-24T02:11:57.505170+00:00",
+      "covers": "build, CPU preparation/preflight, full stage limits/supervision, recovery, collection and retention",
+      "original_amount_usd": 70,
+      "released_usd": 62,
+      "resolved_at": "2026-11-24T02:37:09.779809+00:00",
+      "evidence": {
+        "provider_reconciliation": "provider-reconciliation-20261124T023629Z.json",
+        "terminal_calls": 5,
+        "basis": "Conservative App-lifetime bound: preparation+preflight App lifetimes about 368 s at $10/hour = $1.02; launch App lifetime about 880 s at $20/hour = $4.89; rounded up with retention of the 6.45 GB volume for seven days ($0.14), collection and delayed-billing margin to $8. Completed-hour billing for these calls was not yet available at reconciliation.",
+        "supervisor_accounted_upper_bound_usd": 4.42958179447386,
+        "observed_completed_hour_usd": 1.39074,
+        "conservative_app_lifetime_exposure_usd": 5.91
+      }
+    },
+    {
+      "id": "a07-inclusive",
+      "status": "terminal_conservative_hold",
+      "amount_usd": 25,
+      "source_commit": "7f1e13d7bacb477c9e5e95a16868a2b0f2484ee6",
+      "plan_sha256": "005ef25125787ae1a3ec099ab64c68f166682a2d15a4a5236603993ddf6f6d3a",
+      "purpose": "qualification",
+      "at": "2026-11-24T02:37:09.951414+00:00",
+      "covers": "build, CPU preparation/preflight, full stage limits/supervision, recovery, collection and retention",
+      "original_amount_usd": 175,
+      "released_usd": 150,
+      "resolved_at": "2026-11-24T04:03:55.906656+00:00",
+      "evidence": {
+        "provider_reconciliation": "provider-reconciliation-20261124T040253Z.json",
+        "terminal_calls": 9,
+        "observed_completed_hour_usd": 5.15639,
+        "basis": "Conservative App-lifetime bound $18.14 (preparation/preflight at $10/hour, launch App lifetime at $20/hour; supervisor-accounted upper bound $16.94), seven-day retention of the 116.75 GiB a07 volume $2.452, collection egress and delayed-billing margin, rounded up to $25. Observed completed-hour usage is inside this hold, not added to it."
+      }
+    }
+  ],
+  "active_calls": [],
+  "unknown_submissions": [],
+  "retained_resources": [
+    {
+      "kind": "volume",
+      "name": "reader-asset-20261121-a01-volume",
+      "id": "vo-KtIYfz0ZCf5RVNpWjB6LMB"
+    },
+    {
+      "kind": "registry",
+      "name": "reader-asset-20261121-a01-registry",
+      "id": "di-89aPaR7B9aNx1EDw4oOAlt"
+    },
+    {
+      "kind": "volume",
+      "name": "reader-asset-20261121-a02-volume",
+      "id": "vo-KtzGn1oPG8LfXOztBi04Jr"
+    },
+    {
+      "kind": "registry",
+      "name": "reader-asset-20261121-a02-registry",
+      "id": "di-1IIFqOxyn9KjM9WBGLShAb"
+    },
+    {
+      "kind": "volume",
+      "name": "reader-asset-20261121-a03-volume",
+      "id": "vo-WFtwoXPWkiS6yOwCoFfSz8"
+    },
+    {
+      "kind": "registry",
+      "name": "reader-asset-20261121-a03-registry",
+      "id": "di-D9PAc1yJElVDI86YsYounv"
+    },
+    {
+      "kind": "volume",
+      "name": "reader-asset-20261121-a04-volume",
+      "id": "vo-1DponfTcYKI9q3oxLt3NIn"
+    },
+    {
+      "kind": "registry",
+      "name": "reader-asset-20261121-a04-registry",
+      "id": "di-FXBB2Msz3kJC0BBE2pcJjH"
+    },
+    {
+      "kind": "volume",
+      "name": "reader-asset-20261122-a05-volume",
+      "id": "vo-WqMMuCiJaLx8qWg8NiyqGj"
+    },
+    {
+      "kind": "registry",
+      "name": "reader-asset-20261122-a05-registry",
+      "id": "di-J7VdQDODC8tA6idkQqcXPd"
+    },
+    {
+      "kind": "volume",
+      "name": "reader-asset-20261122-a06-volume",
+      "id": "vo-IiG0se8E2kgzVyvte5pHAR"
+    },
+    {
+      "kind": "registry",
+      "name": "reader-asset-20261122-a06-registry",
+      "id": "di-RjN1uNKfQqWUfClecsdqvt"
+    },
+    {
+      "kind": "volume",
+      "name": "reader-asset-20261122-a07-volume",
+      "id": "vo-aNf9E4heLEnwhGuv6pFxDD"
+    },
+    {
+      "kind": "registry",
+      "name": "reader-asset-20261122-a07-registry",
+      "id": "di-USeZ0zqVQU8KVFAsNtSgAE"
+    }
+  ],
+  "unreserved_balance_usd": 226,
+  "pricing": {
+    "checked_at": "2026-11-22T01:54:20.276472+00:00",
+    "source": "https://modal.com/pricing",
+    "h100_second_usd": 0.001097,
+    "cpu_core_second_usd": 1.31e-05,
+    "memory_gib_second_usd": 2.22e-06,
+    "storage_gib_month_usd": 0.09,
+    "egress_gib_usd": 0.04,
+    "execution_options": "standard functions; no region/cloud pin, premium execution, upgrade or credits assumed"
+  },
+  "retention": {
+    "max_gib": 300,
+    "days": 7,
+    "deadline": "2026-11-29T01:54:46.522052+00:00",
+    "continuation_review_deadline": "2026-12-01T03:34:30+00:00",
+    "continuation_scope": "a05-a07 volumes and registries; seven days after a07 completion. The earlier deadline continues to apply to a01-a04."
+  },
+  "events": [
+    {
+      "at": "2026-11-22T01:54:20.276472+00:00",
+      "event": "repository_and_live_PR_verified",
+      "source": "b73f3f7b4497ea553a4ebf1e47e52c81afeae070",
+      "base": "5c069f7e9cc23d03050d13360ce43e27e47e54aa",
+      "clean": true,
+      "draft": true,
+      "merged": false
+    },
+    {
+      "at": "2026-11-22T01:54:31.780203+00:00",
+      "event": "authenticated_workspace_and_existing_secret_handle_verified",
+      "workspace": "amulyasp",
+      "environment": "main",
+      "secret": "reader-reference-credentials",
+      "modal_client": "1.6.3"
+    },
+    {
+      "at": "2026-11-22T01:56:16.624119+00:00",
+      "event": "image_resolution_in_progress",
+      "app_id": "ap-9IcoABtSJC2w9XBIYab7QG",
+      "submission_receipt": ".local/phase3-live-20261121/preparation-submission.json",
+      "full_exposure_reserved": true,
+      "calendar_note": "Campaign slug retains request date 20261121; actual UTC execution timestamps are 2026-11-22."
+    },
+    {
+      "at": "2026-11-22T02:00:54.090494+00:00",
+      "event": "preparation_acknowledged",
+      "call_id": "fc-01M80FQ3QAKHHDATABC697684S",
+      "image_id": "im-YgJB9ZeIqUyuQXvUD8HQrx",
+      "client_log_tail_timeout": "Submission acknowledged in local and durable registry; not a lost submission"
+    },
+    {
+      "at": "2026-11-22T02:02:32.400685+00:00",
+      "action": "preflight",
+      "plan_sha256": "9444af0daf0536d5fa2ab6f6cea035f07e26036e1e8b43044b3b998f6ec46b69",
+      "terminal_calls": [
+        {
+          "id": "fc-01M80FQ3QAKHHDATABC697684S",
+          "status": "completed"
+        }
+      ],
+      "retained_bytes": 6435388013,
+      "attributed_closed_hour_usd": 0.00117049
+    },
+    {
+      "at": "2026-11-22T02:05:00.311982+00:00",
+      "action": "launch",
+      "plan_sha256": "9444af0daf0536d5fa2ab6f6cea035f07e26036e1e8b43044b3b998f6ec46b69",
+      "terminal_calls": [
+        {
+          "id": "fc-01M80FQ3QAKHHDATABC697684S",
+          "status": "completed"
+        },
+        {
+          "id": "fc-01M80FWCVMAK8X2EQC0BMAGZA2",
+          "status": "completed"
+        }
+      ],
+      "retained_bytes": 6435614399,
+      "attributed_closed_hour_usd": 0.00117049
+    },
+    {
+      "event": "supervisor_submission_acknowledged",
+      "call_id": "fc-01M80G13HY5V5B928YE4EVF7RN",
+      "app_id": "ap-e0xC2Z8WstnI6LnyT42eM6",
+      "image_id": "im-YgJB9ZeIqUyuQXvUD8HQrx",
+      "plan_sha256": "9444af0daf0536d5fa2ab6f6cea035f07e26036e1e8b43044b3b998f6ec46b69",
+      "at_epoch": 1795313120.723543
+    },
+    {
+      "at": "2026-11-22T02:18:30.076052+00:00",
+      "event": "a01_terminal_reconciled",
+      "hold_usd": 60,
+      "released_usd": 115,
+      "original_records_retained": true
+    },
+    {
+      "event": "a02_image_resolution",
+      "app_id": "ap-n5ALTEy6TQGVkvrJh42l1J",
+      "plan_sha256": "3619bcd6a537d1283f1e06801a936b0d902a7b162cda381686370b273f9590f6",
+      "full_exposure_reserved": true,
+      "at_epoch": 1795313947.1126204
+    },
+    {
+      "event": "a02_preparation_acknowledged",
+      "call_id": "fc-01M80H2R69E9PRPN5RYNX3QQJN",
+      "image_id": "im-buzZvebIURyGYvJVe3ed0g",
+      "at_epoch": 1795313947.1126204
+    },
+    {
+      "at": "2026-11-22T02:26:06.080077+00:00",
+      "action": "preflight",
+      "plan_sha256": "8a816f2566f1d4d02cb3df808d78029d701da8ca4bdc59385f8fa0ec1b0725c2",
+      "terminal_calls": [
+        {
+          "id": "fc-01M80H2R69E9PRPN5RYNX3QQJN",
+          "status": "completed"
+        }
+      ],
+      "retained_bytes": 6435393510,
+      "attributed_closed_hour_usd": 0.00117049
+    },
+    {
+      "event": "a02_preflight_acknowledged",
+      "call_id": "fc-01M80H7C2AT38ASTW98V2HRJ9H",
+      "image_id": "im-buzZvebIURyGYvJVe3ed0g",
+      "at_epoch": 1795314375.604807
+    },
+    {
+      "at": "2026-11-22T02:28:19.713941+00:00",
+      "action": "launch",
+      "plan_sha256": "8a816f2566f1d4d02cb3df808d78029d701da8ca4bdc59385f8fa0ec1b0725c2",
+      "terminal_calls": [
+        {
+          "id": "fc-01M80H2R69E9PRPN5RYNX3QQJN",
+          "status": "completed"
+        },
+        {
+          "id": "fc-01M80H7C2AT38ASTW98V2HRJ9H",
+          "status": "completed"
+        }
+      ],
+      "retained_bytes": 6435620463,
+      "attributed_closed_hour_usd": 0.00117049
+    },
+    {
+      "event": "a02_supervisor_acknowledged",
+      "call_id": "fc-01M80HC07CKTV2983RHG0SH1VT",
+      "app_id": "ap-VtUpY3MyDL6rAQoVdwSkSX",
+      "image_id": "im-buzZvebIURyGYvJVe3ed0g",
+      "at_epoch": 1795314527.6418138
+    },
+    {
+      "at": "2026-11-22T02:40:52.764620+00:00",
+      "event": "a02_terminal_reconciled",
+      "hold_usd": 60,
+      "released_usd": 115
+    },
+    {
+      "event": "a03_image_resolution",
+      "app_id": "ap-939jSnArvoP02v5LA0VlW4",
+      "plan_sha256": "9c21256e339c12f05f01baa007a78ae17dd02b81b3b61ff4297eda4516360498",
+      "full_exposure_reserved": true,
+      "at_epoch": 1795315292.8075905
+    },
+    {
+      "at": "2026-11-22T02:47:23.938937+00:00",
+      "action": "preflight",
+      "plan_sha256": "cad14a7b5355cb02c05ce0bb7fe54b8d6b3cb28d18d2ffa513e7a47148b6fca1",
+      "terminal_calls": [
+        {
+          "id": "fc-01M80J9W73BMV4KZRK537SVCRD",
+          "status": "completed"
+        }
+      ],
+      "retained_bytes": 6435386172,
+      "attributed_closed_hour_usd": 0.00117049
+    },
+    {
+      "event": "a03_preparation_acknowledged",
+      "call_id": "fc-01M80J9W73BMV4KZRK537SVCRD",
+      "image_id": "im-7SRnhIai3ZHWvdFWHLYw3e",
+      "at_epoch": 1795315756.9130192
+    },
+    {
+      "event": "a03_preflight_acknowledged",
+      "call_id": "fc-01M80JECN42AEVZVHQGS2J37W5",
+      "image_id": "im-7SRnhIai3ZHWvdFWHLYw3e",
+      "at_epoch": 1795315756.9130487
+    },
+    {
+      "at": "2026-11-22T02:49:35.665356+00:00",
+      "action": "launch",
+      "plan_sha256": "cad14a7b5355cb02c05ce0bb7fe54b8d6b3cb28d18d2ffa513e7a47148b6fca1",
+      "terminal_calls": [
+        {
+          "id": "fc-01M80J9W73BMV4KZRK537SVCRD",
+          "status": "completed"
+        },
+        {
+          "id": "fc-01M80JECN42AEVZVHQGS2J37W5",
+          "status": "completed"
+        }
+      ],
+      "retained_bytes": 6435613126,
+      "attributed_closed_hour_usd": 0.00117049
+    },
+    {
+      "event": "a03_supervisor_acknowledged",
+      "call_id": "fc-01M80JJF51RTYEVNQAGMQGAQ8S",
+      "app_id": "ap-Z6exDUUlaK7MsPwkd7hCh3",
+      "image_id": "im-7SRnhIai3ZHWvdFWHLYw3e",
+      "at_epoch": 1795315848.1103902
+    },
+    {
+      "at": "2026-11-22T03:05:43.887044+00:00",
+      "provider_reconciliation_file": ".local/phase3-live-20261121/provider-reconciliation-20261122T030537Z.json",
+      "prior_calls_terminal": true,
+      "prior_owned_apps_stopped": true,
+      "build_elapsed_bounds": [
+        {
+          "attempt": 1,
+          "app_id": "ap-9IcoABtSJC2w9XBIYab7QG",
+          "app_lifetime_seconds": 402.0,
+          "whole_lifetime_at_10_usd_per_hour": 1.1166666666666667,
+          "retained_build_hold_usd": 10,
+          "cache_hit_assumed": false
+        },
+        {
+          "attempt": 2,
+          "app_id": "ap-n5ALTEy6TQGVkvrJh42l1J",
+          "app_lifetime_seconds": 367.0,
+          "whole_lifetime_at_10_usd_per_hour": 1.0194444444444444,
+          "retained_build_hold_usd": 10,
+          "cache_hit_assumed": false
+        },
+        {
+          "attempt": 3,
+          "app_id": "ap-939jSnArvoP02v5LA0VlW4",
+          "app_lifetime_seconds": 305.0,
+          "whole_lifetime_at_10_usd_per_hour": 0.8472222222222223,
+          "retained_build_hold_usd": 10,
+          "cache_hit_assumed": false
+        }
+      ],
+      "prior_supervisor_conservative_usd_a03": 4.582363975710338,
+      "rates": {
+        "endpoints_zai_org_glm_5.3_flash_prompt_mtok_cost": "0.45",
+        "endpoints_qwen_qwen3.8_2.4t_a95b_completion_mtok_cost": "6.00",
+        "endpoints_zai_org_glm_5.3_reasoning_mtok_cost": "4.40",
+        "endpoints_qwen_qwen3.8_2.4t_a95b_reasoning_mtok_cost": "6.00",
+        "endpoints_deepseek_ai_deepseek_v4.1_flash_1017_prompt_mtok_cost": "0.25",
+        "endpoints_thinkingmachines_inkling_nvfp4_cached_prompt_mtok_cost": "0.27",
+        "endpoints_moonshotai_kimi_k3_reasoning_mtok_cost": "15.00",
+        "endpoints_deepseek_ai_deepseek_v4.1_flash_1017_completion_mtok_cost": "1.00",
+        "endpoints_thinkingmachines_inkling_2_small_reasoning_mtok_cost": "1.00",
+        "endpoints_nvidia_glm_5.2_nvfp4_cached_prompt_mtok_cost": "1",
+        "endpoints_deepseek_ai_deepseek_v4.1_flash_1017_eu_completion_mtok_cost": "1.50",
+        "endpoints_deepseek_ai_deepseek_v4.1_flash_1017_eu_prompt_mtok_cost": "0.375",
+        "gpu_hour_cost_t4": "0.59000",
+        "gpu_hour_cost_l4": "0.80000",
+        "gpu_hour_cost_b300": "7.10000",
+        "mem_gib_hour_cost_sandbox": "0.024000",
+        "endpoints_thinkingmachines_inkling_2_small_cached_prompt_mtok_cost": "0.03",
+        "gpu_hour_cost_a100_80gb": "2.50000",
+        "endpoints_deepseek_ai_deepseek_v4.1_flash_1017_eu_cached_prompt_mtok_cost": "0.0075",
+        "endpoints_thinkingmachines_inkling_2_small_prompt_mtok_cost": "0.30",
+        "endpoints_zai_org_glm_5.3_completion_mtok_cost": "4.40",
+        "endpoints_zai_org_glm_5.3_prompt_mtok_cost": "1.40",
+        "endpoints_nvidia_glm_5.2_nvfp4_prompt_mtok_cost": "1",
+        "endpoints_qwen_qwen3.8_2.4t_a95b_prompt_mtok_cost": "2.00",
+        "endpoints_thinkingmachines_inkling_nvfp4_prompt_mtok_cost": "1.20",
+        "endpoints_thinkingmachines_inkling_nvfp4_completion_mtok_cost": "5",
+        "egress_gib_cost": "0.04000",
+        "endpoints_nvidia_glm_5.2_nvfp4_completion_mtok_cost": "1",
+        "gpu_hour_cost_h100": "3.95000",
+        "endpoints_qwen_qwen3.8_2.4t_a95b_cached_prompt_mtok_cost": "0.25",
+        "endpoints_moonshotai_kimi_k3.1_pro_completion_mtok_cost": "10.00",
+        "cpu_hour_cost": "0.04730",
+        "gpu_hour_cost_l40s": "1.95000",
+        "gpu_hour_cost_h200": "4.54000",
+        "endpoints_zai_org_glm_5.3_flash_reasoning_mtok_cost": "1.50",
+        "mem_gib_hour_cost": "0.00800",
+        "endpoints_moonshotai_kimi_k3.1_pro_prompt_mtok_cost": "2.00",
+        "gpu_hour_cost_rtx6000": "3.03000",
+        "endpoints_thinkingmachines_inkling_nvfp4_reasoning_mtok_cost": "5",
+        "gpu_hour_cost_b200": "6.25000",
+        "endpoints_moonshotai_kimi_k3_completion_mtok_cost": "15.00",
+        "endpoints_nvidia_glm_5.2_nvfp4_reasoning_mtok_cost": "1",
+        "cpu_hour_cost_sandbox": "0.141900",
+        "endpoints_deepseek_ai_deepseek_v4.1_flash_1017_cached_prompt_mtok_cost": "0.005",
+        "endpoints_zai_org_glm_5.3_cached_prompt_mtok_cost": "0.26",
+        "endpoints_moonshotai_kimi_k3_cached_prompt_mtok_cost": "0.30",
+        "endpoints_moonshotai_kimi_k3.1_pro_cached_prompt_mtok_cost": "0.20",
+        "volume_storage_gib_month_cost": "0.09000",
+        "endpoints_moonshotai_kimi_k3_prompt_mtok_cost": "3.00",
+        "endpoints_zai_org_glm_5.3_flash_cached_prompt_mtok_cost": "0.09",
+        "endpoints_thinkingmachines_inkling_2_small_completion_mtok_cost": "1.00",
+        "endpoints_deepseek_ai_deepseek_v4.1_flash_1017_eu_reasoning_mtok_cost": "1.50",
+        "gpu_hour_cost_a100_40gb": "2.10000",
+        "endpoints_zai_org_glm_5.3_flash_completion_mtok_cost": "1.50",
+        "endpoints_deepseek_ai_deepseek_v4.1_flash_1017_reasoning_mtok_cost": "1.00",
+        "endpoints_moonshotai_kimi_k3.1_pro_reasoning_mtok_cost": "10.00",
+        "gpu_hour_cost_a10g": "1.10000"
+      },
+      "observed_partial_provider_charges_usd": 2.71022273,
+      "prior_attempts_hold_usd": 120,
+      "new_attempt_reservation_usd": 175,
+      "unreserved_balance_usd": 5,
+      "remaining_uncommitted_before_new_reservation_usd": 180,
+      "storage_gib_remaining_for_a04": 279,
+      "source_commit": "07ddf1bad56c10c6b8b4d144293aec4f911df706",
+      "plan_sha256": "02f01fb128acdcefdfb0a684685e5b38c74f0ec8103b8664ff8651df1b71e6d9",
+      "execution_options": "standard functions; no region/cloud pin or premium; one H100! GPU lane",
+      "caveat": "Conservative operating exposure, not final charges or a provider cap; no credits/cache/free allowance assumed."
+    },
+    {
+      "event": "a04_image_resolution",
+      "app_id": "ap-F8qe1OG36s6L7UyjtHwiOn",
+      "plan_sha256": "02f01fb128acdcefdfb0a684685e5b38c74f0ec8103b8664ff8651df1b71e6d9",
+      "full_exposure_reserved": true,
+      "at_epoch": 1795316789.5189261
+    },
+    {
+      "event": "a04_preparation_acknowledged",
+      "call_id": "fc-01M80KNQH880GNB60GQH2BB6MY",
+      "image_id": "im-a7M1vxet2jtMPeU7RPMawl",
+      "at_epoch": 1795317031.309131
+    },
+    {
+      "at": "2026-11-22T03:31:51.462589+00:00",
+      "action": "preflight",
+      "plan_sha256": "0947b53fdd507e12a1183a042a3f67f9701233b05052a1e01b6a3a04deae10ce",
+      "terminal_calls": [
+        {
+          "id": "fc-01M80KNQH880GNB60GQH2BB6MY",
+          "status": "completed"
+        }
+      ],
+      "retained_bytes": 6435837838,
+      "attributed_closed_hour_usd": 2.71022273
+    },
+    {
+      "event": "a04_preflight_acknowledged",
+      "call_id": "fc-01M80MZVDMAW0X098Q6N137CNY",
+      "image_id": "im-a7M1vxet2jtMPeU7RPMawl",
+      "at_epoch": 1795318417.7313945
+    },
+    {
+      "at": "2026-11-22T03:34:12.994020+00:00",
+      "action": "launch",
+      "plan_sha256": "0947b53fdd507e12a1183a042a3f67f9701233b05052a1e01b6a3a04deae10ce",
+      "terminal_calls": [
+        {
+          "id": "fc-01M80KNQH880GNB60GQH2BB6MY",
+          "status": "completed"
+        },
+        {
+          "id": "fc-01M80MZVDMAW0X098Q6N137CNY",
+          "status": "completed"
+        }
+      ],
+      "retained_bytes": 6436064790,
+      "attributed_closed_hour_usd": 2.71022273
+    },
+    {
+      "event": "a04_supervisor_acknowledged",
+      "call_id": "fc-01M80N46X1EJBJ4BNC1A5ZAK5Q",
+      "app_id": "ap-Hyx2Wvy7fmvHIoMl1QuzBV",
+      "image_id": "im-a7M1vxet2jtMPeU7RPMawl",
+      "at_epoch": 1795318526.8912044
+    },
+    {
+      "event": "a04_active_call_and_rate_reconciliation",
+      "at": "2026-11-22T03:55:36.598870+00:00",
+      "record": ".local/phase3-live-20261121/provider-reconciliation-20261122T035536Z.json",
+      "active_calls": [
+        "fc-01M80N46X1EJBJ4BNC1A5ZAK5Q",
+        "fc-01M80P50Z5XM34VEBCK8R5Z773"
+      ],
+      "observed_partial_provider_charges_usd": 2.71022273,
+      "full_reservations_retained_usd": 295
+    },
+    {
+      "event": "terminal_campaign_reconciled",
+      "at": "2026-11-22T04:04:01.753274+00:00",
+      "inclusive_hold_usd": 40,
+      "unreserved_balance_usd": 260,
+      "record": ".local/phase3-live-20261121/cost-closeout.json"
+    },
+    {
+      "at": "2026-11-22T06:42:42.975422+00:00",
+      "event": "a05_reserved",
+      "original_hold_preserved": true,
+      "prior_reconciliation": "provider-reconciliation-20261122T061343Z.json",
+      "balance": 85
+    },
+    {
+      "at": "2026-11-24T02:02:14.320040+00:00",
+      "event": "a05_interrupted_submission_discovered",
+      "detail": "Prior operator session ended during image build of the a05 prepare submission; receipt status unknown, call_id null; ledger had not recorded it. Resources and unknown submission now recorded; reservation unchanged pending provider reconciliation."
+    },
+    {
+      "at": "2026-11-24T02:09:50.647814+00:00",
+      "event": "a05_reconciled_never_executed",
+      "released_usd": 174,
+      "hold_usd": 1,
+      "balance": 259,
+      "record": "provider-reconciliation-20261124T020912Z.json",
+      "all_known_calls_terminal": 22,
+      "workspace_running_apps": 0
+    },
+    {
+      "at": "2026-11-24T02:11:57.505201+00:00",
+      "event": "a06_reserved",
+      "original_hold_preserved": true,
+      "prior_reconciliation": "provider-reconciliation-20261124T020912Z.json",
+      "balance": 189
+    },
+    {
+      "at": "2026-11-24T02:16:12.922407+00:00",
+      "attempt": 6,
+      "action": "prepare",
+      "submission": {
+        "status": "submitted",
+        "action": "prepare",
+        "plan_sha256": "6bb254084913ded03abc12e3a7b9f2556aa883536921e03c65f8cfe7ad794e5d",
+        "ownership": {
+          "workspace": "amulyasp",
+          "verified_at": 1795486335.0295346,
+          "method": "Workspace.from_context().hydrate()",
+          "environment": "main",
+          "volume_id": "vo-IiG0se8E2kgzVyvte5pHAR",
+          "registry_id": "di-RjN1uNKfQqWUfClecsdqvt",
+          "volume_backend_version": 1
+        },
+        "time": 1795486336.4138806,
+        "call_id": "fc-01M85NDDE44AHPQ583JPGZY7Q7",
+        "automatic_retry": false,
+        "image_id": "im-UTGiucVTEF7MLNN45fV1Yh",
+        "app_id": "ap-IOCi4ZZKnkSAp2dmeBDqFD"
+      }
+    },
+    {
+      "at": "2026-11-24T02:17:46.695284+00:00",
+      "attempt": 6,
+      "action": "preflight",
+      "submission": {
+        "status": "submitted",
+        "action": "preflight",
+        "plan_sha256": "6c1e259e171e9eebfa32fb438dd80f5d685b04e91e51a9c7f8c419e255c94449",
+        "ownership": {
+          "workspace": "amulyasp",
+          "verified_at": 1795486628.9916668,
+          "method": "Workspace.from_context().hydrate()",
+          "environment": "main",
+          "volume_id": "vo-IiG0se8E2kgzVyvte5pHAR",
+          "registry_id": "di-RjN1uNKfQqWUfClecsdqvt",
+          "volume_backend_version": 1
+        },
+        "time": 1795486629.8024619,
+        "call_id": "fc-01M85NG911SGKKJXR55J3EAQQ2",
+        "automatic_retry": false,
+        "image_id": "im-UTGiucVTEF7MLNN45fV1Yh",
+        "app_id": "ap-PK5X9Z00GBfPu1FkgKqjuO"
+      }
+    },
+    {
+      "at": "2026-11-24T02:19:22.070119+00:00",
+      "attempt": 6,
+      "action": "launch",
+      "submission": {
+        "status": "submitted",
+        "action": "launch",
+        "plan_sha256": "6c1e259e171e9eebfa32fb438dd80f5d685b04e91e51a9c7f8c419e255c94449",
+        "ownership": {
+          "workspace": "amulyasp",
+          "verified_at": 1795486721.186022,
+          "method": "Workspace.from_context().hydrate()",
+          "environment": "main",
+          "volume_id": "vo-IiG0se8E2kgzVyvte5pHAR",
+          "registry_id": "di-RjN1uNKfQqWUfClecsdqvt",
+          "volume_backend_version": 1
+        },
+        "time": 1795486724.2351596,
+        "call_id": "fc-01M85NK5YXAAWR7AH4PNPPGSSH",
+        "automatic_retry": false,
+        "image_id": "im-UTGiucVTEF7MLNN45fV1Yh",
+        "app_id": "ap-G4DqftLedEiSbCOvbqFltn"
+      }
+    },
+    {
+      "at": "2026-11-24T02:36:29.161434+00:00",
+      "event": "a06_resources_recorded",
+      "volume_id": "vo-IiG0se8E2kgzVyvte5pHAR",
+      "registry_id": "di-RjN1uNKfQqWUfClecsdqvt"
+    },
+    {
+      "at": "2026-11-24T02:37:09.779809+00:00",
+      "event": "a06_terminal_reconciled",
+      "hold_usd": 8,
+      "released_usd": 62,
+      "balance": 251,
+      "record": "provider-reconciliation-20261124T023629Z.json",
+      "all_known_calls_terminal": 27,
+      "development_accepted": true
+    },
+    {
+      "at": "2026-11-24T02:37:09.951438+00:00",
+      "event": "a07_reserved",
+      "original_hold_preserved": true,
+      "prior_reconciliation": "provider-reconciliation-20261124T023629Z.json",
+      "balance": 76
+    },
+    {
+      "at": "2026-11-24T02:38:38.637606+00:00",
+      "attempt": 7,
+      "action": "prepare",
+      "submission": {
+        "status": "submitted",
+        "action": "prepare",
+        "plan_sha256": "005ef25125787ae1a3ec099ab64c68f166682a2d15a4a5236603993ddf6f6d3a",
+        "ownership": {
+          "workspace": "amulyasp",
+          "verified_at": 1795487842.6680884,
+          "method": "Workspace.from_context().hydrate()",
+          "environment": "main",
+          "volume_id": "vo-aNf9E4heLEnwhGuv6pFxDD",
+          "registry_id": "di-USeZ0zqVQU8KVFAsNtSgAE",
+          "volume_backend_version": 1
+        },
+        "time": 1795487843.5635896,
+        "call_id": "fc-01M85PPFK94TCG12T2G27KSFDA",
+        "automatic_retry": false,
+        "image_id": "im-q55YWEYSIoAOgQzw37h4f3",
+        "app_id": "ap-g9NNkEPPD7GfNkQtCFmOyq"
+      }
+    },
+    {
+      "at": "2026-11-24T02:40:29.664228+00:00",
+      "attempt": 7,
+      "action": "preflight",
+      "submission": {
+        "status": "submitted",
+        "action": "preflight",
+        "plan_sha256": "2a9b1cc811421c6eca122e344e1cc3a60cd210a3776603c7b8c9a4bd2d44bf21",
+        "ownership": {
+          "workspace": "amulyasp",
+          "verified_at": 1795487994.0850148,
+          "method": "Workspace.from_context().hydrate()",
+          "environment": "main",
+          "volume_id": "vo-aNf9E4heLEnwhGuv6pFxDD",
+          "registry_id": "di-USeZ0zqVQU8KVFAsNtSgAE",
+          "volume_backend_version": 1
+        },
+        "time": 1795487994.835999,
+        "call_id": "fc-01M85PSW1ZRT030CAF8EM48T80",
+        "automatic_retry": false,
+        "image_id": "im-q55YWEYSIoAOgQzw37h4f3",
+        "app_id": "ap-k7xTQL096d7vsif6HK1jjb"
+      }
+    },
+    {
+      "at": "2026-11-24T02:41:49.106523+00:00",
+      "attempt": 7,
+      "action": "launch",
+      "submission": {
+        "status": "submitted",
+        "action": "launch",
+        "plan_sha256": "2a9b1cc811421c6eca122e344e1cc3a60cd210a3776603c7b8c9a4bd2d44bf21",
+        "ownership": {
+          "workspace": "amulyasp",
+          "verified_at": 1795488072.0943153,
+          "method": "Workspace.from_context().hydrate()",
+          "environment": "main",
+          "volume_id": "vo-aNf9E4heLEnwhGuv6pFxDD",
+          "registry_id": "di-USeZ0zqVQU8KVFAsNtSgAE",
+          "volume_backend_version": 1
+        },
+        "time": 1795488074.153423,
+        "call_id": "fc-01M85PW9JMA4EDMR3JWJSYH7YF",
+        "automatic_retry": false,
+        "image_id": "im-q55YWEYSIoAOgQzw37h4f3",
+        "app_id": "ap-fsAlpjXpAwTK4eku101CGT"
+      }
+    },
+    {
+      "at": "2026-11-24T03:45:16.301753+00:00",
+      "event": "a07_resources_recorded",
+      "volume_id": "vo-aNf9E4heLEnwhGuv6pFxDD",
+      "registry_id": "di-USeZ0zqVQU8KVFAsNtSgAE",
+      "supervisor_index_status": "completed"
+    },
+    {
+      "at": "2026-11-24T04:03:55.906656+00:00",
+      "event": "a07_terminal_reconciled_campaign_closeout",
+      "hold_usd": 25,
+      "released_usd": 150,
+      "balance": 226,
+      "record": "provider-reconciliation-20261124T040253Z.json",
+      "all_known_calls_terminal": 36,
+      "workspace_running_apps": 0,
+      "observed_completed_hour_total_usd": 12.30982472,
+      "six_stage_qualification": "completed"
+    },
+    {
+      "at": "2026-11-24T05:28:15.625362+00:00",
+      "event": "campaign_execution_closed",
+      "record": "provider-reconciliation-20261124T052307Z.json",
+      "all_known_calls_terminal": 36,
+      "workspace_running_apps": 0,
+      "observed_completed_hour_total_usd": 12.30982472,
+      "balance": 226,
+      "note": "Owner closed the experimental milestone. No reservation changed. Unreserved balance is unused authorization, not a budget for further runs."
+    }
+  ],
+  "limitations": [
+    "Reservations are conservative operating controls, not a provider spending cap.",
+    "Provider charges and build/startup overhead require reconciliation; zero submitted work is distinct from observed zero billing."
+  ],
+  "owned_apps": [
+    "ap-9IcoABtSJC2w9XBIYab7QG",
+    "ap-GpTPM2HqEdXFOtbEAlzjGn",
+    "ap-e0xC2Z8WstnI6LnyT42eM6",
+    "ap-n5ALTEy6TQGVkvrJh42l1J",
+    "ap-90zP2nIT3wvWhQ7NBNGVDj",
+    "ap-VtUpY3MyDL6rAQoVdwSkSX",
+    "ap-939jSnArvoP02v5LA0VlW4",
+    "ap-RmnV1X3wMhw3bDZYovJCp2",
+    "ap-Z6exDUUlaK7MsPwkd7hCh3",
+    "ap-F8qe1OG36s6L7UyjtHwiOn",
+    "ap-BGMPNHSYye3VIZxUsJlF9S",
+    "ap-Hyx2Wvy7fmvHIoMl1QuzBV",
+    "ap-ZK29JoQTxVpICBAg7T86Yl",
+    "ap-IOCi4ZZKnkSAp2dmeBDqFD",
+    "ap-PK5X9Z00GBfPu1FkgKqjuO",
+    "ap-G4DqftLedEiSbCOvbqFltn",
+    "ap-g9NNkEPPD7GfNkQtCFmOyq",
+    "ap-k7xTQL096d7vsif6HK1jjb",
+    "ap-fsAlpjXpAwTK4eku101CGT"
+  ],
+  "observed_provider_partial_charges_usd": 12.30982472,
+  "retained_bytes": 157612506976,
+  "reservation_history_before_closeout": [
+    {
+      "id": "a01-initial",
+      "status": "completed_attempt_conservative_hold",
+      "amount_usd": 40,
+      "plan_sha256": "0ee63d537f24df652799618cd3f57fcd09ca097952d46e08a5b22ced34a5b7ab",
+      "source_commit": "b73f3f7b4497ea553a4ebf1e47e52c81afeae070",
+      "at": "2026-11-22T01:54:31.780203+00:00",
+      "training_plan_sha256": "9444af0daf0536d5fa2ab6f6cea035f07e26036e1e8b43044b3b998f6ec46b69",
+      "original_amount_usd": 175,
+      "released_usd": 115,
+      "terminal_calls": [
+        {
+          "id": "fc-01M80FWCVMAK8X2EQC0BMAGZA2",
+          "status": "completed"
+        },
+        {
+          "id": "fc-01M80G13HY5V5B928YE4EVF7RN",
+          "status": "provider_cancelled"
+        },
+        {
+          "id": "fc-01M80G1D8F9JTC026TAM6VNZGN",
+          "status": "failed",
+          "error_type": "RuntimeError"
+        },
+        {
+          "id": "fc-01M80GEDFW1QH2HH5K98GZJ8YD",
+          "status": "provider_cancelled"
+        }
+      ],
+      "original_categories_usd": {
+        "training_supervision": 125,
+        "builds": 30,
+        "cpu_preparation_preflight": 10,
+        "storage": 7,
+        "collection_reconciliation": 3
+      },
+      "categories_usd": {
+        "builds": 10,
+        "cpu_preparation_preflight": 10,
+        "storage": 7,
+        "collection": 3,
+        "training_supervision": 10
+      },
+      "reservation_history": [
+        {
+          "at": "2026-11-22T03:05:43.887044+00:00",
+          "previous_amount_usd": 60,
+          "previous_categories_usd": {
+            "training_supervision": 10,
+            "builds": 30,
+            "cpu_preparation_preflight": 10,
+            "storage": 7,
+            "collection_reconciliation": 3
+          },
+          "reason": "Terminal provider calls and stopped Apps reconciled; elapsed build exposure bounded, conservative holds retained."
+        }
+      ]
+    },
+    {
+      "id": "a02-retry",
+      "status": "completed_attempt_conservative_hold",
+      "amount_usd": 40,
+      "plan_sha256": "3619bcd6a537d1283f1e06801a936b0d902a7b162cda381686370b273f9590f6",
+      "source_commit": "de867130ff35afb287d6bf11f83a33f4951014bb",
+      "profile": ".local/phase3-live-20261121/a02/profile.json",
+      "at": "2026-11-22T02:18:54.963454+00:00",
+      "includes": "30 builds + 10 CPU + 125 training/supervision + 7 storage + 3 collection; no credits",
+      "training_plan_sha256": "8a816f2566f1d4d02cb3df808d78029d701da8ca4bdc59385f8fa0ec1b0725c2",
+      "original_amount_usd": 175,
+      "released_usd": 115,
+      "terminal_calls": [
+        {
+          "id": "fc-01M80H7C2AT38ASTW98V2HRJ9H",
+          "status": "completed"
+        },
+        {
+          "id": "fc-01M80HC07CKTV2983RHG0SH1VT",
+          "status": "provider_cancelled"
+        },
+        {
+          "id": "fc-01M80HC6M1R2DP69DSC07CN9HP",
+          "status": "failed"
+        },
+        {
+          "id": "fc-01M80HRVX9HVK590EEB3FR452W",
+          "status": "provider_cancelled"
+        }
+      ],
+      "categories_usd": {
+        "builds": 10,
+        "cpu_preparation_preflight": 10,
+        "storage": 7,
+        "collection": 3,
+        "training_supervision": 10
+      },
+      "reservation_history": [
+        {
+          "at": "2026-11-22T03:05:43.887044+00:00",
+          "previous_amount_usd": 60,
+          "previous_categories_usd": {
+            "builds": 30,
+            "cpu": 10,
+            "storage": 7,
+            "collection": 3,
+            "training_supervision": 10
+          },
+          "reason": "Terminal provider calls and stopped Apps reconciled; elapsed build exposure bounded, conservative holds retained."
+        }
+      ]
+    },
+    {
+      "id": "a03-retry",
+      "status": "completed_attempt_conservative_hold",
+      "amount_usd": 40,
+      "plan_sha256": "9c21256e339c12f05f01baa007a78ae17dd02b81b3b61ff4297eda4516360498",
+      "source_commit": "e00dc14bb9777dd644b8384be3f18b97c69b972c",
+      "profile": ".local/phase3-live-20261121/a03/profile.json",
+      "at": "2026-11-22T02:41:20.581176+00:00",
+      "categories_usd": {
+        "builds": 10,
+        "cpu_preparation_preflight": 10,
+        "storage": 7,
+        "collection": 3,
+        "training_supervision": 10
+      },
+      "training_plan_sha256": "cad14a7b5355cb02c05ce0bb7fe54b8d6b3cb28d18d2ffa513e7a47148b6fca1",
+      "reservation_history": [
+        {
+          "at": "2026-11-22T03:05:43.887044+00:00",
+          "previous_amount_usd": 175,
+          "previous_categories_usd": {
+            "builds": 30,
+            "cpu": 10,
+            "training_supervision": 125,
+            "storage": 7,
+            "collection": 3
+          },
+          "reason": "Terminal provider calls and stopped Apps reconciled; elapsed build exposure bounded, conservative holds retained."
+        }
+      ]
+    },
+    {
+      "id": "a04-retry",
+      "status": "reserved",
+      "amount_usd": 175,
+      "plan_sha256": "02f01fb128acdcefdfb0a684685e5b38c74f0ec8103b8664ff8651df1b71e6d9",
+      "source_commit": "07ddf1bad56c10c6b8b4d144293aec4f911df706",
+      "profile": ".local/phase3-live-20261121/a04/profile.json",
+      "at": "2026-11-22T03:05:43.887044+00:00",
+      "categories_usd": {
+        "builds": 30,
+        "cpu_preparation_preflight": 10,
+        "storage": 7,
+        "collection": 3,
+        "training_supervision": 125
+      },
+      "training_plan_sha256": "0947b53fdd507e12a1183a042a3f67f9701233b05052a1e01b6a3a04deae10ce"
+    }
+  ],
+  "resolved_unknown_submissions": [
+    {
+      "file": ".local/phase3-live-20261121/a05/prepare-submission.json",
+      "resolution": "never executed; stopped; not retried",
+      "at": "2026-11-24T02:09:50.647814+00:00"
+    }
+  ],
+  "execution_status": "closed"
+}

@@ -12,7 +12,7 @@ This directory was published by a later documentation commit.
 - `identities.json`: planned and executed commits, canonical plan, source,
   configuration, task, environment and data hashes, and the episode policy.
 - `a05/reconciliation.json`: the earlier session's interrupted, never-executed
-  submission, the provider findings and its durable stop.
+  submission, the provider findings and its stop marker.
 - `a06`: the collection-only development run. `development-acceptance.json` holds
   the declared panel, seeds, bounds and reviewed results. It is not qualification
   evidence.
@@ -35,6 +35,13 @@ This directory was published by a later documentation commit.
   the US$12.31 observed; it is not additional spending.
 - `retained-resources.json`: owned volumes, registries and apps, with the two
   retention review deadlines. No deletion has been scheduled or performed.
+- `closeout`: the later [closeout](../../docs/PHASE3_CLOSEOUT_2026-11-24.md)
+  records. `preservation-inventory.json` lists local and remote evidence
+  locations, checkpoint inventories and backup status.
+  `provider-reconciliation-final.json` is the last read-only provider query,
+  `campaign-closeout.json` separates observed charges, unresolved billing,
+  continuing storage and unused authorization, and `spending-ledger-final.json`
+  is the ledger with execution recorded as closed.
 
 Raw traces, prompts with observations, runtime requests and configuration
 contents, model weights and checkpoint tensors are not published.
