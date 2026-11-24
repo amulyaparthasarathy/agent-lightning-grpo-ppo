@@ -143,6 +143,17 @@ and unknown-tool observations are recognized only with the matching sampled call
 An arbitrary MCP error, parser exception or backend failure is insufficient evidence
 of a policy mistake and remains incomplete.
 
+One sampled action cannot reach the server at all: valid JSON arguments that are
+not an object, such as `"asset-047"` or `["asset-047"]`. MCP `tools/call` carries
+only an object. The MCP client rejects truthy non-objects with a message that
+depends on the installed library version, and AutoGen replaces falsy ones with
+`{}`. The asset harness therefore returns the typed `non_object_arguments` error
+for exactly this case, without contacting the server or rewriting the action, and
+classifies it only when the retained sampled arguments really are a non-object.
+The call, error count and observation are recorded like any other tool call.
+`episode_policy.policy_error_codes` lists every recognized code. The remote
+preflight probe checks the exact typed error payloads in the training image.
+
 After an invalid call the model can correct it. A complete final answer after
 recovery receives the same strict independent zero-or-one reward. After two
 observed invalid actions, the environment records `policy_error_limit` termination

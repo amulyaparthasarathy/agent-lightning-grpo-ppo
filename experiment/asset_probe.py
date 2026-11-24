@@ -25,14 +25,14 @@ async def probe():
         tools = await workbench.list_tools()
         if len(tools) != 1 or tools[0]['name'] != 'lookup_asset' or tools[0]['parameters'] != task.TOOL_SCHEMA:
             raise ValueError('MCP schema differs')
-        for args, error in (({'asset_id': 'asset-047'}, False), ({}, True),
-                            ({'asset_id': 47}, True), ({'asset_id': 'asset-047', 'extra': 1}, True),
-                            ({'asset_id': '../047'}, True), ({'asset_id': 'asset-999'}, True)):
+        for args, code in (({'asset_id': 'asset-047'}, None), ({}, 'invalid_arguments'),
+                           ({'asset_id': 47}, 'invalid_arguments'), ({'asset_id': 'asset-047', 'extra': 1}, 'invalid_arguments'),
+                           ({'asset_id': '../047'}, 'invalid_asset_id'), ({'asset_id': 'asset-999'}, 'unknown_asset')):
             result = await workbench.call_tool('lookup_asset', args)
-            valid = result.is_error == error
-            if not error:
-                valid = valid and json.loads(result.to_text()) == task.lookup(args)
-            checks.append({'arguments': args, 'expected_error': error, 'valid': valid})
+            error = code is not None
+            # The episode policy depends on the exact typed error in this runtime's MCP version.
+            valid = result.is_error == error and json.loads(result.to_text()) == (task.policy_error(code) if error else task.lookup(args))
+            checks.append({'arguments': args, 'expected_error': error, 'expected_code': code, 'valid': valid})
     return {'schema': 'asset-local-probe-v1', 'task': task.TASK, 'environment_sha256': task.digest(task.environment()),
             'transport': 'real stdio MCP', 'checks': checks, 'status': 'passed' if all(c['valid'] for c in checks) else 'failed',
             'workbench_context_exited': True, 'model_inference': 'not executed', 'live_qualification': False}

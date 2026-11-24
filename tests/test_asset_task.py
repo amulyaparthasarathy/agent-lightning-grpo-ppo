@@ -105,10 +105,21 @@ class RealHarnessTests(unittest.TestCase):
                 self.assertEqual(len(reader_integration.chains(result['records'], self.request(), evidence_class='scripted-inference')), 2)
 
     def test_recovery_and_explicit_terminal_failure(self):
-        for mode in ('recover', 'malformed-recover', 'unknown-recover', 'policy-limit'):
+        for mode in ('recover', 'malformed-recover', 'unknown-recover', 'string-arguments-recover',
+                     'list-arguments-recover', 'null-arguments-recover', 'policy-limit'):
             with self.subTest(mode=mode), tempfile.TemporaryDirectory() as tmp:
                 req = self.request(); result = run_case(tmp, mode=mode, request=req)
                 self.assertIsNone(result['error'])
+                if mode.endswith('-arguments-recover'):
+                    # The sampled action is retained unchanged; the typed error is an observation.
+                    first = next(r for r in result['records'] if r['kind'] == 'action_outcome')
+                    self.assertNotIsInstance(json.loads(first['inputs']['call']['arguments']), dict)
+                    self.assertEqual(first['outputs']['policy_error'], 'non_object_arguments')
+                    self.assertEqual(json.loads(first['inputs']['observation']['content']), task.policy_error('non_object_arguments'))
+                    tools = [r for r in result['records'] if r['kind'] == 'tool']
+                    self.assertEqual([t['execution_status'] for t in tools], ['tool_reported_error', 'ok'])
+                    self.assertEqual(next(r for r in result['records'] if r['kind'] == 'episode')['outputs']['tool_errors'], 1)
+                    self.assertEqual(result['inputs'][1][-1]['content'][0]['content'], first['inputs']['observation']['content'])
                 terminal = mode == 'policy-limit'
                 self.assertEqual(result['posts'], [{'event_type': 'reward', 'data': {'value': 0 if terminal else 1}}])
                 episode = next(r for r in result['records'] if r['kind'] == 'episode')['outputs']

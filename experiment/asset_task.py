@@ -13,7 +13,10 @@ TASK = 'asset-status-v1'
 EPISODE_POLICY = {'version': 'asset-episode-v2', 'max_tool_iterations': 2,
                   'policy_error_limit': 2, 'final_generation': 'context-json-reminder-v1',
                   'recovered_final': 'strict-verifier', 'policy_limit': 'terminal-zero',
-                  'infrastructure_or_missing_evidence': 'incomplete-no-reward'}
+                  'infrastructure_or_missing_evidence': 'incomplete-no-reward',
+                  # Typed server/harness codes plus the two exact AutoGen 0.7.5 branches.
+                  'policy_error_codes': ['invalid_arguments', 'invalid_asset_id', 'unknown_asset',
+                                         'non_object_arguments', 'invalid_argument_json', 'unknown_tool']}
 SEED = 'asset-status-v1/2026-11-20/329'
 SERVICE = ('operational', 'degraded', 'offline')
 BACKUP = ('healthy', 'stale', 'failed')
@@ -51,6 +54,15 @@ def registry():
 
 class PolicyActionError(ValueError):
     """Only explicit model input validation failures; never transport/server errors."""
+
+
+POLICY_ERROR_CODES = tuple(EPISODE_POLICY['policy_error_codes'][:4])
+
+
+def policy_error(code):
+    """Typed model-visible error observation; shared by the server and harness."""
+    return {'error_type': 'asset_policy_action_v2', 'code': code,
+            'instruction': 'Call lookup_asset with exactly one string argument: asset_id.'}
 
 
 def lookup(arguments):

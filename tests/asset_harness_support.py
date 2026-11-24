@@ -65,7 +65,8 @@ def run_case(root, final=None, mode='normal', request=None):
                 raise ConnectionError('test-only model transport failure after tool')
             if mode.startswith('missing'):
                 return CreateResult(content='', finish_reason='stop', usage=RequestUsage(prompt_tokens=0, completion_tokens=0), cached=False)
-        two_calls = mode in ('two-tools', 'recover', 'policy-limit', 'malformed-recover', 'unknown-recover', 'infrastructure-after-tool') or mode.endswith('-reflection')
+        two_calls = mode in ('two-tools', 'recover', 'policy-limit', 'malformed-recover', 'unknown-recover', 'string-arguments-recover',
+                             'list-arguments-recover', 'null-arguments-recover', 'infrastructure-after-tool') or mode.endswith('-reflection')
         if step == 1 or (two_calls and step == 2):
             arguments = task.dumps({'asset_id': aid})
             name = 'lookup_asset'
@@ -75,6 +76,9 @@ def run_case(root, final=None, mode='normal', request=None):
                 arguments = '{'
             if mode == 'unknown-recover' and step == 1:
                 name = 'missing_tool'
+            if mode.endswith('-arguments-recover') and step == 1:
+                # Valid JSON that is not an object: MCP tools/call cannot carry it.
+                arguments = {'string': json.dumps(aid), 'list': json.dumps([aid]), 'null': 'null'}[mode.split('-')[0]]
             return CreateResult(content=[FunctionCall(id=f'scripted-call-{step}', name=name, arguments=arguments)],
                                 finish_reason='length' if mode == 'truncated-action' else 'function_calls', usage=RequestUsage(prompt_tokens=0, completion_tokens=0), cached=False)
         answer = task.dumps({**truth, 'service_state': next(x for x in task.SERVICE if x != truth['service_state'])}) if mode == 'corrupt-observation' else final

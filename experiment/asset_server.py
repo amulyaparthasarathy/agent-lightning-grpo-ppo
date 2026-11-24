@@ -3,11 +3,11 @@ import asyncio
 import json
 from mcp.server import Server
 from mcp.server.stdio import stdio_server
-from mcp.types import Tool, TextContent, CallToolResult
+from mcp.types import Tool, TextContent
 try:
-    from .asset_task import TOOL_SCHEMA, lookup, dumps, PolicyActionError
+    from .asset_task import TOOL_SCHEMA, lookup, dumps, policy_error, PolicyActionError
 except ImportError:
-    from asset_task import TOOL_SCHEMA, lookup, dumps, PolicyActionError
+    from asset_task import TOOL_SCHEMA, lookup, dumps, policy_error, PolicyActionError
 
 server = Server('asset-status-v1')
 
@@ -26,9 +26,9 @@ async def call_tool(name, arguments):
         # Explicit validation also enforces no extra arguments (no coercion).
         return [TextContent(type='text', text=dumps(lookup(arguments)))]
     except PolicyActionError as exc:
-        return CallToolResult(isError=True, content=[TextContent(type='text', text=dumps({
-            'error_type': 'asset_policy_action_v2', 'code': str(exc),
-            'instruction': 'Call lookup_asset with exactly one string argument: asset_id.'}))])
+        # MCP reports a raised tool exception as isError with exactly this text. That
+        # conversion is the one observed live with the remote MCP version in a04.
+        raise ValueError(dumps(policy_error(str(exc)))) from None
 
 
 async def main():

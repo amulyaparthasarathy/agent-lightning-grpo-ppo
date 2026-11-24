@@ -8,7 +8,8 @@ import httpx
 from autogen_agentchat.agents import AssistantAgent
 from autogen_agentchat.messages import TextMessage
 from autogen_core.models import ModelFamily, UserMessage
-from autogen_ext.tools.mcp import StdioServerParams
+from autogen_core.tools import TextResultContent, ToolResult
+from autogen_ext.tools.mcp import McpWorkbench, StdioServerParams
 try:
     from . import asset_task as task
     from .observed_runtime import Recorder, ObservedClient, ObservedWorkbench
@@ -39,6 +40,26 @@ FINAL_INSTRUCTION = (
 
 class PolicyLimitReached(Exception):
     """Declared environment termination after two observed invalid actions."""
+
+
+class ObjectArguments(McpWorkbench):
+    """MCP tools/call can only carry an object (or nothing) as arguments.
+
+    A sampled non-object such as "asset-120" or ["asset-120"] cannot be sent: the
+    MCP client rejects truthy values with a library-version-specific message, and
+    AutoGen silently replaces falsy ones with {}. Return the typed policy error
+    instead, without contacting the server and without altering the action. The
+    recording workbench above still records the call, its error and its count.
+    """
+    async def call_tool(self, name, arguments=None, cancellation_token=None, call_id=None):
+        if name == 'lookup_asset' and not isinstance(arguments, dict):
+            return ToolResult(name=name, is_error=True, result=[TextResultContent(
+                content=task.dumps(task.policy_error('non_object_arguments')))])
+        return await super().call_tool(name, arguments, cancellation_token, call_id)
+
+
+class AssetWorkbench(ObservedWorkbench, ObjectArguments):
+    """ObservedWorkbench.call_tool records, then delegates to ObjectArguments."""
 
 
 class AssetClient(ObservedClient):
@@ -78,15 +99,20 @@ class AssetClient(ObservedClient):
                         error = json.loads(observation.content)
                     except (ValueError, TypeError):
                         error = None
-                    if (isinstance(error, dict) and error.get('error_type') == 'asset_policy_action_v2'
-                            and error.get('code') in ('invalid_arguments', 'invalid_asset_id', 'unknown_asset')):
+                    if (isinstance(error, dict) and error == task.policy_error(error.get('code'))
+                            and error['code'] in task.POLICY_ERROR_CODES):
                         # Verify that the action itself fails the declared input
                         # validation with the same code, not just an error string.
-                        try:
-                            task.lookup(json.loads(call.arguments))
-                        except task.PolicyActionError as exc:
-                            if str(exc) == error['code']:
-                                code = str(exc)
+                        sampled = json.loads(call.arguments)
+                        if error['code'] == 'non_object_arguments':
+                            if call.name == 'lookup_asset' and not isinstance(sampled, dict):
+                                code = error['code']
+                        elif isinstance(sampled, dict):
+                            try:
+                                task.lookup(sampled)
+                            except task.PolicyActionError as exc:
+                                if str(exc) == error['code']:
+                                    code = str(exc)
                 if code is None:
                     raise RuntimeError('Unclassified tool failure; terminal reward forbidden')
                 self.policy_errors += 1
@@ -152,7 +178,7 @@ class Agent:
         client = None
         try:
             with r.stage('episode', task.TASK, {'question': question}, lambda: None) as (record, _):
-                async with ObservedWorkbench(server_params(), recorder=r) as workbench:
+                async with AssetWorkbench(server_params(), recorder=r) as workbench:
                     client = AssetClient(recorder=r, model='auto', base_url=os.environ['AGL_OPENAI_BASE_URL'], api_key=key,
                         model_info={'vision': False, 'function_calling': True, 'json_output': False,
                                     'family': ModelFamily.UNKNOWN, 'structured_output': False},
