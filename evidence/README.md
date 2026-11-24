@@ -1,5 +1,7 @@
 # Evidence to retain
 
+**Phase 4A offline verification, November 24, 2026:** [`phase4a-offline-20261124/`](phase4a-offline-20261124/README.md) holds prompt-budget measurements, a replay of recorded prompt token counts, candidate plan identities and a scripted calibration report. It contains no live model result; see the [verification report](../docs/PHASE4A_VERIFICATION.md).
+
 **Completed Phase 2 r03, November 15, 2026:** [closeout](../docs/PHASE2_CLOSEOUT_2026-11-15.md), [selected evidence index](phase2-r03/EVIDENCE_INDEX.md), [six-run CSV](phase2-r03/per_seed_results.csv), and [publication manifest](phase2-r03/manifest.json). Run `python3 scripts/check_phase2_results.py` from the repository root for offline arithmetic/hash checks. All six study seeds/arms are retained; qualification and prior failures are separate. The older records below remain history, with their original source and retention scopes.
 
 The completed `preserve-20261114-01` workflow has a [closeout report](../docs/PRESERVATION_CLOSEOUT_2026-11-14.md) and [machine-readable revision/identity index](preservation-closeout-2026-11-14.json). These add original/replication backup, conversion, publication and independent retrieval evidence without replacing the historical experiment records.

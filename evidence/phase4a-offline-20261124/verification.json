@@ -1,0 +1,79 @@
+{
+  "schema": "phase4a-offline-verification-v1",
+  "date": "2026-11-24",
+  "evidence_class": "local CPU test execution; no model inference",
+  "base": {
+    "ref": "main",
+    "commit": "daed9a51cc14892c3521cbb0b449fb2c7bd0db6f"
+  },
+  "tested_commit": "664a5a45e6648b298449c7a2a70c205ee683de39",
+  "tree_clean_when_tested": true,
+  "gates": {
+    "scripts/test_task_local.sh": {
+      "environment": "locked reader-harness group (.venv-reader-cpu)",
+      "tests_on_base": 26,
+      "tests_on_tested_commit": 79,
+      "result": "OK",
+      "skipped": 0
+    },
+    "scripts/test_reader_offline.sh": {
+      "environment": "uv project environment, offline",
+      "runs": [
+        {
+          "suite": "test_ppo_mc",
+          "tests_on_base": 39,
+          "tests_on_tested_commit": 39,
+          "result": "OK"
+        },
+        {
+          "suite": "test_matched_study",
+          "tests_on_base": 15,
+          "tests_on_tested_commit": 15,
+          "result": "OK"
+        },
+        {
+          "suite": "reader suites",
+          "tests_on_base": 86,
+          "tests_on_tested_commit": 126,
+          "result": "OK"
+        }
+      ],
+      "skipped": 0,
+      "also": "cpu_accounting_demo.py and check_phase2_results.py passed"
+    },
+    "scripts/test_matched_training.sh": {
+      "environment": "cached CPU PyTorch 2.11.0 and hash-verified pinned sources",
+      "tests_on_base": 63,
+      "tests_on_tested_commit": 68,
+      "pinned_config_subprocess_tests_on_base": 6,
+      "pinned_config_subprocess_tests_on_tested_commit": 7,
+      "result": "OK",
+      "skipped": 0
+    }
+  },
+  "new_suites": {
+    "test_recovery_task": 18,
+    "test_recovery_harness": 13,
+    "test_recovery_calibration": 22,
+    "test_matched_recovery_calibration": 5,
+    "pinned_config_checks.test_recovery_calibration_two_algorithms_four_stages_composed": 1
+  },
+  "regression_digests": {
+    "basis": "reader_contract.make_plan and matched_launch.make_plan for a fixed source identity; equal on base and tested commit",
+    "calculator_plan": "02bfbcbe4e51d4ef2df2f62c0492fb0e2066166e0faa2c1d1fabfacc37019f5e",
+    "asset_plan": "c0ca5fe76df1343c64f544c8a33f7a12feb9ff12f18dddbdcefa57d9e900ee04",
+    "asset_collection_only_plan": "9a74ec6365053f783500652b5c273c72efd1c95f7c906b89be660aae246c7eab",
+    "fourteen_launch_configurations": "bc1b83a6417b1faeaea5fb60a84faf67efbf3fc6e70b561bbbe1a4e0861016c0"
+  },
+  "not_executed": [
+    "model inference",
+    "GPU work",
+    "remote image build",
+    "remote preparation",
+    "remote preflight",
+    "launch",
+    "cloud resource creation",
+    "W&B runs"
+  ],
+  "live_qualification": false
+}

@@ -1,0 +1,1771 @@
+{
+  "schema": "recovery-calibration-report-v1",
+  "task": "recovery-readiness-v1",
+  "episode_policy": "recovery-episode-v1",
+  "evidence_class": "scripted-inference",
+  "live_policy_measurement": false,
+  "panel_id": "rr1-dev-ac7fd952343b0c7d",
+  "packets": [
+    "rr1-dev-p1-98576e24a30d5457",
+    "rr1-dev-p2-292a56c798a2b41f",
+    "rr1-dev-p3-ee1d7ab06b3bf9ec"
+  ],
+  "split": "development",
+  "final_evaluation": {
+    "panel_id": "rr1-final-a76397cabf99d31a",
+    "split": "final",
+    "cases": 64,
+    "ordered_case_ids_sha256": "77a05b6d5d30f18cf54e48bc75aff9f3eb1d888a6e968af8c1ec6e0d36c0a6f7",
+    "use": "no model evaluation during calibration; frozen for a later controlled study",
+    "model_use": "forbidden during calibration"
+  },
+  "criteria": {
+    "version": "recovery-screen-v1",
+    "applies_to": "each algorithm route separately; never pooled",
+    "groups": 24,
+    "min_semantic_evidence_informative_groups": 6,
+    "min_case_families": 2,
+    "max_interface_share_of_zero_rewards": 0.5,
+    "interface_failure_classes": [
+      "format",
+      "action"
+    ],
+    "substantive_failure_classes": [
+      "semantic",
+      "evidence"
+    ],
+    "operational_requirement": "all 120 episodes complete with confirmed rewards and zero optimization events",
+    "status": "engineering heuristic; no universal accuracy band is imposed"
+  },
+  "expected_total_episodes": 240,
+  "optimizer_updates_declared": 0,
+  "routes": {
+    "grpo-matched-v2": {
+      "evidence_class": "scripted-inference",
+      "episodes": {
+        "expected": 120,
+        "attempted_and_admitted": 120,
+        "complete": 120,
+        "not_admitted": 0,
+        "rewards_confirmed": 120,
+        "rewards_missing": 0,
+        "note": "episodes of a stage that failed completion are not admitted and are never zero-filled"
+      },
+      "stage_problems": [],
+      "greedy": {
+        "episodes": 24,
+        "reward_sum": 17.0,
+        "reward_mean": 0.7083333333333334,
+        "reward_wilson95": [
+          0.5083,
+          0.8509
+        ],
+        "json_syntax_valid": 24,
+        "contract_format_valid": 24,
+        "target_correct": 24,
+        "time_correct": 24,
+        "decision_assessable": 24,
+        "decision_correct": 17,
+        "evidence_correct": 20,
+        "decision_correct_evidence_invalid": 0,
+        "decision_not_assessable": 0,
+        "failure_classes": {
+          "correct": 17,
+          "semantic": 7
+        },
+        "outcomes": {
+          "complete_final": 24
+        },
+        "typed_action_errors": 0,
+        "typed_action_error_codes": {},
+        "recovered_episodes": 0,
+        "terminal_policy_failures": 0,
+        "episodes_with_successful_call": {
+          "get_asset": 24,
+          "get_policy": 24,
+          "list_backup_runs": 24
+        },
+        "episodes_with_required_evidence_observed": 24,
+        "correctly_joined_observation_chains": 72,
+        "tool_rounds": {
+          "3": 24
+        },
+        "model_calls": 96,
+        "episodes_without_reported_usage": 24,
+        "prompt_tokens_max": null,
+        "completion_tokens_reported": 0,
+        "finish_reasons": {
+          "function_calls": 72,
+          "stop": 24
+        },
+        "by_family": {
+          "recent_usable": {
+            "episodes": 6,
+            "reward_sum": 4.0,
+            "failure_classes": {
+              "semantic": 2,
+              "correct": 4
+            }
+          },
+          "failed_newer_usable_older": {
+            "episodes": 6,
+            "reward_sum": 5.0,
+            "failure_classes": {
+              "semantic": 1,
+              "correct": 5
+            }
+          },
+          "stale_success": {
+            "episodes": 4,
+            "reward_sum": 3.0,
+            "failure_classes": {
+              "correct": 3,
+              "semantic": 1
+            }
+          },
+          "recent_incomplete": {
+            "episodes": 3,
+            "reward_sum": 3.0,
+            "failure_classes": {
+              "correct": 3
+            }
+          },
+          "recent_integrity_failed": {
+            "episodes": 3,
+            "reward_sum": 2.0,
+            "failure_classes": {
+              "correct": 2,
+              "semantic": 1
+            }
+          },
+          "empty_history": {
+            "episodes": 2,
+            "reward_sum": 0.0,
+            "failure_classes": {
+              "semantic": 2
+            }
+          }
+        },
+        "per_question_reward": {
+          "recovery-readiness-v1/development/c-01f40b8f3c": 1.0,
+          "recovery-readiness-v1/development/c-121050b58a": 1.0,
+          "recovery-readiness-v1/development/c-2c03f8daf4": 0.0,
+          "recovery-readiness-v1/development/c-2e641a2d24": 0.0,
+          "recovery-readiness-v1/development/c-3c9386f800": 0.0,
+          "recovery-readiness-v1/development/c-529d506be0": 0.0,
+          "recovery-readiness-v1/development/c-5db1a70832": 0.0,
+          "recovery-readiness-v1/development/c-6a7e0cc126": 1.0,
+          "recovery-readiness-v1/development/c-6c1c74a0e6": 1.0,
+          "recovery-readiness-v1/development/c-77fa9e56ce": 0.0,
+          "recovery-readiness-v1/development/c-803d4459c3": 1.0,
+          "recovery-readiness-v1/development/c-87f449f853": 1.0,
+          "recovery-readiness-v1/development/c-8a187cb514": 1.0,
+          "recovery-readiness-v1/development/c-92516b687c": 1.0,
+          "recovery-readiness-v1/development/c-96ea63c827": 1.0,
+          "recovery-readiness-v1/development/c-9b22a6dd87": 1.0,
+          "recovery-readiness-v1/development/c-aa26cb7656": 1.0,
+          "recovery-readiness-v1/development/c-b5fac01e6c": 1.0,
+          "recovery-readiness-v1/development/c-c25ac45067": 1.0,
+          "recovery-readiness-v1/development/c-cf2994fed4": 1.0,
+          "recovery-readiness-v1/development/c-d867a4a6e7": 0.0,
+          "recovery-readiness-v1/development/c-daf12ab574": 1.0,
+          "recovery-readiness-v1/development/c-e769799570": 1.0,
+          "recovery-readiness-v1/development/c-fb62402846": 1.0
+        }
+      },
+      "sampled": {
+        "episodes": 96,
+        "reward_sum": 55.0,
+        "reward_mean": 0.5729166666666666,
+        "reward_wilson95": [
+          0.473,
+          0.6672
+        ],
+        "json_syntax_valid": 86,
+        "contract_format_valid": 86,
+        "target_correct": 86,
+        "time_correct": 86,
+        "decision_assessable": 86,
+        "decision_correct": 60,
+        "evidence_correct": 65,
+        "decision_correct_evidence_invalid": 5,
+        "decision_not_assessable": 10,
+        "failure_classes": {
+          "semantic": 26,
+          "correct": 55,
+          "action": 2,
+          "format": 8,
+          "evidence": 5
+        },
+        "outcomes": {
+          "complete_final": 83,
+          "terminal_policy_failure": 2,
+          "complete_recovered": 11
+        },
+        "typed_action_errors": 15,
+        "typed_action_error_codes": {
+          "invalid_arguments": 13,
+          "invalid_argument_json": 2
+        },
+        "recovered_episodes": 11,
+        "terminal_policy_failures": 2,
+        "episodes_with_successful_call": {
+          "get_asset": 94,
+          "get_policy": 79,
+          "list_backup_runs": 94
+        },
+        "episodes_with_required_evidence_observed": 79,
+        "correctly_joined_observation_chains": 267,
+        "tool_rounds": {
+          "2": 17,
+          "3": 68,
+          "4": 11
+        },
+        "model_calls": 376,
+        "episodes_without_reported_usage": 96,
+        "prompt_tokens_max": null,
+        "completion_tokens_reported": 0,
+        "finish_reasons": {
+          "function_calls": 282,
+          "stop": 94
+        },
+        "by_family": {
+          "recent_usable": {
+            "episodes": 24,
+            "reward_sum": 13.0,
+            "failure_classes": {
+              "correct": 13,
+              "evidence": 3,
+              "semantic": 7,
+              "format": 1
+            }
+          },
+          "failed_newer_usable_older": {
+            "episodes": 24,
+            "reward_sum": 16.0,
+            "failure_classes": {
+              "correct": 16,
+              "format": 3,
+              "semantic": 3,
+              "evidence": 2
+            }
+          },
+          "stale_success": {
+            "episodes": 16,
+            "reward_sum": 8.0,
+            "failure_classes": {
+              "semantic": 5,
+              "correct": 8,
+              "format": 2,
+              "action": 1
+            }
+          },
+          "recent_incomplete": {
+            "episodes": 12,
+            "reward_sum": 7.0,
+            "failure_classes": {
+              "correct": 7,
+              "semantic": 5
+            }
+          },
+          "recent_integrity_failed": {
+            "episodes": 12,
+            "reward_sum": 5.0,
+            "failure_classes": {
+              "semantic": 5,
+              "correct": 5,
+              "action": 1,
+              "format": 1
+            }
+          },
+          "empty_history": {
+            "episodes": 8,
+            "reward_sum": 6.0,
+            "failure_classes": {
+              "correct": 6,
+              "format": 1,
+              "semantic": 1
+            }
+          }
+        },
+        "groups": {
+          "groups": 24,
+          "constant_zero": 1,
+          "constant_one": 3,
+          "mixed_semantic_evidence": 18,
+          "mixed_format_action_only": 2,
+          "mixed": 20,
+          "semantic_evidence_informative_families": [
+            "empty_history",
+            "failed_newer_usable_older",
+            "recent_incomplete",
+            "recent_integrity_failed",
+            "recent_usable",
+            "stale_success"
+          ],
+          "zero_rewards": 41,
+          "interface_zero_rewards": 10,
+          "substantive_zero_rewards": 31
+        },
+        "by_packet": {
+          "sampled-packet-1": {
+            "packet_id": "rr1-dev-p1-98576e24a30d5457",
+            "groups": 8,
+            "constant_zero": 0,
+            "constant_one": 0,
+            "mixed_semantic_evidence": 7,
+            "mixed_format_action_only": 1,
+            "mixed": 8,
+            "semantic_evidence_informative_families": [
+              "failed_newer_usable_older",
+              "recent_incomplete",
+              "recent_integrity_failed",
+              "recent_usable",
+              "stale_success"
+            ],
+            "zero_rewards": 17,
+            "interface_zero_rewards": 7,
+            "substantive_zero_rewards": 10,
+            "collection": {
+              "real_rollouts": 32,
+              "groups": 8,
+              "generated_tokens": 3720,
+              "fragment_rows": 124,
+              "adapter_constant_groups": 0,
+              "limits": {
+                "max_prompt_length": 3072,
+                "max_response_length": 2048
+              },
+              "truncated_rows": 0,
+              "dropped_prompt_rows": 0,
+              "stopped_before": "advantages, backward pass, optimizer step and checkpoint save"
+            }
+          },
+          "sampled-packet-2": {
+            "packet_id": "rr1-dev-p2-292a56c798a2b41f",
+            "groups": 8,
+            "constant_zero": 1,
+            "constant_one": 1,
+            "mixed_semantic_evidence": 6,
+            "mixed_format_action_only": 0,
+            "mixed": 6,
+            "semantic_evidence_informative_families": [
+              "empty_history",
+              "failed_newer_usable_older",
+              "recent_incomplete",
+              "recent_usable"
+            ],
+            "zero_rewards": 14,
+            "interface_zero_rewards": 1,
+            "substantive_zero_rewards": 13,
+            "collection": {
+              "real_rollouts": 32,
+              "groups": 8,
+              "generated_tokens": 3780,
+              "fragment_rows": 126,
+              "adapter_constant_groups": 2,
+              "limits": {
+                "max_prompt_length": 3072,
+                "max_response_length": 2048
+              },
+              "truncated_rows": 0,
+              "dropped_prompt_rows": 0,
+              "stopped_before": "advantages, backward pass, optimizer step and checkpoint save"
+            }
+          },
+          "sampled-packet-3": {
+            "packet_id": "rr1-dev-p3-ee1d7ab06b3bf9ec",
+            "groups": 8,
+            "constant_zero": 0,
+            "constant_one": 2,
+            "mixed_semantic_evidence": 5,
+            "mixed_format_action_only": 1,
+            "mixed": 6,
+            "semantic_evidence_informative_families": [
+              "failed_newer_usable_older",
+              "recent_incomplete",
+              "recent_usable",
+              "stale_success"
+            ],
+            "zero_rewards": 10,
+            "interface_zero_rewards": 2,
+            "substantive_zero_rewards": 8,
+            "collection": {
+              "real_rollouts": 32,
+              "groups": 8,
+              "generated_tokens": 3780,
+              "fragment_rows": 126,
+              "adapter_constant_groups": 2,
+              "limits": {
+                "max_prompt_length": 3072,
+                "max_response_length": 2048
+              },
+              "truncated_rows": 0,
+              "dropped_prompt_rows": 0,
+              "stopped_before": "advantages, backward pass, optimizer step and checkpoint save"
+            }
+          }
+        },
+        "per_question": [
+          {
+            "case_id": "recovery-readiness-v1/development/c-01f40b8f3c",
+            "family": "recent_incomplete",
+            "variant": "plain",
+            "rewards": [
+              0.0,
+              0.0,
+              1.0,
+              1.0
+            ],
+            "failure_classes": [
+              "semantic",
+              "semantic",
+              "correct",
+              "correct"
+            ],
+            "group_type": "mixed_semantic_evidence"
+          },
+          {
+            "case_id": "recovery-readiness-v1/development/c-121050b58a",
+            "family": "stale_success",
+            "variant": "completed_recent",
+            "rewards": [
+              0.0,
+              1.0,
+              1.0,
+              0.0
+            ],
+            "failure_classes": [
+              "format",
+              "correct",
+              "correct",
+              "semantic"
+            ],
+            "group_type": "mixed_semantic_evidence"
+          },
+          {
+            "case_id": "recovery-readiness-v1/development/c-2c03f8daf4",
+            "family": "empty_history",
+            "variant": "plain",
+            "rewards": [
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "failure_classes": [
+              "correct",
+              "correct",
+              "correct",
+              "correct"
+            ],
+            "group_type": "constant_one"
+          },
+          {
+            "case_id": "recovery-readiness-v1/development/c-2e641a2d24",
+            "family": "empty_history",
+            "variant": "plain",
+            "rewards": [
+              1.0,
+              0.0,
+              0.0,
+              1.0
+            ],
+            "failure_classes": [
+              "correct",
+              "format",
+              "semantic",
+              "correct"
+            ],
+            "group_type": "mixed_semantic_evidence"
+          },
+          {
+            "case_id": "recovery-readiness-v1/development/c-3c9386f800",
+            "family": "failed_newer_usable_older",
+            "variant": "boundary",
+            "rewards": [
+              1.0,
+              1.0,
+              0.0,
+              1.0
+            ],
+            "failure_classes": [
+              "correct",
+              "correct",
+              "semantic",
+              "correct"
+            ],
+            "group_type": "mixed_semantic_evidence"
+          },
+          {
+            "case_id": "recovery-readiness-v1/development/c-529d506be0",
+            "family": "recent_usable",
+            "variant": "boundary",
+            "rewards": [
+              0.0,
+              1.0,
+              1.0,
+              0.0
+            ],
+            "failure_classes": [
+              "semantic",
+              "correct",
+              "correct",
+              "evidence"
+            ],
+            "group_type": "mixed_semantic_evidence"
+          },
+          {
+            "case_id": "recovery-readiness-v1/development/c-5db1a70832",
+            "family": "stale_success",
+            "variant": "time_sibling",
+            "rewards": [
+              0.0,
+              0.0,
+              1.0,
+              0.0
+            ],
+            "failure_classes": [
+              "semantic",
+              "semantic",
+              "correct",
+              "semantic"
+            ],
+            "group_type": "mixed_semantic_evidence"
+          },
+          {
+            "case_id": "recovery-readiness-v1/development/c-6a7e0cc126",
+            "family": "recent_integrity_failed",
+            "variant": "integrity_pending",
+            "rewards": [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "failure_classes": [
+              "semantic",
+              "semantic",
+              "semantic",
+              "semantic"
+            ],
+            "group_type": "constant_zero"
+          },
+          {
+            "case_id": "recovery-readiness-v1/development/c-6c1c74a0e6",
+            "family": "failed_newer_usable_older",
+            "variant": "multi_witness",
+            "rewards": [
+              1.0,
+              0.0,
+              0.0,
+              1.0
+            ],
+            "failure_classes": [
+              "correct",
+              "evidence",
+              "evidence",
+              "correct"
+            ],
+            "group_type": "mixed_semantic_evidence"
+          },
+          {
+            "case_id": "recovery-readiness-v1/development/c-77fa9e56ce",
+            "family": "recent_integrity_failed",
+            "variant": "plain",
+            "rewards": [
+              0.0,
+              1.0,
+              0.0,
+              1.0
+            ],
+            "failure_classes": [
+              "semantic",
+              "correct",
+              "action",
+              "correct"
+            ],
+            "group_type": "mixed_semantic_evidence"
+          },
+          {
+            "case_id": "recovery-readiness-v1/development/c-803d4459c3",
+            "family": "stale_success",
+            "variant": "plain",
+            "rewards": [
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "failure_classes": [
+              "correct",
+              "format",
+              "action",
+              "semantic"
+            ],
+            "group_type": "mixed_semantic_evidence"
+          },
+          {
+            "case_id": "recovery-readiness-v1/development/c-87f449f853",
+            "family": "recent_integrity_failed",
+            "variant": "plain",
+            "rewards": [
+              1.0,
+              1.0,
+              1.0,
+              0.0
+            ],
+            "failure_classes": [
+              "correct",
+              "correct",
+              "correct",
+              "format"
+            ],
+            "group_type": "mixed_format_action_only"
+          },
+          {
+            "case_id": "recovery-readiness-v1/development/c-8a187cb514",
+            "family": "failed_newer_usable_older",
+            "variant": "multi_witness",
+            "rewards": [
+              1.0,
+              1.0,
+              0.0,
+              0.0
+            ],
+            "failure_classes": [
+              "correct",
+              "correct",
+              "format",
+              "format"
+            ],
+            "group_type": "mixed_format_action_only"
+          },
+          {
+            "case_id": "recovery-readiness-v1/development/c-92516b687c",
+            "family": "failed_newer_usable_older",
+            "variant": "plain",
+            "rewards": [
+              0.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "failure_classes": [
+              "semantic",
+              "correct",
+              "correct",
+              "correct"
+            ],
+            "group_type": "mixed_semantic_evidence"
+          },
+          {
+            "case_id": "recovery-readiness-v1/development/c-96ea63c827",
+            "family": "recent_usable",
+            "variant": "multi_witness",
+            "rewards": [
+              1.0,
+              0.0,
+              0.0,
+              1.0
+            ],
+            "failure_classes": [
+              "correct",
+              "semantic",
+              "semantic",
+              "correct"
+            ],
+            "group_type": "mixed_semantic_evidence"
+          },
+          {
+            "case_id": "recovery-readiness-v1/development/c-9b22a6dd87",
+            "family": "recent_incomplete",
+            "variant": "plain",
+            "rewards": [
+              1.0,
+              1.0,
+              0.0,
+              1.0
+            ],
+            "failure_classes": [
+              "correct",
+              "correct",
+              "semantic",
+              "correct"
+            ],
+            "group_type": "mixed_semantic_evidence"
+          },
+          {
+            "case_id": "recovery-readiness-v1/development/c-aa26cb7656",
+            "family": "recent_usable",
+            "variant": "time_sibling",
+            "rewards": [
+              1.0,
+              0.0,
+              0.0,
+              1.0
+            ],
+            "failure_classes": [
+              "correct",
+              "evidence",
+              "semantic",
+              "correct"
+            ],
+            "group_type": "mixed_semantic_evidence"
+          },
+          {
+            "case_id": "recovery-readiness-v1/development/c-b5fac01e6c",
+            "family": "stale_success",
+            "variant": "just_stale",
+            "rewards": [
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "failure_classes": [
+              "correct",
+              "correct",
+              "correct",
+              "correct"
+            ],
+            "group_type": "constant_one"
+          },
+          {
+            "case_id": "recovery-readiness-v1/development/c-c25ac45067",
+            "family": "failed_newer_usable_older",
+            "variant": "plain",
+            "rewards": [
+              0.0,
+              0.0,
+              1.0,
+              1.0
+            ],
+            "failure_classes": [
+              "semantic",
+              "format",
+              "correct",
+              "correct"
+            ],
+            "group_type": "mixed_semantic_evidence"
+          },
+          {
+            "case_id": "recovery-readiness-v1/development/c-cf2994fed4",
+            "family": "recent_usable",
+            "variant": "multi_witness",
+            "rewards": [
+              0.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "failure_classes": [
+              "semantic",
+              "correct",
+              "correct",
+              "correct"
+            ],
+            "group_type": "mixed_semantic_evidence"
+          },
+          {
+            "case_id": "recovery-readiness-v1/development/c-d867a4a6e7",
+            "family": "recent_usable",
+            "variant": "plain",
+            "rewards": [
+              1.0,
+              0.0,
+              0.0,
+              1.0
+            ],
+            "failure_classes": [
+              "correct",
+              "semantic",
+              "evidence",
+              "correct"
+            ],
+            "group_type": "mixed_semantic_evidence"
+          },
+          {
+            "case_id": "recovery-readiness-v1/development/c-daf12ab574",
+            "family": "recent_incomplete",
+            "variant": "plain",
+            "rewards": [
+              0.0,
+              1.0,
+              0.0,
+              1.0
+            ],
+            "failure_classes": [
+              "semantic",
+              "correct",
+              "semantic",
+              "correct"
+            ],
+            "group_type": "mixed_semantic_evidence"
+          },
+          {
+            "case_id": "recovery-readiness-v1/development/c-e769799570",
+            "family": "failed_newer_usable_older",
+            "variant": "boundary",
+            "rewards": [
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "failure_classes": [
+              "correct",
+              "correct",
+              "correct",
+              "correct"
+            ],
+            "group_type": "constant_one"
+          },
+          {
+            "case_id": "recovery-readiness-v1/development/c-fb62402846",
+            "family": "recent_usable",
+            "variant": "plain",
+            "rewards": [
+              1.0,
+              0.0,
+              1.0,
+              0.0
+            ],
+            "failure_classes": [
+              "correct",
+              "format",
+              "correct",
+              "semantic"
+            ],
+            "group_type": "mixed_semantic_evidence"
+          }
+        ],
+        "tokens": {
+          "source": "scripted or simulated events; not measurements",
+          "sampled_tokens": 11280,
+          "mask_tokens": 11280,
+          "masked_context_tokens": 0,
+          "fragment_rows": 376,
+          "largest_fragment_prompt_tokens": 1320,
+          "conservation": "mask tokens equal sampled tokens for every admitted rollout",
+          "truncated_or_dropped_rows": 0
+        }
+      },
+      "optimization_events": {
+        "optimizer_step": 0,
+        "gradient_step": 0,
+        "matched_advantages": 0,
+        "native_checkpoint_saved": 0
+      },
+      "weight_refresh_steps_by_stage": {
+        "greedy-development": [
+          0
+        ],
+        "sampled-packet-1": [
+          0
+        ],
+        "sampled-packet-2": [
+          0
+        ],
+        "sampled-packet-3": [
+          0
+        ]
+      },
+      "decision": {
+        "operational_validity": "mechanics_only_not_live",
+        "scientific_suitability": "not_assessed",
+        "screen_on_supplied_evidence": "screen_passed",
+        "semantic_evidence_informative_groups": 18,
+        "of_groups": 24,
+        "informative_case_families": [
+          "empty_history",
+          "failed_newer_usable_older",
+          "recent_incomplete",
+          "recent_integrity_failed",
+          "recent_usable",
+          "stale_success"
+        ],
+        "interface_share_of_zero_rewards": 0.24390243902439024,
+        "greedy_successes_and_failures_both_observed": true,
+        "sampled_successes_and_failures_both_observed": true,
+        "next_step": "none: scripted or simulated evidence supports no calibration decision",
+        "interpretation": "scripted or simulated evidence: harness mechanics only, never a policy measurement"
+      }
+    },
+    "ppo-mc-matched-v2": {
+      "evidence_class": "scripted-inference",
+      "episodes": {
+        "expected": 120,
+        "attempted_and_admitted": 120,
+        "complete": 120,
+        "not_admitted": 0,
+        "rewards_confirmed": 120,
+        "rewards_missing": 0,
+        "note": "episodes of a stage that failed completion are not admitted and are never zero-filled"
+      },
+      "stage_problems": [],
+      "greedy": {
+        "episodes": 24,
+        "reward_sum": 18.0,
+        "reward_mean": 0.75,
+        "reward_wilson95": [
+          0.551,
+          0.88
+        ],
+        "json_syntax_valid": 24,
+        "contract_format_valid": 24,
+        "target_correct": 24,
+        "time_correct": 24,
+        "decision_assessable": 24,
+        "decision_correct": 18,
+        "evidence_correct": 22,
+        "decision_correct_evidence_invalid": 0,
+        "decision_not_assessable": 0,
+        "failure_classes": {
+          "semantic": 6,
+          "correct": 18
+        },
+        "outcomes": {
+          "complete_final": 24
+        },
+        "typed_action_errors": 0,
+        "typed_action_error_codes": {},
+        "recovered_episodes": 0,
+        "terminal_policy_failures": 0,
+        "episodes_with_successful_call": {
+          "get_asset": 24,
+          "get_policy": 24,
+          "list_backup_runs": 24
+        },
+        "episodes_with_required_evidence_observed": 24,
+        "correctly_joined_observation_chains": 72,
+        "tool_rounds": {
+          "3": 24
+        },
+        "model_calls": 96,
+        "episodes_without_reported_usage": 24,
+        "prompt_tokens_max": null,
+        "completion_tokens_reported": 0,
+        "finish_reasons": {
+          "function_calls": 72,
+          "stop": 24
+        },
+        "by_family": {
+          "recent_usable": {
+            "episodes": 6,
+            "reward_sum": 4.0,
+            "failure_classes": {
+              "correct": 4,
+              "semantic": 2
+            }
+          },
+          "failed_newer_usable_older": {
+            "episodes": 6,
+            "reward_sum": 4.0,
+            "failure_classes": {
+              "correct": 4,
+              "semantic": 2
+            }
+          },
+          "stale_success": {
+            "episodes": 4,
+            "reward_sum": 4.0,
+            "failure_classes": {
+              "correct": 4
+            }
+          },
+          "recent_incomplete": {
+            "episodes": 3,
+            "reward_sum": 2.0,
+            "failure_classes": {
+              "semantic": 1,
+              "correct": 2
+            }
+          },
+          "recent_integrity_failed": {
+            "episodes": 3,
+            "reward_sum": 2.0,
+            "failure_classes": {
+              "correct": 2,
+              "semantic": 1
+            }
+          },
+          "empty_history": {
+            "episodes": 2,
+            "reward_sum": 2.0,
+            "failure_classes": {
+              "correct": 2
+            }
+          }
+        },
+        "per_question_reward": {
+          "recovery-readiness-v1/development/c-01f40b8f3c": 0.0,
+          "recovery-readiness-v1/development/c-121050b58a": 1.0,
+          "recovery-readiness-v1/development/c-2c03f8daf4": 1.0,
+          "recovery-readiness-v1/development/c-2e641a2d24": 1.0,
+          "recovery-readiness-v1/development/c-3c9386f800": 1.0,
+          "recovery-readiness-v1/development/c-529d506be0": 1.0,
+          "recovery-readiness-v1/development/c-5db1a70832": 1.0,
+          "recovery-readiness-v1/development/c-6a7e0cc126": 1.0,
+          "recovery-readiness-v1/development/c-6c1c74a0e6": 1.0,
+          "recovery-readiness-v1/development/c-77fa9e56ce": 0.0,
+          "recovery-readiness-v1/development/c-803d4459c3": 1.0,
+          "recovery-readiness-v1/development/c-87f449f853": 1.0,
+          "recovery-readiness-v1/development/c-8a187cb514": 0.0,
+          "recovery-readiness-v1/development/c-92516b687c": 1.0,
+          "recovery-readiness-v1/development/c-96ea63c827": 1.0,
+          "recovery-readiness-v1/development/c-9b22a6dd87": 1.0,
+          "recovery-readiness-v1/development/c-aa26cb7656": 0.0,
+          "recovery-readiness-v1/development/c-b5fac01e6c": 1.0,
+          "recovery-readiness-v1/development/c-c25ac45067": 1.0,
+          "recovery-readiness-v1/development/c-cf2994fed4": 1.0,
+          "recovery-readiness-v1/development/c-d867a4a6e7": 0.0,
+          "recovery-readiness-v1/development/c-daf12ab574": 1.0,
+          "recovery-readiness-v1/development/c-e769799570": 0.0,
+          "recovery-readiness-v1/development/c-fb62402846": 1.0
+        }
+      },
+      "sampled": {
+        "episodes": 96,
+        "reward_sum": 45.0,
+        "reward_mean": 0.46875,
+        "reward_wilson95": [
+          0.3721,
+          0.5678
+        ],
+        "json_syntax_valid": 77,
+        "contract_format_valid": 77,
+        "target_correct": 77,
+        "time_correct": 77,
+        "decision_assessable": 77,
+        "decision_correct": 52,
+        "evidence_correct": 53,
+        "decision_correct_evidence_invalid": 7,
+        "decision_not_assessable": 19,
+        "failure_classes": {
+          "correct": 45,
+          "semantic": 25,
+          "format": 16,
+          "evidence": 7,
+          "action": 3
+        },
+        "outcomes": {
+          "complete_final": 83,
+          "complete_recovered": 10,
+          "terminal_policy_failure": 3
+        },
+        "typed_action_errors": 16,
+        "typed_action_error_codes": {
+          "invalid_arguments": 13,
+          "invalid_argument_json": 3
+        },
+        "recovered_episodes": 10,
+        "terminal_policy_failures": 3,
+        "episodes_with_successful_call": {
+          "get_asset": 93,
+          "get_policy": 82,
+          "list_backup_runs": 93
+        },
+        "episodes_with_required_evidence_observed": 82,
+        "correctly_joined_observation_chains": 268,
+        "tool_rounds": {
+          "2": 14,
+          "3": 72,
+          "4": 10
+        },
+        "model_calls": 377,
+        "episodes_without_reported_usage": 96,
+        "prompt_tokens_max": null,
+        "completion_tokens_reported": 0,
+        "finish_reasons": {
+          "function_calls": 284,
+          "stop": 93
+        },
+        "by_family": {
+          "recent_usable": {
+            "episodes": 24,
+            "reward_sum": 16.0,
+            "failure_classes": {
+              "semantic": 4,
+              "evidence": 3,
+              "correct": 16,
+              "format": 1
+            }
+          },
+          "failed_newer_usable_older": {
+            "episodes": 24,
+            "reward_sum": 11.0,
+            "failure_classes": {
+              "correct": 11,
+              "evidence": 4,
+              "semantic": 4,
+              "format": 4,
+              "action": 1
+            }
+          },
+          "stale_success": {
+            "episodes": 16,
+            "reward_sum": 5.0,
+            "failure_classes": {
+              "correct": 5,
+              "semantic": 8,
+              "format": 2,
+              "action": 1
+            }
+          },
+          "recent_incomplete": {
+            "episodes": 12,
+            "reward_sum": 6.0,
+            "failure_classes": {
+              "correct": 6,
+              "semantic": 3,
+              "format": 3
+            }
+          },
+          "recent_integrity_failed": {
+            "episodes": 12,
+            "reward_sum": 4.0,
+            "failure_classes": {
+              "correct": 4,
+              "format": 3,
+              "semantic": 4,
+              "action": 1
+            }
+          },
+          "empty_history": {
+            "episodes": 8,
+            "reward_sum": 3.0,
+            "failure_classes": {
+              "correct": 3,
+              "format": 3,
+              "semantic": 2
+            }
+          }
+        },
+        "groups": {
+          "groups": 24,
+          "constant_zero": 1,
+          "constant_one": 1,
+          "mixed_semantic_evidence": 19,
+          "mixed_format_action_only": 3,
+          "mixed": 22,
+          "semantic_evidence_informative_families": [
+            "empty_history",
+            "failed_newer_usable_older",
+            "recent_incomplete",
+            "recent_integrity_failed",
+            "recent_usable",
+            "stale_success"
+          ],
+          "zero_rewards": 51,
+          "interface_zero_rewards": 19,
+          "substantive_zero_rewards": 32
+        },
+        "by_packet": {
+          "sampled-packet-1": {
+            "packet_id": "rr1-dev-p1-98576e24a30d5457",
+            "groups": 8,
+            "constant_zero": 1,
+            "constant_one": 0,
+            "mixed_semantic_evidence": 6,
+            "mixed_format_action_only": 1,
+            "mixed": 7,
+            "semantic_evidence_informative_families": [
+              "failed_newer_usable_older",
+              "recent_incomplete",
+              "recent_usable",
+              "stale_success"
+            ],
+            "zero_rewards": 16,
+            "interface_zero_rewards": 4,
+            "substantive_zero_rewards": 12,
+            "collection": {
+              "real_rollouts": 32,
+              "groups": 8,
+              "generated_tokens": 3810,
+              "fragment_rows": 127,
+              "adapter_constant_groups": 1,
+              "limits": {
+                "max_prompt_length": 3072,
+                "max_response_length": 2048
+              },
+              "truncated_rows": 0,
+              "dropped_prompt_rows": 0,
+              "stopped_before": "advantages, backward pass, optimizer step and checkpoint save"
+            }
+          },
+          "sampled-packet-2": {
+            "packet_id": "rr1-dev-p2-292a56c798a2b41f",
+            "groups": 8,
+            "constant_zero": 0,
+            "constant_one": 0,
+            "mixed_semantic_evidence": 7,
+            "mixed_format_action_only": 1,
+            "mixed": 8,
+            "semantic_evidence_informative_families": [
+              "empty_history",
+              "failed_newer_usable_older",
+              "recent_integrity_failed",
+              "recent_usable",
+              "stale_success"
+            ],
+            "zero_rewards": 18,
+            "interface_zero_rewards": 6,
+            "substantive_zero_rewards": 12,
+            "collection": {
+              "real_rollouts": 32,
+              "groups": 8,
+              "generated_tokens": 3780,
+              "fragment_rows": 126,
+              "adapter_constant_groups": 0,
+              "limits": {
+                "max_prompt_length": 3072,
+                "max_response_length": 2048
+              },
+              "truncated_rows": 0,
+              "dropped_prompt_rows": 0,
+              "stopped_before": "advantages, backward pass, optimizer step and checkpoint save"
+            }
+          },
+          "sampled-packet-3": {
+            "packet_id": "rr1-dev-p3-ee1d7ab06b3bf9ec",
+            "groups": 8,
+            "constant_zero": 0,
+            "constant_one": 1,
+            "mixed_semantic_evidence": 6,
+            "mixed_format_action_only": 1,
+            "mixed": 7,
+            "semantic_evidence_informative_families": [
+              "failed_newer_usable_older",
+              "recent_incomplete",
+              "recent_integrity_failed",
+              "recent_usable",
+              "stale_success"
+            ],
+            "zero_rewards": 17,
+            "interface_zero_rewards": 9,
+            "substantive_zero_rewards": 8,
+            "collection": {
+              "real_rollouts": 32,
+              "groups": 8,
+              "generated_tokens": 3720,
+              "fragment_rows": 124,
+              "adapter_constant_groups": 1,
+              "limits": {
+                "max_prompt_length": 3072,
+                "max_response_length": 2048
+              },
+              "truncated_rows": 0,
+              "dropped_prompt_rows": 0,
+              "stopped_before": "advantages, backward pass, optimizer step and checkpoint save"
+            }
+          }
+        },
+        "per_question": [
+          {
+            "case_id": "recovery-readiness-v1/development/c-01f40b8f3c",
+            "family": "recent_incomplete",
+            "variant": "plain",
+            "rewards": [
+              0.0,
+              0.0,
+              1.0,
+              1.0
+            ],
+            "failure_classes": [
+              "format",
+              "semantic",
+              "correct",
+              "correct"
+            ],
+            "group_type": "mixed_semantic_evidence"
+          },
+          {
+            "case_id": "recovery-readiness-v1/development/c-121050b58a",
+            "family": "stale_success",
+            "variant": "completed_recent",
+            "rewards": [
+              0.0,
+              0.0,
+              1.0,
+              0.0
+            ],
+            "failure_classes": [
+              "action",
+              "semantic",
+              "correct",
+              "format"
+            ],
+            "group_type": "mixed_semantic_evidence"
+          },
+          {
+            "case_id": "recovery-readiness-v1/development/c-2c03f8daf4",
+            "family": "empty_history",
+            "variant": "plain",
+            "rewards": [
+              1.0,
+              1.0,
+              0.0,
+              0.0
+            ],
+            "failure_classes": [
+              "correct",
+              "correct",
+              "format",
+              "format"
+            ],
+            "group_type": "mixed_format_action_only"
+          },
+          {
+            "case_id": "recovery-readiness-v1/development/c-2e641a2d24",
+            "family": "empty_history",
+            "variant": "plain",
+            "rewards": [
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "failure_classes": [
+              "correct",
+              "format",
+              "semantic",
+              "semantic"
+            ],
+            "group_type": "mixed_semantic_evidence"
+          },
+          {
+            "case_id": "recovery-readiness-v1/development/c-3c9386f800",
+            "family": "failed_newer_usable_older",
+            "variant": "boundary",
+            "rewards": [
+              1.0,
+              0.0,
+              0.0,
+              1.0
+            ],
+            "failure_classes": [
+              "correct",
+              "format",
+              "evidence",
+              "correct"
+            ],
+            "group_type": "mixed_semantic_evidence"
+          },
+          {
+            "case_id": "recovery-readiness-v1/development/c-529d506be0",
+            "family": "recent_usable",
+            "variant": "boundary",
+            "rewards": [
+              1.0,
+              1.0,
+              1.0,
+              0.0
+            ],
+            "failure_classes": [
+              "correct",
+              "correct",
+              "correct",
+              "evidence"
+            ],
+            "group_type": "mixed_semantic_evidence"
+          },
+          {
+            "case_id": "recovery-readiness-v1/development/c-5db1a70832",
+            "family": "stale_success",
+            "variant": "time_sibling",
+            "rewards": [
+              1.0,
+              1.0,
+              1.0,
+              0.0
+            ],
+            "failure_classes": [
+              "correct",
+              "correct",
+              "correct",
+              "semantic"
+            ],
+            "group_type": "mixed_semantic_evidence"
+          },
+          {
+            "case_id": "recovery-readiness-v1/development/c-6a7e0cc126",
+            "family": "recent_integrity_failed",
+            "variant": "integrity_pending",
+            "rewards": [
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "failure_classes": [
+              "correct",
+              "semantic",
+              "semantic",
+              "semantic"
+            ],
+            "group_type": "mixed_semantic_evidence"
+          },
+          {
+            "case_id": "recovery-readiness-v1/development/c-6c1c74a0e6",
+            "family": "failed_newer_usable_older",
+            "variant": "multi_witness",
+            "rewards": [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ],
+            "failure_classes": [
+              "format",
+              "format",
+              "semantic",
+              "correct"
+            ],
+            "group_type": "mixed_semantic_evidence"
+          },
+          {
+            "case_id": "recovery-readiness-v1/development/c-77fa9e56ce",
+            "family": "recent_integrity_failed",
+            "variant": "plain",
+            "rewards": [
+              1.0,
+              0.0,
+              1.0,
+              0.0
+            ],
+            "failure_classes": [
+              "correct",
+              "format",
+              "correct",
+              "format"
+            ],
+            "group_type": "mixed_format_action_only"
+          },
+          {
+            "case_id": "recovery-readiness-v1/development/c-803d4459c3",
+            "family": "stale_success",
+            "variant": "plain",
+            "rewards": [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "failure_classes": [
+              "semantic",
+              "semantic",
+              "semantic",
+              "format"
+            ],
+            "group_type": "constant_zero"
+          },
+          {
+            "case_id": "recovery-readiness-v1/development/c-87f449f853",
+            "family": "recent_integrity_failed",
+            "variant": "plain",
+            "rewards": [
+              0.0,
+              1.0,
+              0.0,
+              0.0
+            ],
+            "failure_classes": [
+              "semantic",
+              "correct",
+              "action",
+              "format"
+            ],
+            "group_type": "mixed_semantic_evidence"
+          },
+          {
+            "case_id": "recovery-readiness-v1/development/c-8a187cb514",
+            "family": "failed_newer_usable_older",
+            "variant": "multi_witness",
+            "rewards": [
+              1.0,
+              0.0,
+              1.0,
+              1.0
+            ],
+            "failure_classes": [
+              "correct",
+              "evidence",
+              "correct",
+              "correct"
+            ],
+            "group_type": "mixed_semantic_evidence"
+          },
+          {
+            "case_id": "recovery-readiness-v1/development/c-92516b687c",
+            "family": "failed_newer_usable_older",
+            "variant": "plain",
+            "rewards": [
+              0.0,
+              0.0,
+              1.0,
+              0.0
+            ],
+            "failure_classes": [
+              "action",
+              "evidence",
+              "correct",
+              "evidence"
+            ],
+            "group_type": "mixed_semantic_evidence"
+          },
+          {
+            "case_id": "recovery-readiness-v1/development/c-96ea63c827",
+            "family": "recent_usable",
+            "variant": "multi_witness",
+            "rewards": [
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "failure_classes": [
+              "correct",
+              "correct",
+              "correct",
+              "correct"
+            ],
+            "group_type": "constant_one"
+          },
+          {
+            "case_id": "recovery-readiness-v1/development/c-9b22a6dd87",
+            "family": "recent_incomplete",
+            "variant": "plain",
+            "rewards": [
+              1.0,
+              0.0,
+              1.0,
+              0.0
+            ],
+            "failure_classes": [
+              "correct",
+              "semantic",
+              "correct",
+              "semantic"
+            ],
+            "group_type": "mixed_semantic_evidence"
+          },
+          {
+            "case_id": "recovery-readiness-v1/development/c-aa26cb7656",
+            "family": "recent_usable",
+            "variant": "time_sibling",
+            "rewards": [
+              0.0,
+              0.0,
+              1.0,
+              1.0
+            ],
+            "failure_classes": [
+              "semantic",
+              "evidence",
+              "correct",
+              "correct"
+            ],
+            "group_type": "mixed_semantic_evidence"
+          },
+          {
+            "case_id": "recovery-readiness-v1/development/c-b5fac01e6c",
+            "family": "stale_success",
+            "variant": "just_stale",
+            "rewards": [
+              0.0,
+              0.0,
+              1.0,
+              0.0
+            ],
+            "failure_classes": [
+              "semantic",
+              "semantic",
+              "correct",
+              "semantic"
+            ],
+            "group_type": "mixed_semantic_evidence"
+          },
+          {
+            "case_id": "recovery-readiness-v1/development/c-c25ac45067",
+            "family": "failed_newer_usable_older",
+            "variant": "plain",
+            "rewards": [
+              1.0,
+              0.0,
+              1.0,
+              0.0
+            ],
+            "failure_classes": [
+              "correct",
+              "semantic",
+              "correct",
+              "format"
+            ],
+            "group_type": "mixed_semantic_evidence"
+          },
+          {
+            "case_id": "recovery-readiness-v1/development/c-cf2994fed4",
+            "family": "recent_usable",
+            "variant": "multi_witness",
+            "rewards": [
+              0.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "failure_classes": [
+              "semantic",
+              "correct",
+              "correct",
+              "correct"
+            ],
+            "group_type": "mixed_semantic_evidence"
+          },
+          {
+            "case_id": "recovery-readiness-v1/development/c-d867a4a6e7",
+            "family": "recent_usable",
+            "variant": "plain",
+            "rewards": [
+              1.0,
+              1.0,
+              0.0,
+              0.0
+            ],
+            "failure_classes": [
+              "correct",
+              "correct",
+              "semantic",
+              "format"
+            ],
+            "group_type": "mixed_semantic_evidence"
+          },
+          {
+            "case_id": "recovery-readiness-v1/development/c-daf12ab574",
+            "family": "recent_incomplete",
+            "variant": "plain",
+            "rewards": [
+              1.0,
+              0.0,
+              0.0,
+              1.0
+            ],
+            "failure_classes": [
+              "correct",
+              "format",
+              "format",
+              "correct"
+            ],
+            "group_type": "mixed_format_action_only"
+          },
+          {
+            "case_id": "recovery-readiness-v1/development/c-e769799570",
+            "family": "failed_newer_usable_older",
+            "variant": "boundary",
+            "rewards": [
+              0.0,
+              1.0,
+              0.0,
+              1.0
+            ],
+            "failure_classes": [
+              "semantic",
+              "correct",
+              "semantic",
+              "correct"
+            ],
+            "group_type": "mixed_semantic_evidence"
+          },
+          {
+            "case_id": "recovery-readiness-v1/development/c-fb62402846",
+            "family": "recent_usable",
+            "variant": "plain",
+            "rewards": [
+              1.0,
+              0.0,
+              1.0,
+              0.0
+            ],
+            "failure_classes": [
+              "correct",
+              "semantic",
+              "correct",
+              "evidence"
+            ],
+            "group_type": "mixed_semantic_evidence"
+          }
+        ],
+        "tokens": {
+          "source": "scripted or simulated events; not measurements",
+          "sampled_tokens": 11310,
+          "mask_tokens": 11310,
+          "masked_context_tokens": 0,
+          "fragment_rows": 377,
+          "largest_fragment_prompt_tokens": 1320,
+          "conservation": "mask tokens equal sampled tokens for every admitted rollout",
+          "truncated_or_dropped_rows": 0
+        }
+      },
+      "optimization_events": {
+        "optimizer_step": 0,
+        "gradient_step": 0,
+        "matched_advantages": 0,
+        "native_checkpoint_saved": 0
+      },
+      "weight_refresh_steps_by_stage": {
+        "greedy-development": [
+          0
+        ],
+        "sampled-packet-1": [
+          0
+        ],
+        "sampled-packet-2": [
+          0
+        ],
+        "sampled-packet-3": [
+          0
+        ]
+      },
+      "decision": {
+        "operational_validity": "mechanics_only_not_live",
+        "scientific_suitability": "not_assessed",
+        "screen_on_supplied_evidence": "screen_passed",
+        "semantic_evidence_informative_groups": 19,
+        "of_groups": 24,
+        "informative_case_families": [
+          "empty_history",
+          "failed_newer_usable_older",
+          "recent_incomplete",
+          "recent_integrity_failed",
+          "recent_usable",
+          "stale_success"
+        ],
+        "interface_share_of_zero_rewards": 0.37254901960784315,
+        "greedy_successes_and_failures_both_observed": true,
+        "sampled_successes_and_failures_both_observed": true,
+        "next_step": "none: scripted or simulated evidence supports no calibration decision",
+        "interpretation": "scripted or simulated evidence: harness mechanics only, never a policy measurement"
+      }
+    }
+  },
+  "stage_timings_seconds": "not supplied",
+  "resource_bounds": {
+    "gpu_stages": 8,
+    "stage_seconds_limit": 1500,
+    "max_gpu_seconds": 12000,
+    "reserved_budget_usd": 70,
+    "hourly_ceiling_usd": 10,
+    "note": "reservation bounds, not spending; observed stage times are above when supplied"
+  },
+  "unverified_assumptions": [
+    "Sampling temperatures are set by the gateway routes named in each stage; they are checked in the worker launch command, not observed per request.",
+    "Token counts for greedy episodes are server-reported usage; sampled-token counts come from the adapter.",
+    "Scripted or simulated evidence says nothing about how the model behaves on this task."
+  ],
+  "claims": {
+    "local_operation": "established only by executed offline tests",
+    "harness_effects": "not measured by this report",
+    "useful_signal": "assessed per route by the fixed screen, only on live evidence",
+    "learning_improvement": "not assessed; calibration performs zero optimization"
+  }
+}
