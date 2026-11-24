@@ -41,7 +41,7 @@
   },
   "bounds": {
     "stage_seconds": 1500,
-    "startup_seconds": 900,
+    "startup_seconds": 600,
     "preparation_seconds": 3600,
     "preflight_seconds": 900,
     "concurrency": 1,
@@ -49,11 +49,11 @@
     "supervisor_hourly_usd": 0.1,
     "preparation_budget_usd": 5,
     "training_budget_usd": 70,
-    "build_budget_usd": 10,
-    "storage_gib": 300,
+    "build_budget_usd": 15,
+    "storage_gib": 100,
     "retention_days": 7,
-    "storage_budget_usd": 7,
+    "storage_budget_usd": 3,
     "collection_gib": 2,
-    "total_budget_usd": 93
+    "total_budget_usd": 95
   }
 }
