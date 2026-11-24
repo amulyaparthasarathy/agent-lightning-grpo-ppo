@@ -1,0 +1,98 @@
+{
+  "plan_sha256": "2a9b1cc811421c6eca122e344e1cc3a60cd210a3776603c7b8c9a4bd2d44bf21",
+  "evidence_complete": true,
+  "operational_completion": "completed",
+  "algorithms": {
+    "grpo-matched-v2": {
+      "operational_stage_completion": {
+        "baseline": "completed",
+        "training": "completed",
+        "checkpoint-eval": "completed"
+      },
+      "model_tool_integration": {
+        "baseline": {
+          "schema": "reader-integration-v2",
+          "algorithm": "grpo-matched-v2",
+          "stage": "baseline",
+          "qualified": true,
+          "episodes_with_valid_chain": 64,
+          "trace_files": 64,
+          "gaps": [],
+          "task_correctness_required": false
+        },
+        "training": {
+          "schema": "reader-integration-v2",
+          "algorithm": "grpo-matched-v2",
+          "stage": "training",
+          "qualified": true,
+          "episodes_with_valid_chain": 64,
+          "trace_files": 64,
+          "gaps": [],
+          "task_correctness_required": false
+        },
+        "checkpoint-eval": {
+          "schema": "reader-integration-v2",
+          "algorithm": "grpo-matched-v2",
+          "stage": "checkpoint-eval",
+          "qualified": true,
+          "episodes_with_valid_chain": 64,
+          "trace_files": 64,
+          "gaps": [],
+          "task_correctness_required": false
+        }
+      },
+      "informative_grpo_reward_groups": 1,
+      "integration_rule": "all-three-stages-v2",
+      "harness_integration_qualified": true,
+      "qualification_gaps": []
+    },
+    "ppo-mc-matched-v2": {
+      "operational_stage_completion": {
+        "baseline": "completed",
+        "training": "completed",
+        "checkpoint-eval": "completed"
+      },
+      "model_tool_integration": {
+        "baseline": {
+          "schema": "reader-integration-v2",
+          "algorithm": "ppo-mc-matched-v2",
+          "stage": "baseline",
+          "qualified": true,
+          "episodes_with_valid_chain": 64,
+          "trace_files": 64,
+          "gaps": [],
+          "task_correctness_required": false
+        },
+        "training": {
+          "schema": "reader-integration-v2",
+          "algorithm": "ppo-mc-matched-v2",
+          "stage": "training",
+          "qualified": true,
+          "episodes_with_valid_chain": 64,
+          "trace_files": 64,
+          "gaps": [],
+          "task_correctness_required": false
+        },
+        "checkpoint-eval": {
+          "schema": "reader-integration-v2",
+          "algorithm": "ppo-mc-matched-v2",
+          "stage": "checkpoint-eval",
+          "qualified": true,
+          "episodes_with_valid_chain": 64,
+          "trace_files": 64,
+          "gaps": [],
+          "task_correctness_required": false
+        }
+      },
+      "informative_grpo_reward_groups": "not applicable",
+      "integration_rule": "all-three-stages-v2",
+      "harness_integration_qualified": true,
+      "qualification_gaps": []
+    }
+  },
+  "qualification_evidence": true,
+  "live_qualification": "operational and harness evidence observed; learning success not established",
+  "hosted_wandb_history": "not independently queried",
+  "collected_bytes": 71979570,
+  "collection_errors": []
+}

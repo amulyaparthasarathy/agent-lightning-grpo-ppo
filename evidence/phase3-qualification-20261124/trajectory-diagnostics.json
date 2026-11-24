@@ -1,0 +1,672 @@
+{
+  "schema": "asset-trajectory-diagnostics-v1",
+  "scope": "Reviewed aggregates derived from retained private traces. Shapes list tool names and argument/answer key sets only; no prompts, observations or answer values are published. Diagnostics are outside model inputs and add no reward terms.",
+  "attempts": {
+    "a06": {
+      "grpo-matched-v2": {
+        "training": {
+          "episodes": 32,
+          "outcomes": {
+            "complete_final": 32
+          },
+          "diagnostics": {
+            "json_syntax": 32,
+            "format_compliant": 32,
+            "target_correct": 32,
+            "content_correct": 32,
+            "reward_1": 32,
+            "reward_0": 0,
+            "reward_missing": 0,
+            "recovered": 0,
+            "policy_errors": 0
+          },
+          "policy_error_codes": {},
+          "finish_reasons": {
+            "function_calls": 64,
+            "stop": 32
+          },
+          "final_text_kinds": {
+            "json:asset_id,backup_health,service_state@reflect": 32
+          },
+          "max_completion_tokens": 26,
+          "groups": 8,
+          "group_sizes": {
+            "4": 8
+          },
+          "informative_groups": 0,
+          "constant_zero_groups": 0,
+          "constant_one_groups": 8,
+          "group_reward_sums": [
+            4.0,
+            4.0,
+            4.0,
+            4.0,
+            4.0,
+            4.0,
+            4.0,
+            4.0
+          ],
+          "trajectory_shapes": [
+            {
+              "count": 32,
+              "shape": "call[lookup_asset:asset_id] > tool:ok > call[lookup_asset:asset_id] > tool:ok > text<json:asset_id,backup_health,service_state>[reflect] > EP:ok:1.0:None"
+            }
+          ]
+        }
+      },
+      "ppo-mc-matched-v2": {
+        "training": {
+          "episodes": 32,
+          "outcomes": {
+            "complete_final": 32
+          },
+          "diagnostics": {
+            "json_syntax": 32,
+            "format_compliant": 32,
+            "target_correct": 32,
+            "content_correct": 31,
+            "reward_1": 31,
+            "reward_0": 1,
+            "reward_missing": 0,
+            "recovered": 0,
+            "policy_errors": 1
+          },
+          "policy_error_codes": {
+            "unknown_tool": 1
+          },
+          "finish_reasons": {
+            "function_calls": 64,
+            "stop": 32
+          },
+          "final_text_kinds": {
+            "json:asset_id,backup_health,service_state@reflect": 32
+          },
+          "max_completion_tokens": 26,
+          "groups": 8,
+          "group_sizes": {
+            "4": 8
+          },
+          "informative_groups": 1,
+          "constant_zero_groups": 0,
+          "constant_one_groups": 7,
+          "group_reward_sums": [
+            3.0,
+            4.0,
+            4.0,
+            4.0,
+            4.0,
+            4.0,
+            4.0,
+            4.0
+          ],
+          "trajectory_shapes": [
+            {
+              "count": 31,
+              "shape": "call[lookup_asset:asset_id] > tool:ok > call[lookup_asset:asset_id] > tool:ok > text<json:asset_id,backup_health,service_state>[reflect] > EP:ok:1.0:None"
+            },
+            {
+              "count": 1,
+              "shape": "call[lookup_asset:asset_id] > tool:ok > call[Lookup_asset:asset_id] > text<json:asset_id,backup_health,service_state>[reflect] > EP:ok:0.0:None"
+            }
+          ]
+        }
+      }
+    },
+    "a07": {
+      "grpo-matched-v2": {
+        "baseline": {
+          "episodes": 64,
+          "outcomes": {
+            "complete_final": 64
+          },
+          "diagnostics": {
+            "json_syntax": 64,
+            "format_compliant": 64,
+            "target_correct": 64,
+            "content_correct": 64,
+            "reward_1": 64,
+            "reward_0": 0,
+            "reward_missing": 0,
+            "recovered": 0,
+            "policy_errors": 0
+          },
+          "policy_error_codes": {},
+          "finish_reasons": {
+            "function_calls": 128,
+            "stop": 64
+          },
+          "final_text_kinds": {
+            "json:asset_id,backup_health,service_state@reflect": 64
+          },
+          "max_completion_tokens": 26,
+          "groups": 64,
+          "group_sizes": {
+            "1": 64
+          },
+          "informative_groups": 0,
+          "constant_zero_groups": 0,
+          "constant_one_groups": 64,
+          "group_reward_sums": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "trajectory_shapes": [
+            {
+              "count": 64,
+              "shape": "call[lookup_asset:asset_id] > tool:ok > call[lookup_asset:asset_id] > tool:ok > text<json:asset_id,backup_health,service_state>[reflect] > EP:ok:1.0:None"
+            }
+          ]
+        },
+        "training": {
+          "episodes": 64,
+          "outcomes": {
+            "complete_final": 64
+          },
+          "diagnostics": {
+            "json_syntax": 64,
+            "format_compliant": 63,
+            "target_correct": 63,
+            "content_correct": 63,
+            "reward_1": 63,
+            "reward_0": 1,
+            "reward_missing": 0,
+            "recovered": 0,
+            "policy_errors": 0
+          },
+          "policy_error_codes": {},
+          "finish_reasons": {
+            "function_calls": 128,
+            "stop": 64
+          },
+          "final_text_kinds": {
+            "json:asset_id,backup_health,service_state@reflect": 63,
+            "json:asset_id,backup_height,service_state@reflect": 1
+          },
+          "max_completion_tokens": 26,
+          "groups": 16,
+          "group_sizes": {
+            "4": 16
+          },
+          "informative_groups": 1,
+          "constant_zero_groups": 0,
+          "constant_one_groups": 15,
+          "group_reward_sums": [
+            3.0,
+            4.0,
+            4.0,
+            4.0,
+            4.0,
+            4.0,
+            4.0,
+            4.0,
+            4.0,
+            4.0,
+            4.0,
+            4.0,
+            4.0,
+            4.0,
+            4.0,
+            4.0
+          ],
+          "trajectory_shapes": [
+            {
+              "count": 63,
+              "shape": "call[lookup_asset:asset_id] > tool:ok > call[lookup_asset:asset_id] > tool:ok > text<json:asset_id,backup_health,service_state>[reflect] > EP:ok:1.0:None"
+            },
+            {
+              "count": 1,
+              "shape": "call[lookup_asset:asset_id] > tool:ok > call[lookup_asset:asset_id] > tool:ok > text<json:asset_id,backup_height,service_state>[reflect] > EP:ok:0.0:None"
+            }
+          ]
+        },
+        "checkpoint-eval": {
+          "episodes": 64,
+          "outcomes": {
+            "complete_final": 64
+          },
+          "diagnostics": {
+            "json_syntax": 64,
+            "format_compliant": 64,
+            "target_correct": 64,
+            "content_correct": 64,
+            "reward_1": 64,
+            "reward_0": 0,
+            "reward_missing": 0,
+            "recovered": 0,
+            "policy_errors": 0
+          },
+          "policy_error_codes": {},
+          "finish_reasons": {
+            "function_calls": 128,
+            "stop": 64
+          },
+          "final_text_kinds": {
+            "json:asset_id,backup_health,service_state@reflect": 64
+          },
+          "max_completion_tokens": 26,
+          "groups": 64,
+          "group_sizes": {
+            "1": 64
+          },
+          "informative_groups": 0,
+          "constant_zero_groups": 0,
+          "constant_one_groups": 64,
+          "group_reward_sums": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "trajectory_shapes": [
+            {
+              "count": 64,
+              "shape": "call[lookup_asset:asset_id] > tool:ok > call[lookup_asset:asset_id] > tool:ok > text<json:asset_id,backup_health,service_state>[reflect] > EP:ok:1.0:None"
+            }
+          ]
+        }
+      },
+      "ppo-mc-matched-v2": {
+        "baseline": {
+          "episodes": 64,
+          "outcomes": {
+            "complete_final": 64
+          },
+          "diagnostics": {
+            "json_syntax": 64,
+            "format_compliant": 64,
+            "target_correct": 64,
+            "content_correct": 64,
+            "reward_1": 64,
+            "reward_0": 0,
+            "reward_missing": 0,
+            "recovered": 0,
+            "policy_errors": 0
+          },
+          "policy_error_codes": {},
+          "finish_reasons": {
+            "function_calls": 128,
+            "stop": 64
+          },
+          "final_text_kinds": {
+            "json:asset_id,backup_health,service_state@reflect": 64
+          },
+          "max_completion_tokens": 26,
+          "groups": 64,
+          "group_sizes": {
+            "1": 64
+          },
+          "informative_groups": 0,
+          "constant_zero_groups": 0,
+          "constant_one_groups": 64,
+          "group_reward_sums": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "trajectory_shapes": [
+            {
+              "count": 64,
+              "shape": "call[lookup_asset:asset_id] > tool:ok > call[lookup_asset:asset_id] > tool:ok > text<json:asset_id,backup_health,service_state>[reflect] > EP:ok:1.0:None"
+            }
+          ]
+        },
+        "training": {
+          "episodes": 64,
+          "outcomes": {
+            "complete_final": 64
+          },
+          "diagnostics": {
+            "json_syntax": 63,
+            "format_compliant": 63,
+            "target_correct": 63,
+            "content_correct": 63,
+            "reward_1": 63,
+            "reward_0": 1,
+            "reward_missing": 0,
+            "recovered": 0,
+            "policy_errors": 1
+          },
+          "policy_error_codes": {
+            "unknown_tool": 1
+          },
+          "finish_reasons": {
+            "function_calls": 127,
+            "stop": 64
+          },
+          "final_text_kinds": {
+            "json:asset_id,backup_health,service_state@reflect": 63,
+            "prose@tools": 1
+          },
+          "max_completion_tokens": 26,
+          "groups": 16,
+          "group_sizes": {
+            "4": 16
+          },
+          "informative_groups": 1,
+          "constant_zero_groups": 0,
+          "constant_one_groups": 15,
+          "group_reward_sums": [
+            3.0,
+            4.0,
+            4.0,
+            4.0,
+            4.0,
+            4.0,
+            4.0,
+            4.0,
+            4.0,
+            4.0,
+            4.0,
+            4.0,
+            4.0,
+            4.0,
+            4.0,
+            4.0
+          ],
+          "trajectory_shapes": [
+            {
+              "count": 62,
+              "shape": "call[lookup_asset:asset_id] > tool:ok > call[lookup_asset:asset_id] > tool:ok > text<json:asset_id,backup_health,service_state>[reflect] > EP:ok:1.0:None"
+            },
+            {
+              "count": 1,
+              "shape": "call[lookup_asset:asset_id] > tool:ok > call[Lookup_asset:asset_id] > text<json:asset_id,backup_health,service_state>[reflect] > EP:ok:1.0:None"
+            },
+            {
+              "count": 1,
+              "shape": "call[lookup_asset:asset_id] > tool:ok > text<prose>[tools] > EP:ok:0.0:None"
+            }
+          ]
+        },
+        "checkpoint-eval": {
+          "episodes": 64,
+          "outcomes": {
+            "complete_final": 64
+          },
+          "diagnostics": {
+            "json_syntax": 64,
+            "format_compliant": 64,
+            "target_correct": 64,
+            "content_correct": 64,
+            "reward_1": 64,
+            "reward_0": 0,
+            "reward_missing": 0,
+            "recovered": 0,
+            "policy_errors": 0
+          },
+          "policy_error_codes": {},
+          "finish_reasons": {
+            "function_calls": 128,
+            "stop": 64
+          },
+          "final_text_kinds": {
+            "json:asset_id,backup_health,service_state@reflect": 64
+          },
+          "max_completion_tokens": 26,
+          "groups": 64,
+          "group_sizes": {
+            "1": 64
+          },
+          "informative_groups": 0,
+          "constant_zero_groups": 0,
+          "constant_one_groups": 64,
+          "group_reward_sums": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "trajectory_shapes": [
+            {
+              "count": 64,
+              "shape": "call[lookup_asset:asset_id] > tool:ok > call[lookup_asset:asset_id] > tool:ok > text<json:asset_id,backup_health,service_state>[reflect] > EP:ok:1.0:None"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

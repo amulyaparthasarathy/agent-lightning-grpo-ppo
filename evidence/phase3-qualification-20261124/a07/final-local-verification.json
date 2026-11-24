@@ -1,0 +1,324 @@
+{
+  "attempt": 7,
+  "phase": "qualification",
+  "source_commit": "7f1e13d7bacb477c9e5e95a16868a2b0f2484ee6",
+  "plan_sha256": "2a9b1cc811421c6eca122e344e1cc3a60cd210a3776603c7b8c9a4bd2d44bf21",
+  "local_revalidation": {
+    "evidence_complete": true,
+    "operational_completion": "completed",
+    "live_qualification": "operational and harness evidence observed; learning success not established"
+  },
+  "collected_bytes": 71979570,
+  "collection_errors": [],
+  "collected_files": 1098,
+  "stages": [
+    {
+      "algorithm": "grpo-matched-v2",
+      "stage": "baseline",
+      "attempts": 64,
+      "completed": 64,
+      "failed": 0,
+      "unclassified": 0,
+      "invalid_records": [],
+      "reward_posts": 64,
+      "correct": 64.0,
+      "episode_outcomes": {
+        "complete_final": 64
+      },
+      "format_compliant_finals": 64,
+      "policy_errors": 0,
+      "integration_episodes": 64,
+      "trace_sha256_recomputed": 64,
+      "optimizer_events": {
+        "actor": 0,
+        "critic": 0
+      },
+      "gradient_steps": [],
+      "all_gradients_finite": true,
+      "refreshes": [
+        0
+      ],
+      "checkpoint_saved_events": 0,
+      "native_reload_events": 0,
+      "cleanup": true,
+      "trainer_exit_code": 0,
+      "container_id": "ta-01M85PWSC5N1CEYWHCN0BV6TKR",
+      "wandb_id": "79f9982122fcd9501dff1ec7"
+    },
+    {
+      "algorithm": "grpo-matched-v2",
+      "stage": "training",
+      "attempts": 64,
+      "completed": 64,
+      "failed": 0,
+      "unclassified": 0,
+      "invalid_records": [],
+      "reward_posts": 64,
+      "correct": 63.0,
+      "episode_outcomes": {
+        "complete_final": 64
+      },
+      "format_compliant_finals": 63,
+      "policy_errors": 0,
+      "integration_episodes": 64,
+      "trace_sha256_recomputed": 64,
+      "optimizer_events": {
+        "actor": 2,
+        "critic": 0
+      },
+      "gradient_steps": [
+        {
+          "role": "actor",
+          "preclip_norm": 0.27084779739379883,
+          "preclip_finite": true,
+          "postclip_local_norm": 0.27084779739379883,
+          "optimizer_called": true
+        },
+        {
+          "role": "actor",
+          "preclip_norm": 0.0,
+          "preclip_finite": true,
+          "postclip_local_norm": 0.0,
+          "optimizer_called": true
+        }
+      ],
+      "all_gradients_finite": true,
+      "refreshes": [
+        0,
+        1,
+        2
+      ],
+      "checkpoint_saved_events": 1,
+      "native_reload_events": 0,
+      "cleanup": true,
+      "trainer_exit_code": 0,
+      "container_id": "ta-01M85Q6T8WV1FJ5FFBGR7VS44R",
+      "wandb_id": "db8f80ac687ad9f4cdcc0c5e",
+      "checkpoint": {
+        "sha256": "2e6cf21b255a0bc46f4629deed908c887c1349987115dae69cd35b065a45bdd7",
+        "matches_completion": true,
+        "roles": {
+          "actor": {
+            "files": 9,
+            "bytes": 40146400251
+          }
+        },
+        "bytes": 40146400251,
+        "step": 2,
+        "resolved_config_sha256": "8ed2ee4474c3985879cf2e62a03cc03c994f93226f4f4ea914c1edcb184485f3"
+      }
+    },
+    {
+      "algorithm": "grpo-matched-v2",
+      "stage": "checkpoint-eval",
+      "attempts": 64,
+      "completed": 64,
+      "failed": 0,
+      "unclassified": 0,
+      "invalid_records": [],
+      "reward_posts": 64,
+      "correct": 64.0,
+      "episode_outcomes": {
+        "complete_final": 64
+      },
+      "format_compliant_finals": 64,
+      "policy_errors": 0,
+      "integration_episodes": 64,
+      "trace_sha256_recomputed": 64,
+      "optimizer_events": {
+        "actor": 0,
+        "critic": 0
+      },
+      "gradient_steps": [],
+      "all_gradients_finite": true,
+      "refreshes": [
+        2
+      ],
+      "checkpoint_saved_events": 0,
+      "native_reload_events": 0,
+      "cleanup": true,
+      "trainer_exit_code": 0,
+      "container_id": "ta-01M85QNVC7X4XNGSM40K6A2CQR",
+      "wandb_id": "011b8c28be3bec0dd03c9144",
+      "reload": {
+        "checkpoint_sha256": "2e6cf21b255a0bc46f4629deed908c887c1349987115dae69cd35b065a45bdd7",
+        "same_as_training": true,
+        "training_container": "ta-01M85Q6T8WV1FJ5FFBGR7VS44R",
+        "evaluation_container": "ta-01M85QNVC7X4XNGSM40K6A2CQR",
+        "distinct_fresh_worker": true,
+        "restored_checkpoint": "/__modal/volumes/vo-aNf9E4heLEnwhGuv6pFxDD/phase3-runs/reader-asset-20261122-r07/a07/grpo-matched-v2/training/checkpoints/global_step_2"
+      }
+    },
+    {
+      "algorithm": "ppo-mc-matched-v2",
+      "stage": "baseline",
+      "attempts": 64,
+      "completed": 64,
+      "failed": 0,
+      "unclassified": 0,
+      "invalid_records": [],
+      "reward_posts": 64,
+      "correct": 64.0,
+      "episode_outcomes": {
+        "complete_final": 64
+      },
+      "format_compliant_finals": 64,
+      "policy_errors": 0,
+      "integration_episodes": 64,
+      "trace_sha256_recomputed": 64,
+      "optimizer_events": {
+        "actor": 0,
+        "critic": 0
+      },
+      "gradient_steps": [],
+      "all_gradients_finite": true,
+      "refreshes": [
+        0
+      ],
+      "checkpoint_saved_events": 0,
+      "native_reload_events": 0,
+      "cleanup": true,
+      "trainer_exit_code": 0,
+      "container_id": "ta-01M85R22VEV8H91V9H0HQQ3Y0R",
+      "wandb_id": "60fe3eaad9748df5561e3425"
+    },
+    {
+      "algorithm": "ppo-mc-matched-v2",
+      "stage": "training",
+      "attempts": 64,
+      "completed": 64,
+      "failed": 0,
+      "unclassified": 0,
+      "invalid_records": [],
+      "reward_posts": 64,
+      "correct": 63.0,
+      "episode_outcomes": {
+        "complete_final": 64
+      },
+      "format_compliant_finals": 63,
+      "policy_errors": 1,
+      "integration_episodes": 64,
+      "trace_sha256_recomputed": 64,
+      "optimizer_events": {
+        "actor": 2,
+        "critic": 2
+      },
+      "gradient_steps": [
+        {
+          "role": "critic",
+          "preclip_norm": 279.00836181640625,
+          "preclip_finite": true,
+          "postclip_local_norm": 1.0,
+          "optimizer_called": true
+        },
+        {
+          "role": "actor",
+          "preclip_norm": 0.7457740306854248,
+          "preclip_finite": true,
+          "postclip_local_norm": 0.7457740306854248,
+          "optimizer_called": true
+        },
+        {
+          "role": "critic",
+          "preclip_norm": 509.76898193359375,
+          "preclip_finite": true,
+          "postclip_local_norm": 0.9999999403953552,
+          "optimizer_called": true
+        },
+        {
+          "role": "actor",
+          "preclip_norm": 3.5052051544189453,
+          "preclip_finite": true,
+          "postclip_local_norm": 0.9999997615814209,
+          "optimizer_called": true
+        }
+      ],
+      "all_gradients_finite": true,
+      "refreshes": [
+        0,
+        1,
+        2
+      ],
+      "checkpoint_saved_events": 1,
+      "native_reload_events": 0,
+      "cleanup": true,
+      "trainer_exit_code": 0,
+      "container_id": "ta-01M85RDS63WV07KR494CV1CH5R",
+      "wandb_id": "b45afdfd791a2c68104ad3f0",
+      "checkpoint": {
+        "sha256": "f8ad498fa245d84e66fd95cfb06fbdf57190a4aa60ff98de5904d3047f42ec3d",
+        "matches_completion": true,
+        "roles": {
+          "actor": {
+            "files": 9,
+            "bytes": 40146400251
+          },
+          "critic": {
+            "files": 8,
+            "bytes": 38570427714
+          }
+        },
+        "bytes": 78716827965,
+        "step": 2,
+        "resolved_config_sha256": "b56eb1f20bbe6d5a76d659a99c4699531f7edcda65c3723b12ca01ecd747d1d4"
+      }
+    },
+    {
+      "algorithm": "ppo-mc-matched-v2",
+      "stage": "checkpoint-eval",
+      "attempts": 64,
+      "completed": 64,
+      "failed": 0,
+      "unclassified": 0,
+      "invalid_records": [],
+      "reward_posts": 64,
+      "correct": 64.0,
+      "episode_outcomes": {
+        "complete_final": 64
+      },
+      "format_compliant_finals": 64,
+      "policy_errors": 0,
+      "integration_episodes": 64,
+      "trace_sha256_recomputed": 64,
+      "optimizer_events": {
+        "actor": 0,
+        "critic": 0
+      },
+      "gradient_steps": [],
+      "all_gradients_finite": true,
+      "refreshes": [
+        2
+      ],
+      "checkpoint_saved_events": 0,
+      "native_reload_events": 0,
+      "cleanup": true,
+      "trainer_exit_code": 0,
+      "container_id": "ta-01M85SB6H5D9W0KYMBZ39812QR",
+      "wandb_id": "080b99cb08f17205cb0cf4b3",
+      "reload": {
+        "checkpoint_sha256": "f8ad498fa245d84e66fd95cfb06fbdf57190a4aa60ff98de5904d3047f42ec3d",
+        "same_as_training": true,
+        "training_container": "ta-01M85RDS63WV07KR494CV1CH5R",
+        "evaluation_container": "ta-01M85SB6H5D9W0KYMBZ39812QR",
+        "distinct_fresh_worker": true,
+        "restored_checkpoint": "/__modal/volumes/vo-aNf9E4heLEnwhGuv6pFxDD/phase3-runs/reader-asset-20261122-r07/a07/ppo-mc-matched-v2/training/checkpoints/global_step_2"
+      }
+    }
+  ],
+  "checks": {
+    "all_stage_containers_distinct": true,
+    "all_trace_joins_reproduced": true,
+    "all_cleanup_completed": true,
+    "evaluations_without_optimizer_events": true,
+    "grpo_actor_updates": {
+      "actor": 2,
+      "critic": 0
+    },
+    "ppo_actor_critic_updates": {
+      "actor": 2,
+      "critic": 2
+    },
+    "checkpoints_match": true,
+    "reloads_same_checkpoint_fresh_worker": true
+  }
+}

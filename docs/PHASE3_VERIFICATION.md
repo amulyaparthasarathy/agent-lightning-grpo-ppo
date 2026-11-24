@@ -1,5 +1,29 @@
 # Phase 3 offline verification
 
+**Episode-policy correction and qualification (2026-11-24):** The asset task is
+operationally qualified for both algorithms under `asset-episode-v2`; see the
+[dated report](PHASE3_QUALIFICATION_2026-11-24.md). Both live attempts executed
+`7f1e13d7bacb477c9e5e95a16868a2b0f2484ee6`. At that commit, before any paid
+dispatch, the three gates passed with no skips:
+
+- `bash scripts/test_task_local.sh`: 26 tests.
+- `bash scripts/test_reader_offline.sh`: 39 PPO-MC, 15 matched-study and 86
+  reader tests, plus the accounting demo and historical artifact checks.
+- `bash scripts/test_matched_training.sh` with the cache variables shown below:
+  63 tests and six pinned-configuration checks.
+
+The harness tests run the production agent, observed client and workbench against
+the real local stdio MCP server; model responses are scripted and labeled
+`scripted-inference`. They cover one call then final JSON; two calls, reflection
+and final JSON or prose; typed error then corrected call (extra argument,
+malformed JSON, unknown tool, and string, list and null arguments); two invalid
+calls and the declared terminal failure; an untyped backend error after a
+successful lookup; truncation, cancellation, missing output and transport failure
+at the second and reflection steps; and failed reward delivery. The same gates
+were rerun on the documentation commit that published the results, with the same
+counts. Sections below keep their original dates and counts.
+
+
 **Live follow-up (2026-11-22):** The authorized US$300 campaign is recorded in the
 [dated qualification report](PHASE3_QUALIFICATION_2026-11-22.md). Both baselines
 passed integration; incomplete training collections prevented optimizer updates

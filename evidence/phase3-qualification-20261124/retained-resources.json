@@ -1,0 +1,123 @@
+{
+  "deadlines": {
+    "a01-a04": "2026-11-29T01:54:46.522052+00:00",
+    "a05-a07": "2026-12-01T03:34:30+00:00"
+  },
+  "note": "Review/cleanup obligations, not scheduled deletions. Only explicitly owned resources may be removed. Nothing was deleted in this continuation.",
+  "resources": [
+    {
+      "kind": "volume",
+      "name": "reader-asset-20261121-a01-volume",
+      "id": "vo-KtIYfz0ZCf5RVNpWjB6LMB",
+      "bytes": 6437603580,
+      "files": 202,
+      "checkpoint_bytes": 0
+    },
+    {
+      "kind": "registry",
+      "name": "reader-asset-20261121-a01-registry",
+      "id": "di-89aPaR7B9aNx1EDw4oOAlt"
+    },
+    {
+      "kind": "volume",
+      "name": "reader-asset-20261121-a02-volume",
+      "id": "vo-KtzGn1oPG8LfXOztBi04Jr",
+      "bytes": 6444280823,
+      "files": 471,
+      "checkpoint_bytes": 0
+    },
+    {
+      "kind": "registry",
+      "name": "reader-asset-20261121-a02-registry",
+      "id": "di-1IIFqOxyn9KjM9WBGLShAb"
+    },
+    {
+      "kind": "volume",
+      "name": "reader-asset-20261121-a03-volume",
+      "id": "vo-WFtwoXPWkiS6yOwCoFfSz8",
+      "bytes": 6452127500,
+      "files": 696,
+      "checkpoint_bytes": 0
+    },
+    {
+      "kind": "registry",
+      "name": "reader-asset-20261121-a03-registry",
+      "id": "di-D9PAc1yJElVDI86YsYounv"
+    },
+    {
+      "kind": "volume",
+      "name": "reader-asset-20261121-a04-volume",
+      "id": "vo-1DponfTcYKI9q3oxLt3NIn",
+      "bytes": 6468612838,
+      "files": 1162,
+      "checkpoint_bytes": 0
+    },
+    {
+      "kind": "registry",
+      "name": "reader-asset-20261121-a04-registry",
+      "id": "di-FXBB2Msz3kJC0BBE2pcJjH"
+    },
+    {
+      "kind": "volume",
+      "name": "reader-asset-20261122-a05-volume",
+      "id": "vo-WqMMuCiJaLx8qWg8NiyqGj",
+      "bytes": 0,
+      "files": 0,
+      "checkpoint_bytes": 0
+    },
+    {
+      "kind": "registry",
+      "name": "reader-asset-20261122-a05-registry",
+      "id": "di-J7VdQDODC8tA6idkQqcXPd"
+    },
+    {
+      "kind": "volume",
+      "name": "reader-asset-20261122-a06-volume",
+      "id": "vo-IiG0se8E2kgzVyvte5pHAR",
+      "bytes": 6452406118,
+      "files": 594,
+      "checkpoint_bytes": 0
+    },
+    {
+      "kind": "registry",
+      "name": "reader-asset-20261122-a06-registry",
+      "id": "di-RjN1uNKfQqWUfClecsdqvt"
+    },
+    {
+      "kind": "volume",
+      "name": "reader-asset-20261122-a07-volume",
+      "id": "vo-aNf9E4heLEnwhGuv6pFxDD",
+      "bytes": 125357476117,
+      "files": 1978,
+      "checkpoint_bytes": 118863248277
+    },
+    {
+      "kind": "registry",
+      "name": "reader-asset-20261122-a07-registry",
+      "id": "di-USeZ0zqVQU8KVFAsNtSgAE"
+    }
+  ],
+  "owned_apps": [
+    "ap-9IcoABtSJC2w9XBIYab7QG",
+    "ap-GpTPM2HqEdXFOtbEAlzjGn",
+    "ap-e0xC2Z8WstnI6LnyT42eM6",
+    "ap-n5ALTEy6TQGVkvrJh42l1J",
+    "ap-90zP2nIT3wvWhQ7NBNGVDj",
+    "ap-VtUpY3MyDL6rAQoVdwSkSX",
+    "ap-939jSnArvoP02v5LA0VlW4",
+    "ap-RmnV1X3wMhw3bDZYovJCp2",
+    "ap-Z6exDUUlaK7MsPwkd7hCh3",
+    "ap-F8qe1OG36s6L7UyjtHwiOn",
+    "ap-BGMPNHSYye3VIZxUsJlF9S",
+    "ap-Hyx2Wvy7fmvHIoMl1QuzBV",
+    "ap-ZK29JoQTxVpICBAg7T86Yl",
+    "ap-IOCi4ZZKnkSAp2dmeBDqFD",
+    "ap-PK5X9Z00GBfPu1FkgKqjuO",
+    "ap-G4DqftLedEiSbCOvbqFltn",
+    "ap-g9NNkEPPD7GfNkQtCFmOyq",
+    "ap-k7xTQL096d7vsif6HK1jjb",
+    "ap-fsAlpjXpAwTK4eku101CGT"
+  ],
+  "owned_apps_with_running_tasks": 0,
+  "retained_bytes": 157612506976
+}

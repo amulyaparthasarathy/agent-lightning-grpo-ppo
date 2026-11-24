@@ -7,6 +7,11 @@ passed integration, but incomplete training collections prevented any optimizer
 updates or checkpoint qualification. The completed reference campaign's earlier
 $250 authorization remains closed and was not reused.
 
+**Update (2026-11-24):** Under the same aggregate ceiling, a versioned episode-policy
+correction and a fresh six-stage attempt completed all stages for both algorithms.
+See the [2026-11-24 report](PHASE3_QUALIFICATION_2026-11-24.md). The 2026-11-22
+results above are unchanged.
+
 The remaining text preserves the original proposal and its prospective acceptance
 criteria. It is not a new authorization, executable plan, or claim that every stage passed.
 

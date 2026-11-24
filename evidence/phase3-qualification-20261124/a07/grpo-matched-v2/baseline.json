@@ -1,0 +1,3624 @@
+{
+  "attempt": 7,
+  "purpose": "qualification",
+  "algorithm": "grpo-matched-v2",
+  "stage": "baseline",
+  "source_commit": "7f1e13d7bacb477c9e5e95a16868a2b0f2484ee6",
+  "plan_sha256": "2a9b1cc811421c6eca122e344e1cc3a60cd210a3776603c7b8c9a4bd2d44bf21",
+  "wandb": {
+    "entity": "amulyap-stanford-university",
+    "project": "reader-owned-reference",
+    "group": "reader-asset-20261122-r07-a07",
+    "id": "79f9982122fcd9501dff1ec7",
+    "name": "reader-asset-20261122-r07-a07-grpo-matched-v2-baseline",
+    "job_type": "baseline",
+    "resume": "never",
+    "config": {
+      "schema": "reader-task-v2",
+      "source": "46490adf43e9e1e983d99832a752df855353da82250b2e7437897c237a091936",
+      "profile": "15daa00171dde43c7285430b6ad98ee1d223d1979cf66183697a77cb08e9b47a",
+      "assets": "28f4f4e5c7593a285c679bba03d90cd06a26e09feda653bc6fbde54182204d5f",
+      "algorithm": "grpo-matched-v2",
+      "stage": "baseline",
+      "protocol": "matched-rollout-mean-v2",
+      "seed_streams": {
+        "python": 143897530,
+        "numpy": 846298712,
+        "torch_cpu": 1376393873,
+        "torch_cuda": 2040295816,
+        "actor_sampling": 1217781245,
+        "actor_optimizer": 660317075,
+        "row_batching": 1823162246,
+        "critic_init": null,
+        "paired_question_order": 1028282608
+      },
+      "resources": {
+        "gpu": "H100!",
+        "cpu": 16,
+        "memory_mib": 196608
+      },
+      "steps": 2,
+      "task": {
+        "name": "asset-status-v1",
+        "visible_fields": [
+          "question"
+        ],
+        "label_fields": [
+          "result"
+        ],
+        "episode_policy": {
+          "version": "asset-episode-v2",
+          "max_tool_iterations": 2,
+          "policy_error_limit": 2,
+          "final_generation": "context-json-reminder-v1",
+          "recovered_final": "strict-verifier",
+          "policy_limit": "terminal-zero",
+          "infrastructure_or_missing_evidence": "incomplete-no-reward",
+          "policy_error_codes": [
+            "invalid_arguments",
+            "invalid_asset_id",
+            "unknown_asset",
+            "non_object_arguments",
+            "invalid_argument_json",
+            "unknown_tool"
+          ]
+        },
+        "data_mapping": {
+          "QUESTION": "input.question",
+          "RESULT": "input.result",
+          "AGL_CASE_ID": "input.case_id",
+          "AGL_DATA_SPLIT": "input.split",
+          "EVAL_SPLIT": "input.split"
+        },
+        "agent_class": "asset_agent.Agent",
+        "cwd": "examples/calc_x",
+        "mcp": {
+          "command": "training-python",
+          "args": [
+            "-I",
+            "asset_stdio.py"
+          ],
+          "environment": {
+            "PYTHONUNBUFFERED": "1",
+            "PYTHONDONTWRITEBYTECODE": "1"
+          },
+          "ownership_receipt": "optional absolute directory argument; never a model input"
+        },
+        "local_probe": "asset_probe.check",
+        "integration_rule": "reader-integration-v2; live chain required in all three stages per algorithm",
+        "environment": {
+          "task": "asset-status-v1",
+          "recipe": "asset-status-v1/2026-11-20/329",
+          "registry_sha256": "241b5672d43b7dff7db7d203f2805d91e0a541e7a20e18d4edb608419e670e44",
+          "ordered_cases_sha256": {
+            "train_main.parquet": "59af0d2b9decfc87637b787d28f37de83c40fd801ffac5edda028b26fc02cd0e",
+            "eval_main.parquet": "493299d2b0fe8db770d5047f65893d67c0fc4c8f6e6c9825305f7b4c6e68464c",
+            "eval_main.jsonl": "493299d2b0fe8db770d5047f65893d67c0fc4c8f6e6c9825305f7b4c6e68464c",
+            "train_smoke.parquet": "1585496ecf3d2bba3e1e6069959c657a2f771f912eddb2d640f44733fe4ba1a1",
+            "eval_smoke.parquet": "918071a326a383d42db8ddc48919a4e5e48a6ec4b9d8cee0bb4471d06ac1ce30",
+            "eval_smoke.jsonl": "918071a326a383d42db8ddc48919a4e5e48a6ec4b9d8cee0bb4471d06ac1ce30"
+          },
+          "tool": {
+            "name": "lookup_asset",
+            "input_schema": {
+              "type": "object",
+              "properties": {
+                "asset_id": {
+                  "type": "string",
+                  "pattern": "^asset-[0-9]{3}$"
+                }
+              },
+              "required": [
+                "asset_id"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "prompt": "Use lookup_asset to look up the requested asset. Return exactly one JSON object with only asset_id, service_state, backup_health, all strings. No markdown or other text. service_state must be operational, degraded, or offline; backup_health must be healthy, stale, or failed.",
+          "output": {
+            "fields": [
+              "asset_id",
+              "service_state",
+              "backup_health"
+            ],
+            "service_state": [
+              "operational",
+              "degraded",
+              "offline"
+            ],
+            "backup_health": [
+              "healthy",
+              "stale",
+              "failed"
+            ],
+            "parser": "whole-response-json-unique-keys-no-extra-fields-v1"
+          },
+          "reward": "independent exact terminal correctness, binary; incomplete has no reward"
+        },
+        "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+        "source_sha256": {
+          "asset_task.py": "1abd6a8248340065efcc3489524d91750eea3c8d7f1b555981288a0339ae3b2d",
+          "asset_server.py": "6250d650487ff00e10fe47237dce5f5a880e671b4f896991ac2bdeb73d05e8a7",
+          "asset_stdio.py": "33af32fcaca9d28a7abe9a742c64e889641687e7dd8a302b7ce250a9f086acf5",
+          "asset_agent.py": "fc02ec3730eaceb11f59672c49d47fe935bfc5cb8e10703daacdf8101c03994c",
+          "asset_probe.py": "ff8b3845f61e027b93918b64c1324c9554a81b6460bbcd213c7b7eb0ed9e3e70",
+          "owned_processes.py": "6ca9cce7a93ab0ffd2bcad7a47fa5190c4328d705713e24425ed97e4d9ce34d3",
+          "observed_runtime.py": "81ff2831c901091a784f0b11e72de9a13c2db5ff05e0756b1c4fb97c41ca2fa9"
+        },
+        "entrypoint_lock_sha256": "9d211065a5dd984d5fdfc43c63cab6c38e86ff36a2f4cac9ff0b9ab63302665a",
+        "launcher_sha256": "752cca22341639228b20e69de32b7a8062e59f47ad9d1fcd22b8e177798ddf97"
+      },
+      "model": {
+        "id": "meta-llama/Llama-3.2-3B-Instruct",
+        "revision": "0cb88a4f764b7a12671c53f0838cd831a0843b95",
+        "profile": "llama3b",
+        "parser": "llama3_json"
+      },
+      "evaluation": "asset-status-v1-64"
+    }
+  },
+  "dependency_gate": {
+    "rule": "baseline-live-integration-v2",
+    "stage": "baseline",
+    "admitted": true,
+    "reason": "baseline_integration_qualified"
+  },
+  "supervisor": {
+    "status": "completed",
+    "call_id": "fc-01M85PWS2XD738252CZQ7028P0",
+    "submitted_at": 1795488106.455306,
+    "finished_at": 1795488425.4419198,
+    "reason": null,
+    "cancellation_requested": null
+  },
+  "provider_reconciliation": {
+    "queried_at": "2026-11-24T04:02:53.898971+00:00",
+    "id": "fc-01M85PWS2XD738252CZQ7028P0",
+    "provider_status": "completed",
+    "error_type": null
+  },
+  "completion": {
+    "protocol": "matched-rollout-mean-v2",
+    "plan_sha256": "2a9b1cc811421c6eca122e344e1cc3a60cd210a3776603c7b8c9a4bd2d44bf21",
+    "stage": "baseline",
+    "evaluation": {
+      "run_dir": "/__modal/volumes/vo-aNf9E4heLEnwhGuv6pFxDD/phase3-runs/reader-asset-20261122-r07/a07/grpo-matched-v2/baseline",
+      "phase_filter": "baseline",
+      "route_filter": "val",
+      "attempt_files_total": 64,
+      "attempts_selected": 64,
+      "unclassified_attempt_files": 0,
+      "invalid_records": [],
+      "completed": 64,
+      "failed": 0,
+      "incomplete_or_ambiguous": 0,
+      "phase_route_counts": {
+        "baseline/val": 64
+      },
+      "observed_reward": {
+        "count": 64,
+        "sum": 64.0,
+        "mean": 1.0,
+        "max": 1.0
+      },
+      "attempts_without_numeric_reward": 0,
+      "reward_denominator": "Only observed numeric episode rewards, including failed reward posts; no zero fills.",
+      "reward_posts_confirmed": 64,
+      "model_calls_recorded": 192,
+      "model_errors_recorded": 0,
+      "tool_calls_recorded": 128,
+      "tool_errors_recorded": 0,
+      "call_count_scope": "Recorded spans, not transport retries; unfinished or dropped spans may be absent.",
+      "model_calls_with_usage": 192,
+      "model_calls_without_usage": 0,
+      "usage_source": "Recorded response usage only; AutoGen zero/absent ambiguity remains unknown.",
+      "usage": {
+        "prompt_tokens": {
+          "count": 192,
+          "sum": 84273,
+          "mean": 438.921875,
+          "max": 479
+        },
+        "completion_tokens": {
+          "count": 192,
+          "sum": 4219,
+          "mean": 21.973958333333332,
+          "max": 26
+        }
+      },
+      "episode_elapsed_ms": {
+        "count": 64,
+        "sum": 208831.509,
+        "mean": 3262.992328125,
+        "max": 5435.343
+      },
+      "model_operation_ms": {
+        "count": 192,
+        "sum": 105962.851,
+        "mean": 551.8898489583333,
+        "max": 2754.035
+      },
+      "tool_operation_ms": {
+        "count": 128,
+        "sum": 694.326,
+        "mean": 5.424421875,
+        "max": 6.037
+      },
+      "timing_scope": "Inclusive episode duration; model/tool operation durations are separate and may overlap.",
+      "episode_outcomes": {
+        "complete_final": 64
+      },
+      "format_compliant_finals": 64,
+      "policy_errors": 0,
+      "diagnostic_scope": "Final-format and policy diagnostics; no added reward terms"
+    },
+    "execution_schema": "reader-task-v2",
+    "source_sha256": "46490adf43e9e1e983d99832a752df855353da82250b2e7437897c237a091936",
+    "configuration_sha256": "15daa00171dde43c7285430b6ad98ee1d223d1979cf66183697a77cb08e9b47a",
+    "assets_sha256": "28f4f4e5c7593a285c679bba03d90cd06a26e09feda653bc6fbde54182204d5f",
+    "task_sha256": "b64e9a1d40d6f903970ff95e3ca2b92ad0aac0788be792277a9badcfce7c27c2",
+    "worker": {
+      "call_id": "fc-01M85PWS2XD738252CZQ7028P0",
+      "hostname": "modal",
+      "container_id": "ta-01M85PWSC5N1CEYWHCN0BV6TKR",
+      "launcher_pid": 46,
+      "trainer_pid": 1184
+    },
+    "wandb_id": "79f9982122fcd9501dff1ec7",
+    "model_tool_integration": {
+      "sha256": "23c0ce4eaab1186e000dde92fac77102c67a9ec042430554a3e7228e895240b5",
+      "identical_to_recomputed_model_tool_integration": true
+    }
+  },
+  "receipt": {
+    "status": "completed",
+    "call_id": "fc-01M85PWS2XD738252CZQ7028P0",
+    "output": "phase3-runs/reader-asset-20261122-r07/a07/grpo-matched-v2/baseline",
+    "started_at": 1795488119.2204125,
+    "container_id": "ta-01M85PWSC5N1CEYWHCN0BV6TKR",
+    "completion": {
+      "protocol": "matched-rollout-mean-v2",
+      "plan_sha256": "2a9b1cc811421c6eca122e344e1cc3a60cd210a3776603c7b8c9a4bd2d44bf21",
+      "stage": "baseline",
+      "evaluation": {
+        "run_dir": "/__modal/volumes/vo-aNf9E4heLEnwhGuv6pFxDD/phase3-runs/reader-asset-20261122-r07/a07/grpo-matched-v2/baseline",
+        "phase_filter": "baseline",
+        "route_filter": "val",
+        "attempt_files_total": 64,
+        "attempts_selected": 64,
+        "unclassified_attempt_files": 0,
+        "invalid_records": [],
+        "completed": 64,
+        "failed": 0,
+        "incomplete_or_ambiguous": 0,
+        "phase_route_counts": {
+          "baseline/val": 64
+        },
+        "observed_reward": {
+          "count": 64,
+          "sum": 64.0,
+          "mean": 1.0,
+          "max": 1.0
+        },
+        "attempts_without_numeric_reward": 0,
+        "reward_denominator": "Only observed numeric episode rewards, including failed reward posts; no zero fills.",
+        "reward_posts_confirmed": 64,
+        "model_calls_recorded": 192,
+        "model_errors_recorded": 0,
+        "tool_calls_recorded": 128,
+        "tool_errors_recorded": 0,
+        "call_count_scope": "Recorded spans, not transport retries; unfinished or dropped spans may be absent.",
+        "model_calls_with_usage": 192,
+        "model_calls_without_usage": 0,
+        "usage_source": "Recorded response usage only; AutoGen zero/absent ambiguity remains unknown.",
+        "usage": {
+          "prompt_tokens": {
+            "count": 192,
+            "sum": 84273,
+            "mean": 438.921875,
+            "max": 479
+          },
+          "completion_tokens": {
+            "count": 192,
+            "sum": 4219,
+            "mean": 21.973958333333332,
+            "max": 26
+          }
+        },
+        "episode_elapsed_ms": {
+          "count": 64,
+          "sum": 208831.509,
+          "mean": 3262.992328125,
+          "max": 5435.343
+        },
+        "model_operation_ms": {
+          "count": 192,
+          "sum": 105962.851,
+          "mean": 551.8898489583333,
+          "max": 2754.035
+        },
+        "tool_operation_ms": {
+          "count": 128,
+          "sum": 694.326,
+          "mean": 5.424421875,
+          "max": 6.037
+        },
+        "timing_scope": "Inclusive episode duration; model/tool operation durations are separate and may overlap.",
+        "episode_outcomes": {
+          "complete_final": 64
+        },
+        "format_compliant_finals": 64,
+        "policy_errors": 0,
+        "diagnostic_scope": "Final-format and policy diagnostics; no added reward terms"
+      },
+      "execution_schema": "reader-task-v2",
+      "source_sha256": "46490adf43e9e1e983d99832a752df855353da82250b2e7437897c237a091936",
+      "configuration_sha256": "15daa00171dde43c7285430b6ad98ee1d223d1979cf66183697a77cb08e9b47a",
+      "assets_sha256": "28f4f4e5c7593a285c679bba03d90cd06a26e09feda653bc6fbde54182204d5f",
+      "task_sha256": "b64e9a1d40d6f903970ff95e3ca2b92ad0aac0788be792277a9badcfce7c27c2",
+      "worker": {
+        "call_id": "fc-01M85PWS2XD738252CZQ7028P0",
+        "hostname": "modal",
+        "container_id": "ta-01M85PWSC5N1CEYWHCN0BV6TKR",
+        "launcher_pid": 46,
+        "trainer_pid": 1184
+      },
+      "wandb_id": "79f9982122fcd9501dff1ec7",
+      "model_tool_integration": {
+        "sha256": "23c0ce4eaab1186e000dde92fac77102c67a9ec042430554a3e7228e895240b5",
+        "identical_to_recomputed_model_tool_integration": true
+      }
+    },
+    "finished_at": 1795488411.7260714
+  },
+  "trainer_result": {
+    "status": "completed",
+    "exit_code": 0,
+    "owned_process_cleanup_completed": true,
+    "checkpoints": [],
+    "latest_checkpoint": null,
+    "restored_checkpoint": null,
+    "resolved_config_saved": true
+  },
+  "audit_event_counts": {
+    "matched_registered": 21,
+    "weight_refresh": 1,
+    "trainer_returned": 1,
+    "wandb_finished": 1,
+    "model_construction_begin": 1,
+    "model_constructed": 1
+  },
+  "observed_optimizer_events": {
+    "actor": 0,
+    "critic": 0
+  },
+  "policy_refreshes": [
+    0
+  ],
+  "numerical_diagnostics": [
+    {
+      "event": "weight_refresh",
+      "pid": 1184,
+      "time": 1795488337.6914635,
+      "step": 0
+    },
+    {
+      "event": "trainer_returned",
+      "pid": 1184,
+      "time": 1795488402.7847836,
+      "global_step": 0,
+      "validation_only": true
+    }
+  ],
+  "collections": [],
+  "trajectories": {
+    "phase_filter": "baseline",
+    "route_filter": "val",
+    "attempt_files_total": 64,
+    "attempts_selected": 64,
+    "unclassified_attempt_files": 0,
+    "invalid_records": [],
+    "completed": 64,
+    "failed": 0,
+    "incomplete_or_ambiguous": 0,
+    "phase_route_counts": {
+      "baseline/val": 64
+    },
+    "observed_reward": {
+      "count": 64,
+      "sum": 64.0,
+      "mean": 1.0,
+      "max": 1.0
+    },
+    "attempts_without_numeric_reward": 0,
+    "reward_denominator": "Only observed numeric episode rewards, including failed reward posts; no zero fills.",
+    "reward_posts_confirmed": 64,
+    "model_calls_recorded": 192,
+    "model_errors_recorded": 0,
+    "tool_calls_recorded": 128,
+    "tool_errors_recorded": 0,
+    "call_count_scope": "Recorded spans, not transport retries; unfinished or dropped spans may be absent.",
+    "model_calls_with_usage": 192,
+    "model_calls_without_usage": 0,
+    "usage_source": "Recorded response usage only; AutoGen zero/absent ambiguity remains unknown.",
+    "usage": {
+      "prompt_tokens": {
+        "count": 192,
+        "sum": 84273,
+        "mean": 438.921875,
+        "max": 479
+      },
+      "completion_tokens": {
+        "count": 192,
+        "sum": 4219,
+        "mean": 21.973958333333332,
+        "max": 26
+      }
+    },
+    "episode_elapsed_ms": {
+      "count": 64,
+      "sum": 208831.509,
+      "mean": 3262.992328125,
+      "max": 5435.343
+    },
+    "model_operation_ms": {
+      "count": 192,
+      "sum": 105962.851,
+      "mean": 551.8898489583333,
+      "max": 2754.035
+    },
+    "tool_operation_ms": {
+      "count": 128,
+      "sum": 694.326,
+      "mean": 5.424421875,
+      "max": 6.037
+    },
+    "timing_scope": "Inclusive episode duration; model/tool operation durations are separate and may overlap.",
+    "episode_outcomes": {
+      "complete_final": 64
+    },
+    "format_compliant_finals": 64,
+    "policy_errors": 0,
+    "diagnostic_scope": "Final-format and policy diagnostics; no added reward terms"
+  },
+  "model_tool_integration": {
+    "schema": "reader-integration-v2",
+    "algorithm": "grpo-matched-v2",
+    "stage": "baseline",
+    "qualified": true,
+    "episodes_with_valid_chain": 64,
+    "trace_files": 64,
+    "coverage": [
+      {
+        "file": "trajectory-001a24fd42c94911b0bdf08b013b3db7.jsonl",
+        "sha256": "f339286d570b03e9e2e00de74c5b9df1d949883985c57a782e8945fca420c43f",
+        "chains": [
+          {
+            "trace_id": "001a24fd42c94911b0bdf08b013b3db7",
+            "case_id": "asset-status-v1/heldout/asset-165",
+            "rollout_id": "419d9ee577374bb697dc4cba4b741cb7",
+            "attempt_id": "0",
+            "model_span": "36068743aa964f779af92ff31c71e3a5",
+            "tool_span": "df607615b449449ebe4393b8b51d5ac0",
+            "tool_call_id": "chatcmpl-tool-b567b9413887a218",
+            "continuation_span": "a1a5e0033c63470cb38996b09e26ee50",
+            "episode_span": "7340a531d5054cc79f54fd6cc65979de",
+            "observation_sha256": "aad244a2c65ff0664a748adb4cdb83a81b705fd805d76a2760ec549cb2fa6385",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "001a24fd42c94911b0bdf08b013b3db7",
+            "case_id": "asset-status-v1/heldout/asset-165",
+            "rollout_id": "419d9ee577374bb697dc4cba4b741cb7",
+            "attempt_id": "0",
+            "model_span": "a1a5e0033c63470cb38996b09e26ee50",
+            "tool_span": "d089f151433b4806b5f3b765028231ad",
+            "tool_call_id": "chatcmpl-tool-99b83db291d74a7e",
+            "continuation_span": "c62086263a2a48beb51afebe0e9e3d8e",
+            "episode_span": "7340a531d5054cc79f54fd6cc65979de",
+            "observation_sha256": "aad244a2c65ff0664a748adb4cdb83a81b705fd805d76a2760ec549cb2fa6385",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ],
+        "episode_outcome": "complete_final",
+        "diagnostics": {
+          "json_syntax": true,
+          "format_compliant": true,
+          "target_correct": true,
+          "content_correct": true
+        }
+      },
+      {
+        "file": "trajectory-0112bf27bac441b2810c93952453cf70.jsonl",
+        "sha256": "8e306ef3a843a2cd30d7dea4326905606afebaea562059ca4c64ef205751bcee",
+        "chains": [
+          {
+            "trace_id": "0112bf27bac441b2810c93952453cf70",
+            "case_id": "asset-status-v1/heldout/asset-314",
+            "rollout_id": "688c7721c7e5437b85274227300d7cab",
+            "attempt_id": "0",
+            "model_span": "ea9118ce9bd841299a3385502a83d34b",
+            "tool_span": "9b7835d0446f4734a77b245806ea74ca",
+            "tool_call_id": "chatcmpl-tool-a5b286c6c541d25e",
+            "continuation_span": "a6849481a5e0447aac407c09a5b34171",
+            "episode_span": "c8a67644e9004e37878bdb2b9c8e843b",
+            "observation_sha256": "5379e27f619b6bc49dbf310163357e02569e876d02013e85bf97b7e26a764371",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "0112bf27bac441b2810c93952453cf70",
+            "case_id": "asset-status-v1/heldout/asset-314",
+            "rollout_id": "688c7721c7e5437b85274227300d7cab",
+            "attempt_id": "0",
+            "model_span": "a6849481a5e0447aac407c09a5b34171",
+            "tool_span": "a5a7835da8c5495490797d13b0346d27",
+            "tool_call_id": "chatcmpl-tool-acdb9d5bb81fcc63",
+            "continuation_span": "195a47ccdc8941ba9ff2b6f5772a16b7",
+            "episode_span": "c8a67644e9004e37878bdb2b9c8e843b",
+            "observation_sha256": "5379e27f619b6bc49dbf310163357e02569e876d02013e85bf97b7e26a764371",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ],
+        "episode_outcome": "complete_final",
+        "diagnostics": {
+          "json_syntax": true,
+          "format_compliant": true,
+          "target_correct": true,
+          "content_correct": true
+        }
+      },
+      {
+        "file": "trajectory-0cc615df5f8d41d3b50f4aaed34d7305.jsonl",
+        "sha256": "03a6eabebd5ea6b7cb35217f1c01015b3e39eca66a253d6abfbe3532ac6623f4",
+        "chains": [
+          {
+            "trace_id": "0cc615df5f8d41d3b50f4aaed34d7305",
+            "case_id": "asset-status-v1/heldout/asset-008",
+            "rollout_id": "e43ae306832a47a0bb63c59878d8fc19",
+            "attempt_id": "0",
+            "model_span": "321f30865071441f8b322d4d018dbeb2",
+            "tool_span": "64b810b02de6465280f4d344223f8182",
+            "tool_call_id": "chatcmpl-tool-ac5fdc1d5bb311ab",
+            "continuation_span": "21d318249fb64a348af4656feef38510",
+            "episode_span": "f345aeff641f4cb3a82a509e8ff6baa1",
+            "observation_sha256": "9541271403d23be45ded31c5ac820e9bea9c8c63335015a51bf829948ad9777d",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "0cc615df5f8d41d3b50f4aaed34d7305",
+            "case_id": "asset-status-v1/heldout/asset-008",
+            "rollout_id": "e43ae306832a47a0bb63c59878d8fc19",
+            "attempt_id": "0",
+            "model_span": "21d318249fb64a348af4656feef38510",
+            "tool_span": "fbccfda514ba4583a59e422162ff7a62",
+            "tool_call_id": "chatcmpl-tool-8aca90fd5a975778",
+            "continuation_span": "be4c099bebaf4e5f8d0b936e3edc8e7e",
+            "episode_span": "f345aeff641f4cb3a82a509e8ff6baa1",
+            "observation_sha256": "9541271403d23be45ded31c5ac820e9bea9c8c63335015a51bf829948ad9777d",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ],
+        "episode_outcome": "complete_final",
+        "diagnostics": {
+          "json_syntax": true,
+          "format_compliant": true,
+          "target_correct": true,
+          "content_correct": true
+        }
+      },
+      {
+        "file": "trajectory-0f274975035c4d639c1e1a897f7965e6.jsonl",
+        "sha256": "d55314814cb57a80d9a0e02ed895a8e24e44b01b8b9a7cfb387e7e53cd7f0876",
+        "chains": [
+          {
+            "trace_id": "0f274975035c4d639c1e1a897f7965e6",
+            "case_id": "asset-status-v1/heldout/asset-148",
+            "rollout_id": "d220acefb85a47b78c6c90f1795d254a",
+            "attempt_id": "0",
+            "model_span": "45471970d3564aa19924db31c94f9a9b",
+            "tool_span": "048e3017acd7465fb0491c2498336f7b",
+            "tool_call_id": "chatcmpl-tool-85221292b6a644b2",
+            "continuation_span": "92916d925a0a4e7cb87c89ed94ef1a8c",
+            "episode_span": "d377e3bd2c5948879c3cffb55f8c2f88",
+            "observation_sha256": "df309c1347e8330e86de76921250ee14fbeea50c90a4671a69253cccf20e1d57",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "0f274975035c4d639c1e1a897f7965e6",
+            "case_id": "asset-status-v1/heldout/asset-148",
+            "rollout_id": "d220acefb85a47b78c6c90f1795d254a",
+            "attempt_id": "0",
+            "model_span": "92916d925a0a4e7cb87c89ed94ef1a8c",
+            "tool_span": "1d1ae3205ba94ce596d57153b4de7daa",
+            "tool_call_id": "chatcmpl-tool-b91e7fa3159f6099",
+            "continuation_span": "ac690f8e0b7d4850a3fa4495e0fde391",
+            "episode_span": "d377e3bd2c5948879c3cffb55f8c2f88",
+            "observation_sha256": "df309c1347e8330e86de76921250ee14fbeea50c90a4671a69253cccf20e1d57",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ],
+        "episode_outcome": "complete_final",
+        "diagnostics": {
+          "json_syntax": true,
+          "format_compliant": true,
+          "target_correct": true,
+          "content_correct": true
+        }
+      },
+      {
+        "file": "trajectory-143eb1b717a24288b16f6330abaaa6ef.jsonl",
+        "sha256": "95a5fb3873d5d67728ae010fd4afe5dd4e8fc6b29a518e3dccbb6a5c0e72dfef",
+        "chains": [
+          {
+            "trace_id": "143eb1b717a24288b16f6330abaaa6ef",
+            "case_id": "asset-status-v1/heldout/asset-293",
+            "rollout_id": "aa5939b932654f73b0381989a0cb6679",
+            "attempt_id": "0",
+            "model_span": "4d335cb1e4bc41f7b0a91c96931468ab",
+            "tool_span": "861380660ea048278f4a32171172f6ba",
+            "tool_call_id": "chatcmpl-tool-8be6028114d6e067",
+            "continuation_span": "48da676ec5f04f47bb6340745f91c4cd",
+            "episode_span": "66f7dc5cfbed4e9bb161dce36ef6b692",
+            "observation_sha256": "429b4848864e7acd74189a3feb4e6e3ac86a5088e416b18971c6d204f3666f34",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "143eb1b717a24288b16f6330abaaa6ef",
+            "case_id": "asset-status-v1/heldout/asset-293",
+            "rollout_id": "aa5939b932654f73b0381989a0cb6679",
+            "attempt_id": "0",
+            "model_span": "48da676ec5f04f47bb6340745f91c4cd",
+            "tool_span": "785e6769a5724c278edcd28b9c0aec59",
+            "tool_call_id": "chatcmpl-tool-9bbf5fb2384a2a4d",
+            "continuation_span": "eef031826fcb487590a6e702656fce25",
+            "episode_span": "66f7dc5cfbed4e9bb161dce36ef6b692",
+            "observation_sha256": "429b4848864e7acd74189a3feb4e6e3ac86a5088e416b18971c6d204f3666f34",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ],
+        "episode_outcome": "complete_final",
+        "diagnostics": {
+          "json_syntax": true,
+          "format_compliant": true,
+          "target_correct": true,
+          "content_correct": true
+        }
+      },
+      {
+        "file": "trajectory-1585bfb7c4d4409fbc1c85fb5dd50ad5.jsonl",
+        "sha256": "21192cafdb97558f1e57a91914984551e649c7648fe841a3ccc5cc8e5489911a",
+        "chains": [
+          {
+            "trace_id": "1585bfb7c4d4409fbc1c85fb5dd50ad5",
+            "case_id": "asset-status-v1/heldout/asset-017",
+            "rollout_id": "561e4ad35f3b40bf94d563dcc3db288f",
+            "attempt_id": "0",
+            "model_span": "045af966824247968f15eab00ce9c434",
+            "tool_span": "cbf0ccbc329d4885bd8d29b379acad37",
+            "tool_call_id": "chatcmpl-tool-b8fbdca33642aace",
+            "continuation_span": "7cbf6e84be194ea6a162f13f6d3a5a2c",
+            "episode_span": "84507135160b46898614f2c0a9cd2870",
+            "observation_sha256": "8968817aaa6e5cf2f4ab899cdb5afecc86c9a0a4f260372257f166bbcc10f67f",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "1585bfb7c4d4409fbc1c85fb5dd50ad5",
+            "case_id": "asset-status-v1/heldout/asset-017",
+            "rollout_id": "561e4ad35f3b40bf94d563dcc3db288f",
+            "attempt_id": "0",
+            "model_span": "7cbf6e84be194ea6a162f13f6d3a5a2c",
+            "tool_span": "4d18978647f1474f8987ca8fc985d0f0",
+            "tool_call_id": "chatcmpl-tool-ab0aad29f706acd9",
+            "continuation_span": "ff88cfd1946342849235ae403763fa0f",
+            "episode_span": "84507135160b46898614f2c0a9cd2870",
+            "observation_sha256": "8968817aaa6e5cf2f4ab899cdb5afecc86c9a0a4f260372257f166bbcc10f67f",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ],
+        "episode_outcome": "complete_final",
+        "diagnostics": {
+          "json_syntax": true,
+          "format_compliant": true,
+          "target_correct": true,
+          "content_correct": true
+        }
+      },
+      {
+        "file": "trajectory-1776eb6b22a3470790d73c87b38296a5.jsonl",
+        "sha256": "33f64d62a2cc65519d496f0e5b3d13dcff2a886b3c5d7b2d11ea18d0ed7cfdc6",
+        "chains": [
+          {
+            "trace_id": "1776eb6b22a3470790d73c87b38296a5",
+            "case_id": "asset-status-v1/heldout/asset-070",
+            "rollout_id": "f8ee5579e38c4fdcbe63bbf0968b1cf8",
+            "attempt_id": "0",
+            "model_span": "2f949c48fa3145a790ab0834db73fe03",
+            "tool_span": "451fc0895f7d437bba9b4bc1460fc4cb",
+            "tool_call_id": "chatcmpl-tool-bf56ce56fc9bafa9",
+            "continuation_span": "fec2d955aaa5479cbeda5b5d5ce3b68a",
+            "episode_span": "3553d01221434c899d74002fd05b7f9c",
+            "observation_sha256": "255e39939b9d14e0979fb06ab21d862bf8a6401933261c1a2b844b2a212cae9b",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "1776eb6b22a3470790d73c87b38296a5",
+            "case_id": "asset-status-v1/heldout/asset-070",
+            "rollout_id": "f8ee5579e38c4fdcbe63bbf0968b1cf8",
+            "attempt_id": "0",
+            "model_span": "fec2d955aaa5479cbeda5b5d5ce3b68a",
+            "tool_span": "374ec570b64747799e25e5c834250c82",
+            "tool_call_id": "chatcmpl-tool-a6a2f08ff4b822ef",
+            "continuation_span": "37c4bc469b404dbb9cd169915fd67c45",
+            "episode_span": "3553d01221434c899d74002fd05b7f9c",
+            "observation_sha256": "255e39939b9d14e0979fb06ab21d862bf8a6401933261c1a2b844b2a212cae9b",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ],
+        "episode_outcome": "complete_final",
+        "diagnostics": {
+          "json_syntax": true,
+          "format_compliant": true,
+          "target_correct": true,
+          "content_correct": true
+        }
+      },
+      {
+        "file": "trajectory-1816e7438ba3429389e46f9b7d013bc9.jsonl",
+        "sha256": "43212d85e94744e5ca9bc5e3f2cba9705cb4255f356933ea6acb6604d0c625f2",
+        "chains": [
+          {
+            "trace_id": "1816e7438ba3429389e46f9b7d013bc9",
+            "case_id": "asset-status-v1/heldout/asset-270",
+            "rollout_id": "9e0d4f21c1e3408191f51251080bb2af",
+            "attempt_id": "0",
+            "model_span": "23d4f2bf4d6d40ac87322d1dbd251baa",
+            "tool_span": "8ccc70b7b8234d669dc9bdf247c3cc18",
+            "tool_call_id": "chatcmpl-tool-99b9bc7e1c544dba",
+            "continuation_span": "f53416c35d6d4b3ea387a7684b017dc5",
+            "episode_span": "2cf12b5d9f654fc88a755a416d59390b",
+            "observation_sha256": "7022e3ebe69ebaf0319446c7826eb4e3c9bec80ccef3dbc1c7a91d4f1cd0f418",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "1816e7438ba3429389e46f9b7d013bc9",
+            "case_id": "asset-status-v1/heldout/asset-270",
+            "rollout_id": "9e0d4f21c1e3408191f51251080bb2af",
+            "attempt_id": "0",
+            "model_span": "f53416c35d6d4b3ea387a7684b017dc5",
+            "tool_span": "070c962a592a4c8cb8818dbdc85c2bf9",
+            "tool_call_id": "chatcmpl-tool-8042862bd8fc4e44",
+            "continuation_span": "aab5e057c9ae470b81e3de31d40d115c",
+            "episode_span": "2cf12b5d9f654fc88a755a416d59390b",
+            "observation_sha256": "7022e3ebe69ebaf0319446c7826eb4e3c9bec80ccef3dbc1c7a91d4f1cd0f418",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ],
+        "episode_outcome": "complete_final",
+        "diagnostics": {
+          "json_syntax": true,
+          "format_compliant": true,
+          "target_correct": true,
+          "content_correct": true
+        }
+      },
+      {
+        "file": "trajectory-1a08aae663c64e659309cb39d58ba55f.jsonl",
+        "sha256": "a4737db64fb1ef780bd855d2ca1cdb6bf9ef15d90bacc6aea05e84a0119ec73f",
+        "chains": [
+          {
+            "trace_id": "1a08aae663c64e659309cb39d58ba55f",
+            "case_id": "asset-status-v1/heldout/asset-120",
+            "rollout_id": "84e238f6b8a442bfac95fad283425683",
+            "attempt_id": "0",
+            "model_span": "3ea797f893044102b3b3ffd42eaec36e",
+            "tool_span": "711ffcdc268047b4b024f0b2df400b28",
+            "tool_call_id": "chatcmpl-tool-be4c3159f31be4f7",
+            "continuation_span": "69ec7c51780a4d61a6b614a7d5d4413c",
+            "episode_span": "594a0c7194194559b86e3851f687dfac",
+            "observation_sha256": "41a21c78ff95c953fe634c5282fa082972cc472370131b4034ef51ce7c1a1c85",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "1a08aae663c64e659309cb39d58ba55f",
+            "case_id": "asset-status-v1/heldout/asset-120",
+            "rollout_id": "84e238f6b8a442bfac95fad283425683",
+            "attempt_id": "0",
+            "model_span": "69ec7c51780a4d61a6b614a7d5d4413c",
+            "tool_span": "7711ff0e425644b59316c3224686186c",
+            "tool_call_id": "chatcmpl-tool-86f8058947dd7beb",
+            "continuation_span": "f8e25fd5f9794dec8cbd603611353758",
+            "episode_span": "594a0c7194194559b86e3851f687dfac",
+            "observation_sha256": "41a21c78ff95c953fe634c5282fa082972cc472370131b4034ef51ce7c1a1c85",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ],
+        "episode_outcome": "complete_final",
+        "diagnostics": {
+          "json_syntax": true,
+          "format_compliant": true,
+          "target_correct": true,
+          "content_correct": true
+        }
+      },
+      {
+        "file": "trajectory-1a62acf8d164481a8140ddd0ff0271fb.jsonl",
+        "sha256": "ecac7a7e5713588099a6f15298ebe691b950a39dcef6f1313533eaa4cd8d647d",
+        "chains": [
+          {
+            "trace_id": "1a62acf8d164481a8140ddd0ff0271fb",
+            "case_id": "asset-status-v1/heldout/asset-049",
+            "rollout_id": "124971cc964348a58d459e3abba7c518",
+            "attempt_id": "0",
+            "model_span": "ed4315d1a7be4f6488a4500f814c48f9",
+            "tool_span": "a2ebd1b5e2ef495595962be6f6275d99",
+            "tool_call_id": "chatcmpl-tool-8ab4843ce92d50c6",
+            "continuation_span": "3331c99a5bba4e7488cd5d7f53bff15e",
+            "episode_span": "1d3c7fa0ff0c42318484d7f0c4fb2135",
+            "observation_sha256": "fabe25d14a662659c08a28690b9a5513547fdd306050a3906b149ea7e14c90e7",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "1a62acf8d164481a8140ddd0ff0271fb",
+            "case_id": "asset-status-v1/heldout/asset-049",
+            "rollout_id": "124971cc964348a58d459e3abba7c518",
+            "attempt_id": "0",
+            "model_span": "3331c99a5bba4e7488cd5d7f53bff15e",
+            "tool_span": "6040524069754ee4b9142fdc6211330b",
+            "tool_call_id": "chatcmpl-tool-81a30d3c839553ac",
+            "continuation_span": "42de5e67fb20401f82f111b1a81a4880",
+            "episode_span": "1d3c7fa0ff0c42318484d7f0c4fb2135",
+            "observation_sha256": "fabe25d14a662659c08a28690b9a5513547fdd306050a3906b149ea7e14c90e7",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ],
+        "episode_outcome": "complete_final",
+        "diagnostics": {
+          "json_syntax": true,
+          "format_compliant": true,
+          "target_correct": true,
+          "content_correct": true
+        }
+      },
+      {
+        "file": "trajectory-1e432fa8710e430fb47b0325e434060e.jsonl",
+        "sha256": "8b70e8a60f5efb9ef6a0e1291e753911ce7798da145af3c6bec4e8444619fc80",
+        "chains": [
+          {
+            "trace_id": "1e432fa8710e430fb47b0325e434060e",
+            "case_id": "asset-status-v1/heldout/asset-248",
+            "rollout_id": "04ec7a95293c4999b65c935a8e6cc0df",
+            "attempt_id": "0",
+            "model_span": "55229b91193543d9b92288db5e6028bf",
+            "tool_span": "a7572631f5784105a622890781daeae8",
+            "tool_call_id": "chatcmpl-tool-bee3eb2d3bd0bd51",
+            "continuation_span": "709562a35c424ffebe5729b92b65d3b8",
+            "episode_span": "393640c6dab243798e7b23810001960a",
+            "observation_sha256": "67a629ca26a20a3e0effe4e5e8a5c8dbfda0ee1b13ab552e67c145eba6fe957f",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "1e432fa8710e430fb47b0325e434060e",
+            "case_id": "asset-status-v1/heldout/asset-248",
+            "rollout_id": "04ec7a95293c4999b65c935a8e6cc0df",
+            "attempt_id": "0",
+            "model_span": "709562a35c424ffebe5729b92b65d3b8",
+            "tool_span": "df0582d3b12d4df1a109dd106fe224f6",
+            "tool_call_id": "chatcmpl-tool-9ba2b40d72e8cd42",
+            "continuation_span": "6e7971be3f06434fa6f883c258153262",
+            "episode_span": "393640c6dab243798e7b23810001960a",
+            "observation_sha256": "67a629ca26a20a3e0effe4e5e8a5c8dbfda0ee1b13ab552e67c145eba6fe957f",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ],
+        "episode_outcome": "complete_final",
+        "diagnostics": {
+          "json_syntax": true,
+          "format_compliant": true,
+          "target_correct": true,
+          "content_correct": true
+        }
+      },
+      {
+        "file": "trajectory-23d57d13499343d0ad0259cdce679258.jsonl",
+        "sha256": "5d05887950e50a41785b026f2fe78214bf6ab90accc8c1b5809732c3b21cd13a",
+        "chains": [
+          {
+            "trace_id": "23d57d13499343d0ad0259cdce679258",
+            "case_id": "asset-status-v1/heldout/asset-267",
+            "rollout_id": "90dae5f5169c4f608936caf94074c350",
+            "attempt_id": "0",
+            "model_span": "576371edcbff4c80adac14011c5e9539",
+            "tool_span": "86a774b273ff45b79c26ff3e11e9a3f5",
+            "tool_call_id": "chatcmpl-tool-83e27620fe6014a1",
+            "continuation_span": "2dc36c9bc10c438d86a18f4c6337727c",
+            "episode_span": "dd978abd5b444289b775ae81a764aafa",
+            "observation_sha256": "bf62c3f812e5afc670b6863614393ce04ba62d1e5526501d7459e67655b10b8b",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "23d57d13499343d0ad0259cdce679258",
+            "case_id": "asset-status-v1/heldout/asset-267",
+            "rollout_id": "90dae5f5169c4f608936caf94074c350",
+            "attempt_id": "0",
+            "model_span": "2dc36c9bc10c438d86a18f4c6337727c",
+            "tool_span": "83252f9747bd4cf0a54c84ae552b21ae",
+            "tool_call_id": "chatcmpl-tool-a2fb9bf66ef06fad",
+            "continuation_span": "571aeaee8a2a4543934a7e8e7c83e7ec",
+            "episode_span": "dd978abd5b444289b775ae81a764aafa",
+            "observation_sha256": "bf62c3f812e5afc670b6863614393ce04ba62d1e5526501d7459e67655b10b8b",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ],
+        "episode_outcome": "complete_final",
+        "diagnostics": {
+          "json_syntax": true,
+          "format_compliant": true,
+          "target_correct": true,
+          "content_correct": true
+        }
+      },
+      {
+        "file": "trajectory-23e538956a754d3299f6cd6b2b49a361.jsonl",
+        "sha256": "1fa6ff31ada38908899a288843984930f6b05fcb9e1ab147c9f694624d9f2cb0",
+        "chains": [
+          {
+            "trace_id": "23e538956a754d3299f6cd6b2b49a361",
+            "case_id": "asset-status-v1/heldout/asset-080",
+            "rollout_id": "e57a5fa670bd493da5fdde2a5b4a7f2f",
+            "attempt_id": "0",
+            "model_span": "26051c8a2fa14dd5ab6bc6e7f8119920",
+            "tool_span": "594cc0441e7b4000909dbd9bda9634ef",
+            "tool_call_id": "chatcmpl-tool-89531f63d8830e66",
+            "continuation_span": "c06e8c275c44416b97f6056bf7ac6157",
+            "episode_span": "a073b3236562429a9dcbe306e1fa9ac1",
+            "observation_sha256": "de91b21dbafd9a2dfbbf6fa73604f66451d7cc0c69de8c89250048154a758ca7",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "23e538956a754d3299f6cd6b2b49a361",
+            "case_id": "asset-status-v1/heldout/asset-080",
+            "rollout_id": "e57a5fa670bd493da5fdde2a5b4a7f2f",
+            "attempt_id": "0",
+            "model_span": "c06e8c275c44416b97f6056bf7ac6157",
+            "tool_span": "efb2a1e1b844481fbb802d767974e463",
+            "tool_call_id": "chatcmpl-tool-a7329f6f16f71eae",
+            "continuation_span": "eb63b0117431477a92670240f201ec0e",
+            "episode_span": "a073b3236562429a9dcbe306e1fa9ac1",
+            "observation_sha256": "de91b21dbafd9a2dfbbf6fa73604f66451d7cc0c69de8c89250048154a758ca7",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ],
+        "episode_outcome": "complete_final",
+        "diagnostics": {
+          "json_syntax": true,
+          "format_compliant": true,
+          "target_correct": true,
+          "content_correct": true
+        }
+      },
+      {
+        "file": "trajectory-28d676f44bd5408d9a39bdb089232bfc.jsonl",
+        "sha256": "5dde532cd7f6c728e41d9bfa0ba3985c76a1b3e39137c653d6133cce6427de8c",
+        "chains": [
+          {
+            "trace_id": "28d676f44bd5408d9a39bdb089232bfc",
+            "case_id": "asset-status-v1/heldout/asset-038",
+            "rollout_id": "54261370583b4deca1bf8b6fb6af3a07",
+            "attempt_id": "0",
+            "model_span": "c6db3c265f16443390a5a56e2d02ff15",
+            "tool_span": "2d61ec61841c4aacbc20758edfec8817",
+            "tool_call_id": "chatcmpl-tool-8e430ef50af7731d",
+            "continuation_span": "2559b643eefb4b1dba1a278a6322edb0",
+            "episode_span": "a9ca5e2af036418c81eb7f64bdc90b71",
+            "observation_sha256": "ff0471fd5418a072e4ce099bedde74ce8c0c998d64b889a1c9ae2c053d44a26d",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "28d676f44bd5408d9a39bdb089232bfc",
+            "case_id": "asset-status-v1/heldout/asset-038",
+            "rollout_id": "54261370583b4deca1bf8b6fb6af3a07",
+            "attempt_id": "0",
+            "model_span": "2559b643eefb4b1dba1a278a6322edb0",
+            "tool_span": "bff4c4dd045a4e188ad961469ee41bef",
+            "tool_call_id": "chatcmpl-tool-b0a9cf863c865fa2",
+            "continuation_span": "094bc5403f4b4c39912260231785383a",
+            "episode_span": "a9ca5e2af036418c81eb7f64bdc90b71",
+            "observation_sha256": "ff0471fd5418a072e4ce099bedde74ce8c0c998d64b889a1c9ae2c053d44a26d",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ],
+        "episode_outcome": "complete_final",
+        "diagnostics": {
+          "json_syntax": true,
+          "format_compliant": true,
+          "target_correct": true,
+          "content_correct": true
+        }
+      },
+      {
+        "file": "trajectory-2d46d512569f496aa6750b27486eeba0.jsonl",
+        "sha256": "a6b3da79dca535814a345f249fad274ca7d7b827ecea12cb342f4bd4087516e9",
+        "chains": [
+          {
+            "trace_id": "2d46d512569f496aa6750b27486eeba0",
+            "case_id": "asset-status-v1/heldout/asset-175",
+            "rollout_id": "552ca17c210d4fd5934b8607c75c15ff",
+            "attempt_id": "0",
+            "model_span": "817b8c61052f488baeec91a51f8ceace",
+            "tool_span": "0b419a86102a4dcc90bb7e5f842404d7",
+            "tool_call_id": "chatcmpl-tool-962613378506a1ca",
+            "continuation_span": "7ee6aaf1e2ef4666971b5e33fcde0cdf",
+            "episode_span": "8803a492ca3a491eba53c2e143479103",
+            "observation_sha256": "938c47c3af6869d75a59a4dfce8ac903a9bd3162c692c7cc725f4fcdf17a4c70",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "2d46d512569f496aa6750b27486eeba0",
+            "case_id": "asset-status-v1/heldout/asset-175",
+            "rollout_id": "552ca17c210d4fd5934b8607c75c15ff",
+            "attempt_id": "0",
+            "model_span": "7ee6aaf1e2ef4666971b5e33fcde0cdf",
+            "tool_span": "46fec556192c4759b1fef34a0943a7e9",
+            "tool_call_id": "chatcmpl-tool-ac48cd680c285150",
+            "continuation_span": "59ca71038d004206a4878677d221314e",
+            "episode_span": "8803a492ca3a491eba53c2e143479103",
+            "observation_sha256": "938c47c3af6869d75a59a4dfce8ac903a9bd3162c692c7cc725f4fcdf17a4c70",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ],
+        "episode_outcome": "complete_final",
+        "diagnostics": {
+          "json_syntax": true,
+          "format_compliant": true,
+          "target_correct": true,
+          "content_correct": true
+        }
+      },
+      {
+        "file": "trajectory-340d0b857ccc42feb7fb0a4a74e766cd.jsonl",
+        "sha256": "baa32d11214b306f8bd05107b92961b34d9e10a4db6982ad0539443f72b5ac1b",
+        "chains": [
+          {
+            "trace_id": "340d0b857ccc42feb7fb0a4a74e766cd",
+            "case_id": "asset-status-v1/heldout/asset-132",
+            "rollout_id": "5f7d7c5d98154027a12709f635a6b7e5",
+            "attempt_id": "0",
+            "model_span": "15c3ac22b984413dbd8064fe6a0b8a5f",
+            "tool_span": "3ccc4126386344758456dd99f419a589",
+            "tool_call_id": "chatcmpl-tool-bff9fac5b11a3b2e",
+            "continuation_span": "1a94f21b4b1049dd92feda29f4d96f7b",
+            "episode_span": "3edb10502b8f4cda91f821168fae7e22",
+            "observation_sha256": "81eb02f41fba46a7b4a3fcec3424dcb20d90ca5ef34dfd62e4b12a77179c9c41",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "340d0b857ccc42feb7fb0a4a74e766cd",
+            "case_id": "asset-status-v1/heldout/asset-132",
+            "rollout_id": "5f7d7c5d98154027a12709f635a6b7e5",
+            "attempt_id": "0",
+            "model_span": "1a94f21b4b1049dd92feda29f4d96f7b",
+            "tool_span": "cf9f420da274496bb317d9f5668bf6ce",
+            "tool_call_id": "chatcmpl-tool-bce1e44a3015238f",
+            "continuation_span": "a795b1b422964d859315d819d64aaf7f",
+            "episode_span": "3edb10502b8f4cda91f821168fae7e22",
+            "observation_sha256": "81eb02f41fba46a7b4a3fcec3424dcb20d90ca5ef34dfd62e4b12a77179c9c41",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ],
+        "episode_outcome": "complete_final",
+        "diagnostics": {
+          "json_syntax": true,
+          "format_compliant": true,
+          "target_correct": true,
+          "content_correct": true
+        }
+      },
+      {
+        "file": "trajectory-35287c46a8154db785cb49e748f89fd3.jsonl",
+        "sha256": "2219f58b03e97571e6a149669f35c4139b07f482c2c3f0af472a3e41a079ca47",
+        "chains": [
+          {
+            "trace_id": "35287c46a8154db785cb49e748f89fd3",
+            "case_id": "asset-status-v1/heldout/asset-217",
+            "rollout_id": "a78c58ddc55d446c8782009d6db678c5",
+            "attempt_id": "0",
+            "model_span": "1cd89af6630c431c9b221ca3ddf02ed5",
+            "tool_span": "a8db1759893a44d1b150f4d3a6668659",
+            "tool_call_id": "chatcmpl-tool-a9f5eeab3fe9fc1a",
+            "continuation_span": "c927eb1208dd47dbaca88b684041d8c1",
+            "episode_span": "9e22b79dccd5417c953d7d70e547fdc8",
+            "observation_sha256": "c5b9476bf8226d48c8f8423fcdd540d841f314b29c855b7967f6db3c4089847a",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "35287c46a8154db785cb49e748f89fd3",
+            "case_id": "asset-status-v1/heldout/asset-217",
+            "rollout_id": "a78c58ddc55d446c8782009d6db678c5",
+            "attempt_id": "0",
+            "model_span": "c927eb1208dd47dbaca88b684041d8c1",
+            "tool_span": "021dcc78059d4b43bf8757a6611feb25",
+            "tool_call_id": "chatcmpl-tool-af3d5b95289a8387",
+            "continuation_span": "de10d44380a8496482bf521c269eac09",
+            "episode_span": "9e22b79dccd5417c953d7d70e547fdc8",
+            "observation_sha256": "c5b9476bf8226d48c8f8423fcdd540d841f314b29c855b7967f6db3c4089847a",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ],
+        "episode_outcome": "complete_final",
+        "diagnostics": {
+          "json_syntax": true,
+          "format_compliant": true,
+          "target_correct": true,
+          "content_correct": true
+        }
+      },
+      {
+        "file": "trajectory-3937a81eac4b4b148203186c726983d2.jsonl",
+        "sha256": "c40864b48fea0cf5a246a45f67389df07e3b29af138c540d84704f4451f77f96",
+        "chains": [
+          {
+            "trace_id": "3937a81eac4b4b148203186c726983d2",
+            "case_id": "asset-status-v1/heldout/asset-013",
+            "rollout_id": "38400fb7d7c74b7ba197b29ca378ba7a",
+            "attempt_id": "0",
+            "model_span": "9f242094ab124d8d8c5b77efab87f20a",
+            "tool_span": "7c026fddb1f2434f9138e9e143b0477d",
+            "tool_call_id": "chatcmpl-tool-b08044d7f44096ab",
+            "continuation_span": "99d6a5d933a84662a48bded7a453648b",
+            "episode_span": "238af609b3564da2a8532e2f6adf8cd2",
+            "observation_sha256": "7abe701b4d79e0e05fe0c03fc37016d9633ab01332d73ba34f1656f714248a4a",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "3937a81eac4b4b148203186c726983d2",
+            "case_id": "asset-status-v1/heldout/asset-013",
+            "rollout_id": "38400fb7d7c74b7ba197b29ca378ba7a",
+            "attempt_id": "0",
+            "model_span": "99d6a5d933a84662a48bded7a453648b",
+            "tool_span": "1f8269d8bead4dc4acd563a6e8d99749",
+            "tool_call_id": "chatcmpl-tool-bbb8ab2365095e82",
+            "continuation_span": "d711edd435c44bd18b098e2db8709814",
+            "episode_span": "238af609b3564da2a8532e2f6adf8cd2",
+            "observation_sha256": "7abe701b4d79e0e05fe0c03fc37016d9633ab01332d73ba34f1656f714248a4a",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ],
+        "episode_outcome": "complete_final",
+        "diagnostics": {
+          "json_syntax": true,
+          "format_compliant": true,
+          "target_correct": true,
+          "content_correct": true
+        }
+      },
+      {
+        "file": "trajectory-3960796c31cb405b970244468d500093.jsonl",
+        "sha256": "3f4e7c8ceae923c1a6d314f901c776e00b89535b7c87f2ee2558ec37bbf47c4c",
+        "chains": [
+          {
+            "trace_id": "3960796c31cb405b970244468d500093",
+            "case_id": "asset-status-v1/heldout/asset-024",
+            "rollout_id": "b57138d018a74d4a99fbe1737bfeb986",
+            "attempt_id": "0",
+            "model_span": "aea0664489434036a37a81fb2be3c79c",
+            "tool_span": "97b12b8b31314ae7aa49382a7c0f960f",
+            "tool_call_id": "chatcmpl-tool-9976db2ed946b21b",
+            "continuation_span": "aac72e3e9a6f4ed58d7cc50cf31e8657",
+            "episode_span": "d2caf866318240ee99fbee771a55af5d",
+            "observation_sha256": "a573507553bd579fa59d4eba68b6e8ebe4a3cbcb5a89741a863ea93e1dac5bb1",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "3960796c31cb405b970244468d500093",
+            "case_id": "asset-status-v1/heldout/asset-024",
+            "rollout_id": "b57138d018a74d4a99fbe1737bfeb986",
+            "attempt_id": "0",
+            "model_span": "aac72e3e9a6f4ed58d7cc50cf31e8657",
+            "tool_span": "2a48105e0568434aa9247c6119ac59ce",
+            "tool_call_id": "chatcmpl-tool-b26cc1e6ce512e22",
+            "continuation_span": "83c8fd014f8744e784494c53374ef1b4",
+            "episode_span": "d2caf866318240ee99fbee771a55af5d",
+            "observation_sha256": "a573507553bd579fa59d4eba68b6e8ebe4a3cbcb5a89741a863ea93e1dac5bb1",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ],
+        "episode_outcome": "complete_final",
+        "diagnostics": {
+          "json_syntax": true,
+          "format_compliant": true,
+          "target_correct": true,
+          "content_correct": true
+        }
+      },
+      {
+        "file": "trajectory-3a27d2dd360147d3a374382c3a3d3d44.jsonl",
+        "sha256": "1add7f8e1c9c6d0511eb300477dd3d64b1d1d2ab8785ffeda1b3247ca2248bed",
+        "chains": [
+          {
+            "trace_id": "3a27d2dd360147d3a374382c3a3d3d44",
+            "case_id": "asset-status-v1/heldout/asset-068",
+            "rollout_id": "47fa69f6447946daa2d6b58bbaeabc91",
+            "attempt_id": "0",
+            "model_span": "f80f2d723f6a42c59c86cab45395863f",
+            "tool_span": "7b7b1df2675c40dfa78b789d049849ec",
+            "tool_call_id": "chatcmpl-tool-a83eb440563985ff",
+            "continuation_span": "ccba46eab2c64070a15a73074397674f",
+            "episode_span": "7f16696ba68d4b5090c5067d8fcf50ba",
+            "observation_sha256": "9b3163039445a8ab1629f0e27e4c739236c9834840e5bcbe44992a3779e0b75b",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "3a27d2dd360147d3a374382c3a3d3d44",
+            "case_id": "asset-status-v1/heldout/asset-068",
+            "rollout_id": "47fa69f6447946daa2d6b58bbaeabc91",
+            "attempt_id": "0",
+            "model_span": "ccba46eab2c64070a15a73074397674f",
+            "tool_span": "6e1130b039b646aa9531d40d029a538e",
+            "tool_call_id": "chatcmpl-tool-98bf6d31f604a0b3",
+            "continuation_span": "8070f7430abf4a279d0576b302437a29",
+            "episode_span": "7f16696ba68d4b5090c5067d8fcf50ba",
+            "observation_sha256": "9b3163039445a8ab1629f0e27e4c739236c9834840e5bcbe44992a3779e0b75b",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ],
+        "episode_outcome": "complete_final",
+        "diagnostics": {
+          "json_syntax": true,
+          "format_compliant": true,
+          "target_correct": true,
+          "content_correct": true
+        }
+      },
+      {
+        "file": "trajectory-3ad15c7539734cb094fb66d09929cd75.jsonl",
+        "sha256": "b195c5872f3747bfa7bc7c049d25777cd972527845dccb92a72332f3c25f95eb",
+        "chains": [
+          {
+            "trace_id": "3ad15c7539734cb094fb66d09929cd75",
+            "case_id": "asset-status-v1/heldout/asset-047",
+            "rollout_id": "ce13030fa3a74e58878c3906621d2c2c",
+            "attempt_id": "0",
+            "model_span": "1289d8def00d45e3bd17610249992c81",
+            "tool_span": "88cdacc1c9684a1a87cd1e3cd043db91",
+            "tool_call_id": "chatcmpl-tool-ae26ee2e1d13e5e1",
+            "continuation_span": "38692d4fe2b2406196a39d866e82ae51",
+            "episode_span": "bae69c9d89b14052a87c3b1840f168d9",
+            "observation_sha256": "b0c669075c461b3172e21b53d89e162a13ee8de93eccb5e4ae6e145810d43339",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "3ad15c7539734cb094fb66d09929cd75",
+            "case_id": "asset-status-v1/heldout/asset-047",
+            "rollout_id": "ce13030fa3a74e58878c3906621d2c2c",
+            "attempt_id": "0",
+            "model_span": "38692d4fe2b2406196a39d866e82ae51",
+            "tool_span": "77d222999dd2498ead088fe6be95d4d1",
+            "tool_call_id": "chatcmpl-tool-80b00ddd254ac885",
+            "continuation_span": "22034671c741432b93698d37d36bb489",
+            "episode_span": "bae69c9d89b14052a87c3b1840f168d9",
+            "observation_sha256": "b0c669075c461b3172e21b53d89e162a13ee8de93eccb5e4ae6e145810d43339",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ],
+        "episode_outcome": "complete_final",
+        "diagnostics": {
+          "json_syntax": true,
+          "format_compliant": true,
+          "target_correct": true,
+          "content_correct": true
+        }
+      },
+      {
+        "file": "trajectory-3d28990a8b9143988f5096925a7e9ee2.jsonl",
+        "sha256": "5123e48b563b65097ed2ffb1d217dacd7136be7a562981d72c16bc18cdbd8c4b",
+        "chains": [
+          {
+            "trace_id": "3d28990a8b9143988f5096925a7e9ee2",
+            "case_id": "asset-status-v1/heldout/asset-305",
+            "rollout_id": "378d4624fff343668a01f8ec4bcb44f8",
+            "attempt_id": "0",
+            "model_span": "17138714a7914adfbf20e5c1172aab3e",
+            "tool_span": "3c3f60f3b51b4407ba8d3eb8d4a37571",
+            "tool_call_id": "chatcmpl-tool-81289665a8dd3418",
+            "continuation_span": "0a904adb2c2e4176a0dc29d79ecf4c89",
+            "episode_span": "ebba0fade4994dbaab74b98edcadc56b",
+            "observation_sha256": "33ca756e2f9ba5dda957c01886a2697a8344726f8c9d65e0cfe87fce40ee80da",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "3d28990a8b9143988f5096925a7e9ee2",
+            "case_id": "asset-status-v1/heldout/asset-305",
+            "rollout_id": "378d4624fff343668a01f8ec4bcb44f8",
+            "attempt_id": "0",
+            "model_span": "0a904adb2c2e4176a0dc29d79ecf4c89",
+            "tool_span": "3d0a3b5725d94e33bf1d32e77a577029",
+            "tool_call_id": "chatcmpl-tool-827f32f1124cffb3",
+            "continuation_span": "4864297f4bc94e0e944cc77375ec0b93",
+            "episode_span": "ebba0fade4994dbaab74b98edcadc56b",
+            "observation_sha256": "33ca756e2f9ba5dda957c01886a2697a8344726f8c9d65e0cfe87fce40ee80da",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ],
+        "episode_outcome": "complete_final",
+        "diagnostics": {
+          "json_syntax": true,
+          "format_compliant": true,
+          "target_correct": true,
+          "content_correct": true
+        }
+      },
+      {
+        "file": "trajectory-3d6c7f4175e74c8b9be1129b5ac8bfe5.jsonl",
+        "sha256": "b5930a688893a7d51223a5803f8a9ac339ab5998c3220a480664a682082b01f2",
+        "chains": [
+          {
+            "trace_id": "3d6c7f4175e74c8b9be1129b5ac8bfe5",
+            "case_id": "asset-status-v1/heldout/asset-091",
+            "rollout_id": "7bebc8792c1340bfbcd41bda8af12226",
+            "attempt_id": "0",
+            "model_span": "96d65c6706c145d58101bc8d5ab1986e",
+            "tool_span": "0b167bf1f1484b12886c3ebdd8f8742a",
+            "tool_call_id": "chatcmpl-tool-9624fd3637194ef4",
+            "continuation_span": "28df49875eaf47cebc4fd4a685408c4f",
+            "episode_span": "5eab0023d26f4bb09a7531241360dbbd",
+            "observation_sha256": "8b504a79c4d83a068636f2a27c7b5a92a59610e350a46624d74c0a7f9e916306",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "3d6c7f4175e74c8b9be1129b5ac8bfe5",
+            "case_id": "asset-status-v1/heldout/asset-091",
+            "rollout_id": "7bebc8792c1340bfbcd41bda8af12226",
+            "attempt_id": "0",
+            "model_span": "28df49875eaf47cebc4fd4a685408c4f",
+            "tool_span": "9fc46f527636498fa8787080248aacfe",
+            "tool_call_id": "chatcmpl-tool-a8a8b915ca385b38",
+            "continuation_span": "ab05d7c5f6714eef86c4d26522a4e851",
+            "episode_span": "5eab0023d26f4bb09a7531241360dbbd",
+            "observation_sha256": "8b504a79c4d83a068636f2a27c7b5a92a59610e350a46624d74c0a7f9e916306",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ],
+        "episode_outcome": "complete_final",
+        "diagnostics": {
+          "json_syntax": true,
+          "format_compliant": true,
+          "target_correct": true,
+          "content_correct": true
+        }
+      },
+      {
+        "file": "trajectory-3f09cf6b369848a7b615a4d0421590c3.jsonl",
+        "sha256": "529a5a971cc3c73942887669bf0e553fd1a544e324e3f434c073f3ae6cf0a5b8",
+        "chains": [
+          {
+            "trace_id": "3f09cf6b369848a7b615a4d0421590c3",
+            "case_id": "asset-status-v1/heldout/asset-211",
+            "rollout_id": "c59b88bba2a34cf1b8d2d4a783172a9c",
+            "attempt_id": "0",
+            "model_span": "3f7d5ebba7bc4765a54f7e1b235de6df",
+            "tool_span": "0535320faff54f89ab2212e232709ba1",
+            "tool_call_id": "chatcmpl-tool-92a86e25a5094441",
+            "continuation_span": "38ffc1f165e8495584e87559e60f2865",
+            "episode_span": "29f96639e938460e8e4646126cd8924a",
+            "observation_sha256": "77d05cd8d063abcec2042d36d33b41c0038541b1655accd9eeb6ea547d54ddd9",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "3f09cf6b369848a7b615a4d0421590c3",
+            "case_id": "asset-status-v1/heldout/asset-211",
+            "rollout_id": "c59b88bba2a34cf1b8d2d4a783172a9c",
+            "attempt_id": "0",
+            "model_span": "38ffc1f165e8495584e87559e60f2865",
+            "tool_span": "6a0e31fdb8a8439690b3c6ea27ddafec",
+            "tool_call_id": "chatcmpl-tool-a4c2ed8384057315",
+            "continuation_span": "dfa2d32e6de0412aae6f5e1905619abb",
+            "episode_span": "29f96639e938460e8e4646126cd8924a",
+            "observation_sha256": "77d05cd8d063abcec2042d36d33b41c0038541b1655accd9eeb6ea547d54ddd9",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ],
+        "episode_outcome": "complete_final",
+        "diagnostics": {
+          "json_syntax": true,
+          "format_compliant": true,
+          "target_correct": true,
+          "content_correct": true
+        }
+      },
+      {
+        "file": "trajectory-400d35b6c7c64724b4e1b5a5c74f8382.jsonl",
+        "sha256": "c2039bbe9a4e82d0d786fd76fe4be9ba3980c8d0090eddc39b7fd36e4c83fc0d",
+        "chains": [
+          {
+            "trace_id": "400d35b6c7c64724b4e1b5a5c74f8382",
+            "case_id": "asset-status-v1/heldout/asset-065",
+            "rollout_id": "7749688ca1574f79a446a411f2b625b6",
+            "attempt_id": "0",
+            "model_span": "8939f40aa4ea4fc8a0d982c0ce2571d7",
+            "tool_span": "6206a337ccbd4afc9609215c29d9a882",
+            "tool_call_id": "chatcmpl-tool-87286a2fefc13f15",
+            "continuation_span": "f87091c8c2ef423dacdd4d2083e9c730",
+            "episode_span": "d1acedfcf8a2402983235f6404170516",
+            "observation_sha256": "7b9452e4240b6c2b1d57cb01de9911aed99a7f86b16d42ce3a2a61e15b3655a3",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "400d35b6c7c64724b4e1b5a5c74f8382",
+            "case_id": "asset-status-v1/heldout/asset-065",
+            "rollout_id": "7749688ca1574f79a446a411f2b625b6",
+            "attempt_id": "0",
+            "model_span": "f87091c8c2ef423dacdd4d2083e9c730",
+            "tool_span": "939a233c553e486f862604e3fb7cf0aa",
+            "tool_call_id": "chatcmpl-tool-b7e169a030e39855",
+            "continuation_span": "43800ad06fd94ce2b149fcd573766fa5",
+            "episode_span": "d1acedfcf8a2402983235f6404170516",
+            "observation_sha256": "7b9452e4240b6c2b1d57cb01de9911aed99a7f86b16d42ce3a2a61e15b3655a3",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ],
+        "episode_outcome": "complete_final",
+        "diagnostics": {
+          "json_syntax": true,
+          "format_compliant": true,
+          "target_correct": true,
+          "content_correct": true
+        }
+      },
+      {
+        "file": "trajectory-4b7350f9c5b64ad0baa8ac530f638def.jsonl",
+        "sha256": "8ed4224570bd433582b1d579b813b198248920615999f42c2016753c828559e8",
+        "chains": [
+          {
+            "trace_id": "4b7350f9c5b64ad0baa8ac530f638def",
+            "case_id": "asset-status-v1/heldout/asset-099",
+            "rollout_id": "4b5e4df638ec43318d7f529e53fee553",
+            "attempt_id": "0",
+            "model_span": "ca4f518af82c4cb4a88701f42a56f5cb",
+            "tool_span": "0a66521ed70d4544a7a60621193215d4",
+            "tool_call_id": "chatcmpl-tool-af6eb4be69777b2d",
+            "continuation_span": "148625eecd084f00869c3266cfbeac70",
+            "episode_span": "8d957cb13d544269838353400f5115f8",
+            "observation_sha256": "bf06a8e0970ca7370e27f7a4148ef720bb949745960f616457519908d2becfd3",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "4b7350f9c5b64ad0baa8ac530f638def",
+            "case_id": "asset-status-v1/heldout/asset-099",
+            "rollout_id": "4b5e4df638ec43318d7f529e53fee553",
+            "attempt_id": "0",
+            "model_span": "148625eecd084f00869c3266cfbeac70",
+            "tool_span": "3b16ae09b6f8456ea67a299c67c13702",
+            "tool_call_id": "chatcmpl-tool-bd284b0be9fa027f",
+            "continuation_span": "dc0c136ba79545809d051c8ca4a5da6d",
+            "episode_span": "8d957cb13d544269838353400f5115f8",
+            "observation_sha256": "bf06a8e0970ca7370e27f7a4148ef720bb949745960f616457519908d2becfd3",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ],
+        "episode_outcome": "complete_final",
+        "diagnostics": {
+          "json_syntax": true,
+          "format_compliant": true,
+          "target_correct": true,
+          "content_correct": true
+        }
+      },
+      {
+        "file": "trajectory-4c4791a8d5a54e28bb439dccd87be7c2.jsonl",
+        "sha256": "4a7c3f08ca6299806e6eb2dcd42ca82f793df40ee7247c2e9907e7bb1df09d4e",
+        "chains": [
+          {
+            "trace_id": "4c4791a8d5a54e28bb439dccd87be7c2",
+            "case_id": "asset-status-v1/heldout/asset-280",
+            "rollout_id": "f6524a9799454b54bd6459951e0c761b",
+            "attempt_id": "0",
+            "model_span": "9d549dcff0ca491ab48eda6f24fd9617",
+            "tool_span": "dc27f1b7ecde4a5c9791c7bc204382f5",
+            "tool_call_id": "chatcmpl-tool-aa9312690da68326",
+            "continuation_span": "887d668c90da46d8a5fa6825c76161b2",
+            "episode_span": "7fb5c736bce84bd8a2a6f753aa648853",
+            "observation_sha256": "a58d3ef794296a0f73d372e5074e58cf57b767992240d1ea20c103eb896dc9fc",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "4c4791a8d5a54e28bb439dccd87be7c2",
+            "case_id": "asset-status-v1/heldout/asset-280",
+            "rollout_id": "f6524a9799454b54bd6459951e0c761b",
+            "attempt_id": "0",
+            "model_span": "887d668c90da46d8a5fa6825c76161b2",
+            "tool_span": "71f75dd67ff84c4fabad5af050cd37df",
+            "tool_call_id": "chatcmpl-tool-9aca534b356ee863",
+            "continuation_span": "e9b6bbc59dcb4ce68da956f028a95995",
+            "episode_span": "7fb5c736bce84bd8a2a6f753aa648853",
+            "observation_sha256": "a58d3ef794296a0f73d372e5074e58cf57b767992240d1ea20c103eb896dc9fc",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ],
+        "episode_outcome": "complete_final",
+        "diagnostics": {
+          "json_syntax": true,
+          "format_compliant": true,
+          "target_correct": true,
+          "content_correct": true
+        }
+      },
+      {
+        "file": "trajectory-50ef2c93e4644129b263ad32c068cffb.jsonl",
+        "sha256": "669274729d7d355203390e652422ef6dd66e0543849d4bf424958426247f2a3d",
+        "chains": [
+          {
+            "trace_id": "50ef2c93e4644129b263ad32c068cffb",
+            "case_id": "asset-status-v1/heldout/asset-106",
+            "rollout_id": "5243418526a449c4b2b714a48b5e065f",
+            "attempt_id": "0",
+            "model_span": "5375b6f4dc8b452abea591f9fb0dc198",
+            "tool_span": "651cc7107f7d4aadad0a8c79aa86172e",
+            "tool_call_id": "chatcmpl-tool-91397eb24dcc6656",
+            "continuation_span": "b93d3b802b2345e1a9fa099f4464610c",
+            "episode_span": "8967b2de002847bf8dd56753640cb192",
+            "observation_sha256": "b88dcbb8b2df478d14a8c07c0e70ce55336aedee0b38ea0781fef6e17e142655",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "50ef2c93e4644129b263ad32c068cffb",
+            "case_id": "asset-status-v1/heldout/asset-106",
+            "rollout_id": "5243418526a449c4b2b714a48b5e065f",
+            "attempt_id": "0",
+            "model_span": "b93d3b802b2345e1a9fa099f4464610c",
+            "tool_span": "c3e400b9bc804c2dab74272ef77fe5a8",
+            "tool_call_id": "chatcmpl-tool-96541e8b863dfa10",
+            "continuation_span": "f986f62f34ba4b058b5d80bc1f6f5853",
+            "episode_span": "8967b2de002847bf8dd56753640cb192",
+            "observation_sha256": "b88dcbb8b2df478d14a8c07c0e70ce55336aedee0b38ea0781fef6e17e142655",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ],
+        "episode_outcome": "complete_final",
+        "diagnostics": {
+          "json_syntax": true,
+          "format_compliant": true,
+          "target_correct": true,
+          "content_correct": true
+        }
+      },
+      {
+        "file": "trajectory-53387a1e8c244bc2bc82cb355493e731.jsonl",
+        "sha256": "576ba04ee8b0f09cb8391d5e567529a6980614d0a1c152a83b324f1fc691b4d5",
+        "chains": [
+          {
+            "trace_id": "53387a1e8c244bc2bc82cb355493e731",
+            "case_id": "asset-status-v1/heldout/asset-272",
+            "rollout_id": "1dba6b2d387244fcbbb3b2397d0037e6",
+            "attempt_id": "0",
+            "model_span": "2ba55868fc564b2d86f0372efb872d82",
+            "tool_span": "83684be45ef644359002f5857e14aaba",
+            "tool_call_id": "chatcmpl-tool-b7a71ac2c8c7d865",
+            "continuation_span": "6053a65daec14aada6077ab4f567bf4c",
+            "episode_span": "ac403b7d6df04efd9d48c7f647a86c5c",
+            "observation_sha256": "4d83ec3515b7975d296a470e1114404ec9c7baeedd7db0a02bfbe206ac9b48f6",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "53387a1e8c244bc2bc82cb355493e731",
+            "case_id": "asset-status-v1/heldout/asset-272",
+            "rollout_id": "1dba6b2d387244fcbbb3b2397d0037e6",
+            "attempt_id": "0",
+            "model_span": "6053a65daec14aada6077ab4f567bf4c",
+            "tool_span": "137cbceccc5744d4b610520f66f6fa18",
+            "tool_call_id": "chatcmpl-tool-997660145cded542",
+            "continuation_span": "30b164a473f445939ea1368adabd3b3a",
+            "episode_span": "ac403b7d6df04efd9d48c7f647a86c5c",
+            "observation_sha256": "4d83ec3515b7975d296a470e1114404ec9c7baeedd7db0a02bfbe206ac9b48f6",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ],
+        "episode_outcome": "complete_final",
+        "diagnostics": {
+          "json_syntax": true,
+          "format_compliant": true,
+          "target_correct": true,
+          "content_correct": true
+        }
+      },
+      {
+        "file": "trajectory-54edf42ea756439a9f4bef22d1872cfc.jsonl",
+        "sha256": "de4bfeef99968e23a441662c7a98080759522a5a190295210091a561b16dc68a",
+        "chains": [
+          {
+            "trace_id": "54edf42ea756439a9f4bef22d1872cfc",
+            "case_id": "asset-status-v1/heldout/asset-147",
+            "rollout_id": "99a71e376cd14319990fe804690000ed",
+            "attempt_id": "0",
+            "model_span": "3647bc262c364be8a27901bedce37d1b",
+            "tool_span": "6f4ace4cf56d4d9bb4ae89ce25d98642",
+            "tool_call_id": "chatcmpl-tool-bd269834e3722ba9",
+            "continuation_span": "d09915fac2f34bbf85b5af5cdaedd43e",
+            "episode_span": "6c20a71de6ca4141959fef27012180a7",
+            "observation_sha256": "9d15c315e0e1d83e9a0473cc1ac0bcd147e3713bf3190aa031d513a1cf498307",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "54edf42ea756439a9f4bef22d1872cfc",
+            "case_id": "asset-status-v1/heldout/asset-147",
+            "rollout_id": "99a71e376cd14319990fe804690000ed",
+            "attempt_id": "0",
+            "model_span": "d09915fac2f34bbf85b5af5cdaedd43e",
+            "tool_span": "6b74560b988c437b8e9bbbb3ccaf2ade",
+            "tool_call_id": "chatcmpl-tool-a622b5342386b8b5",
+            "continuation_span": "770d594a71cd4c839ca3a6e32203caee",
+            "episode_span": "6c20a71de6ca4141959fef27012180a7",
+            "observation_sha256": "9d15c315e0e1d83e9a0473cc1ac0bcd147e3713bf3190aa031d513a1cf498307",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ],
+        "episode_outcome": "complete_final",
+        "diagnostics": {
+          "json_syntax": true,
+          "format_compliant": true,
+          "target_correct": true,
+          "content_correct": true
+        }
+      },
+      {
+        "file": "trajectory-558228006a4d4fa68b378bb1a8e5e237.jsonl",
+        "sha256": "fecc508498d9ccdae3674292013839b5591615977a1422e67d916c450c529d9e",
+        "chains": [
+          {
+            "trace_id": "558228006a4d4fa68b378bb1a8e5e237",
+            "case_id": "asset-status-v1/heldout/asset-162",
+            "rollout_id": "ab3f239376844c678390531f3a7cb1d7",
+            "attempt_id": "0",
+            "model_span": "084cc134415049698fbf4309bd2af063",
+            "tool_span": "d6226f0e071e4df9989d86f0dfd15f14",
+            "tool_call_id": "chatcmpl-tool-813b23365d330b1a",
+            "continuation_span": "9215704727964a66992341c03d236f8f",
+            "episode_span": "38dd07fd763a4beaa606a0b992e777c8",
+            "observation_sha256": "ca3eb8be3fd8ede0f0f74be6f5235f6318f463515da97979ff408dbd37bc0e43",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "558228006a4d4fa68b378bb1a8e5e237",
+            "case_id": "asset-status-v1/heldout/asset-162",
+            "rollout_id": "ab3f239376844c678390531f3a7cb1d7",
+            "attempt_id": "0",
+            "model_span": "9215704727964a66992341c03d236f8f",
+            "tool_span": "39501189bb214efe839a071dbbd8fe31",
+            "tool_call_id": "chatcmpl-tool-9764fa33eb6108b7",
+            "continuation_span": "9d2975c0099749b7a83338cd77182b34",
+            "episode_span": "38dd07fd763a4beaa606a0b992e777c8",
+            "observation_sha256": "ca3eb8be3fd8ede0f0f74be6f5235f6318f463515da97979ff408dbd37bc0e43",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ],
+        "episode_outcome": "complete_final",
+        "diagnostics": {
+          "json_syntax": true,
+          "format_compliant": true,
+          "target_correct": true,
+          "content_correct": true
+        }
+      },
+      {
+        "file": "trajectory-5c1a5f82b07a4121b5876282cf7907ed.jsonl",
+        "sha256": "1dacb7bdbbed278275e26dd2f816263475853c1999cb87445f349362672cf249",
+        "chains": [
+          {
+            "trace_id": "5c1a5f82b07a4121b5876282cf7907ed",
+            "case_id": "asset-status-v1/heldout/asset-190",
+            "rollout_id": "4d7c8c608e744535a1effe2907fd93d0",
+            "attempt_id": "0",
+            "model_span": "1a073c24ee1848f7872d6facf852d208",
+            "tool_span": "96c2f6b5e7734d8dbfd73dab0a4d98f1",
+            "tool_call_id": "chatcmpl-tool-b5dca23b31a51e3a",
+            "continuation_span": "33d28df22981498e9fdbcf57cfa9fad2",
+            "episode_span": "edf4e0af83454edeb617a6d36708fa5c",
+            "observation_sha256": "285f0074de7c6b39e1afc82afd88cfc853227fd50ccb7c5894fd4b3218e6277d",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "5c1a5f82b07a4121b5876282cf7907ed",
+            "case_id": "asset-status-v1/heldout/asset-190",
+            "rollout_id": "4d7c8c608e744535a1effe2907fd93d0",
+            "attempt_id": "0",
+            "model_span": "33d28df22981498e9fdbcf57cfa9fad2",
+            "tool_span": "28a3e0e908254cce879eb8ef562e4489",
+            "tool_call_id": "chatcmpl-tool-a411af6d890c8ddf",
+            "continuation_span": "9fccdfe0094e430abda7c29cf9278cd7",
+            "episode_span": "edf4e0af83454edeb617a6d36708fa5c",
+            "observation_sha256": "285f0074de7c6b39e1afc82afd88cfc853227fd50ccb7c5894fd4b3218e6277d",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ],
+        "episode_outcome": "complete_final",
+        "diagnostics": {
+          "json_syntax": true,
+          "format_compliant": true,
+          "target_correct": true,
+          "content_correct": true
+        }
+      },
+      {
+        "file": "trajectory-5cfd7ba17aea4f7da74b7f4be9551ae9.jsonl",
+        "sha256": "e919a87b2477f89f9f4d4787728ee5950dd5d6078d7b4620c6a76b6fb1910160",
+        "chains": [
+          {
+            "trace_id": "5cfd7ba17aea4f7da74b7f4be9551ae9",
+            "case_id": "asset-status-v1/heldout/asset-058",
+            "rollout_id": "64e27662ea0d47efae4a901dfcb9de53",
+            "attempt_id": "0",
+            "model_span": "7f3dc12242df40a783b9acf45d771c7d",
+            "tool_span": "4c48ff2718a04d1da9661ae2f79895ff",
+            "tool_call_id": "chatcmpl-tool-ab67f41b1da924ed",
+            "continuation_span": "6e9bfb4bf7864c0795caedcef04ba720",
+            "episode_span": "2d089a65ed9043ca8abed94e2df0b680",
+            "observation_sha256": "c0924c99a75819e63cf2b746de229d7575ad5b86ae258c170d346aa4163d6e7a",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "5cfd7ba17aea4f7da74b7f4be9551ae9",
+            "case_id": "asset-status-v1/heldout/asset-058",
+            "rollout_id": "64e27662ea0d47efae4a901dfcb9de53",
+            "attempt_id": "0",
+            "model_span": "6e9bfb4bf7864c0795caedcef04ba720",
+            "tool_span": "544913a575bd467fb083a5a5042275e0",
+            "tool_call_id": "chatcmpl-tool-9e99c87333e97926",
+            "continuation_span": "54b44f136d554756ae7f569522802cd3",
+            "episode_span": "2d089a65ed9043ca8abed94e2df0b680",
+            "observation_sha256": "c0924c99a75819e63cf2b746de229d7575ad5b86ae258c170d346aa4163d6e7a",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ],
+        "episode_outcome": "complete_final",
+        "diagnostics": {
+          "json_syntax": true,
+          "format_compliant": true,
+          "target_correct": true,
+          "content_correct": true
+        }
+      },
+      {
+        "file": "trajectory-5de299cabe77455cbaaaad863ab4c66c.jsonl",
+        "sha256": "4d4631b1a22a6ad01095e58e7828e7e0eef5395ed28627255529a820721bb65f",
+        "chains": [
+          {
+            "trace_id": "5de299cabe77455cbaaaad863ab4c66c",
+            "case_id": "asset-status-v1/heldout/asset-281",
+            "rollout_id": "caccfc16ec6b42e9b26b0cc1465da00a",
+            "attempt_id": "0",
+            "model_span": "88adbcb107d0423f9f6c1c92ff9dfbd8",
+            "tool_span": "d9b936544a2e43ef9396ff2347147176",
+            "tool_call_id": "chatcmpl-tool-9d04d96f71ed8d48",
+            "continuation_span": "d789133f7e854cc3a6fdb4d217f50835",
+            "episode_span": "1566a6ac01b046318c9441f05017914d",
+            "observation_sha256": "978c88d53d90ef86192aac2ba725b3222da956fd4d4cda955a7e3d7e7bbb25ec",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "5de299cabe77455cbaaaad863ab4c66c",
+            "case_id": "asset-status-v1/heldout/asset-281",
+            "rollout_id": "caccfc16ec6b42e9b26b0cc1465da00a",
+            "attempt_id": "0",
+            "model_span": "d789133f7e854cc3a6fdb4d217f50835",
+            "tool_span": "115d22d452a140c0adf9166b9cae5061",
+            "tool_call_id": "chatcmpl-tool-9d196ce7f9a78c29",
+            "continuation_span": "e3230c2cd4594f44b1f6923c1ed27a20",
+            "episode_span": "1566a6ac01b046318c9441f05017914d",
+            "observation_sha256": "978c88d53d90ef86192aac2ba725b3222da956fd4d4cda955a7e3d7e7bbb25ec",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ],
+        "episode_outcome": "complete_final",
+        "diagnostics": {
+          "json_syntax": true,
+          "format_compliant": true,
+          "target_correct": true,
+          "content_correct": true
+        }
+      },
+      {
+        "file": "trajectory-639f525b0fe04e03bfb630aa8a367fe1.jsonl",
+        "sha256": "07c3597f706ead046834eb01a6e780fbce037e3e53ee21c114397639d3a263dd",
+        "chains": [
+          {
+            "trace_id": "639f525b0fe04e03bfb630aa8a367fe1",
+            "case_id": "asset-status-v1/heldout/asset-262",
+            "rollout_id": "ffdf5e1a4cf54468977937911a9e1468",
+            "attempt_id": "0",
+            "model_span": "ceffca71e6a3499b9bbe3310d84c0139",
+            "tool_span": "028a4a00cbcf4d608be39e490e0d4308",
+            "tool_call_id": "chatcmpl-tool-a420bd5af3c577a6",
+            "continuation_span": "ecd6342293fd47058a074a81f1b54eef",
+            "episode_span": "0094e5fbf441481cbaf5bd62e5d3d051",
+            "observation_sha256": "f40730f998248311b11ee2c708f9893069f684aa2a507a7323af6b7c3f07036c",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "639f525b0fe04e03bfb630aa8a367fe1",
+            "case_id": "asset-status-v1/heldout/asset-262",
+            "rollout_id": "ffdf5e1a4cf54468977937911a9e1468",
+            "attempt_id": "0",
+            "model_span": "ecd6342293fd47058a074a81f1b54eef",
+            "tool_span": "47c24fee99ee4c37999b9c09d0f53106",
+            "tool_call_id": "chatcmpl-tool-b6fe1a709c33868b",
+            "continuation_span": "ade4a5de4a634168973d94ea9d615b25",
+            "episode_span": "0094e5fbf441481cbaf5bd62e5d3d051",
+            "observation_sha256": "f40730f998248311b11ee2c708f9893069f684aa2a507a7323af6b7c3f07036c",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ],
+        "episode_outcome": "complete_final",
+        "diagnostics": {
+          "json_syntax": true,
+          "format_compliant": true,
+          "target_correct": true,
+          "content_correct": true
+        }
+      },
+      {
+        "file": "trajectory-6f51c4d6d8704ce7a50a8a056399ff21.jsonl",
+        "sha256": "09c0d288d4c2612c69d2c6ce2709940f84eaa30984ccce95ed1cebae8960421b",
+        "chains": [
+          {
+            "trace_id": "6f51c4d6d8704ce7a50a8a056399ff21",
+            "case_id": "asset-status-v1/heldout/asset-095",
+            "rollout_id": "3477a8435b2149dbac462ead63da13a1",
+            "attempt_id": "0",
+            "model_span": "cf0c4f32de4f434fa7db1e089338b9f0",
+            "tool_span": "8398dacebf6f4114968752608aec6f3e",
+            "tool_call_id": "chatcmpl-tool-88a44bb25d8115b8",
+            "continuation_span": "92c084f312364a6894db37c8130a60b0",
+            "episode_span": "ab37185298224100a8e77207058975fe",
+            "observation_sha256": "078c2de8e310c460009c55eeb14e404f5470219a655434c409ae4831e5389a77",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "6f51c4d6d8704ce7a50a8a056399ff21",
+            "case_id": "asset-status-v1/heldout/asset-095",
+            "rollout_id": "3477a8435b2149dbac462ead63da13a1",
+            "attempt_id": "0",
+            "model_span": "92c084f312364a6894db37c8130a60b0",
+            "tool_span": "312e2055026c416787a28b3c8d3ca1b2",
+            "tool_call_id": "chatcmpl-tool-8894436b5b3cb0ac",
+            "continuation_span": "337b2bc4e3cc4da99515f15ad80fbd4b",
+            "episode_span": "ab37185298224100a8e77207058975fe",
+            "observation_sha256": "078c2de8e310c460009c55eeb14e404f5470219a655434c409ae4831e5389a77",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ],
+        "episode_outcome": "complete_final",
+        "diagnostics": {
+          "json_syntax": true,
+          "format_compliant": true,
+          "target_correct": true,
+          "content_correct": true
+        }
+      },
+      {
+        "file": "trajectory-70fe8ffb200c4e50b52418666838f537.jsonl",
+        "sha256": "043869f06e08b63e66c9476ff90effe4ee8ffca9064ae615f0e0b64f05712c77",
+        "chains": [
+          {
+            "trace_id": "70fe8ffb200c4e50b52418666838f537",
+            "case_id": "asset-status-v1/heldout/asset-124",
+            "rollout_id": "14cb1a1cce004868b6f43c09acc1c8b4",
+            "attempt_id": "0",
+            "model_span": "34610ff62b1c471dac81b19d245ca3a0",
+            "tool_span": "46383744b986476fb2eda17306b601da",
+            "tool_call_id": "chatcmpl-tool-9a628afbdf6531cf",
+            "continuation_span": "ea5e928202bd4ed5bd8687bb27eca814",
+            "episode_span": "b9adfee8a2224739a5c956e05bcc8f76",
+            "observation_sha256": "5c11a51146dac61ccbf066d7fb227e5f023ee255797a3e1cb87aa92a4cd65886",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "70fe8ffb200c4e50b52418666838f537",
+            "case_id": "asset-status-v1/heldout/asset-124",
+            "rollout_id": "14cb1a1cce004868b6f43c09acc1c8b4",
+            "attempt_id": "0",
+            "model_span": "ea5e928202bd4ed5bd8687bb27eca814",
+            "tool_span": "4094e4b7c581403194ada8885c4fc4ed",
+            "tool_call_id": "chatcmpl-tool-869b5816b8eb6cc0",
+            "continuation_span": "4cc5c9e56a974b2ea0ae51c403835b42",
+            "episode_span": "b9adfee8a2224739a5c956e05bcc8f76",
+            "observation_sha256": "5c11a51146dac61ccbf066d7fb227e5f023ee255797a3e1cb87aa92a4cd65886",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ],
+        "episode_outcome": "complete_final",
+        "diagnostics": {
+          "json_syntax": true,
+          "format_compliant": true,
+          "target_correct": true,
+          "content_correct": true
+        }
+      },
+      {
+        "file": "trajectory-7a8c8a05f6a34f25b24f7095917b041b.jsonl",
+        "sha256": "fc879567ec788c28b5c63323182d9bc800aabcc1ba3a5de4793d17dc9da386bd",
+        "chains": [
+          {
+            "trace_id": "7a8c8a05f6a34f25b24f7095917b041b",
+            "case_id": "asset-status-v1/heldout/asset-159",
+            "rollout_id": "289ac5f11010468abc000ad0f347e406",
+            "attempt_id": "0",
+            "model_span": "bcd1f8e67d484449b60cda64b0e043dd",
+            "tool_span": "0adf386ec1b94dae9f1ab1a5bfc12622",
+            "tool_call_id": "chatcmpl-tool-b968cd7ebea9d36d",
+            "continuation_span": "9ee355ba51da4ddcb8ba6ba6f34054c5",
+            "episode_span": "6c98ac50937845a5b15af7e9f28d444d",
+            "observation_sha256": "421e1b3c7f01abbfc225cc465b800dc9e4f49f77661c72832b6046c3c5a087d9",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "7a8c8a05f6a34f25b24f7095917b041b",
+            "case_id": "asset-status-v1/heldout/asset-159",
+            "rollout_id": "289ac5f11010468abc000ad0f347e406",
+            "attempt_id": "0",
+            "model_span": "9ee355ba51da4ddcb8ba6ba6f34054c5",
+            "tool_span": "c4a2f5ff46a34816b9bd517c7dfcc922",
+            "tool_call_id": "chatcmpl-tool-a607a98754a62643",
+            "continuation_span": "17be976246dd4647a7aed420698f2759",
+            "episode_span": "6c98ac50937845a5b15af7e9f28d444d",
+            "observation_sha256": "421e1b3c7f01abbfc225cc465b800dc9e4f49f77661c72832b6046c3c5a087d9",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ],
+        "episode_outcome": "complete_final",
+        "diagnostics": {
+          "json_syntax": true,
+          "format_compliant": true,
+          "target_correct": true,
+          "content_correct": true
+        }
+      },
+      {
+        "file": "trajectory-7bc2ebea7ed14a80be81c96a4acf5ca8.jsonl",
+        "sha256": "df5505bc72ae0a771df4766bc8ec34e073b3753a40b13f6322678951939a06b0",
+        "chains": [
+          {
+            "trace_id": "7bc2ebea7ed14a80be81c96a4acf5ca8",
+            "case_id": "asset-status-v1/heldout/asset-056",
+            "rollout_id": "9d975090f3a44382a72d24acd09356b8",
+            "attempt_id": "0",
+            "model_span": "c65704249be342be9c02eadfb285b1b2",
+            "tool_span": "90678648e6ce4d73829e2163385b7dee",
+            "tool_call_id": "chatcmpl-tool-8694901058b54947",
+            "continuation_span": "a51327e6825a4a998bd373dfa552dd6e",
+            "episode_span": "8eafef36e9a9436f97baafb0c7a658fe",
+            "observation_sha256": "eb8131705ed1d3795b309a059170f77407ca9977aadbab0f0cf537c6cb4f2ec6",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "7bc2ebea7ed14a80be81c96a4acf5ca8",
+            "case_id": "asset-status-v1/heldout/asset-056",
+            "rollout_id": "9d975090f3a44382a72d24acd09356b8",
+            "attempt_id": "0",
+            "model_span": "a51327e6825a4a998bd373dfa552dd6e",
+            "tool_span": "a068dd5b1b364c4d9da1abe7073a857a",
+            "tool_call_id": "chatcmpl-tool-b035ead67f84e25f",
+            "continuation_span": "36233cfa65164fcdbbeb5a115a154403",
+            "episode_span": "8eafef36e9a9436f97baafb0c7a658fe",
+            "observation_sha256": "eb8131705ed1d3795b309a059170f77407ca9977aadbab0f0cf537c6cb4f2ec6",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ],
+        "episode_outcome": "complete_final",
+        "diagnostics": {
+          "json_syntax": true,
+          "format_compliant": true,
+          "target_correct": true,
+          "content_correct": true
+        }
+      },
+      {
+        "file": "trajectory-84e4310078d9434795e6a43c2b275ba8.jsonl",
+        "sha256": "58db5a670ee4d3739dd5f9dda0dd4f18dc0a38c5ac31f3f8cb85992e1da596fe",
+        "chains": [
+          {
+            "trace_id": "84e4310078d9434795e6a43c2b275ba8",
+            "case_id": "asset-status-v1/heldout/asset-319",
+            "rollout_id": "67fe3707f06a4af8b6c491e50f30ae71",
+            "attempt_id": "0",
+            "model_span": "982a741d33c246be82046bf111a8e479",
+            "tool_span": "0ca49f1f054f4da78b9b64bc1453af50",
+            "tool_call_id": "chatcmpl-tool-806d74a61ba55c10",
+            "continuation_span": "6ff08740809a4f69b67a32c33b09401f",
+            "episode_span": "464260f16a174817984c85add0721632",
+            "observation_sha256": "2bcedff18e9ffa8d4b3a13cfcfdb93992679530fd278218f383b5732cd4b64fd",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "84e4310078d9434795e6a43c2b275ba8",
+            "case_id": "asset-status-v1/heldout/asset-319",
+            "rollout_id": "67fe3707f06a4af8b6c491e50f30ae71",
+            "attempt_id": "0",
+            "model_span": "6ff08740809a4f69b67a32c33b09401f",
+            "tool_span": "25889a789ebf44b7b6d792f4e4917e65",
+            "tool_call_id": "chatcmpl-tool-bff417f2a3f9f18e",
+            "continuation_span": "6f38587e63e643eaac137c56ec5693bb",
+            "episode_span": "464260f16a174817984c85add0721632",
+            "observation_sha256": "2bcedff18e9ffa8d4b3a13cfcfdb93992679530fd278218f383b5732cd4b64fd",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ],
+        "episode_outcome": "complete_final",
+        "diagnostics": {
+          "json_syntax": true,
+          "format_compliant": true,
+          "target_correct": true,
+          "content_correct": true
+        }
+      },
+      {
+        "file": "trajectory-8b5721de30464e588f9184ff43f824b2.jsonl",
+        "sha256": "994ce86ea3f12d17ca50627f407d9cb61a6e6cb2c5637feecc92b4c883033ec8",
+        "chains": [
+          {
+            "trace_id": "8b5721de30464e588f9184ff43f824b2",
+            "case_id": "asset-status-v1/heldout/asset-212",
+            "rollout_id": "dd0d9cfa92884e52958b38373fb9af0f",
+            "attempt_id": "0",
+            "model_span": "d848144330404c8182c01f2f3c6b88b4",
+            "tool_span": "01d07473aa3a40cb98d7e9a82f4472b8",
+            "tool_call_id": "chatcmpl-tool-b2873c31ccb92f71",
+            "continuation_span": "193528c7a9ee4cd68eb85c5d7c805426",
+            "episode_span": "897e825959c446f380dbdbb6ddc41a73",
+            "observation_sha256": "5d233bda3f881f53f127551a2494614af6fbdb24258734c215a1b8b0327bfbb3",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "8b5721de30464e588f9184ff43f824b2",
+            "case_id": "asset-status-v1/heldout/asset-212",
+            "rollout_id": "dd0d9cfa92884e52958b38373fb9af0f",
+            "attempt_id": "0",
+            "model_span": "193528c7a9ee4cd68eb85c5d7c805426",
+            "tool_span": "36f818c69e8c452cb16e23819acae225",
+            "tool_call_id": "chatcmpl-tool-b8a5279277d00f1a",
+            "continuation_span": "c99bb1e82c7f4a659d21dac574d4d1d6",
+            "episode_span": "897e825959c446f380dbdbb6ddc41a73",
+            "observation_sha256": "5d233bda3f881f53f127551a2494614af6fbdb24258734c215a1b8b0327bfbb3",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ],
+        "episode_outcome": "complete_final",
+        "diagnostics": {
+          "json_syntax": true,
+          "format_compliant": true,
+          "target_correct": true,
+          "content_correct": true
+        }
+      },
+      {
+        "file": "trajectory-8d7485307f5047f8a810a69e66c6415c.jsonl",
+        "sha256": "532bac85c0a130ec098a080e2c93d29846eebb74fe05af3b467e7c8a0bda68dd",
+        "chains": [
+          {
+            "trace_id": "8d7485307f5047f8a810a69e66c6415c",
+            "case_id": "asset-status-v1/heldout/asset-309",
+            "rollout_id": "7653dc73f2844df8a1e17d4d8504d8c3",
+            "attempt_id": "0",
+            "model_span": "9ee01f05f629404da25f4f2938aeda2a",
+            "tool_span": "8bda74535e8c43249365809f5793f986",
+            "tool_call_id": "chatcmpl-tool-8a8cc8137578c5e2",
+            "continuation_span": "3012ad1ddb2e4d599377700d8148f53c",
+            "episode_span": "9e0852ac58524c649eb2d7fadd05bd91",
+            "observation_sha256": "98e71cc647b9e841297426018a28efae32c38d8fda5d6e65f05a1dfb52f14923",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "8d7485307f5047f8a810a69e66c6415c",
+            "case_id": "asset-status-v1/heldout/asset-309",
+            "rollout_id": "7653dc73f2844df8a1e17d4d8504d8c3",
+            "attempt_id": "0",
+            "model_span": "3012ad1ddb2e4d599377700d8148f53c",
+            "tool_span": "ae97863e7d204d61bef233660ea68d01",
+            "tool_call_id": "chatcmpl-tool-bb7e1542ae484518",
+            "continuation_span": "7d1a335b712d49318f68cb8000a708c9",
+            "episode_span": "9e0852ac58524c649eb2d7fadd05bd91",
+            "observation_sha256": "98e71cc647b9e841297426018a28efae32c38d8fda5d6e65f05a1dfb52f14923",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ],
+        "episode_outcome": "complete_final",
+        "diagnostics": {
+          "json_syntax": true,
+          "format_compliant": true,
+          "target_correct": true,
+          "content_correct": true
+        }
+      },
+      {
+        "file": "trajectory-8d8fee402c1b447ebe2db40067bc7c9d.jsonl",
+        "sha256": "538235a267e29f9783e3d12a678a8745ea878a2849817f39a112be0f5c86bb01",
+        "chains": [
+          {
+            "trace_id": "8d8fee402c1b447ebe2db40067bc7c9d",
+            "case_id": "asset-status-v1/heldout/asset-283",
+            "rollout_id": "8960678a44384a0eac5ae0dd6f570be1",
+            "attempt_id": "0",
+            "model_span": "2221920159b640caa4c039a89d108bf5",
+            "tool_span": "5ea61c9a7d6c4d5fadb89697e792e771",
+            "tool_call_id": "chatcmpl-tool-a8507626b115c247",
+            "continuation_span": "aeb2cb9b5fbd4edaa211ebf95285be58",
+            "episode_span": "a788702cdecb45169302f3ab5a3a8e1b",
+            "observation_sha256": "9a7e2802df2e4aa326e0678c25338f74c5a494e90257910e9061034f5f8618e1",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "8d8fee402c1b447ebe2db40067bc7c9d",
+            "case_id": "asset-status-v1/heldout/asset-283",
+            "rollout_id": "8960678a44384a0eac5ae0dd6f570be1",
+            "attempt_id": "0",
+            "model_span": "aeb2cb9b5fbd4edaa211ebf95285be58",
+            "tool_span": "b711b391902545fda3a6bf6833a21a21",
+            "tool_call_id": "chatcmpl-tool-9b7bbf06eaef1f93",
+            "continuation_span": "7dd659a537db4d429332445bc84d50d1",
+            "episode_span": "a788702cdecb45169302f3ab5a3a8e1b",
+            "observation_sha256": "9a7e2802df2e4aa326e0678c25338f74c5a494e90257910e9061034f5f8618e1",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ],
+        "episode_outcome": "complete_final",
+        "diagnostics": {
+          "json_syntax": true,
+          "format_compliant": true,
+          "target_correct": true,
+          "content_correct": true
+        }
+      },
+      {
+        "file": "trajectory-a92188a5bb6e45af96427c3f4a3bc476.jsonl",
+        "sha256": "8290d3a0a0b7e2b8f782a947bea73a17d4ca044a79cc4e24398248cc3cc11f16",
+        "chains": [
+          {
+            "trace_id": "a92188a5bb6e45af96427c3f4a3bc476",
+            "case_id": "asset-status-v1/heldout/asset-289",
+            "rollout_id": "f32cfa73dfce4ecebec162d2baf52054",
+            "attempt_id": "0",
+            "model_span": "804c64b127fd447fac70f83458b5e36e",
+            "tool_span": "0454e7dd44194bb7b9e24a82525ed8d3",
+            "tool_call_id": "chatcmpl-tool-b4f13f8464a7c472",
+            "continuation_span": "2232503d64c84787a913becdba817bd7",
+            "episode_span": "98a2f7aaf786496099dd0132d7bd3f82",
+            "observation_sha256": "54dfcdb319b64a686fe4d664bf1bcf471f0d3a821c7e04d37944da9b38cf8b12",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "a92188a5bb6e45af96427c3f4a3bc476",
+            "case_id": "asset-status-v1/heldout/asset-289",
+            "rollout_id": "f32cfa73dfce4ecebec162d2baf52054",
+            "attempt_id": "0",
+            "model_span": "2232503d64c84787a913becdba817bd7",
+            "tool_span": "c89e8f4ceda84837b7b82dd1da2c397b",
+            "tool_call_id": "chatcmpl-tool-8f728187e84a7401",
+            "continuation_span": "fb9b027ea2a14be3a1ae32dc4776b25f",
+            "episode_span": "98a2f7aaf786496099dd0132d7bd3f82",
+            "observation_sha256": "54dfcdb319b64a686fe4d664bf1bcf471f0d3a821c7e04d37944da9b38cf8b12",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ],
+        "episode_outcome": "complete_final",
+        "diagnostics": {
+          "json_syntax": true,
+          "format_compliant": true,
+          "target_correct": true,
+          "content_correct": true
+        }
+      },
+      {
+        "file": "trajectory-afb2870d79ce42389f46962cf5fa6273.jsonl",
+        "sha256": "34791a97801702453b411aa0f2301c9f1ec06cfd8f7a06cf71dbac6db484fd00",
+        "chains": [
+          {
+            "trace_id": "afb2870d79ce42389f46962cf5fa6273",
+            "case_id": "asset-status-v1/heldout/asset-029",
+            "rollout_id": "1232d6f838ec49669f68e957851e6e54",
+            "attempt_id": "0",
+            "model_span": "edb389a3c08e4c1b9d2ed7d53f0d5a64",
+            "tool_span": "4f3b5936c97c464297463b97db22ca92",
+            "tool_call_id": "chatcmpl-tool-a01cb39b1ad62273",
+            "continuation_span": "0ab6c9fa40164985b8bad5ad01429945",
+            "episode_span": "5ab70e40abf8489bbc731c661a6f042f",
+            "observation_sha256": "0fa70cec3209e93e233be54b16d31e71180be65e8df5ee35eead6cc1737f5e0f",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "afb2870d79ce42389f46962cf5fa6273",
+            "case_id": "asset-status-v1/heldout/asset-029",
+            "rollout_id": "1232d6f838ec49669f68e957851e6e54",
+            "attempt_id": "0",
+            "model_span": "0ab6c9fa40164985b8bad5ad01429945",
+            "tool_span": "7a65b7a34be14c1483777812e9a85859",
+            "tool_call_id": "chatcmpl-tool-98ea56dead601537",
+            "continuation_span": "e61476c4fa424395a54a0ce0cefd0b4d",
+            "episode_span": "5ab70e40abf8489bbc731c661a6f042f",
+            "observation_sha256": "0fa70cec3209e93e233be54b16d31e71180be65e8df5ee35eead6cc1737f5e0f",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ],
+        "episode_outcome": "complete_final",
+        "diagnostics": {
+          "json_syntax": true,
+          "format_compliant": true,
+          "target_correct": true,
+          "content_correct": true
+        }
+      },
+      {
+        "file": "trajectory-b37991693cd44c9bbab2327f95f00a7a.jsonl",
+        "sha256": "403afe47272cca6be89b72ad805e2376e6e6ef331bb0e7b84b8b8520d4a145ee",
+        "chains": [
+          {
+            "trace_id": "b37991693cd44c9bbab2327f95f00a7a",
+            "case_id": "asset-status-v1/heldout/asset-186",
+            "rollout_id": "7b31cebbdce8452280b30e98f9f02af7",
+            "attempt_id": "0",
+            "model_span": "5407868f8fca40ef9cd55c82b916f4e1",
+            "tool_span": "feea465b5d6141a287578d452f7f691c",
+            "tool_call_id": "chatcmpl-tool-9c66f6e3ac0a4540",
+            "continuation_span": "fcfaf85d607949e7b9e8775ee990f6f1",
+            "episode_span": "46380bd8ed9641a4a739902e36c294f5",
+            "observation_sha256": "ac085a58d143d298f6025ef357592955496dacf9dc772255c4438190e055bcd1",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "b37991693cd44c9bbab2327f95f00a7a",
+            "case_id": "asset-status-v1/heldout/asset-186",
+            "rollout_id": "7b31cebbdce8452280b30e98f9f02af7",
+            "attempt_id": "0",
+            "model_span": "fcfaf85d607949e7b9e8775ee990f6f1",
+            "tool_span": "6d3f3b8bab4243eead6b8d013dfa3b15",
+            "tool_call_id": "chatcmpl-tool-b8be20f3b73f97c5",
+            "continuation_span": "983909de24ef4334a95bfd4a49b08b10",
+            "episode_span": "46380bd8ed9641a4a739902e36c294f5",
+            "observation_sha256": "ac085a58d143d298f6025ef357592955496dacf9dc772255c4438190e055bcd1",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ],
+        "episode_outcome": "complete_final",
+        "diagnostics": {
+          "json_syntax": true,
+          "format_compliant": true,
+          "target_correct": true,
+          "content_correct": true
+        }
+      },
+      {
+        "file": "trajectory-bc0a18df344c485bae55cc39f172eff4.jsonl",
+        "sha256": "66649f374bbbf81a5e52d668f1dd1be3361486abef0c7a55ec0541175a5fa347",
+        "chains": [
+          {
+            "trace_id": "bc0a18df344c485bae55cc39f172eff4",
+            "case_id": "asset-status-v1/heldout/asset-238",
+            "rollout_id": "c9896b36b4c84b0cbbbce244de174536",
+            "attempt_id": "0",
+            "model_span": "cd30f7349e3c4cd7b33e5427baa40c0f",
+            "tool_span": "333d385696dc42c6a0f7c29c28b75e09",
+            "tool_call_id": "chatcmpl-tool-89794e10b0c50756",
+            "continuation_span": "e12b270c47a748b7a3b1259bc987f8a5",
+            "episode_span": "033eee1b6e274e609827a14781b464bd",
+            "observation_sha256": "ef9c4e944e708ea1c45bd03001b12c32ac46ff8b731646e0e0644983a5c0627f",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "bc0a18df344c485bae55cc39f172eff4",
+            "case_id": "asset-status-v1/heldout/asset-238",
+            "rollout_id": "c9896b36b4c84b0cbbbce244de174536",
+            "attempt_id": "0",
+            "model_span": "e12b270c47a748b7a3b1259bc987f8a5",
+            "tool_span": "1173ca6aeb1240568dfdfe4f02dba244",
+            "tool_call_id": "chatcmpl-tool-82e101d2d167a4be",
+            "continuation_span": "c207fd9e79404f309ec350687e3f4b8e",
+            "episode_span": "033eee1b6e274e609827a14781b464bd",
+            "observation_sha256": "ef9c4e944e708ea1c45bd03001b12c32ac46ff8b731646e0e0644983a5c0627f",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ],
+        "episode_outcome": "complete_final",
+        "diagnostics": {
+          "json_syntax": true,
+          "format_compliant": true,
+          "target_correct": true,
+          "content_correct": true
+        }
+      },
+      {
+        "file": "trajectory-cbd263aaa32547989a7c37d1ea6b73d0.jsonl",
+        "sha256": "b9706c6aac3e5a795090a4ea226471f0c09f47a4c80f0852cb58d08a47c198f2",
+        "chains": [
+          {
+            "trace_id": "cbd263aaa32547989a7c37d1ea6b73d0",
+            "case_id": "asset-status-v1/heldout/asset-275",
+            "rollout_id": "61aea4e0ffc342c3bdbda3acb5a89b26",
+            "attempt_id": "0",
+            "model_span": "377fefb514cd44158dc45b7bf3ac596a",
+            "tool_span": "ec6321b0ec8d4580a3c395edf1bd8a11",
+            "tool_call_id": "chatcmpl-tool-b3c487ce896353bb",
+            "continuation_span": "17827990fe0041a39593f965483b6ad4",
+            "episode_span": "7642acb6243c430290f1b693cc45add4",
+            "observation_sha256": "37276259137fca58288784c993ecc8a0757da2b1141e92be071e3bad88dc459a",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "cbd263aaa32547989a7c37d1ea6b73d0",
+            "case_id": "asset-status-v1/heldout/asset-275",
+            "rollout_id": "61aea4e0ffc342c3bdbda3acb5a89b26",
+            "attempt_id": "0",
+            "model_span": "17827990fe0041a39593f965483b6ad4",
+            "tool_span": "ebc0edcf498e4003a00378b1dae28a71",
+            "tool_call_id": "chatcmpl-tool-9a25534646a36dd9",
+            "continuation_span": "eb32934d4aae4a74b4046b0acfcbf528",
+            "episode_span": "7642acb6243c430290f1b693cc45add4",
+            "observation_sha256": "37276259137fca58288784c993ecc8a0757da2b1141e92be071e3bad88dc459a",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ],
+        "episode_outcome": "complete_final",
+        "diagnostics": {
+          "json_syntax": true,
+          "format_compliant": true,
+          "target_correct": true,
+          "content_correct": true
+        }
+      },
+      {
+        "file": "trajectory-d0172da609ab4c24a979f20967f7b35c.jsonl",
+        "sha256": "1ffe361f5eb098644d9d5e6f733cff5d018fafc99be80213095860038e1074e1",
+        "chains": [
+          {
+            "trace_id": "d0172da609ab4c24a979f20967f7b35c",
+            "case_id": "asset-status-v1/heldout/asset-327",
+            "rollout_id": "9079dfbdd17d409f8dce2fd00740f574",
+            "attempt_id": "0",
+            "model_span": "67c7822b816047ccb9775941fce77a2f",
+            "tool_span": "4042e0afa0f64a0a99756b7c5c06e29c",
+            "tool_call_id": "chatcmpl-tool-89d79f294800dc74",
+            "continuation_span": "02205a234dc649edb1dc443a45540d27",
+            "episode_span": "e18b1eeef60b49769fcaefaba3f21a36",
+            "observation_sha256": "51815ff23ce326eb8547f59bf0551f04032574a3cb56f2af4b41d8ff27f7a511",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "d0172da609ab4c24a979f20967f7b35c",
+            "case_id": "asset-status-v1/heldout/asset-327",
+            "rollout_id": "9079dfbdd17d409f8dce2fd00740f574",
+            "attempt_id": "0",
+            "model_span": "02205a234dc649edb1dc443a45540d27",
+            "tool_span": "68b865ee871a4f37a7c2e5079ecbad6f",
+            "tool_call_id": "chatcmpl-tool-af443f0e053c2020",
+            "continuation_span": "fe740fdfe1bf4b49b8c6eee96d45e028",
+            "episode_span": "e18b1eeef60b49769fcaefaba3f21a36",
+            "observation_sha256": "51815ff23ce326eb8547f59bf0551f04032574a3cb56f2af4b41d8ff27f7a511",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ],
+        "episode_outcome": "complete_final",
+        "diagnostics": {
+          "json_syntax": true,
+          "format_compliant": true,
+          "target_correct": true,
+          "content_correct": true
+        }
+      },
+      {
+        "file": "trajectory-d13498c713be415b8500603913db9108.jsonl",
+        "sha256": "7af940effa685db5caff610f69b9aa3cd5a5328c0a9dd6fcff8780bdea281992",
+        "chains": [
+          {
+            "trace_id": "d13498c713be415b8500603913db9108",
+            "case_id": "asset-status-v1/heldout/asset-027",
+            "rollout_id": "18983927f9504a11821af8d19ceebd0b",
+            "attempt_id": "0",
+            "model_span": "a5e3850da9d84d9e841d934effa09aa9",
+            "tool_span": "a48f45dd90874f4cb6cc3f93510541fd",
+            "tool_call_id": "chatcmpl-tool-b84caa2428203c4d",
+            "continuation_span": "cbeb29413da54b199b2efc250c930f2f",
+            "episode_span": "1aef96b38374473a9bdbfa05ede28ed0",
+            "observation_sha256": "5cb6e26c544cfc1fba4f1d707463b9273b188382e7f84dfe7e7f354bda4ac8b9",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "d13498c713be415b8500603913db9108",
+            "case_id": "asset-status-v1/heldout/asset-027",
+            "rollout_id": "18983927f9504a11821af8d19ceebd0b",
+            "attempt_id": "0",
+            "model_span": "cbeb29413da54b199b2efc250c930f2f",
+            "tool_span": "367dc8388077498eba135204d3519862",
+            "tool_call_id": "chatcmpl-tool-b9adc8fa14519b45",
+            "continuation_span": "baac402ee8e042c480eb81cfb492a22a",
+            "episode_span": "1aef96b38374473a9bdbfa05ede28ed0",
+            "observation_sha256": "5cb6e26c544cfc1fba4f1d707463b9273b188382e7f84dfe7e7f354bda4ac8b9",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ],
+        "episode_outcome": "complete_final",
+        "diagnostics": {
+          "json_syntax": true,
+          "format_compliant": true,
+          "target_correct": true,
+          "content_correct": true
+        }
+      },
+      {
+        "file": "trajectory-d43f28bb69b84f248294ff1083415e8c.jsonl",
+        "sha256": "783ad3886ee3d034a2bf34aa47b4a6458aaf838808e3e566964d399152750cc5",
+        "chains": [
+          {
+            "trace_id": "d43f28bb69b84f248294ff1083415e8c",
+            "case_id": "asset-status-v1/heldout/asset-064",
+            "rollout_id": "4a5ea0e4c51a4ce69c761e3b6a8ebd8f",
+            "attempt_id": "0",
+            "model_span": "6e2f982fd5294322a7c9a56c7a1969c9",
+            "tool_span": "ccd777efa06a4efaa49a57590fe8c0b2",
+            "tool_call_id": "chatcmpl-tool-8573febaa8b91552",
+            "continuation_span": "f13d7800260b41dd992aeb9561390eb6",
+            "episode_span": "ed769630b6e549249c921f10c89e65d8",
+            "observation_sha256": "4f45a4db0896d56a3d5afcd47bea02a0893531e64241bc45135aa3274521bec7",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "d43f28bb69b84f248294ff1083415e8c",
+            "case_id": "asset-status-v1/heldout/asset-064",
+            "rollout_id": "4a5ea0e4c51a4ce69c761e3b6a8ebd8f",
+            "attempt_id": "0",
+            "model_span": "f13d7800260b41dd992aeb9561390eb6",
+            "tool_span": "413f0d86b93e438fb64da573572b6120",
+            "tool_call_id": "chatcmpl-tool-b7d106342c50ba0b",
+            "continuation_span": "402b54cb7e7b4cfb8c62449f66508618",
+            "episode_span": "ed769630b6e549249c921f10c89e65d8",
+            "observation_sha256": "4f45a4db0896d56a3d5afcd47bea02a0893531e64241bc45135aa3274521bec7",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ],
+        "episode_outcome": "complete_final",
+        "diagnostics": {
+          "json_syntax": true,
+          "format_compliant": true,
+          "target_correct": true,
+          "content_correct": true
+        }
+      },
+      {
+        "file": "trajectory-d80fb0cec55940b0856b389b3cab0bb9.jsonl",
+        "sha256": "87456ffab21623bdc09b398ddb6730e209cf9adb183ed1e8c68a2b9d8fb139ad",
+        "chains": [
+          {
+            "trace_id": "d80fb0cec55940b0856b389b3cab0bb9",
+            "case_id": "asset-status-v1/heldout/asset-114",
+            "rollout_id": "ee75ebb3df894abaa8af22ca14401e2d",
+            "attempt_id": "0",
+            "model_span": "633fbd4735364e0eb5d1d89e39f75393",
+            "tool_span": "5267d7c7a10f4da8b284c197f96f2c72",
+            "tool_call_id": "chatcmpl-tool-92c28415cc6b21fb",
+            "continuation_span": "f570469e34544b359b59cb9f9fe1434d",
+            "episode_span": "50ce14087b68495e8cd6cc27df7a4b92",
+            "observation_sha256": "3c7544fb45dfbd8411357dbcbf66166e87b23bf30093e162fa3e4ba6b438596a",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "d80fb0cec55940b0856b389b3cab0bb9",
+            "case_id": "asset-status-v1/heldout/asset-114",
+            "rollout_id": "ee75ebb3df894abaa8af22ca14401e2d",
+            "attempt_id": "0",
+            "model_span": "f570469e34544b359b59cb9f9fe1434d",
+            "tool_span": "7cfe2a4ebba24b6e8ebe0ec4e6afa488",
+            "tool_call_id": "chatcmpl-tool-9a771bd4438b6a8e",
+            "continuation_span": "a0f94a78bc7248d28cd992e2f802227e",
+            "episode_span": "50ce14087b68495e8cd6cc27df7a4b92",
+            "observation_sha256": "3c7544fb45dfbd8411357dbcbf66166e87b23bf30093e162fa3e4ba6b438596a",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ],
+        "episode_outcome": "complete_final",
+        "diagnostics": {
+          "json_syntax": true,
+          "format_compliant": true,
+          "target_correct": true,
+          "content_correct": true
+        }
+      },
+      {
+        "file": "trajectory-dc05c354208a458096458e8909331803.jsonl",
+        "sha256": "2592efc35cf6d58225a010d3e6535a88602f7ba2e6a504b9baaf23697e04a7e5",
+        "chains": [
+          {
+            "trace_id": "dc05c354208a458096458e8909331803",
+            "case_id": "asset-status-v1/heldout/asset-198",
+            "rollout_id": "2b757c2c3aa845c1839d9c63c4226b8c",
+            "attempt_id": "0",
+            "model_span": "80518f7c3fda43a3b6d5515dd1790e6e",
+            "tool_span": "1e4a96e0b92845fcb07cc8e092ed7a64",
+            "tool_call_id": "chatcmpl-tool-8120978effc76737",
+            "continuation_span": "5893a873fc6c4b808e15aae3da4678a0",
+            "episode_span": "848c9810aba74ce7a10d7d5e1bd89973",
+            "observation_sha256": "144471ff6bea83ca05eb204e98d1b561e82262d33b8b49112bc12c2a27e9bbe8",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "dc05c354208a458096458e8909331803",
+            "case_id": "asset-status-v1/heldout/asset-198",
+            "rollout_id": "2b757c2c3aa845c1839d9c63c4226b8c",
+            "attempt_id": "0",
+            "model_span": "5893a873fc6c4b808e15aae3da4678a0",
+            "tool_span": "f450e5b300094160aed330062cc29520",
+            "tool_call_id": "chatcmpl-tool-bd203f467bbfabfc",
+            "continuation_span": "f0a639e382664fe4898403ff0b4558f3",
+            "episode_span": "848c9810aba74ce7a10d7d5e1bd89973",
+            "observation_sha256": "144471ff6bea83ca05eb204e98d1b561e82262d33b8b49112bc12c2a27e9bbe8",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ],
+        "episode_outcome": "complete_final",
+        "diagnostics": {
+          "json_syntax": true,
+          "format_compliant": true,
+          "target_correct": true,
+          "content_correct": true
+        }
+      },
+      {
+        "file": "trajectory-dc958c936cd04715bb1a423e1fe56541.jsonl",
+        "sha256": "1aaae3e7d3cb9d95c40aef5044961fd77cdee09fbabc5adf7fa39851f7880139",
+        "chains": [
+          {
+            "trace_id": "dc958c936cd04715bb1a423e1fe56541",
+            "case_id": "asset-status-v1/heldout/asset-177",
+            "rollout_id": "5a3d58a9cff94e5ba74e9306c013ad96",
+            "attempt_id": "0",
+            "model_span": "852e273b7f8d4b34ba6ad31519971873",
+            "tool_span": "4ffe4bcb004b4bc49fea6562257caa92",
+            "tool_call_id": "chatcmpl-tool-80a42db13d71c13e",
+            "continuation_span": "da356c7e5dc34f108b7a7ce8bac58904",
+            "episode_span": "0fd637d45fcd487f955ea9124df7089f",
+            "observation_sha256": "01e899bb405d89caa8f6156c0ad27e1a1d5060a13035bd4894d97d66ebbbf95e",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "dc958c936cd04715bb1a423e1fe56541",
+            "case_id": "asset-status-v1/heldout/asset-177",
+            "rollout_id": "5a3d58a9cff94e5ba74e9306c013ad96",
+            "attempt_id": "0",
+            "model_span": "da356c7e5dc34f108b7a7ce8bac58904",
+            "tool_span": "4d1d85c159dc4d88984edb93f1c27927",
+            "tool_call_id": "chatcmpl-tool-abbf357f8de44e66",
+            "continuation_span": "9d16c5e355e54307ba8d932be80f9898",
+            "episode_span": "0fd637d45fcd487f955ea9124df7089f",
+            "observation_sha256": "01e899bb405d89caa8f6156c0ad27e1a1d5060a13035bd4894d97d66ebbbf95e",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ],
+        "episode_outcome": "complete_final",
+        "diagnostics": {
+          "json_syntax": true,
+          "format_compliant": true,
+          "target_correct": true,
+          "content_correct": true
+        }
+      },
+      {
+        "file": "trajectory-e1833603c4cd4f499dd6bf413613570c.jsonl",
+        "sha256": "fd18be5b1a53c68c566efc07b3fbb9d12dd299d1c81b273767c46ae3ebfc5bba",
+        "chains": [
+          {
+            "trace_id": "e1833603c4cd4f499dd6bf413613570c",
+            "case_id": "asset-status-v1/heldout/asset-045",
+            "rollout_id": "4d908a6e5c4843538fe57f8eb5da7d85",
+            "attempt_id": "0",
+            "model_span": "43cd077c11ff432cb0ee7413d0ea52d5",
+            "tool_span": "53131298587c4779b95b286ddffd29d0",
+            "tool_call_id": "chatcmpl-tool-ab2f499e9881c27d",
+            "continuation_span": "db47b9bc35d6411fa5bde5f4c9235759",
+            "episode_span": "0f2c11517855440e82cddcc03f16aeec",
+            "observation_sha256": "05eec9ae3af791531ecd86f4378629dcef9914265f3d216c6722e9129468497f",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "e1833603c4cd4f499dd6bf413613570c",
+            "case_id": "asset-status-v1/heldout/asset-045",
+            "rollout_id": "4d908a6e5c4843538fe57f8eb5da7d85",
+            "attempt_id": "0",
+            "model_span": "db47b9bc35d6411fa5bde5f4c9235759",
+            "tool_span": "b718b6eb5b0d4a0db37a560aa6f527ed",
+            "tool_call_id": "chatcmpl-tool-8e63d64d3fc5878d",
+            "continuation_span": "3aca6dfced62474eae14921d6becca2f",
+            "episode_span": "0f2c11517855440e82cddcc03f16aeec",
+            "observation_sha256": "05eec9ae3af791531ecd86f4378629dcef9914265f3d216c6722e9129468497f",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ],
+        "episode_outcome": "complete_final",
+        "diagnostics": {
+          "json_syntax": true,
+          "format_compliant": true,
+          "target_correct": true,
+          "content_correct": true
+        }
+      },
+      {
+        "file": "trajectory-e2c873125a93444ba2da0fd1cabe4716.jsonl",
+        "sha256": "61d3e97ce48ed5eb3f6e8b2d78a834c98256e727c5296f07141680ab83c5d3fb",
+        "chains": [
+          {
+            "trace_id": "e2c873125a93444ba2da0fd1cabe4716",
+            "case_id": "asset-status-v1/heldout/asset-001",
+            "rollout_id": "07b9814cd762445c955591c1bb5260cb",
+            "attempt_id": "0",
+            "model_span": "daccf79211be4edf87e6a8d9e77b0b75",
+            "tool_span": "0405b872d66a45ac84883066805b37e8",
+            "tool_call_id": "chatcmpl-tool-bb6eb54d6ce6084d",
+            "continuation_span": "6639abb4e5d54e2cbcbe2cce016bbfb6",
+            "episode_span": "47e15c5e26b8490bbb02e8df7f5c7d45",
+            "observation_sha256": "bb1c45fcc79c10245dc37ed463842791f6da11db631e0abb32e4c3065a05c47d",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "e2c873125a93444ba2da0fd1cabe4716",
+            "case_id": "asset-status-v1/heldout/asset-001",
+            "rollout_id": "07b9814cd762445c955591c1bb5260cb",
+            "attempt_id": "0",
+            "model_span": "6639abb4e5d54e2cbcbe2cce016bbfb6",
+            "tool_span": "a56d0a039eca4db98860af7495dbed84",
+            "tool_call_id": "chatcmpl-tool-83f10100576491a7",
+            "continuation_span": "753ec82d315741faaf64ae9e2588d04c",
+            "episode_span": "47e15c5e26b8490bbb02e8df7f5c7d45",
+            "observation_sha256": "bb1c45fcc79c10245dc37ed463842791f6da11db631e0abb32e4c3065a05c47d",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ],
+        "episode_outcome": "complete_final",
+        "diagnostics": {
+          "json_syntax": true,
+          "format_compliant": true,
+          "target_correct": true,
+          "content_correct": true
+        }
+      },
+      {
+        "file": "trajectory-e64115e662c440448d137dc2dc82d2b0.jsonl",
+        "sha256": "303a64d5c23e7c29722a3cd10df6819d11b4060ccba79e7d34907fae3e37efd2",
+        "chains": [
+          {
+            "trace_id": "e64115e662c440448d137dc2dc82d2b0",
+            "case_id": "asset-status-v1/heldout/asset-074",
+            "rollout_id": "c3daa23d425f491bb39fe66926923d0f",
+            "attempt_id": "0",
+            "model_span": "8d4ae1d9b53641a1b868fbac0a90af12",
+            "tool_span": "ade0c768f55d46bdbb36016cd88b3ab1",
+            "tool_call_id": "chatcmpl-tool-89a07a841804fc01",
+            "continuation_span": "7e1d2c58cb984f6f99cb1310020ec59d",
+            "episode_span": "3b80516d1411417fb9b045715a8521cb",
+            "observation_sha256": "81d45bb0d5a4d0f7032c8a3f2e0bf5e7f0436e78e3641013ea8a61c8e2707c2b",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "e64115e662c440448d137dc2dc82d2b0",
+            "case_id": "asset-status-v1/heldout/asset-074",
+            "rollout_id": "c3daa23d425f491bb39fe66926923d0f",
+            "attempt_id": "0",
+            "model_span": "7e1d2c58cb984f6f99cb1310020ec59d",
+            "tool_span": "84e79fbd30c64ba8ad932f6fb7b48601",
+            "tool_call_id": "chatcmpl-tool-98479e3f02c9a78e",
+            "continuation_span": "89439db139ad407087a111a97be1cbdc",
+            "episode_span": "3b80516d1411417fb9b045715a8521cb",
+            "observation_sha256": "81d45bb0d5a4d0f7032c8a3f2e0bf5e7f0436e78e3641013ea8a61c8e2707c2b",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ],
+        "episode_outcome": "complete_final",
+        "diagnostics": {
+          "json_syntax": true,
+          "format_compliant": true,
+          "target_correct": true,
+          "content_correct": true
+        }
+      },
+      {
+        "file": "trajectory-e7cfa82b455d4ee88ac87ecf0d8c9b80.jsonl",
+        "sha256": "9d769cc7a88ab023d65bda38c0274b238fbcab30b5c5d8c3ea85b0d7720d3497",
+        "chains": [
+          {
+            "trace_id": "e7cfa82b455d4ee88ac87ecf0d8c9b80",
+            "case_id": "asset-status-v1/heldout/asset-105",
+            "rollout_id": "e9dd8006f99040ba9f1fa814ec13f533",
+            "attempt_id": "0",
+            "model_span": "f49f2ba34716486ea1a31fab9d78ec34",
+            "tool_span": "0eafd7c0f19e45b9b0ae6a0764001b32",
+            "tool_call_id": "chatcmpl-tool-9a54ed25527c1782",
+            "continuation_span": "328ce984a2c84db3a53c43134cbcc5d4",
+            "episode_span": "c2280a7bf6a04d808e20e15b606dff09",
+            "observation_sha256": "bc94cf68f150f9a7e892096d5685b4dfce4a582428f9f1a005bf50a81332f8b8",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "e7cfa82b455d4ee88ac87ecf0d8c9b80",
+            "case_id": "asset-status-v1/heldout/asset-105",
+            "rollout_id": "e9dd8006f99040ba9f1fa814ec13f533",
+            "attempt_id": "0",
+            "model_span": "328ce984a2c84db3a53c43134cbcc5d4",
+            "tool_span": "b929093dbb084537a3991829f12775b3",
+            "tool_call_id": "chatcmpl-tool-92508664b88eef50",
+            "continuation_span": "c983d10e4f0840dcb3d806954b733844",
+            "episode_span": "c2280a7bf6a04d808e20e15b606dff09",
+            "observation_sha256": "bc94cf68f150f9a7e892096d5685b4dfce4a582428f9f1a005bf50a81332f8b8",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ],
+        "episode_outcome": "complete_final",
+        "diagnostics": {
+          "json_syntax": true,
+          "format_compliant": true,
+          "target_correct": true,
+          "content_correct": true
+        }
+      },
+      {
+        "file": "trajectory-e97c581506a24c11b2b5f4ea21a1d363.jsonl",
+        "sha256": "c87118bbdbcd9c46060bfc6d447c70268aa3bea3528f07cdd5727305868e7fc7",
+        "chains": [
+          {
+            "trace_id": "e97c581506a24c11b2b5f4ea21a1d363",
+            "case_id": "asset-status-v1/heldout/asset-260",
+            "rollout_id": "ffd40ce9c99a47d6b43bdf0acabcf85b",
+            "attempt_id": "0",
+            "model_span": "2abde3c1cca94702b20724e2c8640d84",
+            "tool_span": "39ef8052980f4f6d96f4e7e21579f9ad",
+            "tool_call_id": "chatcmpl-tool-93d5f2590827d86a",
+            "continuation_span": "2abebd89f4b249939d3c05d104116377",
+            "episode_span": "fe5282834b44465fa30f6379171bc760",
+            "observation_sha256": "ebfdc90bf6910a2a196171177f77fa22470d675e7be13371306953a550bcef84",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "e97c581506a24c11b2b5f4ea21a1d363",
+            "case_id": "asset-status-v1/heldout/asset-260",
+            "rollout_id": "ffd40ce9c99a47d6b43bdf0acabcf85b",
+            "attempt_id": "0",
+            "model_span": "2abebd89f4b249939d3c05d104116377",
+            "tool_span": "10f5836a35ae46d9983b23f8a0ceb1f5",
+            "tool_call_id": "chatcmpl-tool-b8c48661a8166fea",
+            "continuation_span": "7ac954d3787e4fd3925f49c286c1c331",
+            "episode_span": "fe5282834b44465fa30f6379171bc760",
+            "observation_sha256": "ebfdc90bf6910a2a196171177f77fa22470d675e7be13371306953a550bcef84",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ],
+        "episode_outcome": "complete_final",
+        "diagnostics": {
+          "json_syntax": true,
+          "format_compliant": true,
+          "target_correct": true,
+          "content_correct": true
+        }
+      },
+      {
+        "file": "trajectory-f262ac7f1853416fbac542ff14502538.jsonl",
+        "sha256": "219cbe7710815756d0995f35d09f6c84bdef4dc8d1ae83b2861aded9837f012a",
+        "chains": [
+          {
+            "trace_id": "f262ac7f1853416fbac542ff14502538",
+            "case_id": "asset-status-v1/heldout/asset-009",
+            "rollout_id": "02011fed6f754be0b2f7cf367a0e416d",
+            "attempt_id": "0",
+            "model_span": "5f9ef0e99de94183adecd810881dc96a",
+            "tool_span": "11ced0e0f0b9467eade0287c07c6e602",
+            "tool_call_id": "chatcmpl-tool-83e41ed6234a942b",
+            "continuation_span": "5505383fb1d343a6a1305a735281f2cf",
+            "episode_span": "489e5f7f65254c00971275954c8f479d",
+            "observation_sha256": "0f9ec4bf7e232669fc2b6484ef9811dcb97dc906514b8b583ae1d43356d5d120",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "f262ac7f1853416fbac542ff14502538",
+            "case_id": "asset-status-v1/heldout/asset-009",
+            "rollout_id": "02011fed6f754be0b2f7cf367a0e416d",
+            "attempt_id": "0",
+            "model_span": "5505383fb1d343a6a1305a735281f2cf",
+            "tool_span": "84cd70d1e9224ab380ec0ea2ecad065d",
+            "tool_call_id": "chatcmpl-tool-9ed89689c9cc06ab",
+            "continuation_span": "4362c71ca3f34f18b0571a682c80c571",
+            "episode_span": "489e5f7f65254c00971275954c8f479d",
+            "observation_sha256": "0f9ec4bf7e232669fc2b6484ef9811dcb97dc906514b8b583ae1d43356d5d120",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ],
+        "episode_outcome": "complete_final",
+        "diagnostics": {
+          "json_syntax": true,
+          "format_compliant": true,
+          "target_correct": true,
+          "content_correct": true
+        }
+      },
+      {
+        "file": "trajectory-f558f32c96b74138833839d7d72fa0ee.jsonl",
+        "sha256": "fba1e05859032901c9d875acacec3c916efbbd99b7ea888ded468c8bcf5a214a",
+        "chains": [
+          {
+            "trace_id": "f558f32c96b74138833839d7d72fa0ee",
+            "case_id": "asset-status-v1/heldout/asset-268",
+            "rollout_id": "69c4951f5c4046df997025261d58cf11",
+            "attempt_id": "0",
+            "model_span": "2747fafb8cca4f2888fff27e32fe2d63",
+            "tool_span": "c06dcaf11ef449939683afecd15c8125",
+            "tool_call_id": "chatcmpl-tool-bfc32154d3756383",
+            "continuation_span": "3323308d93464a9dacb52d78ba150b95",
+            "episode_span": "b631d37d53bd4f2ba0f09f10ea1565ae",
+            "observation_sha256": "bea3c9da652bb00f4f8d8de9ecc36d78bf281c3dfde7aa43a735a98cf0395a04",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "f558f32c96b74138833839d7d72fa0ee",
+            "case_id": "asset-status-v1/heldout/asset-268",
+            "rollout_id": "69c4951f5c4046df997025261d58cf11",
+            "attempt_id": "0",
+            "model_span": "3323308d93464a9dacb52d78ba150b95",
+            "tool_span": "89d0c59f42024ca9b1413537042b63a3",
+            "tool_call_id": "chatcmpl-tool-917a5e8d89fd4b8a",
+            "continuation_span": "4691e6bc96c4487b8f4f44aec62f4532",
+            "episode_span": "b631d37d53bd4f2ba0f09f10ea1565ae",
+            "observation_sha256": "bea3c9da652bb00f4f8d8de9ecc36d78bf281c3dfde7aa43a735a98cf0395a04",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ],
+        "episode_outcome": "complete_final",
+        "diagnostics": {
+          "json_syntax": true,
+          "format_compliant": true,
+          "target_correct": true,
+          "content_correct": true
+        }
+      },
+      {
+        "file": "trajectory-f93157d2eba94e2b9e3c8db5b99417c6.jsonl",
+        "sha256": "50cd621051cef1c3b9c48312e65a801150211b5ee7aced77734d48338d1d5c7f",
+        "chains": [
+          {
+            "trace_id": "f93157d2eba94e2b9e3c8db5b99417c6",
+            "case_id": "asset-status-v1/heldout/asset-220",
+            "rollout_id": "299dfdaa01704e39ae91aee5ee602080",
+            "attempt_id": "0",
+            "model_span": "d5fc078cf6f54a31b853e1a2355a2d33",
+            "tool_span": "b693bfc094a44408a479befd7fbf37da",
+            "tool_call_id": "chatcmpl-tool-ac47584b7ec13420",
+            "continuation_span": "b1ca61fd445149e1b8a39a9404914bea",
+            "episode_span": "6c471a0cb21d4edfa14edee47dbeabac",
+            "observation_sha256": "0781ec3012f1ac84859c06bc4a93ec0b4b282a4f546d18d8fb593283ce72fd55",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "f93157d2eba94e2b9e3c8db5b99417c6",
+            "case_id": "asset-status-v1/heldout/asset-220",
+            "rollout_id": "299dfdaa01704e39ae91aee5ee602080",
+            "attempt_id": "0",
+            "model_span": "b1ca61fd445149e1b8a39a9404914bea",
+            "tool_span": "781f5523b7f34f4e9177f7e14b6ce880",
+            "tool_call_id": "chatcmpl-tool-b2785693cbb18b37",
+            "continuation_span": "7db1daccda504191a22a9112db232ff7",
+            "episode_span": "6c471a0cb21d4edfa14edee47dbeabac",
+            "observation_sha256": "0781ec3012f1ac84859c06bc4a93ec0b4b282a4f546d18d8fb593283ce72fd55",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ],
+        "episode_outcome": "complete_final",
+        "diagnostics": {
+          "json_syntax": true,
+          "format_compliant": true,
+          "target_correct": true,
+          "content_correct": true
+        }
+      },
+      {
+        "file": "trajectory-fd3eca52b775495ca368af5ab2f8e740.jsonl",
+        "sha256": "24436aaff06a77727077d2edeb6d81bc2b81255e23bec0aff30cddd16de40c68",
+        "chains": [
+          {
+            "trace_id": "fd3eca52b775495ca368af5ab2f8e740",
+            "case_id": "asset-status-v1/heldout/asset-247",
+            "rollout_id": "f1d28bc9760b42ff88a0fb26de0e16c9",
+            "attempt_id": "0",
+            "model_span": "4fb1ee23d9274c2092e7b024ace18bc5",
+            "tool_span": "0b7f6e94a6b2415081cb720b9ba58030",
+            "tool_call_id": "chatcmpl-tool-98c060b98fc4d447",
+            "continuation_span": "49a2bfa2f5ea4a768031b1ea52593751",
+            "episode_span": "85a729fbf74b461583ac175cfd992f07",
+            "observation_sha256": "c1f2ceb6f7c6c7e4069dbca9af5b9d818d2c89fc518a2c49798253a882a01dc0",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "fd3eca52b775495ca368af5ab2f8e740",
+            "case_id": "asset-status-v1/heldout/asset-247",
+            "rollout_id": "f1d28bc9760b42ff88a0fb26de0e16c9",
+            "attempt_id": "0",
+            "model_span": "49a2bfa2f5ea4a768031b1ea52593751",
+            "tool_span": "0a441c1f06154593b5797827adbe8224",
+            "tool_call_id": "chatcmpl-tool-9700af329624e702",
+            "continuation_span": "88bb30c7aa3e45fe95760c3a8fccbbdb",
+            "episode_span": "85a729fbf74b461583ac175cfd992f07",
+            "observation_sha256": "c1f2ceb6f7c6c7e4069dbca9af5b9d818d2c89fc518a2c49798253a882a01dc0",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ],
+        "episode_outcome": "complete_final",
+        "diagnostics": {
+          "json_syntax": true,
+          "format_compliant": true,
+          "target_correct": true,
+          "content_correct": true
+        }
+      },
+      {
+        "file": "trajectory-fd7fa48616104037b53dfca3b4417107.jsonl",
+        "sha256": "aad40c2559d2412fe7e0290d29ea9000064bc1776edf34f14cf164b69969a751",
+        "chains": [
+          {
+            "trace_id": "fd7fa48616104037b53dfca3b4417107",
+            "case_id": "asset-status-v1/heldout/asset-021",
+            "rollout_id": "af198a1a66b742fd8b55fa1053fdf954",
+            "attempt_id": "0",
+            "model_span": "c46abe8cfef741569ca49deded5eca11",
+            "tool_span": "0d9b2b0290f5441fb34375e8f11b55f6",
+            "tool_call_id": "chatcmpl-tool-bb5bfbd931effa05",
+            "continuation_span": "93aad2e3ba8d44ab9b0a76c76be26abf",
+            "episode_span": "cdbc84e54a4c4dd29359b33585475c4f",
+            "observation_sha256": "dd0679858e3d074b4a92984ca83c50ffc7abfd03419dce102666e70b6a47e058",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "fd7fa48616104037b53dfca3b4417107",
+            "case_id": "asset-status-v1/heldout/asset-021",
+            "rollout_id": "af198a1a66b742fd8b55fa1053fdf954",
+            "attempt_id": "0",
+            "model_span": "93aad2e3ba8d44ab9b0a76c76be26abf",
+            "tool_span": "06dd35e22e1948f9a9196f4757cec13a",
+            "tool_call_id": "chatcmpl-tool-94619485f3b0ec50",
+            "continuation_span": "51143dfe670643eda3ee71e3ad87c424",
+            "episode_span": "cdbc84e54a4c4dd29359b33585475c4f",
+            "observation_sha256": "dd0679858e3d074b4a92984ca83c50ffc7abfd03419dce102666e70b6a47e058",
+            "terminal_reward": 1.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ],
+        "episode_outcome": "complete_final",
+        "diagnostics": {
+          "json_syntax": true,
+          "format_compliant": true,
+          "target_correct": true,
+          "content_correct": true
+        }
+      }
+    ],
+    "gaps": [],
+    "task_correctness_required": false
+  },
+  "native_checkpoint_manifests": [],
+  "local_metric_rows": [
+    {
+      "step": 0,
+      "metrics": {
+        "val/reward": 1.0,
+        "val/n_rollouts": 64,
+        "val/n_rollouts_w_trace": 64,
+        "val/n_rollouts_w_reward": 64,
+        "val/mean_response_length_per_turn": 21.973958333333332,
+        "val/mean_total_response_length_per_rollout": 65.921875,
+        "val/turn_count": 3.0
+      }
+    }
+  ],
+  "hosted_wandb": {
+    "attempt": 7,
+    "algorithm": "grpo-matched-v2",
+    "stage": "baseline",
+    "id": "79f9982122fcd9501dff1ec7",
+    "queried_at": "2026-11-24T03:56:33.674149+00:00",
+    "project_enumeration_complete": true,
+    "present": true,
+    "url": "https://wandb.ai/amulyap-stanford-university/reader-owned-reference/runs/79f9982122fcd9501dff1ec7",
+    "state": "finished",
+    "name": "reader-asset-20261122-r07-a07-grpo-matched-v2-baseline",
+    "configuration_matches": true,
+    "expected_configuration_sha256": "19421abb7b94aebc9cbddafccf6123b2b7f77b86f4f7d87bc2cc9a9986d0ab78",
+    "actual_configuration_sha256": "19421abb7b94aebc9cbddafccf6123b2b7f77b86f4f7d87bc2cc9a9986d0ab78",
+    "matched_study_config": {
+      "algorithm": "grpo-matched-v2",
+      "assets": "28f4f4e5c7593a285c679bba03d90cd06a26e09feda653bc6fbde54182204d5f",
+      "evaluation": "asset-status-v1-64",
+      "model": {
+        "id": "meta-llama/Llama-3.2-3B-Instruct",
+        "parser": "llama3_json",
+        "profile": "llama3b",
+        "revision": "0cb88a4f764b7a12671c53f0838cd831a0843b95"
+      },
+      "profile": "15daa00171dde43c7285430b6ad98ee1d223d1979cf66183697a77cb08e9b47a",
+      "protocol": "matched-rollout-mean-v2",
+      "resources": {
+        "cpu": 16,
+        "gpu": "H100!",
+        "memory_mib": 196608
+      },
+      "schema": "reader-task-v2",
+      "seed_streams": {
+        "actor_optimizer": 660317075,
+        "actor_sampling": 1217781245,
+        "critic_init": null,
+        "numpy": 846298712,
+        "paired_question_order": 1028282608,
+        "python": 143897530,
+        "row_batching": 1823162246,
+        "torch_cpu": 1376393873,
+        "torch_cuda": 2040295816
+      },
+      "source": "46490adf43e9e1e983d99832a752df855353da82250b2e7437897c237a091936",
+      "stage": "baseline",
+      "steps": 2,
+      "task": {
+        "agent_class": "asset_agent.Agent",
+        "cwd": "examples/calc_x",
+        "data_mapping": {
+          "AGL_CASE_ID": "input.case_id",
+          "AGL_DATA_SPLIT": "input.split",
+          "EVAL_SPLIT": "input.split",
+          "QUESTION": "input.question",
+          "RESULT": "input.result"
+        },
+        "entrypoint_lock_sha256": "9d211065a5dd984d5fdfc43c63cab6c38e86ff36a2f4cac9ff0b9ab63302665a",
+        "environment": {
+          "ordered_cases_sha256": {
+            "eval_main.jsonl": "493299d2b0fe8db770d5047f65893d67c0fc4c8f6e6c9825305f7b4c6e68464c",
+            "eval_main.parquet": "493299d2b0fe8db770d5047f65893d67c0fc4c8f6e6c9825305f7b4c6e68464c",
+            "eval_smoke.jsonl": "918071a326a383d42db8ddc48919a4e5e48a6ec4b9d8cee0bb4471d06ac1ce30",
+            "eval_smoke.parquet": "918071a326a383d42db8ddc48919a4e5e48a6ec4b9d8cee0bb4471d06ac1ce30",
+            "train_main.parquet": "59af0d2b9decfc87637b787d28f37de83c40fd801ffac5edda028b26fc02cd0e",
+            "train_smoke.parquet": "1585496ecf3d2bba3e1e6069959c657a2f771f912eddb2d640f44733fe4ba1a1"
+          },
+          "output": {
+            "backup_health": [
+              "healthy",
+              "stale",
+              "failed"
+            ],
+            "fields": [
+              "asset_id",
+              "service_state",
+              "backup_health"
+            ],
+            "parser": "whole-response-json-unique-keys-no-extra-fields-v1",
+            "service_state": [
+              "operational",
+              "degraded",
+              "offline"
+            ]
+          },
+          "prompt": "Use lookup_asset to look up the requested asset. Return exactly one JSON object with only asset_id, service_state, backup_health, all strings. No markdown or other text. service_state must be operational, degraded, or offline; backup_health must be healthy, stale, or failed.",
+          "recipe": "asset-status-v1/2026-11-20/329",
+          "registry_sha256": "241b5672d43b7dff7db7d203f2805d91e0a541e7a20e18d4edb608419e670e44",
+          "reward": "independent exact terminal correctness, binary; incomplete has no reward",
+          "task": "asset-status-v1",
+          "tool": {
+            "input_schema": {
+              "additionalProperties": false,
+              "properties": {
+                "asset_id": {
+                  "pattern": "^asset-[0-9]{3}$",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "asset_id"
+              ],
+              "type": "object"
+            },
+            "name": "lookup_asset"
+          }
+        },
+        "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+        "episode_policy": {
+          "final_generation": "context-json-reminder-v1",
+          "infrastructure_or_missing_evidence": "incomplete-no-reward",
+          "max_tool_iterations": 2,
+          "policy_error_codes": [
+            "invalid_arguments",
+            "invalid_asset_id",
+            "unknown_asset",
+            "non_object_arguments",
+            "invalid_argument_json",
+            "unknown_tool"
+          ],
+          "policy_error_limit": 2,
+          "policy_limit": "terminal-zero",
+          "recovered_final": "strict-verifier",
+          "version": "asset-episode-v2"
+        },
+        "integration_rule": "reader-integration-v2; live chain required in all three stages per algorithm",
+        "label_fields": [
+          "result"
+        ],
+        "launcher_sha256": "752cca22341639228b20e69de32b7a8062e59f47ad9d1fcd22b8e177798ddf97",
+        "local_probe": "asset_probe.check",
+        "mcp": {
+          "args": [
+            "-I",
+            "asset_stdio.py"
+          ],
+          "command": "training-python",
+          "environment": {
+            "PYTHONDONTWRITEBYTECODE": "1",
+            "PYTHONUNBUFFERED": "1"
+          },
+          "ownership_receipt": "optional absolute directory argument; never a model input"
+        },
+        "name": "asset-status-v1",
+        "source_sha256": {
+          "asset_agent.py": "fc02ec3730eaceb11f59672c49d47fe935bfc5cb8e10703daacdf8101c03994c",
+          "asset_probe.py": "ff8b3845f61e027b93918b64c1324c9554a81b6460bbcd213c7b7eb0ed9e3e70",
+          "asset_server.py": "6250d650487ff00e10fe47237dce5f5a880e671b4f896991ac2bdeb73d05e8a7",
+          "asset_stdio.py": "33af32fcaca9d28a7abe9a742c64e889641687e7dd8a302b7ce250a9f086acf5",
+          "asset_task.py": "1abd6a8248340065efcc3489524d91750eea3c8d7f1b555981288a0339ae3b2d",
+          "observed_runtime.py": "81ff2831c901091a784f0b11e72de9a13c2db5ff05e0756b1c4fb97c41ca2fa9",
+          "owned_processes.py": "6ca9cce7a93ab0ffd2bcad7a47fa5190c4328d705713e24425ed97e4d9ce34d3"
+        },
+        "visible_fields": [
+          "question"
+        ]
+      }
+    },
+    "history": [
+      {
+        "_runtime": 67.056997809,
+        "val/mean_response_length_per_turn": 21.973958333333332,
+        "val/n_rollouts": 64,
+        "val/turn_count": 3,
+        "_step": 0,
+        "_timestamp": 1795488402.782961,
+        "val/mean_total_response_length_per_rollout": 65.921875,
+        "val/n_rollouts_w_reward": 64,
+        "val/n_rollouts_w_trace": 64,
+        "val/reward": 1
+      }
+    ],
+    "history_steps": [
+      0
+    ],
+    "local_metric_rows": 1,
+    "local_history_steps": [
+      0
+    ],
+    "metric_comparisons": [
+      {
+        "step": 0,
+        "metric": "val/reward",
+        "matches": true,
+        "local": 1.0,
+        "hosted": 1
+      },
+      {
+        "step": 0,
+        "metric": "val/n_rollouts",
+        "matches": true,
+        "local": 64,
+        "hosted": 64
+      },
+      {
+        "step": 0,
+        "metric": "val/n_rollouts_w_trace",
+        "matches": true,
+        "local": 64,
+        "hosted": 64
+      },
+      {
+        "step": 0,
+        "metric": "val/n_rollouts_w_reward",
+        "matches": true,
+        "local": 64,
+        "hosted": 64
+      },
+      {
+        "step": 0,
+        "metric": "val/mean_response_length_per_turn",
+        "matches": true,
+        "local": 21.973958333333332,
+        "hosted": 21.973958333333332
+      },
+      {
+        "step": 0,
+        "metric": "val/mean_total_response_length_per_rollout",
+        "matches": true,
+        "local": 65.921875,
+        "hosted": 65.921875
+      },
+      {
+        "step": 0,
+        "metric": "val/turn_count",
+        "matches": true,
+        "local": 3.0,
+        "hosted": 3
+      }
+    ],
+    "all_local_numeric_metrics_match": true,
+    "history_steps_match": true,
+    "metric_comparison_status": "matched"
+  }
+}

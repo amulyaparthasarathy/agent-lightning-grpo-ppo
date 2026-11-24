@@ -1,0 +1,41 @@
+{
+  "bounds": {
+    "stage_seconds": 3600,
+    "startup_seconds": 600,
+    "supervisor_seconds": 22200,
+    "concurrency": 1,
+    "max_gpu_seconds": 21600,
+    "budget_usd": 125,
+    "all_resource_hourly_ceiling_usd": 10
+  },
+  "resources": {
+    "gpu": "H100!",
+    "cpu": 16,
+    "memory_mib": 196608
+  },
+  "automatic_retries": 0,
+  "seed_streams": {
+    "grpo-matched-v2": {
+      "python": 143897530,
+      "numpy": 846298712,
+      "torch_cpu": 1376393873,
+      "torch_cuda": 2040295816,
+      "actor_sampling": 1217781245,
+      "actor_optimizer": 660317075,
+      "row_batching": 1823162246,
+      "critic_init": null,
+      "paired_question_order": 1028282608
+    },
+    "ppo-mc-matched-v2": {
+      "python": 139295096,
+      "numpy": 513160406,
+      "torch_cpu": 204395415,
+      "torch_cuda": 180497808,
+      "actor_sampling": 737109812,
+      "actor_optimizer": 1751928485,
+      "row_batching": 2080451036,
+      "critic_init": 1864040309,
+      "paired_question_order": 1028282608
+    }
+  }
+}

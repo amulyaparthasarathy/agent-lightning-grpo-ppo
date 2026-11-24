@@ -1,0 +1,188 @@
+{
+  "queried_at": "2026-11-24T03:56:33.674149+00:00",
+  "project_enumeration_complete": true,
+  "runs": [
+    {
+      "attempt": 5,
+      "algorithm": "grpo-matched-v2",
+      "stage": "training",
+      "id": "01c8eaf633720089ba0e48c3",
+      "present": false,
+      "state": null,
+      "configuration_matches": null,
+      "history_steps": null,
+      "local_history_steps": null,
+      "all_local_numeric_metrics_match": null,
+      "history_steps_match": null,
+      "metric_comparison_status": null,
+      "url": null
+    },
+    {
+      "attempt": 5,
+      "algorithm": "ppo-mc-matched-v2",
+      "stage": "training",
+      "id": "a1c2ed2a1d6c2bb3ffad9299",
+      "present": false,
+      "state": null,
+      "configuration_matches": null,
+      "history_steps": null,
+      "local_history_steps": null,
+      "all_local_numeric_metrics_match": null,
+      "history_steps_match": null,
+      "metric_comparison_status": null,
+      "url": null
+    },
+    {
+      "attempt": 6,
+      "algorithm": "grpo-matched-v2",
+      "stage": "training",
+      "id": "5a6977e90e34e0b83113f30a",
+      "present": true,
+      "state": "finished",
+      "configuration_matches": true,
+      "history_steps": [
+        1
+      ],
+      "local_history_steps": [],
+      "all_local_numeric_metrics_match": null,
+      "history_steps_match": false,
+      "metric_comparison_status": "review_required",
+      "url": "https://wandb.ai/amulyap-stanford-university/reader-owned-reference/runs/5a6977e90e34e0b83113f30a"
+    },
+    {
+      "attempt": 6,
+      "algorithm": "ppo-mc-matched-v2",
+      "stage": "training",
+      "id": "d376b6d80edcc1ae7c41ab5e",
+      "present": true,
+      "state": "finished",
+      "configuration_matches": true,
+      "history_steps": [
+        1
+      ],
+      "local_history_steps": [],
+      "all_local_numeric_metrics_match": null,
+      "history_steps_match": false,
+      "metric_comparison_status": "review_required",
+      "url": "https://wandb.ai/amulyap-stanford-university/reader-owned-reference/runs/d376b6d80edcc1ae7c41ab5e"
+    },
+    {
+      "attempt": 7,
+      "algorithm": "grpo-matched-v2",
+      "stage": "baseline",
+      "id": "79f9982122fcd9501dff1ec7",
+      "present": true,
+      "state": "finished",
+      "configuration_matches": true,
+      "history_steps": [
+        0
+      ],
+      "local_history_steps": [
+        0
+      ],
+      "all_local_numeric_metrics_match": true,
+      "history_steps_match": true,
+      "metric_comparison_status": "matched",
+      "url": "https://wandb.ai/amulyap-stanford-university/reader-owned-reference/runs/79f9982122fcd9501dff1ec7"
+    },
+    {
+      "attempt": 7,
+      "algorithm": "grpo-matched-v2",
+      "stage": "training",
+      "id": "db8f80ac687ad9f4cdcc0c5e",
+      "present": true,
+      "state": "finished",
+      "configuration_matches": true,
+      "history_steps": [
+        1,
+        2
+      ],
+      "local_history_steps": [
+        1,
+        2
+      ],
+      "all_local_numeric_metrics_match": true,
+      "history_steps_match": true,
+      "metric_comparison_status": "matched",
+      "url": "https://wandb.ai/amulyap-stanford-university/reader-owned-reference/runs/db8f80ac687ad9f4cdcc0c5e"
+    },
+    {
+      "attempt": 7,
+      "algorithm": "grpo-matched-v2",
+      "stage": "checkpoint-eval",
+      "id": "011b8c28be3bec0dd03c9144",
+      "present": true,
+      "state": "finished",
+      "configuration_matches": true,
+      "history_steps": [
+        2
+      ],
+      "local_history_steps": [
+        2
+      ],
+      "all_local_numeric_metrics_match": true,
+      "history_steps_match": true,
+      "metric_comparison_status": "matched",
+      "url": "https://wandb.ai/amulyap-stanford-university/reader-owned-reference/runs/011b8c28be3bec0dd03c9144"
+    },
+    {
+      "attempt": 7,
+      "algorithm": "ppo-mc-matched-v2",
+      "stage": "baseline",
+      "id": "60fe3eaad9748df5561e3425",
+      "present": true,
+      "state": "finished",
+      "configuration_matches": true,
+      "history_steps": [
+        0
+      ],
+      "local_history_steps": [
+        0
+      ],
+      "all_local_numeric_metrics_match": true,
+      "history_steps_match": true,
+      "metric_comparison_status": "matched",
+      "url": "https://wandb.ai/amulyap-stanford-university/reader-owned-reference/runs/60fe3eaad9748df5561e3425"
+    },
+    {
+      "attempt": 7,
+      "algorithm": "ppo-mc-matched-v2",
+      "stage": "training",
+      "id": "b45afdfd791a2c68104ad3f0",
+      "present": true,
+      "state": "finished",
+      "configuration_matches": true,
+      "history_steps": [
+        1,
+        2
+      ],
+      "local_history_steps": [
+        1,
+        2
+      ],
+      "all_local_numeric_metrics_match": true,
+      "history_steps_match": true,
+      "metric_comparison_status": "matched",
+      "url": "https://wandb.ai/amulyap-stanford-university/reader-owned-reference/runs/b45afdfd791a2c68104ad3f0"
+    },
+    {
+      "attempt": 7,
+      "algorithm": "ppo-mc-matched-v2",
+      "stage": "checkpoint-eval",
+      "id": "080b99cb08f17205cb0cf4b3",
+      "present": true,
+      "state": "finished",
+      "configuration_matches": true,
+      "history_steps": [
+        2
+      ],
+      "local_history_steps": [
+        2
+      ],
+      "all_local_numeric_metrics_match": true,
+      "history_steps_match": true,
+      "metric_comparison_status": "matched",
+      "url": "https://wandb.ai/amulyap-stanford-university/reader-owned-reference/runs/080b99cb08f17205cb0cf4b3"
+    }
+  ]
+}

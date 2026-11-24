@@ -1,0 +1,32 @@
+{
+  "prepare": {
+    "status": "submitted",
+    "action": "prepare",
+    "plan_sha256": "6bb254084913ded03abc12e3a7b9f2556aa883536921e03c65f8cfe7ad794e5d",
+    "call_id": "fc-01M85NDDE44AHPQ583JPGZY7Q7",
+    "app_id": "ap-IOCi4ZZKnkSAp2dmeBDqFD",
+    "image_id": "im-UTGiucVTEF7MLNN45fV1Yh",
+    "time": 1795486336.4138806,
+    "automatic_retry": false
+  },
+  "preflight": {
+    "status": "submitted",
+    "action": "preflight",
+    "plan_sha256": "6c1e259e171e9eebfa32fb438dd80f5d685b04e91e51a9c7f8c419e255c94449",
+    "call_id": "fc-01M85NG911SGKKJXR55J3EAQQ2",
+    "app_id": "ap-PK5X9Z00GBfPu1FkgKqjuO",
+    "image_id": "im-UTGiucVTEF7MLNN45fV1Yh",
+    "time": 1795486629.8024619,
+    "automatic_retry": false
+  },
+  "launch": {
+    "status": "submitted",
+    "action": "launch",
+    "plan_sha256": "6c1e259e171e9eebfa32fb438dd80f5d685b04e91e51a9c7f8c419e255c94449",
+    "call_id": "fc-01M85NK5YXAAWR7AH4PNPPGSSH",
+    "app_id": "ap-G4DqftLedEiSbCOvbqFltn",
+    "image_id": "im-UTGiucVTEF7MLNN45fV1Yh",
+    "time": 1795486724.2351596,
+    "automatic_retry": false
+  }
+}

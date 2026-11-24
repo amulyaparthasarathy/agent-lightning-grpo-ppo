@@ -1,0 +1,1017 @@
+[
+  {
+    "attempt": 6,
+    "purpose": "collection-only",
+    "algorithm": "grpo-matched-v2",
+    "stage": "training",
+    "supervisor": {
+      "status": "completed",
+      "call_id": "fc-01M85NKC9YZ5Z1QRGN64CRH7MD",
+      "submitted_at": 1795486755.5063312,
+      "finished_at": 1795487165.7578151,
+      "reason": null,
+      "cancellation_requested": null
+    },
+    "provider_reconciliation": {
+      "queried_at": "2026-11-24T04:02:53.898971+00:00",
+      "id": "fc-01M85NKC9YZ5Z1QRGN64CRH7MD",
+      "provider_status": "completed",
+      "error_type": null
+    },
+    "observed_optimizer_events": {
+      "actor": 0,
+      "critic": 0
+    },
+    "policy_refreshes": [
+      0
+    ],
+    "trajectories": {
+      "phase_filter": "training",
+      "route_filter": "train",
+      "attempt_files_total": 32,
+      "attempts_selected": 32,
+      "unclassified_attempt_files": 0,
+      "invalid_records": [],
+      "completed": 32,
+      "failed": 0,
+      "incomplete_or_ambiguous": 0,
+      "phase_route_counts": {
+        "training/train": 32
+      },
+      "observed_reward": {
+        "count": 32,
+        "sum": 32.0,
+        "mean": 1.0,
+        "max": 1.0
+      },
+      "attempts_without_numeric_reward": 0,
+      "reward_denominator": "Only observed numeric episode rewards, including failed reward posts; no zero fills.",
+      "reward_posts_confirmed": 32,
+      "model_calls_recorded": 96,
+      "model_errors_recorded": 0,
+      "tool_calls_recorded": 64,
+      "tool_errors_recorded": 0,
+      "call_count_scope": "Recorded spans, not transport retries; unfinished or dropped spans may be absent.",
+      "model_calls_with_usage": 96,
+      "model_calls_without_usage": 0,
+      "usage_source": "Recorded response usage only; AutoGen zero/absent ambiguity remains unknown.",
+      "usage": {
+        "prompt_tokens": {
+          "count": 96,
+          "sum": 42144,
+          "mean": 439.0,
+          "max": 479
+        },
+        "completion_tokens": {
+          "count": 96,
+          "sum": 2112,
+          "mean": 22.0,
+          "max": 26
+        }
+      },
+      "episode_elapsed_ms": {
+        "count": 32,
+        "sum": 234500.468,
+        "mean": 7328.139625,
+        "max": 13719.844
+      },
+      "model_operation_ms": {
+        "count": 96,
+        "sum": 148431.588,
+        "mean": 1546.1623749999999,
+        "max": 9492.994
+      },
+      "tool_operation_ms": {
+        "count": 64,
+        "sum": 480.561,
+        "mean": 7.508765625,
+        "max": 8.639
+      },
+      "timing_scope": "Inclusive episode duration; model/tool operation durations are separate and may overlap.",
+      "episode_outcomes": {
+        "complete_final": 32
+      },
+      "format_compliant_finals": 32,
+      "policy_errors": 0,
+      "diagnostic_scope": "Final-format and policy diagnostics; no added reward terms"
+    },
+    "collections": [
+      {
+        "iteration": 1,
+        "rollouts": 32,
+        "groups": 8,
+        "case_ids": [
+          "asset-status-v1/train/asset-011",
+          "asset-status-v1/train/asset-039",
+          "asset-status-v1/train/asset-041",
+          "asset-status-v1/train/asset-075",
+          "asset-status-v1/train/asset-111",
+          "asset-status-v1/train/asset-246",
+          "asset-status-v1/train/asset-250",
+          "asset-status-v1/train/asset-271"
+        ],
+        "rewards": {
+          "1.0": 32
+        },
+        "fragments": 96,
+        "original_generated_tokens": 2112,
+        "group_reward_sums": [
+          4.0,
+          4.0,
+          4.0,
+          4.0,
+          4.0,
+          4.0,
+          4.0,
+          4.0
+        ]
+      }
+    ],
+    "integration": {
+      "qualified": true,
+      "episodes_with_valid_chain": 32,
+      "trace_files": 32
+    }
+  },
+  {
+    "attempt": 6,
+    "purpose": "collection-only",
+    "algorithm": "ppo-mc-matched-v2",
+    "stage": "training",
+    "supervisor": {
+      "status": "completed",
+      "call_id": "fc-01M85NZXD7EVTND6B2Z68CY1WF",
+      "submitted_at": 1795487166.810328,
+      "finished_at": 1795487552.960146,
+      "reason": null,
+      "cancellation_requested": null
+    },
+    "provider_reconciliation": {
+      "queried_at": "2026-11-24T04:02:53.898971+00:00",
+      "id": "fc-01M85NZXD7EVTND6B2Z68CY1WF",
+      "provider_status": "completed",
+      "error_type": null
+    },
+    "observed_optimizer_events": {
+      "actor": 0,
+      "critic": 0
+    },
+    "policy_refreshes": [
+      0
+    ],
+    "trajectories": {
+      "phase_filter": "training",
+      "route_filter": "train",
+      "attempt_files_total": 32,
+      "attempts_selected": 32,
+      "unclassified_attempt_files": 0,
+      "invalid_records": [],
+      "completed": 32,
+      "failed": 0,
+      "incomplete_or_ambiguous": 0,
+      "phase_route_counts": {
+        "training/train": 32
+      },
+      "observed_reward": {
+        "count": 32,
+        "sum": 31.0,
+        "mean": 0.96875,
+        "max": 1.0
+      },
+      "attempts_without_numeric_reward": 0,
+      "reward_denominator": "Only observed numeric episode rewards, including failed reward posts; no zero fills.",
+      "reward_posts_confirmed": 32,
+      "model_calls_recorded": 96,
+      "model_errors_recorded": 0,
+      "tool_calls_recorded": 63,
+      "tool_errors_recorded": 0,
+      "call_count_scope": "Recorded spans, not transport retries; unfinished or dropped spans may be absent.",
+      "model_calls_with_usage": 96,
+      "model_calls_without_usage": 0,
+      "usage_source": "Recorded response usage only; AutoGen zero/absent ambiguity remains unknown.",
+      "usage": {
+        "prompt_tokens": {
+          "count": 96,
+          "sum": 42138,
+          "mean": 438.9375,
+          "max": 479
+        },
+        "completion_tokens": {
+          "count": 96,
+          "sum": 2112,
+          "mean": 22.0,
+          "max": 26
+        }
+      },
+      "episode_elapsed_ms": {
+        "count": 32,
+        "sum": 253483.051,
+        "mean": 7921.34534375,
+        "max": 14742.245
+      },
+      "model_operation_ms": {
+        "count": 96,
+        "sum": 155596.282,
+        "mean": 1620.7946041666667,
+        "max": 10176.531
+      },
+      "tool_operation_ms": {
+        "count": 63,
+        "sum": 488.559,
+        "mean": 7.754904761904762,
+        "max": 10.349
+      },
+      "timing_scope": "Inclusive episode duration; model/tool operation durations are separate and may overlap.",
+      "episode_outcomes": {
+        "complete_final": 32
+      },
+      "format_compliant_finals": 32,
+      "policy_errors": 1,
+      "diagnostic_scope": "Final-format and policy diagnostics; no added reward terms"
+    },
+    "collections": [
+      {
+        "iteration": 1,
+        "rollouts": 32,
+        "groups": 8,
+        "case_ids": [
+          "asset-status-v1/train/asset-011",
+          "asset-status-v1/train/asset-039",
+          "asset-status-v1/train/asset-041",
+          "asset-status-v1/train/asset-075",
+          "asset-status-v1/train/asset-111",
+          "asset-status-v1/train/asset-246",
+          "asset-status-v1/train/asset-250",
+          "asset-status-v1/train/asset-271"
+        ],
+        "rewards": {
+          "1.0": 31,
+          "0.0": 1
+        },
+        "fragments": 96,
+        "original_generated_tokens": 2112,
+        "group_reward_sums": [
+          3.0,
+          4.0,
+          4.0,
+          4.0,
+          4.0,
+          4.0,
+          4.0,
+          4.0
+        ]
+      }
+    ],
+    "integration": {
+      "qualified": true,
+      "episodes_with_valid_chain": 32,
+      "trace_files": 32
+    }
+  },
+  {
+    "attempt": 7,
+    "purpose": "qualification",
+    "algorithm": "grpo-matched-v2",
+    "stage": "baseline",
+    "supervisor": {
+      "status": "completed",
+      "call_id": "fc-01M85PWS2XD738252CZQ7028P0",
+      "submitted_at": 1795488106.455306,
+      "finished_at": 1795488425.4419198,
+      "reason": null,
+      "cancellation_requested": null
+    },
+    "provider_reconciliation": {
+      "queried_at": "2026-11-24T04:02:53.898971+00:00",
+      "id": "fc-01M85PWS2XD738252CZQ7028P0",
+      "provider_status": "completed",
+      "error_type": null
+    },
+    "observed_optimizer_events": {
+      "actor": 0,
+      "critic": 0
+    },
+    "policy_refreshes": [
+      0
+    ],
+    "trajectories": {
+      "phase_filter": "baseline",
+      "route_filter": "val",
+      "attempt_files_total": 64,
+      "attempts_selected": 64,
+      "unclassified_attempt_files": 0,
+      "invalid_records": [],
+      "completed": 64,
+      "failed": 0,
+      "incomplete_or_ambiguous": 0,
+      "phase_route_counts": {
+        "baseline/val": 64
+      },
+      "observed_reward": {
+        "count": 64,
+        "sum": 64.0,
+        "mean": 1.0,
+        "max": 1.0
+      },
+      "attempts_without_numeric_reward": 0,
+      "reward_denominator": "Only observed numeric episode rewards, including failed reward posts; no zero fills.",
+      "reward_posts_confirmed": 64,
+      "model_calls_recorded": 192,
+      "model_errors_recorded": 0,
+      "tool_calls_recorded": 128,
+      "tool_errors_recorded": 0,
+      "call_count_scope": "Recorded spans, not transport retries; unfinished or dropped spans may be absent.",
+      "model_calls_with_usage": 192,
+      "model_calls_without_usage": 0,
+      "usage_source": "Recorded response usage only; AutoGen zero/absent ambiguity remains unknown.",
+      "usage": {
+        "prompt_tokens": {
+          "count": 192,
+          "sum": 84273,
+          "mean": 438.921875,
+          "max": 479
+        },
+        "completion_tokens": {
+          "count": 192,
+          "sum": 4219,
+          "mean": 21.973958333333332,
+          "max": 26
+        }
+      },
+      "episode_elapsed_ms": {
+        "count": 64,
+        "sum": 208831.509,
+        "mean": 3262.992328125,
+        "max": 5435.343
+      },
+      "model_operation_ms": {
+        "count": 192,
+        "sum": 105962.851,
+        "mean": 551.8898489583333,
+        "max": 2754.035
+      },
+      "tool_operation_ms": {
+        "count": 128,
+        "sum": 694.326,
+        "mean": 5.424421875,
+        "max": 6.037
+      },
+      "timing_scope": "Inclusive episode duration; model/tool operation durations are separate and may overlap.",
+      "episode_outcomes": {
+        "complete_final": 64
+      },
+      "format_compliant_finals": 64,
+      "policy_errors": 0,
+      "diagnostic_scope": "Final-format and policy diagnostics; no added reward terms"
+    },
+    "collections": [],
+    "integration": {
+      "qualified": true,
+      "episodes_with_valid_chain": 64,
+      "trace_files": 64
+    }
+  },
+  {
+    "attempt": 7,
+    "purpose": "qualification",
+    "algorithm": "grpo-matched-v2",
+    "stage": "training",
+    "supervisor": {
+      "status": "completed",
+      "call_id": "fc-01M85Q6SY0QDXNSVS3E1HTP114",
+      "submitted_at": 1795488436.422349,
+      "finished_at": 1795488920.4278731,
+      "reason": null,
+      "cancellation_requested": null
+    },
+    "provider_reconciliation": {
+      "queried_at": "2026-11-24T04:02:53.898971+00:00",
+      "id": "fc-01M85Q6SY0QDXNSVS3E1HTP114",
+      "provider_status": "completed",
+      "error_type": null
+    },
+    "observed_optimizer_events": {
+      "actor": 2,
+      "critic": 0
+    },
+    "policy_refreshes": [
+      0,
+      1,
+      2
+    ],
+    "trajectories": {
+      "phase_filter": "training",
+      "route_filter": "train",
+      "attempt_files_total": 64,
+      "attempts_selected": 64,
+      "unclassified_attempt_files": 0,
+      "invalid_records": [],
+      "completed": 64,
+      "failed": 0,
+      "incomplete_or_ambiguous": 0,
+      "phase_route_counts": {
+        "training/train": 64
+      },
+      "observed_reward": {
+        "count": 64,
+        "sum": 63.0,
+        "mean": 0.984375,
+        "max": 1.0
+      },
+      "attempts_without_numeric_reward": 0,
+      "reward_denominator": "Only observed numeric episode rewards, including failed reward posts; no zero fills.",
+      "reward_posts_confirmed": 64,
+      "model_calls_recorded": 192,
+      "model_errors_recorded": 0,
+      "tool_calls_recorded": 128,
+      "tool_errors_recorded": 0,
+      "call_count_scope": "Recorded spans, not transport retries; unfinished or dropped spans may be absent.",
+      "model_calls_with_usage": 192,
+      "model_calls_without_usage": 0,
+      "usage_source": "Recorded response usage only; AutoGen zero/absent ambiguity remains unknown.",
+      "usage": {
+        "prompt_tokens": {
+          "count": 192,
+          "sum": 84300,
+          "mean": 439.0625,
+          "max": 479
+        },
+        "completion_tokens": {
+          "count": 192,
+          "sum": 4227,
+          "mean": 22.015625,
+          "max": 26
+        }
+      },
+      "episode_elapsed_ms": {
+        "count": 64,
+        "sum": 236775.988,
+        "mean": 3699.6248125,
+        "max": 8575.865
+      },
+      "model_operation_ms": {
+        "count": 192,
+        "sum": 136499.646,
+        "mean": 710.9356562500001,
+        "max": 6309.068
+      },
+      "tool_operation_ms": {
+        "count": 128,
+        "sum": 678.487,
+        "mean": 5.3006796875,
+        "max": 6.12
+      },
+      "timing_scope": "Inclusive episode duration; model/tool operation durations are separate and may overlap.",
+      "episode_outcomes": {
+        "complete_final": 64
+      },
+      "format_compliant_finals": 63,
+      "policy_errors": 0,
+      "diagnostic_scope": "Final-format and policy diagnostics; no added reward terms"
+    },
+    "collections": [
+      {
+        "iteration": 1,
+        "rollouts": 32,
+        "groups": 8,
+        "case_ids": [
+          "asset-status-v1/train/asset-082",
+          "asset-status-v1/train/asset-142",
+          "asset-status-v1/train/asset-156",
+          "asset-status-v1/train/asset-206",
+          "asset-status-v1/train/asset-243",
+          "asset-status-v1/train/asset-288",
+          "asset-status-v1/train/asset-310",
+          "asset-status-v1/train/asset-316"
+        ],
+        "rewards": {
+          "1.0": 31,
+          "0.0": 1
+        },
+        "fragments": 96,
+        "original_generated_tokens": 2116,
+        "group_reward_sums": [
+          3.0,
+          4.0,
+          4.0,
+          4.0,
+          4.0,
+          4.0,
+          4.0,
+          4.0
+        ]
+      },
+      {
+        "iteration": 2,
+        "rollouts": 32,
+        "groups": 8,
+        "case_ids": [
+          "asset-status-v1/train/asset-079",
+          "asset-status-v1/train/asset-112",
+          "asset-status-v1/train/asset-191",
+          "asset-status-v1/train/asset-203",
+          "asset-status-v1/train/asset-245",
+          "asset-status-v1/train/asset-269",
+          "asset-status-v1/train/asset-303",
+          "asset-status-v1/train/asset-325"
+        ],
+        "rewards": {
+          "1.0": 32
+        },
+        "fragments": 95,
+        "original_generated_tokens": 2111,
+        "group_reward_sums": [
+          4.0,
+          4.0,
+          4.0,
+          4.0,
+          4.0,
+          4.0,
+          4.0,
+          4.0
+        ]
+      }
+    ],
+    "integration": {
+      "qualified": true,
+      "episodes_with_valid_chain": 64,
+      "trace_files": 64
+    }
+  },
+  {
+    "attempt": 7,
+    "purpose": "qualification",
+    "algorithm": "grpo-matched-v2",
+    "stage": "checkpoint-eval",
+    "supervisor": {
+      "status": "completed",
+      "call_id": "fc-01M85QNTY8P8G4PJBK5NM8ZCZ3",
+      "submitted_at": 1795488929.5824556,
+      "finished_at": 1795489324.4057457,
+      "reason": null,
+      "cancellation_requested": null
+    },
+    "provider_reconciliation": {
+      "queried_at": "2026-11-24T04:02:53.898971+00:00",
+      "id": "fc-01M85QNTY8P8G4PJBK5NM8ZCZ3",
+      "provider_status": "completed",
+      "error_type": null
+    },
+    "observed_optimizer_events": {
+      "actor": 0,
+      "critic": 0
+    },
+    "policy_refreshes": [
+      2
+    ],
+    "trajectories": {
+      "phase_filter": "checkpoint-eval",
+      "route_filter": "val",
+      "attempt_files_total": 64,
+      "attempts_selected": 64,
+      "unclassified_attempt_files": 0,
+      "invalid_records": [],
+      "completed": 64,
+      "failed": 0,
+      "incomplete_or_ambiguous": 0,
+      "phase_route_counts": {
+        "checkpoint-eval/val": 64
+      },
+      "observed_reward": {
+        "count": 64,
+        "sum": 64.0,
+        "mean": 1.0,
+        "max": 1.0
+      },
+      "attempts_without_numeric_reward": 0,
+      "reward_denominator": "Only observed numeric episode rewards, including failed reward posts; no zero fills.",
+      "reward_posts_confirmed": 64,
+      "model_calls_recorded": 192,
+      "model_errors_recorded": 0,
+      "tool_calls_recorded": 128,
+      "tool_errors_recorded": 0,
+      "call_count_scope": "Recorded spans, not transport retries; unfinished or dropped spans may be absent.",
+      "model_calls_with_usage": 192,
+      "model_calls_without_usage": 0,
+      "usage_source": "Recorded response usage only; AutoGen zero/absent ambiguity remains unknown.",
+      "usage": {
+        "prompt_tokens": {
+          "count": 192,
+          "sum": 84273,
+          "mean": 438.921875,
+          "max": 479
+        },
+        "completion_tokens": {
+          "count": 192,
+          "sum": 4219,
+          "mean": 21.973958333333332,
+          "max": 26
+        }
+      },
+      "episode_elapsed_ms": {
+        "count": 64,
+        "sum": 204576.495,
+        "mean": 3196.507734375,
+        "max": 4200.362
+      },
+      "model_operation_ms": {
+        "count": 192,
+        "sum": 101796.587,
+        "mean": 530.1905572916667,
+        "max": 1763.333
+      },
+      "tool_operation_ms": {
+        "count": 128,
+        "sum": 705.495,
+        "mean": 5.5116796875,
+        "max": 6.279
+      },
+      "timing_scope": "Inclusive episode duration; model/tool operation durations are separate and may overlap.",
+      "episode_outcomes": {
+        "complete_final": 64
+      },
+      "format_compliant_finals": 64,
+      "policy_errors": 0,
+      "diagnostic_scope": "Final-format and policy diagnostics; no added reward terms"
+    },
+    "collections": [],
+    "integration": {
+      "qualified": true,
+      "episodes_with_valid_chain": 64,
+      "trace_files": 64
+    }
+  },
+  {
+    "attempt": 7,
+    "purpose": "qualification",
+    "algorithm": "ppo-mc-matched-v2",
+    "stage": "baseline",
+    "supervisor": {
+      "status": "completed",
+      "call_id": "fc-01M85R22KKJ2G4GTF566GVFE01",
+      "submitted_at": 1795489330.2419932,
+      "finished_at": 1795489705.651744,
+      "reason": null,
+      "cancellation_requested": null
+    },
+    "provider_reconciliation": {
+      "queried_at": "2026-11-24T04:02:53.898971+00:00",
+      "id": "fc-01M85R22KKJ2G4GTF566GVFE01",
+      "provider_status": "completed",
+      "error_type": null
+    },
+    "observed_optimizer_events": {
+      "actor": 0,
+      "critic": 0
+    },
+    "policy_refreshes": [
+      0
+    ],
+    "trajectories": {
+      "phase_filter": "baseline",
+      "route_filter": "val",
+      "attempt_files_total": 64,
+      "attempts_selected": 64,
+      "unclassified_attempt_files": 0,
+      "invalid_records": [],
+      "completed": 64,
+      "failed": 0,
+      "incomplete_or_ambiguous": 0,
+      "phase_route_counts": {
+        "baseline/val": 64
+      },
+      "observed_reward": {
+        "count": 64,
+        "sum": 64.0,
+        "mean": 1.0,
+        "max": 1.0
+      },
+      "attempts_without_numeric_reward": 0,
+      "reward_denominator": "Only observed numeric episode rewards, including failed reward posts; no zero fills.",
+      "reward_posts_confirmed": 64,
+      "model_calls_recorded": 192,
+      "model_errors_recorded": 0,
+      "tool_calls_recorded": 128,
+      "tool_errors_recorded": 0,
+      "call_count_scope": "Recorded spans, not transport retries; unfinished or dropped spans may be absent.",
+      "model_calls_with_usage": 192,
+      "model_calls_without_usage": 0,
+      "usage_source": "Recorded response usage only; AutoGen zero/absent ambiguity remains unknown.",
+      "usage": {
+        "prompt_tokens": {
+          "count": 192,
+          "sum": 84273,
+          "mean": 438.921875,
+          "max": 479
+        },
+        "completion_tokens": {
+          "count": 192,
+          "sum": 4219,
+          "mean": 21.973958333333332,
+          "max": 26
+        }
+      },
+      "episode_elapsed_ms": {
+        "count": 64,
+        "sum": 273074.156,
+        "mean": 4266.7836875,
+        "max": 5608.433
+      },
+      "model_operation_ms": {
+        "count": 192,
+        "sum": 137087.362,
+        "mean": 713.9966770833333,
+        "max": 2876.732
+      },
+      "tool_operation_ms": {
+        "count": 128,
+        "sum": 877.987,
+        "mean": 6.8592734375,
+        "max": 10.254
+      },
+      "timing_scope": "Inclusive episode duration; model/tool operation durations are separate and may overlap.",
+      "episode_outcomes": {
+        "complete_final": 64
+      },
+      "format_compliant_finals": 64,
+      "policy_errors": 0,
+      "diagnostic_scope": "Final-format and policy diagnostics; no added reward terms"
+    },
+    "collections": [],
+    "integration": {
+      "qualified": true,
+      "episodes_with_valid_chain": 64,
+      "trace_files": 64
+    }
+  },
+  {
+    "attempt": 7,
+    "purpose": "qualification",
+    "algorithm": "ppo-mc-matched-v2",
+    "stage": "training",
+    "supervisor": {
+      "status": "completed",
+      "call_id": "fc-01M85RDRYA8HG9SHYMKQTGK47S",
+      "submitted_at": 1795489713.850551,
+      "finished_at": 1795490668.3591754,
+      "reason": null,
+      "cancellation_requested": null
+    },
+    "provider_reconciliation": {
+      "queried_at": "2026-11-24T04:02:53.898971+00:00",
+      "id": "fc-01M85RDRYA8HG9SHYMKQTGK47S",
+      "provider_status": "completed",
+      "error_type": null
+    },
+    "observed_optimizer_events": {
+      "actor": 2,
+      "critic": 2
+    },
+    "policy_refreshes": [
+      0,
+      1,
+      2
+    ],
+    "trajectories": {
+      "phase_filter": "training",
+      "route_filter": "train",
+      "attempt_files_total": 64,
+      "attempts_selected": 64,
+      "unclassified_attempt_files": 0,
+      "invalid_records": [],
+      "completed": 64,
+      "failed": 0,
+      "incomplete_or_ambiguous": 0,
+      "phase_route_counts": {
+        "training/train": 64
+      },
+      "observed_reward": {
+        "count": 64,
+        "sum": 63.0,
+        "mean": 0.984375,
+        "max": 1.0
+      },
+      "attempts_without_numeric_reward": 0,
+      "reward_denominator": "Only observed numeric episode rewards, including failed reward posts; no zero fills.",
+      "reward_posts_confirmed": 64,
+      "model_calls_recorded": 191,
+      "model_errors_recorded": 0,
+      "tool_calls_recorded": 126,
+      "tool_errors_recorded": 0,
+      "call_count_scope": "Recorded spans, not transport retries; unfinished or dropped spans may be absent.",
+      "model_calls_with_usage": 191,
+      "model_calls_without_usage": 0,
+      "usage_source": "Recorded response usage only; AutoGen zero/absent ambiguity remains unknown.",
+      "usage": {
+        "prompt_tokens": {
+          "count": 191,
+          "sum": 83880,
+          "mean": 439.16230366492147,
+          "max": 479
+        },
+        "completion_tokens": {
+          "count": 191,
+          "sum": 4200,
+          "mean": 21.98952879581152,
+          "max": 26
+        }
+      },
+      "episode_elapsed_ms": {
+        "count": 64,
+        "sum": 424822.866,
+        "mean": 6637.85728125,
+        "max": 15439.525
+      },
+      "model_operation_ms": {
+        "count": 191,
+        "sum": 264027.758,
+        "mean": 1382.3442827225128,
+        "max": 10307.603
+      },
+      "tool_operation_ms": {
+        "count": 126,
+        "sum": 997.805,
+        "mean": 7.919087301587301,
+        "max": 11.543
+      },
+      "timing_scope": "Inclusive episode duration; model/tool operation durations are separate and may overlap.",
+      "episode_outcomes": {
+        "complete_final": 64
+      },
+      "format_compliant_finals": 63,
+      "policy_errors": 1,
+      "diagnostic_scope": "Final-format and policy diagnostics; no added reward terms"
+    },
+    "collections": [
+      {
+        "iteration": 1,
+        "rollouts": 32,
+        "groups": 8,
+        "case_ids": [
+          "asset-status-v1/train/asset-082",
+          "asset-status-v1/train/asset-142",
+          "asset-status-v1/train/asset-156",
+          "asset-status-v1/train/asset-206",
+          "asset-status-v1/train/asset-243",
+          "asset-status-v1/train/asset-288",
+          "asset-status-v1/train/asset-310",
+          "asset-status-v1/train/asset-316"
+        ],
+        "rewards": {
+          "1.0": 32
+        },
+        "fragments": 96,
+        "original_generated_tokens": 2116,
+        "group_reward_sums": [
+          4.0,
+          4.0,
+          4.0,
+          4.0,
+          4.0,
+          4.0,
+          4.0,
+          4.0
+        ]
+      },
+      {
+        "iteration": 2,
+        "rollouts": 32,
+        "groups": 8,
+        "case_ids": [
+          "asset-status-v1/train/asset-079",
+          "asset-status-v1/train/asset-112",
+          "asset-status-v1/train/asset-191",
+          "asset-status-v1/train/asset-203",
+          "asset-status-v1/train/asset-245",
+          "asset-status-v1/train/asset-269",
+          "asset-status-v1/train/asset-303",
+          "asset-status-v1/train/asset-325"
+        ],
+        "rewards": {
+          "1.0": 31,
+          "0.0": 1
+        },
+        "fragments": 95,
+        "original_generated_tokens": 2084,
+        "group_reward_sums": [
+          3.0,
+          4.0,
+          4.0,
+          4.0,
+          4.0,
+          4.0,
+          4.0,
+          4.0
+        ]
+      }
+    ],
+    "integration": {
+      "qualified": true,
+      "episodes_with_valid_chain": 64,
+      "trace_files": 64
+    }
+  },
+  {
+    "attempt": 7,
+    "purpose": "qualification",
+    "algorithm": "ppo-mc-matched-v2",
+    "stage": "checkpoint-eval",
+    "supervisor": {
+      "status": "completed",
+      "call_id": "fc-01M85SB696RBKYQYS9AMF9620K",
+      "submitted_at": 1795490677.329947,
+      "finished_at": 1795491174.1292465,
+      "reason": null,
+      "cancellation_requested": null
+    },
+    "provider_reconciliation": {
+      "queried_at": "2026-11-24T04:02:53.898971+00:00",
+      "id": "fc-01M85SB696RBKYQYS9AMF9620K",
+      "provider_status": "completed",
+      "error_type": null
+    },
+    "observed_optimizer_events": {
+      "actor": 0,
+      "critic": 0
+    },
+    "policy_refreshes": [
+      2
+    ],
+    "trajectories": {
+      "phase_filter": "checkpoint-eval",
+      "route_filter": "val",
+      "attempt_files_total": 64,
+      "attempts_selected": 64,
+      "unclassified_attempt_files": 0,
+      "invalid_records": [],
+      "completed": 64,
+      "failed": 0,
+      "incomplete_or_ambiguous": 0,
+      "phase_route_counts": {
+        "checkpoint-eval/val": 64
+      },
+      "observed_reward": {
+        "count": 64,
+        "sum": 64.0,
+        "mean": 1.0,
+        "max": 1.0
+      },
+      "attempts_without_numeric_reward": 0,
+      "reward_denominator": "Only observed numeric episode rewards, including failed reward posts; no zero fills.",
+      "reward_posts_confirmed": 64,
+      "model_calls_recorded": 192,
+      "model_errors_recorded": 0,
+      "tool_calls_recorded": 128,
+      "tool_errors_recorded": 0,
+      "call_count_scope": "Recorded spans, not transport retries; unfinished or dropped spans may be absent.",
+      "model_calls_with_usage": 192,
+      "model_calls_without_usage": 0,
+      "usage_source": "Recorded response usage only; AutoGen zero/absent ambiguity remains unknown.",
+      "usage": {
+        "prompt_tokens": {
+          "count": 192,
+          "sum": 84273,
+          "mean": 438.921875,
+          "max": 479
+        },
+        "completion_tokens": {
+          "count": 192,
+          "sum": 4219,
+          "mean": 21.973958333333332,
+          "max": 26
+        }
+      },
+      "episode_elapsed_ms": {
+        "count": 64,
+        "sum": 185697.478,
+        "mean": 2901.52309375,
+        "max": 3493.407
+      },
+      "model_operation_ms": {
+        "count": 192,
+        "sum": 93883.96,
+        "mean": 488.97895833333337,
+        "max": 1454.736
+      },
+      "tool_operation_ms": {
+        "count": 128,
+        "sum": 684.039,
+        "mean": 5.3440546875,
+        "max": 6.005
+      },
+      "timing_scope": "Inclusive episode duration; model/tool operation durations are separate and may overlap.",
+      "episode_outcomes": {
+        "complete_final": 64
+      },
+      "format_compliant_finals": 64,
+      "policy_errors": 0,
+      "diagnostic_scope": "Final-format and policy diagnostics; no added reward terms"
+    },
+    "collections": [],
+    "integration": {
+      "qualified": true,
+      "episodes_with_valid_chain": 64,
+      "trace_files": 64
+    }
+  }
+]

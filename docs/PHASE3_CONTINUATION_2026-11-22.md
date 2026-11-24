@@ -1,5 +1,13 @@
 # Phase 3 asset episode correction — 2026-11-22
 
+> **Superseded as a status report.** This interim note was written before any live
+> execution of the revised contract. Its planned attempt a05 was never executed.
+> A later review added a typed `non_object_arguments` policy error at
+> `7f1e13d7bacb477c9e5e95a16868a2b0f2484ee6`, the source that actually ran. Results,
+> executed identities, test counts and the reconciled budget are in the
+> [2026-11-24 report](PHASE3_QUALIFICATION_2026-11-24.md). The text below is kept as
+> written.
+
 This continuation uses the original aggregate $300 authorization. The earlier
 [a01–a04 report](PHASE3_QUALIFICATION_2026-11-22.md) and evidence remain immutable.
 At implementation start, local HEAD and remote PR #4 head were

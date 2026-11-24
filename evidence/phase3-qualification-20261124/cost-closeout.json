@@ -1,0 +1,115 @@
+{
+  "at": "2026-11-24T04:03:55.906656+00:00",
+  "provider_reconciliation_file": ".local/phase3-live-20261121/provider-reconciliation-20261124T040253Z.json",
+  "known_owned_calls": 36,
+  "all_known_calls_terminal": true,
+  "owned_apps": 19,
+  "owned_apps_with_running_tasks": 0,
+  "workspace_apps_with_running_tasks": [],
+  "unknown_submissions": [],
+  "resolved_unknown_submissions": [
+    {
+      "file": ".local/phase3-live-20261121/a05/prepare-submission.json",
+      "resolution": "never executed; stopped; not retried",
+      "at": "2026-11-24T02:09:50.647814+00:00"
+    }
+  ],
+  "observed_modal_completed_hour_usage_usd": 12.30982472,
+  "observed_by_attempt_usd": {
+    "a01-a04": 5.76165025,
+    "a05": 0.00105,
+    "a06": 1.39074,
+    "a07": 5.15639
+  },
+  "unattributed_workspace_usage_since_campaign_start_usd": 0,
+  "observed_usage_caveat": "Provider usage report through completed hours; not a settled invoice. Volume storage and delayed charges remain covered by the inclusive holds. No credit deductions assumed.",
+  "continuation_app_elapsed_bounds": [
+    {
+      "attempt": 6,
+      "action": "prepare",
+      "app_id": "ap-IOCi4ZZKnkSAp2dmeBDqFD",
+      "call_id": "fc-01M85NDDE44AHPQ583JPGZY7Q7",
+      "app_lifetime_seconds_upper_bound": 268.6,
+      "accounting_hourly_ceiling_usd": 10,
+      "elapsed_exposure_usd": 0.7461,
+      "observed_completed_hour_usd": 0.00357
+    },
+    {
+      "attempt": 6,
+      "action": "preflight",
+      "app_id": "ap-PK5X9Z00GBfPu1FkgKqjuO",
+      "call_id": "fc-01M85NG911SGKKJXR55J3EAQQ2",
+      "app_lifetime_seconds_upper_bound": 78.2,
+      "accounting_hourly_ceiling_usd": 10,
+      "elapsed_exposure_usd": 0.2172,
+      "observed_completed_hour_usd": 0.00432
+    },
+    {
+      "attempt": 6,
+      "action": "launch",
+      "app_id": "ap-G4DqftLedEiSbCOvbqFltn",
+      "call_id": "fc-01M85NK5YXAAWR7AH4PNPPGSSH",
+      "app_lifetime_seconds_upper_bound": 889.5,
+      "accounting_hourly_ceiling_usd": 20,
+      "elapsed_exposure_usd": 4.9417,
+      "observed_completed_hour_usd": 1.38285
+    },
+    {
+      "attempt": 7,
+      "action": "prepare",
+      "app_id": "ap-g9NNkEPPD7GfNkQtCFmOyq",
+      "call_id": "fc-01M85PPFK94TCG12T2G27KSFDA",
+      "app_lifetime_seconds_upper_bound": 129.4,
+      "accounting_hourly_ceiling_usd": 10,
+      "elapsed_exposure_usd": 0.3594,
+      "observed_completed_hour_usd": 0.00486
+    },
+    {
+      "attempt": 7,
+      "action": "preflight",
+      "app_id": "ap-k7xTQL096d7vsif6HK1jjb",
+      "call_id": "fc-01M85PSW1ZRT030CAF8EM48T80",
+      "app_lifetime_seconds_upper_bound": 70.2,
+      "accounting_hourly_ceiling_usd": 10,
+      "elapsed_exposure_usd": 0.195,
+      "observed_completed_hour_usd": 0.00317
+    },
+    {
+      "attempt": 7,
+      "action": "launch",
+      "app_id": "ap-fsAlpjXpAwTK4eku101CGT",
+      "call_id": "fc-01M85PW9JMA4EDMR3JWJSYH7YF",
+      "app_lifetime_seconds_upper_bound": 3164.9,
+      "accounting_hourly_ceiling_usd": 20,
+      "elapsed_exposure_usd": 17.5828,
+      "observed_completed_hour_usd": 5.14835
+    }
+  ],
+  "holds_usd": {
+    "campaign-closeout-inclusive-hold": 40,
+    "a05-inclusive": 1,
+    "a06-inclusive": 8,
+    "a07-inclusive": 25
+  },
+  "inclusive_hold_total_usd": 74,
+  "authorized_gross_usd": 300,
+  "unreserved_balance_usd": 226,
+  "retained_bytes": 157612506976,
+  "retained_checkpoint_bytes": 118863248277,
+  "seven_day_storage_estimate_usd_all_volumes": 3.083,
+  "rates": {
+    "egress_gib_cost": "0.04000",
+    "gpu_hour_cost_h100": "3.95000",
+    "cpu_hour_cost": "0.04730",
+    "cpu_hour_cost_sandbox": "0.141900",
+    "volume_storage_gib_month_cost": "0.09000"
+  },
+  "retention": {
+    "max_gib": 300,
+    "days": 7,
+    "deadline": "2026-11-29T01:54:46.522052+00:00",
+    "continuation_review_deadline": "2026-12-01T03:34:30+00:00",
+    "continuation_scope": "a05-a07 volumes and registries; seven days after a07 completion. The earlier deadline continues to apply to a01-a04."
+  },
+  "hold_semantics": "Holds are conservative operating reservations that include observed charges. They are neither additional spending nor a provider spending cap."
+}

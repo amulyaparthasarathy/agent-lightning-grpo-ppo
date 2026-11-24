@@ -1,0 +1,88 @@
+{
+  "attempt": 6,
+  "phase": "collection-only",
+  "source_commit": "7f1e13d7bacb477c9e5e95a16868a2b0f2484ee6",
+  "plan_sha256": "6c1e259e171e9eebfa32fb438dd80f5d685b04e91e51a9c7f8c419e255c94449",
+  "local_revalidation": {
+    "evidence_complete": true,
+    "operational_completion": "completed",
+    "live_qualification": "development only; not six-stage qualification"
+  },
+  "collected_bytes": 4301590,
+  "collection_errors": [],
+  "collected_files": 254,
+  "stages": [
+    {
+      "algorithm": "grpo-matched-v2",
+      "stage": "training",
+      "attempts": 32,
+      "completed": 32,
+      "failed": 0,
+      "unclassified": 0,
+      "invalid_records": [],
+      "reward_posts": 32,
+      "correct": 32.0,
+      "episode_outcomes": {
+        "complete_final": 32
+      },
+      "format_compliant_finals": 32,
+      "policy_errors": 0,
+      "integration_episodes": 32,
+      "trace_sha256_recomputed": 32,
+      "optimizer_events": {
+        "actor": 0,
+        "critic": 0
+      },
+      "gradient_steps": [],
+      "all_gradients_finite": true,
+      "refreshes": [
+        0
+      ],
+      "checkpoint_saved_events": 0,
+      "native_reload_events": 0,
+      "cleanup": true,
+      "trainer_exit_code": 0,
+      "container_id": "ta-01M85NKCJSJTHQJ7V20GJ3ZKGR",
+      "wandb_id": "5a6977e90e34e0b83113f30a"
+    },
+    {
+      "algorithm": "ppo-mc-matched-v2",
+      "stage": "training",
+      "attempts": 32,
+      "completed": 32,
+      "failed": 0,
+      "unclassified": 0,
+      "invalid_records": [],
+      "reward_posts": 32,
+      "correct": 31.0,
+      "episode_outcomes": {
+        "complete_final": 32
+      },
+      "format_compliant_finals": 32,
+      "policy_errors": 1,
+      "integration_episodes": 32,
+      "trace_sha256_recomputed": 32,
+      "optimizer_events": {
+        "actor": 0,
+        "critic": 0
+      },
+      "gradient_steps": [],
+      "all_gradients_finite": true,
+      "refreshes": [
+        0
+      ],
+      "checkpoint_saved_events": 0,
+      "native_reload_events": 0,
+      "cleanup": true,
+      "trainer_exit_code": 0,
+      "container_id": "ta-01M85NZXK57KC9C3NK0RSKX96R",
+      "wandb_id": "d376b6d80edcc1ae7c41ab5e"
+    }
+  ],
+  "checks": {
+    "all_stage_containers_distinct": true,
+    "all_trace_joins_reproduced": true,
+    "all_cleanup_completed": true,
+    "evaluations_without_optimizer_events": true
+  }
+}
