@@ -156,13 +156,10 @@ def validate_manifest(m, task="calculator-v1"):
             or model['parser'] != 'llama3_json' or model['files'] != model_lock()
             or not re.fullmatch('[a-f0-9]{64}', model['manifest_sha256'])):
         raise ValueError('Model identity does not match supported reference')
-    if task == 'asset-status-v1':
-        try:
-            from .asset_task import validate_manifest as validate_asset_data
-        except ImportError:
-            from asset_task import validate_manifest as validate_asset_data
-        validate_asset_data(m['data'])
-        if m['historical_match'] != {'claim': 'synthetic asset task; no calculator-data equivalence'}:
+    if task != 'calculator-v1':
+        # Explicit synthetic-task dispatch; an unknown task fails closed.
+        c.task_module(task).validate_manifest(m['data'])
+        if m['historical_match'] != synthetic_claim(task):
             raise ValueError('Incorrect historical data claim')
         return
     validate_data_manifest(m['data'])
@@ -170,16 +167,25 @@ def validate_manifest(m, task="calculator-v1"):
         raise ValueError('Historical comparison differs')
 
 
-def inspect(model, data, staging=None, task="calculator-v1"):
-    if task == 'asset-status-v1':
-        try:
-            from .asset_task import verify
-        except ImportError:
-            from asset_task import verify
+def synthetic_claim(task):
+    return {'asset-status-v1': {'claim': 'synthetic asset task; no calculator-data equivalence'},
+            'recovery-readiness-v1': {'claim': 'synthetic recovery-readiness task; no calculator or asset-data equivalence'}}[task]
+
+
+def inspect(model, data, staging=None, task="calculator-v1", scope='all'):
+    """scope='development' is accepted only by the recovery task: a model-facing
+    calibration stage verifies the development files and never opens the others."""
+    if task != 'calculator-v1':
+        verify = c.task_module(task).verify
+        if scope != 'all' and task != 'recovery-readiness-v1':
+            raise ValueError('Scoped dataset verification is not defined for this task')
         m = {'schema': 'reader-assets-v1', 'fixture': False, 'model': verify_model(model),
-             'data': verify(data), 'historical_match': {'claim': 'synthetic asset task; no calculator-data equivalence'}}
+             'data': verify(data) if scope == 'all' else verify(data, scope=scope),
+             'historical_match': synthetic_claim(task)}
         validate_manifest(m, task)
         return m
+    if scope != 'all':
+        raise ValueError('Scoped dataset verification is not defined for this task')
     m = {'schema': 'reader-assets-v1', 'fixture': False, 'model': verify_model(model), 'data': verify_data(data, staging)}
     m['historical_match'] = historical_match(m['data'])
     validate_manifest(m)
@@ -218,12 +224,8 @@ def prepare(plan, root, run_command, log, env):
     run([BUNDLE/'prepare_model.py', '--profile', 'llama3b', '--output-dir', staging/'model'], 'model')
     verify_model(staging/'model')
     task = plan['profile']['task']
-    if task == 'asset-status-v1':
-        try:
-            from .asset_task import generate
-        except ImportError:
-            from asset_task import generate
-        generate(staging/'data')
+    if task != 'calculator-v1':
+        c.task_module(task).generate(staging/'data')
     else:
         archive = staging/'calc-x.zip'
         run(['-m', 'gdown', DATA_ID, '-O', archive], 'acquire-data')

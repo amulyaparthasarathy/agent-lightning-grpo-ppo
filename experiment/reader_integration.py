@@ -4,6 +4,21 @@ import hashlib
 import json
 
 
+# Prospective episode policies with explicit outcome rules; any other trace keeps the
+# historical treatment. Limits are those declared by each task's EPISODE_POLICY.
+EPISODE_POLICIES = {'asset-episode-v2': {'policy_error_limit': 2}, 'recovery-episode-v1': {'policy_error_limit': 2}}
+TOOLS = {'calculator-v1': ('calculate',), 'asset-status-v1': ('lookup_asset',),
+         'recovery-readiness-v1': ('get_asset', 'get_policy', 'list_backup_runs')}
+
+
+def stage_route(plan, stage):
+    try:
+        from .reader_modes import route
+    except ImportError:
+        from reader_modes import route
+    return route(plan, stage)
+
+
 IDENTITY = ('trace_id', 'experiment_id', 'wandb_run_id', 'case_id', 'phase', 'policy_version',
             'eval_split', 'model_profile', 'rollout_id', 'attempt_id', 'route_mode')
 
@@ -16,7 +31,7 @@ def episode_outcome(records):
     e = episodes[0]; out = e.get('outputs') or {}
     if e.get('execution_status') != 'ok' or out.get('reward_posted') is not True:
         return 'incomplete'
-    if e.get('episode_policy') != 'asset-episode-v2':
+    if e.get('episode_policy') not in EPISODE_POLICIES:
         return 'historical_complete'
     models = [r for r in records if r['kind'] == 'llm']
     actions = [r for r in records if r['kind'] == 'action_outcome']
@@ -34,7 +49,7 @@ def episode_outcome(records):
         return 'incomplete'
     outcome = out.get('outcome')
     if outcome == 'terminal_policy_failure':
-        if (errors < 2 or out['reward'] != 0 or out.get('raw_answer') is not None
+        if (errors < EPISODE_POLICIES[e['episode_policy']]['policy_error_limit'] or out['reward'] != 0 or out.get('raw_answer') is not None
                 or len(terminations) != 1 or terminations[0]['name'] != 'policy_error_limit'):
             return 'incomplete'
         return outcome
@@ -56,7 +71,9 @@ def chains(records, request, *, evidence_class="live-model"):
     plan = request.get('plan', {})
     modern = plan.get('schema') == 'reader-task-v2'
     task = plan.get('task_identity', {}).get('name', 'calculator-v1')
-    tool_name = 'lookup_asset' if task == 'asset-status-v1' else 'calculate'
+    if task not in TOOLS:
+        raise ValueError('Unknown task; no integration rule')
+    tool_names = TOOLS[task]
     identities = IDENTITY + (('task_id', 'task_sha256', 'environment_sha256', 'source_sha256', 'configuration_sha256') if modern else ())
     episodes = [r for r in records if r['kind'] == 'episode']
     if len(episodes) != 1:
@@ -65,7 +82,7 @@ def chains(records, request, *, evidence_class="live-model"):
     if (episode['experiment_id'] != job['job_id'] or episode['wandb_run_id'] != stage['wandb']['id']
             or episode['phase'] != stage['name'] or episode['policy_version'] != 'matched-rollout-mean-v2'
             or episode['model_profile'] != 'llama3b'
-            or episode['route_mode'] != ('train' if stage['name'] == 'training' else 'val')):
+            or episode['route_mode'] != stage_route(plan, stage)):
         raise ValueError('Trace belongs to a different stage or protocol')
     if modern:
         try:
@@ -100,7 +117,7 @@ def chains(records, request, *, evidence_class="live-model"):
     def ok(record):
         return record['execution_status'] == 'ok' and record['exception'] is None
     output = episode['outputs'] or {}
-    if episode.get('episode_policy') == 'asset-episode-v2' and episode_outcome(records) in ('incomplete', 'terminal_policy_failure'):
+    if episode.get('episode_policy') in EPISODE_POLICIES and episode_outcome(records) in ('incomplete', 'terminal_policy_failure'):
         return []
     if not ok(episode) or output.get('reward_posted') is not True or type(output.get('reward')) not in (int, float) or output['reward'] not in (0, 1):
         return []
@@ -121,7 +138,7 @@ def chains(records, request, *, evidence_class="live-model"):
         if not isinstance(content, list):
             continue
         for call in content:
-            if call.get('name') != tool_name or not call.get('id'):
+            if call.get('name') not in tool_names or not call.get('id'):
                 continue
             same_calls = [call_record for llm in llms if isinstance(llm['outputs']['content'], list)
                           for call_record in llm['outputs']['content'] if call_record.get('id') == call['id']]
@@ -132,7 +149,7 @@ def chains(records, request, *, evidence_class="live-model"):
                 continue
             tool = matches[0]
             result = tool['outputs'] or {}
-            if (not ok(tool) or tool['name'] != tool_name or result.get('name') != tool_name
+            if (not ok(tool) or tool['name'] != call['name'] or result.get('name') != call['name']
                     or result.get('is_error') is not False or not before(model, tool)
                     or json.loads(call['arguments']) != tool['inputs']['arguments']):
                 continue
@@ -146,7 +163,7 @@ def chains(records, request, *, evidence_class="live-model"):
                 observations = [o for message in continuation['inputs']['messages']
                     if message.get('type') == 'FunctionExecutionResultMessage'
                     for o in message['content'] if o.get('call_id') == call['id']]
-                if (len(observations) == 1 and observations[0].get('name') == tool_name
+                if (len(observations) == 1 and observations[0].get('name') == call['name']
                         and observations[0].get('is_error') is False and observations[0].get('content') == observation):
                     found.append({'trace_id': episode['trace_id'], 'case_id': episode['case_id'],
                         'rollout_id': episode['rollout_id'], 'attempt_id': episode['attempt_id'],

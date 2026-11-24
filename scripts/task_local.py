@@ -4,38 +4,140 @@ import argparse
 import json
 from pathlib import Path
 import sys
-sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
 from experiment import asset_task
+
+ASSET, CALCULATOR, RECOVERY = asset_task.TASK, 'calculator-v1', 'recovery-readiness-v1'
+
+
+def recovery_prompts(args):
+    """Effective served prompts for one development case, and the token budget if a tokenizer is given."""
+    from experiment import recovery_prompt as prompt, recovery_task as task
+    row = task.rows('development')[args.case]
+    asset_id, as_of = task.target(row['question'])
+    policy_id = task.call('get_asset', {'asset_id': asset_id})['policy_id']
+    solved = [('get_asset', {'asset_id': asset_id}), ('get_policy', {'policy_id': policy_id}),
+              ('list_backup_runs', {'asset_id': asset_id, 'as_of': as_of})]
+    paths = {'reference: three calls, answer on a tool-enabled turn': prompt.episode(row['question'], solved),
+             'typed error then recovery': prompt.episode(row['question'], [('get_asset', {'asset_id': asset_id, 'as_of': as_of})] + solved),
+             'five rounds, then tool-less reflection with the reminder': prompt.episode(
+                 row['question'], solved + solved[2:] * 2, reflect=True)}
+    count = prompt.tokenizer(args.tokenizer) if args.tokenizer else None
+    for views in paths.values():
+        for view in views:
+            view['prompt_tokens'] = count(view['prompt']) if count else 'not measured: pass --tokenizer'
+    result = {'schema': 'recovery-effective-prompts-v1', 'task': task.TASK, 'case_id': row['case_id'], 'split': 'development',
+              'rendering': 'prepared served template (fixed date header) rendered offline; no model inference',
+              'template_date_header': 'Today Date: 11 Nov 2026', 'authoritative_time': as_of,
+              'context_limits': task.CONTEXT_LIMITS, 'measured_prompts_sha256': prompt.prompt_set_sha256(), 'paths': paths}
+    if count:
+        result['budget'] = prompt.budget(count)
+    if args.replay:
+        if not count:
+            raise SystemExit('--replay requires --tokenizer')
+        result['replay'] = prompt.replay(args.replay, count)
+    return result
+
+
+def calibration_report(args):
+    """Rebuild the calibration report from stage completions; recheck episode rows against traces."""
+    from experiment import reader_assets as assets, reader_contract as c, recovery_calibration as calibration
+    plan = assets.read(args.plan)
+    completions, rechecked = {}, 0
+    for job in plan['jobs']:
+        for stage in job['stages']:
+            run = args.evidence/job['algorithm']/stage['name']
+            if not (run/'completion.json').is_file():
+                continue
+            proof = assets.read(run/'completion.json')
+            completions.setdefault(job['algorithm'], {})[stage['name']] = proof
+            if (run/'traces').is_dir() and 'calibration' in proof:
+                request = c.stage_request(plan, job, stage) if not args.unvalidated_plan else {
+                    'plan': plan, 'job': job, 'stage': stage, 'plan_sha256': c.digest(plan)}
+                rows = calibration.episode_table(run, request, proof['calibration']['evidence_class'])
+                recorded = [{k: v for k, v in e.items() if k in rows[0]} for e in proof['calibration']['episodes']] if rows else []
+                if rows != recorded:
+                    raise ValueError(f'Episode rows differ from collected traces: {run}')
+                rechecked += len(rows)
+    result = calibration.report(plan, completions)
+    args.out.mkdir(parents=True, exist_ok=False)
+    assets.write_new(args.out/'report.json', result)
+    (args.out/'summary.md').write_text(calibration.summary(result))
+    return {'report': str(args.out/'report.json'), 'summary': str(args.out/'summary.md'),
+            'evidence_class': result['evidence_class'], 'live_policy_measurement': result['live_policy_measurement'],
+            'episode_rows_rechecked_against_traces': rechecked,
+            'decisions': {a: {k: r['decision'][k] for k in ('operational_validity', 'scientific_suitability')}
+                          for a, r in result['routes'].items()}}
 
 
 def main():
     p = argparse.ArgumentParser(description=__doc__)
-    p.add_argument('command', choices=('generate', 'verify', 'probe', 'scripted'))
-    p.add_argument('--task', choices=('asset-status-v1', 'calculator-v1'), default='asset-status-v1')
+    p.add_argument('command', choices=('generate', 'verify', 'probe', 'scripted', 'prompts', 'calibration-demo', 'report'))
+    p.add_argument('--task', choices=(ASSET, CALCULATOR, RECOVERY), default=ASSET)
     p.add_argument('--out', type=Path)
     p.add_argument('--data', type=Path)
+    p.add_argument('--case', type=int, default=0, help='prompts: index into the development panel')
+    p.add_argument('--tokenizer', type=Path, help='prompts: pinned tokenizer.json (verified against the model lock)')
+    p.add_argument('--replay', type=Path, help='prompts: collected evidence directory whose recorded prompt tokens to reproduce')
+    p.add_argument('--evidence', type=Path, help='report: collected or demonstration evidence directory')
+    p.add_argument('--plan', type=Path, help='report: the plan the evidence was produced under')
+    p.add_argument('--unvalidated-plan', action='store_true',
+                   help='report: skip regenerating the plan from current source (inspecting an older plan)')
     args = p.parse_args()
+    if args.command in ('prompts', 'calibration-demo', 'report') and args.task != RECOVERY:
+        p.error(f'{args.command} requires --task {RECOVERY}')
     if args.command in ('generate', 'verify'):
-        if args.task != asset_task.TASK or not args.data:
-            p.error('generate/verify require --data and asset-status-v1')
-        result = asset_task.generate(args.data) if args.command == 'generate' else asset_task.verify(args.data)
+        if args.task == CALCULATOR or not args.data:
+            p.error('generate/verify require --data and a synthetic task')
+        if args.task == RECOVERY:
+            from experiment import recovery_task as task
+        else:
+            task = asset_task
+        result = task.generate(args.data) if args.command == 'generate' else task.verify(args.data)
+        if args.task == RECOVERY:
+            result = {'schema': result['schema'], 'task': result['task'], 'environment_sha256': result['environment_sha256'],
+                      'world_file_sha256': result['world_file_sha256'], 'panels': result['environment']['panels'],
+                      'files': {n: {k: f[k] for k in ('rows', 'split', 'sha256')} for n, f in result['files'].items()}}
+    elif args.command == 'report':
+        if not (args.evidence and args.plan and args.out):
+            p.error('report requires --evidence, --plan and a fresh --out directory')
+        result = calibration_report(args)
     else:
         if not args.out:
-            p.error('probe/scripted require a fresh --out')
+            p.error(f'{args.command} requires a fresh --out')
         args.out.parent.mkdir(parents=True, exist_ok=True)
         if args.command == 'probe':
-            if args.task == asset_task.TASK:
+            if args.task == ASSET:
                 from experiment.asset_probe import check
+            elif args.task == RECOVERY:
+                from experiment.recovery_probe import check
             else:
                 from experiment.reader_calculator import check
             result = check(args.out)
+            if args.task == RECOVERY:
+                result = {k: v for k, v in result.items() if k != 'checks'} | {'checks_passed': sum(c['valid'] for c in result['checks'])}
+        elif args.command == 'prompts':
+            result = recovery_prompts(args)
+            with args.out.open('x') as handle:
+                json.dump(result, handle, indent=2)
+                handle.write('\n')
+            result = {'written': str(args.out), 'paths': {k: [(v['kind'], v['prompt_tokens']) for v in views] for k, views in result['paths'].items()},
+                      **{k: result[k] for k in ('budget', 'replay') if k in result}}
         else:
-            if args.task != asset_task.TASK:
-                p.error('scripted harness demonstration supports asset-status-v1')
+            if args.task == CALCULATOR:
+                p.error('scripted harness demonstrations support the synthetic tasks')
             # Explicit test-only boundary; excluded from the production image inventory.
-            sys.path.insert(0, str(Path(__file__).resolve().parents[1]/'tests'))
-            from asset_harness_support import demonstration
-            result = demonstration(args.out)
+            sys.path.insert(0, str(ROOT/'tests'))
+            if args.command == 'calibration-demo':
+                from recovery_harness_support import calibration_demonstration
+                result = calibration_demonstration(args.out)
+            elif args.task == RECOVERY:
+                from recovery_harness_support import demonstration
+                result = demonstration(args.out)
+            else:
+                from asset_harness_support import demonstration
+                result = demonstration(args.out)
     print(json.dumps(result, indent=2))
 
 

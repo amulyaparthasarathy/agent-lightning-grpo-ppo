@@ -86,7 +86,7 @@ def summarize(directory, phase=None, route=None):
         "timing_scope": "Inclusive episode duration; model/tool operation durations are separate and may overlap.",
     }
     # Prospective fields only: do not reinterpret historical failures or rewards.
-    if any(e.get('episode_policy') == 'asset-episode-v2' for e in episodes):
+    if any(e.get('episode_policy') in ('asset-episode-v2', 'recovery-episode-v1') for e in episodes):
         report['episode_outcomes'] = dict(Counter(
             (e.get('outputs') or {}).get('outcome', 'incomplete')
             if e.get('execution_status') == 'ok' and (e.get('outputs') or {}).get('reward_posted') is True

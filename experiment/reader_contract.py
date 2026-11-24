@@ -13,9 +13,10 @@ import re
 import subprocess
 
 try:
-    from . import matched_contract as historical
+    from . import matched_contract as historical, reader_modes as modes
 except ImportError:
     import matched_contract as historical
+    import reader_modes as modes
 
 SCHEMA = 'reader-task-v2'
 LEGACY_SCHEMA = 'reader-reference-v1'
@@ -69,8 +70,13 @@ def path(value):
 def validate_profile(p):
     exact(p, 'schema fixture modal paths experiment attempt wandb model task algorithms resources bounds'
           + (' purpose' if 'purpose' in p else ''), 'profile')
-    if 'purpose' in p and (p['purpose'] != 'collection-only' or p['task'] != 'asset-status-v1'):
-        raise ValueError('Only the bounded asset collection-only development purpose is supported')
+    if 'purpose' in p and (p['purpose'], p['task']) not in (
+            (modes.COLLECTION_ONLY, 'asset-status-v1'), (modes.CALIBRATION, 'recovery-readiness-v1')):
+        raise ValueError('Only the bounded asset collection-only development purpose is supported, '
+                         'or development-calibration for recovery-readiness-v1')
+    if p.get('task') == 'recovery-readiness-v1' and p.get('purpose') != modes.CALIBRATION:
+        # No training length, checkpoint or final evaluation is qualified for this task.
+        raise ValueError('recovery-readiness-v1 supports only the development-calibration purpose')
     if p['schema'] != SCHEMA or type(p['fixture']) is not bool:
         raise ValueError('Unsupported reader schema/fixture label; migrate profile to reader-task-v2 and regenerate plans')
     exact(p['modal'], 'profile workspace environment app registry volume secret', 'Modal')
@@ -90,7 +96,7 @@ def validate_profile(p):
         slug(v)
     if p['model'] != {'id': MODEL, 'revision': BASE_REVISION, 'profile': 'llama3b', 'parser': 'llama3_json'}:
         raise ValueError('Unsupported immutable model/tokenizer/parser/critic combination')
-    if p['task'] not in ('calculator-v1', 'asset-status-v1') or p['algorithms'] != list(ALGORITHMS) or p['resources'] != RESOURCES:
+    if p['task'] not in modes.TASKS or p['algorithms'] != list(ALGORITHMS) or p['resources'] != RESOURCES:
         raise ValueError('Only registered tasks, both matched algorithms and the continuity worker shape are supported')
     b = p['bounds']
     exact(b, 'stage_seconds startup_seconds preparation_seconds preflight_seconds concurrency '
@@ -108,8 +114,10 @@ def validate_profile(p):
         raise ValueError('Exactly one GPU lane; startup must fit stage deadline')
     if b['worker_hourly_usd'] < 7 or b['supervisor_hourly_usd'] < .07:
         raise ValueError('Rate ceilings below the reviewed conservative minimum; re-review pricing')
-    # Supervisor uses the worker ceiling in the existing common supervisor.
-    compute = (12*b['stage_seconds']+600)*b['worker_hourly_usd']/3600
+    # Supervisor uses the worker ceiling in the existing common supervisor. Six stages
+    # per qualification; development calibration schedules eight.
+    stages = 8 if p.get('purpose') == modes.CALIBRATION else 6
+    compute = (2*stages*b['stage_seconds']+600)*b['worker_hourly_usd']/3600
     if (b['training_budget_usd'] < compute or b['preparation_budget_usd'] < 3
             or b['build_budget_usd'] < 5 or b['storage_budget_usd'] < b['storage_gib']*.09*b['retention_days']/30
             or b['total_budget_usd'] < sum(b[k] for k in ('training_budget_usd', 'preparation_budget_usd', 'build_budget_usd', 'storage_budget_usd')) + b['collection_gib']*.04):
@@ -130,13 +138,18 @@ def packaged(files):
                      'scripts/install_modal_training.sh', 'scripts/finalize_modal_training.sh')}
 
 
+def task_module(task):
+    """The synthetic task implementation; calculator has none. Unknown tasks fail closed."""
+    from importlib import import_module
+    if task not in modes.TASKS[1:]:
+        raise ValueError('Unknown task or task without a synthetic implementation')
+    name = {'asset-status-v1': 'asset_task', 'recovery-readiness-v1': 'recovery_task'}[task]
+    return import_module('.'+name, __package__) if __package__ else import_module(name)
+
+
 def task_identity(source, task="calculator-v1"):
-    if task == "asset-status-v1":
-        try:
-            from .asset_task import identity
-        except ImportError:
-            from asset_task import identity
-        return identity(source)
+    if task != 'calculator-v1':
+        return task_module(task).identity(source)
     return {'name': 'calculator-v1', 'visible_fields': ['question'], 'label_fields': ['result'],
             'data_mapping': {'QUESTION': 'input.question', 'RESULT': 'input.result',
                              'AGL_CASE_ID': 'input.case_id', 'AGL_DATA_SPLIT': 'input.split', 'EVAL_SPLIT': 'input.split'},
@@ -156,7 +169,8 @@ def task_identity(source, task="calculator-v1"):
 def make_plan(profile, source, assets=None):
     validate_profile(profile)
     p = copy.deepcopy(profile)
-    development = p.get('purpose') == 'collection-only'
+    development = p.get('purpose') == modes.COLLECTION_ONLY
+    calibration = p.get('purpose') == modes.CALIBRATION
     if assets is not None:
         try:
             from .reader_assets import validate_manifest
@@ -170,7 +184,7 @@ def make_plan(profile, source, assets=None):
             'configuration_sha256': digest(p), 'packaged_sha256': digest(source['runtime_files']),
             'assets': assets, 'data_manifest': assets['data'] if assets else None,
             'task_identity': task_identity(source, p['task']), 'study_id': p['experiment'],
-            'phase': 'collection-only' if development else 'qualification',
+            'phase': modes.COLLECTION_ONLY if development else modes.CALIBRATION if calibration else modes.QUALIFICATION,
             'attempt': p['attempt'], 'root': root, 'jobs': [], 'automatic_retries': 0,
             'remote_ownership': 'UNVERIFIED offline', 'availability': 'UNVERIFIED offline',
             'training_admissible': bool(assets and not p['fixture'] and not source['dirty']),
@@ -188,19 +202,30 @@ def make_plan(profile, source, assets=None):
             'qualification_evidence': False}
         plan['bounds'].update(supervisor_seconds=2*p['bounds']['stage_seconds']+600,
                               max_gpu_seconds=2*p['bounds']['stage_seconds'])
+    if calibration:
+        from importlib import import_module
+        declared = (import_module('.recovery_calibration', __package__) if __package__
+                    else import_module('recovery_calibration')).declaration()
+        plan['calibration'] = declared
+        plan['bounds'].update(supervisor_seconds=8*p['bounds']['stage_seconds']+600,
+                              max_gpu_seconds=8*p['bounds']['stage_seconds'])
     for algorithm in ALGORITHMS:
         name = f"{p['experiment']}-a{p['attempt']:02d}-{algorithm}"
         job = {'job_id': name, 'algorithm': algorithm, 'run_seed': 9001, 'steps': 2,
                'pair_id': f"{p['experiment']}-a{p['attempt']:02d}",
                'seed_streams': historical.streams(9001, algorithm), 'output_root': f'{root}/{algorithm}', 'stages': []}
-        for kind in (('training',) if development else historical.STAGES):
+        for kind in modes.STAGES[plan['phase']]:
             identity = {'schema': SCHEMA, 'source': digest(source), 'profile': digest(p),
                         'assets': digest(assets), 'algorithm': algorithm, 'stage': kind}
             job['stages'].append({'name': kind, 'output': f'{job["output_root"]}/{kind}', 'wandb': {
                 **p['wandb'], 'group': job['pair_id'], 'id': digest(identity)[:24], 'name': f'{name}-{kind}',
                 'job_type': kind, 'resume': 'never', 'config': {**identity, 'protocol': PROTOCOL,
-                    'seed_streams': job['seed_streams'], 'resources': RESOURCES, 'steps': 0 if development else 2,
+                    'seed_streams': job['seed_streams'], 'resources': RESOURCES, 'steps': 0 if development or calibration else 2,
                     'task': plan['task_identity'], 'model': p['model'], 'evaluation': p['task']+'-64'}}})
+            if calibration:
+                # Each stage carries the exact panel it may use; no final-evaluation identity.
+                job['stages'][-1]['wandb']['config'].update(
+                    evaluation='development-calibration', calibration=plan['calibration']['stages'][kind])
         plan['jobs'].append(job)
     return plan
 

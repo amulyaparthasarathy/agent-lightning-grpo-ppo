@@ -303,6 +303,55 @@ class ReaderTaskConfigs(unittest.TestCase):
         self.assertEqual(checked, 12)
         print('12 reader configs: complete task agent/env_map, datasets, native roles and fresh-reload routing passed.')
 
+    def test_recovery_calibration_two_algorithms_four_stages_composed(self):
+        from experiment import reader_contract as reader, reader_assets, recovery_task
+        from test_reader_training import source
+        p = reader_assets.read(ROOT/'examples/reader-profile.recovery-calibration.synthetic.json')
+        plan = reader.make_plan(p, source())
+        checked = 0
+        for job in plan['jobs']:
+            for stage in job['stages']:
+                req = reader.stage_request(plan, job, stage)
+                run = Path('/data')/stage['output']
+                rp, commands = matched_launch.make_plan(req, ROOT/'experiment', SOURCES/'agent-lightning',
+                    Path('/data')/p['paths']['model'], Path('/data')/p['paths']['data'], Path(sys.executable), run, 12345)
+                cfg = calc.build_config(model=rp['model'], agl_base_url=rp['gateway'], agl_key=rp['local_key'],
+                    run_name=rp['run_name'], config_overrides=ppo_contract.runtime_env_overrides(rp['overrides'], get_ppo_ray_runtime_env()))
+                resolved = OmegaConf.to_container(cfg, resolve=True)
+                matched_launch.validate_resolved(resolved, rp)
+                greedy = stage['name'] == 'greedy-development'
+                self.assertEqual((cfg.trainer.val_only, cfg.trainer.val_before_train), (greedy, greedy))
+                self.assertEqual((cfg.trainer.resume_mode, cfg.trainer.test_freq), ('disable', -1))
+                # Both upstream dataset arguments are run-local development copies.
+                self.assertEqual([rp['train_file'], rp['eval_file']], [str(run/'calibration-train.parquet'), str(run/'calibration-val.parquet')])
+                self.assertEqual(resolved['agentlightning']['local']['agent_class'], 'recovery_agent.Agent')
+                self.assertEqual(resolved['agentlightning']['local']['env_map'], plan['task_identity']['data_mapping'])
+                aggregator = resolved['agentlightning']['trace_aggregator']
+                limits = recovery_task.CONTEXT_LIMITS
+                self.assertEqual((aggregator['level'], aggregator['trajectory_max_prompt_length'], aggregator['trajectory_max_response_length']),
+                                 ('trajectory', limits['trajectory_max_prompt_length'], limits['trajectory_max_response_length']))
+                self.assertEqual(cfg.actor_rollout_ref.rollout.max_model_len, limits['max_model_len'])
+                self.assertEqual((cfg.actor_rollout_ref.rollout.n, cfg.actor_rollout_ref.rollout.val_kwargs.n, cfg.data.train_batch_size), (4, 1, 8))
+                self.assertEqual(cfg.algorithm.adv_estimator, 'gae' if job['algorithm'] == c.ALGORITHMS[1] else 'grpo')
+                self.assertIn('default_proxy.train.temperature=1.0', commands['gateway'])
+                self.assertIn('default_proxy.val.temperature=0.0', commands['gateway'])
+                runtime_env = resolved['ray_kwargs']['ray_init']['runtime_env']['env_vars']
+                self.assertNotIn('AGL_MATCHED_REQUEST', runtime_env)
+                self.assertLess(len(json.dumps(runtime_env)), 8192)
+                for node in (cfg.actor_rollout_ref.actor, cfg.actor_rollout_ref.rollout, cfg.critic):
+                    omega_conf_to_dataclass(node)
+                for key, value in (('train_file', '/data/'+p['paths']['data']+'/final_eval.parquet'),
+                                   ('eval_file', '/data/'+p['paths']['data']+'/eval_main.parquet')):
+                    with self.assertRaisesRegex(ValueError, 'routing changed'):
+                        matched_launch.validate_resolved(resolved, {**rp, key: value})
+                bad = OmegaConf.to_container(cfg, resolve=True)
+                bad['agentlightning']['trace_aggregator']['trajectory_max_prompt_length'] = 2048
+                with self.assertRaisesRegex(ValueError, 'drift'):
+                    matched_launch.validate_resolved(bad, rp)
+                checked += 1
+        self.assertEqual(checked, 8)
+        print('8 recovery calibration configs: development-only dataset routing, modes, context limits and native roles passed.')
+
 
 if __name__ == '__main__':
     def deny_network(event, args):

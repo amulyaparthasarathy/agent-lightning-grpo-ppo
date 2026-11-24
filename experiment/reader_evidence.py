@@ -7,10 +7,11 @@ from pathlib import Path
 import socket
 
 try:
-    from . import reader_contract as c, reader_integration
+    from . import reader_contract as c, reader_integration, reader_modes as modes
 except ImportError:
     import reader_contract as c
     import reader_integration
+    import reader_modes as modes
 
 
 def container_identity(value):
@@ -51,7 +52,7 @@ def complete(run, request, completion):
     if len(finished) != 1 or finished[0]['id'] != stage['wandb']['id']:
         raise ValueError('Missing/duplicate/wrong W&B completion identity')
     terminal = [e for e in events if e['event'] == 'trainer_returned']
-    if len(terminal) != 1 or terminal[0]['validation_only'] != (stage['name'] != 'training'):
+    if len(terminal) != 1 or terminal[0]['validation_only'] != modes.validation_only(request['plan'], stage):
         raise ValueError('Wrong trainer evaluation mode')
     result = {**completion, 'execution_schema': request['plan']['schema'],
               'source_sha256': c.digest(request['plan']['source']),
@@ -62,7 +63,7 @@ def complete(run, request, completion):
                          'container_id': container_identity(os.environ.get('MODAL_TASK_ID')),
                          'launcher_pid': os.getpid(), 'trainer_pid': terminal[0]['pid']},
               'wandb_id': stage['wandb']['id']}
-    if stage['name'] == 'training' and request['plan']['phase'] != 'collection-only':
+    if modes.kind(request['plan'], stage) == 'training':
         roles = ('actor', 'critic') if job['algorithm'] == c.ALGORITHMS[1] else ('actor',)
         checkpoint = json.loads((run/'checkpoints/global_step_2/matched_identity.json').read_text())
         if set(checkpoint['roles']) != set(roles):
@@ -115,7 +116,9 @@ def validate_collection(plan, index, read):
         outcome = outcomes[job['algorithm']] = {'operational_stage_completion': {}, 'model_tool_integration': {}}
         receipts = index['jobs'][job['job_id']]['stages']
         development = plan['phase'] == 'collection-only'
-        expected_stages = ['training'] if development else ['baseline', 'training', 'checkpoint-eval']
+        calibration = modes.phase(plan) == modes.CALIBRATION
+        expected_stages = (list(modes.STAGES[modes.CALIBRATION]) if calibration else
+                           ['training'] if development else ['baseline', 'training', 'checkpoint-eval'])
         if len(receipts) != len(expected_stages) or [r['stage'] for r in receipts] != expected_stages:
             raise ValueError('Missing/duplicate stage receipts')
         for stage, entry in zip(job['stages'], receipts, strict=True):
@@ -146,7 +149,10 @@ def validate_collection(plan, index, read):
                     or integration['trace_files'] != len(integration['coverage'])):
                 raise ValueError('Invalid integration coverage report')
             outcome['model_tool_integration'][stage['name']] = integration
-            if development:
+            if calibration:
+                # The calibration report validates each stage proof against the plan itself.
+                outcome.setdefault('stage_proofs', {})[stage['name']] = proof
+            elif development:
                 if proof.get('optimizer_updates') != {'actor': 0, 'critic': 0} or proof.get('development', {}).get('real_rollouts') != 32:
                     raise ValueError('Missing collection-only no-update evidence')
                 outcome['development'] = proof['development']
@@ -161,14 +167,33 @@ def validate_collection(plan, index, read):
                         or proof['training_worker'] != previous['worker']
                         or proof['worker']['container_id'] == previous['worker']['container_id']):
                     raise ValueError('Training/reload evidence differs')
-        outcome['integration_rule'] = 'all-three-stages-v2' if plan['schema'] == c.SCHEMA else 'any-stage-v1'
+        outcome['integration_rule'] = ('all-calibration-stages-v1' if calibration else
+                                       'all-three-stages-v2' if plan['schema'] == c.SCHEMA else 'any-stage-v1')
         outcome['harness_integration_qualified'] = (all if plan['schema'] == c.SCHEMA else any)(r['qualified'] for r in outcome['model_tool_integration'].values())
         outcome['qualification_gaps'] = [] if outcome['harness_integration_qualified'] else ['Model/tool integration unqualified: required stage coverage missing in this algorithm workflow']
-        if not development and job['algorithm'] == c.ALGORITHMS[0] and not outcome['informative_grpo_reward_groups']:
+        if not development and not calibration and job['algorithm'] == c.ALGORITHMS[0] and not outcome['informative_grpo_reward_groups']:
             outcome['qualification_gaps'].append('Informative group-relative task-advantage evidence was not observed')
+    report = None
+    if modes.phase(plan) == modes.CALIBRATION:
+        try:
+            from . import recovery_calibration
+        except ImportError:
+            import recovery_calibration
+        timings = {}
+        for job in plan['jobs']:
+            for entry in index['jobs'][job['job_id']]['stages']:
+                result = entry.get('result') or {}
+                if 'started_at' in result and 'finished_at' in result:
+                    timings[f"{job['algorithm']}/{entry['stage']}"] = round(result['finished_at'] - result['started_at'], 1)
+        report = recovery_calibration.report(plan, {a: o.pop('stage_proofs') for a, o in outcomes.items()}, timings)
+        if (report['evidence_class'] != 'live-model'
+                or any(r['decision']['operational_validity'] != 'valid' for r in report['routes'].values())):
+            raise ValueError('Calibration evidence is not a complete live collection for every route')
     return {'evidence_complete': True, 'operational_completion': 'completed', 'algorithms': outcomes,
-            'qualification_evidence': plan['phase'] != 'collection-only',
-            'live_qualification': ('development only; not six-stage qualification' if plan['phase'] == 'collection-only'
+            **({'calibration': report} if report else {}),
+            'qualification_evidence': plan['phase'] not in ('collection-only', modes.CALIBRATION),
+            'live_qualification': ('development calibration only; zero optimization; not qualification or learning evidence'
+                                   if report else 'development only; not six-stage qualification' if plan['phase'] == 'collection-only'
                 else 'gaps remain' if any(o['qualification_gaps'] for o in outcomes.values())
                 else 'operational and harness evidence observed; learning success not established'),
             'hosted_wandb_history': 'not independently queried'}
