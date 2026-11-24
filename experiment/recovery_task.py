@@ -415,6 +415,38 @@ def call(name, arguments):
     raise PolicyActionError('unknown_tool')
 
 
+def classify_error(name, raw_arguments, content):
+    """Typed policy-error code for an error observation, or None if unattributable.
+
+    A code is returned only when the retained sampled call itself fails the declared
+    validation with that same code. An error flag alone proves nothing: the MCP
+    workbench converts every exception into an error result. Pure, so that a
+    reviewer can re-derive every classification from a recorded trace.
+    """
+    try:
+        sampled = json.loads(raw_arguments)
+    except json.JSONDecodeError as exc:
+        # Exact AutoGen 0.7.5 branch; MCP is never invoked.
+        return 'invalid_argument_json' if content == f'Error: {exc}' else None
+    if name not in TOOLS:
+        return 'unknown_tool' if content == f"Error: tool '{name}' not found in any workbench" else None
+    try:
+        error = json.loads(content)
+    except (ValueError, TypeError):
+        return None
+    if not isinstance(error, dict) or error != policy_error(error.get('code')):
+        return None
+    if error['code'] == 'non_object_arguments':
+        return error['code'] if not isinstance(sampled, dict) else None
+    if error['code'] not in SERVER_ERROR_CODES or not isinstance(sampled, dict):
+        return None
+    try:
+        call(name, sampled)
+    except PolicyActionError as exc:
+        return str(exc) if str(exc) == error['code'] else None
+    return None
+
+
 def usable(run, as_of, rpo, asset_id):
     """Trusted eligibility over raw integer-minute facts; the RPO boundary is inclusive."""
     return (run['asset_id'] == asset_id and run['status'] == 'succeeded' and run['completed_at'] <= as_of
@@ -642,7 +674,9 @@ def identity(source):
                     'environment': {'PYTHONUNBUFFERED': '1', 'PYTHONDONTWRITEBYTECODE': '1'},
                     'ownership_receipt': 'optional absolute directory argument; never a model input'},
             'local_probe': 'recovery_probe.check',
-            'integration_rule': 'reader-integration-v2; live chain required in every calibration stage per algorithm',
+            'integration_rule': ('reader-integration-v2; chain coverage is reported for every calibration stage and every '
+                                 'successful call of an admitted episode must be joined; a stage without chains is a '
+                                 'result, not an admission failure'),
             'environment': environment(), 'environment_sha256': digest(environment()),
             'source_sha256': {n: source['files'][f'experiment/{n}'] for n in
                               ('recovery_task.py', 'recovery_server.py', 'recovery_stdio.py', 'recovery_agent.py',

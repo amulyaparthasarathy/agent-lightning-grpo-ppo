@@ -12,8 +12,13 @@ Terminal outcomes, from the pinned AutoGen 0.7.5 AssistantAgent loop:
 - terminal_policy_failure: the second typed, attributable invalid action. One
   confirmed zero, no further generation, no invented answer.
 - incomplete (exception, no reward): anything else, including an unclassified tool
-  error, a lost or altered observation, more than one call in a generation,
-  truncation, cancellation, a backend failure or an unconfirmed reward post.
+  error, a lost or altered observation, more than one call in a generation, a
+  tool name the framework rewrote into a valid tool, truncation, an empty answer,
+  cancellation, a backend failure or an unconfirmed reward post.
+
+An empty or whitespace-only answer stays incomplete, as in asset-episode-v2: the
+pinned client substitutes "" for absent content, so it cannot be told apart from a
+missing generation.
 """
 import asyncio
 import json
@@ -71,6 +76,18 @@ class ObjectArguments(McpWorkbench):
         if name in task.TOOLS and not isinstance(arguments, dict):
             return ToolResult(name=name, is_error=True, result=[TextResultContent(
                 content=task.dumps(task.policy_error('non_object_arguments')))])
+        if name in task.TOOLS:
+            try:
+                json.dumps(arguments, ensure_ascii=False).encode('utf-8')
+            except UnicodeEncodeError:
+                # A lone surrogate cannot cross the stdio transport: the MCP client would
+                # hang until its read timeout. Such a value never satisfies the declared
+                # schema, so return exactly the typed error the server's validation gives.
+                try:
+                    task.call(name, arguments)
+                except task.PolicyActionError as exc:
+                    return ToolResult(name=name, is_error=True, result=[TextResultContent(
+                        content=task.dumps(task.policy_error(str(exc))))])
         return await super().call_tool(name, arguments, cancellation_token, call_id)
 
 
@@ -79,35 +96,8 @@ class RecoveryWorkbench(ObservedWorkbench, ObjectArguments):
 
 
 def classify(call, observation):
-    """Typed policy-error code for an error observation, or None if unattributable.
-
-    A code is returned only when the retained sampled call itself fails the declared
-    validation with that same code. `is_error` alone proves nothing: McpWorkbench
-    converts every exception into an error result.
-    """
-    try:
-        sampled = json.loads(call.arguments)
-    except json.JSONDecodeError as exc:
-        # Exact AutoGen 0.7.5 branch; MCP is never invoked.
-        return 'invalid_argument_json' if observation.content == f'Error: {exc}' else None
-    if call.name not in task.TOOLS:
-        expected = f"Error: tool '{call.name}' not found in any workbench"
-        return 'unknown_tool' if observation.content == expected else None
-    try:
-        error = json.loads(observation.content)
-    except (ValueError, TypeError):
-        return None
-    if not isinstance(error, dict) or error != task.policy_error(error.get('code')):
-        return None
-    if error['code'] == 'non_object_arguments':
-        return error['code'] if not isinstance(sampled, dict) else None
-    if error['code'] not in task.SERVER_ERROR_CODES or not isinstance(sampled, dict):
-        return None
-    try:
-        task.call(call.name, sampled)
-    except task.PolicyActionError as exc:
-        return str(exc) if str(exc) == error['code'] else None
-    return None
+    """Typed policy-error code for a sampled call's error observation, or None."""
+    return task.classify_error(call.name, call.arguments, observation.content)
 
 
 class RecoveryClient(ObservedClient):
@@ -126,6 +116,19 @@ class RecoveryClient(ObservedClient):
         self.successful_calls = 0
         self.tool_rounds = 0
         self.recovered = False
+        # The pinned client rewrites tool names and finish reasons while parsing a
+        # response. Keep what the server actually returned for the last generation.
+        self.served = None
+        completions = self._client.chat.completions
+        served_create = completions.create
+
+        async def create(*args, **kwargs):
+            response = await served_create(*args, **kwargs)
+            choice = response.choices[0]
+            self.served = {'finish_reason': choice.finish_reason,
+                           'tool_names': [c.function.name for c in choice.message.tool_calls or []]}
+            return response
+        completions.create = create
 
     async def create(self, messages, **kwargs):
         for call in self.pending:
@@ -164,8 +167,10 @@ class RecoveryClient(ObservedClient):
             raise PolicyLimitReached()
         if kwargs.get('tool_choice') == 'none':
             messages = [*messages, UserMessage(content=FINAL_INSTRUCTION, source='user')]
+        self.served = None
         result = await super().create(messages, **kwargs)
-        if result.finish_reason not in ('stop', 'function_calls'):
+        served = self.served or {}
+        if result.finish_reason not in ('stop', 'function_calls') or served.get('finish_reason') == 'length':
             raise RuntimeError('Incomplete model generation')
         if isinstance(result.content, list):
             # parallel_tool_calls=False: the served stack returns at most one call.
@@ -176,6 +181,12 @@ class RecoveryClient(ObservedClient):
             # completion count is the only remaining truncation evidence; never hide it.
             if result.usage.completion_tokens >= self._create_args['max_tokens']:
                 raise RuntimeError('Action generation reached the output-token limit')
+            # AutoGen replaces characters outside [A-Za-z0-9_-] in a sampled tool name.
+            # If that turns an invalid name into a real tool, the framework would execute
+            # an action the model did not sample. Never score a repaired action.
+            sampled = served.get('tool_names', [result.content[0].name])
+            if sampled != [result.content[0].name] and result.content[0].name in task.TOOLS:
+                raise RuntimeError('Sampled tool name was rewritten into a valid tool; terminal reward forbidden')
             self.pending = list(result.content)
             self.tool_rounds += 1
         elif not isinstance(result.content, str) or not result.content.strip() or result.finish_reason != 'stop':

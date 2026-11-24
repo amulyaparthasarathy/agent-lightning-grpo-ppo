@@ -164,6 +164,14 @@ class HarnessTests(unittest.TestCase):
                     row = calibration.episode_row(result['records'], request, 'scripted-inference')
                     self.assertEqual((row['policy_error_codes'], row['recovered'], row['reward']), ([code], True, 1.0))
                     del sent
+        # A value that cannot cross the stdio transport gets the server's own typed validation error
+        # immediately, instead of hanging the MCP client until its read timeout.
+        for raw, code in (('{"asset_id": "ast-\\ud800"}', 'invalid_asset_id'), ('{"asset_id": "ok", "x\\udfff": "y"}', 'invalid_arguments')):
+            with self.subTest(raw=raw):
+                result = self.run_case([RAW('get_asset', raw), SOLVE, SOLVE, SOLVE, SOLVE])
+                self.assertEqual(self.complete(result, 1.0, 'complete_recovered')['policy_errors'], 1)
+                first = next(r for r in result['records'] if r['kind'] == 'action_outcome')
+                self.assertEqual((first['inputs']['call']['arguments'], first['outputs']['policy_error']), (raw, code))
         # Non-object JSON arguments of every shape are typed without contacting the server or repair.
         for raw in ('[]', json.dumps([asset]), 'null', '7', 'true', '""'):
             with self.subTest(raw=raw):
@@ -268,6 +276,20 @@ class HarnessTests(unittest.TestCase):
         result = self.run_case(mode='reward-failure')
         self.incomplete(result, 'HTTPStatusError', posts=1, requests=4)
         self.assertEqual(episode(result)['outputs']['reward'], 1.0)  # computed, never confirmed
+        # The pinned client rewrites invalid characters in a sampled tool name. A name that
+        # becomes a real tool this way is never executed or scored as if it had been sampled.
+        for name in ('get asset', 'get.asset', 'list backup runs'):
+            with self.subTest(name=name):
+                result = self.run_case([CALL(name, asset_id=TRUTH['asset_id']), SOLVE, SOLVE, SOLVE, SOLVE])
+                self.incomplete(result, 'rewritten into a valid tool', requests=1)
+                self.assertEqual(sum(r['kind'] == 'tool' for r in result['records']), 0)
+        # A rewritten name that is still no tool remains an ordinary typed unknown-tool error.
+        result = self.run_case([CALL('functions.get_asset', asset_id=TRUTH['asset_id']), SOLVE, SOLVE, SOLVE, SOLVE])
+        self.assertEqual(self.complete(result, 1.0, 'complete_recovered')['policy_errors'], 1)
+        # The server's own finish reason is honored even where the client overrides it.
+        result = self.run_case([lambda st: completion(st.step, calls=[('get_asset', task.dumps({'asset_id': st.asset_id}))], finish='length'),
+                                SOLVE, SOLVE, SOLVE])
+        self.incomplete(result, 'Incomplete model generation', requests=1)
         # A typed-looking error whose sampled call was valid is not a policy mistake.
         fake = type('Observation', (), {'content': task.dumps(task.policy_error('unknown_asset')), 'is_error': True})
         call = type('Call', (), {'name': 'get_asset', 'arguments': task.dumps({'asset_id': TRUTH['asset_id']})})
@@ -300,6 +322,23 @@ class HarnessTests(unittest.TestCase):
                      lambda e: e.update(eval_split='final'), lambda e: e.update(episode_policy='asset-episode-v2')):
             bad = copy.deepcopy(result['records']); edit(next(r for r in bad if r['kind'] == 'episode'))
             with self.assertRaises(ValueError): calibration.episode_row(bad, packet, 'scripted-inference')
+        # Recorded classifications are re-derived: an error observation that is not typed
+        # evidence for its call cannot stay a policy error, and a recorded code cannot be changed.
+        failed = self.run_case([bad_extra, RAW('get_policy', '{')], request=packet, row=in_packet, route='train')
+        self.assertEqual(calibration.episode_row(failed['records'], packet, 'scripted-inference')['outcome'], 'terminal_policy_failure')
+        for edit in (lambda a: a['inputs']['observation'].update(content='backend unavailable'),
+                     lambda a: a['outputs'].update(policy_error='unknown_asset'),
+                     lambda a: a['inputs']['call'].update(arguments=task.dumps({'asset_id': in_packet['question'].split()[3]}))):
+            bad = copy.deepcopy(failed['records']); edit(next(r for r in bad if r['kind'] == 'action_outcome'))
+            with self.assertRaises(ValueError): calibration.episode_row(bad, packet, 'scripted-inference')
+        # Every successful call must be joined to the model input that saw its observation.
+        bad = copy.deepcopy(result['records'])
+        for record in bad:
+            if record['kind'] == 'llm':
+                for message in record['inputs']['messages']:
+                    if message['type'] == 'FunctionExecutionResultMessage':
+                        message['content'][0]['content'] = '{}'
+        with self.assertRaisesRegex(ValueError, 'not joined'): calibration.episode_row(bad, packet, 'scripted-inference')
         # Another episode's observation cannot be spliced in as evidence.
         bad = copy.deepcopy(result['records'])
         other = self.run_case(request=packet, row=outside, route='train')

@@ -50,7 +50,7 @@
       ]
     },
     "worst_case_bounded": {
-      "basis": "5 rounds of the largest inventory in the world, then reflection",
+      "basis": "5 rounds of the largest inventory in the world, then reflection; sampled calls are assumed to be schema-sized",
       "prompt_tokens_by_call": [
         988,
         1421,
@@ -68,8 +68,8 @@
         2385
       ],
       "largest_prompt_tokens": 2739,
-      "merged_response_tokens_upper_bound": 1943,
-      "generation_headroom_tokens": 297
+      "merged_response_tokens_upper_bound": 1924,
+      "generation_headroom_tokens": 316
     },
     "checks": {
       "every_prompt_within_trajectory_prompt_limit": true,

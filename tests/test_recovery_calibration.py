@@ -360,6 +360,13 @@ class CompletionTests(unittest.TestCase):
                        'seven groups': lambda e: next(x for x in e if x['event'] == 'development_collection_admitted').update(groups=7),
                        'no token evidence': lambda e: e.remove(measured(e)),
                        'two collections': lambda e: e.append(copy.deepcopy(next(x for x in e if x['event'] == 'collection_manifest')))}
+        # Server-reported completion tokens, when present, must equal the adapter's sampled tokens.
+        reported = copy.deepcopy(episodes)
+        for e in reported:
+            e['completion_tokens'] = [30] * e['llm_calls']
+        self.assertEqual(len(calibration.assemble(request, good, reported)['calibration']['episodes']), 32)
+        reported[3]['completion_tokens'][0] += 1
+        with self.assertRaises(ValueError): calibration.assemble(request, good, reported)
         for label, edit in event_edits.items():
             bad = copy.deepcopy(good); edit(bad)
             with self.subTest(events=label), self.assertRaises(ValueError):
@@ -372,6 +379,7 @@ class CompletionTests(unittest.TestCase):
                      lambda d: d['calibration']['audit'].update(optimizer_step=1), lambda d: d.update(optimizer_updates={'actor': 1, 'critic': 0}),
                      lambda d: d['calibration']['audit'].update(weight_refresh_steps=[0, 1]),
                      lambda d: d['calibration']['episodes'][0].update(mask_tokens=1), lambda d: d['calibration'].update(algorithm=PPO),
+                     lambda d: d['calibration'].update(seed_streams=self.plan['jobs'][1]['seed_streams']),
                      lambda d: d['calibration'].update(evidence_class='simulated-trace'), lambda d: d['calibration']['collection'].update(truncated_rows=2)):
             bad = copy.deepcopy(done); edit(bad)
             with self.assertRaises((ValueError, KeyError)):
@@ -395,8 +403,8 @@ class ReportTests(unittest.TestCase):
             s, g, groups = r['sampled'], r['greedy'], r['sampled']['groups']
             self.assertEqual((g['episodes'], s['episodes'], groups['groups']), (24, 96, 24))
             # Format and action failures are not counted as known semantic answers.
-            self.assertEqual(s['decision_assessable'] + s['semantics_not_assessable'], 96)
-            self.assertEqual(s['semantics_not_assessable'], s['failure_classes'].get('format', 0) + s['failure_classes'].get('action', 0))
+            self.assertEqual(s['decision_assessable'] + s['decision_not_assessable'], 96)
+            self.assertEqual(s['decision_not_assessable'], s['failure_classes'].get('format', 0) + s['failure_classes'].get('action', 0))
             self.assertEqual(s['contract_format_valid'], 96 - s['failure_classes'].get('format', 0))
             # Decision and evidence correctness are reported separately.
             self.assertEqual(s['decision_correct'], s['failure_classes']['correct'] + s['failure_classes']['evidence'])
@@ -448,11 +456,12 @@ class ReportTests(unittest.TestCase):
             for r in self.report(behavior)['routes'].values():
                 self.assertEqual((r['decision']['operational_validity'], r['decision']['scientific_suitability']), ('valid', verdict))
                 self.assertIn('do not repeat an unchanged collection', r['decision']['next_step'])
-        # One formatting failure makes a mixed group but not a semantically informative one.
+        # One formatting failure makes a mixed group but not a semantically informative one,
+        # and 95 of 96 correct is saturation, not an interface problem.
         r = self.report(isolated_format)['routes'][GRPO]
         self.assertEqual((r['sampled']['groups']['mixed'], r['sampled']['groups']['mixed_format_action_only'],
-                          r['decision']['semantic_evidence_informative_groups'], r['decision']['scientific_suitability']),
-                         (1, 1, 0, 'interface_dominated'))
+                          r['decision']['semantic_evidence_informative_groups'], r['decision']['interface_share_of_zero_rewards'],
+                          r['decision']['scientific_suitability']), (1, 1, 0, 1.0, 'saturated'))
         self.assertEqual(self.report(five_groups)['routes'][GRPO]['decision']['scientific_suitability'], 'insufficient_semantic_variation')
         r = self.report(one_family)['routes'][GRPO]['decision']
         self.assertEqual((r['semantic_evidence_informative_groups'], r['informative_case_families'], r['scientific_suitability']),
@@ -485,9 +494,24 @@ class ReportTests(unittest.TestCase):
             self.assertEqual((r['decision']['operational_validity'], r['decision']['scientific_suitability']), ('mechanics_only_not_live', 'not_assessed'))
             self.assertIn('never a policy measurement', r['decision']['interpretation'])
         self.assertIn('**Not a live policy measurement.**', calibration.summary(result))
+        # Evidence class is decided per route and never borrowed, in either job order.
+        for scripted_route, live_route in ((GRPO, PPO), (PPO, GRPO)):
+            mixed = fx.proofs(self.plan, fx.informative)
+            for proof in mixed[scripted_route].values():
+                proof['calibration']['evidence_class'] = 'scripted-inference'
+            result = calibration.report(self.plan, mixed)
+            self.assertEqual((result['evidence_class'], result['live_policy_measurement']), ('scripted-inference', False))
+            self.assertEqual((result['routes'][live_route]['evidence_class'], result['routes'][live_route]['decision']['operational_validity'],
+                              result['routes'][live_route]['decision']['scientific_suitability']), ('live-model', 'valid', 'screen_passed'))
+            self.assertEqual((result['routes'][scripted_route]['evidence_class'], result['routes'][scripted_route]['decision']['operational_validity'],
+                              result['routes'][scripted_route]['decision']['scientific_suitability']),
+                             ('scripted-inference', 'mechanics_only_not_live', 'not_assessed'))
+        # One scripted stage makes its whole route non-live.
         mixed = fx.proofs(self.plan, fx.informative)
         mixed[PPO]['sampled-packet-2']['calibration']['evidence_class'] = 'scripted-inference'
-        self.assertEqual(calibration.report(self.plan, mixed)['evidence_class'], 'scripted-inference')
+        result = calibration.report(self.plan, mixed)
+        self.assertEqual((result['evidence_class'], result['routes'][PPO]['evidence_class'], result['routes'][GRPO]['evidence_class']),
+                         ('scripted-inference', 'scripted-inference', 'live-model'))
         # Durable collection: the same joins as qualification, then the calibration report.
         admitted = fx.calibration_plan(source(), fixture=False)
         index, files = fx.durable(admitted, fx.proofs(admitted, fx.informative))

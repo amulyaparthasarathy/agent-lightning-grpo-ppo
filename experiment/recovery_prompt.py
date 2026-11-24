@@ -198,9 +198,11 @@ def budget(count):
     largest = max(max(worst), max(error))
     # Two extremes of the trajectory aggregator. Live Phase 3 collections put every call
     # in its own fragment, so each whole prompt must fit the prompt limit. If instead
-    # every turn merged into one row, everything after the first prompt would be
-    # "response": observations and reminder (masked) plus sampled tokens (unmasked).
-    merged = max(worst[-1], error[-1]) - min(worst[0], error[0]) + ANSWER_TOKENS
+    # the tool-enabled turns merged into one row, everything after the first prompt
+    # would be "response": observations (masked) plus sampled tokens (unmasked), ending
+    # with the last tool-enabled generation. The reflection prompt has no tool preamble,
+    # shares no prefix with the earlier prompts and always starts its own row.
+    merged = max(worst[-2], error[-2]) - min(worst[0], error[0]) + ANSWER_TOKENS
     checks = {
         'every_prompt_within_trajectory_prompt_limit': largest <= LIMITS['trajectory_max_prompt_length'],
         'prompt_plus_generation_within_model_context': largest + LIMITS['max_tokens'] <= LIMITS['max_model_len'],
@@ -214,7 +216,8 @@ def budget(count):
                                            'prompt_tokens_by_call_min': [min(c) for c in zip(*reference)]},
             'development_five_round_reflection': {'cases': len(extended), 'calls': rounds + 1,
                                                   'prompt_tokens_by_call_max': [max(c) for c in zip(*extended)]},
-            'worst_case_bounded': {'basis': f'{rounds} rounds of the largest inventory in the world, then reflection',
+            'worst_case_bounded': {'basis': f'{rounds} rounds of the largest inventory in the world, then reflection; '
+                                            'sampled calls are assumed to be schema-sized',
                                    'prompt_tokens_by_call': worst, 'with_initial_typed_error': error,
                                    'largest_prompt_tokens': largest, 'merged_response_tokens_upper_bound': merged,
                                    'generation_headroom_tokens': LIMITS['trajectory_max_response_length'] - merged + ANSWER_TOKENS},
