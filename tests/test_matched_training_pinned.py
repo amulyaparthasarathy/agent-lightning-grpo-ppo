@@ -85,11 +85,11 @@ class PinnedTrainingTests(unittest.TestCase):
     def tearDown(self):
         self.env.stop(); self.tmp.cleanup()
 
-    def adapter(self):
+    def adapter(self, collection_only=False):
         import io, zipfile, base64
         module = load('agentlightning', 'verl/rollout_adapter.py', dict(torch=self.torch, np=self.np,
             TensorDict=self.TD, DataProto=Proto, json=json, io=io, zipfile=zipfile, base64=base64))
-        runtime.instrument_adapter(module)
+        runtime.instrument_adapter(module, collection_only=collection_only)
         return module.RolloutAdapter(max_prompt_length=24, max_response_length=32,
                                      device=self.torch.device('cpu'), pad_token_id=0, trace_aggregator_level='trajectory')
 
@@ -122,6 +122,30 @@ class PinnedTrainingTests(unittest.TestCase):
             self.assertAlmostEqual(batch.batch['matched_weights'].sum().item(),1)
             self.assertEqual(set(batch.non_tensor_batch['ppo_case_id']), {'case-q'})
             self.assertFalse(batch.batch['is_drop_mask'].any())
+
+    def test_collection_only_preserves_tokens_masks_groups_and_stops_before_updates(self):
+        rows = []
+        for group in range(8):
+            for row in self.rollouts(fragmented=True, constant=True):
+                row.rollout_id += f'-{group}'
+                row.data_id = f'q-{group}'
+                rows.append(row)
+        with self.assertRaises(runtime.CollectionOnlyComplete):
+            self.adapter(collection_only=True).get_train_data_batch(rows, global_steps=1)
+        events = [json.loads(line) for p in Path(self.tmp.name).glob('*.jsonl') for line in p.read_text().splitlines()]
+        admitted = [e for e in events if e['event'] == 'development_collection_admitted']
+        self.assertEqual(len(admitted), 1)
+        self.assertEqual(admitted[0]['generated_tokens'], 14*8)
+        self.assertEqual(admitted[0]['fragment_rows'], 64)
+        self.assertEqual(admitted[0]['constant_groups'], 8)
+        self.assertFalse(any(e['event'] in ('matched_advantages', 'optimizer_step', 'gradient_step') for e in events))
+        for kind in ('missing-reward', 'incomplete-group', 'truncated'):
+            bad = copy.deepcopy(rows); adapter = self.adapter(collection_only=True)
+            if kind == 'missing-reward': bad[0].final_reward = None
+            if kind == 'incomplete-group': bad.pop()
+            if kind == 'truncated': adapter.max_response_length = 1
+            with self.subTest(kind=kind), self.assertRaises(ValueError):
+                adapter.get_train_data_batch(bad, global_steps=1)
 
     def test_incomplete_truncated_duplicate_and_missing_reward_fail_closed(self):
         for kind in ('incomplete','truncated','duplicate','reward','no-trace'):

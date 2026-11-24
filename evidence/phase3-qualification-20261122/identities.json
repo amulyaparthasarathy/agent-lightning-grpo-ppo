@@ -1,0 +1,58 @@
+[
+  {
+    "attempt": 1,
+    "execution_commit": "b73f3f7b4497ea553a4ebf1e47e52c81afeae070",
+    "preparation_plan_sha256": "0ee63d537f24df652799618cd3f57fcd09ca097952d46e08a5b22ced34a5b7ab",
+    "training_plan_sha256": "9444af0daf0536d5fa2ab6f6cea035f07e26036e1e8b43044b3b998f6ec46b69",
+    "source_sha256": "8d3aaa7e3a6e67f6bfb63d487d232ec982dde9634b060445c67319a3701655c2",
+    "configuration_sha256": "1d3102ccadacf8b458e5ee37aae9e84134cbeffcb0dee91d9141c008cf94bfbb",
+    "packaged_sha256": "d860c7b42d91c2198f5d9497f1a58dd48ebb00e29ef545d071e1ae7972355f08",
+    "task_sha256": "6dd4be007519e4e195c3c7dbcc00bad6b0996b6d1528698e124f3adff34b7d1a",
+    "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+    "data_manifest_sha256": "39f9df2872d3c48ee5698c58cc908db6763477670776c5d1e1d5a78c84925772",
+    "image_id": "im-YgJB9ZeIqUyuQXvUD8HQrx",
+    "source_file_count": 294
+  },
+  {
+    "attempt": 2,
+    "execution_commit": "de867130ff35afb287d6bf11f83a33f4951014bb",
+    "preparation_plan_sha256": "3619bcd6a537d1283f1e06801a936b0d902a7b162cda381686370b273f9590f6",
+    "training_plan_sha256": "8a816f2566f1d4d02cb3df808d78029d701da8ca4bdc59385f8fa0ec1b0725c2",
+    "source_sha256": "d65cf823888a81f0d6469361ba6889905500f6421773660147f8797caf2ea8fa",
+    "configuration_sha256": "9d0f4a4f5212be313a14a65d4ee321e46d11b20ec6ee9db22da967b4a323dd08",
+    "packaged_sha256": "c9ae659dcd507597f6de454078b4cca61af8b6c17c49e01192d771c3fd10ae17",
+    "task_sha256": "7dbc44b42fab8c876dbfc209de728903efc896dfd24dfd2a7db8d1f7cbe4a685",
+    "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+    "data_manifest_sha256": "39f9df2872d3c48ee5698c58cc908db6763477670776c5d1e1d5a78c84925772",
+    "image_id": "im-buzZvebIURyGYvJVe3ed0g",
+    "source_file_count": 297
+  },
+  {
+    "attempt": 3,
+    "execution_commit": "e00dc14bb9777dd644b8384be3f18b97c69b972c",
+    "preparation_plan_sha256": "9c21256e339c12f05f01baa007a78ae17dd02b81b3b61ff4297eda4516360498",
+    "training_plan_sha256": "cad14a7b5355cb02c05ce0bb7fe54b8d6b3cb28d18d2ffa513e7a47148b6fca1",
+    "source_sha256": "29484e6a1ae207b91337a75976700e84a78865a01f9f0de43aa18584726d3ac2",
+    "configuration_sha256": "36760674d8177b23b518b997a4463a1f946ad8a411eb8e5b835e7b1c0b9ab049",
+    "packaged_sha256": "b0b7372897aa9e62628e17d8ffa53c2193ad6d9e2bf9468043da1e6524c08267",
+    "task_sha256": "beb4f4435328e4255a8d8a0792effa706caa2dac3ba023b9b873d7476274f710",
+    "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+    "data_manifest_sha256": "39f9df2872d3c48ee5698c58cc908db6763477670776c5d1e1d5a78c84925772",
+    "image_id": "im-7SRnhIai3ZHWvdFWHLYw3e",
+    "source_file_count": 297
+  },
+  {
+    "attempt": 4,
+    "execution_commit": "07ddf1bad56c10c6b8b4d144293aec4f911df706",
+    "preparation_plan_sha256": "02f01fb128acdcefdfb0a684685e5b38c74f0ec8103b8664ff8651df1b71e6d9",
+    "training_plan_sha256": "0947b53fdd507e12a1183a042a3f67f9701233b05052a1e01b6a3a04deae10ce",
+    "source_sha256": "930ee2939f1264820711173745732afed20de72ee6370280eb8d013f115e52ba",
+    "configuration_sha256": "9d4118320dc6d332fbccba3d3d073187b5ff591ce83eaf21e51ec0dedad4c9ff",
+    "packaged_sha256": "bf0fa77717599d454caeac1b62f260ac374b12fd54b69a6e3853945925bbdf09",
+    "task_sha256": "74a1f3ced6495a9e922d56e2bfd1d28a330eaf30dcea40110545be27782616ad",
+    "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+    "data_manifest_sha256": "39f9df2872d3c48ee5698c58cc908db6763477670776c5d1e1d5a78c84925772",
+    "image_id": "im-a7M1vxet2jtMPeU7RPMawl",
+    "source_file_count": 297
+  }
+]

@@ -1,0 +1,885 @@
+{
+  "attempt": 3,
+  "algorithm": "ppo-mc-matched-v2",
+  "stage": "baseline",
+  "source_commit": "e00dc14bb9777dd644b8384be3f18b97c69b972c",
+  "plan_sha256": "cad14a7b5355cb02c05ce0bb7fe54b8d6b3cb28d18d2ffa513e7a47148b6fca1",
+  "wandb": {
+    "entity": "amulyap-stanford-university",
+    "project": "reader-owned-reference",
+    "group": "reader-asset-20261121-r03-a03",
+    "id": "09016b45b7ae5947249a112c",
+    "name": "reader-asset-20261121-r03-a03-ppo-mc-matched-v2-baseline",
+    "job_type": "baseline",
+    "resume": "never",
+    "config": {
+      "schema": "reader-task-v2",
+      "source": "29484e6a1ae207b91337a75976700e84a78865a01f9f0de43aa18584726d3ac2",
+      "profile": "36760674d8177b23b518b997a4463a1f946ad8a411eb8e5b835e7b1c0b9ab049",
+      "assets": "0db61be73574c01b06d94fbb334d7866419826e55865cab757984dbc130d8a1e",
+      "algorithm": "ppo-mc-matched-v2",
+      "stage": "baseline",
+      "protocol": "matched-rollout-mean-v2",
+      "seed_streams": {
+        "python": 139295096,
+        "numpy": 513160406,
+        "torch_cpu": 204395415,
+        "torch_cuda": 180497808,
+        "actor_sampling": 737109812,
+        "actor_optimizer": 1751928485,
+        "row_batching": 2080451036,
+        "critic_init": 1864040309,
+        "paired_question_order": 1028282608
+      },
+      "resources": {
+        "gpu": "H100!",
+        "cpu": 16,
+        "memory_mib": 196608
+      },
+      "steps": 2,
+      "task": {
+        "name": "asset-status-v1",
+        "visible_fields": [
+          "question"
+        ],
+        "label_fields": [
+          "result"
+        ],
+        "data_mapping": {
+          "QUESTION": "input.question",
+          "RESULT": "input.result",
+          "AGL_CASE_ID": "input.case_id",
+          "AGL_DATA_SPLIT": "input.split",
+          "EVAL_SPLIT": "input.split"
+        },
+        "agent_class": "asset_agent.Agent",
+        "cwd": "examples/calc_x",
+        "mcp": {
+          "command": "training-python",
+          "args": [
+            "-I",
+            "asset_stdio.py"
+          ],
+          "environment": {
+            "PYTHONUNBUFFERED": "1",
+            "PYTHONDONTWRITEBYTECODE": "1"
+          },
+          "ownership_receipt": "optional absolute directory argument; never a model input"
+        },
+        "local_probe": "asset_probe.check",
+        "integration_rule": "reader-integration-v2; live chain required in all three stages per algorithm",
+        "environment": {
+          "task": "asset-status-v1",
+          "recipe": "asset-status-v1/2026-11-20/329",
+          "registry_sha256": "241b5672d43b7dff7db7d203f2805d91e0a541e7a20e18d4edb608419e670e44",
+          "ordered_cases_sha256": {
+            "train_main.parquet": "59af0d2b9decfc87637b787d28f37de83c40fd801ffac5edda028b26fc02cd0e",
+            "eval_main.parquet": "493299d2b0fe8db770d5047f65893d67c0fc4c8f6e6c9825305f7b4c6e68464c",
+            "eval_main.jsonl": "493299d2b0fe8db770d5047f65893d67c0fc4c8f6e6c9825305f7b4c6e68464c",
+            "train_smoke.parquet": "1585496ecf3d2bba3e1e6069959c657a2f771f912eddb2d640f44733fe4ba1a1",
+            "eval_smoke.parquet": "918071a326a383d42db8ddc48919a4e5e48a6ec4b9d8cee0bb4471d06ac1ce30",
+            "eval_smoke.jsonl": "918071a326a383d42db8ddc48919a4e5e48a6ec4b9d8cee0bb4471d06ac1ce30"
+          },
+          "tool": {
+            "name": "lookup_asset",
+            "input_schema": {
+              "type": "object",
+              "properties": {
+                "asset_id": {
+                  "type": "string",
+                  "pattern": "^asset-[0-9]{3}$"
+                }
+              },
+              "required": [
+                "asset_id"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "prompt": "Use lookup_asset to look up the requested asset. Return exactly one JSON object with only asset_id, service_state, backup_health, all strings. No markdown or other text. service_state must be operational, degraded, or offline; backup_health must be healthy, stale, or failed.",
+          "output": {
+            "fields": [
+              "asset_id",
+              "service_state",
+              "backup_health"
+            ],
+            "service_state": [
+              "operational",
+              "degraded",
+              "offline"
+            ],
+            "backup_health": [
+              "healthy",
+              "stale",
+              "failed"
+            ],
+            "parser": "whole-response-json-unique-keys-no-extra-fields-v1"
+          },
+          "reward": "independent exact terminal correctness, binary; incomplete has no reward"
+        },
+        "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+        "source_sha256": {
+          "asset_task.py": "2577c07f6a4e47bcbc6998447a5a7d0d21a57d6af3c8682f0e531cf7570f2275",
+          "asset_server.py": "85c7ea8f778fcb8a6cea79eb30540ff5df3e8f48103a01f82bef41888a1b6566",
+          "asset_stdio.py": "33af32fcaca9d28a7abe9a742c64e889641687e7dd8a302b7ce250a9f086acf5",
+          "asset_agent.py": "b3dbcef2a8b7afa528c45c7f770aaa18123396a295a6d19dceebb1f0db75d2d5",
+          "asset_probe.py": "03219442750c8d5109e098bff5c9c4223cc168b47c5cd3a892365e905584af20",
+          "owned_processes.py": "6ca9cce7a93ab0ffd2bcad7a47fa5190c4328d705713e24425ed97e4d9ce34d3",
+          "observed_runtime.py": "5e3dafca7d675a05fb33c1fedd428258ca5908aadf1854b7a1825520fa99c575"
+        },
+        "entrypoint_lock_sha256": "9d211065a5dd984d5fdfc43c63cab6c38e86ff36a2f4cac9ff0b9ab63302665a",
+        "launcher_sha256": "752cca22341639228b20e69de32b7a8062e59f47ad9d1fcd22b8e177798ddf97"
+      },
+      "model": {
+        "id": "meta-llama/Llama-3.2-3B-Instruct",
+        "revision": "0cb88a4f764b7a12671c53f0838cd831a0843b95",
+        "profile": "llama3b",
+        "parser": "llama3_json"
+      },
+      "evaluation": "asset-status-v1-64"
+    }
+  },
+  "dependency_gate": null,
+  "supervisor": {
+    "status": "failed",
+    "call_id": "fc-01M80K0JSPRXR0BS5B7CFGPK0G",
+    "submitted_at": 1795316271.2157714,
+    "finished_at": 1795316637.6216562,
+    "reason": null,
+    "cancellation_requested": true
+  },
+  "provider_reconciliation": {
+    "queried_at": "2026-11-22T04:01:17.629550+00:00",
+    "id": "fc-01M80K0JSPRXR0BS5B7CFGPK0G",
+    "provider_status": "failed",
+    "error_type": "RuntimeError"
+  },
+  "completion": null,
+  "receipt": {
+    "status": "failed",
+    "call_id": "fc-01M80K0JSPRXR0BS5B7CFGPK0G",
+    "output": "phase3-runs/reader-asset-20261121-r03/a03/ppo-mc-matched-v2/baseline",
+    "started_at": 1795316278.4075627,
+    "container_id": "ta-01M80K0K5X1P2G3VNK4S15JY2R",
+    "error": "RuntimeError: Command exited 1; inspect /__modal/volumes/vo-WFtwoXPWkiS6yOwCoFfSz8/phase3-runs/reader-asset-20261121-r03/a03/ppo-mc-matched-v2/baseline/launcher.log",
+    "finished_at": 1795316633.650466
+  },
+  "trainer_result": {
+    "status": "completed",
+    "exit_code": 0,
+    "owned_process_cleanup_completed": true,
+    "checkpoints": [],
+    "latest_checkpoint": null,
+    "restored_checkpoint": null,
+    "resolved_config_saved": true
+  },
+  "audit_event_counts": {
+    "matched_registered": 21,
+    "weight_refresh": 1,
+    "trainer_returned": 1,
+    "wandb_finished": 1,
+    "model_construction_begin": 2,
+    "critic_loading_info": 1,
+    "critic_head_initialization": 1,
+    "model_constructed": 2
+  },
+  "observed_optimizer_events": {
+    "actor": 0,
+    "critic": 0
+  },
+  "policy_refreshes": [
+    0
+  ],
+  "numerical_diagnostics": [
+    {
+      "event": "trainer_returned",
+      "pid": 1184,
+      "time": 1795316625.9261587,
+      "global_step": 0,
+      "validation_only": true
+    },
+    {
+      "event": "critic_loading_info",
+      "pid": 1477,
+      "time": 1795316396.0671225,
+      "class_name": "LlamaForTokenClassification",
+      "info": {
+        "missing_keys": "{'score.bias', 'score.weight'}",
+        "unexpected_keys": "set()",
+        "mismatched_keys": "set()",
+        "error_msgs": []
+      },
+      "seed": 1864040309,
+      "fresh_parameters": [
+        "score.weight",
+        "score.bias"
+      ]
+    },
+    {
+      "event": "critic_head_initialization",
+      "pid": 1477,
+      "time": 1795316396.0688064,
+      "parameters": {
+        "score.weight": {
+          "shape": [
+            1,
+            3072
+          ],
+          "dtype": "torch.float32",
+          "sha256": "6240acef6b84b7cc4a11b242e7d398fd4478666454629c7cd7afdd44069c9367"
+        },
+        "score.bias": {
+          "shape": [
+            1
+          ],
+          "dtype": "torch.float32",
+          "sha256": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119"
+        }
+      },
+      "weight_initializer": "Transformers normal(0, config.initializer_range); bias=zeros",
+      "seed": 1864040309
+    }
+  ],
+  "trajectories": {
+    "phase_filter": "baseline",
+    "route_filter": "val",
+    "attempt_files_total": 64,
+    "attempts_selected": 64,
+    "unclassified_attempt_files": 0,
+    "invalid_records": [],
+    "completed": 0,
+    "failed": 64,
+    "incomplete_or_ambiguous": 0,
+    "phase_route_counts": {
+      "baseline/val": 64
+    },
+    "observed_reward": {
+      "count": 0,
+      "sum": null,
+      "mean": null,
+      "max": null
+    },
+    "attempts_without_numeric_reward": 64,
+    "reward_denominator": "Only observed numeric episode rewards, including failed reward posts; no zero fills.",
+    "reward_posts_confirmed": 0,
+    "model_calls_recorded": 192,
+    "model_errors_recorded": 0,
+    "tool_calls_recorded": 128,
+    "tool_errors_recorded": 128,
+    "call_count_scope": "Recorded spans, not transport retries; unfinished or dropped spans may be absent.",
+    "model_calls_with_usage": 192,
+    "model_calls_without_usage": 0,
+    "usage_source": "Recorded response usage only; AutoGen zero/absent ambiguity remains unknown.",
+    "usage": {
+      "prompt_tokens": {
+        "count": 192,
+        "sum": 63488,
+        "mean": 330.6666666666667,
+        "max": 388
+      },
+      "completion_tokens": {
+        "count": 192,
+        "sum": 15683,
+        "mean": 81.68229166666667,
+        "max": 253
+      }
+    },
+    "episode_elapsed_ms": {
+      "count": 64,
+      "sum": 375760.363,
+      "mean": 5871.255671875,
+      "max": 9164.492
+    },
+    "model_operation_ms": {
+      "count": 192,
+      "sum": 256399.509,
+      "mean": 1335.414109375,
+      "max": 3596.33
+    },
+    "tool_operation_ms": {
+      "count": 128,
+      "sum": 269.01,
+      "mean": 2.101640625,
+      "max": 2.706
+    },
+    "timing_scope": "Inclusive episode duration; model/tool operation durations are separate and may overlap."
+  },
+  "model_tool_integration": {
+    "schema": "reader-integration-v2",
+    "algorithm": "ppo-mc-matched-v2",
+    "stage": "baseline",
+    "qualified": false,
+    "episodes_with_valid_chain": 0,
+    "trace_files": 64,
+    "coverage": [
+      {
+        "file": "trajectory-026398a9509842b59ac4e2a6766be0a7.jsonl",
+        "sha256": "adeef34175aed27beadfab173d683641cf4353f1ed372310227d3a8bb714bc10",
+        "chains": []
+      },
+      {
+        "file": "trajectory-047d422af4e141638c27169e27d42afa.jsonl",
+        "sha256": "180d66812eadca4b1bb620267c97821fef39cafd68b3a80450867c5dd341af84",
+        "chains": []
+      },
+      {
+        "file": "trajectory-0931a219016f47c399dcf47a2b328528.jsonl",
+        "sha256": "7c75fe89d9c5d62598cb7262235e05babb02814a07ad2072c3330ec1af23a04f",
+        "chains": []
+      },
+      {
+        "file": "trajectory-0d2b08607bb84fd9901c9b7fee6f85a7.jsonl",
+        "sha256": "7b2f7cdd9ba52e552a277aa7d93ec0faa8f24895785e5802e10a76378ab04c23",
+        "chains": []
+      },
+      {
+        "file": "trajectory-1ca2cc791dbc42a0a158858fdfdd3493.jsonl",
+        "sha256": "0b0677ecfb8f856de238bfc0ecf7c9937d23d5876bea0255b60d9c171bb7b9bb",
+        "chains": []
+      },
+      {
+        "file": "trajectory-28fa3e4248aa43b7be3716dccb9ddc10.jsonl",
+        "sha256": "05b58fb1e2808c0c8c3af4f8cbc43000057bad520a313a71d1242ba4c0e557ea",
+        "chains": []
+      },
+      {
+        "file": "trajectory-2a2de3404e2040d1af52730c7eab8c26.jsonl",
+        "sha256": "5cb258174eeb06733c64331c8988627380ecae47327a42a44cd2de4a86d4396b",
+        "chains": []
+      },
+      {
+        "file": "trajectory-36c2c446e4f448978b63cc2204c3063f.jsonl",
+        "sha256": "921ec7bf663b50d21caa6ca5366f4e706306a6182d157f93f632737edc0ea3aa",
+        "chains": []
+      },
+      {
+        "file": "trajectory-3b47a1105cdc409fb86ef0b7582bd62b.jsonl",
+        "sha256": "401c007c6d6d365f618a985d2edba831e39e53fd9a6e78479d946c695ad42139",
+        "chains": []
+      },
+      {
+        "file": "trajectory-3d99fa15057b4161b992f1f173de14e1.jsonl",
+        "sha256": "c00cf7f0cdcec1a72e39d59ea6029f767195661cf05ed77d04aed757f8a19f90",
+        "chains": []
+      },
+      {
+        "file": "trajectory-3f21c0a590264495966044c37ce36f40.jsonl",
+        "sha256": "ca32700f05ebb338d647855806145ce23f799d700a69d4b74699509938763caa",
+        "chains": []
+      },
+      {
+        "file": "trajectory-4023dfc004b64e70893ac6f1f30c4f2a.jsonl",
+        "sha256": "a1baef278fb02ac77e69f9a6e75522cd43c46938f0f4cdec9e243e47d2554cbc",
+        "chains": []
+      },
+      {
+        "file": "trajectory-41c722595f924e3f869280ee24bf2d0d.jsonl",
+        "sha256": "c245346a03dc751adc455252de7c7a5432c187ba63b1510a670af2789a4ab1a7",
+        "chains": []
+      },
+      {
+        "file": "trajectory-4c64b5bfb65148288278c24952debe80.jsonl",
+        "sha256": "b9696d018a2c5c0f429ece231701ec15b706091e0f39c98497cfcc88878ddb5d",
+        "chains": []
+      },
+      {
+        "file": "trajectory-4ce85f4d25e24aa3996bbe92722c5f94.jsonl",
+        "sha256": "795ccec3eec7544809cc817317b2bda05fb5e785196070ccdda3c5fbf4c8cb67",
+        "chains": []
+      },
+      {
+        "file": "trajectory-4d0c3e0815da4b62887134bd76821404.jsonl",
+        "sha256": "c1db47ddf1de70c9222c8e3d4ae7fdc404497e2748b38fd588cc9596b5b568fa",
+        "chains": []
+      },
+      {
+        "file": "trajectory-50f67f8b55ef459bb4d9eb02acca9ccd.jsonl",
+        "sha256": "95cb93248c24edf5ac7c4d2aa4b5664d995ea67ad628b5c94fbda4ab2af07579",
+        "chains": []
+      },
+      {
+        "file": "trajectory-54889ea31a2b4f14839cf51851d7aff3.jsonl",
+        "sha256": "5ad73bab6a05cb91cd6cef1f891b34d8cb328f75ebab14f4bdbe0ea286178cae",
+        "chains": []
+      },
+      {
+        "file": "trajectory-556b6fd0a7184d9cbcc50056f23fb6cf.jsonl",
+        "sha256": "ddb7816316832af8c89d1d4a2eb8a25970510572d627dfe04d27904cc58726eb",
+        "chains": []
+      },
+      {
+        "file": "trajectory-59da34a138184f77a68d95a9364205d3.jsonl",
+        "sha256": "89316280a2e564feee21adaa51ee04ea301a182601b128a24f07eeacab4e76fb",
+        "chains": []
+      },
+      {
+        "file": "trajectory-63022091ed3448819d3c47d476b3ec88.jsonl",
+        "sha256": "4c88c543954f740a659d6a3b1c4b45fc3b579531e80ce0fc9439c16f71ae7278",
+        "chains": []
+      },
+      {
+        "file": "trajectory-64a030615b2344228bbdf1f3be7b9cfb.jsonl",
+        "sha256": "a254b889f9396bbe1d77bfd9fb2221f928c032e619543dc6998a2bfe9a120d03",
+        "chains": []
+      },
+      {
+        "file": "trajectory-64cda5942d3443068d371a8facef93de.jsonl",
+        "sha256": "c342a080c00450a4a7397f190fc368188340444430341905f03271d3a7e3696a",
+        "chains": []
+      },
+      {
+        "file": "trajectory-65b8f9bad2b74db89cadd2bef357c53a.jsonl",
+        "sha256": "007d0323c93e3a2d80bda5960fa11975839f46842e359f1dfb4a4a0b2dfce0fc",
+        "chains": []
+      },
+      {
+        "file": "trajectory-68928c1cfbdb462ab675e21b8f5aa8f8.jsonl",
+        "sha256": "80b041780a89a2261a86160a8e3d8c34c61d639c1c099721cb41c280650e7789",
+        "chains": []
+      },
+      {
+        "file": "trajectory-6a853a81ef2c4b4e9237630a46ee66bd.jsonl",
+        "sha256": "5baa0b4cd666251fc72a8010b4278cd3c0a07049b2c3195e924705d91eba14f1",
+        "chains": []
+      },
+      {
+        "file": "trajectory-6bc9c84571284b908556b7ed7893623d.jsonl",
+        "sha256": "e3dadebc0b6429b597659b0d03cbfd8ce34580ba5877565d06375bd0550be9d8",
+        "chains": []
+      },
+      {
+        "file": "trajectory-7845458be9874d10a00422fe1000ebda.jsonl",
+        "sha256": "42d6d45239f97635e5158772505f927c7602663dfd3d54a72f5582911bb773fe",
+        "chains": []
+      },
+      {
+        "file": "trajectory-7887e7351a02419d94bed1dbed6ced7f.jsonl",
+        "sha256": "12ea7da48051781c98852b078e3d8bc82c84f4a5df089d5dbd6a9735db9f8086",
+        "chains": []
+      },
+      {
+        "file": "trajectory-79c6bf821ff34f819764b51fccba4e6a.jsonl",
+        "sha256": "d4890d4b33e034f4c4be866f42a27c9681df72269bdcdb9d6607c526482c54a3",
+        "chains": []
+      },
+      {
+        "file": "trajectory-7a8c16e191d54dfca71973023aa28649.jsonl",
+        "sha256": "3e70649b36c2d18b2bfc1e19cc4aa0f28abca9766db3afee031035ce9221a7c1",
+        "chains": []
+      },
+      {
+        "file": "trajectory-7be21b57c852460b87b9129223897166.jsonl",
+        "sha256": "e83ed489fa2490aa4e128221bab6feb7fb85de66b74f481eb60401f158052728",
+        "chains": []
+      },
+      {
+        "file": "trajectory-7c7674e093e041f2bfad6ed0846872f4.jsonl",
+        "sha256": "ae652a83dee3f2640e9ce1ee90332ebc0f016efcb7f50e08c2b1d898b246a445",
+        "chains": []
+      },
+      {
+        "file": "trajectory-7d11ef5f5cc54aa5bb5e7e48e2672863.jsonl",
+        "sha256": "e29d07efa716c5a7655962c0d13688095df689216e24ee0eee6775acd277ac7c",
+        "chains": []
+      },
+      {
+        "file": "trajectory-80b2fcd2140a47d0b500e9c4fb369c1e.jsonl",
+        "sha256": "f97f89e3de7ad5314e134ff04b7173bcef89258f1eda988ab3a81a3433601b45",
+        "chains": []
+      },
+      {
+        "file": "trajectory-839b09090a0a4887a4670d7c71ede9b1.jsonl",
+        "sha256": "d41b8b193da4ae4383ba1eaf95a8337383400505e9c48796d0d4155145cac720",
+        "chains": []
+      },
+      {
+        "file": "trajectory-8786b6751ed14da19aff2b404f0bcc23.jsonl",
+        "sha256": "c4473dafe2f0109f1400aa9a6d9af58e410de614853af32270637a2e7bba6341",
+        "chains": []
+      },
+      {
+        "file": "trajectory-8840bbc5a5c9444787377200b80fd80a.jsonl",
+        "sha256": "619f9c31a1fc66326f777a2bbc4f9de48a0d90f5ecfa3b03e107c66b16506d1e",
+        "chains": []
+      },
+      {
+        "file": "trajectory-8df2996c47e74db89bae398d29ac5734.jsonl",
+        "sha256": "4871f0a888499a5049320c4e850c66c79a949ba7d417cad8471b72258959fa22",
+        "chains": []
+      },
+      {
+        "file": "trajectory-94600a2dcb8d47f48b712695e09ede29.jsonl",
+        "sha256": "a4a28d9de1bca06114b5aeba67d2121674f1ca266a72304b43c8135cb43eff98",
+        "chains": []
+      },
+      {
+        "file": "trajectory-958e085730564db6980cd4e5bcf08b5f.jsonl",
+        "sha256": "7ae8605bbd51b7ff389e4d70d75047fd86fe85e05f28cc70af2ec3ee964e6f80",
+        "chains": []
+      },
+      {
+        "file": "trajectory-9838037dcc4547ceb973e8b6cc4cb359.jsonl",
+        "sha256": "428afa29d247ca05ad12c4bbee05a1396aa1678cf681ee1602079df7b1c7e8c9",
+        "chains": []
+      },
+      {
+        "file": "trajectory-99aed40a1b314a5da3f4f159c9e5c2f4.jsonl",
+        "sha256": "cac476e00e54ccf626decfb7c00ba60acfb1f3005d6468a027f0cd3d53e09087",
+        "chains": []
+      },
+      {
+        "file": "trajectory-a010b1904d7f4dec93e3e7aa5500ce22.jsonl",
+        "sha256": "5f9921edde1a6fb727d29dfcd9f5b5c2028dcc427fb5dffee456153de1614cb7",
+        "chains": []
+      },
+      {
+        "file": "trajectory-a8824b605f52497a9e845dd9a8579429.jsonl",
+        "sha256": "a6b9147283cc087f4f03235bf1d763f229700cafafef771d373e6d2d13c1eb8c",
+        "chains": []
+      },
+      {
+        "file": "trajectory-b150222e2d914aeea8c2a160172c8495.jsonl",
+        "sha256": "d5b8832eb0bf6820590ab5c118d891e4eee878fb1c4ad89304c612121c4fe00b",
+        "chains": []
+      },
+      {
+        "file": "trajectory-bb4ab9739f6b44d4af8cb31c13272edd.jsonl",
+        "sha256": "34e0a4235d4d42d7cfb2daf928a5fd3314fe7b38d1df951d881c4b6153db93fc",
+        "chains": []
+      },
+      {
+        "file": "trajectory-bba4335a322d4f23aa35a0ea23ff1d26.jsonl",
+        "sha256": "93d3b4cf48e3717b862cf24a771e6d2c22948c06bdf6539ba387d92bbae80607",
+        "chains": []
+      },
+      {
+        "file": "trajectory-bea2c854f0684141b90e6c0d0af4bc9a.jsonl",
+        "sha256": "e6a2f91674096738fce80bd23c81077c1c990ca0960ff51726465d7072676815",
+        "chains": []
+      },
+      {
+        "file": "trajectory-c22688216b7a42c09702db980aa5a17b.jsonl",
+        "sha256": "895a0e211ce24074cb68d6669e9f70be5358b4562abc3dd3cbc37a1844a94acd",
+        "chains": []
+      },
+      {
+        "file": "trajectory-c7b0c9945e24455d97b6a6456d168099.jsonl",
+        "sha256": "51df2a1df5a6062fcb3a8d0a41556f2579120f258ad79cafb342d83dc18fd0d2",
+        "chains": []
+      },
+      {
+        "file": "trajectory-ca3c0cfb4f45475291b1034835675f86.jsonl",
+        "sha256": "4d1084f808bc7e50935440b0241aaa7bbe89bfcce62d68891dad3a66cdcf7e5b",
+        "chains": []
+      },
+      {
+        "file": "trajectory-cbc01dc7f9934a47973cc94d0e9c9e76.jsonl",
+        "sha256": "abc1b10fc8e0e05232a4c759ae626dedb6c5985afdcd6e825113e21bc03e88e5",
+        "chains": []
+      },
+      {
+        "file": "trajectory-cd08f36ec3154e33a4366b47e7040507.jsonl",
+        "sha256": "c9124d07edef6336ba5fd399d16e2cae26af02a55cf6f125bbf7d28bdcca7e22",
+        "chains": []
+      },
+      {
+        "file": "trajectory-d6b4756815db4aa1bcd4abbcb3c49d9d.jsonl",
+        "sha256": "671e08d3fe934785581924e40ede6be9751c0c85e3b94ca30bcb75436c1fae7b",
+        "chains": []
+      },
+      {
+        "file": "trajectory-e3036759720e4d90b1b74473f69db696.jsonl",
+        "sha256": "7c66efb641fc83d046cc5821c72ab0f4a2abd9a2057146b368dcb67236347e1b",
+        "chains": []
+      },
+      {
+        "file": "trajectory-e69f2fc104fc42338278e59834a055bd.jsonl",
+        "sha256": "d0182f93f70733797775d2c13e78979fcad9e76ec61b400d923ff6577abf365e",
+        "chains": []
+      },
+      {
+        "file": "trajectory-e746aed0dfff4a8490defd757fc151ab.jsonl",
+        "sha256": "eb6a0267abc610e5c990075e5758ad07d4fbf3b9202313d1f84f01e3b4600813",
+        "chains": []
+      },
+      {
+        "file": "trajectory-e8648ad76b8244c09c3f8a9a656d68b3.jsonl",
+        "sha256": "70ca80d3b40f7d9e3c52b4ad103fba8b7cefef2ad2eda695fc801e8554a4fe72",
+        "chains": []
+      },
+      {
+        "file": "trajectory-ec11f54f387449fdbf5aa2775f588af2.jsonl",
+        "sha256": "7ea1d2d87bb7c93d8006b0a15b8e63a896981b5a0c7cf3fabd153f02966585d4",
+        "chains": []
+      },
+      {
+        "file": "trajectory-f1fdfb4061e641a98f57a64186333373.jsonl",
+        "sha256": "567785ec446538879581325ed5dcf70112bb73445da9130a3da6bc2f6ace1644",
+        "chains": []
+      },
+      {
+        "file": "trajectory-f7a544c692264dc3bfc6a470701ffa4b.jsonl",
+        "sha256": "6c9afcae5ae8a01b36990bed1f14f636cd751fde4355a9de53cd864322519434",
+        "chains": []
+      },
+      {
+        "file": "trajectory-f9ddf333f53b4155984eb891981ed8f1.jsonl",
+        "sha256": "db293015180ba5f6ae596f78301bfcea45954651fbaeabd0d0f8e0ea796a7b71",
+        "chains": []
+      },
+      {
+        "file": "trajectory-fe2be6b738b441688628a3917dabdba0.jsonl",
+        "sha256": "92f4513e2f902b5e10daa376a6777fccd15c72f67c1dd25b320a823bcd0cff86",
+        "chains": []
+      }
+    ],
+    "gaps": [
+      "No valid model \u2192 task tool \u2192 model observation \u2192 delivered terminal reward chain observed"
+    ],
+    "task_correctness_required": false
+  },
+  "native_checkpoint_manifests": [],
+  "hosted_wandb": {
+    "attempt": 3,
+    "algorithm": "ppo-mc-matched-v2",
+    "stage": "baseline",
+    "id": "09016b45b7ae5947249a112c",
+    "queried_at": "2026-11-22T04:07:01.152632+00:00",
+    "project_enumeration_complete": true,
+    "present": true,
+    "url": "https://wandb.ai/amulyap-stanford-university/reader-owned-reference/runs/09016b45b7ae5947249a112c",
+    "state": "finished",
+    "name": "reader-asset-20261121-r03-a03-ppo-mc-matched-v2-baseline",
+    "configuration_matches": true,
+    "expected_configuration_sha256": "c4f3c31ef8f368463c520b6185ea6c40c5157a2bb6610f2eddebd670abde1529",
+    "actual_configuration_sha256": "c4f3c31ef8f368463c520b6185ea6c40c5157a2bb6610f2eddebd670abde1529",
+    "matched_study_config": {
+      "algorithm": "ppo-mc-matched-v2",
+      "assets": "0db61be73574c01b06d94fbb334d7866419826e55865cab757984dbc130d8a1e",
+      "evaluation": "asset-status-v1-64",
+      "model": {
+        "id": "meta-llama/Llama-3.2-3B-Instruct",
+        "parser": "llama3_json",
+        "profile": "llama3b",
+        "revision": "0cb88a4f764b7a12671c53f0838cd831a0843b95"
+      },
+      "profile": "36760674d8177b23b518b997a4463a1f946ad8a411eb8e5b835e7b1c0b9ab049",
+      "protocol": "matched-rollout-mean-v2",
+      "resources": {
+        "cpu": 16,
+        "gpu": "H100!",
+        "memory_mib": 196608
+      },
+      "schema": "reader-task-v2",
+      "seed_streams": {
+        "actor_optimizer": 1751928485,
+        "actor_sampling": 737109812,
+        "critic_init": 1864040309,
+        "numpy": 513160406,
+        "paired_question_order": 1028282608,
+        "python": 139295096,
+        "row_batching": 2080451036,
+        "torch_cpu": 204395415,
+        "torch_cuda": 180497808
+      },
+      "source": "29484e6a1ae207b91337a75976700e84a78865a01f9f0de43aa18584726d3ac2",
+      "stage": "baseline",
+      "steps": 2,
+      "task": {
+        "agent_class": "asset_agent.Agent",
+        "cwd": "examples/calc_x",
+        "data_mapping": {
+          "AGL_CASE_ID": "input.case_id",
+          "AGL_DATA_SPLIT": "input.split",
+          "EVAL_SPLIT": "input.split",
+          "QUESTION": "input.question",
+          "RESULT": "input.result"
+        },
+        "entrypoint_lock_sha256": "9d211065a5dd984d5fdfc43c63cab6c38e86ff36a2f4cac9ff0b9ab63302665a",
+        "environment": {
+          "ordered_cases_sha256": {
+            "eval_main.jsonl": "493299d2b0fe8db770d5047f65893d67c0fc4c8f6e6c9825305f7b4c6e68464c",
+            "eval_main.parquet": "493299d2b0fe8db770d5047f65893d67c0fc4c8f6e6c9825305f7b4c6e68464c",
+            "eval_smoke.jsonl": "918071a326a383d42db8ddc48919a4e5e48a6ec4b9d8cee0bb4471d06ac1ce30",
+            "eval_smoke.parquet": "918071a326a383d42db8ddc48919a4e5e48a6ec4b9d8cee0bb4471d06ac1ce30",
+            "train_main.parquet": "59af0d2b9decfc87637b787d28f37de83c40fd801ffac5edda028b26fc02cd0e",
+            "train_smoke.parquet": "1585496ecf3d2bba3e1e6069959c657a2f771f912eddb2d640f44733fe4ba1a1"
+          },
+          "output": {
+            "backup_health": [
+              "healthy",
+              "stale",
+              "failed"
+            ],
+            "fields": [
+              "asset_id",
+              "service_state",
+              "backup_health"
+            ],
+            "parser": "whole-response-json-unique-keys-no-extra-fields-v1",
+            "service_state": [
+              "operational",
+              "degraded",
+              "offline"
+            ]
+          },
+          "prompt": "Use lookup_asset to look up the requested asset. Return exactly one JSON object with only asset_id, service_state, backup_health, all strings. No markdown or other text. service_state must be operational, degraded, or offline; backup_health must be healthy, stale, or failed.",
+          "recipe": "asset-status-v1/2026-11-20/329",
+          "registry_sha256": "241b5672d43b7dff7db7d203f2805d91e0a541e7a20e18d4edb608419e670e44",
+          "reward": "independent exact terminal correctness, binary; incomplete has no reward",
+          "task": "asset-status-v1",
+          "tool": {
+            "input_schema": {
+              "additionalProperties": false,
+              "properties": {
+                "asset_id": {
+                  "pattern": "^asset-[0-9]{3}$",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "asset_id"
+              ],
+              "type": "object"
+            },
+            "name": "lookup_asset"
+          }
+        },
+        "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+        "integration_rule": "reader-integration-v2; live chain required in all three stages per algorithm",
+        "label_fields": [
+          "result"
+        ],
+        "launcher_sha256": "752cca22341639228b20e69de32b7a8062e59f47ad9d1fcd22b8e177798ddf97",
+        "local_probe": "asset_probe.check",
+        "mcp": {
+          "args": [
+            "-I",
+            "asset_stdio.py"
+          ],
+          "command": "training-python",
+          "environment": {
+            "PYTHONDONTWRITEBYTECODE": "1",
+            "PYTHONUNBUFFERED": "1"
+          },
+          "ownership_receipt": "optional absolute directory argument; never a model input"
+        },
+        "name": "asset-status-v1",
+        "source_sha256": {
+          "asset_agent.py": "b3dbcef2a8b7afa528c45c7f770aaa18123396a295a6d19dceebb1f0db75d2d5",
+          "asset_probe.py": "03219442750c8d5109e098bff5c9c4223cc168b47c5cd3a892365e905584af20",
+          "asset_server.py": "85c7ea8f778fcb8a6cea79eb30540ff5df3e8f48103a01f82bef41888a1b6566",
+          "asset_stdio.py": "33af32fcaca9d28a7abe9a742c64e889641687e7dd8a302b7ce250a9f086acf5",
+          "asset_task.py": "2577c07f6a4e47bcbc6998447a5a7d0d21a57d6af3c8682f0e531cf7570f2275",
+          "observed_runtime.py": "5e3dafca7d675a05fb33c1fedd428258ca5908aadf1854b7a1825520fa99c575",
+          "owned_processes.py": "6ca9cce7a93ab0ffd2bcad7a47fa5190c4328d705713e24425ed97e4d9ce34d3"
+        },
+        "visible_fields": [
+          "question"
+        ]
+      }
+    },
+    "history": [
+      {
+        "val/n_rollouts_w_reward": 0,
+        "_timestamp": 1795316625.9240074,
+        "val/n_rollouts": 64,
+        "val/n_rollouts_w_trace": 64,
+        "val/reward": 0,
+        "val/turn_count": 3,
+        "_step": 0,
+        "_runtime": 92.684491837,
+        "val/mean_response_length_per_turn": 81.68229166666666,
+        "val/mean_total_response_length_per_rollout": 245.046875
+      }
+    ],
+    "history_steps": [
+      0
+    ],
+    "local_metric_rows": 1,
+    "local_history_steps": [
+      0
+    ],
+    "metric_comparisons": [
+      {
+        "step": 0,
+        "metric": "val/reward",
+        "matches": true,
+        "local": 0.0,
+        "hosted": 0
+      },
+      {
+        "step": 0,
+        "metric": "val/n_rollouts",
+        "matches": true,
+        "local": 64,
+        "hosted": 64
+      },
+      {
+        "step": 0,
+        "metric": "val/n_rollouts_w_trace",
+        "matches": true,
+        "local": 64,
+        "hosted": 64
+      },
+      {
+        "step": 0,
+        "metric": "val/n_rollouts_w_reward",
+        "matches": true,
+        "local": 0,
+        "hosted": 0
+      },
+      {
+        "step": 0,
+        "metric": "val/mean_response_length_per_turn",
+        "matches": true,
+        "local": 81.68229166666666,
+        "hosted": 81.68229166666666
+      },
+      {
+        "step": 0,
+        "metric": "val/mean_total_response_length_per_rollout",
+        "matches": true,
+        "local": 245.046875,
+        "hosted": 245.046875
+      },
+      {
+        "step": 0,
+        "metric": "val/turn_count",
+        "matches": true,
+        "local": 3.0,
+        "hosted": 3
+      }
+    ],
+    "all_local_numeric_metrics_match": true,
+    "history_steps_match": true,
+    "metric_comparison_status": "matched"
+  },
+  "hosted_presence": {
+    "algorithm": "ppo-mc-matched-v2",
+    "stage": "baseline",
+    "id": "09016b45b7ae5947249a112c",
+    "present": true,
+    "state": "finished"
+  },
+  "hosted_reconciliation": {
+    "attempt": 3,
+    "algorithm": "ppo-mc-matched-v2",
+    "stage": "baseline",
+    "id": "09016b45b7ae5947249a112c",
+    "present": true,
+    "state": "finished",
+    "configuration_matches": true,
+    "history_steps": [
+      0
+    ],
+    "local_history_steps": [
+      0
+    ],
+    "all_local_numeric_metrics_match": true,
+    "history_steps_match": true,
+    "metric_comparison_status": "matched",
+    "url": "https://wandb.ai/amulyap-stanford-university/reader-owned-reference/runs/09016b45b7ae5947249a112c",
+    "reconciliation_status": "configuration_steps_and_numeric_metrics_match"
+  }
+}

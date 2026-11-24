@@ -10,7 +10,7 @@ BUNDLE = Path('/opt/agent-lightning-lab/experiment')
 CUDA_IMAGE = "nvidia/cuda:13.0.0-devel-ubuntu24.04@sha256:1e8ac7a54c184a1af8ef2167f28fa98281892a835c981ebcddb1fad04bdd452d"
 RUNTIME_FILES = (
     "ppo_contract.py", "ppo_math.py", "ppo_runtime.py", "ppo_source_lock.json",
-    "check_gpu.py", "launch.py", "export_artifact.py", "observed_calc_agent.py", "prepare_model.py",
+    "check_gpu.py", "launch.py", "export_artifact.py", "observed_calc_agent.py", "observed_runtime.py", "prepare_model.py",
     "prepare_data.py", "summarize.py", "requirements-agent.txt", "LICENSE-AgentLightning.txt",
     "templates/tool_chat_template_llama3.1_json.jinja", "templates/PROVENANCE.json",
     "templates/LICENSE-vllm.txt",
@@ -48,9 +48,16 @@ def matched_image(reader=False):
         image = image.run_commands(
             "uv pip install --python /opt/agent-lightning/.venv/bin/python --no-deps --no-build "
             + shlex.quote(wheel["url"]+"#sha256="+wheel["digests"]["sha256"]))
-    for path in sorted((LOCAL/"experiment").rglob("*")):
-        if (path.is_file() and path.suffix in (".py", ".json", ".jinja", ".txt")
-                and "__pycache__" not in path.parts
-                and str(path.relative_to(LOCAL/"experiment")) not in RUNTIME_FILES):
-            image = image.add_local_file(path, str(BUNDLE/path.relative_to(LOCAL/"experiment")), copy=True)
+    if reader:
+        from experiment.reader_source import inventory
+        for relative in inventory(LOCAL):
+            if relative.startswith('experiment/') and relative.removeprefix('experiment/') not in RUNTIME_FILES:
+                image = image.add_local_file(LOCAL/relative, str(BUNDLE.parent/relative), copy=True)
+        image = image.env({'PYTHONDONTWRITEBYTECODE': '1'})
+    else:
+        for path in sorted((LOCAL/"experiment").rglob("*")):
+            if (path.is_file() and path.suffix in (".py", ".json", ".jinja", ".txt")
+                    and "__pycache__" not in path.parts
+                    and str(path.relative_to(LOCAL/"experiment")) not in RUNTIME_FILES):
+                image = image.add_local_file(path, str(BUNDLE/path.relative_to(LOCAL/"experiment")), copy=True)
     return image

@@ -1,0 +1,43 @@
+{
+  "attempt": 5,
+  "planned_source_commit": "484e51d9182c3fa56849661270fcd3e8c58f08ca",
+  "preparation_plan_sha256": "522a9dff6dfdfb0e6f9b115b1d03a48a0d205fff958ecce914fbd91e59684b23",
+  "submission_receipt": {
+    "status": "unknown",
+    "action": "prepare",
+    "plan_sha256": "522a9dff6dfdfb0e6f9b115b1d03a48a0d205fff958ecce914fbd91e59684b23",
+    "call_id": null,
+    "time": 1795329895.7097833,
+    "automatic_retry": false
+  },
+  "findings": {
+    "app_id": "ap-ZK29JoQTxVpICBAg7T86Yl",
+    "app_functions": 0,
+    "app_tasks": 0,
+    "app_running": false,
+    "registry_rows": [
+      "asset-allocation",
+      "submission:prepare (status unknown, no call ID)"
+    ],
+    "entered_or_result_row": false,
+    "volume_files": 0,
+    "observed_completed_hour_usd": 0.00105,
+    "hours_after_submission_at_reconciliation": 43.4,
+    "preparation_limit_seconds": 3600
+  },
+  "resolution": {
+    "stop_marker": "stop:reader:522a9dff6dfdfb0e6f9b115b1d03a48a0d205fff958ecce914fbd91e59684b23",
+    "stop_owned_result": {
+      "status": "cancellation_requested",
+      "owned_calls": [],
+      "errors": [],
+      "unknown_submissions": "Reservation retained; no call ID is not proof of no work"
+    },
+    "retried": false,
+    "hosted_wandb_identities_present": false,
+    "reservation_usd": {
+      "original": 175,
+      "held": 1
+    }
+  }
+}

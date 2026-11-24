@@ -97,7 +97,10 @@ class IntegrationTests(unittest.TestCase):
             'wandb_run_id': stage['wandb']['id'], 'case_id': 'synthetic-case', 'phase': stage['name'],
             'policy_version': 'matched-rollout-mean-v2', 'model_profile': 'llama3b', 'eval_split': 'final',
             'rollout_id': 'synthetic-rollout', 'attempt_id': 'synthetic-attempt',
-            'route_mode': 'train' if stage['name'] == 'training' else 'val', 'synthetic_fixture': False,
+            'route_mode': 'train' if stage['name'] == 'training' else 'val', 'synthetic_fixture': True, 'evidence_class': 'simulated-trace',
+            'task_id': 'calculator-v1', 'task_sha256': c.digest(p['task_identity']),
+            'environment_sha256': c.digest(p['data_manifest']), 'source_sha256': c.digest(p['source']),
+            'configuration_sha256': p['configuration_sha256'],
             'execution_status': 'ok', 'exception': None, 'parent_span_id': 'episode'}
         def record(kind, span, start, end, inputs, outputs):
             return {**common, 'kind': kind, 'name': 'calculate' if kind == 'tool' else kind, 'span_id': span,
@@ -108,8 +111,8 @@ class IntegrationTests(unittest.TestCase):
             record('tool', 'tool', 3, 4, {'tool_call_id': 'call-1', 'arguments': {'expression': '2+3'}},
                 {'name': 'calculate', 'is_error': False, 'result': [{'type': 'TextResultContent', 'content': '5'}]}),
             record('llm', 'continuation', 5, 6, {'messages': [{'type': 'FunctionExecutionResultMessage',
-                'content': [{'call_id': 'call-1', 'name': 'calculate', 'content': '5', 'is_error': False}]}]}, {'content': 'answer'}),
-            record('episode', 'episode', 0, 7, {}, {'reward_posted': True, 'reward': 0.0})]
+                'content': [{'call_id': 'call-1', 'name': 'calculate', 'content': '5', 'is_error': False}]}]}, {'content': 'answer', 'finish_reason': 'stop'}),
+            record('episode', 'episode', 0, 7, {}, {'reward_posted': True, 'reward': 0.0, 'raw_answer': 'answer'})]
         records[-1]['parent_span_id'] = None
         return request, records
 
@@ -117,11 +120,11 @@ class IntegrationTests(unittest.TestCase):
         for algorithm in (0, 1):
             for stage in (0, 1, 2):
                 request, records = self.fixture(algorithm, stage)
-                result = integration.chains(records, request)
+                result = integration.chains(records, request, evidence_class="simulated-trace")
                 self.assertEqual(len(result), 1)
                 self.assertEqual(result[0]['terminal_reward'], 0.0)
                 # JSONL is written on span completion, not a required input ordering.
-                self.assertEqual(integration.chains(list(reversed(records)), request), result)
+                self.assertEqual(integration.chains(list(reversed(records)), request, evidence_class="simulated-trace"), result)
 
     def test_missing_continuation_observation_tool_success_or_reward_is_unqualified(self):
         edits = [lambda r: r.pop(2), lambda r: r[2]['inputs'].update(messages=[]),
@@ -134,19 +137,19 @@ class IntegrationTests(unittest.TestCase):
             lambda r: r.append(copy.deepcopy(r[1]) | {'span_id': 'duplicate-call'})]
         for edit in edits:
             request, records = self.fixture(); edit(records)
-            self.assertEqual(integration.chains(records, request), [])
+            self.assertEqual(integration.chains(records, request, evidence_class="simulated-trace"), [])
 
     def test_wrong_stage_synthetic_and_duplicate_trace_rejected(self):
-        for edit in (lambda r: r[1].update(attempt_id='other'), lambda r: r[0].update(synthetic_fixture=True),
+        for edit in (lambda r: r[1].update(attempt_id='other'), lambda r: r[0].update(synthetic_fixture=False),
                      lambda r: r[1].update(span_id='request'), lambda r: r[1].update(parent_span_id='other')):
             request, records = self.fixture(); edit(records)
-            with self.assertRaises(ValueError): integration.chains(records, request)
+            with self.assertRaises(ValueError): integration.chains(records, request, evidence_class="simulated-trace")
         request, records = self.fixture()
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp); (root/'traces').mkdir()
             path = root/'traces/trajectory-synthetic-trace.jsonl'
             path.write_text(''.join(json.dumps(r)+'\n' for r in records))
-            self.assertTrue(integration.report(root, request)['qualified'])
+            self.assertFalse(integration.report(root, request)['qualified'])  # simulated traces never qualify live work
             records[2]['inputs']['messages'] = []
             path.write_text(''.join(json.dumps(r)+'\n' for r in records))
             result = integration.report(root, request)

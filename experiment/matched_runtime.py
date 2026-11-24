@@ -206,7 +206,11 @@ def policy_loss(config, model_output, data, dp_group=None):
     return loss, metrics
 
 
-def instrument_adapter(module):
+class CollectionOnlyComplete(Exception):
+    """Stop after admitted real training collection, before advantage/optimizer work."""
+
+
+def instrument_adapter(module, *, collection_only=False):
     # Reuse the original fragment/context mapper, not the legacy selection wrapper.
     audit._instrument_adapter(module)
     original = module.RolloutAdapter.get_train_data_batch
@@ -237,6 +241,16 @@ def instrument_adapter(module):
             groups[r.data_id].add(r.rollout_id)
         if any(len(g) != 4 for g in groups.values()):
             raise ValueError('Incomplete group; collection rejected')
+        if collection_only:
+            if len(completed_rollouts) != 32 or len(groups) != 8:
+                raise ValueError('Development collection must contain eight full groups')
+            rewards = defaultdict(list)
+            for r in completed_rollouts:
+                rewards[r.data_id].append(r.final_reward)
+            audit.emit('development_collection_admitted', iteration=global_steps,
+                       real_rollouts=32, groups=8, generated_tokens=sum(actual_tokens.values()),
+                       fragment_rows=len(out), constant_groups=sum(len(set(v)) == 1 for v in rewards.values()))
+            raise CollectionOnlyComplete()
         return out, metrics
     module.RolloutAdapter.get_train_data_batch = collect
 
@@ -271,7 +285,11 @@ def register_in_worker():
         for relative, expected in files.items():
             if hashlib.sha256((root/relative).read_bytes()).hexdigest() != expected:
                 raise ValueError(f'Unreviewed matched runtime source: {package}/{relative}')
-    request = json.loads(os.environ['AGL_MATCHED_REQUEST'])
+    try:
+        from .request_transport import load
+    except ImportError:
+        from request_transport import load
+    request = load()
     run = Path(os.environ['AGL_PPO_RUN_DIR'])
     streams = request['job']['seed_streams']
     seed_process(streams)
@@ -282,7 +300,8 @@ def register_in_worker():
     from verl.workers import engine_workers
     from verl.workers.utils import losses
     import wandb
-    instrument_adapter(rollout_adapter)
+    collection_only = request['plan'].get('phase') == 'collection-only'
+    instrument_adapter(rollout_adapter, collection_only=collection_only)
     trainer.compute_advantage = advantages
     trainer.normalize_advantages_by_rollout = normalize
     cls = trainer.AgentLightningRayPPOTrainer
@@ -311,7 +330,14 @@ def register_in_worker():
     original_fit = cls.fit
     def fit(self):
         try:
-            result = original_fit(self)
+            try:
+                result = original_fit(self)
+            except CollectionOnlyComplete:
+                if not collection_only:
+                    raise
+                audit.emit('trainer_returned', global_step=self.global_steps, validation_only=False,
+                           collection_only=True, optimizer_updates=0, resources=audit._resource_snapshot())
+                return
             audit.emit('trainer_returned', global_step=self.global_steps,
                        validation_only=bool(self.config.trainer.val_only), resources=audit._resource_snapshot())
             return result

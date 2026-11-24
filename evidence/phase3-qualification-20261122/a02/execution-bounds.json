@@ -1,0 +1,17 @@
+{
+  "bounds": {
+    "stage_seconds": 3600,
+    "startup_seconds": 600,
+    "supervisor_seconds": 22200,
+    "concurrency": 1,
+    "max_gpu_seconds": 21600,
+    "budget_usd": 125,
+    "all_resource_hourly_ceiling_usd": 10
+  },
+  "resources": {
+    "gpu": "H100!",
+    "cpu": 16,
+    "memory_mib": 196608
+  },
+  "automatic_retries": 0
+}

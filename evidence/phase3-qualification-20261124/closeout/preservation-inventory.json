@@ -1,0 +1,438 @@
+{
+  "at": "2026-11-24T05:28:15.625362+00:00",
+  "scope": "Phase 3 asset-task campaign, attempts a01-a07",
+  "nothing_deleted": true,
+  "no_checkpoint_tensor_downloaded": true,
+  "attempts": [
+    {
+      "attempt": 1,
+      "volume": {
+        "name": "reader-asset-20261121-a01-volume",
+        "id": "vo-KtIYfz0ZCf5RVNpWjB6LMB",
+        "bytes": 6437603580,
+        "gib": 5.995,
+        "monthly_storage_estimate_usd": 0.54,
+        "checkpoint_bytes": 0
+      },
+      "registry": {
+        "name": "reader-asset-20261121-a01-registry",
+        "id": "di-89aPaR7B9aNx1EDw4oOAlt"
+      },
+      "local_evidence": {
+        "collected_directory": ".local/phase3-live-20261121/failed-a01-evidence",
+        "attempt_directory": ".local/phase3-live-20261121",
+        "manifest": "evidence/phase3-qualification-20261122/a01/collected-file-manifest.json",
+        "manifest_files": 74,
+        "manifest_bytes": 2527969,
+        "rehashed_against_manifest": "all files present with equal SHA-256; no extra files",
+        "equal_size_originals_on_volume": 73,
+        "local_only": [
+          "collection.json"
+        ]
+      },
+      "volume_only_content": {
+        "temporary_caches": [
+          16,
+          383937
+        ],
+        "prepared_model_and_data": {
+          "phase3-staging/a01": [
+            1,
+            25039
+          ],
+          "phase3-assets/llama3b-a01": [
+            38,
+            6434758470
+          ],
+          "phase3-assets/asset-status-a01": [
+            8,
+            138409
+          ]
+        },
+        "checkpoint_tensors": null,
+        "small_run_files_pulled_into_private_supplement": {
+          "files": 9,
+          "bytes": 2766,
+          "manifest_sha256": "57f6f0d733a99c347cc06523701ecfe9def4e4a2b5c0b232ce663bbc278132d2"
+        }
+      },
+      "backup_status": "Collected evidence exists twice: the owned volume original and the hash-verified local copy. The local copy is on one workbench disk and has no second copy.",
+      "retirement": "Can be retired on approval: all evidence is held locally; the rest is a re-acquirable pinned model snapshot, regenerable synthetic data and disposable caches."
+    },
+    {
+      "attempt": 2,
+      "volume": {
+        "name": "reader-asset-20261121-a02-volume",
+        "id": "vo-KtzGn1oPG8LfXOztBi04Jr",
+        "bytes": 6444280823,
+        "gib": 6.002,
+        "monthly_storage_estimate_usd": 0.54,
+        "checkpoint_bytes": 0
+      },
+      "registry": {
+        "name": "reader-asset-20261121-a02-registry",
+        "id": "di-1IIFqOxyn9KjM9WBGLShAb"
+      },
+      "local_evidence": {
+        "collected_directory": ".local/phase3-live-20261121/a02/stopped-evidence",
+        "attempt_directory": ".local/phase3-live-20261121/a02",
+        "manifest": "evidence/phase3-qualification-20261122/a02/collected-file-manifest.json",
+        "manifest_files": 233,
+        "manifest_bytes": 3416284,
+        "rehashed_against_manifest": "all files present with equal SHA-256; no extra files",
+        "equal_size_originals_on_volume": 232,
+        "local_only": [
+          "collection.json"
+        ]
+      },
+      "volume_only_content": {
+        "temporary_caches": [
+          76,
+          6162897
+        ],
+        "prepared_model_and_data": {
+          "phase3-staging/a02": [
+            1,
+            25039
+          ],
+          "phase3-assets/llama3b-a02": [
+            38,
+            6434758471
+          ],
+          "phase3-assets/asset-status-a02": [
+            8,
+            138409
+          ]
+        },
+        "checkpoint_tensors": null,
+        "small_run_files_pulled_into_private_supplement": {
+          "files": 10,
+          "bytes": 3828,
+          "manifest_sha256": "702a849300a873fadaaa57768eb200bf035780395d36d0b4ef5f21783dde5f46"
+        }
+      },
+      "backup_status": "Collected evidence exists twice: the owned volume original and the hash-verified local copy. The local copy is on one workbench disk and has no second copy.",
+      "retirement": "Can be retired on approval: all evidence is held locally; the rest is a re-acquirable pinned model snapshot, regenerable synthetic data and disposable caches."
+    },
+    {
+      "attempt": 3,
+      "volume": {
+        "name": "reader-asset-20261121-a03-volume",
+        "id": "vo-WFtwoXPWkiS6yOwCoFfSz8",
+        "bytes": 6452127500,
+        "gib": 6.009,
+        "monthly_storage_estimate_usd": 0.54,
+        "checkpoint_bytes": 0
+      },
+      "registry": {
+        "name": "reader-asset-20261121-a03-registry",
+        "id": "di-D9PAc1yJElVDI86YsYounv"
+      },
+      "local_evidence": {
+        "collected_directory": ".local/phase3-live-20261121/a03/final-evidence",
+        "attempt_directory": ".local/phase3-live-20261121/a03",
+        "manifest": "evidence/phase3-qualification-20261122/a03/collected-file-manifest.json",
+        "manifest_files": 382,
+        "manifest_bytes": 5612556,
+        "rehashed_against_manifest": "all files present with equal SHA-256; no extra files",
+        "equal_size_originals_on_volume": 381,
+        "local_only": [
+          "collection.json"
+        ]
+      },
+      "volume_only_content": {
+        "temporary_caches": [
+          124,
+          11805383
+        ],
+        "prepared_model_and_data": {
+          "phase3-staging/a03": [
+            1,
+            25039
+          ],
+          "phase3-assets/llama3b-a03": [
+            38,
+            6434758469
+          ],
+          "phase3-assets/asset-status-a03": [
+            8,
+            138409
+          ]
+        },
+        "checkpoint_tensors": null,
+        "small_run_files_pulled_into_private_supplement": {
+          "files": 10,
+          "bytes": 3828,
+          "manifest_sha256": "702a849300a873fadaaa57768eb200bf035780395d36d0b4ef5f21783dde5f46"
+        }
+      },
+      "backup_status": "Collected evidence exists twice: the owned volume original and the hash-verified local copy. The local copy is on one workbench disk and has no second copy.",
+      "retirement": "Can be retired on approval: all evidence is held locally; the rest is a re-acquirable pinned model snapshot, regenerable synthetic data and disposable caches."
+    },
+    {
+      "attempt": 4,
+      "volume": {
+        "name": "reader-asset-20261121-a04-volume",
+        "id": "vo-1DponfTcYKI9q3oxLt3NIn",
+        "bytes": 6468612838,
+        "gib": 6.024,
+        "monthly_storage_estimate_usd": 0.54,
+        "checkpoint_bytes": 0
+      },
+      "registry": {
+        "name": "reader-asset-20261121-a04-registry",
+        "id": "di-FXBB2Msz3kJC0BBE2pcJjH"
+      },
+      "local_evidence": {
+        "collected_directory": ".local/phase3-live-20261121/a04/final-evidence",
+        "attempt_directory": ".local/phase3-live-20261121/a04",
+        "manifest": "evidence/phase3-qualification-20261122/a04/collected-file-manifest.json",
+        "manifest_files": 602,
+        "manifest_bytes": 9345130,
+        "rehashed_against_manifest": "all files present with equal SHA-256; no extra files",
+        "equal_size_originals_on_volume": 601,
+        "local_only": [
+          "collection.json"
+        ]
+      },
+      "volume_only_content": {
+        "temporary_caches": [
+          262,
+          24869714
+        ],
+        "prepared_model_and_data": {
+          "phase3-staging/a04": [
+            1,
+            25039
+          ],
+          "phase3-assets/llama3b-a04": [
+            38,
+            6434758472
+          ],
+          "phase3-assets/asset-status-a04": [
+            8,
+            138409
+          ]
+        },
+        "checkpoint_tensors": null,
+        "small_run_files_pulled_into_private_supplement": {
+          "files": 16,
+          "bytes": 6804,
+          "manifest_sha256": "f7918753bced3cdaa13fd76382060d945f3cd27b450a8c89b139240ee305fd80"
+        }
+      },
+      "backup_status": "Collected evidence exists twice: the owned volume original and the hash-verified local copy. The local copy is on one workbench disk and has no second copy.",
+      "retirement": "Can be retired on approval: all evidence is held locally; the rest is a re-acquirable pinned model snapshot, regenerable synthetic data and disposable caches."
+    },
+    {
+      "attempt": 5,
+      "volume": {
+        "name": "reader-asset-20261122-a05-volume",
+        "id": "vo-WqMMuCiJaLx8qWg8NiyqGj",
+        "bytes": 0,
+        "gib": 0.0,
+        "monthly_storage_estimate_usd": 0.0,
+        "checkpoint_bytes": 0
+      },
+      "registry": {
+        "name": "reader-asset-20261122-a05-registry",
+        "id": "di-J7VdQDODC8tA6idkQqcXPd"
+      },
+      "local_evidence": {
+        "directory": ".local/phase3-live-20261121/a05",
+        "contents": "planned preparation plan, unknown prepare receipt, client logs, stop-owned result",
+        "files": 8
+      },
+      "reviewed_public_record": "evidence/phase3-qualification-20261124/a05/reconciliation.json",
+      "provider_stop_marker": {
+        "key": "stop:reader:522a9dff6dfdfb0e6f9b115b1d03a48a0d205fff958ecce914fbd91e59684b23",
+        "present_at": "2026-11-24T05:26Z",
+        "plan_matches": true,
+        "caveat": "Modal Dict entries expire after seven days without a read or write. The lasting records are the local stop-owned receipt and the committed reconciliation."
+      },
+      "backup_status": "No remote data exists (empty volume). Record held locally and in Git.",
+      "retirement": "Volume is empty and can be retired. Keep the registry while the provider-side stop marker is wanted."
+    },
+    {
+      "attempt": 6,
+      "volume": {
+        "name": "reader-asset-20261122-a06-volume",
+        "id": "vo-IiG0se8E2kgzVyvte5pHAR",
+        "bytes": 6452406118,
+        "gib": 6.009,
+        "monthly_storage_estimate_usd": 0.54,
+        "checkpoint_bytes": 0
+      },
+      "registry": {
+        "name": "reader-asset-20261122-a06-registry",
+        "id": "di-RjN1uNKfQqWUfClecsdqvt"
+      },
+      "local_evidence": {
+        "collected_directory": ".local/phase3-live-20261121/a06/final-evidence",
+        "attempt_directory": ".local/phase3-live-20261121/a06",
+        "manifest": "evidence/phase3-qualification-20261124/a06/collected-file-manifest.json",
+        "manifest_files": 254,
+        "manifest_bytes": 4846314,
+        "rehashed_against_manifest": "all files present with equal SHA-256; no extra files",
+        "equal_size_originals_on_volume": 253,
+        "local_only": [
+          "collection.json"
+        ]
+      },
+      "volume_only_content": {
+        "temporary_caches": [
+          144,
+          13156531
+        ],
+        "prepared_model_and_data": {
+          "phase3-staging/a06": [
+            1,
+            25039
+          ],
+          "phase3-assets/llama3b-a06": [
+            38,
+            6434758470
+          ],
+          "phase3-assets/asset-status-a06": [
+            8,
+            138409
+          ]
+        },
+        "checkpoint_tensors": null,
+        "small_run_files_pulled_into_private_supplement": {
+          "files": 12,
+          "bytes": 8282,
+          "manifest_sha256": "f2c1cc4c60ffcbab2bbf08555fb3dd30e22e002135c73ead94a75e782c99c9ab"
+        }
+      },
+      "backup_status": "Collected evidence exists twice: the owned volume original and the hash-verified local copy. The local copy is on one workbench disk and has no second copy.",
+      "retirement": "Can be retired on approval: all evidence is held locally; the rest is a re-acquirable pinned model snapshot, regenerable synthetic data and disposable caches."
+    },
+    {
+      "attempt": 7,
+      "volume": {
+        "name": "reader-asset-20261122-a07-volume",
+        "id": "vo-aNf9E4heLEnwhGuv6pFxDD",
+        "bytes": 125357476117,
+        "gib": 116.748,
+        "monthly_storage_estimate_usd": 10.51,
+        "checkpoint_bytes": 118863248277
+      },
+      "registry": {
+        "name": "reader-asset-20261122-a07-registry",
+        "id": "di-USeZ0zqVQU8KVFAsNtSgAE"
+      },
+      "local_evidence": {
+        "collected_directory": ".local/phase3-live-20261121/a07/final-evidence",
+        "attempt_directory": ".local/phase3-live-20261121/a07",
+        "manifest": "evidence/phase3-qualification-20261124/a07/collected-file-manifest.json",
+        "manifest_files": 1098,
+        "manifest_bytes": 74288336,
+        "rehashed_against_manifest": "all files present with equal SHA-256; no extra files",
+        "equal_size_originals_on_volume": 1097,
+        "local_only": [
+          "collection.json"
+        ]
+      },
+      "volume_only_content": {
+        "temporary_caches": [
+          440,
+          38888328
+        ],
+        "prepared_model_and_data": {
+          "phase3-staging/a07": [
+            1,
+            25039
+          ],
+          "phase3-assets/llama3b-a07": [
+            38,
+            6434758468
+          ],
+          "phase3-assets/asset-status-a07": [
+            8,
+            138409
+          ]
+        },
+        "checkpoint_tensors": [
+          14,
+          118811608774
+        ],
+        "small_run_files_pulled_into_private_supplement": {
+          "files": 25,
+          "bytes": 25662,
+          "manifest_sha256": "50545a0fa07e1cbfc709f43726ba8f142efc70eb7b81fc2f43c07e993b4cad90"
+        }
+      },
+      "backup_status": "Collected evidence exists twice: the owned volume original and the hash-verified local copy. The local copy is on one workbench disk and has no second copy.",
+      "retirement": "Retain. Holds the only copy of both native step-two checkpoints."
+    }
+  ],
+  "checkpoints": [
+    {
+      "algorithm": "grpo-matched-v2",
+      "identity_sha256": "2e6cf21b255a0bc46f4629deed908c887c1349987115dae69cd35b065a45bdd7",
+      "step": 2,
+      "bytes": 40146400251,
+      "roles": {
+        "actor": {
+          "files": 9,
+          "bytes": 40146400251
+        }
+      },
+      "per_file_hashes": "evidence/phase3-qualification-20261124/a07/grpo-matched-v2/training.json -> native_checkpoint_manifests",
+      "remote_path": "reader-asset-20261122-a07-volume:/phase3-runs/reader-asset-20261122-r07/a07/grpo-matched-v2/training/checkpoints/global_step_2",
+      "verification": [
+        "hashed by the training worker at save",
+        "identity re-verified by the fresh evaluation worker before reload",
+        "all files present with manifest sizes in a read-only listing on 2026-11-24"
+      ],
+      "independent_backup": false
+    },
+    {
+      "algorithm": "ppo-mc-matched-v2",
+      "identity_sha256": "f8ad498fa245d84e66fd95cfb06fbdf57190a4aa60ff98de5904d3047f42ec3d",
+      "step": 2,
+      "bytes": 78716827965,
+      "roles": {
+        "actor": {
+          "files": 9,
+          "bytes": 40146400251
+        },
+        "critic": {
+          "files": 8,
+          "bytes": 38570427714
+        }
+      },
+      "per_file_hashes": "evidence/phase3-qualification-20261124/a07/ppo-mc-matched-v2/training.json -> native_checkpoint_manifests",
+      "remote_path": "reader-asset-20261122-a07-volume:/phase3-runs/reader-asset-20261122-r07/a07/ppo-mc-matched-v2/training/checkpoints/global_step_2",
+      "verification": [
+        "hashed by the training worker at save",
+        "identity re-verified by the fresh evaluation worker before reload",
+        "all files present with manifest sizes in a read-only listing on 2026-11-24"
+      ],
+      "independent_backup": false
+    }
+  ],
+  "private_campaign_directory": {
+    "path": ".local/phase3-live-20261121",
+    "git_ignored": true,
+    "files": 5977,
+    "bytes": 257889910,
+    "holds": "ledger and snapshots, plans, submission receipts, client logs, provider and hosted reconciliations, raw collected evidence, operator helpers",
+    "second_copy": false
+  },
+  "local_disk": {
+    "filesystem": "/workspace",
+    "size_gb": 1007,
+    "available_gb": 843,
+    "checkpoint_backup_requirement_gb": 118.86
+  },
+  "hosted_wandb": "eight continuation runs and seven earlier runs retained in the existing project; metrics only",
+  "retained_bytes": 157612506976,
+  "monthly_storage_estimate_usd": 13.21,
+  "seven_day_storage_estimate_usd": 3.08,
+  "review_deadlines": {
+    "a01-a04": "2026-11-29T01:54:46.522052+00:00",
+    "a05-a07": "2026-12-01T03:34:30+00:00"
+  }
+}

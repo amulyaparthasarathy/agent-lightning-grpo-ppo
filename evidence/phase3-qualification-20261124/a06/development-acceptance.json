@@ -1,0 +1,123 @@
+{
+  "schema": "asset-development-acceptance-v1",
+  "attempt": 6,
+  "source_commit": "7f1e13d7bacb477c9e5e95a16868a2b0f2484ee6",
+  "preparation_plan_sha256": "6bb254084913ded03abc12e3a7b9f2556aa883536921e03c65f8cfe7ad794e5d",
+  "stage_plan_sha256": "6c1e259e171e9eebfa32fb438dd80f5d685b04e91e51a9c7f8c419e255c94449",
+  "declared": {
+    "schema": "asset-collection-only-v1",
+    "questions": 8,
+    "rollouts_per_question": 4,
+    "case_ids": [
+      "asset-status-v1/train/asset-011",
+      "asset-status-v1/train/asset-041",
+      "asset-status-v1/train/asset-250",
+      "asset-status-v1/train/asset-271",
+      "asset-status-v1/train/asset-075",
+      "asset-status-v1/train/asset-246",
+      "asset-status-v1/train/asset-111",
+      "asset-status-v1/train/asset-039"
+    ],
+    "optimizer_updates": 0,
+    "collections_per_algorithm": 1,
+    "temperature": 1,
+    "qualification_evidence": false
+  },
+  "seed_streams": {
+    "grpo-matched-v2": {
+      "python": 143897530,
+      "numpy": 846298712,
+      "torch_cpu": 1376393873,
+      "torch_cuda": 2040295816,
+      "actor_sampling": 1217781245,
+      "actor_optimizer": 660317075,
+      "row_batching": 1823162246,
+      "critic_init": null,
+      "paired_question_order": 1028282608
+    },
+    "ppo-mc-matched-v2": {
+      "python": 139295096,
+      "numpy": 513160406,
+      "torch_cpu": 204395415,
+      "torch_cuda": 180497808,
+      "actor_sampling": 737109812,
+      "actor_optimizer": 1751928485,
+      "row_batching": 2080451036,
+      "critic_init": 1864040309,
+      "paired_question_order": 1028282608
+    }
+  },
+  "results": {
+    "grpo-matched-v2": {
+      "attempted": 32,
+      "complete": 32,
+      "rewards_confirmed": 32,
+      "reward_one": 32,
+      "format_compliant": 32,
+      "policy_errors": 0,
+      "recovered": 0,
+      "terminal_policy_failures": 0,
+      "incomplete": 0,
+      "generated_tokens": 2112,
+      "fragment_rows": 96,
+      "groups": 8,
+      "informative_groups": 0,
+      "constant_one_groups": 8,
+      "valid_live_chain_episodes": 32,
+      "optimizer_updates": {
+        "actor": 0,
+        "critic": 0
+      }
+    },
+    "ppo-mc-matched-v2": {
+      "attempted": 32,
+      "complete": 32,
+      "rewards_confirmed": 32,
+      "reward_one": 31,
+      "format_compliant": 32,
+      "policy_errors": 1,
+      "policy_error_codes": {
+        "unknown_tool": 1
+      },
+      "recovered": 0,
+      "terminal_policy_failures": 0,
+      "incomplete": 0,
+      "generated_tokens": 2112,
+      "fragment_rows": 96,
+      "groups": 8,
+      "informative_groups": 1,
+      "constant_one_groups": 7,
+      "valid_live_chain_episodes": 32,
+      "optimizer_updates": {
+        "actor": 0,
+        "critic": 0
+      }
+    }
+  },
+  "acceptance": {
+    "all_rollouts_accounted": true,
+    "policy_mistake_handled_as_intended": "one live unknown-tool action retained, classified, followed by a complete final response scored zero by the strict verifier; recovery-with-later-success and the two-error terminal limit were not sampled live and remain offline-verified only",
+    "no_missing_rewards_or_token_context_gaps": true,
+    "contract_correct_final_json_observed": true,
+    "accepted": true
+  },
+  "stage_calls": [
+    {
+      "id": "fc-01M85NKC9YZ5Z1QRGN64CRH7MD",
+      "stage": "training",
+      "job": "reader-asset-20261122-r06-a06-grpo-matched-v2",
+      "status": "completed",
+      "seconds": 410.3
+    },
+    {
+      "id": "fc-01M85NZXD7EVTND6B2Z68CY1WF",
+      "stage": "training",
+      "job": "reader-asset-20261122-r06-a06-ppo-mc-matched-v2",
+      "status": "completed",
+      "seconds": 386.1
+    }
+  ],
+  "supervisor_accounted_upper_bound_usd": 4.42958179447386,
+  "recorded_at": "2026-11-24T02:37:09.779809+00:00",
+  "not_qualification_evidence": true
+}

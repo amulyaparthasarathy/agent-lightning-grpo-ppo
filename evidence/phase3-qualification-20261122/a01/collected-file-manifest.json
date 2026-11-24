@@ -1,0 +1,301 @@
+{
+  "root": "retained local and owned Modal evidence",
+  "files": {
+    "collection.json": {
+      "bytes": 237457,
+      "sha256": "6e998b273578bb0837cd6d5660e3624fec0419c8cc4acc4505d648f4c8c81a1b"
+    },
+    "grpo-matched-v2/baseline/error.txt": {
+      "bytes": 149,
+      "sha256": "9a9ad79931b8f9bf1f41d9b96041635f69b490150777e0a0db3b375d0e9adca8"
+    },
+    "grpo-matched-v2/baseline/gpu-preflight.json": {
+      "bytes": 533,
+      "sha256": "393e351dd05e93f2b097223c62344212b3dda1f7040473ad646ffc9cea159bf9"
+    },
+    "grpo-matched-v2/baseline/gpu-preflight.log": {
+      "bytes": 533,
+      "sha256": "393e351dd05e93f2b097223c62344212b3dda1f7040473ad646ffc9cea159bf9"
+    },
+    "grpo-matched-v2/baseline/image-build/agent-lightning-commit.txt": {
+      "bytes": 41,
+      "sha256": "c36758de82625f7fe79ed2c2fad8d51b3657c0b2482350173455988187607542"
+    },
+    "grpo-matched-v2/baseline/image-build/base-agent-lightning-commit.txt": {
+      "bytes": 41,
+      "sha256": "c36758de82625f7fe79ed2c2fad8d51b3657c0b2482350173455988187607542"
+    },
+    "grpo-matched-v2/baseline/image-build/base-installed-packages.txt": {
+      "bytes": 5294,
+      "sha256": "cef94c2d0e9929f6f5d0646d26d0bf2d233ded8bfe573bda39c4e867f5e63496"
+    },
+    "grpo-matched-v2/baseline/image-build/base-uv-version.txt": {
+      "bytes": 38,
+      "sha256": "3caf74cc393152b69f0c92760994cc10f835fd4e26534f74550b532a7440b1a0"
+    },
+    "grpo-matched-v2/baseline/image-build/build-settings.txt": {
+      "bytes": 160,
+      "sha256": "a5bff2bd4d6018d462dacb24002bd8338281eaf42c2a45d574f3ebd1ceb52005"
+    },
+    "grpo-matched-v2/baseline/image-build/installed-packages.txt": {
+      "bytes": 5774,
+      "sha256": "f3d4f4329fe86d7a70ed142a20bb7539a76d3a1dc03d6178174941e940c09d52"
+    },
+    "grpo-matched-v2/baseline/image-build/pip-check-exit-code.txt": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    "grpo-matched-v2/baseline/image-build/pip-check.txt": {
+      "bytes": 596,
+      "sha256": "a5c7c988ddc45f83ab0fff44fce95cc7dcfead2d20a7648fac0f05eb3fd4a6d8"
+    },
+    "grpo-matched-v2/baseline/image-build/uv-version.txt": {
+      "bytes": 38,
+      "sha256": "3caf74cc393152b69f0c92760994cc10f835fd4e26534f74550b532a7440b1a0"
+    },
+    "grpo-matched-v2/baseline/launcher.log": {
+      "bytes": 16534,
+      "sha256": "f39429a691a5478e19bbbd1c2de7dd9f4d4a686a6f536158b6d005a06a7e892e"
+    },
+    "grpo-matched-v2/baseline/logs/controller.log": {
+      "bytes": 60924,
+      "sha256": "4afba9c7d3462806ce74435ea750d31f8241ab95ca45c0e49a2d259456105241"
+    },
+    "grpo-matched-v2/baseline/logs/gateway.log": {
+      "bytes": 42239,
+      "sha256": "8cf124c66dd0a04225163831b78b16859c03b914d3d7a6372ba36982820f92bf"
+    },
+    "grpo-matched-v2/baseline/logs/trainer.log": {
+      "bytes": 598931,
+      "sha256": "e949f92fafa0cdeca9acc1fa7d847b229bed8c64b044d3cd6c39d1f9fcc0be90"
+    },
+    "grpo-matched-v2/baseline/observability.json": {
+      "bytes": 5933,
+      "sha256": "d8b4fd699948d483544651b92d5667a903551a9166734b02830762465ecc42a7"
+    },
+    "grpo-matched-v2/baseline/receipt.json": {
+      "bytes": 446,
+      "sha256": "fe13f9a08bc1a775046c2eed83dda20bd4394990d5a7dda71dcf8cb0b3980d78"
+    },
+    "grpo-matched-v2/baseline/request.json": {
+      "bytes": 169601,
+      "sha256": "e68c98dd8b98e61d1f759d1eb6af30dfadb5c2a97dd2e3429a80ef92658fa078"
+    },
+    "grpo-matched-v2/baseline/resolved_config.json": {
+      "bytes": 169023,
+      "sha256": "38ff58f5d4265217c3306671d1ca7e379bcf3045b6012b67c045ee10f2fb9cd4"
+    },
+    "grpo-matched-v2/baseline/resource-preflight.json": {
+      "bytes": 149,
+      "sha256": "c8999a560a55a700e779fb98a15e6bea5962a703f5b24ecd85024b16162239f0"
+    },
+    "grpo-matched-v2/baseline/result.json": {
+      "bytes": 559,
+      "sha256": "c8eee5ae8c4e86f3fe1958612099397eee923b32354b5f6bce9717e8e46366fb"
+    },
+    "grpo-matched-v2/baseline/run_plan.json": {
+      "bytes": 333581,
+      "sha256": "92aa28fb9a7d33c3938eb7f4b480ad7122d1464603b940eb358abe307e489650"
+    },
+    "grpo-matched-v2/baseline/runtime-identity.json": {
+      "bytes": 209,
+      "sha256": "dcdb5a7896866685d187298a46face37b0598f78c204713dce5186eebc9de6ac"
+    },
+    "ppo-mc-matched-v2/baseline/gpu-preflight.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "ppo-mc-matched-v2/baseline/image-build/agent-lightning-commit.txt": {
+      "bytes": 41,
+      "sha256": "c36758de82625f7fe79ed2c2fad8d51b3657c0b2482350173455988187607542"
+    },
+    "ppo-mc-matched-v2/baseline/image-build/base-agent-lightning-commit.txt": {
+      "bytes": 41,
+      "sha256": "c36758de82625f7fe79ed2c2fad8d51b3657c0b2482350173455988187607542"
+    },
+    "ppo-mc-matched-v2/baseline/image-build/base-installed-packages.txt": {
+      "bytes": 5294,
+      "sha256": "cef94c2d0e9929f6f5d0646d26d0bf2d233ded8bfe573bda39c4e867f5e63496"
+    },
+    "ppo-mc-matched-v2/baseline/image-build/base-uv-version.txt": {
+      "bytes": 38,
+      "sha256": "3caf74cc393152b69f0c92760994cc10f835fd4e26534f74550b532a7440b1a0"
+    },
+    "ppo-mc-matched-v2/baseline/image-build/build-settings.txt": {
+      "bytes": 160,
+      "sha256": "a5bff2bd4d6018d462dacb24002bd8338281eaf42c2a45d574f3ebd1ceb52005"
+    },
+    "ppo-mc-matched-v2/baseline/image-build/installed-packages.txt": {
+      "bytes": 5774,
+      "sha256": "f3d4f4329fe86d7a70ed142a20bb7539a76d3a1dc03d6178174941e940c09d52"
+    },
+    "ppo-mc-matched-v2/baseline/image-build/pip-check-exit-code.txt": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    "ppo-mc-matched-v2/baseline/image-build/pip-check.txt": {
+      "bytes": 596,
+      "sha256": "a5c7c988ddc45f83ab0fff44fce95cc7dcfead2d20a7648fac0f05eb3fd4a6d8"
+    },
+    "ppo-mc-matched-v2/baseline/image-build/uv-version.txt": {
+      "bytes": 38,
+      "sha256": "3caf74cc393152b69f0c92760994cc10f835fd4e26534f74550b532a7440b1a0"
+    },
+    "ppo-mc-matched-v2/baseline/receipt.json": {
+      "bytes": 306,
+      "sha256": "473284048159880e18500836e3ecff3d47042bf990a20e9295d9d38149f5eb38"
+    },
+    "ppo-mc-matched-v2/baseline/request.json": {
+      "bytes": 169651,
+      "sha256": "669354a4a2cac9bf8cfebf71f351cabf342d11da57fb8a7d2afcd56ca135b777"
+    },
+    "ppo-mc-matched-v2/baseline/resource-preflight.json": {
+      "bytes": 149,
+      "sha256": "c8999a560a55a700e779fb98a15e6bea5962a703f5b24ecd85024b16162239f0"
+    },
+    "ppo-mc-matched-v2/baseline/runtime-identity.json": {
+      "bytes": 209,
+      "sha256": "0e80d718e9508e6545a0a4445da7843021b65a419e144097679e8af8865bf178"
+    },
+    "preflight/action.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "preflight/asset-preflight.json": {
+      "bytes": 1575,
+      "sha256": "9d8d88387a5abd20574bff63225543dfaca994001e985259cccb948c95159445"
+    },
+    "preflight/asset-preflight.json-mcp-2wvca7ko/bf39a7ea3ccb4169a202044777a98afd.json": {
+      "bytes": 103,
+      "sha256": "e7e55d2c682c2e13951447ff3f2759361d2b00bf482db41c99c71827c79736b1"
+    },
+    "preflight/dependencies.json": {
+      "bytes": 2140,
+      "sha256": "29a59c9a5811daab19c82d5f23a764d5688fafdd3f79877782e124f1565d0008"
+    },
+    "preflight/image-build/agent-lightning-commit.txt": {
+      "bytes": 41,
+      "sha256": "c36758de82625f7fe79ed2c2fad8d51b3657c0b2482350173455988187607542"
+    },
+    "preflight/image-build/base-agent-lightning-commit.txt": {
+      "bytes": 41,
+      "sha256": "c36758de82625f7fe79ed2c2fad8d51b3657c0b2482350173455988187607542"
+    },
+    "preflight/image-build/base-installed-packages.txt": {
+      "bytes": 5294,
+      "sha256": "cef94c2d0e9929f6f5d0646d26d0bf2d233ded8bfe573bda39c4e867f5e63496"
+    },
+    "preflight/image-build/base-uv-version.txt": {
+      "bytes": 38,
+      "sha256": "3caf74cc393152b69f0c92760994cc10f835fd4e26534f74550b532a7440b1a0"
+    },
+    "preflight/image-build/build-settings.txt": {
+      "bytes": 160,
+      "sha256": "a5bff2bd4d6018d462dacb24002bd8338281eaf42c2a45d574f3ebd1ceb52005"
+    },
+    "preflight/image-build/installed-packages.txt": {
+      "bytes": 5774,
+      "sha256": "f3d4f4329fe86d7a70ed142a20bb7539a76d3a1dc03d6178174941e940c09d52"
+    },
+    "preflight/image-build/pip-check-exit-code.txt": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    "preflight/image-build/pip-check.txt": {
+      "bytes": 596,
+      "sha256": "a5c7c988ddc45f83ab0fff44fce95cc7dcfead2d20a7648fac0f05eb3fd4a6d8"
+    },
+    "preflight/image-build/uv-version.txt": {
+      "bytes": 38,
+      "sha256": "3caf74cc393152b69f0c92760994cc10f835fd4e26534f74550b532a7440b1a0"
+    },
+    "preflight/plan.json": {
+      "bytes": 138108,
+      "sha256": "35859b36919731cdd82484f174cd22228267e9f1d69544ed160324b9b4ad40c6"
+    },
+    "preflight/preflight.json": {
+      "bytes": 8989,
+      "sha256": "db2be40a4161fb70a3805a16ef76249b4135a5055cc87645898864ef3af65d0d"
+    },
+    "preflight/receipt.json": {
+      "bytes": 9915,
+      "sha256": "d01eccf5a592e7912870232dd38284afd888b32a0826a986af8239769ed18b12"
+    },
+    "preflight/runtime-identity.json": {
+      "bytes": 209,
+      "sha256": "e117c32aab5f912f992c4c126ef016338606d740b26cee8e4fed82e874191a12"
+    },
+    "preflight/runtime-packages.json": {
+      "bytes": 43161,
+      "sha256": "0b39f82c314a53be5358c83314c5753254b515c1d5dd0eb31a4d64710155a1c5"
+    },
+    "prepare/action.log": {
+      "bytes": 1568,
+      "sha256": "d1033f6219c206e6d5429bc35e7f38b14aeb2fb827710a24bda8863fd9798a59"
+    },
+    "prepare/assets.json": {
+      "bytes": 25039,
+      "sha256": "ee29f0a2dfb492f32c50d6129ce32a955cf93487e34de8e9bac5ec7318d8ac43"
+    },
+    "prepare/image-build/agent-lightning-commit.txt": {
+      "bytes": 41,
+      "sha256": "c36758de82625f7fe79ed2c2fad8d51b3657c0b2482350173455988187607542"
+    },
+    "prepare/image-build/base-agent-lightning-commit.txt": {
+      "bytes": 41,
+      "sha256": "c36758de82625f7fe79ed2c2fad8d51b3657c0b2482350173455988187607542"
+    },
+    "prepare/image-build/base-installed-packages.txt": {
+      "bytes": 5294,
+      "sha256": "cef94c2d0e9929f6f5d0646d26d0bf2d233ded8bfe573bda39c4e867f5e63496"
+    },
+    "prepare/image-build/base-uv-version.txt": {
+      "bytes": 38,
+      "sha256": "3caf74cc393152b69f0c92760994cc10f835fd4e26534f74550b532a7440b1a0"
+    },
+    "prepare/image-build/build-settings.txt": {
+      "bytes": 160,
+      "sha256": "a5bff2bd4d6018d462dacb24002bd8338281eaf42c2a45d574f3ebd1ceb52005"
+    },
+    "prepare/image-build/installed-packages.txt": {
+      "bytes": 5774,
+      "sha256": "f3d4f4329fe86d7a70ed142a20bb7539a76d3a1dc03d6178174941e940c09d52"
+    },
+    "prepare/image-build/pip-check-exit-code.txt": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    "prepare/image-build/pip-check.txt": {
+      "bytes": 596,
+      "sha256": "a5c7c988ddc45f83ab0fff44fce95cc7dcfead2d20a7648fac0f05eb3fd4a6d8"
+    },
+    "prepare/image-build/uv-version.txt": {
+      "bytes": 38,
+      "sha256": "3caf74cc393152b69f0c92760994cc10f835fd4e26534f74550b532a7440b1a0"
+    },
+    "prepare/model.log": {
+      "bytes": 1410,
+      "sha256": "478e56803178cb45843a90eb2ca7f1fb4427539815095c38abcfc9b600104bf2"
+    },
+    "prepare/plan.json": {
+      "bytes": 89549,
+      "sha256": "abd7b996a6e6113ac4375ce76b891f217f62413d7af160d00d764bbf7c1793ec"
+    },
+    "prepare/receipt.json": {
+      "bytes": 26565,
+      "sha256": "085b8e3ddc3a0529845138ddabc5fafb21c90ec9fec218cd72a7f489e4a92a88"
+    },
+    "prepare/runtime-identity.json": {
+      "bytes": 209,
+      "sha256": "6fdc5f1d3ff9d6359ba6cf97fcbea93bade8beea3e702eff13eb07afdd9ab9a0"
+    },
+    "supervisor/index.json": {
+      "bytes": 186269,
+      "sha256": "b298a54126ac830c58f07bf6fb4578ba687775271b08dd703d8344f52e5fcb9d"
+    },
+    "supervisor/plan.json": {
+      "bytes": 138108,
+      "sha256": "35859b36919731cdd82484f174cd22228267e9f1d69544ed160324b9b4ad40c6"
+    }
+  }
+}

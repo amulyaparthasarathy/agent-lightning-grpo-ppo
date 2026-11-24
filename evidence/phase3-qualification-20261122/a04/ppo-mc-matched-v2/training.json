@@ -1,0 +1,1596 @@
+{
+  "attempt": 4,
+  "algorithm": "ppo-mc-matched-v2",
+  "stage": "training",
+  "source_commit": "07ddf1bad56c10c6b8b4d144293aec4f911df706",
+  "plan_sha256": "0947b53fdd507e12a1183a042a3f67f9701233b05052a1e01b6a3a04deae10ce",
+  "wandb": {
+    "entity": "amulyap-stanford-university",
+    "project": "reader-owned-reference",
+    "group": "reader-asset-20261121-r04-a04",
+    "id": "189912b5b07126a34fa6d3a5",
+    "name": "reader-asset-20261121-r04-a04-ppo-mc-matched-v2-training",
+    "job_type": "training",
+    "resume": "never",
+    "config": {
+      "schema": "reader-task-v2",
+      "source": "930ee2939f1264820711173745732afed20de72ee6370280eb8d013f115e52ba",
+      "profile": "9d4118320dc6d332fbccba3d3d073187b5ff591ce83eaf21e51ec0dedad4c9ff",
+      "assets": "defdff1ab27bc058a5520276712116f0fc6a37b2214edbf62a1e23901da5d1ad",
+      "algorithm": "ppo-mc-matched-v2",
+      "stage": "training",
+      "protocol": "matched-rollout-mean-v2",
+      "seed_streams": {
+        "python": 139295096,
+        "numpy": 513160406,
+        "torch_cpu": 204395415,
+        "torch_cuda": 180497808,
+        "actor_sampling": 737109812,
+        "actor_optimizer": 1751928485,
+        "row_batching": 2080451036,
+        "critic_init": 1864040309,
+        "paired_question_order": 1028282608
+      },
+      "resources": {
+        "gpu": "H100!",
+        "cpu": 16,
+        "memory_mib": 196608
+      },
+      "steps": 2,
+      "task": {
+        "name": "asset-status-v1",
+        "visible_fields": [
+          "question"
+        ],
+        "label_fields": [
+          "result"
+        ],
+        "data_mapping": {
+          "QUESTION": "input.question",
+          "RESULT": "input.result",
+          "AGL_CASE_ID": "input.case_id",
+          "AGL_DATA_SPLIT": "input.split",
+          "EVAL_SPLIT": "input.split"
+        },
+        "agent_class": "asset_agent.Agent",
+        "cwd": "examples/calc_x",
+        "mcp": {
+          "command": "training-python",
+          "args": [
+            "-I",
+            "asset_stdio.py"
+          ],
+          "environment": {
+            "PYTHONUNBUFFERED": "1",
+            "PYTHONDONTWRITEBYTECODE": "1"
+          },
+          "ownership_receipt": "optional absolute directory argument; never a model input"
+        },
+        "local_probe": "asset_probe.check",
+        "integration_rule": "reader-integration-v2; live chain required in all three stages per algorithm",
+        "environment": {
+          "task": "asset-status-v1",
+          "recipe": "asset-status-v1/2026-11-20/329",
+          "registry_sha256": "241b5672d43b7dff7db7d203f2805d91e0a541e7a20e18d4edb608419e670e44",
+          "ordered_cases_sha256": {
+            "train_main.parquet": "59af0d2b9decfc87637b787d28f37de83c40fd801ffac5edda028b26fc02cd0e",
+            "eval_main.parquet": "493299d2b0fe8db770d5047f65893d67c0fc4c8f6e6c9825305f7b4c6e68464c",
+            "eval_main.jsonl": "493299d2b0fe8db770d5047f65893d67c0fc4c8f6e6c9825305f7b4c6e68464c",
+            "train_smoke.parquet": "1585496ecf3d2bba3e1e6069959c657a2f771f912eddb2d640f44733fe4ba1a1",
+            "eval_smoke.parquet": "918071a326a383d42db8ddc48919a4e5e48a6ec4b9d8cee0bb4471d06ac1ce30",
+            "eval_smoke.jsonl": "918071a326a383d42db8ddc48919a4e5e48a6ec4b9d8cee0bb4471d06ac1ce30"
+          },
+          "tool": {
+            "name": "lookup_asset",
+            "input_schema": {
+              "type": "object",
+              "properties": {
+                "asset_id": {
+                  "type": "string",
+                  "pattern": "^asset-[0-9]{3}$"
+                }
+              },
+              "required": [
+                "asset_id"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "prompt": "Use lookup_asset to look up the requested asset. Return exactly one JSON object with only asset_id, service_state, backup_health, all strings. No markdown or other text. service_state must be operational, degraded, or offline; backup_health must be healthy, stale, or failed.",
+          "output": {
+            "fields": [
+              "asset_id",
+              "service_state",
+              "backup_health"
+            ],
+            "service_state": [
+              "operational",
+              "degraded",
+              "offline"
+            ],
+            "backup_health": [
+              "healthy",
+              "stale",
+              "failed"
+            ],
+            "parser": "whole-response-json-unique-keys-no-extra-fields-v1"
+          },
+          "reward": "independent exact terminal correctness, binary; incomplete has no reward"
+        },
+        "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+        "source_sha256": {
+          "asset_task.py": "2577c07f6a4e47bcbc6998447a5a7d0d21a57d6af3c8682f0e531cf7570f2275",
+          "asset_server.py": "85c7ea8f778fcb8a6cea79eb30540ff5df3e8f48103a01f82bef41888a1b6566",
+          "asset_stdio.py": "33af32fcaca9d28a7abe9a742c64e889641687e7dd8a302b7ce250a9f086acf5",
+          "asset_agent.py": "059f66aee6def648185eed9f237fc07dd817d4985b70e54d9dab5a5ae0134c09",
+          "asset_probe.py": "03219442750c8d5109e098bff5c9c4223cc168b47c5cd3a892365e905584af20",
+          "owned_processes.py": "6ca9cce7a93ab0ffd2bcad7a47fa5190c4328d705713e24425ed97e4d9ce34d3",
+          "observed_runtime.py": "5e3dafca7d675a05fb33c1fedd428258ca5908aadf1854b7a1825520fa99c575"
+        },
+        "entrypoint_lock_sha256": "9d211065a5dd984d5fdfc43c63cab6c38e86ff36a2f4cac9ff0b9ab63302665a",
+        "launcher_sha256": "752cca22341639228b20e69de32b7a8062e59f47ad9d1fcd22b8e177798ddf97"
+      },
+      "model": {
+        "id": "meta-llama/Llama-3.2-3B-Instruct",
+        "revision": "0cb88a4f764b7a12671c53f0838cd831a0843b95",
+        "profile": "llama3b",
+        "parser": "llama3_json"
+      },
+      "evaluation": "asset-status-v1-64"
+    }
+  },
+  "dependency_gate": {
+    "rule": "baseline-live-integration-v2",
+    "stage": "baseline",
+    "admitted": true,
+    "reason": "baseline_integration_qualified"
+  },
+  "supervisor": {
+    "status": "failed",
+    "call_id": "fc-01M80P50Z5XM34VEBCK8R5Z773",
+    "submitted_at": 1795319562.1307442,
+    "finished_at": 1795319960.726706,
+    "reason": null,
+    "cancellation_requested": true
+  },
+  "provider_reconciliation": {
+    "queried_at": "2026-11-22T04:01:17.629550+00:00",
+    "id": "fc-01M80P50Z5XM34VEBCK8R5Z773",
+    "provider_status": "failed",
+    "error_type": "RuntimeError"
+  },
+  "completion": null,
+  "receipt": {
+    "status": "failed",
+    "call_id": "fc-01M80P50Z5XM34VEBCK8R5Z773",
+    "output": "phase3-runs/reader-asset-20261121-r04/a04/ppo-mc-matched-v2/training",
+    "started_at": 1795319568.1050727,
+    "container_id": "ta-01M80P5186K3D2Q0BA1KVKYTGR",
+    "error": "RuntimeError: Command exited 1; inspect /__modal/volumes/vo-1DponfTcYKI9q3oxLt3NIn/phase3-runs/reader-asset-20261121-r04/a04/ppo-mc-matched-v2/training/launcher.log",
+    "finished_at": 1795319956.0329473
+  },
+  "trainer_result": {
+    "status": "trainer_failed",
+    "exit_code": 1,
+    "owned_process_cleanup_completed": true,
+    "checkpoints": [],
+    "latest_checkpoint": null,
+    "restored_checkpoint": null,
+    "resolved_config_saved": true
+  },
+  "audit_event_counts": {
+    "matched_registered": 21,
+    "weight_refresh": 1,
+    "collected_rows": 1,
+    "collection_manifest": 1,
+    "wandb_finished": 1,
+    "model_construction_begin": 2,
+    "critic_loading_info": 1,
+    "critic_head_initialization": 1,
+    "model_constructed": 2
+  },
+  "observed_optimizer_events": {
+    "actor": 0,
+    "critic": 0
+  },
+  "policy_refreshes": [
+    0
+  ],
+  "numerical_diagnostics": [
+    {
+      "event": "critic_loading_info",
+      "pid": 1509,
+      "time": 1795319709.8632803,
+      "class_name": "LlamaForTokenClassification",
+      "info": {
+        "missing_keys": "{'score.bias', 'score.weight'}",
+        "unexpected_keys": "set()",
+        "mismatched_keys": "set()",
+        "error_msgs": []
+      },
+      "seed": 1864040309,
+      "fresh_parameters": [
+        "score.weight",
+        "score.bias"
+      ]
+    },
+    {
+      "event": "critic_head_initialization",
+      "pid": 1509,
+      "time": 1795319709.864995,
+      "parameters": {
+        "score.weight": {
+          "shape": [
+            1,
+            3072
+          ],
+          "dtype": "torch.float32",
+          "sha256": "6240acef6b84b7cc4a11b242e7d398fd4478666454629c7cd7afdd44069c9367"
+        },
+        "score.bias": {
+          "shape": [
+            1
+          ],
+          "dtype": "torch.float32",
+          "sha256": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119"
+        }
+      },
+      "weight_initializer": "Transformers normal(0, config.initializer_range); bias=zeros",
+      "seed": 1864040309
+    }
+  ],
+  "trajectories": {
+    "phase_filter": "training",
+    "route_filter": "train",
+    "attempt_files_total": 32,
+    "attempts_selected": 32,
+    "unclassified_attempt_files": 0,
+    "invalid_records": [],
+    "completed": 30,
+    "failed": 2,
+    "incomplete_or_ambiguous": 0,
+    "phase_route_counts": {
+      "training/train": 32
+    },
+    "observed_reward": {
+      "count": 30,
+      "sum": 0.0,
+      "mean": 0.0,
+      "max": 0.0
+    },
+    "attempts_without_numeric_reward": 2,
+    "reward_denominator": "Only observed numeric episode rewards, including failed reward posts; no zero fills.",
+    "reward_posts_confirmed": 30,
+    "model_calls_recorded": 93,
+    "model_errors_recorded": 0,
+    "tool_calls_recorded": 61,
+    "tool_errors_recorded": 2,
+    "call_count_scope": "Recorded spans, not transport retries; unfinished or dropped spans may be absent.",
+    "model_calls_with_usage": 93,
+    "model_calls_without_usage": 0,
+    "usage_source": "Recorded response usage only; AutoGen zero/absent ambiguity remains unknown.",
+    "usage": {
+      "prompt_tokens": {
+        "count": 93,
+        "sum": 31680,
+        "mean": 340.64516129032256,
+        "max": 397
+      },
+      "completion_tokens": {
+        "count": 93,
+        "sum": 2731,
+        "mean": 29.365591397849464,
+        "max": 84
+      }
+    },
+    "episode_elapsed_ms": {
+      "count": 32,
+      "sum": 258617.283,
+      "mean": 8081.79009375,
+      "max": 15894.653
+    },
+    "model_operation_ms": {
+      "count": 93,
+      "sum": 167984.552,
+      "mean": 1806.285505376344,
+      "max": 9874.173
+    },
+    "tool_operation_ms": {
+      "count": 61,
+      "sum": 457.908,
+      "mean": 7.506688524590164,
+      "max": 9.085
+    },
+    "timing_scope": "Inclusive episode duration; model/tool operation durations are separate and may overlap."
+  },
+  "model_tool_integration": {
+    "schema": "reader-integration-v2",
+    "algorithm": "ppo-mc-matched-v2",
+    "stage": "training",
+    "qualified": true,
+    "episodes_with_valid_chain": 30,
+    "trace_files": 32,
+    "coverage": [
+      {
+        "file": "trajectory-00a375fec57e42cdbd308cadc4fc39ae.jsonl",
+        "sha256": "2eded0484f176ada9ac9fafec71127c49202e9a1e3fd86bb1cb53dfdcc7d9b83",
+        "chains": [
+          {
+            "trace_id": "00a375fec57e42cdbd308cadc4fc39ae",
+            "case_id": "asset-status-v1/train/asset-288",
+            "rollout_id": "716d1c1287b0461abe443eb991daa776",
+            "attempt_id": "0",
+            "model_span": "6738ce84ecc84e94a0df793661a8d61b",
+            "tool_span": "eec48b6463654adca26955d46e8d14d2",
+            "tool_call_id": "chatcmpl-tool-9a45e2ce5dbaee78",
+            "continuation_span": "72e7c819b8de449d93c4d10acc0cf4bd",
+            "episode_span": "e1b826c2af284dc0bc64be57cf078afb",
+            "observation_sha256": "09eb58df69525d75ebfe7aa845c1e6101877db5f2469f36f966274735b091c30",
+            "terminal_reward": 0.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "00a375fec57e42cdbd308cadc4fc39ae",
+            "case_id": "asset-status-v1/train/asset-288",
+            "rollout_id": "716d1c1287b0461abe443eb991daa776",
+            "attempt_id": "0",
+            "model_span": "72e7c819b8de449d93c4d10acc0cf4bd",
+            "tool_span": "290a2a13de1c4fdd8a089130a3a2a54a",
+            "tool_call_id": "chatcmpl-tool-a7101f11dc266d65",
+            "continuation_span": "0115323f65024512892328a48bd0ce3a",
+            "episode_span": "e1b826c2af284dc0bc64be57cf078afb",
+            "observation_sha256": "09eb58df69525d75ebfe7aa845c1e6101877db5f2469f36f966274735b091c30",
+            "terminal_reward": 0.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ]
+      },
+      {
+        "file": "trajectory-06c40bd4879c4c91b619d4470c31e56e.jsonl",
+        "sha256": "6be1b9c583686a58cc1d7123e3ea50faa1d7282719f62b1a16f128a5db4ff133",
+        "chains": [
+          {
+            "trace_id": "06c40bd4879c4c91b619d4470c31e56e",
+            "case_id": "asset-status-v1/train/asset-156",
+            "rollout_id": "f7eb0402bab74f2fbd556386ff4b13d6",
+            "attempt_id": "0",
+            "model_span": "0babeaa2f75d48ba86696af404809145",
+            "tool_span": "c73e348303fb4243b3d10bdcdc0c411b",
+            "tool_call_id": "chatcmpl-tool-82c9ba193110f928",
+            "continuation_span": "ba1498aacf7449008462264a69630de4",
+            "episode_span": "06125d6d1182427fae8d644e545f6498",
+            "observation_sha256": "9026b6a56ed81593e253fc5d197bfb984f82448cee7c5af0062cfff5a5160975",
+            "terminal_reward": 0.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "06c40bd4879c4c91b619d4470c31e56e",
+            "case_id": "asset-status-v1/train/asset-156",
+            "rollout_id": "f7eb0402bab74f2fbd556386ff4b13d6",
+            "attempt_id": "0",
+            "model_span": "ba1498aacf7449008462264a69630de4",
+            "tool_span": "5a517f944bc141d6812fe87fdc7bb607",
+            "tool_call_id": "chatcmpl-tool-b5d09c00989ec26b",
+            "continuation_span": "bdf2ff91a97542ecb07ca36836f35c7f",
+            "episode_span": "06125d6d1182427fae8d644e545f6498",
+            "observation_sha256": "9026b6a56ed81593e253fc5d197bfb984f82448cee7c5af0062cfff5a5160975",
+            "terminal_reward": 0.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ]
+      },
+      {
+        "file": "trajectory-11171ddc73b945e4b45ef18910138655.jsonl",
+        "sha256": "7cbd7c78829c9570f6b23f06982c6fa448588d383ef8abbce0c4e89f9cb21cac",
+        "chains": [
+          {
+            "trace_id": "11171ddc73b945e4b45ef18910138655",
+            "case_id": "asset-status-v1/train/asset-316",
+            "rollout_id": "991b8892af0f44cab81f359e321a8247",
+            "attempt_id": "0",
+            "model_span": "965770b4b7c94b5ca88bebf83e9668de",
+            "tool_span": "87ad5c59e6954614ae9e665a33e0049f",
+            "tool_call_id": "chatcmpl-tool-832da17f91d857a1",
+            "continuation_span": "69c3901cc3554cee85661202313cf4dd",
+            "episode_span": "b77585bab7fd4da08ceb8e7e28e462ea",
+            "observation_sha256": "8c6b987d47fdb3599acaa79b95f1e327d078b8a68459f0109f60a34ec861235c",
+            "terminal_reward": 0.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "11171ddc73b945e4b45ef18910138655",
+            "case_id": "asset-status-v1/train/asset-316",
+            "rollout_id": "991b8892af0f44cab81f359e321a8247",
+            "attempt_id": "0",
+            "model_span": "69c3901cc3554cee85661202313cf4dd",
+            "tool_span": "0581aa7701034202a9d89fdb0af9bf80",
+            "tool_call_id": "chatcmpl-tool-914db60003bb298e",
+            "continuation_span": "91dfd1b8b7be4d6dadb54f88f09426b7",
+            "episode_span": "b77585bab7fd4da08ceb8e7e28e462ea",
+            "observation_sha256": "8c6b987d47fdb3599acaa79b95f1e327d078b8a68459f0109f60a34ec861235c",
+            "terminal_reward": 0.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ]
+      },
+      {
+        "file": "trajectory-1e2ee7ee97964d3fb108e6d16f9123d6.jsonl",
+        "sha256": "76643e3f3124a8d01906c436f311b1c59b8ee9629c64cfa8aadf6f517be5c9de",
+        "chains": [
+          {
+            "trace_id": "1e2ee7ee97964d3fb108e6d16f9123d6",
+            "case_id": "asset-status-v1/train/asset-316",
+            "rollout_id": "6b2b0f13c9a94eccab9f678bca42a013",
+            "attempt_id": "0",
+            "model_span": "a7ad6d86019648e09f0ab96d9bd0d7ab",
+            "tool_span": "82635b6c84474873baea69772f5140c1",
+            "tool_call_id": "chatcmpl-tool-89f312a4667ae3af",
+            "continuation_span": "a79ea19b626143ffb49b8bf95f410e62",
+            "episode_span": "12ddf1a1239d42c78a699b9929c054b9",
+            "observation_sha256": "8c6b987d47fdb3599acaa79b95f1e327d078b8a68459f0109f60a34ec861235c",
+            "terminal_reward": 0.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "1e2ee7ee97964d3fb108e6d16f9123d6",
+            "case_id": "asset-status-v1/train/asset-316",
+            "rollout_id": "6b2b0f13c9a94eccab9f678bca42a013",
+            "attempt_id": "0",
+            "model_span": "a79ea19b626143ffb49b8bf95f410e62",
+            "tool_span": "e2335792c61a41ac870979fe996995be",
+            "tool_call_id": "chatcmpl-tool-ad6d1bc6672623b0",
+            "continuation_span": "65b29119d8a94dd1b64cb7d21382af7d",
+            "episode_span": "12ddf1a1239d42c78a699b9929c054b9",
+            "observation_sha256": "8c6b987d47fdb3599acaa79b95f1e327d078b8a68459f0109f60a34ec861235c",
+            "terminal_reward": 0.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ]
+      },
+      {
+        "file": "trajectory-286bd385b3ab45b2aaa90d952298924c.jsonl",
+        "sha256": "13d45624670c30586c4e8a38cd6c2e48fea14edb2dc979608b0a5652bfe58de1",
+        "chains": []
+      },
+      {
+        "file": "trajectory-2f0f47d9e6c7472ba4cf638672ce885d.jsonl",
+        "sha256": "1073e973a89984c810386e8c1c67e980b423e097e60ee8ca5f634f3c4b4ba2ca",
+        "chains": [
+          {
+            "trace_id": "2f0f47d9e6c7472ba4cf638672ce885d",
+            "case_id": "asset-status-v1/train/asset-316",
+            "rollout_id": "71266de3156e448d9a479b3bae78ebed",
+            "attempt_id": "0",
+            "model_span": "43264a0bf9e9440a963dc4b45c6a9011",
+            "tool_span": "a4639744066d45049f29349b993d9faf",
+            "tool_call_id": "chatcmpl-tool-832bea11c36b61ee",
+            "continuation_span": "cf00f2caddb941feae77ac71f1846e79",
+            "episode_span": "8ba35b28911444bd900ad992bd0d67a4",
+            "observation_sha256": "8c6b987d47fdb3599acaa79b95f1e327d078b8a68459f0109f60a34ec861235c",
+            "terminal_reward": 0.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "2f0f47d9e6c7472ba4cf638672ce885d",
+            "case_id": "asset-status-v1/train/asset-316",
+            "rollout_id": "71266de3156e448d9a479b3bae78ebed",
+            "attempt_id": "0",
+            "model_span": "cf00f2caddb941feae77ac71f1846e79",
+            "tool_span": "f07d85bf6b484b71b0ee09838ac9b327",
+            "tool_call_id": "chatcmpl-tool-a084cb74e0d0c6c5",
+            "continuation_span": "e96e994289e943e1a379a7be006e860f",
+            "episode_span": "8ba35b28911444bd900ad992bd0d67a4",
+            "observation_sha256": "8c6b987d47fdb3599acaa79b95f1e327d078b8a68459f0109f60a34ec861235c",
+            "terminal_reward": 0.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ]
+      },
+      {
+        "file": "trajectory-34ceda696abd462b9f0bc8a97075e563.jsonl",
+        "sha256": "d994958a4a57da85160dfd16c7bf3dd622e45e944d617de04036e43ba64322f3",
+        "chains": [
+          {
+            "trace_id": "34ceda696abd462b9f0bc8a97075e563",
+            "case_id": "asset-status-v1/train/asset-288",
+            "rollout_id": "5f33d1c1c919408d8c700d1654c9725a",
+            "attempt_id": "0",
+            "model_span": "e162019178484244a83b2b988755e620",
+            "tool_span": "212f4b01a6c041e1a7b3e92336eff6f8",
+            "tool_call_id": "chatcmpl-tool-96329062635afab4",
+            "continuation_span": "805aaa0c38f8427dbb832af66dc6bbf3",
+            "episode_span": "019e64af33754947b2c8422c387df4a5",
+            "observation_sha256": "09eb58df69525d75ebfe7aa845c1e6101877db5f2469f36f966274735b091c30",
+            "terminal_reward": 0.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "34ceda696abd462b9f0bc8a97075e563",
+            "case_id": "asset-status-v1/train/asset-288",
+            "rollout_id": "5f33d1c1c919408d8c700d1654c9725a",
+            "attempt_id": "0",
+            "model_span": "805aaa0c38f8427dbb832af66dc6bbf3",
+            "tool_span": "59085eecb46f4b54896ab0ced1657f8b",
+            "tool_call_id": "chatcmpl-tool-8b469b795795d786",
+            "continuation_span": "d76f9fbc663c4506a862ee1ee8e8c977",
+            "episode_span": "019e64af33754947b2c8422c387df4a5",
+            "observation_sha256": "09eb58df69525d75ebfe7aa845c1e6101877db5f2469f36f966274735b091c30",
+            "terminal_reward": 0.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ]
+      },
+      {
+        "file": "trajectory-350a5067e54046d9b503dc3295a972e6.jsonl",
+        "sha256": "85c185364bd6bc11cda43e1e60ec15e835cdc38ef0608fc88736162f697639b2",
+        "chains": [
+          {
+            "trace_id": "350a5067e54046d9b503dc3295a972e6",
+            "case_id": "asset-status-v1/train/asset-156",
+            "rollout_id": "14fccb24d9ef48b59674b45829d6ea8b",
+            "attempt_id": "0",
+            "model_span": "e7a6ac426e3149969c8a0402ab92307e",
+            "tool_span": "b13ec45cdb54409d8774f47ed7d7adf2",
+            "tool_call_id": "chatcmpl-tool-97193b1b7f3384bc",
+            "continuation_span": "82ac019302fb416c874476a4d4ce1805",
+            "episode_span": "b4ba2626c6d74290a11d82b06c61f26d",
+            "observation_sha256": "9026b6a56ed81593e253fc5d197bfb984f82448cee7c5af0062cfff5a5160975",
+            "terminal_reward": 0.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "350a5067e54046d9b503dc3295a972e6",
+            "case_id": "asset-status-v1/train/asset-156",
+            "rollout_id": "14fccb24d9ef48b59674b45829d6ea8b",
+            "attempt_id": "0",
+            "model_span": "82ac019302fb416c874476a4d4ce1805",
+            "tool_span": "0680787ac9ac4e64b7305543419e3774",
+            "tool_call_id": "chatcmpl-tool-b7db22e2b59176a8",
+            "continuation_span": "5986f396b35044e492fde0f3663f2dd6",
+            "episode_span": "b4ba2626c6d74290a11d82b06c61f26d",
+            "observation_sha256": "9026b6a56ed81593e253fc5d197bfb984f82448cee7c5af0062cfff5a5160975",
+            "terminal_reward": 0.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ]
+      },
+      {
+        "file": "trajectory-45c662b40cd342c0b84d034ec3867d1a.jsonl",
+        "sha256": "a3dd9254e014f375096996c15438ce808e64ed5dd0c0ce527a472d294b1b1e47",
+        "chains": [
+          {
+            "trace_id": "45c662b40cd342c0b84d034ec3867d1a",
+            "case_id": "asset-status-v1/train/asset-206",
+            "rollout_id": "8312738da7ad4d33a05420cd18717b07",
+            "attempt_id": "0",
+            "model_span": "eb44f3396224472e8932e38a6d1a4393",
+            "tool_span": "893e1dbad95b4165ac27f45c7f6d56b8",
+            "tool_call_id": "chatcmpl-tool-9fb5f4398a01e85e",
+            "continuation_span": "50e31eebe0a841b9ad7428a33efc7f73",
+            "episode_span": "445a4443dabb42f09e38dce03104ad82",
+            "observation_sha256": "d341dae60277dc5539e0e2d5c01672447829d78f2eb03107475854dd73f49b8d",
+            "terminal_reward": 0.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ]
+      },
+      {
+        "file": "trajectory-49d9d61e5cfc422fb8768310f3d7df7a.jsonl",
+        "sha256": "3abe6e24ba574c6301fda68ea1fe8436174afb1ba2dd50012a82966d901b57b1",
+        "chains": [
+          {
+            "trace_id": "49d9d61e5cfc422fb8768310f3d7df7a",
+            "case_id": "asset-status-v1/train/asset-142",
+            "rollout_id": "d0331e3e09544d06acb7798a974a883d",
+            "attempt_id": "0",
+            "model_span": "a34b820be20b47d89f51a06c1177bedf",
+            "tool_span": "88249cd7589145b0aa636c78e6691f4f",
+            "tool_call_id": "chatcmpl-tool-830fb87060b15c2c",
+            "continuation_span": "8dcdb6c2431b4442b718f2549a86499f",
+            "episode_span": "13fbf919211948d1bd0b284b32b7c258",
+            "observation_sha256": "57135673097a49f2d925876390aacbd3a51b4125fa1d1fe98e2611707c1bafe2",
+            "terminal_reward": 0.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "49d9d61e5cfc422fb8768310f3d7df7a",
+            "case_id": "asset-status-v1/train/asset-142",
+            "rollout_id": "d0331e3e09544d06acb7798a974a883d",
+            "attempt_id": "0",
+            "model_span": "8dcdb6c2431b4442b718f2549a86499f",
+            "tool_span": "43f4940b24634ffb81d498cdcf1d666a",
+            "tool_call_id": "chatcmpl-tool-970631dec88e535d",
+            "continuation_span": "c87f94d2c435413b8fe412ebfbbeb6e3",
+            "episode_span": "13fbf919211948d1bd0b284b32b7c258",
+            "observation_sha256": "57135673097a49f2d925876390aacbd3a51b4125fa1d1fe98e2611707c1bafe2",
+            "terminal_reward": 0.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ]
+      },
+      {
+        "file": "trajectory-54d319572c7f456ab376d537f557c7ae.jsonl",
+        "sha256": "85c77989151975aaae7f23933d96584569731f304faa3458c1a8f5518b4a55d1",
+        "chains": [
+          {
+            "trace_id": "54d319572c7f456ab376d537f557c7ae",
+            "case_id": "asset-status-v1/train/asset-206",
+            "rollout_id": "1299657fd0df43f886ceaba0eaf31eb7",
+            "attempt_id": "0",
+            "model_span": "b9a2502f8800407e9b0eb9837f41feeb",
+            "tool_span": "dc468761136f47c5b3e1c8d6939c7af5",
+            "tool_call_id": "chatcmpl-tool-8897ef11d0b74045",
+            "continuation_span": "78cf91593c80420b96fc1486d8038df8",
+            "episode_span": "43ef2071f43440e69a6ab3e8f74fbe9b",
+            "observation_sha256": "d341dae60277dc5539e0e2d5c01672447829d78f2eb03107475854dd73f49b8d",
+            "terminal_reward": 0.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "54d319572c7f456ab376d537f557c7ae",
+            "case_id": "asset-status-v1/train/asset-206",
+            "rollout_id": "1299657fd0df43f886ceaba0eaf31eb7",
+            "attempt_id": "0",
+            "model_span": "78cf91593c80420b96fc1486d8038df8",
+            "tool_span": "e6f7a2ef1a154a8888bcfeb14b28ef0f",
+            "tool_call_id": "chatcmpl-tool-b3cc751f57c1bdb1",
+            "continuation_span": "2123a056da5d4299900f3554f10b4988",
+            "episode_span": "43ef2071f43440e69a6ab3e8f74fbe9b",
+            "observation_sha256": "d341dae60277dc5539e0e2d5c01672447829d78f2eb03107475854dd73f49b8d",
+            "terminal_reward": 0.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ]
+      },
+      {
+        "file": "trajectory-5c3e09b527984ee59a380242041aaabc.jsonl",
+        "sha256": "304d6d7f2bdad1259302dc5c6024d87e8f55a9f6de99251f50c77053045509dc",
+        "chains": [
+          {
+            "trace_id": "5c3e09b527984ee59a380242041aaabc",
+            "case_id": "asset-status-v1/train/asset-206",
+            "rollout_id": "32a2a6a7abea4f67a53f8b295602ad80",
+            "attempt_id": "0",
+            "model_span": "33426694e5b34b72aa9edbdd07699ae0",
+            "tool_span": "a87a4774b2f24970bdce6764014c68fb",
+            "tool_call_id": "chatcmpl-tool-9b93652498a9caf2",
+            "continuation_span": "b6a20bec16144c91b487a2c5d73e5252",
+            "episode_span": "7327e77dfd614ec18142e2b6a836d89b",
+            "observation_sha256": "d341dae60277dc5539e0e2d5c01672447829d78f2eb03107475854dd73f49b8d",
+            "terminal_reward": 0.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "5c3e09b527984ee59a380242041aaabc",
+            "case_id": "asset-status-v1/train/asset-206",
+            "rollout_id": "32a2a6a7abea4f67a53f8b295602ad80",
+            "attempt_id": "0",
+            "model_span": "b6a20bec16144c91b487a2c5d73e5252",
+            "tool_span": "83dd5d02fffd4e7089c219da2dbcd440",
+            "tool_call_id": "chatcmpl-tool-85f0f6b6aedd4cb1",
+            "continuation_span": "45bab437fd1347e0ae745141db22cafc",
+            "episode_span": "7327e77dfd614ec18142e2b6a836d89b",
+            "observation_sha256": "d341dae60277dc5539e0e2d5c01672447829d78f2eb03107475854dd73f49b8d",
+            "terminal_reward": 0.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ]
+      },
+      {
+        "file": "trajectory-64e599499bb845f19e4cf3a6f9057ef1.jsonl",
+        "sha256": "cf9f7ef452ccfbf962aa2905635f5f5e8f7c6a03cab251e56989ea753b14e47f",
+        "chains": [
+          {
+            "trace_id": "64e599499bb845f19e4cf3a6f9057ef1",
+            "case_id": "asset-status-v1/train/asset-142",
+            "rollout_id": "8df3711f64be493da1daf3029bd3386d",
+            "attempt_id": "0",
+            "model_span": "15704b8d0835409eaa7214ae1e448aa6",
+            "tool_span": "638aa42261574e9a87eaa1d932552d76",
+            "tool_call_id": "chatcmpl-tool-90d14a910d33583f",
+            "continuation_span": "95a10bc34d1941568470f35e9b353357",
+            "episode_span": "575d6e4d493b47c18f4aa49c70be0f59",
+            "observation_sha256": "57135673097a49f2d925876390aacbd3a51b4125fa1d1fe98e2611707c1bafe2",
+            "terminal_reward": 0.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "64e599499bb845f19e4cf3a6f9057ef1",
+            "case_id": "asset-status-v1/train/asset-142",
+            "rollout_id": "8df3711f64be493da1daf3029bd3386d",
+            "attempt_id": "0",
+            "model_span": "95a10bc34d1941568470f35e9b353357",
+            "tool_span": "742a795fe13c41d7a050d80df7de6caf",
+            "tool_call_id": "chatcmpl-tool-99dea947b46de02a",
+            "continuation_span": "c3a18cdb8ed6404aa252080c8e335cfd",
+            "episode_span": "575d6e4d493b47c18f4aa49c70be0f59",
+            "observation_sha256": "57135673097a49f2d925876390aacbd3a51b4125fa1d1fe98e2611707c1bafe2",
+            "terminal_reward": 0.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ]
+      },
+      {
+        "file": "trajectory-68a92e7b51cd4b0fae4087def2a48171.jsonl",
+        "sha256": "2f0cf8fc9e1db8a687a724739a487975e91bf20930d7dcfe9aab51473ad5cd0d",
+        "chains": [
+          {
+            "trace_id": "68a92e7b51cd4b0fae4087def2a48171",
+            "case_id": "asset-status-v1/train/asset-156",
+            "rollout_id": "1c2d37e38f554c3cbb323cb70a7bb1f7",
+            "attempt_id": "0",
+            "model_span": "a785236506414c06a7a6d40aae2b818a",
+            "tool_span": "93cc0ee1ce8d47c78df1b1165df330ae",
+            "tool_call_id": "chatcmpl-tool-8c45bc6a23edb52e",
+            "continuation_span": "1198a7452109444c904b012b0c48c5af",
+            "episode_span": "5a84eae0ecbe4a178c337545d97d179a",
+            "observation_sha256": "9026b6a56ed81593e253fc5d197bfb984f82448cee7c5af0062cfff5a5160975",
+            "terminal_reward": 0.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "68a92e7b51cd4b0fae4087def2a48171",
+            "case_id": "asset-status-v1/train/asset-156",
+            "rollout_id": "1c2d37e38f554c3cbb323cb70a7bb1f7",
+            "attempt_id": "0",
+            "model_span": "1198a7452109444c904b012b0c48c5af",
+            "tool_span": "31636dcda62b4c34b529f50056bbe778",
+            "tool_call_id": "chatcmpl-tool-bbab2cefbbc79574",
+            "continuation_span": "56b7425c09824919a698a1bcd46d96a9",
+            "episode_span": "5a84eae0ecbe4a178c337545d97d179a",
+            "observation_sha256": "9026b6a56ed81593e253fc5d197bfb984f82448cee7c5af0062cfff5a5160975",
+            "terminal_reward": 0.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ]
+      },
+      {
+        "file": "trajectory-6e041d2389d54043bb498ed1e89c383f.jsonl",
+        "sha256": "5cf69f08c12cdc9ba7b890e0915da3942377f4c8f7821ba95a7bbda1c1ba260f",
+        "chains": [
+          {
+            "trace_id": "6e041d2389d54043bb498ed1e89c383f",
+            "case_id": "asset-status-v1/train/asset-310",
+            "rollout_id": "0975230fdd35475b8974d8cf5fe9b3c6",
+            "attempt_id": "0",
+            "model_span": "d82eb2ba43944e7ca2ded7fc6f5faa0f",
+            "tool_span": "af2245cdceba4c9b887614a1f6c88a30",
+            "tool_call_id": "chatcmpl-tool-a24dafc5f9c96337",
+            "continuation_span": "d76686cffffb400db87e493310892748",
+            "episode_span": "19eff02f539d49c38ec802dec1cc00f0",
+            "observation_sha256": "9141485a882a0a9b58b1e27fd16c4c23e030608c11a8b6ded0ffc647123b9847",
+            "terminal_reward": 0.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ]
+      },
+      {
+        "file": "trajectory-6f0cc76c771a4f4f8020870eacf55a99.jsonl",
+        "sha256": "13a5852f155a834a3c82759571256cfed9ee82278fea02a02d6a69724b8a0497",
+        "chains": [
+          {
+            "trace_id": "6f0cc76c771a4f4f8020870eacf55a99",
+            "case_id": "asset-status-v1/train/asset-243",
+            "rollout_id": "fb7856dcf7a345a6954b0ed896a0aa8e",
+            "attempt_id": "0",
+            "model_span": "305fc92c1cd642e6abc2c6282494ca6a",
+            "tool_span": "295eac8a0f7943d79a7ba948e5ab229b",
+            "tool_call_id": "chatcmpl-tool-8660d1d55c83a4a2",
+            "continuation_span": "5ab0fa5a48984c6ca6ed815de2279d63",
+            "episode_span": "f91f9f67d4a646c1b042e6c95db8cd35",
+            "observation_sha256": "e9d1e8599f2dc151443c981150288578c6ecfea8a85b076166baee30366d34f2",
+            "terminal_reward": 0.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "6f0cc76c771a4f4f8020870eacf55a99",
+            "case_id": "asset-status-v1/train/asset-243",
+            "rollout_id": "fb7856dcf7a345a6954b0ed896a0aa8e",
+            "attempt_id": "0",
+            "model_span": "5ab0fa5a48984c6ca6ed815de2279d63",
+            "tool_span": "64bd363b3cbd4f9aa2fed9d4f33d3748",
+            "tool_call_id": "chatcmpl-tool-ad4d2bc34e7947f0",
+            "continuation_span": "fa7fcaf776f74871aaf1469a139c208c",
+            "episode_span": "f91f9f67d4a646c1b042e6c95db8cd35",
+            "observation_sha256": "e9d1e8599f2dc151443c981150288578c6ecfea8a85b076166baee30366d34f2",
+            "terminal_reward": 0.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ]
+      },
+      {
+        "file": "trajectory-6f5781762fb44da2b0adc9e2cd39ed76.jsonl",
+        "sha256": "4eb30cc2e708c568a2599d63767cda41cd93dc01142bf582baf0f6d350775729",
+        "chains": [
+          {
+            "trace_id": "6f5781762fb44da2b0adc9e2cd39ed76",
+            "case_id": "asset-status-v1/train/asset-316",
+            "rollout_id": "10785a7e27be441299f53fb9c6752594",
+            "attempt_id": "0",
+            "model_span": "796e343a9c6f4c6aa6743acb3adf44ce",
+            "tool_span": "5ce1e6f0d5b24a87967336fb3fc3fb71",
+            "tool_call_id": "chatcmpl-tool-bdcb9c717405f0af",
+            "continuation_span": "571572a301724c2292c8e45b07284b7f",
+            "episode_span": "91567bb698124c7396c9ecdd24b16a3a",
+            "observation_sha256": "8c6b987d47fdb3599acaa79b95f1e327d078b8a68459f0109f60a34ec861235c",
+            "terminal_reward": 0.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "6f5781762fb44da2b0adc9e2cd39ed76",
+            "case_id": "asset-status-v1/train/asset-316",
+            "rollout_id": "10785a7e27be441299f53fb9c6752594",
+            "attempt_id": "0",
+            "model_span": "571572a301724c2292c8e45b07284b7f",
+            "tool_span": "4ed68f73429c445c9da6668330a43a48",
+            "tool_call_id": "chatcmpl-tool-847fa0eb8d8d71b1",
+            "continuation_span": "84c47d5616784719a9ed60026ede7b95",
+            "episode_span": "91567bb698124c7396c9ecdd24b16a3a",
+            "observation_sha256": "8c6b987d47fdb3599acaa79b95f1e327d078b8a68459f0109f60a34ec861235c",
+            "terminal_reward": 0.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ]
+      },
+      {
+        "file": "trajectory-748cae410e9d40ce98d63d58313dbe59.jsonl",
+        "sha256": "b80e383f78518b9092412989f93f89f80b358bee70bca71dc2c9f1d9a0b0736d",
+        "chains": [
+          {
+            "trace_id": "748cae410e9d40ce98d63d58313dbe59",
+            "case_id": "asset-status-v1/train/asset-310",
+            "rollout_id": "78fbc4d045da49859527df2574e46547",
+            "attempt_id": "0",
+            "model_span": "8b6567f05f694861b44b2a7fd5ccf47c",
+            "tool_span": "87f2d7b0f3674bfab8f04e1e0993db5a",
+            "tool_call_id": "chatcmpl-tool-8f31c2b995ae66b0",
+            "continuation_span": "2a9674c43bc74abf91543108c4b9be1f",
+            "episode_span": "50706dbda62f4c5c8fcd4508e280f585",
+            "observation_sha256": "9141485a882a0a9b58b1e27fd16c4c23e030608c11a8b6ded0ffc647123b9847",
+            "terminal_reward": 0.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "748cae410e9d40ce98d63d58313dbe59",
+            "case_id": "asset-status-v1/train/asset-310",
+            "rollout_id": "78fbc4d045da49859527df2574e46547",
+            "attempt_id": "0",
+            "model_span": "2a9674c43bc74abf91543108c4b9be1f",
+            "tool_span": "3a63564ef4a1414c99d89bdaaa7b3891",
+            "tool_call_id": "chatcmpl-tool-baf6aa06887c6535",
+            "continuation_span": "1e1f96c5264947af9175baf2e80b9847",
+            "episode_span": "50706dbda62f4c5c8fcd4508e280f585",
+            "observation_sha256": "9141485a882a0a9b58b1e27fd16c4c23e030608c11a8b6ded0ffc647123b9847",
+            "terminal_reward": 0.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ]
+      },
+      {
+        "file": "trajectory-8e0e764b139342e49d5e67aa39c0e560.jsonl",
+        "sha256": "4f744df76e3f1c251da5a564fdcb03aac0ea4cdb66dae4961dc773943a90f7ff",
+        "chains": [
+          {
+            "trace_id": "8e0e764b139342e49d5e67aa39c0e560",
+            "case_id": "asset-status-v1/train/asset-288",
+            "rollout_id": "cda00d9d289f497c8f293bc70c28ac10",
+            "attempt_id": "0",
+            "model_span": "fe03f8034a584818a583de1deba290b6",
+            "tool_span": "3dec5d2040d24644a522048b7c857360",
+            "tool_call_id": "chatcmpl-tool-bc5266b201b8291c",
+            "continuation_span": "3851398845b246d6b8a16da7d98f35d8",
+            "episode_span": "6f69f39655734af6ac6cfc34b2afcd45",
+            "observation_sha256": "09eb58df69525d75ebfe7aa845c1e6101877db5f2469f36f966274735b091c30",
+            "terminal_reward": 0.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "8e0e764b139342e49d5e67aa39c0e560",
+            "case_id": "asset-status-v1/train/asset-288",
+            "rollout_id": "cda00d9d289f497c8f293bc70c28ac10",
+            "attempt_id": "0",
+            "model_span": "3851398845b246d6b8a16da7d98f35d8",
+            "tool_span": "59a19146f5b545e89db2206090da0699",
+            "tool_call_id": "chatcmpl-tool-833fb4d1b50bfc69",
+            "continuation_span": "8b6c7ad865dd41858cd30ce87ce10424",
+            "episode_span": "6f69f39655734af6ac6cfc34b2afcd45",
+            "observation_sha256": "09eb58df69525d75ebfe7aa845c1e6101877db5f2469f36f966274735b091c30",
+            "terminal_reward": 0.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ]
+      },
+      {
+        "file": "trajectory-93f4971652ee4d0c8618366069d03f2d.jsonl",
+        "sha256": "8acf56ce532b4b914fef303974c66b234735b4eda606f8084bcf1921cb502372",
+        "chains": [
+          {
+            "trace_id": "93f4971652ee4d0c8618366069d03f2d",
+            "case_id": "asset-status-v1/train/asset-206",
+            "rollout_id": "85331cb037ee4b5ea24d0d95c83d32b8",
+            "attempt_id": "0",
+            "model_span": "4bcef7c1a1df4728af4d00cad549d28a",
+            "tool_span": "24d3feabb185451fb5ad3f54c812c0c0",
+            "tool_call_id": "chatcmpl-tool-bf12929dffd15d9e",
+            "continuation_span": "2695fbececf042849e7eebf69d4de160",
+            "episode_span": "f86d243136fa4912b032fb508c5862c1",
+            "observation_sha256": "d341dae60277dc5539e0e2d5c01672447829d78f2eb03107475854dd73f49b8d",
+            "terminal_reward": 0.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "93f4971652ee4d0c8618366069d03f2d",
+            "case_id": "asset-status-v1/train/asset-206",
+            "rollout_id": "85331cb037ee4b5ea24d0d95c83d32b8",
+            "attempt_id": "0",
+            "model_span": "2695fbececf042849e7eebf69d4de160",
+            "tool_span": "6ec02a9186f34078b4ad04547db1c8ba",
+            "tool_call_id": "chatcmpl-tool-8d8946d93493cf3b",
+            "continuation_span": "93069619f5c945319ba90d83c2366b25",
+            "episode_span": "f86d243136fa4912b032fb508c5862c1",
+            "observation_sha256": "d341dae60277dc5539e0e2d5c01672447829d78f2eb03107475854dd73f49b8d",
+            "terminal_reward": 0.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ]
+      },
+      {
+        "file": "trajectory-95ed45c5a5db4b05be9f610d0340ebc1.jsonl",
+        "sha256": "584e467050d2ab2246622bf9de2a0539385eaf09b6d935626f457186bfe36b18",
+        "chains": [
+          {
+            "trace_id": "95ed45c5a5db4b05be9f610d0340ebc1",
+            "case_id": "asset-status-v1/train/asset-243",
+            "rollout_id": "1a378e0332d843f7a3c230357f8c1dc5",
+            "attempt_id": "0",
+            "model_span": "99fbaf1b381b4c86a90818a9b96d0ac0",
+            "tool_span": "2f30a1372e6247b8989c239daef515b6",
+            "tool_call_id": "chatcmpl-tool-af76aebb00ee4d1e",
+            "continuation_span": "c1d6af6f09714d9997dac9e10953899c",
+            "episode_span": "58eb195b5ef648d288256018368c55e1",
+            "observation_sha256": "e9d1e8599f2dc151443c981150288578c6ecfea8a85b076166baee30366d34f2",
+            "terminal_reward": 0.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "95ed45c5a5db4b05be9f610d0340ebc1",
+            "case_id": "asset-status-v1/train/asset-243",
+            "rollout_id": "1a378e0332d843f7a3c230357f8c1dc5",
+            "attempt_id": "0",
+            "model_span": "c1d6af6f09714d9997dac9e10953899c",
+            "tool_span": "e331f469860449a6ab4db632a415fa20",
+            "tool_call_id": "chatcmpl-tool-8e45f0ff02731918",
+            "continuation_span": "d6caebd283f2446cab00bb60d8c2d33f",
+            "episode_span": "58eb195b5ef648d288256018368c55e1",
+            "observation_sha256": "e9d1e8599f2dc151443c981150288578c6ecfea8a85b076166baee30366d34f2",
+            "terminal_reward": 0.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ]
+      },
+      {
+        "file": "trajectory-a5604ee23fb14c0ea335ec5e4311ce3e.jsonl",
+        "sha256": "49144aff915befec77f96e1e2cceb946055a1534de95a6fd78552bc1414fd2c6",
+        "chains": []
+      },
+      {
+        "file": "trajectory-bbe2de8e0b2f43d0b32061f7b13c573b.jsonl",
+        "sha256": "3c939d92ad8d5fe7aa4d70b616cea3dd71af446b660ea9b236d6cc7ee3eb1478",
+        "chains": [
+          {
+            "trace_id": "bbe2de8e0b2f43d0b32061f7b13c573b",
+            "case_id": "asset-status-v1/train/asset-142",
+            "rollout_id": "de38deb3ea4542e5b1d7946bcfa5bcc4",
+            "attempt_id": "0",
+            "model_span": "a80f2d5ef6ba455dace822aed7794bba",
+            "tool_span": "e86d6bc2197244a082019e237cf7ef49",
+            "tool_call_id": "chatcmpl-tool-866bc0bc8d96233a",
+            "continuation_span": "e6df022398804372a2698850edcdd510",
+            "episode_span": "c36a0391ff634edf9b68412c0977be8e",
+            "observation_sha256": "57135673097a49f2d925876390aacbd3a51b4125fa1d1fe98e2611707c1bafe2",
+            "terminal_reward": 0.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "bbe2de8e0b2f43d0b32061f7b13c573b",
+            "case_id": "asset-status-v1/train/asset-142",
+            "rollout_id": "de38deb3ea4542e5b1d7946bcfa5bcc4",
+            "attempt_id": "0",
+            "model_span": "e6df022398804372a2698850edcdd510",
+            "tool_span": "dcc6a9e41ebe4ec2836c82af4f12a3a8",
+            "tool_call_id": "chatcmpl-tool-b66c30112bf532ea",
+            "continuation_span": "a2442cccaac2459aa7cf9bfc2ef5a8fe",
+            "episode_span": "c36a0391ff634edf9b68412c0977be8e",
+            "observation_sha256": "57135673097a49f2d925876390aacbd3a51b4125fa1d1fe98e2611707c1bafe2",
+            "terminal_reward": 0.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ]
+      },
+      {
+        "file": "trajectory-bec868197aef4221acc4ab11b6d71ab3.jsonl",
+        "sha256": "65d7b57516306c15cac5e935374e771e4792c31a848899c13d9032646f006a7e",
+        "chains": [
+          {
+            "trace_id": "bec868197aef4221acc4ab11b6d71ab3",
+            "case_id": "asset-status-v1/train/asset-082",
+            "rollout_id": "c8cf9759ec87466085e592ec20a27f18",
+            "attempt_id": "0",
+            "model_span": "109e93568678496d9563352536fcc151",
+            "tool_span": "3f07bb0f1d6a48c1b3da32d8d085e5b1",
+            "tool_call_id": "chatcmpl-tool-90dcc1efb037b6d0",
+            "continuation_span": "5bdf885391214478939e35e36bf9650e",
+            "episode_span": "1e4639f6c6c14e17bc57aec4275a73b0",
+            "observation_sha256": "66af826da77a6abbd76465b144bbdafcf6928b4786cf1e68f2945b746cabe51f",
+            "terminal_reward": 0.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ]
+      },
+      {
+        "file": "trajectory-c0ec8b666d0d4e7699eddf3bba697d63.jsonl",
+        "sha256": "111a7d6691053246e48a1eb6e6b32540efcfe488ada6455595de6455dd5bfa38",
+        "chains": [
+          {
+            "trace_id": "c0ec8b666d0d4e7699eddf3bba697d63",
+            "case_id": "asset-status-v1/train/asset-082",
+            "rollout_id": "bf088056701e4c74823bb2802bc65503",
+            "attempt_id": "0",
+            "model_span": "a167e0d6051f4a91b417949f5390de1c",
+            "tool_span": "876558296d714bda989179f1d72970e1",
+            "tool_call_id": "chatcmpl-tool-a901c57719fe3656",
+            "continuation_span": "3ce50c45cb704c4f8b5ae7919ca4b727",
+            "episode_span": "194832ffaefa4162b3a34ebb6530d855",
+            "observation_sha256": "66af826da77a6abbd76465b144bbdafcf6928b4786cf1e68f2945b746cabe51f",
+            "terminal_reward": 0.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "c0ec8b666d0d4e7699eddf3bba697d63",
+            "case_id": "asset-status-v1/train/asset-082",
+            "rollout_id": "bf088056701e4c74823bb2802bc65503",
+            "attempt_id": "0",
+            "model_span": "3ce50c45cb704c4f8b5ae7919ca4b727",
+            "tool_span": "8ea74684b28d4b43982f9a4f8e2ce76a",
+            "tool_call_id": "chatcmpl-tool-b32acd05f4a061f1",
+            "continuation_span": "c5a4597bdfb748b39e84e78b99070f32",
+            "episode_span": "194832ffaefa4162b3a34ebb6530d855",
+            "observation_sha256": "66af826da77a6abbd76465b144bbdafcf6928b4786cf1e68f2945b746cabe51f",
+            "terminal_reward": 0.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ]
+      },
+      {
+        "file": "trajectory-caddfdb8c5044c108703022416c72a0e.jsonl",
+        "sha256": "af4a0d743bbd33d37db502911f806f358762f98804e81e17703c269c3b4016cb",
+        "chains": [
+          {
+            "trace_id": "caddfdb8c5044c108703022416c72a0e",
+            "case_id": "asset-status-v1/train/asset-082",
+            "rollout_id": "ed5994046c5443fe91855ae1b2b26dd4",
+            "attempt_id": "0",
+            "model_span": "367dd83d5d2f40cd8a3d77a61659fd6b",
+            "tool_span": "fa170cae00f54e75a372103091f2dcf6",
+            "tool_call_id": "chatcmpl-tool-8dd4acd38f785398",
+            "continuation_span": "9dfe3d882b4a42ff9219788b03eed03d",
+            "episode_span": "e52218c617fa4be9b4100ad16dbb8675",
+            "observation_sha256": "66af826da77a6abbd76465b144bbdafcf6928b4786cf1e68f2945b746cabe51f",
+            "terminal_reward": 0.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "caddfdb8c5044c108703022416c72a0e",
+            "case_id": "asset-status-v1/train/asset-082",
+            "rollout_id": "ed5994046c5443fe91855ae1b2b26dd4",
+            "attempt_id": "0",
+            "model_span": "9dfe3d882b4a42ff9219788b03eed03d",
+            "tool_span": "e1a301258a0248d8b1a901bc86cc666c",
+            "tool_call_id": "chatcmpl-tool-99e939b4015906ae",
+            "continuation_span": "1d994330858a40dab5cab99ba631a98d",
+            "episode_span": "e52218c617fa4be9b4100ad16dbb8675",
+            "observation_sha256": "66af826da77a6abbd76465b144bbdafcf6928b4786cf1e68f2945b746cabe51f",
+            "terminal_reward": 0.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ]
+      },
+      {
+        "file": "trajectory-d074252696664d669d2c2fd3cae03605.jsonl",
+        "sha256": "ef967000051e4500f8966788029d68223f7fd6929d63822468a185aa6dfe60c2",
+        "chains": [
+          {
+            "trace_id": "d074252696664d669d2c2fd3cae03605",
+            "case_id": "asset-status-v1/train/asset-243",
+            "rollout_id": "42e2351131104ba394ce8c2ff16b120e",
+            "attempt_id": "0",
+            "model_span": "1a7dfe1e529b4e55bf56d0e4d3867dff",
+            "tool_span": "12d4b47396bd4bfe85edd6ad86dfebf2",
+            "tool_call_id": "chatcmpl-tool-b0445c2b58e6712a",
+            "continuation_span": "a480488f4b034a92a07e190ae1663d15",
+            "episode_span": "8f858c6def4a4cdda6b9bfbec7293dd8",
+            "observation_sha256": "e9d1e8599f2dc151443c981150288578c6ecfea8a85b076166baee30366d34f2",
+            "terminal_reward": 0.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "d074252696664d669d2c2fd3cae03605",
+            "case_id": "asset-status-v1/train/asset-243",
+            "rollout_id": "42e2351131104ba394ce8c2ff16b120e",
+            "attempt_id": "0",
+            "model_span": "a480488f4b034a92a07e190ae1663d15",
+            "tool_span": "a809aa2c842345eab363fb67f2b11de3",
+            "tool_call_id": "chatcmpl-tool-8fdf44df0a1a5a45",
+            "continuation_span": "220f2478d4f94ea6872ce82de1d52c8c",
+            "episode_span": "8f858c6def4a4cdda6b9bfbec7293dd8",
+            "observation_sha256": "e9d1e8599f2dc151443c981150288578c6ecfea8a85b076166baee30366d34f2",
+            "terminal_reward": 0.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ]
+      },
+      {
+        "file": "trajectory-df9f5412d9984a9ab84f2472b0b7c9e8.jsonl",
+        "sha256": "32c0df2fbe816ff8c67f9162385a1ca6aa629ce3afb0bb5795efe40e8e1add5e",
+        "chains": [
+          {
+            "trace_id": "df9f5412d9984a9ab84f2472b0b7c9e8",
+            "case_id": "asset-status-v1/train/asset-142",
+            "rollout_id": "44327282add24fcf90f39c0d0b540db4",
+            "attempt_id": "0",
+            "model_span": "eadc90a69cd8484982d593cdabfe689b",
+            "tool_span": "7bbeeb00195b4469b6c2d11db2312c4e",
+            "tool_call_id": "chatcmpl-tool-880c1cb7101b4b5d",
+            "continuation_span": "0f0b7352a4734e5cbd46026e11080385",
+            "episode_span": "855943339f424027968d3268575c7000",
+            "observation_sha256": "57135673097a49f2d925876390aacbd3a51b4125fa1d1fe98e2611707c1bafe2",
+            "terminal_reward": 0.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "df9f5412d9984a9ab84f2472b0b7c9e8",
+            "case_id": "asset-status-v1/train/asset-142",
+            "rollout_id": "44327282add24fcf90f39c0d0b540db4",
+            "attempt_id": "0",
+            "model_span": "0f0b7352a4734e5cbd46026e11080385",
+            "tool_span": "c4d503ae6e6b40979ed79a77b631d123",
+            "tool_call_id": "chatcmpl-tool-acba7fdb50fad013",
+            "continuation_span": "a307a6e37c0740c2acdcc35acfa99ea6",
+            "episode_span": "855943339f424027968d3268575c7000",
+            "observation_sha256": "57135673097a49f2d925876390aacbd3a51b4125fa1d1fe98e2611707c1bafe2",
+            "terminal_reward": 0.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ]
+      },
+      {
+        "file": "trajectory-e9c9aaa2081e4412911e3f9091a90f4b.jsonl",
+        "sha256": "4e2747b29ff831b983cc505b111a5af9ef788e054a8064ecf84995cf17a70d8a",
+        "chains": [
+          {
+            "trace_id": "e9c9aaa2081e4412911e3f9091a90f4b",
+            "case_id": "asset-status-v1/train/asset-310",
+            "rollout_id": "386e8c471fab4875be1d6298d06766f3",
+            "attempt_id": "0",
+            "model_span": "f61f6aade9464c0fb602c6e2f5a2389e",
+            "tool_span": "3d2929f812f04c5c91f91ee77db56a9c",
+            "tool_call_id": "chatcmpl-tool-a806ab0816061e51",
+            "continuation_span": "1ef772d965f04c4da57ca9b4449129ce",
+            "episode_span": "d20ba9db3309410bb0bd2947a9a0acda",
+            "observation_sha256": "9141485a882a0a9b58b1e27fd16c4c23e030608c11a8b6ded0ffc647123b9847",
+            "terminal_reward": 0.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "e9c9aaa2081e4412911e3f9091a90f4b",
+            "case_id": "asset-status-v1/train/asset-310",
+            "rollout_id": "386e8c471fab4875be1d6298d06766f3",
+            "attempt_id": "0",
+            "model_span": "1ef772d965f04c4da57ca9b4449129ce",
+            "tool_span": "f8f1007e20774381babfa0889692ccc0",
+            "tool_call_id": "chatcmpl-tool-88d4601a21f76199",
+            "continuation_span": "247922e4acd94c38ac45a12196ee2406",
+            "episode_span": "d20ba9db3309410bb0bd2947a9a0acda",
+            "observation_sha256": "9141485a882a0a9b58b1e27fd16c4c23e030608c11a8b6ded0ffc647123b9847",
+            "terminal_reward": 0.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ]
+      },
+      {
+        "file": "trajectory-f4e9fb757530464382e15858280b840c.jsonl",
+        "sha256": "39a6add19b6964f21c8105b8f1185b54d8d524e7e5b8b7b1f21a15095241948d",
+        "chains": [
+          {
+            "trace_id": "f4e9fb757530464382e15858280b840c",
+            "case_id": "asset-status-v1/train/asset-156",
+            "rollout_id": "e458845f808146ef811b62d8bd5989c0",
+            "attempt_id": "0",
+            "model_span": "21049dce13dd4352b47fb3f34ea8131d",
+            "tool_span": "d80a8b059fcb4bb68c1f542f4e6937c3",
+            "tool_call_id": "chatcmpl-tool-81cfca843e42fa02",
+            "continuation_span": "884a663f6a544e628b0bd8c3ee6fb5e7",
+            "episode_span": "b9a6f6f3ddc045ad94ad930662764110",
+            "observation_sha256": "9026b6a56ed81593e253fc5d197bfb984f82448cee7c5af0062cfff5a5160975",
+            "terminal_reward": 0.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "f4e9fb757530464382e15858280b840c",
+            "case_id": "asset-status-v1/train/asset-156",
+            "rollout_id": "e458845f808146ef811b62d8bd5989c0",
+            "attempt_id": "0",
+            "model_span": "884a663f6a544e628b0bd8c3ee6fb5e7",
+            "tool_span": "a343449fe1c14badad9213c83d2f3d79",
+            "tool_call_id": "chatcmpl-tool-9b98070bf4bb5c3d",
+            "continuation_span": "34de437fbc6a4fa889e620ea38bd813a",
+            "episode_span": "b9a6f6f3ddc045ad94ad930662764110",
+            "observation_sha256": "9026b6a56ed81593e253fc5d197bfb984f82448cee7c5af0062cfff5a5160975",
+            "terminal_reward": 0.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ]
+      },
+      {
+        "file": "trajectory-f6153b6697ea408b8efdcfe7b9ccb93b.jsonl",
+        "sha256": "aeb85392f4fce60e0f7f80c22851ad3bebf2f3a8a00ed002fae3ccc96c20742c",
+        "chains": [
+          {
+            "trace_id": "f6153b6697ea408b8efdcfe7b9ccb93b",
+            "case_id": "asset-status-v1/train/asset-082",
+            "rollout_id": "2a84bc7930e34737bd1afe3623c36615",
+            "attempt_id": "0",
+            "model_span": "6d55548e974a4ea8ba034c6e51134497",
+            "tool_span": "dc71b596fcef464ba8f574a472c20700",
+            "tool_call_id": "chatcmpl-tool-920b932fab1a18b2",
+            "continuation_span": "bd4db8583f094c1190998db6a66f2a55",
+            "episode_span": "ba9381f22a27461081f25fccce1baf92",
+            "observation_sha256": "66af826da77a6abbd76465b144bbdafcf6928b4786cf1e68f2945b746cabe51f",
+            "terminal_reward": 0.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "f6153b6697ea408b8efdcfe7b9ccb93b",
+            "case_id": "asset-status-v1/train/asset-082",
+            "rollout_id": "2a84bc7930e34737bd1afe3623c36615",
+            "attempt_id": "0",
+            "model_span": "bd4db8583f094c1190998db6a66f2a55",
+            "tool_span": "f7cb3636172645a2b5bac2a1578fb777",
+            "tool_call_id": "chatcmpl-tool-a85e568e97397c27",
+            "continuation_span": "800ae91cbbdd4ea5b8f7490d7787fe82",
+            "episode_span": "ba9381f22a27461081f25fccce1baf92",
+            "observation_sha256": "66af826da77a6abbd76465b144bbdafcf6928b4786cf1e68f2945b746cabe51f",
+            "terminal_reward": 0.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ]
+      },
+      {
+        "file": "trajectory-fc9565ed65d24e679b1ce763295c6f66.jsonl",
+        "sha256": "5f6f3adca4d13ea3f1241e0744e13070a0ef48d7b3af494fa166865414367808",
+        "chains": [
+          {
+            "trace_id": "fc9565ed65d24e679b1ce763295c6f66",
+            "case_id": "asset-status-v1/train/asset-310",
+            "rollout_id": "50f06b25bc3f4806b4797478dfabebdf",
+            "attempt_id": "0",
+            "model_span": "a96a0d64cf694667a2b3f66269ed1d1d",
+            "tool_span": "1a77b9307b8b4ba289a5d9517ff17027",
+            "tool_call_id": "chatcmpl-tool-9605fa3c3365bc14",
+            "continuation_span": "846035bf333c4c7b831067dae802c81d",
+            "episode_span": "d3e82baf864e4b7289e15ddc8d520a2d",
+            "observation_sha256": "9141485a882a0a9b58b1e27fd16c4c23e030608c11a8b6ded0ffc647123b9847",
+            "terminal_reward": 0.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          },
+          {
+            "trace_id": "fc9565ed65d24e679b1ce763295c6f66",
+            "case_id": "asset-status-v1/train/asset-310",
+            "rollout_id": "50f06b25bc3f4806b4797478dfabebdf",
+            "attempt_id": "0",
+            "model_span": "846035bf333c4c7b831067dae802c81d",
+            "tool_span": "d2b8d4df61374c5599b4152b6914d683",
+            "tool_call_id": "chatcmpl-tool-beae96c7b2580012",
+            "continuation_span": "497c701264f143dc8b90cbf6fea6f706",
+            "episode_span": "d3e82baf864e4b7289e15ddc8d520a2d",
+            "observation_sha256": "9141485a882a0a9b58b1e27fd16c4c23e030608c11a8b6ded0ffc647123b9847",
+            "terminal_reward": 0.0,
+            "task_id": "asset-status-v1",
+            "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+            "evidence_class": "live-model"
+          }
+        ]
+      }
+    ],
+    "gaps": [],
+    "task_correctness_required": false
+  },
+  "native_checkpoint_manifests": [],
+  "hosted_wandb": {
+    "attempt": 4,
+    "algorithm": "ppo-mc-matched-v2",
+    "stage": "training",
+    "id": "189912b5b07126a34fa6d3a5",
+    "queried_at": "2026-11-22T04:07:01.152632+00:00",
+    "project_enumeration_complete": true,
+    "present": true,
+    "url": "https://wandb.ai/amulyap-stanford-university/reader-owned-reference/runs/189912b5b07126a34fa6d3a5",
+    "state": "finished",
+    "name": "reader-asset-20261121-r04-a04-ppo-mc-matched-v2-training",
+    "configuration_matches": true,
+    "expected_configuration_sha256": "0a39ff044fcca05f954fc19a5c08b5d8e681d3a7605ec08e33345428131a87e4",
+    "actual_configuration_sha256": "0a39ff044fcca05f954fc19a5c08b5d8e681d3a7605ec08e33345428131a87e4",
+    "matched_study_config": {
+      "algorithm": "ppo-mc-matched-v2",
+      "assets": "defdff1ab27bc058a5520276712116f0fc6a37b2214edbf62a1e23901da5d1ad",
+      "evaluation": "asset-status-v1-64",
+      "model": {
+        "id": "meta-llama/Llama-3.2-3B-Instruct",
+        "parser": "llama3_json",
+        "profile": "llama3b",
+        "revision": "0cb88a4f764b7a12671c53f0838cd831a0843b95"
+      },
+      "profile": "9d4118320dc6d332fbccba3d3d073187b5ff591ce83eaf21e51ec0dedad4c9ff",
+      "protocol": "matched-rollout-mean-v2",
+      "resources": {
+        "cpu": 16,
+        "gpu": "H100!",
+        "memory_mib": 196608
+      },
+      "schema": "reader-task-v2",
+      "seed_streams": {
+        "actor_optimizer": 1751928485,
+        "actor_sampling": 737109812,
+        "critic_init": 1864040309,
+        "numpy": 513160406,
+        "paired_question_order": 1028282608,
+        "python": 139295096,
+        "row_batching": 2080451036,
+        "torch_cpu": 204395415,
+        "torch_cuda": 180497808
+      },
+      "source": "930ee2939f1264820711173745732afed20de72ee6370280eb8d013f115e52ba",
+      "stage": "training",
+      "steps": 2,
+      "task": {
+        "agent_class": "asset_agent.Agent",
+        "cwd": "examples/calc_x",
+        "data_mapping": {
+          "AGL_CASE_ID": "input.case_id",
+          "AGL_DATA_SPLIT": "input.split",
+          "EVAL_SPLIT": "input.split",
+          "QUESTION": "input.question",
+          "RESULT": "input.result"
+        },
+        "entrypoint_lock_sha256": "9d211065a5dd984d5fdfc43c63cab6c38e86ff36a2f4cac9ff0b9ab63302665a",
+        "environment": {
+          "ordered_cases_sha256": {
+            "eval_main.jsonl": "493299d2b0fe8db770d5047f65893d67c0fc4c8f6e6c9825305f7b4c6e68464c",
+            "eval_main.parquet": "493299d2b0fe8db770d5047f65893d67c0fc4c8f6e6c9825305f7b4c6e68464c",
+            "eval_smoke.jsonl": "918071a326a383d42db8ddc48919a4e5e48a6ec4b9d8cee0bb4471d06ac1ce30",
+            "eval_smoke.parquet": "918071a326a383d42db8ddc48919a4e5e48a6ec4b9d8cee0bb4471d06ac1ce30",
+            "train_main.parquet": "59af0d2b9decfc87637b787d28f37de83c40fd801ffac5edda028b26fc02cd0e",
+            "train_smoke.parquet": "1585496ecf3d2bba3e1e6069959c657a2f771f912eddb2d640f44733fe4ba1a1"
+          },
+          "output": {
+            "backup_health": [
+              "healthy",
+              "stale",
+              "failed"
+            ],
+            "fields": [
+              "asset_id",
+              "service_state",
+              "backup_health"
+            ],
+            "parser": "whole-response-json-unique-keys-no-extra-fields-v1",
+            "service_state": [
+              "operational",
+              "degraded",
+              "offline"
+            ]
+          },
+          "prompt": "Use lookup_asset to look up the requested asset. Return exactly one JSON object with only asset_id, service_state, backup_health, all strings. No markdown or other text. service_state must be operational, degraded, or offline; backup_health must be healthy, stale, or failed.",
+          "recipe": "asset-status-v1/2026-11-20/329",
+          "registry_sha256": "241b5672d43b7dff7db7d203f2805d91e0a541e7a20e18d4edb608419e670e44",
+          "reward": "independent exact terminal correctness, binary; incomplete has no reward",
+          "task": "asset-status-v1",
+          "tool": {
+            "input_schema": {
+              "additionalProperties": false,
+              "properties": {
+                "asset_id": {
+                  "pattern": "^asset-[0-9]{3}$",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "asset_id"
+              ],
+              "type": "object"
+            },
+            "name": "lookup_asset"
+          }
+        },
+        "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+        "integration_rule": "reader-integration-v2; live chain required in all three stages per algorithm",
+        "label_fields": [
+          "result"
+        ],
+        "launcher_sha256": "752cca22341639228b20e69de32b7a8062e59f47ad9d1fcd22b8e177798ddf97",
+        "local_probe": "asset_probe.check",
+        "mcp": {
+          "args": [
+            "-I",
+            "asset_stdio.py"
+          ],
+          "command": "training-python",
+          "environment": {
+            "PYTHONDONTWRITEBYTECODE": "1",
+            "PYTHONUNBUFFERED": "1"
+          },
+          "ownership_receipt": "optional absolute directory argument; never a model input"
+        },
+        "name": "asset-status-v1",
+        "source_sha256": {
+          "asset_agent.py": "059f66aee6def648185eed9f237fc07dd817d4985b70e54d9dab5a5ae0134c09",
+          "asset_probe.py": "03219442750c8d5109e098bff5c9c4223cc168b47c5cd3a892365e905584af20",
+          "asset_server.py": "85c7ea8f778fcb8a6cea79eb30540ff5df3e8f48103a01f82bef41888a1b6566",
+          "asset_stdio.py": "33af32fcaca9d28a7abe9a742c64e889641687e7dd8a302b7ce250a9f086acf5",
+          "asset_task.py": "2577c07f6a4e47bcbc6998447a5a7d0d21a57d6af3c8682f0e531cf7570f2275",
+          "observed_runtime.py": "5e3dafca7d675a05fb33c1fedd428258ca5908aadf1854b7a1825520fa99c575",
+          "owned_processes.py": "6ca9cce7a93ab0ffd2bcad7a47fa5190c4328d705713e24425ed97e4d9ce34d3"
+        },
+        "visible_fields": [
+          "question"
+        ]
+      }
+    },
+    "history": [
+      {
+        "_step": 1,
+        "_runtime": 73.738859161,
+        "_timestamp": 1795319949.985576
+      }
+    ],
+    "history_steps": [
+      1
+    ],
+    "local_metric_rows": 0,
+    "local_history_steps": [],
+    "metric_comparisons": [],
+    "all_local_numeric_metrics_match": null,
+    "history_steps_match": false,
+    "metric_comparison_status": "review_required"
+  },
+  "hosted_reconciliation": {
+    "attempt": 4,
+    "algorithm": "ppo-mc-matched-v2",
+    "stage": "training",
+    "id": "189912b5b07126a34fa6d3a5",
+    "present": true,
+    "state": "finished",
+    "configuration_matches": true,
+    "history_steps": [
+      1
+    ],
+    "local_history_steps": [],
+    "all_local_numeric_metrics_match": null,
+    "history_steps_match": false,
+    "metric_comparison_status": "review_required",
+    "url": "https://wandb.ai/amulyap-stanford-university/reader-owned-reference/runs/189912b5b07126a34fa6d3a5",
+    "reconciliation_status": "explained_collection_artifact_only_history"
+  }
+}

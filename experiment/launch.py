@@ -298,17 +298,22 @@ def make_plan(args, bundle: Path, repo: Path, model: Path, data: Path, python: P
     return plan, commands
 
 
-def stop_owned(processes: list[subprocess.Popen]) -> None:
+def stop_owned(processes: list[subprocess.Popen]):
     """Signal only process groups created by this launcher; never global pkill/ray stop."""
+    anomalies = []
     for sig, seconds in ((signal.SIGINT, 12), (signal.SIGTERM, 5), (signal.SIGKILL, 2)):
         for proc in reversed(processes):
             try:
                 os.killpg(proc.pid, sig)
             except ProcessLookupError:
                 pass
+            except Exception as exc:
+                anomalies.append({"pid": proc.pid, "action": "signal", "error_type": type(exc).__name__})
         deadline = time.monotonic() + seconds
         while any(proc.poll() is None for proc in processes) and time.monotonic() < deadline:
             time.sleep(0.2)
+
+    return {"complete": not anomalies and all(p.poll() is not None for p in processes), "anomalies": anomalies}
 
 
 def run_services(commands, plan, run: Path, repo: Path, bundle: Path, walltime: float):
@@ -325,8 +330,15 @@ def run_services(commands, plan, run: Path, repo: Path, bundle: Path, walltime: 
         env.update(HF_HUB_OFFLINE="1", TRANSFORMERS_OFFLINE="1", AGL_PPO_RUN_DIR=str(run),
                    AGL_PPO_AUDIT_DIR=str(run / "ppo-audit"))
     if matched:
+        try:
+            from .request_transport import environment as request_environment
+        except ImportError:
+            from request_transport import environment as request_environment
+        # Do not inherit another attempt's representation or a large inline value.
+        for name in ('AGL_MATCHED_REQUEST', 'AGL_MATCHED_REQUEST_FILE', 'AGL_MATCHED_REQUEST_SHA256'):
+            env.pop(name, None)
         env.update(HF_HUB_OFFLINE="1", TRANSFORMERS_OFFLINE="1", AGL_PPO_RUN_DIR=str(run),
-                   AGL_PPO_AUDIT_DIR=str(run / "audit"), AGL_MATCHED_REQUEST=json.dumps(plan["request"]))
+                   AGL_PPO_AUDIT_DIR=str(run / "audit"), **request_environment(plan['request'], run))
         for key in ("XDG_CACHE_HOME", "TRITON_CACHE_DIR", "VLLM_CACHE_ROOT", "HF_HOME", "WANDB_DIR"):
             directory = run / "temporary" / key.lower()
             directory.mkdir(parents=True)
@@ -335,8 +347,16 @@ def run_services(commands, plan, run: Path, repo: Path, bundle: Path, walltime: 
         env["PYTHONHASHSEED"] = str(plan["request"]["job"]["seed_streams"]["python"])
         env['WANDB_ENTITY'] = plan['request']['stage']['wandb']['entity']
         env['WANDB_PROJECT'] = plan['request']['stage']['wandb']['project']
-        if plan['request']['plan'].get('schema') == 'reader-reference-v1':
+        if plan['request']['plan'].get('schema') in ('reader-reference-v1', 'reader-task-v2'):
             env['AGL_EXPERIMENT_ID'] = plan['request']['job']['job_id']
+            reader = plan['request']['plan']
+            task = reader['task_identity']
+            env.update(AGL_TASK_ID=task['name'], AGL_TASK_SHA256=hashlib.sha256(json.dumps(task, sort_keys=True, separators=(',', ':')).encode()).hexdigest(),
+                       AGL_ENVIRONMENT_SHA256=task.get('environment_sha256') or hashlib.sha256(json.dumps(reader['data_manifest'], sort_keys=True, separators=(',', ':')).encode()).hexdigest(),
+                       AGL_SOURCE_SHA256=hashlib.sha256(json.dumps(reader['source'], sort_keys=True, separators=(',', ':')).encode()).hexdigest(),
+                       AGL_CONFIGURATION_SHA256=reader['configuration_sha256'],
+                       AGL_MCP_OWNERS=str(run/'mcp-processes'))
+            (run/'mcp-processes').mkdir(exist_ok=True)
     # Ray and vLLM Unix sockets must fit sockaddr_un.sun_path. Set these before
     # exec so children initialize tempfile/vLLM caches with short local paths.
     # Explicit /tmp also avoids an inherited or cached long tempfile directory.
@@ -406,9 +426,28 @@ def run_services(commands, plan, run: Path, repo: Path, bundle: Path, walltime: 
         status, exit_code = "failed", 1
         (run / "error.txt").write_text(str(exc) + "\n")
     finally:
-        stop_owned(processes)
-        for handle in log_handles:
-            handle.close()
+        cleanup_report = {}
+        try:
+            cleanup_report['services'] = stop_owned(processes)
+        except Exception as exc:
+            cleanup_report['services'] = {'complete': False, 'error_type': type(exc).__name__}
+        if (run/'mcp-processes').exists():
+            try:
+                try:
+                    from .owned_processes import cleanup
+                except ImportError:
+                    from owned_processes import cleanup
+                cleanup_report['mcp'] = cleanup(run/'mcp-processes')
+            except Exception as exc:
+                cleanup_report['mcp'] = {'complete': False, 'error_type': type(exc).__name__}
+        for number, handle in enumerate(log_handles):
+            try:
+                handle.close()
+            except Exception as exc:
+                cleanup_report[f'log_{number}'] = {'complete': False, 'error_type': type(exc).__name__}
+        cleanup_complete = all(r['complete'] for r in cleanup_report.values())
+        if not cleanup_complete and status == 'completed':
+            status, exit_code = 'cleanup_failed', 1
         checkpoints = sorted((run / "checkpoints").glob("global_step_*"), key=lambda p: int(p.name.rsplit("_", 1)[1]))
         tracker = run / "checkpoints/latest_checkpointed_iteration.txt"
         latest_completed = None
@@ -422,6 +461,7 @@ def run_services(commands, plan, run: Path, repo: Path, bundle: Path, walltime: 
                                        **({"algorithm": plan["algorithm"], "protocol": plan["protocol"]} if matched
                                           else ppo_contract.identity(plan.get("algorithm", ppo_contract.GRPO))),
                                        "finished_at": datetime.now(timezone.utc).isoformat(),
+                                       "owned_process_cleanup_completed": cleanup_complete, "cleanup": cleanup_report,
                                        "checkpoints": [str(p) for p in checkpoints],
                                        "latest_checkpoint": str(latest_completed) if latest_completed else None,
                                        "restored_checkpoint": next((json.loads(v.split("=", 1)[1]) for v in plan["overrides"] if v.startswith("trainer.resume_from_path=")), None),

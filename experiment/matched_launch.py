@@ -13,11 +13,13 @@ from types import SimpleNamespace
 
 try:
     from . import launch, matched_contract as c, ppo_contract, summarize
+    from .request_transport import environment as request_environment
 except ImportError:
     import launch
     import matched_contract as c
     import ppo_contract
     import summarize
+    from request_transport import environment as request_environment
 
 WORKER = '''import json, os, sys
 from pathlib import Path
@@ -78,14 +80,17 @@ def configuration(request, model, run):
         'trainer.default_local_dir': str(run/'checkpoints'),
         'ray_kwargs.ray_init.runtime_env.worker_process_setup_hook': 'matched_runtime.register_in_worker',
         'ray_kwargs.ray_init.runtime_env.env_vars': {
-            'AGL_MATCHED_REQUEST': json.dumps(request), 'AGL_PPO_RUN_DIR': str(run),
+            **request_environment(request, run), 'AGL_PPO_RUN_DIR': str(run),
             'PYTHONHASHSEED': str(s['python']),
             'AGL_PPO_AUDIT_DIR': str(run/'audit'), 'HF_HUB_OFFLINE': '1', 'TRANSFORMERS_OFFLINE': '1'},
         'lab_protocol': {'protocol': c.PROTOCOL, 'algorithm': job['algorithm'],
                          'seed_streams': s, 'comparison_qualified': False},
     })
-    if request['plan'].get('schema') == 'reader-reference-v1':
+    if request['plan'].get('schema') in ('reader-reference-v1', 'reader-task-v2'):
         cfg['trainer.project_name'] = stage['wandb']['project']
+        task = plan['task_identity']
+        cfg['agentlightning.local.agent_class'] = task['agent_class']
+        cfg['agentlightning.local.env_map'] = task['data_mapping']
     if stage['name'] == 'checkpoint-eval':
         checkpoint = run.parent/'training/checkpoints'/f"global_step_{job['steps']}"
         cfg.update({'trainer.resume_mode': 'resume_path', 'trainer.resume_from_path': str(checkpoint)})
@@ -103,6 +108,8 @@ def make_plan(request, bundle, repo, model, data, python, run, port):
     plan.update(protocol=c.PROTOCOL, algorithm=request['job']['algorithm'], request=request,
                 phase=request['stage']['name'], policy_version=c.PROTOCOL,
                 overrides=[launch.dot(k, v) for k, v in cfg.items()])
+    if request['plan'].get('phase') == 'collection-only':
+        plan['train_file'] = str(run/'development-panel.parquet')
     return plan, commands
 
 
@@ -117,6 +124,15 @@ def validate_resolved(config, plan):
                 raise ValueError('Ray environment drift')
         elif node != value:
             raise ValueError(f'Matched resolved configuration drift: {key}')
+    if plan['request']['plan'].get('schema') == 'reader-task-v2':
+        paths = plan['request']['plan']['profile']['paths']
+        for key, name in (('train_file', 'train_main.parquet'), ('eval_file', 'eval_main.parquet')):
+            if key == 'train_file' and plan['request']['plan'].get('phase') == 'collection-only':
+                if Path(plan[key]) != Path(plan['resolved_config']).parent/'development-panel.parquet':
+                    raise ValueError('Development panel routing changed')
+                continue
+            if Path(plan[key]) != Path('/data')/paths['data']/name:
+                raise ValueError('Task dataset routing changed')
     if config['actor_rollout_ref']['model']['path'] != plan['model']:
         raise ValueError('Actor base changed')
 
@@ -134,7 +150,7 @@ def validate_inputs(request, model, data, repo, bundle, contract=c):
             from .reader_assets import inspect, owned_path
         except ImportError:
             from reader_assets import inspect, owned_path
-        if inspect(model, data, owned_path('/data', request['plan']['profile']['paths']['staging'])) != request['plan']['assets']:
+        if inspect(model, data, owned_path('/data', request['plan']['profile']['paths']['staging']), task=request['plan']['profile']['task']) != request['plan']['assets']:
             raise ValueError('Actual reader assets differ from exact plan manifests')
         return
     lock = json.loads((bundle/'ppo_source_lock.json').read_text())
@@ -197,6 +213,26 @@ def complete_stage(run, request, data):
     stage, job = request['stage']['name'], request['job']
     result = {'protocol': c.PROTOCOL, 'plan_sha256': request['plan_sha256'], 'stage': stage}
     terminal = [e for e in events if e['event']=='trainer_returned']
+    if request['plan'].get('phase') == 'collection-only':
+        from collections import Counter
+        admitted = [e for e in events if e['event'] == 'development_collection_admitted']
+        manifests = [e for e in events if e['event'] == 'collection_manifest']
+        forbidden = {'optimizer_step', 'gradient_step', 'matched_advantages', 'native_checkpoint_saved'}
+        if (len(terminal) != 1 or terminal[0].get('collection_only') is not True
+                or terminal[0]['global_step'] != 1 or terminal[0].get('optimizer_updates') != 0
+                or any(e['event'] in forbidden for e in events)
+                or [e['step'] for e in events if e['event'] == 'weight_refresh'] != [0]
+                or len(admitted) != 1 or admitted[0]['real_rollouts'] != 32
+                or len(manifests) != 1 or Counter(r['case_id'] for r in manifests[0]['trajectories']) !=
+                    Counter({cid: 4 for cid in request['plan']['development']['case_ids']})
+                or list((run/'checkpoints').glob('global_step_*'))):
+            raise ValueError('Invalid collection-only audit or unexpected optimization/checkpoint')
+        result['development'] = admitted[0]
+        result['optimizer_updates'] = {'actor': 0, 'critic': 0}
+        result['trajectories'] = summarize.summarize(run, 'training', 'train')[0]
+        if any(result['trajectories'][k] != 32 for k in ('attempts_selected', 'completed', 'reward_posts_confirmed')):
+            raise ValueError('Incomplete development trajectory evidence')
+        return result
     expected_step = job['steps'] if stage=='training' else job['steps'] if stage=='checkpoint-eval' else 0
     if len(terminal) != 1 or terminal[0]['global_step'] != expected_step:
         raise ValueError('Missing or incorrect terminal global step')
@@ -240,7 +276,7 @@ def main():
     run = args.request.parent
     contract = c
     repo, model, data = Path('/opt/agent-lightning'), Path('/data/restored/models/llama3b'), Path('/data/restored/data-small')
-    if request['plan'].get('schema') == 'reader-reference-v1':
+    if request['plan'].get('schema') in ('reader-reference-v1', 'reader-task-v2'):
         try:
             from . import reader_contract as contract
         except ImportError:
@@ -255,6 +291,12 @@ def main():
         verify_checkpoint(run.parent/'training/checkpoints'/f"global_step_{request['job']['steps']}", request)
     (run/'logs').mkdir()
     plan, commands = make_plan(request, bundle, repo, model, data, repo/'.venv/bin/python', run, launch.free_port())
+    if request['plan'].get('phase') == 'collection-only':
+        import pyarrow.parquet as pq
+        panel = pq.read_table(data/'train_smoke.parquet').slice(0, 8)
+        if panel.column('case_id').to_pylist() != request['plan']['development']['case_ids']:
+            raise ValueError('Development panel identity differs')
+        pq.write_table(panel, plan['train_file'])
     launch.dump_json(run/'run_plan.json', plan)
     (run/'trainer_worker.py').write_text(WORKER)
     def stop(signum, frame):

@@ -1,0 +1,194 @@
+{
+  "attempt": 4,
+  "algorithm": "ppo-mc-matched-v2",
+  "stage": "checkpoint-eval",
+  "source_commit": "07ddf1bad56c10c6b8b4d144293aec4f911df706",
+  "plan_sha256": "0947b53fdd507e12a1183a042a3f67f9701233b05052a1e01b6a3a04deae10ce",
+  "wandb": {
+    "entity": "amulyap-stanford-university",
+    "project": "reader-owned-reference",
+    "group": "reader-asset-20261121-r04-a04",
+    "id": "c82990cd12c1154468e661d3",
+    "name": "reader-asset-20261121-r04-a04-ppo-mc-matched-v2-checkpoint-eval",
+    "job_type": "checkpoint-eval",
+    "resume": "never",
+    "config": {
+      "schema": "reader-task-v2",
+      "source": "930ee2939f1264820711173745732afed20de72ee6370280eb8d013f115e52ba",
+      "profile": "9d4118320dc6d332fbccba3d3d073187b5ff591ce83eaf21e51ec0dedad4c9ff",
+      "assets": "defdff1ab27bc058a5520276712116f0fc6a37b2214edbf62a1e23901da5d1ad",
+      "algorithm": "ppo-mc-matched-v2",
+      "stage": "checkpoint-eval",
+      "protocol": "matched-rollout-mean-v2",
+      "seed_streams": {
+        "python": 139295096,
+        "numpy": 513160406,
+        "torch_cpu": 204395415,
+        "torch_cuda": 180497808,
+        "actor_sampling": 737109812,
+        "actor_optimizer": 1751928485,
+        "row_batching": 2080451036,
+        "critic_init": 1864040309,
+        "paired_question_order": 1028282608
+      },
+      "resources": {
+        "gpu": "H100!",
+        "cpu": 16,
+        "memory_mib": 196608
+      },
+      "steps": 2,
+      "task": {
+        "name": "asset-status-v1",
+        "visible_fields": [
+          "question"
+        ],
+        "label_fields": [
+          "result"
+        ],
+        "data_mapping": {
+          "QUESTION": "input.question",
+          "RESULT": "input.result",
+          "AGL_CASE_ID": "input.case_id",
+          "AGL_DATA_SPLIT": "input.split",
+          "EVAL_SPLIT": "input.split"
+        },
+        "agent_class": "asset_agent.Agent",
+        "cwd": "examples/calc_x",
+        "mcp": {
+          "command": "training-python",
+          "args": [
+            "-I",
+            "asset_stdio.py"
+          ],
+          "environment": {
+            "PYTHONUNBUFFERED": "1",
+            "PYTHONDONTWRITEBYTECODE": "1"
+          },
+          "ownership_receipt": "optional absolute directory argument; never a model input"
+        },
+        "local_probe": "asset_probe.check",
+        "integration_rule": "reader-integration-v2; live chain required in all three stages per algorithm",
+        "environment": {
+          "task": "asset-status-v1",
+          "recipe": "asset-status-v1/2026-11-20/329",
+          "registry_sha256": "241b5672d43b7dff7db7d203f2805d91e0a541e7a20e18d4edb608419e670e44",
+          "ordered_cases_sha256": {
+            "train_main.parquet": "59af0d2b9decfc87637b787d28f37de83c40fd801ffac5edda028b26fc02cd0e",
+            "eval_main.parquet": "493299d2b0fe8db770d5047f65893d67c0fc4c8f6e6c9825305f7b4c6e68464c",
+            "eval_main.jsonl": "493299d2b0fe8db770d5047f65893d67c0fc4c8f6e6c9825305f7b4c6e68464c",
+            "train_smoke.parquet": "1585496ecf3d2bba3e1e6069959c657a2f771f912eddb2d640f44733fe4ba1a1",
+            "eval_smoke.parquet": "918071a326a383d42db8ddc48919a4e5e48a6ec4b9d8cee0bb4471d06ac1ce30",
+            "eval_smoke.jsonl": "918071a326a383d42db8ddc48919a4e5e48a6ec4b9d8cee0bb4471d06ac1ce30"
+          },
+          "tool": {
+            "name": "lookup_asset",
+            "input_schema": {
+              "type": "object",
+              "properties": {
+                "asset_id": {
+                  "type": "string",
+                  "pattern": "^asset-[0-9]{3}$"
+                }
+              },
+              "required": [
+                "asset_id"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "prompt": "Use lookup_asset to look up the requested asset. Return exactly one JSON object with only asset_id, service_state, backup_health, all strings. No markdown or other text. service_state must be operational, degraded, or offline; backup_health must be healthy, stale, or failed.",
+          "output": {
+            "fields": [
+              "asset_id",
+              "service_state",
+              "backup_health"
+            ],
+            "service_state": [
+              "operational",
+              "degraded",
+              "offline"
+            ],
+            "backup_health": [
+              "healthy",
+              "stale",
+              "failed"
+            ],
+            "parser": "whole-response-json-unique-keys-no-extra-fields-v1"
+          },
+          "reward": "independent exact terminal correctness, binary; incomplete has no reward"
+        },
+        "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+        "source_sha256": {
+          "asset_task.py": "2577c07f6a4e47bcbc6998447a5a7d0d21a57d6af3c8682f0e531cf7570f2275",
+          "asset_server.py": "85c7ea8f778fcb8a6cea79eb30540ff5df3e8f48103a01f82bef41888a1b6566",
+          "asset_stdio.py": "33af32fcaca9d28a7abe9a742c64e889641687e7dd8a302b7ce250a9f086acf5",
+          "asset_agent.py": "059f66aee6def648185eed9f237fc07dd817d4985b70e54d9dab5a5ae0134c09",
+          "asset_probe.py": "03219442750c8d5109e098bff5c9c4223cc168b47c5cd3a892365e905584af20",
+          "owned_processes.py": "6ca9cce7a93ab0ffd2bcad7a47fa5190c4328d705713e24425ed97e4d9ce34d3",
+          "observed_runtime.py": "5e3dafca7d675a05fb33c1fedd428258ca5908aadf1854b7a1825520fa99c575"
+        },
+        "entrypoint_lock_sha256": "9d211065a5dd984d5fdfc43c63cab6c38e86ff36a2f4cac9ff0b9ab63302665a",
+        "launcher_sha256": "752cca22341639228b20e69de32b7a8062e59f47ad9d1fcd22b8e177798ddf97"
+      },
+      "model": {
+        "id": "meta-llama/Llama-3.2-3B-Instruct",
+        "revision": "0cb88a4f764b7a12671c53f0838cd831a0843b95",
+        "profile": "llama3b",
+        "parser": "llama3_json"
+      },
+      "evaluation": "asset-status-v1-64"
+    }
+  },
+  "dependency_gate": {
+    "rule": "baseline-live-integration-v2",
+    "stage": "baseline",
+    "admitted": true,
+    "reason": "baseline_integration_qualified"
+  },
+  "supervisor": {
+    "status": "skipped",
+    "call_id": null,
+    "submitted_at": null,
+    "finished_at": null,
+    "reason": "dependency_or_supervisor_failed",
+    "cancellation_requested": null
+  },
+  "provider_reconciliation": null,
+  "completion": null,
+  "audit_event_counts": {},
+  "observed_optimizer_events": {
+    "actor": 0,
+    "critic": 0
+  },
+  "policy_refreshes": [],
+  "numerical_diagnostics": [],
+  "trajectories": null,
+  "model_tool_integration": null,
+  "native_checkpoint_manifests": [],
+  "hosted_wandb": {
+    "attempt": 4,
+    "algorithm": "ppo-mc-matched-v2",
+    "stage": "checkpoint-eval",
+    "id": "c82990cd12c1154468e661d3",
+    "queried_at": "2026-11-22T04:07:01.152632+00:00",
+    "project_enumeration_complete": true,
+    "present": false,
+    "url": null
+  },
+  "hosted_reconciliation": {
+    "attempt": 4,
+    "algorithm": "ppo-mc-matched-v2",
+    "stage": "checkpoint-eval",
+    "id": "c82990cd12c1154468e661d3",
+    "present": false,
+    "state": null,
+    "configuration_matches": null,
+    "history_steps": null,
+    "local_history_steps": null,
+    "all_local_numeric_metrics_match": null,
+    "history_steps_match": null,
+    "metric_comparison_status": null,
+    "url": null,
+    "reconciliation_status": "absent_in_complete_project_enumeration"
+  }
+}

@@ -1,0 +1,77 @@
+{
+  "accepted": true,
+  "dependency_closure_consistent": false,
+  "reviewed_exception_qualified": true,
+  "qualification": "diagnostic_with_reviewed_dependency_exceptions",
+  "uv_pip_check_returncode": 1,
+  "report_parsed": true,
+  "environment_identity": {
+    "python_minor": "3.12",
+    "machine": "x86_64",
+    "upstream_commit": "cbc56e41e0eab643aa71d195e92e5bba652fa683",
+    "versions_checked": {
+      "agentlightning": "1.0.3",
+      "verl": "0.8.0",
+      "vllm": "0.22.0",
+      "torch": "2.11.0+cu130",
+      "flash-attn": "2.8.3",
+      "autogen-agentchat": "0.7.5",
+      "autogen-ext": "0.7.5",
+      "weave": "0.54.1",
+      "ml-dtypes": "0.6.0",
+      "opencv-python-headless": "5.0.0.93",
+      "xgrammar": "0.2.5.post1",
+      "google-api-core": "2.44.0",
+      "tensorboard": "2.21.0",
+      "proto-plus": "1.29.0",
+      "numpy": "1.26.4",
+      "pyarrow": "25.0.1",
+      "datasets": "5.2.0",
+      "transformers": "5.22.2",
+      "protobuf": "5.29.6"
+    },
+    "version_drift": {}
+  },
+  "identity_matches": true,
+  "observed_conflicts": [
+    {
+      "package": "google-api-core",
+      "requirement": "protobuf>=6.33.5,<8.0.0",
+      "installed": "5.29.6",
+      "package_version": "2.44.0"
+    },
+    {
+      "package": "ml-dtypes",
+      "requirement": "numpy>=2.0.0",
+      "installed": "1.26.4",
+      "package_version": "0.6.0"
+    },
+    {
+      "package": "opencv-python-headless",
+      "requirement": "numpy>=2 ; python_full_version >= '3.9'",
+      "installed": "1.26.4",
+      "package_version": "5.0.0.93"
+    },
+    {
+      "package": "proto-plus",
+      "requirement": "protobuf>=6.33.5,<8.0.0",
+      "installed": "5.29.6",
+      "package_version": "1.29.0"
+    },
+    {
+      "package": "tensorboard",
+      "requirement": "protobuf>=6.31.1,<8.0.0",
+      "installed": "5.29.6",
+      "package_version": "2.21.0"
+    },
+    {
+      "package": "xgrammar",
+      "requirement": "transformers>=4.38.0,<5",
+      "installed": "5.22.2",
+      "package_version": "0.2.5.post1"
+    }
+  ],
+  "reviewed_dependency_conflicts": 6,
+  "unreviewed_or_changed_conflicts": [],
+  "missing_reviewed_conflicts": []
+}

@@ -28,7 +28,7 @@ image = None
 if modal.is_local():
     from modal_image import matched_image
     image = matched_image(reader=True).env({'AGL_READER_PROFILE': json.dumps(profile)})
-    for relative in c.packaged(c.source_identity(clean=True)['files']):
+    for relative in c.source_identity(clean=True)['runtime_files']:
         if not relative.startswith('experiment/'):
             image = image.add_local_file(Path(__file__).parent/relative, str(BUNDLE.parent/relative), copy=True)
 volume = modal.Volume.from_name(binding['volume'], environment_name=binding['environment'], create_if_missing=False)

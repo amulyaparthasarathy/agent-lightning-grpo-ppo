@@ -1,0 +1,74 @@
+{
+  "plan_sha256": "6c1e259e171e9eebfa32fb438dd80f5d685b04e91e51a9c7f8c419e255c94449",
+  "evidence_complete": true,
+  "operational_completion": "completed",
+  "algorithms": {
+    "grpo-matched-v2": {
+      "operational_stage_completion": {
+        "training": "completed"
+      },
+      "model_tool_integration": {
+        "training": {
+          "schema": "reader-integration-v2",
+          "algorithm": "grpo-matched-v2",
+          "stage": "training",
+          "qualified": true,
+          "episodes_with_valid_chain": 32,
+          "trace_files": 32,
+          "gaps": [],
+          "task_correctness_required": false
+        }
+      },
+      "development": {
+        "event": "development_collection_admitted",
+        "pid": 1183,
+        "time": 1795487154.3278522,
+        "iteration": 1,
+        "real_rollouts": 32,
+        "groups": 8,
+        "generated_tokens": 2112,
+        "fragment_rows": 96,
+        "constant_groups": 8
+      },
+      "integration_rule": "all-three-stages-v2",
+      "harness_integration_qualified": true,
+      "qualification_gaps": []
+    },
+    "ppo-mc-matched-v2": {
+      "operational_stage_completion": {
+        "training": "completed"
+      },
+      "model_tool_integration": {
+        "training": {
+          "schema": "reader-integration-v2",
+          "algorithm": "ppo-mc-matched-v2",
+          "stage": "training",
+          "qualified": true,
+          "episodes_with_valid_chain": 32,
+          "trace_files": 32,
+          "gaps": [],
+          "task_correctness_required": false
+        }
+      },
+      "development": {
+        "event": "development_collection_admitted",
+        "pid": 1184,
+        "time": 1795487543.8534555,
+        "iteration": 1,
+        "real_rollouts": 32,
+        "groups": 8,
+        "generated_tokens": 2112,
+        "fragment_rows": 96,
+        "constant_groups": 7
+      },
+      "integration_rule": "all-three-stages-v2",
+      "harness_integration_qualified": true,
+      "qualification_gaps": []
+    }
+  },
+  "qualification_evidence": false,
+  "live_qualification": "development only; not six-stage qualification",
+  "hosted_wandb_history": "not independently queried",
+  "collected_bytes": 4301590,
+  "collection_errors": []
+}

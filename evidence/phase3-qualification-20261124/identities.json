@@ -1,0 +1,97 @@
+[
+  {
+    "attempt": 5,
+    "purpose": "collection-only",
+    "execution_commit": null,
+    "planned_source_commit": "484e51d9182c3fa56849661270fcd3e8c58f08ca",
+    "preparation_plan_sha256": "522a9dff6dfdfb0e6f9b115b1d03a48a0d205fff958ecce914fbd91e59684b23",
+    "training_plan_sha256": null,
+    "executed": false,
+    "status": "interrupted before any function spawn; durable stop marker; never retried"
+  },
+  {
+    "attempt": 6,
+    "purpose": "collection-only",
+    "execution_commit": "7f1e13d7bacb477c9e5e95a16868a2b0f2484ee6",
+    "executed": true,
+    "preparation_plan_sha256": "6bb254084913ded03abc12e3a7b9f2556aa883536921e03c65f8cfe7ad794e5d",
+    "training_plan_sha256": "6c1e259e171e9eebfa32fb438dd80f5d685b04e91e51a9c7f8c419e255c94449",
+    "source_sha256": "46490adf43e9e1e983d99832a752df855353da82250b2e7437897c237a091936",
+    "configuration_sha256": "921ad3e8391d5379d7103f099f725c4703d281d82f67f9f76a6534b743720bec",
+    "packaged_sha256": "67124934c1fed63ed6b7685317931fc19f1a24033109fb60edd14694a35c0ee5",
+    "task_sha256": "b64e9a1d40d6f903970ff95e3ca2b92ad0aac0788be792277a9badcfce7c27c2",
+    "episode_policy": {
+      "version": "asset-episode-v2",
+      "max_tool_iterations": 2,
+      "policy_error_limit": 2,
+      "final_generation": "context-json-reminder-v1",
+      "recovered_final": "strict-verifier",
+      "policy_limit": "terminal-zero",
+      "infrastructure_or_missing_evidence": "incomplete-no-reward",
+      "policy_error_codes": [
+        "invalid_arguments",
+        "invalid_asset_id",
+        "unknown_asset",
+        "non_object_arguments",
+        "invalid_argument_json",
+        "unknown_tool"
+      ]
+    },
+    "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+    "data_manifest_sha256": "39f9df2872d3c48ee5698c58cc908db6763477670776c5d1e1d5a78c84925772",
+    "image_id": "im-UTGiucVTEF7MLNN45fV1Yh",
+    "source_file_count": 382,
+    "development": {
+      "schema": "asset-collection-only-v1",
+      "questions": 8,
+      "rollouts_per_question": 4,
+      "case_ids": [
+        "asset-status-v1/train/asset-011",
+        "asset-status-v1/train/asset-041",
+        "asset-status-v1/train/asset-250",
+        "asset-status-v1/train/asset-271",
+        "asset-status-v1/train/asset-075",
+        "asset-status-v1/train/asset-246",
+        "asset-status-v1/train/asset-111",
+        "asset-status-v1/train/asset-039"
+      ],
+      "optimizer_updates": 0,
+      "collections_per_algorithm": 1,
+      "temperature": 1,
+      "qualification_evidence": false
+    }
+  },
+  {
+    "attempt": 7,
+    "purpose": "qualification",
+    "execution_commit": "7f1e13d7bacb477c9e5e95a16868a2b0f2484ee6",
+    "executed": true,
+    "preparation_plan_sha256": "005ef25125787ae1a3ec099ab64c68f166682a2d15a4a5236603993ddf6f6d3a",
+    "training_plan_sha256": "2a9b1cc811421c6eca122e344e1cc3a60cd210a3776603c7b8c9a4bd2d44bf21",
+    "source_sha256": "46490adf43e9e1e983d99832a752df855353da82250b2e7437897c237a091936",
+    "configuration_sha256": "15daa00171dde43c7285430b6ad98ee1d223d1979cf66183697a77cb08e9b47a",
+    "packaged_sha256": "67124934c1fed63ed6b7685317931fc19f1a24033109fb60edd14694a35c0ee5",
+    "task_sha256": "b64e9a1d40d6f903970ff95e3ca2b92ad0aac0788be792277a9badcfce7c27c2",
+    "episode_policy": {
+      "version": "asset-episode-v2",
+      "max_tool_iterations": 2,
+      "policy_error_limit": 2,
+      "final_generation": "context-json-reminder-v1",
+      "recovered_final": "strict-verifier",
+      "policy_limit": "terminal-zero",
+      "infrastructure_or_missing_evidence": "incomplete-no-reward",
+      "policy_error_codes": [
+        "invalid_arguments",
+        "invalid_asset_id",
+        "unknown_asset",
+        "non_object_arguments",
+        "invalid_argument_json",
+        "unknown_tool"
+      ]
+    },
+    "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+    "data_manifest_sha256": "39f9df2872d3c48ee5698c58cc908db6763477670776c5d1e1d5a78c84925772",
+    "image_id": "im-q55YWEYSIoAOgQzw37h4f3",
+    "source_file_count": 382
+  }
+]

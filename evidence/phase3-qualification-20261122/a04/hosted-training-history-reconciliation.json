@@ -1,0 +1,126 @@
+[
+  {
+    "id": "4f38e916c29cbb420bb3682e",
+    "algorithm": "grpo-matched-v2",
+    "checked_at": "2026-11-22T04:11:11.998901+00:00",
+    "hosted_step": 1,
+    "local_optimizer_metric_steps": [],
+    "actual_actor_updates": 0,
+    "actual_critic_updates": 0,
+    "history_tables": {
+      "training/trace_merge_mismatches": {
+        "sha256": "7ab36ff1e29345c1c50342f14471d0c56bc2a9d9e6da8e1e141cf07e6683426d",
+        "path": "media/table/training/trace_merge_mismatches_0_7ab36ff1e29345c1c503.table.json",
+        "_type": "table-file",
+        "size": 252502,
+        "ncols": 10,
+        "nrows": 59
+      },
+      "_step": 1,
+      "training/rollout_trajectories": {
+        "path": "media/table/training/rollout_trajectories_1_27919bd30510cd383ecf.table.json",
+        "ncols": 4,
+        "sha256": "27919bd30510cd383ecf753628efddc1aaf77791e36164abb188c7486e9fa04d",
+        "size": 196,
+        "_type": "table-file",
+        "nrows": 1
+      },
+      "_runtime": 51.961691569,
+      "_timestamp": 1795319229.3184383
+    },
+    "artifacts": [
+      {
+        "name": "run-4f38e916c29cbb420bb3682e-trainingtrace_merge_mismatches-0FwObQ:v0",
+        "type": "run_table",
+        "metadata": {},
+        "digest": "77ca724c45e2b44d61f937295f27f23a"
+      },
+      {
+        "name": "train-trajectories-4f38e916c29cbb420bb3682e-step-1:v0",
+        "type": "train_trajectories",
+        "metadata": {
+          "format": "jsonl.zip",
+          "row_count": 24,
+          "global_steps": 1
+        },
+        "digest": "f100f5c712e539aa5495e3c9ec06e446"
+      },
+      {
+        "name": "run-4f38e916c29cbb420bb3682e-trainingrollout_trajectories-wqk35A:v0",
+        "type": "run_table",
+        "metadata": {},
+        "digest": "bd7b9269372af5097a9abe698a2b2a87"
+      }
+    ],
+    "hosted_compact_rollouts": 24,
+    "local_complete_attempt_accounting": 32,
+    "fragmentation_matches_hosted_table_rows": true,
+    "reconciliation_status": "explained_collection_artifact_only_history",
+    "explanation": "Pinned adapter logs fragmentation diagnostics and a one-row index to a capped 24-rollout artifact at collection step 1, before matched_runtime rejects missing rewards. Local traces account for all 32 attempts. This is neither an optimizer update nor a logged training-loss step.",
+    "upstream_commit": "cbc56e41e0eab643aa71d195e92e5bba652fa683",
+    "upstream_file": "agentlightning/verl/rollout_adapter.py",
+    "verified_source_lock_sha256": "42c1764e9d734a07e4fd5a44fe144a02eb0916e16d36bd9f302ddc25e3651ac9"
+  },
+  {
+    "id": "189912b5b07126a34fa6d3a5",
+    "algorithm": "ppo-mc-matched-v2",
+    "checked_at": "2026-11-22T04:11:11.998944+00:00",
+    "hosted_step": 1,
+    "local_optimizer_metric_steps": [],
+    "actual_actor_updates": 0,
+    "actual_critic_updates": 0,
+    "history_tables": {
+      "training/trace_merge_mismatches": {
+        "ncols": 10,
+        "path": "media/table/training/trace_merge_mismatches_0_f3967670da0040b97465.table.json",
+        "size": 248075,
+        "_type": "table-file",
+        "sha256": "f3967670da0040b97465d0688ca6aef5d1c64f77b92b5430d7e7032b115a1120",
+        "nrows": 58
+      },
+      "_step": 1,
+      "training/rollout_trajectories": {
+        "_type": "table-file",
+        "ncols": 4,
+        "size": 196,
+        "path": "media/table/training/rollout_trajectories_1_5b92071cc4371de6d83a.table.json",
+        "sha256": "5b92071cc4371de6d83a8b24b6f82b7261694c290987a290a568ce1748534207",
+        "nrows": 1
+      },
+      "_runtime": 73.738859161,
+      "_timestamp": 1795319949.985576
+    },
+    "artifacts": [
+      {
+        "name": "run-189912b5b07126a34fa6d3a5-trainingtrace_merge_mismatches-cDS2aA:v0",
+        "type": "run_table",
+        "metadata": {},
+        "digest": "4bbce3e916623c68d6c5119afcac15fe"
+      },
+      {
+        "name": "train-trajectories-189912b5b07126a34fa6d3a5-step-1:v0",
+        "type": "train_trajectories",
+        "metadata": {
+          "format": "jsonl.zip",
+          "row_count": 24,
+          "global_steps": 1
+        },
+        "digest": "84f9888e81c8c138cecc6de4bf87b59f"
+      },
+      {
+        "name": "run-189912b5b07126a34fa6d3a5-trainingrollout_trajectories-RckIuA:v0",
+        "type": "run_table",
+        "metadata": {},
+        "digest": "e694175722c5c6c8c8543271cd779884"
+      }
+    ],
+    "hosted_compact_rollouts": 24,
+    "local_complete_attempt_accounting": 32,
+    "fragmentation_matches_hosted_table_rows": true,
+    "reconciliation_status": "explained_collection_artifact_only_history",
+    "explanation": "Pinned adapter logs fragmentation diagnostics and a one-row index to a capped 24-rollout artifact at collection step 1, before matched_runtime rejects missing rewards. Local traces account for all 32 attempts. This is neither an optimizer update nor a logged training-loss step.",
+    "upstream_commit": "cbc56e41e0eab643aa71d195e92e5bba652fa683",
+    "upstream_file": "agentlightning/verl/rollout_adapter.py",
+    "verified_source_lock_sha256": "42c1764e9d734a07e4fd5a44fe144a02eb0916e16d36bd9f302ddc25e3651ac9"
+  }
+]

@@ -1,0 +1,154 @@
+{
+  "at": "2026-11-22T04:04:01.753274+00:00",
+  "provider_reconciliation_file": ".local/phase3-live-20261121/provider-reconciliation-20261122T040117Z.json",
+  "known_owned_calls": 22,
+  "all_known_calls_terminal": true,
+  "owned_apps_stopped": 12,
+  "unknown_submissions": [],
+  "observed_modal_completed_hour_usage_usd": 5.76165025,
+  "observed_usage_caveat": "Provider usage report through completed hours; not a settled invoice. Current-hour/delayed/unattributed charges remain covered by the inclusive hold. No credit deductions assumed.",
+  "app_elapsed_bounds": [
+    {
+      "attempt": 4,
+      "action": "launch",
+      "app_id": "ap-Hyx2Wvy7fmvHIoMl1QuzBV",
+      "app_lifetime_seconds": 1498.0,
+      "accounting_hourly_ceiling_usd": 20,
+      "elapsed_exposure_usd": 8.322222222222223
+    },
+    {
+      "attempt": 4,
+      "action": "preflight",
+      "app_id": "ap-BGMPNHSYye3VIZxUsJlF9S",
+      "app_lifetime_seconds": 75.0,
+      "accounting_hourly_ceiling_usd": 10,
+      "elapsed_exposure_usd": 0.20833333333333331
+    },
+    {
+      "attempt": 4,
+      "action": "prepare",
+      "app_id": "ap-F8qe1OG36s6L7UyjtHwiOn",
+      "app_lifetime_seconds": 1504.0,
+      "accounting_hourly_ceiling_usd": 10,
+      "elapsed_exposure_usd": 4.177777777777778
+    },
+    {
+      "attempt": 3,
+      "action": "launch",
+      "app_id": "ap-Z6exDUUlaK7MsPwkd7hCh3",
+      "app_lifetime_seconds": 855.0,
+      "accounting_hourly_ceiling_usd": 20,
+      "elapsed_exposure_usd": 4.75
+    },
+    {
+      "attempt": 3,
+      "action": "preflight",
+      "app_id": "ap-RmnV1X3wMhw3bDZYovJCp2",
+      "app_lifetime_seconds": 75.0,
+      "accounting_hourly_ceiling_usd": 10,
+      "elapsed_exposure_usd": 0.20833333333333331
+    },
+    {
+      "attempt": 3,
+      "action": "prepare",
+      "app_id": "ap-939jSnArvoP02v5LA0VlW4",
+      "app_lifetime_seconds": 305.0,
+      "accounting_hourly_ceiling_usd": 10,
+      "elapsed_exposure_usd": 0.8472222222222223
+    },
+    {
+      "attempt": 2,
+      "action": "launch",
+      "app_id": "ap-VtUpY3MyDL6rAQoVdwSkSX",
+      "app_lifetime_seconds": 576.0,
+      "accounting_hourly_ceiling_usd": 20,
+      "elapsed_exposure_usd": 3.2
+    },
+    {
+      "attempt": 2,
+      "action": "preflight",
+      "app_id": "ap-90zP2nIT3wvWhQ7NBNGVDj",
+      "app_lifetime_seconds": 86.0,
+      "accounting_hourly_ceiling_usd": 10,
+      "elapsed_exposure_usd": 0.2388888888888889
+    },
+    {
+      "attempt": 2,
+      "action": "prepare",
+      "app_id": "ap-n5ALTEy6TQGVkvrJh42l1J",
+      "app_lifetime_seconds": 367.0,
+      "accounting_hourly_ceiling_usd": 10,
+      "elapsed_exposure_usd": 1.0194444444444444
+    },
+    {
+      "attempt": 1,
+      "action": "launch",
+      "app_id": "ap-e0xC2Z8WstnI6LnyT42eM6",
+      "app_lifetime_seconds": 473.0,
+      "accounting_hourly_ceiling_usd": 20,
+      "elapsed_exposure_usd": 2.6277777777777778
+    },
+    {
+      "attempt": 1,
+      "action": "preflight",
+      "app_id": "ap-GpTPM2HqEdXFOtbEAlzjGn",
+      "app_lifetime_seconds": 84.0,
+      "accounting_hourly_ceiling_usd": 10,
+      "elapsed_exposure_usd": 0.23333333333333334
+    },
+    {
+      "attempt": 1,
+      "action": "prepare",
+      "app_id": "ap-9IcoABtSJC2w9XBIYab7QG",
+      "app_lifetime_seconds": 402.0,
+      "accounting_hourly_ceiling_usd": 10,
+      "elapsed_exposure_usd": 1.1166666666666667
+    }
+  ],
+  "total_elapsed_compute_build_exposure_usd": 26.950000000000003,
+  "retention_allowance_usd": 7,
+  "collection_reconciliation_allowance_usd": 3,
+  "inclusive_conservative_campaign_hold_usd": 40,
+  "unresolved_component_within_hold_usd": 34.23834975,
+  "unreserved_remaining_budget_usd": 260,
+  "retained_bytes": 25802624741,
+  "retained_gib": 24.030566905625165,
+  "retention_seven_day_estimate_usd": 0.5046419050181284,
+  "retention_deadline": "2026-11-29T01:54:46.522052+00:00",
+  "retained_resources": [
+    {
+      "kind": "volume",
+      "name": "reader-asset-20261121-a01-volume",
+      "id": "vo-KtIYfz0ZCf5RVNpWjB6LMB",
+      "bytes": 6437603580,
+      "files": 202,
+      "checkpoint_tensor_files": 0
+    },
+    {
+      "kind": "volume",
+      "name": "reader-asset-20261121-a02-volume",
+      "id": "vo-KtzGn1oPG8LfXOztBi04Jr",
+      "bytes": 6444280823,
+      "files": 471,
+      "checkpoint_tensor_files": 0
+    },
+    {
+      "kind": "volume",
+      "name": "reader-asset-20261121-a03-volume",
+      "id": "vo-WFtwoXPWkiS6yOwCoFfSz8",
+      "bytes": 6452127500,
+      "files": 696,
+      "checkpoint_tensor_files": 0
+    },
+    {
+      "kind": "volume",
+      "name": "reader-asset-20261121-a04-volume",
+      "id": "vo-1DponfTcYKI9q3oxLt3NIn",
+      "bytes": 6468612838,
+      "files": 1162,
+      "checkpoint_tensor_files": 0
+    }
+  ],
+  "no_checkpoint_tensor_files": true,
+  "basis": "All known Apps stopped. Their complete lifetimes include build/startup/tail time. CPU/build/preflight lifetimes charged at $10/hour; launch lifetimes at $20/hour to cover one $10/hour worker lane plus conservative $10/hour supervision. This exceeds checked standard rates and avoids cache assumptions. Add $7 aggregate storage and $3 collection/reconciliation, then round up to $5. This is an operating estimate, not a provider cap or final charge."
+}

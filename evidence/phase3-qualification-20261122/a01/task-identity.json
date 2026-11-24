@@ -1,0 +1,93 @@
+{
+  "name": "asset-status-v1",
+  "visible_fields": [
+    "question"
+  ],
+  "label_fields": [
+    "result"
+  ],
+  "data_mapping": {
+    "QUESTION": "input.question",
+    "RESULT": "input.result",
+    "AGL_CASE_ID": "input.case_id",
+    "AGL_DATA_SPLIT": "input.split",
+    "EVAL_SPLIT": "input.split"
+  },
+  "agent_class": "asset_agent.Agent",
+  "cwd": "examples/calc_x",
+  "mcp": {
+    "command": "training-python",
+    "args": [
+      "-I",
+      "asset_stdio.py"
+    ],
+    "environment": {
+      "PYTHONUNBUFFERED": "1",
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "ownership_receipt": "optional absolute directory argument; never a model input"
+  },
+  "local_probe": "asset_probe.check",
+  "integration_rule": "reader-integration-v2; live chain required in all three stages per algorithm",
+  "environment": {
+    "task": "asset-status-v1",
+    "recipe": "asset-status-v1/2026-11-20/329",
+    "registry_sha256": "241b5672d43b7dff7db7d203f2805d91e0a541e7a20e18d4edb608419e670e44",
+    "ordered_cases_sha256": {
+      "train_main.parquet": "59af0d2b9decfc87637b787d28f37de83c40fd801ffac5edda028b26fc02cd0e",
+      "eval_main.parquet": "493299d2b0fe8db770d5047f65893d67c0fc4c8f6e6c9825305f7b4c6e68464c",
+      "eval_main.jsonl": "493299d2b0fe8db770d5047f65893d67c0fc4c8f6e6c9825305f7b4c6e68464c",
+      "train_smoke.parquet": "1585496ecf3d2bba3e1e6069959c657a2f771f912eddb2d640f44733fe4ba1a1",
+      "eval_smoke.parquet": "918071a326a383d42db8ddc48919a4e5e48a6ec4b9d8cee0bb4471d06ac1ce30",
+      "eval_smoke.jsonl": "918071a326a383d42db8ddc48919a4e5e48a6ec4b9d8cee0bb4471d06ac1ce30"
+    },
+    "tool": {
+      "name": "lookup_asset",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "asset_id": {
+            "type": "string",
+            "pattern": "^asset-[0-9]{3}$"
+          }
+        },
+        "required": [
+          "asset_id"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "prompt": "Use lookup_asset to look up the requested asset. Return exactly one JSON object with only asset_id, service_state, backup_health, all strings. No markdown or other text. service_state must be operational, degraded, or offline; backup_health must be healthy, stale, or failed.",
+    "output": {
+      "fields": [
+        "asset_id",
+        "service_state",
+        "backup_health"
+      ],
+      "service_state": [
+        "operational",
+        "degraded",
+        "offline"
+      ],
+      "backup_health": [
+        "healthy",
+        "stale",
+        "failed"
+      ],
+      "parser": "whole-response-json-unique-keys-no-extra-fields-v1"
+    },
+    "reward": "independent exact terminal correctness, binary; incomplete has no reward"
+  },
+  "environment_sha256": "d683b4ca993f4d014de260fe8ba04afa901b1488be036a633c37b4fec7ef4089",
+  "source_sha256": {
+    "asset_task.py": "2577c07f6a4e47bcbc6998447a5a7d0d21a57d6af3c8682f0e531cf7570f2275",
+    "asset_server.py": "85c7ea8f778fcb8a6cea79eb30540ff5df3e8f48103a01f82bef41888a1b6566",
+    "asset_stdio.py": "33af32fcaca9d28a7abe9a742c64e889641687e7dd8a302b7ce250a9f086acf5",
+    "asset_agent.py": "d9ea90bd50fc30e69fb3adedfd5078f912b1774c28b6426a5864b9b287e1199d",
+    "asset_probe.py": "03219442750c8d5109e098bff5c9c4223cc168b47c5cd3a892365e905584af20",
+    "owned_processes.py": "6ca9cce7a93ab0ffd2bcad7a47fa5190c4328d705713e24425ed97e4d9ce34d3",
+    "observed_runtime.py": "5e3dafca7d675a05fb33c1fedd428258ca5908aadf1854b7a1825520fa99c575"
+  },
+  "entrypoint_lock_sha256": "9d211065a5dd984d5fdfc43c63cab6c38e86ff36a2f4cac9ff0b9ab63302665a",
+  "launcher_sha256": "196ef77b3a6fb4c0e51332897cbaccf5e029cfbbf071475588d1f406f9cca88f"
+}
