@@ -537,6 +537,8 @@ def review_stage(request, *, supervisor=None, receipt=None, proof=None, durable=
     recomputed = False
     if summary is not None and traces_present and events is not None:
         try:
+            if any(e.get('id') != stage['wandb']['id'] for e in events if e['event'] == 'wandb_finished'):
+                raise ValueError('W&B finish ID differs from the planned stage run ID')
             again = assemble(request, events, rows, summary['evidence_class'],
                              checkpoints=bool(list((Path(run)/'checkpoints').glob('global_step_*'))))
             recomputed = (facts['trace_files'] == expected and len(rows) == expected
