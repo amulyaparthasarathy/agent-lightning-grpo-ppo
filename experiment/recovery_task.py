@@ -41,9 +41,9 @@ EPISODE_POLICY = {
 SERVER_ERROR_CODES = tuple(EPISODE_POLICY['policy_error_codes'][:6])
 # Task-specific context binding. Only the trajectory prompt limit differs from the shared
 # launcher value (2048): in live Phase 3 collections every model call became its own
-# training fragment, so each call's whole prompt must fit this limit, and the bounded
-# worst case here (five rounds of the largest inventory) measures 2739 tokens with the
-# pinned tokenizer. 3072 is max_model_len minus max_tokens, the largest prompt the
+# training fragment, so each call's whole prompt must fit this limit, and the heaviest
+# measured scenario (five rounds of the largest compared inventory; a scenario, not an
+# exhaustive bound) exceeds 2048 tokens with the pinned tokenizer. 3072 is max_model_len minus max_tokens, the largest prompt the
 # server can accept with the full generation budget. Calculator and asset settings are
 # unchanged. Collection-only calibration performs no forward or backward pass.
 CONTEXT_LIMITS = {'version': 'recovery-context-v1', 'trajectory_max_prompt_length': 3072,

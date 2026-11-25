@@ -311,13 +311,20 @@ class HarnessTests(unittest.TestCase):
                                   row['policy_error_codes'], row['tool_names_rewritten_by_framework']),
                                  (name, 'scripted-call-1-0', 'unknown_tool', ['unknown_tool'], 1))
                 self.assertEqual([c['name'] for c in row['sampled_calls'][1:]], list(task.TOOLS))
-                for edit in (lambda rs: next(r for r in rs if r['kind'] == 'llm')['outputs']['content'][0].update(name=normalize(name)),
-                             lambda rs: next(r for r in rs if r['kind'] == 'served_response')['outputs']['tool_calls'][0].update(name=normalize(name)),
-                             lambda rs: next(r for r in rs if r['kind'] == 'action_outcome')['inputs']['call'].update(name=normalize(name)),
-                             lambda rs: next(r for r in rs if r['kind'] == 'action_outcome')['inputs']['observation'].update(name=normalize(name)),
-                             lambda rs: rs.remove(next(r for r in rs if r['kind'] == 'served_response'))):
+                # Each edit of the retained chain is rejected, and by the check that guards that link.
+                for edit, reason in (
+                        (lambda rs: next(r for r in rs if r['kind'] == 'llm')['outputs']['content'][0].update(name=normalize(name)),
+                         'Incomplete or untrusted episode'),
+                        (lambda rs: next(r for r in rs if r['kind'] == 'served_response')['outputs']['tool_calls'][0].update(name=normalize(name)),
+                         'Served response evidence differs from the recorded generation'),
+                        (lambda rs: next(r for r in rs if r['kind'] == 'action_outcome')['inputs']['call'].update(name=normalize(name)),
+                         'Incomplete or untrusted episode'),
+                        (lambda rs: next(r for r in rs if r['kind'] == 'action_outcome')['inputs']['observation'].update(name=normalize(name)),
+                         'Recorded action outcome differs from the typed evidence'),
+                        (lambda rs: rs.remove(next(r for r in rs if r['kind'] == 'served_response')),
+                         'Served response evidence is missing for a generation')):
                     bad = copy.deepcopy(records); edit(bad)
-                    with self.assertRaises((ValueError, KeyError)): calibration.episode_row(bad, request, 'scripted-inference')
+                    with self.assertRaisesRegex(ValueError, reason): calibration.episode_row(bad, request, 'scripted-inference')
         # The declared terminal limit applies to original identities, and nothing is executed.
         result = self.run_case([CALL('get asset', asset_id=asset), CALL('functions.get_asset', asset_id=asset)], request=request)
         out = self.complete(result, 0.0, 'terminal_policy_failure')
@@ -378,7 +385,7 @@ class HarnessTests(unittest.TestCase):
         self.assertEqual([(s['finish_reason'], s['content_present'], s['stop_reason']) for s in served],
                          [('tool_calls', False, None)] * 3 + [('stop', True, 128009)])
         self.assertEqual([s['framework_normalized']['finish_reason'] for s in served], ['function_calls'] * 3 + ['stop'])
-        self.assertEqual(served[0]['usage'], {'prompt_tokens': 0, 'completion_tokens': 12})
+        self.assertEqual(served[0]['usage'], {'prompt_tokens': 1000, 'completion_tokens': 12})  # as scripted, not the framework's zeros
         # The pure rule, including what the pinned client would have hidden.
         status = task.generation_status
         self.assertEqual(status({'finish_reason': 'stop', 'content': ' ', 'tool_calls': [], 'usage': None}, 1024), ('complete', None))
@@ -561,7 +568,7 @@ class PromptTests(unittest.TestCase):
         selection = budget['selection']
         question = next(r['question'] for r in task.rows('development') if r['case_id'] == selection['longest_request_case_id'])
         self.assertEqual(budget['measured_prompts_sha256'],
-                         recovery_prompt.prompt_set_sha256(selection['largest_observation_asset_id'], question))
+                         recovery_prompt.prompt_set_sha256(selection['largest_observation_asset_id'], selection['largest_observation_as_of'], question))
         self.assertEqual(budget['context_limits'], task.CONTEXT_LIMITS)
         self.assertTrue(budget['within_limits'] and all(budget['checks'].values()))
         # It is a measurement of scenarios with stated assumptions, never described as a bound.
@@ -584,14 +591,27 @@ class PromptTests(unittest.TestCase):
         self.assertGreater(largest, 2048)
         self.assertLessEqual(max(budget['development_reference_path']['prompt_tokens_by_call_max']), 2048)
         # Maxima are selected by token count. A counter that inverts the ordering selects differently.
-        asset, tokens, compared = recovery_prompt.largest_inventory(len)
-        other, _, _ = recovery_prompt.largest_inventory(lambda text: -len(text))
-        self.assertNotEqual(asset, other)
-        self.assertEqual(compared, 203)
+        asset, as_of, tokens, compared, observations = recovery_prompt.largest_inventory(len)
+        other = recovery_prompt.largest_inventory(lambda text: -len(text))
+        self.assertNotEqual((asset, as_of), other[:2])
+        self.assertEqual((compared, observations), (203, selection['observations_compared']))
+        self.assertGreater(observations, compared)  # several times per asset, not one late time
+        self.assertIn('not every possible as_of', selection['observations_compared_are'])
+        # The request that carries the heavy scenario is the one the counter measures as longest.
+        rows = task.rows('development')
+        measured = recovery_prompt.budget(lambda text: 50 + (1000 if rows[7]['question'] in text else 0))
+        self.assertEqual(measured['selection']['longest_request_case_id'], rows[7]['case_id'])
+        # The overall maximum covers every measured array: here only one development
+        # reference-path prompt is large, and the heavy scenario is small.
+        policy_id = task.call('get_asset', {'asset_id': task.target(rows[3]['question'])[0]})['policy_id']
+        measured = recovery_prompt.budget(lambda text: 4000 if rows[3]['question'] in text and policy_id in text else 10)
+        self.assertEqual(measured['largest_measured_prompt_tokens'], 4000)
+        self.assertEqual(max(measured['heavy_scenario']['prompt_tokens_by_call'] + measured['heavy_scenario']['with_initial_typed_error']), 10)
+        self.assertEqual((measured['checks']['every_measured_prompt_within_trajectory_prompt_limit'], measured['within_limits']), (False, False))
         if os.environ.get('AGL_PINNED_TOKENIZER'):
             count = recovery_prompt.tokenizer(os.environ['AGL_PINNED_TOKENIZER'])
             self.assertEqual(recovery_prompt.budget(count), budget)
-            self.assertEqual(recovery_prompt.largest_inventory(count)[:2], (selection['largest_observation_asset_id'], selection['largest_observation_tokens']))
+            self.assertEqual(recovery_prompt.largest_inventory(count)[:3], (selection['largest_observation_asset_id'], selection['largest_observation_as_of'], selection['largest_observation_tokens']))
 
 
 if __name__ == '__main__':

@@ -62,8 +62,10 @@ def calibration_report(args):
             'evidence_class': result['evidence_class'], 'live_policy_measurement': result['live_policy_measurement'],
             'provenance': result['provenance'], 'plan_problems': result['plan_problems'],
             'episodes_admitted_after_recomputation_from_traces': sum(r['accounting']['admitted'] for r in result['routes'].values()),
+            # Counts of expected (case, rollout) slots. None means unknown: no trace evidence was available.
             'accounting': {a: {k: r['accounting'][k] for k in ('expected', 'admitted', 'observed_attempts', 'rewards_confirmed',
-                                                               'rewards_missing', 'unattempted', 'unknown', 'rejected_untrusted')}
+                                                               'rewards_missing', 'unattempted', 'unknown', 'rejected_untrusted',
+                                                               'unexpected_extra_attempts')}
                            for a, r in result['routes'].items()},
             'decisions': {a: {k: r['decision'][k] for k in ('operational_validity', 'scientific_suitability', 'reasons')}
                           for a, r in result['routes'].items()}}

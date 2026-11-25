@@ -179,11 +179,27 @@ def calibration_collection(plan, index, read, local=None):
             return read(name)
         except Exception:  # an unavailable durable file is evidence of nothing
             return None
-    reviews, calls, timings = {}, set(), {}
+    reviews, calls, timings, route_problems = {}, set(), {}, {}
+    if not index_problem:
+        states = [v.get('status') if isinstance(v, dict) else None for v in index['jobs'].values()]
+        # The supervisor derives the index status from its jobs; anything else was not written by it.
+        if index.get('status') != ('completed' if set(states) == {'completed'} else 'unknown' if 'unknown' in states
+                                   else 'cancelled' if 'cancelled' in states else 'failed'):
+            index_problem = 'the supervisor index status is inconsistent with its jobs'
     for job in plan['jobs']:
-        entries = [] if index_problem else index['jobs'][job['job_id']].get('stages') or []
+        state = {} if index_problem else index['jobs'][job['job_id']]
+        state = state if isinstance(state, dict) else {}
+        entries = state.get('stages') if isinstance(state.get('stages'), list) else []
+        entries = [e if isinstance(e, dict) else {} for e in entries]
         names = [e.get('stage') for e in entries]
         route = reviews[job['algorithm']] = []
+        if not index_problem:
+            # The route's job must have completed with exactly the planned stages, in order.
+            problems = route_problems[job['algorithm']] = []
+            if state.get('status') != 'completed':
+                problems.append(f"the supervisor index records this job as {state.get('status')!r}, not completed")
+            if names != [s['name'] for s in job['stages']]:
+                problems.append('the supervisor index does not hold exactly the planned stages in order')
         for stage in job['stages']:
             request = c.stage_request(plan, job, stage)
             entry = entries[names.index(stage['name'])] if names.count(stage['name']) == 1 else None
@@ -198,8 +214,8 @@ def calibration_collection(plan, index, read, local=None):
                     durable = {'verified': True, 'problems': []}
                 except Exception as exc:
                     durable = {'verified': False, 'problems': [f'{type(exc).__name__}: {exc}'[:200]]}
-                result = entry.get('result') or {}
-                if 'started_at' in result and 'finished_at' in result:
+                result = entry.get('result') if isinstance(entry.get('result'), dict) else {}
+                if all(isinstance(result.get(k), (int, float)) for k in ('started_at', 'finished_at')):
                     timings[f"{job['algorithm']}/{stage['name']}"] = round(result['finished_at'] - result['started_at'], 1)
             run = Path(local)/PurePosixPath(stage['output']).relative_to(plan['root']) if local is not None else None
             route.append(calibration.review_stage(
@@ -209,7 +225,7 @@ def calibration_collection(plan, index, read, local=None):
                   'supervisor index, receipts, completions and observability joined per stage'
                   + ('; traces and audit events recomputed from the collected directory' if local is not None
                      else '; traces and audit events not available to this reader'))
-    report = calibration.report(plan, reviews, plan_problems, timings, provenance)
+    report = calibration.report(plan, reviews, plan_problems, timings, provenance, route_problems)
     complete = report['live_policy_measurement']
     admitted = all(s['packet_status'] == 'admitted' for r in report['routes'].values() for s in r['stages'].values())
     out = {'evidence_complete': complete, 'operational_completion': 'completed' if admitted else 'incomplete or unverified',

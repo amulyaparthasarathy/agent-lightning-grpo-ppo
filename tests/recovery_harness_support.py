@@ -80,7 +80,10 @@ def completion(step, *, content=None, calls=(), finish=None, completion_tokens=A
         choice['stop_reason'] = stop_reason
     body = {'id': f'scripted-{step}', 'object': 'chat.completion', 'created': 0, 'model': 'auto', 'choices': [choice]}
     if usage:
-        body['usage'] = {'prompt_tokens': 0, 'completion_tokens': completion_tokens, 'total_tokens': completion_tokens}
+        # SIMULATED prompt size: positive, as a server reports, and unrelated to the real prompt.
+        prompt_tokens = 900 + 100 * (step if isinstance(step, int) else 0)
+        body['usage'] = {'prompt_tokens': prompt_tokens, 'completion_tokens': completion_tokens,
+                         'total_tokens': prompt_tokens + completion_tokens}
     return ChatCompletion.model_validate(body)
 
 

@@ -14,6 +14,7 @@ from collections import Counter
 import hashlib
 import json
 import math
+import re
 from pathlib import Path
 
 try:
@@ -121,9 +122,12 @@ def served_evidence(records, llms):
         rebuilt = {'finish_reason': s['finish_reason'], 'content': text if s['content_present'] else None,
                    'tool_calls': s['tool_calls'], 'usage': s['usage']}
         state, reason = task.generation_status(rebuilt, llm['inputs']['client_generation_defaults']['max_tokens'])
+        usage = llm['outputs'].get('usage')
         if (calls != s['tool_calls'] or s['completion'] != {'state': state, 'reason': reason} or state != 'complete'
                 or (text is not None and s['content_present']
-                    and hashlib.sha256(text.encode()).hexdigest() != s['content_sha256'])):
+                    and hashlib.sha256(text.encode()).hexdigest() != s['content_sha256'])
+                # The recorded usage is the served usage, or absent where the client could not tell zeros from none.
+                or (usage is not None and usage != s['usage'])):
             raise ValueError('Served response evidence differs from the recorded generation or does not establish completion')
     return [r['outputs'] for r in served]
 
@@ -168,7 +172,9 @@ def episode_row(records, request, evidence_class='live-model'):
     if terminal:
         reward = 0.0
         diagnostics.update(json_syntax=None, format_compliant=None, failure_class='action')
-    if reward != out['reward'] or diagnostics != out['diagnostics'] or out['successful_tool_calls'] != len(ledger):
+    rounds = sum(bool(s['tool_calls']) for s in served)
+    if (reward != out['reward'] or diagnostics != out['diagnostics'] or out['successful_tool_calls'] != len(ledger)
+            or out['tool_rounds'] != rounds):
         raise ValueError('Recorded reward or diagnostics differ from independent re-verification')
     usage = [(r['outputs'] or {}).get('usage') or {} for r in llms]
     family, variant = task.family(case['case_id'])
@@ -190,14 +196,17 @@ def episode_row(records, request, evidence_class='live-model'):
                                'arguments_sha256': hashlib.sha256(a['inputs']['call']['arguments'].encode()).hexdigest(),
                                'policy_error': a['outputs']['policy_error'], 'successful': a['outputs']['successful_tool_call']}
                               for a in actions],
-            'tool_names_rewritten_by_framework': sum(s['framework_normalized']['tool_names_differ'] for s in served),
-            'recovered': out['recovered'], 'tool_rounds': out['tool_rounds'], 'llm_calls': len(llms),
+            # Re-derived from the served names: how many the pinned client would have rewritten.
+            'tool_names_rewritten_by_framework': sum(re.sub(r'[^a-zA-Z0-9_-]', '_', c['name'])[:64] != c['name']
+                                                     for s in served for c in s['tool_calls']),
+            'recovered': out['recovered'], 'tool_rounds': rounds, 'llm_calls': len(llms),
             'successful_calls_by_tool': dict(Counter(row['tool'] for row in ledger)),
             'joined_observation_chains': len(chains),
             'prompt_tokens': [u.get('prompt_tokens') for u in usage],
             'completion_tokens': [u.get('completion_tokens') for u in usage],
-            'finish_reasons': [(r['outputs'] or {}).get('finish_reason') for r in llms],
             'served_finish_reasons': [s['finish_reason'] for s in served],
+            # The pinned client's relabelled finish reasons, kept only for comparison.
+            'framework_finish_reasons': [(r['outputs'] or {}).get('finish_reason') for r in llms],
             'served_stop_reasons': [s['stop_reason'] for s in served]}
 
 
@@ -349,76 +358,122 @@ def validate_stage(plan, job, stage, proof):
     return report
 
 
+RECOVERY_OUTCOMES = ('complete_final', 'complete_recovered', 'terminal_policy_failure')
+
+
 def inspect_traces(run, request, declared_class):
     """Diagnostic reading of whatever traces exist. Never raises for bad evidence.
 
-    Returns per-trace facts and the rows that pass review. An attempt is a trace
-    file; a confirmed reward is a recorded successful reward post, whether or not
-    the episode is otherwise trusted.
+    Returns facts, the rows that pass review, and one entry per trace file with the
+    slot it claims (case and rollout), whether a reward delivery was confirmed and
+    whether the episode completed.
     """
-    facts = {'observed_attempts': 0, 'completed': 0, 'rewards_confirmed': 0, 'unreadable': 0,
-             'rejected_untrusted': 0, 'rejection_reasons': Counter(), 'incomplete_exceptions': Counter(),
-             'evidence_classes': Counter(), 'model_calls': 0, 'model_calls_with_reported_usage': 0}
-    rows = []
+    facts = {'trace_files': 0, 'unreadable': 0, 'rejected_untrusted': 0, 'rejection_reasons': Counter(),
+             'incomplete_exceptions': Counter(), 'evidence_classes': Counter(), 'model_calls': 0,
+             'model_calls_with_reported_usage': 0}
+    rows, attempts = [], []
     for name, records in read_traces(run):
-        facts['observed_attempts'] += 1
-        if records is None:
+        facts['trace_files'] += 1
+        try:
+            if records is None or not all(isinstance(r, dict) for r in records):
+                raise ValueError('unreadable trace')
+            episodes = [r for r in records if r.get('kind') == 'episode']
+            episode = episodes[0] if len(episodes) == 1 else {}
+            out = episode.get('outputs') if isinstance(episode.get('outputs'), dict) else {}
+            calls = [r for r in records if r.get('kind') == 'llm']
+            facts['model_calls'] += len(calls)
+            facts['model_calls_with_reported_usage'] += sum(
+                isinstance(r.get('outputs'), dict) and bool(r['outputs'].get('usage')) for r in calls)
+            facts['evidence_classes'][str(episode.get('evidence_class', 'unrecorded'))] += 1
+            confirmed = episode.get('execution_status') == 'ok' and out.get('reward_posted') is True
+            try:
+                completed = reader_integration.episode_outcome(records) in RECOVERY_OUTCOMES
+            except Exception:
+                completed = False
+            exception = episode.get('exception') if isinstance(episode.get('exception'), dict) else {}
+            attempt = {'case_id': records[0].get('case_id'), 'rollout_id': records[0].get('rollout_id'),
+                       'confirmed': confirmed, 'completed': completed}
+        except Exception:
+            # Unreadable or malformed: a record that exists and cannot be trusted or placed.
             facts['unreadable'] += 1
             facts['rejected_untrusted'] += 1
-            facts['rejection_reasons']['unreadable trace'] += 1
+            facts['rejection_reasons']['unreadable or malformed trace'] += 1
             continue
-        episodes = [r for r in records if r.get('kind') == 'episode']
-        episode = episodes[0] if len(episodes) == 1 else {}
-        out = episode.get('outputs') or {}
-        calls = [r for r in records if r.get('kind') == 'llm']
-        facts['model_calls'] += len(calls)
-        facts['model_calls_with_reported_usage'] += sum(bool((r.get('outputs') or {}).get('usage')) for r in calls)
-        facts['evidence_classes'][str(episode.get('evidence_class', 'unrecorded'))] += 1
-        confirmed = episode.get('execution_status') == 'ok' and out.get('reward_posted') is True
-        facts['rewards_confirmed'] += confirmed
-        try:
-            completed = reader_integration.episode_outcome(records) != 'incomplete'
-        except (ValueError, KeyError, TypeError, AttributeError):
-            completed = False
-        facts['completed'] += completed
+        attempts.append(attempt)
         if not confirmed:
             # A real attempt without a confirmed reward: missing, never zero.
-            facts['incomplete_exceptions'][str((episode.get('exception') or {}).get('type', 'no terminal episode record'))] += 1
+            facts['incomplete_exceptions'][str(exception.get('type', 'no terminal episode record'))] += 1
             continue
         try:
             rows.append(episode_row(records, request, declared_class))
-        except (ValueError, KeyError, TypeError, AttributeError, task.EvidenceIntegrityError) as exc:
+        except Exception as exc:
             facts['rejected_untrusted'] += 1
             facts['rejection_reasons'][f'{type(exc).__name__}: {exc}'[:160]] += 1
     for key in ('rejection_reasons', 'incomplete_exceptions', 'evidence_classes'):
         facts[key] = dict(facts[key])
-    return facts, sorted(rows, key=lambda r: (r['case_id'], r['rollout_id']))
+    return facts, sorted(rows, key=lambda r: (r['case_id'], r['rollout_id'])), attempts
+
+
+def slot_accounting(declared, attempts):
+    """Count expected (case, rollout) slots, not files.
+
+    A slot is one of the declared rollouts of a declared case. Several traces of one
+    rollout fill one slot; a slot's reward is confirmed if any of them confirmed it.
+    Traces beyond the declared multiplicity, for other cases, or unreadable ones fill
+    no slot and are reported as extra.
+    """
+    per = declared['rollouts_per_question']
+    by_case = {}
+    for a in attempts:
+        if a['case_id'] in declared['case_ids'] and isinstance(a['rollout_id'], str) and a['rollout_id']:
+            slot = by_case.setdefault(a['case_id'], {}).setdefault(a['rollout_id'], {'confirmed': False, 'completed': False})
+            slot['confirmed'] |= a['confirmed']
+            slot['completed'] |= a['completed']
+    observed = confirmed = completed = 0
+    for case_id in declared['case_ids']:
+        slots = sorted(by_case.get(case_id, {}).values(), key=lambda s: (not s['confirmed'], not s['completed']))[:per]
+        observed += len(slots)
+        confirmed += sum(s['confirmed'] for s in slots)
+        completed += sum(s['completed'] for s in slots)
+    return observed, completed, confirmed
 
 
 def token_coverage(declared, events, facts):
     """What token, fragment, truncation and dropped-row evidence exists, with its coverage.
 
-    A value is None when no evidence covers it. It is never reported as zero by default.
+    A value is None when no evidence covers it. It is never reported as zero by
+    default, and absent local files are not read as a statement about the remote run.
     """
     out = {'model_calls_observed': facts['model_calls'] if facts else None,
            'model_calls_with_reported_usage': facts['model_calls_with_reported_usage'] if facts else None}
     if declared['mode'] != 'sampled':
         return {**out, 'adapter_evidence': 'not applicable to a greedy stage'}
-    measured = [e for e in events or [] if e['event'] == 'calibration_collection_tokens']
-    manifests = [e for e in events or [] if e['event'] == 'collection_manifest']
-    covered = measured[0]['rollouts'] if len(measured) == 1 else []
-    return {**out, 'rollouts_expected': declared['expected_episodes'],
-            'rollouts_in_adapter_manifest': len(manifests[0]['trajectories']) if len(manifests) == 1 else None,
-            'rollouts_with_token_evidence': len(covered) if len(measured) == 1 else 0,
-            'sampled_tokens': sum(t['original_generated_tokens'] for t in manifests[0]['trajectories']) if len(manifests) == 1 else None,
-            'mask_tokens': sum(t['mask_tokens'] for t in covered) if covered else None,
-            'masked_context_tokens': sum(t['context_tokens'] for t in covered) if covered else None,
-            'fragment_rows': sum(len(t['prompt_tokens']) for t in covered) if covered else None,
-            'largest_fragment_prompt_tokens': max((p for t in covered for p in t['prompt_tokens']), default=None),
-            'truncated_rows': measured[0]['truncated_rows'] if len(measured) == 1 else None,
-            'dropped_prompt_rows': measured[0]['dropped_prompt_rows'] if len(measured) == 1 else None,
-            'adapter_evidence': ('measured by the collection adapter' if len(measured) == 1 else
-                                 'absent: the adapter did not admit a collection, so truncation and dropped rows are unknown')}
+    empty = {**out, 'rollouts_expected': declared['expected_episodes'], 'rollouts_in_adapter_manifest': None,
+             'rollouts_with_token_evidence': None, 'sampled_tokens': None, 'mask_tokens': None, 'masked_context_tokens': None,
+             'fragment_rows': None, 'largest_fragment_prompt_tokens': None, 'truncated_rows': None, 'dropped_prompt_rows': None}
+    if events is None:
+        return {**empty, 'adapter_evidence': 'unknown: no readable audit events are available locally'}
+    try:
+        measured = [e for e in events if e['event'] == 'calibration_collection_tokens']
+        manifests = [e for e in events if e['event'] == 'collection_manifest']
+        if len(measured) > 1 or len(manifests) > 1:
+            return {**empty, 'adapter_evidence': 'ambiguous: more than one collection is recorded in the audit events'}
+        covered = measured[0]['rollouts'] if measured else []
+        return {**empty,
+                'rollouts_in_adapter_manifest': len(manifests[0]['trajectories']) if manifests else None,
+                'rollouts_with_token_evidence': len(covered),
+                'sampled_tokens': sum(t['original_generated_tokens'] for t in manifests[0]['trajectories']) if manifests else None,
+                'mask_tokens': sum(t['mask_tokens'] for t in covered) if covered else None,
+                'masked_context_tokens': sum(t['context_tokens'] for t in covered) if covered else None,
+                'fragment_rows': sum(len(t['prompt_tokens']) for t in covered) if covered else None,
+                'largest_fragment_prompt_tokens': max((p for t in covered for p in t['prompt_tokens']), default=None),
+                'truncated_rows': measured[0]['truncated_rows'] if measured else None,
+                'dropped_prompt_rows': measured[0]['dropped_prompt_rows'] if measured else None,
+                'adapter_evidence': ('measured by the collection adapter' if measured else
+                                     'the collected audit events hold no adapter token measurement, so truncation and '
+                                     'dropped rows are unknown')}
+    except (KeyError, TypeError, AttributeError):
+        return {**empty, 'adapter_evidence': 'unknown: the audit events are malformed'}
 
 
 def review_stage(request, *, supervisor=None, receipt=None, proof=None, durable=None, run=None):
@@ -431,106 +486,116 @@ def review_stage(request, *, supervisor=None, receipt=None, proof=None, durable=
     report recomputed from those traces and the collected audit events equals the
     completion summary. A summary, or a field that says "live-model", is never enough.
 
-    Diagnostics are separate and tolerant. Missing local files never establish that
-    remote work did not happen: unattempted work is claimed only when the supervisor
-    index shows the stage was never dispatched, or a finished stage left fewer traces
-    than expected. Everything else is unknown.
+    Diagnostics are separate and tolerant; malformed evidence is reported, not
+    raised. Missing local files never establish that remote work did not happen:
+    unattempted work is claimed only when the supervisor index shows the stage was
+    never dispatched and nothing local contradicts it. Every expected slot of a
+    dispatched stage that has no local trace is unknown.
     """
     plan, job, stage = request['plan'], request['job'], request['stage']
     declared = plan['calibration']['stages'][stage['name']]
     expected = declared['expected_episodes']
     problems, checks = [], {}
-    supervisor = supervisor or {}
+    supervisor = supervisor if isinstance(supervisor, dict) else {}
+    receipt = receipt if isinstance(receipt, dict) else {}
+    proof = proof if isinstance(proof, dict) else None
     status = supervisor.get('status', 'unavailable')
-    # Never dispatched only when the supervisor recorded a skipped stage without a call.
-    # A call id means it ran; anything else (for example an uncertain spawn) is not known.
-    dispatched = (True if supervisor.get('call_id') else
-                  False if status == 'skipped' else None)
-    declared_class = (proof or {}).get('calibration', {}).get('evidence_class')
-    if declared_class not in ('live-model', 'scripted-inference'):
-        declared_class = None
-
-    summary = None
+    summary = declared_class = None
     if proof is None:
         checks['completion_summary'] = 'absent'
     else:
         try:
             summary = validate_stage(plan, job, stage, proof)
             checks['completion_summary'] = 'valid'
-        except (ValueError, KeyError, TypeError) as exc:
+            declared_class = summary['evidence_class']
+        except Exception as exc:
             checks['completion_summary'] = 'invalid'
-            problems.append(f'completion summary: {type(exc).__name__}: {exc}')
+            problems.append(f'completion summary: {type(exc).__name__}: {exc}'[:240])
     if durable is None:
         checks['durable_identity'] = 'not checked: no supervisor index or receipts were available'
     else:
         checks['durable_identity'] = 'verified' if durable['verified'] else 'failed'
         problems += [f'durable identity: {p}' for p in durable['problems']]
 
-    facts = rows = events = None
+    facts = rows = attempts = events = None
     traces_present = run is not None and (Path(run)/'traces').is_dir() and any((Path(run)/'traces').glob('trajectory-*.jsonl'))
     audit_present = run is not None and (Path(run)/'audit').is_dir() and any((Path(run)/'audit').glob('events-*.jsonl'))
     checks['traces'] = 'present' if traces_present else 'absent locally'
     checks['audit_events'] = 'present' if audit_present else 'absent locally'
     if traces_present:
         # Without a valid summary there is no declared class; review as live, the strictest reading.
-        facts, rows = inspect_traces(run, request, declared_class or 'live-model')
+        facts, rows, attempts = inspect_traces(run, request, declared_class or 'live-model')
     if audit_present:
         try:
             events = read_events(run)
-        except (ValueError, OSError) as exc:
-            problems.append(f'audit events unreadable: {type(exc).__name__}')
+            if not all(isinstance(e, dict) and isinstance(e.get('event'), str) for e in events):
+                raise ValueError('malformed audit event')
+            audit = audit_counts(events)
+        except Exception as exc:
+            events = None
+            problems.append(f'audit events unreadable or malformed: {type(exc).__name__}')
     recomputed = False
     if summary is not None and traces_present and events is not None:
         try:
-            again = assemble(request, events, rows, summary['evidence_class'])
-            recomputed = (facts['observed_attempts'] == expected and len(rows) == expected
+            again = assemble(request, events, rows, summary['evidence_class'],
+                             checkpoints=bool(list((Path(run)/'checkpoints').glob('global_step_*'))))
+            recomputed = (facts['trace_files'] == expected and len(rows) == expected
                           and json.loads(json.dumps(again)) == {k: proof[k] for k in ('calibration', 'optimizer_updates')})
             if not recomputed:
                 problems.append('the stage report recomputed from traces and audit events differs from the completion summary')
-        except (ValueError, KeyError, TypeError) as exc:
-            problems.append(f'recomputation from traces and audit events: {type(exc).__name__}: {exc}')
+        except Exception as exc:
+            problems.append(f'recomputation from traces and audit events: {type(exc).__name__}: {exc}'[:240])
     elif summary is not None:
         problems.append('supporting traces or audit events are not available, so the summary cannot be rechecked')
     checks['recomputed_from_traces_and_audit'] = recomputed
     admitted = summary is not None and durable is not None and durable['verified'] and recomputed
 
+    # Execution status, from the supervisor first and the stage's own receipt second.
+    local_evidence = traces_present or audit_present or proof is not None or bool(receipt)
+    never_dispatched = bool(supervisor) and status == 'skipped' and not supervisor.get('call_id')
     if admitted:
         packet = 'admitted'
-    elif dispatched is False and not traces_present and proof is None:
-        packet = 'unattempted'  # the supervisor index shows it was never dispatched
+    elif never_dispatched and not local_evidence:
+        packet = 'unattempted'
+    elif never_dispatched:
+        packet = 'rejected'
+        problems.append('the supervisor index records the stage as never dispatched, but local evidence exists for it')
+    elif status in ('failed', 'cancelled') or receipt.get('status') == 'failed':
+        packet = 'failed'  # known to have failed, whether or not it left any episode evidence
+    elif status in ('submitted', 'started', 'planned', 'unknown'):
+        packet = 'unknown'  # not known to have ended; partial evidence is diagnostic only
     elif traces_present or proof is not None:
-        packet = 'failed' if status in ('failed', 'cancelled') or (receipt or {}).get('status') == 'failed' else 'rejected'
+        packet = 'rejected'
     else:
-        packet = 'unknown'  # nothing local and no evidence that it never ran
+        packet = 'unknown'  # nothing local and no evidence about what happened
 
     episodes = {'expected': expected, 'admitted': expected if admitted else 0}
-    if facts is not None:
-        observed = facts['observed_attempts']
-        # Known to have ended: the supervisor says so, or, with no supervisor entry at all, the
-        # stage's own receipt does. A supervisor status of unknown is not overridden by a receipt.
-        ended = (status in ('completed', 'failed', 'cancelled')
-                 or (not supervisor and (receipt or {}).get('status') in ('completed', 'failed')))
-        remaining = max(expected - observed, 0)
-        episodes.update(observed_attempts=observed, completed=facts['completed'], rewards_confirmed=facts['rewards_confirmed'],
-                        rewards_missing=observed - facts['rewards_confirmed'], rejected_untrusted=facts['rejected_untrusted'],
-                        reviewable=len(rows), unexpected_extra_attempts=max(observed - expected, 0),
-                        # Fewer traces than expected is unattempted work only if the stage is known to have ended.
-                        unattempted=remaining if ended else 0, unknown=0 if ended else remaining)
-    elif packet == 'unattempted':
-        episodes.update(observed_attempts=0, completed=0, rewards_confirmed=0, rewards_missing=0, rejected_untrusted=0,
-                        reviewable=0, unexpected_extra_attempts=0, unattempted=expected, unknown=0)
+    if packet == 'unattempted':
+        episodes.update(trace_files=0, observed_attempts=0, completed=0, rewards_confirmed=0, rewards_missing=0,
+                        rewards_confirmed_not_admitted=0, rejected_untrusted=0, reviewable=0, unexpected_extra_attempts=0,
+                        unattempted=expected, unknown=0)
+    elif facts is not None:
+        observed, completed, confirmed = slot_accounting(declared, attempts)
+        episodes.update(trace_files=facts['trace_files'], observed_attempts=observed, completed=completed,
+                        rewards_confirmed=confirmed, rewards_missing=observed - confirmed,
+                        rewards_confirmed_not_admitted=confirmed - episodes['admitted'],
+                        rejected_untrusted=facts['rejected_untrusted'], reviewable=len(rows),
+                        unexpected_extra_attempts=facts['trace_files'] - observed,
+                        # A slot with no local trace is not known to have run or not run.
+                        unattempted=0, unknown=expected - observed)
     else:
         # A summary alone, or nothing at all: what was attempted is not established here.
-        episodes.update(observed_attempts=None, completed=None, rewards_confirmed=None, rewards_missing=None,
-                        rejected_untrusted=None, reviewable=None, unexpected_extra_attempts=None, unattempted=0, unknown=expected)
+        episodes.update(trace_files=None, observed_attempts=None, completed=None, rewards_confirmed=None, rewards_missing=None,
+                        rewards_confirmed_not_admitted=None, rejected_untrusted=None, reviewable=None,
+                        unexpected_extra_attempts=None, unattempted=0, unknown=expected)
     return {'stage': stage['name'], 'mode': declared['mode'], 'packet_id': declared['packet_id'], 'packet_status': packet,
             'evidence_class': summary['evidence_class'] if admitted else None,
-            'execution': {'supervisor_status': status, 'dispatched': dispatched,
-                          'receipt_status': (receipt or {}).get('status', 'unavailable'),
-                          'receipt_error': (receipt or {}).get('error')},
+            'execution': {'supervisor_status': status, 'dispatched': (True if supervisor.get('call_id') else
+                                                                      False if never_dispatched else None),
+                          'receipt_status': receipt.get('status', 'unavailable'), 'receipt_error': receipt.get('error')},
             'episodes': episodes, 'checks': checks, 'problems': problems,
             'trace_facts': facts, 'token_evidence': token_coverage(declared, events, facts),
-            'audit': audit_counts(events) if events is not None else None,
+            'audit': audit if events is not None else None,
             'rows': rows if admitted else [],
             # Reviewable episodes of a packet that is not admitted: for diagnosis only.
             'diagnostic_rows': [] if admitted or rows is None else rows,
@@ -571,7 +636,7 @@ def _summary(episodes):
             'episodes_without_reported_usage': sum(None in e['completion_tokens'] for e in episodes),
             'prompt_tokens_max': max((t for e in episodes for t in e['prompt_tokens'] if t is not None), default=None),
             'completion_tokens_reported': sum(t for e in episodes for t in e['completion_tokens'] if t is not None),
-            'finish_reasons': dict(Counter(f for e in episodes for f in e['served_finish_reasons']))}
+            'served_finish_reasons': dict(Counter(f for e in episodes for f in e['served_finish_reasons']))}
 
 
 def _groups(episodes):
@@ -633,14 +698,14 @@ def screen(greedy, sampled, groups):
             'sampled_successes_and_failures_both_observed': 0 < sampled['reward_sum'] < sampled['episodes']}
 
 
-def decide(reviews, results, plan_problems):
+def decide(reviews, results, plan_problems, route_problems=()):
     """Operational validity and scientific suitability, as separate decisions.
 
     A live scientific decision is given only for a route whose four packets are all
     admitted from live evidence under an executable plan. Anything else is explicitly
     invalid, unverified or mechanics-only, with its reasons, and stays unassessed.
     """
-    reasons = list(plan_problems)
+    reasons = list(plan_problems) + list(route_problems)
     statuses = {r['stage']: r['packet_status'] for r in reviews}
     reasons += [f"{name}: packet {status}" for name, status in statuses.items() if status != 'admitted']
     complete = all(status == 'admitted' for status in statuses.values())
@@ -649,12 +714,16 @@ def decide(reviews, results, plan_problems):
     if complete and not live:
         reasons.append('evidence is scripted or simulated, not a live model' if classes == {'scripted-inference'}
                        else 'evidence classes are mixed within the route')
-    if live and results['sampled']['episodes_without_reported_usage'] + results['greedy']['episodes_without_reported_usage']:
-        reasons.append('some generations have no reported usage, so completion and token accounting are not established')
-    limits = task.CONTEXT_LIMITS
-    largest = max((p for part in ('greedy', 'sampled') for p in [results[part]['prompt_tokens_max']] if p is not None), default=None) if results else None
-    if live and (largest is None or largest > limits['trajectory_max_prompt_length']):
-        reasons.append('served prompt tokens are unreported or exceed the declared trajectory prompt limit')
+    if live:
+        rows = [e for r in reviews for e in r['rows']]
+        limit = task.CONTEXT_LIMITS['trajectory_max_prompt_length']
+        # Every generation of every episode must carry its own served usage.
+        if any(None in e['completion_tokens'] or None in e['prompt_tokens'] or not all(p > 0 for p in e['prompt_tokens'])
+               for e in rows):
+            reasons.append('some generations have no reported usage, so completion, prompt size and token accounting '
+                           'are not established')
+        elif any(p > limit for e in rows for p in e['prompt_tokens']):
+            reasons.append('a served prompt exceeds the declared trajectory prompt limit')
     if not complete:
         validity = 'invalid'
     elif not live:
@@ -705,35 +774,43 @@ def route_results(reviews, declared):
                         'per_question': per_question}}
 
 
-def report(plan, reviews, plan_problems=(), timings=None, provenance=None):
+def report(plan, reviews, plan_problems=(), timings=None, provenance=None, route_problems=None):
     """Machine-readable calibration report from reviewed stages (see review_stage).
 
-    reviews[algorithm] is the ordered list of stage reviews of that route. Admission
-    and diagnostics are kept apart: `accounting` and `stages` describe everything
-    that is known, including failures and unknowns; `results` and a scientific
-    decision exist only for a route whose every packet is admitted. Nothing is
-    zero-filled, padded, dropped or pooled across routes.
+    reviews[algorithm] is the ordered list of stage reviews of that route. This
+    function does arithmetic on reviews; it does not establish them. The entry
+    points that may produce a live decision build reviews only through
+    reader_evidence.calibration_collection. Admission and diagnostics are kept
+    apart: `accounting` and `stages` describe everything that is known, including
+    failures and unknowns; `results` and a scientific decision exist only for a
+    route whose every packet is admitted. Nothing is zero-filled, padded, dropped or
+    pooled across routes.
     """
     declared = plan['calibration']
     if modes.phase(plan) != modes.CALIBRATION or declared != declaration():
         raise ValueError('Not a current recovery calibration plan')
-    out_routes = {}
+    out_routes, admitted_classes = {}, set()
     for job in plan['jobs']:
         route = reviews[job['algorithm']]
         if [r['stage'] for r in route] != [s['name'] for s in job['stages']]:
             raise ValueError('Stage reviews differ from the planned stages')
         results = route_results(route, declared)
         totals = {'expected': declared['episodes_per_algorithm']}
-        for key in ('admitted', 'observed_attempts', 'completed', 'rewards_confirmed', 'rewards_missing',
-                    'rejected_untrusted', 'unattempted', 'unknown'):
-            values = [r['episodes'][key] for r in route]
-            # A total is given over the stages that have the evidence; coverage says which.
-            totals[key] = sum(v for v in values if v is not None)
-        totals['stages_with_trace_evidence'] = sum(r['episodes']['observed_attempts'] is not None and r['trace_facts'] is not None for r in route)
+        for key in ('admitted', 'unattempted', 'unknown'):
+            totals[key] = sum(r['episodes'][key] for r in route)
+        for key in ('trace_files', 'observed_attempts', 'completed', 'rewards_confirmed', 'rewards_missing',
+                    'rewards_confirmed_not_admitted', 'rejected_untrusted', 'reviewable', 'unexpected_extra_attempts'):
+            values = [r['episodes'][key] for r in route if r['episodes'][key] is not None]
+            # Unknown when no stage has the evidence; otherwise a sum over the stages that do.
+            totals[key] = sum(values) if values else None
+        totals['stages_with_trace_evidence'] = sum(r['trace_facts'] is not None for r in route)
         totals['stages'] = len(route)
-        totals['note'] = ('counts other than expected, admitted, unattempted and unknown cover only stages with collected '
-                          'traces; an unavailable stage contributes to unknown, never to missing or to zero')
+        totals['note'] = ('expected = observed attempts + unattempted + unknown, counted in expected (case, rollout) slots; '
+                          'observed = rewards confirmed + missing; confirmed = admitted + confirmed but not admitted. '
+                          'Slot counts cover stages with collected traces or shown never to have been dispatched; every '
+                          'other slot is unknown, never missing and never zero')
         classes = {r['evidence_class'] for r in route if r['packet_status'] == 'admitted'}
+        admitted_classes |= classes
         admitted_reports = {r['stage']: r['summary_report'] for r in route if r['packet_status'] == 'admitted'}
         diagnostics = {}
         for r in route:
@@ -760,12 +837,12 @@ def report(plan, reviews, plan_problems=(), timings=None, provenance=None):
                                    if admitted_reports else None,
             'optimization_events_coverage': f'{len(admitted_reports)} of {len(route)} stages (admitted stages only)',
             'weight_refresh_steps_by_stage': {name: s['audit']['weight_refresh_steps'] for name, s in admitted_reports.items()},
-            'decision': decide(route, results, plan_problems)}
+            'decision': decide(route, results, plan_problems, (route_problems or {}).get(job['algorithm'], ()))}
     valid = [r['decision']['operational_validity'] == 'valid' for r in out_routes.values()]
-    classes = {r['evidence_class'] for r in out_routes.values()}
     return {'schema': REPORT_SCHEMA, 'task': task.TASK, 'episode_policy': task.EPISODE_POLICY['version'],
-            'evidence_class': ('live-model' if classes == {'live-model'} else 'none admitted' if classes == {'none admitted'}
-                               else 'scripted-inference' if classes <= {'scripted-inference', 'none admitted'} else 'mixed'),
+            # The class of the evidence that is admitted, over all routes. Not a statement of completeness.
+            'evidence_class': ('none admitted' if not admitted_classes else 'live-model' if admitted_classes == {'live-model'}
+                               else 'scripted-inference' if admitted_classes == {'scripted-inference'} else 'mixed'),
             # True only when every route is a valid live calibration under the single admission definition.
             'live_policy_measurement': bool(valid) and all(valid),
             'provenance': provenance or 'not verified: no supervisor index was supplied',
@@ -809,9 +886,10 @@ def summary(result):
                   f"- Operational validity: **{d['operational_validity']}**. Scientific suitability: **{d['scientific_suitability']}**.",
                   f"- Episodes: {a['expected']} expected; {a['admitted']} admitted; {show(a['observed_attempts'])} attempts observed, "
                   f"{show(a['completed'])} completed, {show(a['rewards_confirmed'])} rewards confirmed, "
-                  f"{show(a['rewards_missing'])} missing; {a['unattempted']} unattempted; {a['unknown']} unknown; "
-                  f"{show(a['rejected_untrusted'])} rejected as untrusted (trace evidence for "
-                  f"{a['stages_with_trace_evidence']} of {a['stages']} stages).",
+                  f"{show(a['rewards_missing'])} missing; {a['unattempted']} unattempted; {a['unknown']} unknown.",
+                  f"- Records: {show(a['trace_files'])} trace files, {show(a['rejected_untrusted'])} rejected as untrusted, "
+                  f"{show(a['unexpected_extra_attempts'])} beyond the expected slots "
+                  f"(trace evidence for {a['stages_with_trace_evidence']} of {a['stages']} stages).",
                   '- Packets: ' + ', '.join(f"{name} {s['packet_status']}" for name, s in r['stages'].items()) + '.']
         if d['reasons']:
             lines += ['- Reasons: ' + '; '.join(d['reasons']) + '.']

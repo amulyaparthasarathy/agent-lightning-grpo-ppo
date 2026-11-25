@@ -153,18 +153,27 @@ def episode(question, actions, reflect=False):
 
 
 def largest_inventory(count):
-    """The asset whose complete inventory observation has the most tokens, by the pinned tokenizer.
+    """The inventory observation with the most tokens among those compared, by the supplied tokenizer.
 
-    Selected over every asset in the world at a time when all of its runs are visible.
-    Character length is not used: it does not order observations the way tokens do.
+    Compared: every asset in the world, at every time at which the content of its
+    inventory changes (a run starts, completes or is integrity-checked) and at one
+    late time when everything is visible. Character length is not used: it does not
+    order observations the way tokens do. The as_of echo and the inventory ID differ
+    at other times, so an observation at an arbitrary time can differ by a few tokens.
+    Returns (asset_id, as_of, tokens, assets compared, observations compared).
     """
-    sizes = {asset_id: count(json.dumps({'output': task.dumps(task.call(
-        'list_backup_runs', {'asset_id': asset_id, 'as_of': LATE}))})) for asset_id in sorted(task.registry()['runs'])}
-    asset_id = max(sizes, key=lambda a: (sizes[a], a))
-    return asset_id, sizes[asset_id], len(sizes)
+    sizes = {}
+    for asset_id, runs in sorted(task.registry()['runs'].items()):
+        times = {LATE} | {run[key] for run in runs for key in ('recovery_point_at', 'completed_at', 'integrity_checked_at')
+                          if run[key] is not None}
+        for as_of in sorted(times):
+            sizes[asset_id, as_of] = count(json.dumps({'output': task.dumps(task.call(
+                'list_backup_runs', {'asset_id': asset_id, 'as_of': as_of}))}))
+    asset_id, as_of = max(sizes, key=lambda k: (sizes[k], k))
+    return asset_id, as_of, sizes[asset_id, as_of], len({a for a, _ in sizes}), len(sizes)
 
 
-def scenarios(asset_id, question):
+def scenarios(asset_id, as_of_heavy, question):
     """The measured prompt sets: every development case on its reference path and on a
     five-round path, and one constructed heavy scenario with and without a typed error.
 
@@ -179,15 +188,15 @@ def scenarios(asset_id, question):
                    ('list_backup_runs', {'asset_id': target, 'as_of': as_of})]
         reference.append([v['prompt'] for v in episode(row['question'], actions)])
         extended.append([v['prompt'] for v in episode(row['question'], actions + actions[2:] * (rounds - 3), reflect=True)])
-    heavy = [('list_backup_runs', {'asset_id': asset_id, 'as_of': LATE})] * rounds
+    heavy = [('list_backup_runs', {'asset_id': asset_id, 'as_of': as_of_heavy})] * rounds
     return {'reference': reference, 'extended': extended,
             'heavy': [v['prompt'] for v in episode(question, heavy, reflect=True)],
             'heavy_after_typed_error': [v['prompt'] for v in episode(question, [('get_asset', {'asset_id': 'unknown'})] + heavy[1:], reflect=True)]}
 
 
-def prompt_set_sha256(asset_id, question, prompts=None):
+def prompt_set_sha256(asset_id, as_of, question, prompts=None):
     """Identity of every measured prompt; a committed measurement is current only if it matches."""
-    prompts = prompts or scenarios(asset_id, question)
+    prompts = prompts or scenarios(asset_id, as_of, question)
     return task.digest({name: [[hashlib.sha256(p.encode()).hexdigest() for p in row] for row in
                                (rows if name in ('reference', 'extended') else [rows])] for name, rows in prompts.items()})
 
@@ -202,11 +211,11 @@ def budget(count):
     collection rather than cutting anything.
     """
     rounds = task.EPISODE_POLICY['max_tool_iterations']
-    asset_id, observation_tokens, assets = largest_inventory(count)
+    asset_id, heavy_as_of, observation_tokens, assets, observations = largest_inventory(count)
     rows = task.rows('development')
     # The request whose initial prompt is longest in tokens carries the heavy scenario.
     longest = max(rows, key=lambda r: (count(episode(r['question'], [])[0]['prompt']), r['case_id']))
-    prompts = scenarios(asset_id, longest['question'])
+    prompts = scenarios(asset_id, heavy_as_of, longest['question'])
     measured = {name: ([[count(p) for p in row] for row in value] if name in ('reference', 'extended') else [count(p) for p in value])
                 for name, value in prompts.items()}
     reference, extended, heavy, error = (measured[k] for k in ('reference', 'extended', 'heavy', 'heavy_after_typed_error'))
@@ -238,18 +247,22 @@ def budget(count):
         'merged_heavy_scenario_within_response_limit': merged <= LIMITS['trajectory_max_response_length']}
     return {'schema': 'recovery-prompt-budget-v2', 'task': task.TASK, 'episode_policy': task.EPISODE_POLICY['version'],
             'exhaustive_bound': False,
-            'measured_prompts_sha256': prompt_set_sha256(asset_id, longest['question'], prompts),
+            'measured_prompts_sha256': prompt_set_sha256(asset_id, heavy_as_of, longest['question'], prompts),
             'template_sha256': hashlib.sha256(prepare_model.effective_template().encode()).hexdigest(),
             'context_limits': task.CONTEXT_LIMITS,
             'selection': {'method': 'token counts from the supplied tokenizer; no character-length proxy',
-                          'largest_observation_asset_id': asset_id, 'largest_observation_tokens': observation_tokens,
-                          'assets_compared': assets, 'longest_request_case_id': longest['case_id']},
+                          'largest_observation_asset_id': asset_id, 'largest_observation_as_of': heavy_as_of,
+                          'largest_observation_tokens': observation_tokens,
+                          'assets_compared': assets, 'observations_compared': observations,
+                          'observations_compared_are': ('every asset at each time its inventory content changes and at one '
+                                                        'late time; not every possible as_of'),
+                          'longest_request_case_id': longest['case_id']},
             'development_reference_path': {'cases': len(reference), 'calls': 4,
                                            'prompt_tokens_by_call_max': [max(c) for c in zip(*reference)],
                                            'prompt_tokens_by_call_min': [min(c) for c in zip(*reference)]},
             'development_five_round_reflection': {'cases': len(extended), 'calls': rounds + 1,
                                                   'prompt_tokens_by_call_max': [max(c) for c in zip(*extended)]},
-            'heavy_scenario': {'definition': f'{rounds} rounds of the largest inventory observation in the world, then reflection',
+            'heavy_scenario': {'definition': f'{rounds} rounds of the largest compared inventory observation, then reflection',
                                'prompt_tokens_by_call': heavy, 'with_initial_typed_error': error,
                                'merged_response_tokens': merged},
             'largest_measured_prompt_tokens': largest,
@@ -258,9 +271,9 @@ def budget(count):
             'headroom': {'prompt_limit_minus_largest_measured_prompt': LIMITS['trajectory_max_prompt_length'] - largest,
                          'response_limit_minus_merged_heavy_scenario': LIMITS['trajectory_max_response_length'] - merged},
             'assumptions': {
-                'scenario': ('Only the scenarios above were measured. The heavy scenario repeats the largest observation the '
-                             'world can return in every round; it is the largest scenario that was constructed, not a proof '
-                             'that no episode is larger.'),
+                'scenario': ('Only the scenarios above were measured. The heavy scenario repeats the largest inventory '
+                             'observation among those compared in every round; it is the largest scenario that was '
+                             'constructed, not a proof that no episode is larger.'),
                 'call_size': {'measured_schema_sized_call_tokens_max': call_tokens,
                               'statement': ('Earlier sampled calls are replayed in later prompts at the size the model wrote '
                                             'them. The scenarios assume calls about as large as their schema requires. A '

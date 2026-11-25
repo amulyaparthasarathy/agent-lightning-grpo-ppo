@@ -24,8 +24,11 @@
     "selection": {
       "method": "token counts from the supplied tokenizer; no character-length proxy",
       "largest_observation_asset_id": "ast-b971f123",
+      "largest_observation_as_of": "2027-12-31T23:59Z",
       "largest_observation_tokens": 383,
       "assets_compared": 203,
+      "observations_compared": 1893,
+      "observations_compared_are": "every asset at each time its inventory content changes and at one late time; not every possible as_of",
       "longest_request_case_id": "recovery-readiness-v1/development/c-5db1a70832"
     },
     "development_reference_path": {
@@ -57,7 +60,7 @@
       ]
     },
     "heavy_scenario": {
-      "definition": "5 rounds of the largest inventory observation in the world, then reflection",
+      "definition": "5 rounds of the largest compared inventory observation, then reflection",
       "prompt_tokens_by_call": [
         988,
         1421,
@@ -88,7 +91,7 @@
       "response_limit_minus_merged_heavy_scenario": 124
     },
     "assumptions": {
-      "scenario": "Only the scenarios above were measured. The heavy scenario repeats the largest observation the world can return in every round; it is the largest scenario that was constructed, not a proof that no episode is larger.",
+      "scenario": "Only the scenarios above were measured. The heavy scenario repeats the largest inventory observation among those compared in every round; it is the largest scenario that was constructed, not a proof that no episode is larger.",
       "call_size": {
         "measured_schema_sized_call_tokens_max": 42,
         "statement": "Earlier sampled calls are replayed in later prompts at the size the model wrote them. The scenarios assume calls about as large as their schema requires. A call may be up to 1023 tokens, so the headroom above can be used up by long sampled arguments."

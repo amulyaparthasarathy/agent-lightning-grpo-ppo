@@ -549,7 +549,10 @@ class ReportTests(unittest.TestCase):
         self.assertEqual({r['decision']['operational_validity'] for r in problem['routes'].values()}, {'invalid'})
         self.assertFalse(problem['live_policy_measurement'])
         for edit, reason in ((lambda e: e.update(completion_tokens=[None] * e['llm_calls']), 'no reported usage'),
-                             (lambda e: e.update(prompt_tokens=[4000] * e['llm_calls']), 'exceed the declared trajectory prompt limit')):
+                             # One generation of one episode without a served prompt count is enough.
+                             (lambda e: e['prompt_tokens'].__setitem__(0, None), 'no reported usage'),
+                             (lambda e: e['prompt_tokens'].__setitem__(0, 0), 'no reported usage'),
+                             (lambda e: e.update(prompt_tokens=[4000] * e['llm_calls']), 'exceeds the declared trajectory prompt limit')):
             reviews = fx.reviews(self.plan, fx.informative)
             edit(reviews[GRPO][0]['rows'][0])
             d = calibration.report(self.plan, reviews)['routes'][GRPO]['decision']

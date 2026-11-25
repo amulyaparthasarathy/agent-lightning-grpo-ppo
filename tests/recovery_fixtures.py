@@ -81,7 +81,7 @@ def row(case_id, behavior, route, rollout, evidence_class='live-model'):
             # Simulated server-reported usage, as a live run reports it.
             'joined_observation_chains': calls, 'prompt_tokens': [1000 + 70 * i for i in range(generations)],
             'completion_tokens': [20] * generations,
-            'finish_reasons': ['function_calls'] * (calls + len(errors)) + ([] if terminal else ['stop'])}
+            'framework_finish_reasons': ['function_calls'] * (calls + len(errors)) + ([] if terminal else ['stop'])}
 
 
 def rows(stage, behavior, tag='', evidence_class='live-model'):
@@ -166,7 +166,7 @@ def durable(plan, completions):
             files[stage['output'] + '/completion.json'] = proof
             files[stage['output'] + '/observability.json'] = {'wandb': stage['wandb']}
             receipts.append({'stage': stage['name'], 'status': 'completed', 'call_id': call, 'result': receipt, 'output': stage['output']})
-        index['jobs'][job['job_id']] = {'stages': receipts}
+        index['jobs'][job['job_id']] = {'status': 'completed', 'stages': receipts}
     return index, files
 
 
@@ -207,15 +207,16 @@ def reviews(plan, behavior, evidence_class='live-model', skip=()):
             simulated = events(declared, episodes)
             done = calibration.assemble(request, simulated, episodes, evidence_class)['calibration']
             n = len(episodes)
-            facts = {'observed_attempts': n, 'completed': n, 'rewards_confirmed': n, 'unreadable': 0, 'rejected_untrusted': 0,
+            facts = {'trace_files': n, 'unreadable': 0, 'rejected_untrusted': 0,
                      'rejection_reasons': {}, 'incomplete_exceptions': {}, 'evidence_classes': {evidence_class: n},
                      'model_calls': sum(e['llm_calls'] for e in episodes),
                      'model_calls_with_reported_usage': sum(e['llm_calls'] for e in episodes)}
             route.append({'stage': stage['name'], 'mode': declared['mode'], 'packet_id': declared['packet_id'],
                           'packet_status': 'admitted', 'evidence_class': evidence_class,
                           'execution': {'supervisor_status': 'completed', 'dispatched': True, 'receipt_status': 'completed', 'receipt_error': None},
-                          'episodes': {'expected': n, 'admitted': n, 'observed_attempts': n, 'completed': n, 'rewards_confirmed': n,
-                                       'rewards_missing': 0, 'rejected_untrusted': 0, 'reviewable': n, 'unexpected_extra_attempts': 0,
+                          'episodes': {'expected': n, 'admitted': n, 'trace_files': n, 'observed_attempts': n, 'completed': n,
+                                       'rewards_confirmed': n, 'rewards_missing': 0, 'rewards_confirmed_not_admitted': 0,
+                                       'rejected_untrusted': 0, 'reviewable': n, 'unexpected_extra_attempts': 0,
                                        'unattempted': 0, 'unknown': 0},
                           'checks': {'SIMULATED': 'admission bypassed by a test fixture'}, 'problems': [], 'trace_facts': facts,
                           'token_evidence': calibration.token_coverage(declared, simulated, facts),
