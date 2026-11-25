@@ -97,6 +97,7 @@ def bootstrap():
     spec = importlib.util.spec_from_file_location('train_calc_agent', example)
     calc = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(calc)
+    sys.modules[spec.name] = calc
     return calc
 
 
@@ -330,6 +331,19 @@ class ReaderTaskConfigs(unittest.TestCase):
                 for key in ('train_file','eval_file'):
                     with self.assertRaisesRegex(ValueError,'routing changed'):
                         matched_launch.validate_resolved(resolved,dict(rp,**{key:'/data/final_eval.parquet'}))
+
+    def test_cpu_preflight_composes_all_eight_future_configs_without_allocating_outputs(self):
+        from tempfile import TemporaryDirectory
+        from experiment import reader_preflight
+        from recovery_learning_support import request
+        with TemporaryDirectory() as tmp:
+            root = Path(tmp)/'physical'
+            root.mkdir()
+            mount = Path(tmp)/'logical'
+            mount.symlink_to(root)
+            records = reader_preflight.qualification_paths(request(selection='paired')['plan'],mount,'vo-test')
+            self.assertEqual(len(records),8)
+            self.assertEqual(list(root.iterdir()),[])
 
     def test_recovery_calibration_two_algorithms_four_stages_composed(self):
         from experiment import reader_contract as reader, reader_assets, recovery_task

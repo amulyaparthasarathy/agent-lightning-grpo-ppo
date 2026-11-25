@@ -61,20 +61,18 @@ def task_probe(plan, run, tokenizer):
 def qualification_paths(plan, mount, volume_id):
     """Compose the launcher's four stage configurations without allocating stage outputs."""
     try:
-        from . import matched_launch, qualification_paths as paths
+        from . import matched_launch
     except ImportError:
         import matched_launch
-        import qualification_paths as paths
     results = {}
     for job in plan['jobs']:
         for stage in job['stages']:
             request = c.stage_request(plan, job, stage)
-            binding = paths.observe(request, mount, volume_id)
-            local = paths.locations(request, binding)
-            matched_launch.make_plan(request, Path(__file__).parent, Path('/opt/agent-lightning'),
-                                     local['model'], local['data'], Path(sys.executable), local['run'],
-                                     8000, binding=binding)
-            results[stage['wandb']['id']] = binding
+            projected = matched_launch.mounted_stage_plan(request, mount, volume_id, Path(__file__).parent,
+                                                        Path('/opt/agent-lightning'), Path(sys.executable))
+            resolved, _ = matched_launch.resolve_training_config(projected)
+            matched_launch.validate_resolved(resolved, projected)
+            results[stage['wandb']['id']] = projected['path_binding']
     return results
 
 
@@ -84,6 +82,7 @@ def main(plan, run):
     scope = 'qual-train-dev' if c.modes.phase(plan) == c.modes.RECOVERY_LEARNING else 'all'
     path_evidence = {}
     if scope == 'qual-train-dev':
+        sys.path.insert(0, '/opt/agent-lightning/examples/calc_x')
         path_evidence['stage_paths'] = qualification_paths(plan, '/data', os.environ['AGL_READER_VOLUME_ID'])
     actual = assets.inspect(*(assets.owned_path('/data', plan['profile']['paths'][key])
                               for key in ('model', 'data', 'staging')), task=plan['profile']['task'], scope=scope)

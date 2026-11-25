@@ -35,24 +35,29 @@ def calibration(request):
         import recovery_calibration
     return recovery_calibration
 
+def resolve_training_config(plan):
+    """Compose the pinned Calc-X/Hydra configuration without starting services or reading a dataset."""
+    from omegaconf import OmegaConf
+    from train_calc_agent import build_config
+    from verl.trainer.constants_ppo import get_ppo_ray_runtime_env
+    kwargs = dict(model=plan['model'], agl_base_url=plan['gateway'], agl_key=plan['local_key'],
+                  run_name=plan['run_name'],
+                  config_overrides=ppo_contract.runtime_env_overrides(plan['overrides'], get_ppo_ray_runtime_env()))
+    return OmegaConf.to_container(build_config(**kwargs), resolve=True), kwargs
+
+
 WORKER = '''import json, os, sys
 from pathlib import Path
 import ray
-from omegaconf import OmegaConf
 from ppo_runtime import source_identity
-from ppo_contract import runtime_env_overrides
-from verl.trainer.constants_ppo import get_ppo_ray_runtime_env
 from matched_runtime import seed_process
-from matched_launch import validate_resolved
+from matched_launch import resolve_training_config, validate_resolved
 plan = json.loads(Path(sys.argv[1]).read_text())
 source_identity()
 seed_process(plan['request']['job']['seed_streams'])
 sys.path.insert(0, plan['calc_dir'])
-from train_calc_agent import build_config, train
-kwargs = dict(model=plan['model'], agl_base_url=plan['gateway'], agl_key=plan['local_key'],
-              run_name=plan['run_name'], config_overrides=runtime_env_overrides(plan['overrides'], get_ppo_ray_runtime_env()))
-config = build_config(**kwargs)
-resolved = OmegaConf.to_container(config, resolve=True)
+from train_calc_agent import train
+resolved, kwargs = resolve_training_config(plan)
 validate_resolved(resolved, plan)
 Path(plan['resolved_config']).write_text(json.dumps(resolved, indent=2)+'\\n')
 try:
@@ -150,6 +155,19 @@ def make_plan(request, bundle, repo, model, data, python, run, port, *, binding=
     elif request['plan'].get('phase') == 'collection-only':
         plan['train_file'] = str(run/'development-panel.parquet')
     return plan, commands
+
+
+def mounted_stage_plan(request, mount, volume_id, bundle, repo, python):
+    try:
+        from .reader_assets import owned_path
+    except ImportError:
+        from reader_assets import owned_path
+    binding = qualification_paths.observe(request, mount, volume_id)
+    profile = request['plan']['profile']['paths']
+    model, data = (owned_path(mount, profile[key]) for key in ('model', 'data'))
+    run = owned_path(mount, request['stage']['output'])
+    plan, _ = make_plan(request, bundle, repo, model, data, python, run, 8000, binding=binding)
+    return plan
 
 
 def check_launch_paths(plan, overrides):

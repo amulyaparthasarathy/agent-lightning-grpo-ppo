@@ -18,7 +18,7 @@ from unittest.mock import Mock, patch
 from experiment import matched_launch, matched_remote, matched_supervisor, reader_preflight, request_transport, reader_contract as c, reader_evidence as reader
 from experiment import recovery_calibration as cal, recovery_learning as learning, recovery_task as task
 from recovery_harness_support import TEXT, run_episode
-from recovery_learning_support import profile
+from recovery_learning_support import profile, resolved_fixture
 from test_reader_training import Registry, source
 import recovery_fixtures as fx
 
@@ -82,14 +82,7 @@ def scripted_services(commands, rp, run, repo, bundle, remaining):
     req = rp['request']
     stage, job = req['stage'], req['job']
     spec = learning.stage_spec(req)
-    cfg = {'actor_rollout_ref': {'model': {'path': rp['model']}}, 'agentlightning': {'async_rollout': {'enabled': False}}}
-    for override in rp['overrides']:
-        key, value = override.split('=', 1)
-        node = cfg
-        parts = key.split('.')
-        for part in parts[:-1]:
-            node = node.setdefault(part, {})
-        node[parts[-1]] = json.loads(value)
+    cfg, _ = resolved_fixture(rp)
     env = cfg['ray_kwargs']['ray_init']['runtime_env']['env_vars']
     assert request_transport.load(env) == req
     matched_launch.validate_resolved(cfg, rp)
@@ -139,9 +132,11 @@ class RecoveryCollectionTests(unittest.TestCase):
             job = plan['jobs'][0]
             volume = Mock(object_id='vo-synthetic')
             registry = Registry()
+            with patch.object(matched_launch, 'resolve_training_config', resolved_fixture):
+                observations = reader_preflight.qualification_paths(plan,mount,volume.object_id)
             preflight = {'status':'completed','plan_sha256':c.digest(plan),'result':{
                 'status':'passed','plan_sha256':c.digest(plan),
-                'stage_paths':reader_preflight.qualification_paths(plan,mount,volume.object_id)}}
+                'stage_paths':observations}}
             registry['result:preflight:'+plan['root']] = preflight
             output = physical/plan['root']
             self.assertFalse(output.exists())

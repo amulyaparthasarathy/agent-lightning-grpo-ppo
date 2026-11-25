@@ -55,14 +55,13 @@ def stage_worker(request, deadline_epoch, *, c, registry, volume, call_id, image
     binding = None
     if reader and request['plan']['phase'] == c.modes.RECOVERY_LEARNING:
         from . import qualification_paths as paths
-        binding = paths.observe(request, mount, volume.object_id)
+        from . import matched_launch
+        projected = matched_launch.mounted_stage_plan(request, mount, volume.object_id, runtime.BUNDLE,
+                                                     Path('/opt/agent-lightning'), runtime.PYTHON)
+        binding = projected['path_binding']
         preflight = registry.get('result:preflight:'+request['plan']['root'])
         if not preflight or binding != paths.preflight_binding(request, preflight):
             raise ValueError('Worker mount differs from same-plan CPU preflight')
-        from . import matched_launch
-        local = paths.locations(request, binding)
-        matched_launch.make_plan(request, runtime.BUNDLE, Path('/opt/agent-lightning'), local['model'],
-                                 local['data'], runtime.PYTHON, run, 8000, binding=binding)
     # Unique stage marker is a restart guard. Restarting the same attempt is forbidden.
     run.mkdir(parents=True, exist_ok=False)
     receipt = {'status': 'started', 'call_id': call_id, 'output': output, 'started_at': time.time()}

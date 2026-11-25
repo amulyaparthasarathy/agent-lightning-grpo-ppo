@@ -9,12 +9,13 @@ from unittest.mock import Mock, patch
 
 from experiment import matched_launch, matched_remote, qualification_paths, reader_assets
 from experiment import reader_contract as contract, reader_preflight, request_transport
-from recovery_learning_support import request
+from recovery_learning_support import request, resolved_fixture
 from test_reader_training import Registry
 
 
 class QualificationPathTests(unittest.TestCase):
     def setUp(self):
+        self.enterContext(patch.object(matched_launch, 'resolve_training_config', resolved_fixture))
         self.tmp = TemporaryDirectory()
         self.addCleanup(self.tmp.cleanup)
         self.root = Path(self.tmp.name)/'physical'
