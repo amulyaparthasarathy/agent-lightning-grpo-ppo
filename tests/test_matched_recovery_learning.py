@@ -10,6 +10,7 @@ from types import SimpleNamespace as NS
 import unittest
 
 from experiment import reader_modes, recovery_admission, recovery_learning as learning, recovery_task as task
+from experiment import qualification_paths
 from recovery_learning_support import request
 
 
@@ -66,15 +67,17 @@ class RecoveryLoaderTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             assets = fx.assets_manifest()
-            data = root/'data'
+            data = root/request()['plan']['profile']['paths']['data']
             assets['data'] = task.generate(data)
             for p in data.glob('final_eval.*'):
                 p.chmod(0)
             for name in reader_modes.STAGES[reader_modes.RECOVERY_LEARNING]:
                 req = request(name, assets=assets)
-                run = root/name
-                run.mkdir()
-                rp, commands = matched_launch.make_plan(req,root,root,root/'model',data,Path(sys.executable),run,8000)
+                binding = qualification_paths.observe(req,root,'vo-test')
+                locations = qualification_paths.locations(req,binding)
+                run = locations['run']
+                run.mkdir(parents=True)
+                rp, commands = matched_launch.make_plan(req,root,root,locations['model'],data,Path(sys.executable),run,8000,binding=binding)
                 learning.materialize(req,data,run,commands)
                 a,b = eager_inputs(rp['train_file'],rp['eval_file'])
                 for rows, binding in zip((a,b),learning.stage_spec(req)['inputs'],strict=True):

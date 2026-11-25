@@ -132,16 +132,78 @@ def runtime_assertions():
     emit('runtime_arithmetic_assertions', status='passed', synthetic=True, model_loaded=False)
 
 
+def _cgroup_memory(proc=Path('/proc/self')):
+    """Read counters for this process's memory controller, including subtree mounts."""
+    import re
+    from pathlib import PurePosixPath
+
+    def read(path):
+        try:
+            return path.read_text().strip()
+        except (OSError, UnicodeError):
+            return None
+
+    membership = read(proc/'cgroup')
+    result = {'scope': 'memory controller of the emitting process', 'process_cgroup': membership,
+              'cgroup_version': None, 'memory.current': None, 'memory.peak': None,
+              'memory.events': None, 'memory.failcnt': None, 'cgroup_process_count': None}
+    groups = {}
+    for line in (membership or '').splitlines():
+        fields = line.split(':', 2)
+        if len(fields) != 3:
+            continue
+        hierarchy, controllers, path = fields
+        group = PurePosixPath(path)
+        if not group.is_absolute() or '..' in group.parts:
+            continue
+        if 'memory' in controllers.split(','):
+            groups[1] = group
+        elif hierarchy == '0' and controllers == '':
+            groups[2] = group
+    # In a hybrid hierarchy, use the controller that actually owns memory.
+    version = 1 if 1 in groups else 2
+    def unescape(value):
+        return re.sub(r'\\([0-7]{3})', lambda m: chr(int(m[1], 8)), value)
+
+    candidates = []
+    result['cgroup_version'] = version if version in groups else None
+    for line in (read(proc/'mountinfo') or '').splitlines():
+        left, sep, right = line.partition(' - ')
+        fields, fs = left.split(), right.split()
+        if version not in groups or not sep or len(fields) < 6 or len(fs) < 3:
+            continue
+        if version == 1 and (fs[0] != 'cgroup' or 'memory' not in fs[2].split(',')):
+            continue
+        if version == 2 and fs[0] != 'cgroup2':
+            continue
+        root, mount = (Path(unescape(v)) for v in fields[3:5])
+        if not root.is_absolute() or not mount.is_absolute() or not groups[version].is_relative_to(root):
+            continue
+        candidates.append((len(root.parts), mount/groups[version].relative_to(root)))
+    if candidates:
+        _, directory = max(candidates)
+        files = ({'memory.current': 'memory.usage_in_bytes', 'memory.peak': 'memory.max_usage_in_bytes',
+                  'memory.failcnt': 'memory.failcnt'} if version == 1 else
+                 {'memory.current': 'memory.current', 'memory.peak': 'memory.peak'})
+        for key, name in files.items():
+            value = read(directory/name)
+            if value is not None and re.fullmatch('[0-9]+', value):
+                result[key] = value
+        if version == 2:
+            events = read(directory/'memory.events')
+            if events and all(re.fullmatch(r'[a-z_]+ [0-9]+', line) for line in events.splitlines()):
+                result['memory.events'] = events
+        members = read(directory/'cgroup.procs')
+        if members is not None and all(v.isdecimal() for v in members.splitlines()):
+            result['cgroup_process_count'] = len(members.splitlines())
+    result['cgroup_available'] = result['memory.current'] is not None or result['memory.peak'] is not None
+    return result
+
+
 def _resource_snapshot():
     import torch
-    result = {'scope': 'mounted cgroup; containment must be checked from membership, not assumed host-wide',
-              'cuda_scope': 'this process allocator cumulative peak; excludes other processes and driver allocations',
-              'process_cgroup': Path('/proc/self/cgroup').read_text().strip()}
-    for name in ('memory.current', 'memory.peak', 'memory.events'):
-        path = Path('/sys/fs/cgroup') / name
-        result[name] = path.read_text().strip() if path.is_file() else None
-    members = Path('/sys/fs/cgroup/cgroup.procs')
-    result['cgroup_process_count'] = len(members.read_text().splitlines()) if members.is_file() else None
+    result = _cgroup_memory()
+    result['cuda_scope'] = 'this process allocator cumulative peak; excludes other processes and driver allocations'
     if torch.cuda.is_available():
         result.update(cuda_allocated_peak=torch.cuda.max_memory_allocated(),
                       cuda_reserved_peak=torch.cuda.max_memory_reserved())

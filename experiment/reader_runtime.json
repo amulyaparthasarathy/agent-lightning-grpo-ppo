@@ -34,6 +34,7 @@
   "experiment/ppo_source_lock.json",
   "experiment/prepare_data.py",
   "experiment/prepare_model.py",
+  "experiment/qualification_paths.py",
   "experiment/reader_assets.py",
   "experiment/reader_calculator.py",
   "experiment/reader_contract.py",

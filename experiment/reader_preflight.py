@@ -58,10 +58,32 @@ def task_probe(plan, run, tokenizer):
     return check(run/'calculator-preflight.json'), None
 
 
+def qualification_paths(plan, mount, volume_id):
+    """Compose the launcher's four stage configurations without allocating stage outputs."""
+    try:
+        from . import matched_launch
+    except ImportError:
+        import matched_launch
+    results = {}
+    for job in plan['jobs']:
+        for stage in job['stages']:
+            request = c.stage_request(plan, job, stage)
+            projected = matched_launch.mounted_stage_plan(request, mount, volume_id, Path(__file__).parent,
+                                                        Path('/opt/agent-lightning'), Path(sys.executable))
+            resolved, _ = matched_launch.resolve_training_config(projected)
+            matched_launch.validate_resolved(resolved, projected)
+            results[stage['wandb']['id']] = projected['path_binding']
+    return results
+
+
 def main(plan, run):
     c.validate(plan)
     # Match preparation's canonical Volume paths while retaining nested-symlink rejection.
     scope = 'qual-train-dev' if c.modes.phase(plan) == c.modes.RECOVERY_LEARNING else 'all'
+    path_evidence = {}
+    if scope == 'qual-train-dev':
+        sys.path.insert(0, '/opt/agent-lightning/examples/calc_x')
+        path_evidence['stage_paths'] = qualification_paths(plan, '/data', os.environ['AGL_READER_VOLUME_ID'])
     actual = assets.inspect(*(assets.owned_path('/data', plan['profile']['paths'][key])
                               for key in ('model', 'data', 'staging')), task=plan['profile']['task'], scope=scope)
     if actual != plan['assets']:
@@ -90,7 +112,7 @@ def main(plan, run):
     if not dependency['accepted']:
         raise ValueError('Pinned package identity or reviewed dependency exceptions differ')
     from transformers import AutoTokenizer
-    tokenizer = AutoTokenizer.from_pretrained(str(Path('/data')/plan['profile']['paths']['model']), local_files_only=True, trust_remote_code=False)
+    tokenizer = AutoTokenizer.from_pretrained(str(assets.owned_path('/data', plan['profile']['paths']['model'])), local_files_only=True, trust_remote_code=False)
     if tokenizer.bos_token_id != 128000 or tokenizer.eos_token_id != 128009 or tokenizer.chat_template != assets.prepare_model.effective_template():
         raise ValueError('Loaded tokenizer differs')
     from huggingface_hub import HfApi
@@ -108,7 +130,7 @@ def main(plan, run):
         'backend': backend, 'dependencies': dependency, 'packages': versions, 'tokenizer_verified': True, 'model_access': True,
         'wandb_project_readable': True, 'task_probe': calculator, 'task': plan['task_identity'],
         **({'prompt_budget': budget} if budget else {}),
-        'model_inference': 'unqualified', 'training': 'unqualified', 'reload': 'unqualified'})
+        **path_evidence, 'model_inference': 'unqualified', 'training': 'unqualified', 'reload': 'unqualified'})
 
 
 if __name__ == '__main__':

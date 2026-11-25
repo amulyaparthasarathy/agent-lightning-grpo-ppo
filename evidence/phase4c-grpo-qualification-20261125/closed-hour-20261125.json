@@ -1,0 +1,20 @@
+{
+  "as_of_utc": "2026-11-25T18:15:36.921479+00:00",
+  "closed_interval_utc": [
+    "2026-11-25T17:00:00+00:00",
+    "2026-11-25T18:00:00+00:00"
+  ],
+  "observed_before_credits_usd": "0.62502184",
+  "object_rows_usd": {
+    "preflight": "0.00557058",
+    "launch": "0.60641439",
+    "prepare": "0.01303687"
+  },
+  "stopped_apps": 3,
+  "owned_containers": 0,
+  "previous_snapshot_usd": "0.62502184",
+  "storage_reserve_usd": 7,
+  "delayed_billing_hold_usd": 2,
+  "retention_review_utc": "2026-12-02",
+  "additional_dispatch_authority_usd": 0
+}
