@@ -1,18 +1,18 @@
 {
   "schema": "phase4a-candidate-identities-v1",
   "evidence_class": "offline plan generation; no resource created and no dispatch",
-  "tested_source_commit": "664a5a45e6648b298449c7a2a70c205ee683de39",
+  "tested_source_commit": "e5806b15d0d4da49045d2d495457a905562034ad",
   "note": "Plans are bound to the commit they were generated from. Regenerate from the clean approved head before any use; later documentation commits change the source hash but no file under experiment/.",
   "plans": {
     "synthetic-fixture": {
       "profile": "examples/reader-profile.recovery-calibration.synthetic.json; fixture, cannot cross the online boundary",
-      "plan_sha256": "afcf11e7bcae1b27d72237b58c332083b426c745b29caca5a443234ae9998b51",
-      "source_commit": "664a5a45e6648b298449c7a2a70c205ee683de39",
+      "plan_sha256": "e3c0929eb2218b4a9c3c20cae34e7c38513b8f9a83e18307bec387b843246c65",
+      "source_commit": "e5806b15d0d4da49045d2d495457a905562034ad",
       "source_dirty": false,
-      "source_sha256": "91fbe85cd7e81cd2735efbe4e3b8d87decdbd00ae8a77085f97b862dc5b9ce01",
+      "source_sha256": "fbc3bdc2cba34ead1427a65a161ead9ad829cb3e479da64ad4504f8ed725456f",
       "configuration_sha256": "8ee432943467dc50bfcc6e78ae0c5868b62c27bf4e5808296f82f97f95bf2e25",
-      "packaged_sha256": "f322af58aab8bf2380a06faa701c3ca14521133ea57b3354ce8878d583547536",
-      "task_sha256": "a81ea507d0ba950b148b0e1fd6163d5528a8b2c9fe8edd7ff99fe66ea8aa3045",
+      "packaged_sha256": "423e89327af14f0b3f83bbb3ae2031dd6ec980a0114d3986a53b3c532c5753f2",
+      "task_sha256": "e99facd17f5b4fda1b28dc83bbfa3fccf676df19291b3d527387dcc77261a371",
       "environment_sha256": "0c384ed90027f7fa0fb0aeb097220e6e83876dfdd85094353f03c8dd035b1ca3",
       "phase": "development-calibration",
       "training_admissible": false,
@@ -29,28 +29,28 @@
       "runtime_files": 65,
       "stage_wandb_ids": {
         "grpo-matched-v2": {
-          "greedy-development": "2304fc37aeac4bd8df090e97",
-          "sampled-packet-1": "de54667dc2f9ea8644b4e20c",
-          "sampled-packet-2": "3174c7569754bd19dd68a522",
-          "sampled-packet-3": "232621f6cde95a12c42e647a"
+          "greedy-development": "8d577bb91b18e35d5fc96624",
+          "sampled-packet-1": "808b16198fe10f661c764b43",
+          "sampled-packet-2": "36a558cb2123b206e585d373",
+          "sampled-packet-3": "0198cf14c06a716376d5f06d"
         },
         "ppo-mc-matched-v2": {
-          "greedy-development": "af56218da9ae378e481478c9",
-          "sampled-packet-1": "8feb1b446e0e5368ac89d570",
-          "sampled-packet-2": "05558455a8f4eddf604b456c",
-          "sampled-packet-3": "bc3a55439f6e7336cd3d9e02"
+          "greedy-development": "587287bb56e7d9b61b2f8333",
+          "sampled-packet-1": "a3943ee3ea2183e410964d39",
+          "sampled-packet-2": "72caecc86dbae388a589dca2",
+          "sampled-packet-3": "95d1678d2570bb12e2f4e898"
         }
       }
     },
     "candidate": {
       "profile": "non-fixture profile with proposed fresh resource names; preparation plan without assets, not training-admissible",
-      "plan_sha256": "56194ef711ec88b88ec6744f8e63f1e0a643f702ba5a55005354ef44f2c91cdd",
-      "source_commit": "664a5a45e6648b298449c7a2a70c205ee683de39",
+      "plan_sha256": "a06372fdb9cd1effd3b440781856961fe28b113f996debdc1ae82645b4f5a807",
+      "source_commit": "e5806b15d0d4da49045d2d495457a905562034ad",
       "source_dirty": false,
-      "source_sha256": "91fbe85cd7e81cd2735efbe4e3b8d87decdbd00ae8a77085f97b862dc5b9ce01",
+      "source_sha256": "fbc3bdc2cba34ead1427a65a161ead9ad829cb3e479da64ad4504f8ed725456f",
       "configuration_sha256": "875ec4d30ac7c51ee6c084874f51c420518ea19b292c6843138639d24b24df5a",
-      "packaged_sha256": "f322af58aab8bf2380a06faa701c3ca14521133ea57b3354ce8878d583547536",
-      "task_sha256": "a81ea507d0ba950b148b0e1fd6163d5528a8b2c9fe8edd7ff99fe66ea8aa3045",
+      "packaged_sha256": "423e89327af14f0b3f83bbb3ae2031dd6ec980a0114d3986a53b3c532c5753f2",
+      "task_sha256": "e99facd17f5b4fda1b28dc83bbfa3fccf676df19291b3d527387dcc77261a371",
       "environment_sha256": "0c384ed90027f7fa0fb0aeb097220e6e83876dfdd85094353f03c8dd035b1ca3",
       "phase": "development-calibration",
       "training_admissible": false,
@@ -67,16 +67,16 @@
       "runtime_files": 65,
       "stage_wandb_ids": {
         "grpo-matched-v2": {
-          "greedy-development": "bcc95284d3fddf8dca1bb609",
-          "sampled-packet-1": "f912b2eca8268b11413e830f",
-          "sampled-packet-2": "b98c2a515be956aa6040cf47",
-          "sampled-packet-3": "d47ee98fffb53fbd4908bf6c"
+          "greedy-development": "6dae79a63df519f8af1d9800",
+          "sampled-packet-1": "29bbf7b665025e56359bdc4f",
+          "sampled-packet-2": "df739e716b419a163d6c0160",
+          "sampled-packet-3": "fa9d4d389bed883bcfe0dff2"
         },
         "ppo-mc-matched-v2": {
-          "greedy-development": "25838a78edc4ae81afb1c963",
-          "sampled-packet-1": "3d40282b97a260473389b76f",
-          "sampled-packet-2": "6c8625582f9724615b29efc3",
-          "sampled-packet-3": "5d88bec3a643549fc6b59a5d"
+          "greedy-development": "8865f7184dde95fb0d403fe4",
+          "sampled-packet-1": "bdc1bf52674666e58034139c",
+          "sampled-packet-2": "3bc5578438fbd12feca75700",
+          "sampled-packet-3": "5294026c4185647b148ba08c"
         }
       }
     }
@@ -114,6 +114,10 @@
       "policy_limit": "terminal-zero",
       "missing_required_evidence": "complete-zero",
       "multiple_calls_in_one_generation": "incomplete-no-reward",
+      "tool_call_identity": "as-served: id, name and arguments are never rewritten",
+      "completion_evidence": "served finish reason, content presence and reported completion tokens",
+      "empty_final_answer": "complete-zero",
+      "absent_final_answer": "incomplete-no-reward",
       "infrastructure_or_missing_evidence": "incomplete-no-reward",
       "policy_error_codes": [
         "invalid_arguments",
@@ -135,14 +139,14 @@
       "max_tokens": 1024
     },
     "task_source_sha256": {
-      "recovery_task.py": "b872c6d087c9e990e150d986865b4a793ed1ba76a2f488288c01d4ddef2153b1",
+      "recovery_task.py": "721ee1be80459e43a38028861ade2e5dce157843c93b391b7d206f9d4935a63b",
       "recovery_server.py": "1c6f4052c1874c29e89c2578543da1620347225425c08d677baffb34c1ca57c3",
       "recovery_stdio.py": "a8c738077e6502b84b76ed65c3fae4114d5eee19505f73d77e7cfcc07d727ba5",
-      "recovery_agent.py": "fe165cf0fff69a3c96268f77b15eb2ca6ceacf9d91e404a2f1e5090b24f8a9f7",
+      "recovery_agent.py": "f77eebc1050b4ad50247b7beff403c7fea5345774eb72eaed811fd9355f39724",
       "recovery_probe.py": "ffde0564cec2b095d0aecc46c14027ba5c5b52b6bad38361597bd6dab03657db",
       "recovery_solver.py": "5bb60079f16a7dcc2ac46384a024e9c40605eab3d7d9eab68c8d51f6b642e7fb",
-      "recovery_calibration.py": "d01eb20a40a17e5f64f8572a14ca901a402480ee61bd3dc5aa0b629f3bc7bab1",
-      "recovery_prompt.py": "2f16f55cb9c0ac0ddf41ce1e754d7dbbba318c823c5d67f98bd93c589c2934f0",
+      "recovery_calibration.py": "e129cca52ba8b1405a14d4759479602405e89d9e1f898199919448cb5dbe1f4f",
+      "recovery_prompt.py": "c1410858ebdb28e0aca7d146176cb1a474a2b49aa5726dc29e48cf1890e318ef",
       "reader_modes.py": "ba4eab04a6c6f533f2b1cad37ed74b7f4c9a31b43ec96b57bb4675015d2ae216",
       "owned_processes.py": "6ca9cce7a93ab0ffd2bcad7a47fa5190c4328d705713e24425ed97e4d9ce34d3",
       "observed_runtime.py": "81ff2831c901091a784f0b11e72de9a13c2db5ff05e0756b1c4fb97c41ca2fa9"
@@ -205,8 +209,33 @@
         "panel_id": "rr1-dev-ac7fd952343b0c7d",
         "packet_id": null,
         "file": "dev_panel.parquet",
-        "expected_episodes": 24,
-        "case_ids_sha256": "4ca0ee5f59b49418f82442e798cef516bc785f142561020c53c50ec4fcc8048c"
+        "case_ids": [
+          "recovery-readiness-v1/development/c-77fa9e56ce",
+          "recovery-readiness-v1/development/c-5db1a70832",
+          "recovery-readiness-v1/development/c-c25ac45067",
+          "recovery-readiness-v1/development/c-9b22a6dd87",
+          "recovery-readiness-v1/development/c-fb62402846",
+          "recovery-readiness-v1/development/c-803d4459c3",
+          "recovery-readiness-v1/development/c-8a187cb514",
+          "recovery-readiness-v1/development/c-aa26cb7656",
+          "recovery-readiness-v1/development/c-529d506be0",
+          "recovery-readiness-v1/development/c-cf2994fed4",
+          "recovery-readiness-v1/development/c-b5fac01e6c",
+          "recovery-readiness-v1/development/c-daf12ab574",
+          "recovery-readiness-v1/development/c-6a7e0cc126",
+          "recovery-readiness-v1/development/c-2e641a2d24",
+          "recovery-readiness-v1/development/c-3c9386f800",
+          "recovery-readiness-v1/development/c-6c1c74a0e6",
+          "recovery-readiness-v1/development/c-d867a4a6e7",
+          "recovery-readiness-v1/development/c-96ea63c827",
+          "recovery-readiness-v1/development/c-01f40b8f3c",
+          "recovery-readiness-v1/development/c-87f449f853",
+          "recovery-readiness-v1/development/c-e769799570",
+          "recovery-readiness-v1/development/c-2c03f8daf4",
+          "recovery-readiness-v1/development/c-121050b58a",
+          "recovery-readiness-v1/development/c-92516b687c"
+        ],
+        "expected_episodes": 24
       },
       "sampled-packet-1": {
         "mode": "sampled",
@@ -217,8 +246,17 @@
         "panel_id": "rr1-dev-ac7fd952343b0c7d",
         "packet_id": "rr1-dev-p1-98576e24a30d5457",
         "file": "dev_packet_1.parquet",
-        "expected_episodes": 32,
-        "case_ids_sha256": "87d74c2b07dfd9cdf96028a24b38577e0b56a0b8150c72f5050934360be05b67"
+        "case_ids": [
+          "recovery-readiness-v1/development/c-77fa9e56ce",
+          "recovery-readiness-v1/development/c-5db1a70832",
+          "recovery-readiness-v1/development/c-c25ac45067",
+          "recovery-readiness-v1/development/c-9b22a6dd87",
+          "recovery-readiness-v1/development/c-fb62402846",
+          "recovery-readiness-v1/development/c-803d4459c3",
+          "recovery-readiness-v1/development/c-8a187cb514",
+          "recovery-readiness-v1/development/c-aa26cb7656"
+        ],
+        "expected_episodes": 32
       },
       "sampled-packet-2": {
         "mode": "sampled",
@@ -229,8 +267,17 @@
         "panel_id": "rr1-dev-ac7fd952343b0c7d",
         "packet_id": "rr1-dev-p2-292a56c798a2b41f",
         "file": "dev_packet_2.parquet",
-        "expected_episodes": 32,
-        "case_ids_sha256": "a72141848dc9b4b5fd18967a44db4828db5c95854f43b0f653ba2593f8d077e7"
+        "case_ids": [
+          "recovery-readiness-v1/development/c-529d506be0",
+          "recovery-readiness-v1/development/c-cf2994fed4",
+          "recovery-readiness-v1/development/c-b5fac01e6c",
+          "recovery-readiness-v1/development/c-daf12ab574",
+          "recovery-readiness-v1/development/c-6a7e0cc126",
+          "recovery-readiness-v1/development/c-2e641a2d24",
+          "recovery-readiness-v1/development/c-3c9386f800",
+          "recovery-readiness-v1/development/c-6c1c74a0e6"
+        ],
+        "expected_episodes": 32
       },
       "sampled-packet-3": {
         "mode": "sampled",
@@ -241,8 +288,17 @@
         "panel_id": "rr1-dev-ac7fd952343b0c7d",
         "packet_id": "rr1-dev-p3-ee1d7ab06b3bf9ec",
         "file": "dev_packet_3.parquet",
-        "expected_episodes": 32,
-        "case_ids_sha256": "9e272be231014fe3bd9218a967043e079e5e6fb931c0b80a624159c980ecc27b"
+        "case_ids": [
+          "recovery-readiness-v1/development/c-d867a4a6e7",
+          "recovery-readiness-v1/development/c-96ea63c827",
+          "recovery-readiness-v1/development/c-01f40b8f3c",
+          "recovery-readiness-v1/development/c-87f449f853",
+          "recovery-readiness-v1/development/c-e769799570",
+          "recovery-readiness-v1/development/c-2c03f8daf4",
+          "recovery-readiness-v1/development/c-121050b58a",
+          "recovery-readiness-v1/development/c-92516b687c"
+        ],
+        "expected_episodes": 32
       }
     },
     "template_sha256": "a718674808440b537a553c15e0557b5b45d6d76e49ad9ddbc1a9e92447843e2c"

@@ -141,7 +141,7 @@ required observations were made, and one failure class.
 | `correct` | Reward 1 |
 | `semantic` | Contract-valid, but wrong target, time or decision |
 | `evidence` | Right decision, but wrong, unobserved or mis-scoped evidence |
-| `format` | Not contract-valid. Decision and evidence are **not assessable** and are recorded as unknown, never as wrong |
+| `format` | Not contract-valid, including a whitespace-only or empty answer that is established as complete. Decision and evidence are **not assessable** and are recorded as unknown, never as wrong |
 | `action` | Ended at the policy-error limit with no answer |
 
 Diagnostics never enter a prompt and never change a reward.
@@ -267,15 +267,18 @@ workbench, stdio isolation, process ownership, cleanup and reward delivery.
 
 ### Every terminal outcome
 
-Defined from the pinned AutoGen 0.7.5 loop and the pinned vLLM 0.22.0 server.
+Defined from the pinned AutoGen 0.7.5 loop and the pinned vLLM 0.22.0 server, and
+decided from what the server returned (see the next section).
 
 | What happened | Outcome | Reward |
 |---|---|---|
 | Text answer with finish reason `stop`, on a tool-enabled turn or at reflection | `complete_final` | 0 or 1 by the verifier |
 | The same, after a typed error and a later successful call | `complete_recovered` | 0 or 1; the error stays in the trajectory |
 | An answer given before the required observations | `complete_final` | 0 (a policy choice) |
+| A whitespace-only answer that finished with `stop` | `complete_final` | 0, a format failure |
+| An empty-string answer that finished with `stop`, with reported completion tokens | `complete_final` | 0, a format failure |
 | Second typed policy error | `terminal_policy_failure` | One confirmed 0; nothing more is generated |
-| Untyped tool error, lost or altered observation, more than one call in a generation, a tool name the framework rewrote into a valid tool, a call at reflection, truncation, empty answer, backend failure, timeout, cancellation, unconfirmed reward post | incomplete | None. The collection is rejected |
+| Untyped tool error, lost or altered observation, more than one call in a generation, a repeated call ID, a call at reflection, confirmed truncation, an ambiguous exact-cap tool call, absent answer content, an empty answer without reported tokens, backend failure, timeout, cancellation, unconfirmed reward post | incomplete | None. The collection is rejected |
 
 Choosing not to fetch evidence is the policy's own behavior and earns a zero.
 Losing the result of a call that was issued is an execution failure and earns
@@ -287,27 +290,63 @@ string alone is not enough, because the MCP workbench turns every exception into
 an error result. The nine recognized codes are the six server codes above,
 `non_object_arguments`, `invalid_argument_json` and `unknown_tool`.
 
-An empty or whitespace-only answer stays incomplete, as in `asset-episode-v2`.
-The pinned client substitutes an empty string for absent content, so an empty
-generation cannot be told apart from a missing one. This is the one place where a
-possible policy output is treated as an untrusted execution.
+### The served response is the evidence
 
-### Four facts read from the pinned source
+The pinned client changes a response while parsing it. It rewrites every
+character of a tool name outside `[A-Za-z0-9_-]` to `_` and cuts the name at 64.
+It replaces the finish reason whenever tool calls are present. It turns absent
+content into an empty string and absent usage into zeros. Scoring any of those
+values would score something the model did not sample.
+
+`recovery_agent.ServedIdentity` sits below the recording client and above the
+pinned one. For every generation it keeps what the server returned and uses that:
+
+- **Call identity.** The call's ID, name and argument string are restored on the
+  parsed result exactly as served. The generation record, the tool lookup, the
+  error observation, the classification, the action record and the next prompt all
+  carry the name as sampled. `get asset` is therefore an unknown tool. It is never
+  executed as `get_asset`, and it follows the ordinary typed `unknown_tool` policy:
+  one such call can be recovered from, two end the episode.
+- **Nothing is repaired.** An invalid name stays invalid. The framework's own
+  "tool not found" error, with the original name, is the observation.
+- **Normalized metadata is kept apart.** Each generation writes a
+  `served_response` record with the served finish reason, stop reason, call
+  identity, usage, and whether content was a string or absent. What the pinned
+  client made of the same response is stored under `framework_normalized` and is
+  never used for scoring.
+- **Inconsistent metadata fails closed.** If the served response was not captured,
+  or the parsed call's ID or arguments differ from it, or a call ID repeats, the
+  episode is incomplete.
+
+Completion is decided by `recovery_task.generation_status`, a pure function of the
+served response:
+
+| State | When | Treatment |
+|---|---|---|
+| `complete` | An answer with string content and finish `stop`; or one tool call with a tool-call finish and reported completion tokens below the cap | Scored |
+| `truncated` | The server reported a `length` finish | Incomplete |
+| `ambiguous` | A tool call whose reported completion tokens equal the cap | Incomplete |
+| `unestablished` | Anything else: absent content, unreported tokens for a call, an empty answer without reported tokens, another finish reason | Incomplete |
+
+The `ambiguous` state exists because both vLLM and AutoGen label a parsed tool call
+as a tool-call finish even when generation stopped at the token cap. A call that
+ends exactly at the cap may be whole, or may have been cut just after it; the
+protocol cannot say which, so it is not scored. An answer that ends exactly at the
+cap with an explicit `stop` is complete.
+
+A whitespace-only answer that finished with `stop` is a completed, malformed
+answer and earns a format zero. An empty string is treated the same way only when
+the server reported completion tokens for it. Absent or null content is never an
+answer. Whether the served stack returns `""` or null for an empty generation is
+unverified, which is why the two are kept apart.
+
+### Two more facts read from the pinned source
 
 - **One call at most.** With `parallel_tool_calls=False`, vLLM keeps only the
   first parsed call. The harness therefore treats more than one call in a
   generation as an untrusted execution, not a policy error.
-- **Truncation can be hidden.** Both vLLM and AutoGen report a parsed tool call as
-  a tool-call finish even when generation stopped at the token limit. The harness
-  rejects a tool-call generation whose reported completion tokens reach the cap.
 - **Answers are text.** The `llama3_json` parser returns any JSON object without a
   `name` key as content, so a contract answer is never mistaken for a call.
-- **Tool names are rewritten.** AutoGen replaces every character outside
-  `[A-Za-z0-9_-]` in a sampled tool name before the harness sees it, so
-  `get asset` would be executed as `get_asset`. The harness compares the name
-  with what the server returned and never scores a name rewritten into a valid
-  tool. A rewritten name that is still not a tool remains an ordinary
-  `unknown_tool` error.
 
 ## The prompt the model actually receives
 
@@ -341,26 +380,43 @@ server's own prompt token count for each call. It reproduced all **1,343 of
 under the same model, template and serving stack. It does not show how the model
 responds to these prompts.
 
-### Token budget
+### Token measurements
 
 Measured with the pinned tokenizer (`tokenizer.json`, SHA-256 `79e3e522…`),
-which is a gated model file and is not committed.
+which is a gated model file and is not committed. The tokenizer also selects the
+maxima: the largest inventory observation is chosen by token count over 1,893
+observations (all 203 assets, each at every time its inventory content changes and
+at one late time), and the longest request by the token count of its initial
+prompt. Character length is not used as a proxy; it picks a different asset.
 
-| Prompt | Tokens |
+| Measured prompt | Tokens |
 |---|---:|
 | Initial call, three schemas | 984–988 |
 | Reference path, last call | up to 1,518 |
 | Five rounds on the development panel, largest | 1,900 |
-| Worst bounded case: five rounds of the largest inventory | 2,739 |
+| Heavy scenario: five rounds of the largest inventory, then reflection | 2,739 |
+| **Largest measured prompt, over all of the above** | **2,739** |
 
-The worst case assumes each sampled call is about the size its schema requires.
-A model that writes very long arguments can exceed any fixed bound; the adapter
-then rejects the collection rather than cutting anything.
+**These are measurements of defined scenarios, not an exhaustive bound.** They
+rest on three assumptions, which the measurement record states with numbers:
+
+- **Scenario.** Only these scenarios were measured. The heavy scenario repeats the
+  largest inventory observation among those compared in every round. It is the
+  largest scenario that was constructed, not a proof that no episode is larger. An
+  observation at an arbitrary time can differ from the compared ones by a few
+  tokens, because the echoed time and the inventory ID differ.
+- **Call size.** Earlier sampled calls are replayed in later prompts at the size
+  the model wrote them. The scenarios assume calls about as large as the schema
+  requires; the largest such call measures 42 tokens. A sampled call can be up to
+  1,023 tokens.
+- **Answer size.** The merged reading below allows 192 tokens for the last
+  generation; the largest reference answer measures 114. A sampled answer can be up
+  to 1,024 tokens.
 
 In the Phase 3 live collections every model call became its own training
 fragment. Each call's whole prompt must therefore fit the trajectory prompt
 limit. The shared limit is 2,048 tokens, which holds the reference path but not
-the worst bounded case. A policy that repeats the inventory lookup, as the greedy
+the heavy scenario. A policy that repeats the inventory lookup, as the greedy
 Phase 3 policy repeated its lookup, could exceed it and reject a collection.
 
 Payloads were kept compact first: minute timestamps, no indentation, no derived
@@ -378,6 +434,11 @@ identity:
 accepts with a full generation budget. Calculator and asset settings are
 unchanged, and a test pins their launch configurations to `main`.
 
+Against these limits the largest measured prompt leaves 333 tokens of headroom.
+If the tool-enabled turns merged into one training row instead, the heavy scenario
+would put 1,924 tokens on the response side, 124 below that limit. Long sampled
+calls or answers can use up either margin.
+
 Resource implications: collection-only calibration makes no forward or backward
 pass, so the larger limit only widens padded index tensors there. A later
 learning study would train on rows up to about 5,100 positions instead of 4,096.
@@ -387,8 +448,8 @@ qualification.
 Truncation is never hidden. A longer generation is not cut or repaired, and the
 production adapter rejects any collection in which a rollout's fragment tokens
 differ from its sampled tokens. The remote CPU preflight repeats this measurement
-with the tokenizer and template actually in the image and fails if a bound is
-exceeded.
+with the tokenizer and template actually in the image and fails if a measured
+scenario exceeds a limit.
 
 ## Run the local checks
 
@@ -409,5 +470,5 @@ Every command refuses to overwrite its output; choose a fresh path to repeat one
 error, and runs the reference solver on the development panel. `scripted` runs
 one episode through the production harness with scripted model responses; its
 receipt and traces say `scripted-inference`, and live evidence validation rejects
-them. Add `--tokenizer PATH` to `prompts` to measure tokens; the file is verified
-against the committed model lock.
+them. Add `--tokenizer PATH` to `prompts` to measure tokens and to select the
+measured maxima; the file is verified against the committed model lock.

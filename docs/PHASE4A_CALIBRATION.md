@@ -124,13 +124,100 @@ collection pass, and a missing reward stays missing.
 Optimizer accounting comes from audit events. It is never inferred from W&B
 history rows, which appear without any update.
 
+## Admission and diagnostics are separate
+
+The report answers two different questions and keeps them apart.
+
+### Admission: one strict definition
+
+A packet (one stage) is **admitted** only when all four hold:
+
+1. Its completion summary is valid for the plan: panel and packet identity,
+   counts, modes, seed streams, zero optimization events, exactly one trainer
+   return and one W&B finish.
+2. The durable identity join passes: supervisor index entry, receipt, completion
+   and observability agree on call, container, plan, source, configuration,
+   assets, task and W&B identity, and the execution schema is right. This is the
+   same `reader_evidence.durable_stage` check that qualification and asset
+   development use. The index must be consistent with its jobs.
+3. Every expected episode is recomputed from the collected traces.
+4. The stage report recomputed from those traces and the collected audit events
+   equals the completion summary.
+
+A summary alone is never enough, and neither is a field that says `live-model`.
+The evidence class comes from the traces: a scripted trace cannot pass review as
+live, whatever its summary claims.
+
+A route is a **valid live calibration** only when its four packets are all
+admitted from live evidence under a valid, executable plan; the supervisor index
+records its job as completed with exactly the planned stages in order; every
+generation reports its usage; and every served prompt is within the declared
+limit. Only then is the screen applied as a
+decision. Otherwise the route is `invalid` or `mechanics_only_not_live`, its
+reasons are listed, `results` is absent, and scientific suitability is
+`not_assessed`. The plan is validated on every reporting path; there is no mode
+that skips it.
+
+### Diagnostics: everything that is known, including failures
+
+Whether or not anything is admitted, each stage and each route reports:
+
+Counts are of expected slots. A slot is one declared rollout of one declared case.
+
+| Count | Meaning |
+|---|---|
+| Expected | Slots the plan declares |
+| Observed attempts | Slots with at least one readable local trace |
+| Completed | Observed slots whose episode reached a terminal outcome |
+| Rewards confirmed | Observed slots with a recorded successful reward delivery |
+| Rewards missing | Observed slots without one. Never treated as zero |
+| Unattempted | Slots of a stage the supervisor index records as never dispatched, with no local evidence against that |
+| Unknown | Every other slot without a local trace |
+| Admitted | Slots of admitted packets |
+| Confirmed but not admitted | Confirmed slots of packets that are not admitted |
+
+Expected = observed + unattempted + unknown. Observed = confirmed + missing.
+Confirmed = admitted + confirmed but not admitted. Three further counts are of
+trace files, not slots: the files found, the files rejected as untrusted
+(unreadable, from another stage, or failing re-verification), and the files beyond
+the expected slots, such as a second attempt of one rollout. A count is `null`,
+shown as "unknown", when no trace evidence exists for it. It is never zero by
+default.
+
+Missing local files do not establish that remote work never occurred. A slot with
+no local trace is unknown even when its stage is known to have failed: a lost
+download and an episode that never ran look the same from here.
+
+Each packet has a status:
+
+| Status | When |
+|---|---|
+| `admitted` | The four admission conditions hold |
+| `failed` | The supervisor or the stage's own receipt says the stage failed or was cancelled, with or without episode evidence |
+| `unattempted` | The supervisor index records the stage as never dispatched and nothing local contradicts it |
+| `unknown` | The stage is not known to have ended (planned, submitted, started, or an uncertain submission), or nothing is known about it |
+| `rejected` | Evidence is present and is not valid or trusted |
+
+ Failed and rejected packets keep their diagnostics:
+the receipt's status and error, audit event counts, the reasons traces were
+rejected, the exception types of incomplete episodes, and a summary and reward
+vectors of the episodes that do pass review. Those are labelled diagnostic only.
+An incomplete group is shown with the rewards it has. It is not padded, and no
+reward is zero-filled.
+
+Token, fragment, truncation and dropped-row figures state their coverage. They
+come from the collection adapter's own event. Where the collected audit events
+hold no such event, or no audit events are available locally, the report says the
+values are unknown rather than printing zero.
+
 ## The report
 
 `experiment/recovery_calibration.py` builds a machine-readable report
 (`recovery-calibration-report-v1`) and a readable summary. Per algorithm route it
 gives:
 
-- expected, admitted and not-admitted episodes; confirmed and missing rewards;
+- the accounting above, per stage and per route, and each packet's status;
+- failure diagnostics for every packet that is not admitted;
 - JSON syntax, contract format, target and time correctness;
 - decision correctness and evidence correctness as separate counts, each over the
   assessable episodes, with the number that is not assessable stated;
@@ -143,13 +230,16 @@ gives:
   those that include a semantic or evidence failure and those that vary only by
   format or action;
 - sampled tokens, mask tokens, masked context tokens, fragment rows, the largest
-  fragment prompt and truncation;
+  fragment prompt, truncated and dropped rows, each with its coverage;
+- tool names exactly as sampled for unknown-tool errors, and how many names the
+  framework would have rewritten;
 - optimizer, gradient, advantage and checkpoint event counts and refresh steps;
 - 95% Wilson intervals for reward rates, stage timings when available, and the
   unverified assumptions.
 
 A malformed answer is never read as a known semantic answer. Its decision and
-evidence are recorded as not assessable.
+evidence are recorded as not assessable. The per-result items above appear under
+`results`, which exists only for a route whose four packets are all admitted.
 
 ## The decision screen
 
@@ -157,11 +247,13 @@ Fixed in code as `recovery-screen-v1` and bound into every plan, before any live
 sampling. Two decisions are reported separately, **per algorithm route**. Routes
 are never pooled, so a passing route cannot hide a failing one.
 
-**Operational validity.** All 120 episodes of the route are complete with
-confirmed rewards, no optimization event occurred, and the evidence is live. An
-incomplete route is not interpreted at all. Evidence class is also decided per
-route: one scripted stage makes its own route non-live and leaves the other
-route's class alone.
+**Operational validity.** `valid` means all four packets of the route are admitted
+under the definition above, from live evidence, under an executable plan. An
+incomplete, unverified or untrusted route is `invalid` with its reasons and is not
+interpreted at all. A complete route of scripted evidence is
+`mechanics_only_not_live`. Evidence class is decided per route from the traces: one
+scripted packet makes its own route mixed and unassessed and leaves the other
+route alone.
 
 **Scientific suitability.** A starting screen for this panel:
 
@@ -198,7 +290,7 @@ uv run --locked python scripts/reader_training.py validate \
 .venv-reader-cpu/bin/python scripts/task_local.py calibration-demo --task recovery-readiness-v1 \
   --out outputs/phase4a/scripted-calibration
 
-# Rebuild the report from stage completions; episode rows are rechecked against the traces.
+# Review the collected directory and write the report; every packet is admitted again from its traces and audit events.
 .venv-reader-cpu/bin/python scripts/task_local.py report --task recovery-readiness-v1 \
   --evidence outputs/phase4a/scripted-calibration --plan outputs/phase4a/scripted-calibration/plan.json \
   --out outputs/phase4a/report
@@ -206,12 +298,17 @@ uv run --locked python scripts/reader_training.py validate \
 
 `plan` needs a clean committed source and writes only to an ignored path.
 `calibration-demo` runs real episodes over real stdio MCP, but the model
-responses are a fixed arbitrary script and the adapter and trainer events are
-simulated. Its report is labelled `scripted-inference`, says "Not a live policy
-measurement", and reports suitability as `not_assessed`. `report` works the same
-way on a directory produced by `reader_training.py collect`. `status` and
-`collect` report an operationally invalid route only as incomplete evidence; use
-`report` to see its counts and stage problems.
+responses are a fixed arbitrary script, and the audit events, receipts and
+supervisor index are simulated. It writes a directory in the format `collect`
+writes, marked as simulated. Its report is labelled `scripted-inference`, says
+"Not a live policy measurement", and reports suitability as `not_assessed`.
+
+`report` reviews a directory written by `reader_training.py collect`. It needs
+`collection.json` (which holds the supervisor index), the receipts, the traces
+and the audit events. With less it still writes a report, as diagnostics:
+explicitly unverified, with unknown counts where evidence is absent, and never a
+live decision. `status` shows the same review from durable receipts alone and so
+never reports completeness; `collect` reviews again from the downloaded copy.
 
 ### Billable: not run, and not authorized
 
@@ -228,8 +325,8 @@ The sequence, once approved, is the one in
 `plan --assets` → `preflight` → `launch` → `collect` → `report`.
 
 For this task the remote preflight also runs the three-tool probe in the training
-image and measures the bounded prompts with the tokenizer and template actually
-served. It fails if a declared context limit is exceeded.
+image and measures the defined prompt scenarios with the tokenizer and template
+actually served. It fails if a measured scenario exceeds a declared context limit.
 
 ## An unknown submission: reconcile before any retry
 

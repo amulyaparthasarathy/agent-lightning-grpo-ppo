@@ -28,7 +28,7 @@ holds (US$74.00) are **not** counted as available funding here.
 | Algorithms | `grpo-matched-v2` and `ppo-mc-matched-v2`, paired seed 9001, unchanged streams |
 
 **Candidate source.** The tested implementation commit is
-`664a5a45e6648b298449c7a2a70c205ee683de39`. Documentation commits follow it on the
+`e5806b15d0d4da49045d2d495457a905562034ad`. Documentation commits follow it on the
 branch and change no file under `experiment/`. A plan is bound to the commit it
 was generated from, and a document cannot name the commit that contains it. The
 executable plan must therefore be regenerated from the clean approved head; the
@@ -174,7 +174,9 @@ algorithm route separately.
 
 - **Stop and do not interpret** a route with any incomplete episode, unconfirmed
   reward, optimization event or failed stage. Incomplete collections are not
-  admitted.
+  admitted. A route is assessed only when every packet passes the
+  [single admission definition](PHASE4A_CALIBRATION.md#admission-and-diagnostics-are-separate);
+  a failed or partial route is reported as diagnostics only.
 - **The screen:** at least 6 of 24 sampled groups mixed with a semantic or
   evidence failure, across at least 2 case families, with format and action
   failures at most half of the zero rewards. This is an engineering heuristic,
