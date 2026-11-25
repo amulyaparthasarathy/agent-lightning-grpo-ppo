@@ -30,6 +30,9 @@ EPISODE_POLICY = {
     'final_answer': 'strict-evidence-verifier', 'recovered_final': 'strict-evidence-verifier',
     'policy_limit': 'terminal-zero', 'missing_required_evidence': 'complete-zero',
     'multiple_calls_in_one_generation': 'incomplete-no-reward',
+    'tool_call_identity': 'as-served: id, name and arguments are never rewritten',
+    'completion_evidence': 'served finish reason, content presence and reported completion tokens',
+    'empty_final_answer': 'complete-zero', 'absent_final_answer': 'incomplete-no-reward',
     'infrastructure_or_missing_evidence': 'incomplete-no-reward',
     # Typed server codes, one harness code, and the two exact AutoGen 0.7.5 branches.
     'policy_error_codes': ['invalid_arguments', 'invalid_asset_id', 'unknown_asset', 'invalid_policy_id',
@@ -413,6 +416,54 @@ def call(name, arguments):
         return {'inventory_id': inventory_id(asset['asset_id'], arguments['as_of']), 'asset_id': asset['asset_id'],
                 'as_of': arguments['as_of'], 'complete': True, 'runs': rows}
     raise PolicyActionError('unknown_tool')
+
+
+def generation_status(served, max_tokens):
+    """(state, reason) for one served generation, from raw protocol evidence only.
+
+    `served` is what the server returned before the pinned client rewrites anything:
+    finish_reason, content (a string, or None when absent or null), tool_calls as
+    [{'id', 'name', 'arguments'}] and usage (or None). States:
+
+    - 'complete': completion is positively established.
+    - 'truncated': the server itself reported a length finish.
+    - 'ambiguous': a tool call whose reported completion tokens equal the cap. The
+      server and the pinned client both relabel a parsed call as a tool-call finish,
+      so the call may be whole or may have been cut just after it.
+    - 'unestablished': anything else that cannot be shown complete.
+
+    Only 'complete' may be scored. A whitespace-only answer that finished with `stop`
+    is a complete malformed answer. An empty string is one only when completion
+    tokens were reported; absent content is never an answer.
+    """
+    finish = served.get('finish_reason')
+    tokens = (served.get('usage') or {}).get('completion_tokens')
+    reported = type(tokens) is int and tokens >= 1
+    calls = served.get('tool_calls') or []
+    if finish == 'length':
+        return 'truncated', 'the server reported a length finish'
+    if calls:
+        if len(calls) != 1:
+            return 'unestablished', 'more than one tool call in a generation'
+        if any(type(calls[0].get(k)) is not str for k in ('id', 'name', 'arguments')) or not calls[0]['id']:
+            return 'unestablished', 'malformed served tool call'
+        if finish != 'tool_calls':
+            return 'unestablished', 'tool call without a tool-call finish'
+        if not reported:
+            return 'unestablished', 'completion tokens were not reported, so truncation at the cap cannot be ruled out'
+        if tokens > max_tokens:
+            return 'unestablished', 'reported completion tokens exceed the cap'
+        if tokens == max_tokens:
+            return 'ambiguous', 'completion tokens equal the cap: the call may be whole or cut after it'
+        return 'complete', None
+    if finish != 'stop':
+        return 'unestablished', 'answer did not finish with stop'
+    content = served.get('content')
+    if type(content) is not str:
+        return 'unestablished', 'answer content is absent'
+    if content == '' and not reported:
+        return 'unestablished', 'empty answer without reported completion tokens'
+    return 'complete', None
 
 
 def classify_error(name, raw_arguments, content):

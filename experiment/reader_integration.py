@@ -6,7 +6,9 @@ import json
 
 # Prospective episode policies with explicit outcome rules; any other trace keeps the
 # historical treatment. Limits are those declared by each task's EPISODE_POLICY.
-EPISODE_POLICIES = {'asset-episode-v2': {'policy_error_limit': 2}, 'recovery-episode-v1': {'policy_error_limit': 2}}
+EPISODE_POLICIES = {'asset-episode-v2': {'policy_error_limit': 2},
+                    # An empty answer is a completed malformed answer under this policy only.
+                    'recovery-episode-v1': {'policy_error_limit': 2, 'empty_answer_complete': True}}
 TOOLS = {'calculator-v1': ('calculate',), 'asset-status-v1': ('lookup_asset',),
          'recovery-readiness-v1': ('get_asset', 'get_policy', 'list_backup_runs')}
 
@@ -55,7 +57,8 @@ def episode_outcome(records):
         return outcome
     final = models[-1]['outputs']
     if (terminations or final['finish_reason'] != 'stop' or final['content'] != out.get('raw_answer')
-            or not isinstance(final['content'], str) or not final['content'].strip()):
+            or not isinstance(final['content'], str)
+            or (not final['content'].strip() and not EPISODE_POLICIES[e['episode_policy']].get('empty_answer_complete'))):
         return 'incomplete'
     recovered = False; seen_error = False
     for action in actions:

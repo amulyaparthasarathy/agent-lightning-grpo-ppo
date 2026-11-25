@@ -12,15 +12,21 @@ Terminal outcomes, from the pinned AutoGen 0.7.5 AssistantAgent loop:
 - terminal_policy_failure: the second typed, attributable invalid action. One
   confirmed zero, no further generation, no invented answer.
 - incomplete (exception, no reward): anything else, including an unclassified tool
-  error, a lost or altered observation, more than one call in a generation, a
-  tool name the framework rewrote into a valid tool, truncation, an empty answer,
-  cancellation, a backend failure or an unconfirmed reward post.
+  error, a lost or altered observation, more than one call in a generation,
+  confirmed truncation, an ambiguous exact-cap tool call, absent answer content,
+  completion that cannot be established, cancellation, a backend failure or an
+  unconfirmed reward post.
 
-An empty or whitespace-only answer stays incomplete, as in asset-episode-v2: the
-pinned client substitutes "" for absent content, so it cannot be told apart from a
-missing generation.
+Completion and tool-call identity are read from the served response, not from the
+pinned client's rewritten view of it (see ServedIdentity). A sampled tool name is
+never rewritten: an invalid name is an ordinary typed unknown-tool error. An
+answer that finished with `stop` and has string content is complete, so a
+whitespace-only answer is scored as a malformed answer. An empty string is scored
+that way only when completion tokens were reported; absent or null content is
+never an answer.
 """
 import asyncio
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -30,6 +36,7 @@ from autogen_agentchat.agents import AssistantAgent
 from autogen_agentchat.messages import TextMessage
 from autogen_core.models import ModelFamily, UserMessage
 from autogen_core.tools import TextResultContent, ToolResult
+from autogen_ext.models.openai import OpenAIChatCompletionClient
 from autogen_ext.tools.mcp import McpWorkbench, StdioServerParams
 try:
     from . import recovery_task as task
@@ -100,13 +107,76 @@ def classify(call, observation):
     return task.classify_error(call.name, call.arguments, observation.content)
 
 
-class RecoveryClient(ObservedClient):
+class ServedIdentity(OpenAIChatCompletionClient):
+    """Keep what the server returned, below the observed client and above the pinned one.
+
+    The pinned client rewrites a sampled tool name (every character outside
+    [A-Za-z0-9_-] becomes "_", and the name is cut at 64), replaces a finish reason
+    whenever tool calls are present, turns absent content into "" and absent usage
+    into zeros. Scoring any of those rewritten values would score something the
+    model did not sample. This layer restores the original tool-call identity on
+    the parsed result, so the trace, the tool lookup, the error observation, the
+    classification and the next prompt all carry the name as sampled, and records
+    the served response for review. Nothing is repaired: an invalid name stays
+    invalid and is answered by the framework's own unknown-tool error.
+    """
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.served = None
+        completions = self._client.chat.completions
+        send = completions.create
+
+        async def create(*args, **options):
+            response = await send(*args, **options)
+            choice, usage = response.choices[0], response.usage
+            self.served = {
+                'finish_reason': choice.finish_reason, 'content': choice.message.content,
+                # vLLM reports which stop string or token ended generation, when any did.
+                'stop_reason': (getattr(choice, 'model_extra', None) or {}).get('stop_reason'),
+                'tool_calls': [{'id': c.id, 'name': c.function.name, 'arguments': c.function.arguments}
+                               for c in choice.message.tool_calls or []],
+                'usage': None if usage is None else {'prompt_tokens': getattr(usage, 'prompt_tokens', None),
+                                                     'completion_tokens': getattr(usage, 'completion_tokens', None)}}
+            return response
+        completions.create = create
+
+    async def create(self, messages, **kwargs):
+        self.served = None
+        result = await super().create(messages, **kwargs)
+        served = self.served
+        if served is None:
+            raise RuntimeError('Served response was not captured; terminal reward forbidden')
+        parsed = result.content if isinstance(result.content, list) else []
+        client_names = [call.name for call in parsed]
+        if ([call.id for call in parsed] != [c['id'] for c in served['tool_calls']]
+                or any(call.arguments != c['arguments'] for call, c in zip(parsed, served['tool_calls']))
+                or (not parsed and result.content != (served['content'] or ''))):
+            raise RuntimeError('Parsed response differs from the served response; terminal reward forbidden')
+        for call, original in zip(parsed, served['tool_calls']):
+            call.name = original['name']
+        self.completion = task.generation_status(served, self._create_args['max_tokens'])
+        with self.recorder.stage('served_response', 'model_generation', {}, lambda: None) as (record, _):
+            record['outputs'] = {
+                'finish_reason': served['finish_reason'], 'content_present': type(served['content']) is str,
+                'content_sha256': (hashlib.sha256(served['content'].encode()).hexdigest()
+                                   if type(served['content']) is str else None),
+                'stop_reason': served['stop_reason'], 'tool_calls': served['tool_calls'], 'usage': served['usage'],
+                'completion': {'state': self.completion[0], 'reason': self.completion[1]},
+                # What the pinned client made of the same response; never used for scoring.
+                'framework_normalized': {'finish_reason': result.finish_reason, 'tool_names': client_names,
+                                         'tool_names_differ': client_names != [c['name'] for c in served['tool_calls']]}}
+        return result
+
+
+class RecoveryClient(ObservedClient, ServedIdentity):
     """Observed inference plus exact call/observation joins and a final-format reminder.
 
-    Every sampled call is matched to its actual observation in the next model input
-    before another generation is admitted. Successful observations enter the evidence
-    ledger only then, so the ledger holds what demonstrably reached the model. No
-    decoding constraint, repaired response or additional model is involved.
+    ObservedClient records each generation and delegates to ServedIdentity, so every
+    record carries the tool call as sampled. Every sampled call is matched to its
+    actual observation in the next model input before another generation is admitted.
+    Successful observations enter the evidence ledger only then, so the ledger holds
+    what demonstrably reached the model. No decoding constraint, repaired response or
+    additional model is involved.
     """
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -116,19 +186,8 @@ class RecoveryClient(ObservedClient):
         self.successful_calls = 0
         self.tool_rounds = 0
         self.recovered = False
-        # The pinned client rewrites tool names and finish reasons while parsing a
-        # response. Keep what the server actually returned for the last generation.
-        self.served = None
-        completions = self._client.chat.completions
-        served_create = completions.create
-
-        async def create(*args, **kwargs):
-            response = await served_create(*args, **kwargs)
-            choice = response.choices[0]
-            self.served = {'finish_reason': choice.finish_reason,
-                           'tool_names': [c.function.name for c in choice.message.tool_calls or []]}
-            return response
-        completions.create = create
+        self.completion = None
+        self.call_ids = set()
 
     async def create(self, messages, **kwargs):
         for call in self.pending:
@@ -167,30 +226,19 @@ class RecoveryClient(ObservedClient):
             raise PolicyLimitReached()
         if kwargs.get('tool_choice') == 'none':
             messages = [*messages, UserMessage(content=FINAL_INSTRUCTION, source='user')]
-        self.served = None
         result = await super().create(messages, **kwargs)
-        served = self.served or {}
-        if result.finish_reason not in ('stop', 'function_calls') or served.get('finish_reason') == 'length':
-            raise RuntimeError('Incomplete model generation')
+        # Completion is established only by explicit served evidence (task.generation_status).
+        state, reason = self.completion
+        if state != 'complete':
+            raise RuntimeError(f'Incomplete model generation ({state}): {reason}')
         if isinstance(result.content, list):
-            # parallel_tool_calls=False: the served stack returns at most one call.
-            if len(result.content) != 1 or result.finish_reason != 'function_calls':
-                raise RuntimeError('Missing, multiple or inconsistent model actions')
-            # vLLM 0.22.0 and AutoGen 0.7.5 both report a parsed tool call as a tool-call
-            # finish even when generation stopped at the output-token limit. The reported
-            # completion count is the only remaining truncation evidence; never hide it.
-            if result.usage.completion_tokens >= self._create_args['max_tokens']:
-                raise RuntimeError('Action generation reached the output-token limit')
-            # AutoGen replaces characters outside [A-Za-z0-9_-] in a sampled tool name.
-            # If that turns an invalid name into a real tool, the framework would execute
-            # an action the model did not sample. Never score a repaired action.
-            sampled = served.get('tool_names', [result.content[0].name])
-            if sampled != [result.content[0].name] and result.content[0].name in task.TOOLS:
-                raise RuntimeError('Sampled tool name was rewritten into a valid tool; terminal reward forbidden')
+            # A call is joined to its observation by id. A repeated id would make the
+            # join, and every later reading of the trace, ambiguous.
+            if result.content[0].id in self.call_ids:
+                raise RuntimeError('Tool call id repeats an earlier call; the observation join would be ambiguous')
+            self.call_ids.add(result.content[0].id)
             self.pending = list(result.content)
             self.tool_rounds += 1
-        elif not isinstance(result.content, str) or not result.content.strip() or result.finish_reason != 'stop':
-            raise RuntimeError('Missing or inconsistent model answer')
         return result
 
 
@@ -231,8 +279,10 @@ class Agent:
                         response = None
                 # A tool summary, truncation, cancellation or transport error is not terminal zero.
                 last = response.messages[-1] if response and response.messages else None
+                # An empty string is a completed answer here: the client admitted it only
+                # after the served response showed string content and a `stop` finish.
                 if not terminal_failure and (not isinstance(last, TextMessage) or last.source != 'recovery'
-                        or not isinstance(last.content, str) or not last.content.strip()
+                        or not isinstance(last.content, str)
                         or r.last_finish_reason != 'stop' or client.pending):
                     raise RuntimeError('Incomplete recovery trajectory; terminal reward forbidden')
                 if r.warnings or r.log is None:
