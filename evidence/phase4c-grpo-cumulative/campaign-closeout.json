@@ -1,0 +1,79 @@
+{
+  "at": "2026-11-25T21:00:11.036198+00:00",
+  "event": "close campaign after first operational completion",
+  "allocation": "A03",
+  "gross_before_credits": {
+    "A01": "0.62502184",
+    "A02": "0.84622284",
+    "A03": "2.52933395"
+  },
+  "gross_cumulative": "4.00057863",
+  "credits": 0,
+  "billing_snapshot": "2026-11-25T21:00:10.098262+00:00",
+  "gross_envelope_A03": "23.78",
+  "conservative_holds": {
+    "A01": {
+      "unposted_build": "15",
+      "retention": "0.13",
+      "unposted_collection": "0.01",
+      "other_delayed": "2"
+    },
+    "A02": {
+      "remaining_build_and_CPU_envelope": "2.15377716",
+      "retention": "0.13",
+      "unposted_collection": "0.01",
+      "other_delayed": "2"
+    },
+    "A03": {
+      "remaining_build_preparation_and_compute_envelope": "21.25066605",
+      "retention": "0.92",
+      "unposted_collection": "0.01",
+      "other_delayed": "2"
+    }
+  },
+  "unresolved_financial_exposure": "45.61444321",
+  "unresolved_call_exposure": 0,
+  "unencumbered": "63.38497816",
+  "unspent_before_holds": "108.99942137",
+  "additional_dispatch_authority": 0,
+  "successors_used": 2,
+  "all_retention_reviews_utc": "2026-12-02",
+  "note": "A01 settlement preserved. For A02 and A03 the remaining combined liability deducts the posted gross once. Retention covers the seven-day review horizon. Other delayed holds exclude the resource envelopes, storage and collection; no final invoice assumed.",
+  "retained_regular_file_bytes": {
+    "A01": 6445405176,
+    "A02": 6435944452,
+    "A03": 46633520042
+  },
+  "retained_total_regular_file_bytes": 59514869670,
+  "initial_reservations_and_releases": [
+    {
+      "event": "link historical A01 closeout",
+      "original_ceiling": "113.00",
+      "historical_unspent_earmark": "112.37497816"
+    },
+    {
+      "event": "release historical earmark net of A01 reserves",
+      "reallocated": "95.23497816",
+      "retained_A01_holds": "17.14"
+    },
+    {
+      "event": "reserve A02",
+      "full_reservation": "89.00",
+      "remaining": "6.23497816"
+    },
+    {
+      "event": "settle A02 after terminal preflight failure",
+      "available_for_next_reservation": "90.09497816"
+    },
+    {
+      "event": "reserve A03",
+      "full_reservation": "89.00",
+      "remaining": "1.09497816"
+    },
+    {
+      "event": "settle A03 and close dispatch",
+      "unencumbered": "63.38497816",
+      "additional_dispatch_authority": 0
+    }
+  ]
+}

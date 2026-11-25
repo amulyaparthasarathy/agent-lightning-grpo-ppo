@@ -1,5 +1,7 @@
 # Phase 4C recovery-learning qualification
 
+**GRPO operational qualification completed on A03.** Independent review admitted 144 episodes and two actor updates, including a fresh-worker reload of the step-2 checkpoint. [Campaign closeout](PHASE4C_GRPO_CAMPAIGN_CLOSEOUT.md)
+
 Recovery development calibration is closed. On each route the fresh base succeeded on 8 of 24 greedy development episodes and 38 of 96 sampled episodes. All 120 rewards per route were confirmed. GRPO had 13 semantic/evidence mixed questions and PPO-MC had 15, spanning five families each. All eight stages recorded zero advantages, gradients, optimizer calls and checkpoint saves. This supports use of development data for this task. Recovery training capacity, improvement and algorithm superiority remain open. Final-panel model evaluations to date total zero. The historical execution source is `bc81c1fb0def27b15c56cdd8abb01098e7e1f8d5`. The evidence/documentation head is `79b534f5fad7b11ca32a89a239a74bb53e4d7b00`. [Phase 4B results](PHASE4B_LIVE_CALIBRATION.md)
 
 The first live Phase 4C GRPO allocation failed at baseline finalization. Its 24 diagnostic rewards remain available, with zero qualification-admitted episodes or updates. The offline correction and proposed fresh allocation are documented separately. [A01 evidence](PHASE4C_GRPO_QUALIFICATION_A01.md) · [Correction and successor worksheet](PHASE4C_PATH_CORRECTION.md)
