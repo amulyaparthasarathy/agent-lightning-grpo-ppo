@@ -27,6 +27,7 @@ except ImportError:
     from tests.pinned_training_support import load, Proto, SOURCES
 
 HAS_TORCH = importlib.util.find_spec('torch') is not None
+# SIMULATED trainer-level events: no trainer process runs in this gate.
 TRAINER_EVENTS = [{'event': 'weight_refresh', 'step': 0}, {'event': 'wandb_finished', 'id': 'simulated'},
                   {'event': 'trainer_returned', 'global_step': 1, 'validation_only': False, 'collection_only': True, 'optimizer_updates': 0}]
 
@@ -42,7 +43,7 @@ class CalibrationAdapterTests(unittest.TestCase):
         runtime.audit._STATE['step'] = 1
         self.plan = fx.calibration_plan(source())
 
-    def adapter(self, request, prompt=64, response=64, **flags):
+    def adapter(self, request, prompt=256, response=256, **flags):
         import torch
         import numpy as np
         from tensordict import TensorDict
@@ -67,15 +68,17 @@ class CalibrationAdapterTests(unittest.TestCase):
         episodes = fx.rows(declared, behavior)
         rollouts = []
         for index, e in enumerate(episodes):
-            # Three model calls: two tool-call turns and an answer, with observation tokens between.
-            first, second, third = [10, 11, 12 + index % 3], [20, 21], [30, 31, 32, 33]
-            prompt = [1, 2, 3]
-            if fragmented:
-                turns = [(prompt, first), ([4, 5, 6, 7], second), ([8, 9], third)]
-            else:
-                p2 = prompt + first + [90, 91]  # observation
-                p3 = p2 + second + [92, 93, 94]  # observation and reminder
-                turns = [(prompt, first), (p2, second), (p3, third)]
+            # One model call per generation the episode reports, each with exactly the number of
+            # sampled tokens the trace's server-reported usage gives, and observation tokens between.
+            prompt, turns, context = [1, 2, 3], [], [1, 2, 3]
+            for call, tokens in enumerate(e['completion_tokens']):
+                response = [1000 * (call + 1) + t for t in range(tokens)]
+                if fragmented:
+                    prompt = [4 + call, 5 + call, 6 + call, 7 + call][:2 + call % 3]
+                else:
+                    prompt = list(context)
+                turns.append((prompt, response))
+                context = prompt + response + [90 + call, 91 + call]  # observation, or the reminder
             rollouts.append(NS(rollout_id=e['rollout_id'], data_id='group-'+e['case_id'], step=1, sample_idx_in_step=index % 4,
                                final_reward=e['reward'], input={'case_id': e['case_id']},
                                triplets=[NS(prompt={'token_ids': p}, response={'token_ids': r, 'log_probs': [-.5]*len(r)}, image_urls=None)
@@ -107,21 +110,32 @@ class CalibrationAdapterTests(unittest.TestCase):
                         self.assertEqual([kinds.count(k) for k in ('collection_manifest', 'development_collection_admitted', 'calibration_collection_tokens')], [1, 1, 1])
                         admitted = next(e for e in events if e['event'] == 'development_collection_admitted')
                         tokens = next(e for e in events if e['event'] == 'calibration_collection_tokens')
-                        self.assertEqual((admitted['real_rollouts'], admitted['groups'], admitted['generated_tokens']), (32, 8, 32 * 9))
-                        self.assertEqual(admitted['fragment_rows'], 96 if fragmented else 32)
+                        sampled = {e['rollout_id']: sum(e['completion_tokens']) for e in episodes}
+                        generations = {e['rollout_id']: len(e['completion_tokens']) for e in episodes}
+                        self.assertEqual((admitted['real_rollouts'], admitted['groups'], admitted['generated_tokens']), (32, 8, sum(sampled.values())))
+                        self.assertEqual(admitted['fragment_rows'], sum(generations.values()) if fragmented else 32)
                         self.assertEqual((tokens['truncated_rows'], tokens['dropped_prompt_rows']), (0, 0))
                         for measured in tokens['rollouts']:
+                            rollout = measured['rollout']
                             # Sampled tokens are conserved; observations and the reminder are context, never targets.
-                            self.assertEqual(measured['mask_tokens'], 9)
-                            self.assertEqual(measured['context_tokens'], 0 if fragmented else 5)
-                            self.assertEqual(measured['prompt_tokens'], [3, 4, 2] if fragmented else [3])
+                            self.assertEqual(measured['mask_tokens'], sampled[rollout])
+                            self.assertEqual(measured['context_tokens'], 0 if fragmented else 2 * (generations[rollout] - 1))
+                            self.assertEqual(len(measured['prompt_tokens']), generations[rollout] if fragmented else 1)
                         done = calibration.assemble(request, events + TRAINER_EVENTS, episodes)
                         report = calibration.validate_stage(self.plan, self.plan['jobs'][algorithm], request['stage'], done)
                         self.assertEqual(done['optimizer_updates'], {'actor': 0, 'critic': 0})
-                        self.assertEqual((len(report['episodes']), report['collection']['generated_tokens']), (32, 288))
-                        self.assertEqual({(e['sampled_tokens'], e['mask_tokens'], e['masked_context_tokens']) for e in report['episodes']},
-                                         {(9, 9, 0 if fragmented else 5)})
-                        self.assertEqual(report['collection']['limits'], {'max_prompt_length': 64, 'max_response_length': 64})
+                        self.assertEqual((len(report['episodes']), report['collection']['generated_tokens']), (32, sum(sampled.values())))
+                        self.assertTrue(all(e['sampled_tokens'] == e['mask_tokens'] == sum(e['completion_tokens']) for e in report['episodes']))
+                        self.assertEqual(report['collection']['limits'], {'max_prompt_length': 256, 'max_response_length': 256})
+                        # Measured by the adapter, not assumed: coverage is every rollout of the packet.
+                        self.assertEqual((report['collection']['rollouts_with_token_evidence'], report['collection']['truncated_rows'],
+                                          report['collection']['dropped_prompt_rows']), (32, 0, 0))
+                        coverage = calibration.token_coverage(self.plan['calibration']['stages'][name], events, None)
+                        self.assertEqual((coverage['rollouts_with_token_evidence'], coverage['sampled_tokens'], coverage['mask_tokens'],
+                                          coverage['truncated_rows']), (32, sum(sampled.values()), sum(sampled.values()), 0))
+                        # A generation lost or duplicated upstream of the adapter breaks the join with the traces.
+                        lost = copy.deepcopy(episodes); lost[0]['completion_tokens'][0] += 1
+                        with self.assertRaises(ValueError): calibration.assemble(request, events + TRAINER_EVENTS, lost)
 
     def test_constant_groups_are_retained_and_reported(self):
         request = self.request()
@@ -149,6 +163,10 @@ class CalibrationAdapterTests(unittest.TestCase):
                 self.adapter(request).get_train_data_batch(bad, global_steps=1)
         # Limits that cannot hold the trajectory reject the collection; nothing is cut silently.
         with self.assertRaisesRegex(ValueError, 'truncated'): self.adapter(request, response=8).get_train_data_batch(copy.deepcopy(good), global_steps=1)
+        # With no admitted collection there is no adapter token evidence, and none is invented.
+        coverage = calibration.token_coverage(self.plan['calibration']['stages']['sampled-packet-1'], self.events(), None)
+        self.assertEqual((coverage['rollouts_with_token_evidence'], coverage['truncated_rows'], coverage['dropped_prompt_rows'], coverage['mask_tokens']),
+                         (0, None, None, None))
         with self.assertRaisesRegex(ValueError, 'Invalid prompt context'): self.adapter(request, prompt=2).get_train_data_batch(copy.deepcopy(good), global_steps=1)
         for path in Path(self.tmp.name).glob('*.jsonl'):
             self.assertNotIn('development_collection_admitted', path.read_text())
@@ -201,7 +219,7 @@ class CalibrationAdapterTests(unittest.TestCase):
             train_request = c.stage_request(qualification, job, stage)
             self.assertFalse(modes.collection_only(qualification, stage))
             batch, _ = self.adapter(train_request).get_train_data_batch(copy.deepcopy(rollouts), global_steps=1)
-            self.assertEqual(batch.batch['response_mask'].sum().item(), 288)
+            self.assertEqual(batch.batch['response_mask'].sum().item(), sum(sum(len(t.response['token_ids']) for t in r.triplets) for r in rollouts))
         # The greedy calibration stage never enters the training collection branch.
         self.assertFalse(modes.collection_only(self.plan, 'greedy-development'))
 

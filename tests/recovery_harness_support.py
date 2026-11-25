@@ -22,6 +22,7 @@ import openai
 from openai.resources.chat.completions import AsyncCompletions
 from openai.types.chat import ChatCompletion
 from autogen_agentchat.agents import AssistantAgent
+from autogen_ext.models.openai import OpenAIChatCompletionClient
 from experiment import recovery_agent, recovery_task as task, recovery_solver as solver
 from experiment import owned_processes, reader_integration
 from experiment.observed_runtime import Recorder
@@ -58,16 +59,29 @@ class State:
         return task.dumps(value)
 
 
-def completion(step, *, content=None, calls=(), finish=None, completion_tokens=0):
+ABSENT = object()
+
+
+def completion(step, *, content=None, calls=(), finish=None, completion_tokens=ABSENT, usage=True, call_ids=None, stop_reason=None):
+    """One scripted chat completion in the server's response format.
+
+    Completion tokens default to a small positive count, as a server would report.
+    usage=False omits usage; content=None is null content, as for a tool call.
+    """
     message = {'role': 'assistant', 'content': content}
     if calls:
-        message['tool_calls'] = [{'id': f'scripted-call-{step}-{i}', 'type': 'function',
+        message['tool_calls'] = [{'id': (call_ids or [f'scripted-call-{step}-{i}' for i in range(len(calls))])[i], 'type': 'function',
                                   'function': {'name': name, 'arguments': arguments}}
                                  for i, (name, arguments) in enumerate(calls)]
-    return ChatCompletion.model_validate({
-        'id': f'scripted-{step}', 'object': 'chat.completion', 'created': 0, 'model': 'auto',
-        'choices': [{'index': 0, 'message': message, 'finish_reason': finish or ('tool_calls' if calls else 'stop')}],
-        'usage': {'prompt_tokens': 0, 'completion_tokens': completion_tokens, 'total_tokens': completion_tokens}})
+    if completion_tokens is ABSENT:
+        completion_tokens = 12 if calls else max(1, len(content or '') // 4)
+    choice = {'index': 0, 'message': message, 'finish_reason': finish or ('tool_calls' if calls else 'stop')}
+    if stop_reason is not None:
+        choice['stop_reason'] = stop_reason
+    body = {'id': f'scripted-{step}', 'object': 'chat.completion', 'created': 0, 'model': 'auto', 'choices': [choice]}
+    if usage:
+        body['usage'] = {'prompt_tokens': 0, 'completion_tokens': completion_tokens, 'total_tokens': completion_tokens}
+    return ChatCompletion.model_validate(body)
 
 
 def CALL(name, **arguments):
@@ -135,8 +149,12 @@ def identity_environment(request):
 
 
 def run_episode(root, script=None, *, row=None, mode='normal', request=None, route='val', rollout='scripted',
-                attempt='one', fault_step=None):
-    """One production episode with scripted SDK responses. Returns everything observable."""
+                attempt='one', fault_step=None, simulate_live_labels=False):
+    """One production episode with scripted SDK responses. Returns everything observable.
+
+    Traces are labelled scripted-inference unless simulate_live_labels is set, which
+    only tests of the live-evidence admission path do (see `collected`).
+    """
     root = Path(root); root.mkdir(parents=True, exist_ok=True)
     row = row or task.rows('development')[0]
     script = list(SOLVED if script is None else script)
@@ -194,14 +212,29 @@ def run_episode(root, script=None, *, row=None, mode='normal', request=None, rou
         if fault_step in (None, len(executed)):
             result.call_id = 'lost-'+result.call_id
         return call, result
+    pinned_create = OpenAIChatCompletionClient.create
+
+    async def tampered_create(client, messages, **kwargs):
+        # Below the served-identity layer: what the pinned client hands back.
+        result = await pinned_create(client, messages, **kwargs)
+        if mode == 'served-not-captured':
+            client.served = None
+        elif isinstance(result.content, list) and mode == 'parsed-arguments-differ':
+            result.content[0].arguments = result.content[0].arguments + ' '
+        elif isinstance(result.content, list) and mode == 'parsed-id-differs':
+            result.content[0].id = 'another-call'
+        return result
     error = message = None
     try:
         with ExitStack() as stack:
             stack.enter_context(patch.dict(os.environ, env))
-            stack.enter_context(patch.object(recovery_agent, 'Recorder', ScriptedRecorder))
+            if not simulate_live_labels:
+                stack.enter_context(patch.object(recovery_agent, 'Recorder', ScriptedRecorder))
             stack.enter_context(patch.object(AsyncCompletions, 'create', create))
             if mode in ('tool-backend-error', 'corrupt-observation'):
                 stack.enter_context(patch.object(recovery_agent.ObservedWorkbench, 'call_tool', faulty_call))
+            if mode in ('served-not-captured', 'parsed-arguments-differ', 'parsed-id-differs'):
+                stack.enter_context(patch.object(OpenAIChatCompletionClient, 'create', tampered_create))
             if mode == 'lost-observation':
                 stack.enter_context(patch.object(AssistantAgent, '_execute_tool_call', staticmethod(lost_observation)))
             try:
@@ -294,44 +327,112 @@ def scripted_behavior(algorithm, stage, case_id, sample):
 def calibration_demonstration(output):
     """All 240 calibration episodes through the production harness with scripted inference.
 
-    Traces and episode rows are real harness output over real stdio MCP. Adapter and
-    trainer audit events are simulated (the real adapter is exercised in the pinned
-    CPU gate). The result exercises completion, aggregation and reporting only.
+    The result is a directory in the format `reader_training.py collect` writes, so
+    the report command reviews it exactly as it would review collected evidence.
+    Traces and episode rows are real harness output over real stdio MCP. Audit
+    events, receipts and the supervisor index are simulated. Everything is labelled
+    scripted-inference and can support no calibration decision.
     """
-    from experiment import recovery_calibration as calibration, reader_assets as assets, reader_contract as c
+    from experiment import reader_assets as assets, reader_contract as c, reader_evidence
+    profile = assets.read(Path(__file__).resolve().parents[1]/'examples/reader-profile.recovery-calibration.synthetic.json')
+    plan = c.make_plan(profile, c.source_identity())
+    collected(output, plan)
+    reviewed = reader_evidence.calibration_collection(plan, assets.read(Path(output)/'collection.json')['index'],
+                                                      reader_evidence.local_reader(plan, output), local=output)
+    report = reviewed['calibration']
+    assets.write_new(Path(output)/'report.json', report)
+    from experiment.recovery_calibration import summary
+    (Path(output)/'summary.md').write_text(summary(report))
+    return {'schema': 'recovery-scripted-calibration-v1', 'evidence_class': report['evidence_class'],
+            'live_policy_measurement': report['live_policy_measurement'],
+            'episodes_run': sum(r['accounting']['observed_attempts'] for r in report['routes'].values()),
+            'decisions': {a: {k: r['decision'][k] for k in ('operational_validity', 'scientific_suitability')}
+                          for a, r in report['routes'].items()}, 'output': str(output)}
+
+
+def collected(output, plan, *, simulate_live_labels=False, behavior=scripted_behavior, only=None):
+    """TEST ONLY: a collected-attempt directory in production format.
+
+    Every episode runs through the production harness over real stdio MCP with
+    scripted model responses. The stage completion is built by the production
+    completion functions. Audit events, worker identities, receipts and the
+    supervisor index are simulated in their production formats.
+
+    simulate_live_labels=True leaves the traces with the labels a live run would
+    carry, so that tests can exercise the path that admits live evidence. Such a
+    directory is still simulated: it is written only under a test's temporary
+    directory, its collection.json says so, and no model produced it.
+
+    `only` restricts execution to some (algorithm, stage) pairs; the others are
+    recorded in the index as never dispatched.
+    """
+    from unittest.mock import patch as mock_patch
+    from experiment import matched_launch, matched_supervisor, reader_assets as assets, reader_contract as c, reader_evidence
+    from experiment import recovery_calibration as calibration, summarize
     import recovery_fixtures
     output = Path(output)
     output.mkdir(parents=True, exist_ok=False)
-    profile = assets.read(Path(__file__).resolve().parents[1]/'examples/reader-profile.recovery-calibration.synthetic.json')
-    plan = c.make_plan(profile, c.source_identity())
     assets.write_new(output/'plan.json', plan)
+    evidence_class = 'live-model' if simulate_live_labels else 'scripted-inference'
     rows = {r['case_id']: r for r in task.rows('development')}
-    completions = {}
+    index = {'study_key': matched_supervisor.key(plan), 'status': 'completed', 'plan': plan, 'jobs': {}}
+    clock = 1000.0
     for job in plan['jobs']:
+        receipts = []
         for stage in job['stages']:
             request = c.stage_request(plan, job, stage)
             declared = plan['calibration']['stages'][stage['name']]
             run = output/job['algorithm']/stage['name']
+            if only is not None and (job['algorithm'], stage['name']) not in only:
+                receipts.append({'stage': stage['name'], 'output': stage['output'], 'wandb': stage['wandb'], 'status': 'skipped',
+                                 'call_id': None, 'reason': 'dependency_or_supervisor_failed'})
+                continue
             for case_id in declared['case_ids']:
                 for sample in range(declared['rollouts_per_question']):
-                    behavior = scripted_behavior(job['algorithm'], stage['name'], case_id, sample)
-                    result = run_episode(run, SCRIPTED_BEHAVIORS[behavior], row=rows[case_id], request=request,
-                                         route=declared['route'], rollout=f"ro-{case_id.rsplit('/', 1)[1]}-{sample}",
-                                         attempt=f'at-{sample}')
+                    result = run_episode(run, SCRIPTED_BEHAVIORS[behavior(job['algorithm'], stage['name'], case_id, sample)],
+                                         row=rows[case_id], request=request, route=declared['route'],
+                                         rollout=f"ro-{case_id.rsplit('/', 1)[1]}-{sample}", attempt=f'at-{sample}',
+                                         simulate_live_labels=simulate_live_labels)
                     if result['error'] or not result['cleanup']['complete']:
                         raise ValueError('Scripted calibration episode failed; inspect '+str(run))
-            episodes = calibration.episode_table(run, request, 'scripted-inference')
-            events = recovery_fixtures.events(declared, episodes)
+            episodes = calibration.episode_table(run, request, evidence_class)
+            call = 'fc-' + stage['wandb']['id']
+            events = recovery_fixtures.events(declared, episodes, wandb_id=stage['wandb']['id'], pid=4242)
             (run/'audit').mkdir()
-            (run/'audit/events-simulated.jsonl').write_text(''.join(json.dumps(dict(e, simulated=True))+'\n' for e in events))
-            done = {'plan_sha256': c.digest(plan), 'stage': stage['name'],
-                    'adapter_and_trainer_events': 'simulated; not produced by a trainer process',
-                    **calibration.assemble(request, events, episodes, 'scripted-inference')}
-            assets.write_new(run/'completion.json', done)
-            completions.setdefault(job['algorithm'], {})[stage['name']] = done
-    report = calibration.report(plan, completions)
-    assets.write_new(output/'report.json', report)
-    (output/'summary.md').write_text(calibration.summary(report))
-    return {'schema': 'recovery-scripted-calibration-v1', 'evidence_class': report['evidence_class'],
-            'live_policy_measurement': False, 'episodes': sum(r['episodes']['attempted_and_admitted'] for r in report['routes'].values()),
-            'decisions': {a: r['decision'] for a, r in report['routes'].items()}, 'output': str(output)}
+            (run/'audit/events-4242.jsonl').write_text(''.join(json.dumps(e)+'\n' for e in events))
+            worker = {'AGL_READER_CALL_ID': call, 'MODAL_TASK_ID': 'ta-' + c.digest(call)[:16]}
+            if simulate_live_labels:
+                # The two production completion functions, exactly as the stage worker calls them.
+                with mock_patch.dict(os.environ, worker):
+                    proof = reader_evidence.complete(run, request, matched_launch.complete_stage(run, request, None))
+            else:
+                # The production path admits only live evidence; mirror its fields for scripted traces.
+                proof = {'protocol': c.PROTOCOL, 'plan_sha256': c.digest(plan), 'stage': stage['name'],
+                         **calibration.complete(run, request, events, evidence_class),
+                         'trajectories': summarize.summarize(run, stage['name'], declared['route'])[0],
+                         'execution_schema': plan['schema'], 'source_sha256': c.digest(plan['source']),
+                         'configuration_sha256': plan['configuration_sha256'], 'assets_sha256': c.digest(plan['assets']),
+                         'task_sha256': c.digest(plan['task_identity']),
+                         'worker': {'call_id': call, 'hostname': 'simulated', 'container_id': worker['MODAL_TASK_ID'],
+                                    'launcher_pid': 0, 'trainer_pid': 4242},
+                         'wandb_id': stage['wandb']['id'], 'model_tool_integration': reader_integration.report(run, request)}
+            receipt = {'status': 'completed', 'call_id': call, 'output': stage['output'], 'started_at': clock,
+                       'container_id': worker['MODAL_TASK_ID'], 'completion': proof, 'finished_at': clock + 360.0}
+            clock += 400.0
+            for name, value in (('completion.json', proof), ('receipt.json', receipt), ('request.json', request),
+                                ('observability.json', {'experiment_id': job['job_id'], 'wandb_run_id': stage['wandb']['id'],
+                                                        'wandb_project': stage['wandb']['project'], 'wandb': stage['wandb']})):
+                (run/name).write_text(json.dumps(value, indent=2)+'\n')
+            receipts.append({'stage': stage['name'], 'output': stage['output'], 'status': 'completed', 'wandb': stage['wandb'],
+                             'submitted_at': receipt['started_at'] - 5, 'call_id': call, 'result': receipt,
+                             'finished_at': receipt['finished_at']})
+        index['jobs'][job['job_id']] = {'status': 'completed' if all(r['status'] == 'completed' for r in receipts) else 'failed',
+                                         'stages': receipts}
+    if any(j['status'] != 'completed' for j in index['jobs'].values()):
+        index['status'] = 'failed'
+    assets.write_new(output/'collection.json', {
+        'SIMULATED': 'test fixture or scripted demonstration; no model, trainer, provider or supervisor produced this directory',
+        'inference': 'scripted OpenAI SDK responses', 'trace_labels': evidence_class,
+        'adapter_trainer_receipt_and_index_evidence': 'simulated in production formats',
+        'plan_sha256': c.digest(plan), 'index': index})
+    return index

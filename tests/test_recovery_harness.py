@@ -90,7 +90,7 @@ class HarnessTests(unittest.TestCase):
         self.assertEqual(len(result['children']), 1)
         kinds = [r['kind'] for r in result['records']]
         self.assertEqual({k: kinds.count(k) for k in set(kinds)},
-                         {'llm': 4, 'tool': 3, 'action_outcome': 3, 'episode': 1, 'trace_status': 1})
+                         {'llm': 4, 'served_response': 4, 'tool': 3, 'action_outcome': 3, 'episode': 1, 'trace_status': 1})
         self.assertTrue(all(r['evidence_class'] == 'scripted-inference' and r['synthetic_fixture'] for r in result['records']))
         self.assertEqual(episode(result)['episode_policy'], 'recovery-episode-v1')
         chains = scripted(result, request)
@@ -243,14 +243,12 @@ class HarnessTests(unittest.TestCase):
         truncated_action = lambda st: completion(st.step, calls=[('get_asset', task.dumps({'asset_id': st.asset_id}))], completion_tokens=1024)
         rest = [SOLVE, SOLVE, SOLVE, SOLVE]  # what a healthy episode would have done next
         scripts = {
-            'truncated final': ([SOLVE, SOLVE, SOLVE, lambda st: TEXT(st.answer(), finish='length')(st)], 'Incomplete model generation', 4),
-            'truncated action at the token limit': ([truncated_action] + rest, 'reached the output-token limit', 1),
+            'truncated final': ([SOLVE, SOLVE, SOLVE, lambda st: TEXT(st.answer(), finish='length')(st)], 'Incomplete model generation (truncated)', 4),
+            'ambiguous action at the token cap': ([truncated_action] + rest, 'Incomplete model generation (ambiguous)', 1),
             'truncated reflection': ([SOLVE, SOLVE, SOLVE, INVENTORY, INVENTORY, lambda st: TEXT(st.answer(), finish='length')(st)],
-                                     'Incomplete model generation', 6),
-            'content filter': ([SOLVE, TEXT('x', finish='content_filter')] + rest, 'Incomplete model generation', 2),
-            'empty final': ([SOLVE, SOLVE, SOLVE, TEXT('')], 'Missing or inconsistent model answer', 4),
-            'whitespace final': ([SOLVE, SOLVE, SOLVE, TEXT(' \n')], 'Missing or inconsistent model answer', 4),
-            'two calls in one generation': ([two_calls] + rest, 'Missing, multiple or inconsistent model actions', 1),
+                                     'Incomplete model generation (truncated)', 6),
+            'content filter': ([SOLVE, TEXT('x', finish='content_filter')] + rest, 'Incomplete model generation (unestablished)', 2),
+            'two calls in one generation': ([two_calls] + rest, 'more than one tool call in a generation', 1),
             'backend failure first': ([FAIL(connection_error())] + rest, 'APIConnectionError', 1),
             'backend failure after tools': ([SOLVE, SOLVE, FAIL(connection_error())] + rest, 'APIConnectionError', 3),
             'backend failure at reflection': ([SOLVE, SOLVE, SOLVE, INVENTORY, INVENTORY, FAIL(connection_error())], 'APIConnectionError', 6),
@@ -260,6 +258,133 @@ class HarnessTests(unittest.TestCase):
         for name, (script, reason, requests) in scripts.items():
             with self.subTest(name=name):
                 self.incomplete(self.run_case(script), reason, requests=requests)
+
+    def test_original_sampled_tool_call_identity_is_preserved_through_the_retained_chain(self):
+        import re
+        asset = TRUTH['asset_id']
+        normalize = lambda name: re.sub(r'[^a-zA-Z0-9_-]', '_', name)[:64]  # what the pinned client does
+        request = calibration_request()
+        # A valid call is untouched and nothing is reported as rewritten.
+        valid = self.run_case(request=request)
+        served = [r['outputs'] for r in valid['records'] if r['kind'] == 'served_response']
+        self.assertEqual([s['tool_calls'][0]['name'] for s in served[:3]], list(task.TOOLS))
+        self.assertFalse(any(s['framework_normalized']['tool_names_differ'] for s in served))
+        self.assertEqual(calibration.episode_row(valid['records'], request, 'scripted-inference')['tool_names_rewritten_by_framework'], 0)
+        # Names the pinned client would rewrite. Two of them would become real tools.
+        names = ('get asset', 'functions.get_asset', 'get.asset', 'list backup runs', 'get_asset\n', 'gét_asset', 'x' * 70)
+        self.assertEqual([normalize(n) in task.TOOLS for n in names], [True, False, True, True, False, False, False])
+        for name in names:
+            with self.subTest(name=name):
+                raw_arguments = json.dumps({'asset_id': asset}, indent=1)  # not the canonical form: kept byte for byte
+                result = self.run_case([RAW(name, raw_arguments), SOLVE, SOLVE, SOLVE, SOLVE], request=request)
+                out = self.complete(result, 1.0, 'complete_recovered')
+                self.assertEqual((out['policy_errors'], out['successful_tool_calls'], out['tool_calls']), (1, 3, 3))
+                records = result['records']
+                # 1. The served response, recorded below the pinned client.
+                first = next(r['outputs'] for r in records if r['kind'] == 'served_response')
+                self.assertEqual(first['tool_calls'], [{'id': 'scripted-call-1-0', 'name': name, 'arguments': raw_arguments}])
+                self.assertEqual(first['framework_normalized'], {'finish_reason': 'function_calls', 'tool_names': [normalize(name)],
+                                                                  'tool_names_differ': True})
+                # 2. The generation record: the call as sampled, not as normalized.
+                generation = next(r for r in records if r['kind'] == 'llm')['outputs']['content']
+                self.assertEqual(generation, [{'id': 'scripted-call-1-0', 'arguments': raw_arguments, 'name': name}])
+                # 3. No tool was executed for it: normalization never manufactures a valid action.
+                executed = [r['name'] for r in records if r['kind'] == 'tool']
+                self.assertEqual(executed, list(task.TOOLS))
+                # 4. The action record, its observation and its classification.
+                action = next(r for r in records if r['kind'] == 'action_outcome')
+                self.assertEqual(action['name'], name)
+                self.assertEqual(action['inputs']['call'], {'id': 'scripted-call-1-0', 'arguments': raw_arguments, 'name': name})
+                observation = action['inputs']['observation']
+                self.assertEqual((observation['name'], observation['call_id'], observation['is_error'], observation['content']),
+                                 (name, 'scripted-call-1-0', True, f"Error: tool '{name}' not found in any workbench"))
+                self.assertEqual(action['outputs'], {'policy_error': 'unknown_tool', 'successful_tool_call': False})
+                # 5. The next model context: the same identity goes back to the model.
+                sent = result['requests'][1]['messages']
+                self.assertEqual(sent[2]['tool_calls'], [{'id': 'scripted-call-1-0', 'type': 'function',
+                                                          'function': {'arguments': raw_arguments, 'name': name}}])
+                self.assertEqual((sent[3]['tool_call_id'], sent[3]['content']), ('scripted-call-1-0', observation['content']))
+                self.assertIn('{"name": "' + name + '", "parameters": ', recovery_prompt.render(sent, result['requests'][1]['tools']))
+                # 6. The reviewed row, and a recorded name cannot be swapped afterwards.
+                row = calibration.episode_row(records, request, 'scripted-inference')
+                self.assertEqual((row['sampled_calls'][0]['name'], row['sampled_calls'][0]['id'], row['sampled_calls'][0]['policy_error'],
+                                  row['policy_error_codes'], row['tool_names_rewritten_by_framework']),
+                                 (name, 'scripted-call-1-0', 'unknown_tool', ['unknown_tool'], 1))
+                self.assertEqual([c['name'] for c in row['sampled_calls'][1:]], list(task.TOOLS))
+                for edit in (lambda rs: next(r for r in rs if r['kind'] == 'llm')['outputs']['content'][0].update(name=normalize(name)),
+                             lambda rs: next(r for r in rs if r['kind'] == 'served_response')['outputs']['tool_calls'][0].update(name=normalize(name)),
+                             lambda rs: next(r for r in rs if r['kind'] == 'action_outcome')['inputs']['call'].update(name=normalize(name)),
+                             lambda rs: next(r for r in rs if r['kind'] == 'action_outcome')['inputs']['observation'].update(name=normalize(name)),
+                             lambda rs: rs.remove(next(r for r in rs if r['kind'] == 'served_response'))):
+                    bad = copy.deepcopy(records); edit(bad)
+                    with self.assertRaises((ValueError, KeyError)): calibration.episode_row(bad, request, 'scripted-inference')
+        # The declared terminal limit applies to original identities, and nothing is executed.
+        result = self.run_case([CALL('get asset', asset_id=asset), CALL('functions.get_asset', asset_id=asset)], request=request)
+        out = self.complete(result, 0.0, 'terminal_policy_failure')
+        self.assertEqual((out['policy_errors'], out['tool_calls'], len(result['requests'])), (2, 0, 2))
+        self.assertEqual([a['inputs']['call']['name'] for a in result['records'] if a['kind'] == 'action_outcome'], ['get asset', 'functions.get_asset'])
+        row = calibration.episode_row(result['records'], request, 'scripted-inference')
+        self.assertEqual(([c['name'] for c in row['sampled_calls']], row['failure_class']), (['get asset', 'functions.get_asset'], 'action'))
+        # Missing or inconsistent raw metadata fails closed: no reward, no admitted episode.
+        for mode, reason in (('served-not-captured', 'Served response was not captured'),
+                             ('parsed-arguments-differ', 'Parsed response differs from the served response'),
+                             ('parsed-id-differs', 'Parsed response differs from the served response')):
+            with self.subTest(mode=mode):
+                self.incomplete(self.run_case(mode=mode), reason, requests=1)
+        duplicate = lambda st: completion(st.step, calls=[('get_policy', task.dumps({'policy_id': TRUTH['policy_id']}))], call_ids=['scripted-call-1-0'])
+        self.incomplete(self.run_case([SOLVE, duplicate, SOLVE, SOLVE]), 'Tool call id repeats an earlier call', requests=2)
+        empty_id = lambda st: completion(st.step, calls=[('get_asset', task.dumps({'asset_id': st.asset_id}))], call_ids=[''])
+        self.incomplete(self.run_case([empty_id, SOLVE, SOLVE, SOLVE]), 'malformed served tool call', requests=1)
+
+    def test_completion_is_established_only_from_served_protocol_evidence(self):
+        call = lambda st, **options: completion(st.step, calls=[('get_asset', task.dumps({'asset_id': st.asset_id}))], **options)
+        rest = [SOLVE, SOLVE, SOLVE, SOLVE]
+        # Complete answers that are malformed: scored zero as format failures.
+        for name, final, kind in (('whitespace', TEXT(' \n\t'), 'whitespace'), ('whitespace without usage', TEXT('  ', usage=False), 'whitespace'),
+                                  ('empty with reported completion tokens', TEXT('', completion_tokens=1), 'empty')):
+            with self.subTest(name=name):
+                request = calibration_request()
+                result = self.run_case([SOLVE, SOLVE, SOLVE, final], request=request)
+                out = self.complete(result, 0.0)
+                self.assertEqual((out['diagnostics']['failure_class'], out['diagnostics']['json_syntax'], out['raw_answer'].strip()), ('format', False, ''))
+                row = calibration.episode_row(result['records'], request, 'scripted-inference')
+                self.assertEqual((row['answer_content'], row['failure_class'], row['decision_correct']), (kind, 'format', None))
+        # Everything else stays an untrusted execution, with its own state.
+        cases = {
+            'empty answer without reported tokens': ([SOLVE, SOLVE, SOLVE, TEXT('', usage=False)], '(unestablished): empty answer without reported completion tokens', 4),
+            'empty answer with zero tokens': ([SOLVE, SOLVE, SOLVE, TEXT('', completion_tokens=0)], '(unestablished): empty answer without reported completion tokens', 4),
+            'absent content': ([SOLVE, SOLVE, SOLVE, lambda st: completion(st.step, content=None)], '(unestablished): answer content is absent', 4),
+            'confirmed truncated answer': ([SOLVE, SOLVE, SOLVE, lambda st: TEXT(st.answer(), finish='length')(st)], '(truncated): the server reported a length finish', 4),
+            'confirmed truncated call': ([lambda st: call(st, finish='length')] + rest, '(truncated): the server reported a length finish', 1),
+            'ambiguous exact-cap call': ([lambda st: call(st, completion_tokens=1024)] + rest, '(ambiguous): completion tokens equal the cap', 1),
+            'call above the cap': ([lambda st: call(st, completion_tokens=1025)] + rest, '(unestablished): reported completion tokens exceed the cap', 1),
+            'call without reported usage': ([lambda st: call(st, usage=False)] + rest, '(unestablished): completion tokens were not reported', 1),
+            'call with zero reported tokens': ([lambda st: call(st, completion_tokens=0)] + rest, '(unestablished): completion tokens were not reported', 1),
+            'content filter': ([SOLVE, TEXT('x', finish='content_filter')] + rest, '(unestablished): answer did not finish with stop', 2)}
+        for name, (script, reason, requests) in cases.items():
+            with self.subTest(name=name):
+                result = self.run_case(script)
+                self.incomplete(result, reason, requests=requests)
+                last = [r['outputs'] for r in result['records'] if r['kind'] == 'served_response'][-1]
+                self.assertIn(last['completion']['state'], reason)
+                self.assertNotEqual(last['completion']['state'], 'complete')
+        # An answer that stops exactly at the cap is complete: `stop` is explicit for text.
+        result = self.run_case([SOLVE, SOLVE, SOLVE, lambda st: TEXT(st.answer(), completion_tokens=1024)(st)])
+        self.complete(result, 1.0)
+        # Raw termination metadata and raw content presence are retained as served.
+        result = self.run_case([SOLVE, SOLVE, SOLVE, lambda st: TEXT(st.answer(), stop_reason=128009)(st)])
+        self.complete(result, 1.0)
+        served = [r['outputs'] for r in result['records'] if r['kind'] == 'served_response']
+        self.assertEqual([(s['finish_reason'], s['content_present'], s['stop_reason']) for s in served],
+                         [('tool_calls', False, None)] * 3 + [('stop', True, 128009)])
+        self.assertEqual([s['framework_normalized']['finish_reason'] for s in served], ['function_calls'] * 3 + ['stop'])
+        self.assertEqual(served[0]['usage'], {'prompt_tokens': 0, 'completion_tokens': 12})
+        # The pure rule, including what the pinned client would have hidden.
+        status = task.generation_status
+        self.assertEqual(status({'finish_reason': 'stop', 'content': ' ', 'tool_calls': [], 'usage': None}, 1024), ('complete', None))
+        self.assertEqual(status({'finish_reason': 'stop', 'content': '', 'tool_calls': [], 'usage': {'completion_tokens': 1}}, 1024), ('complete', None))
+        self.assertEqual(status({'finish_reason': 'stop', 'content': None, 'tool_calls': [], 'usage': {'completion_tokens': 5}}, 1024)[0], 'unestablished')
+        self.assertEqual(status({'finish_reason': 'length', 'content': 'x', 'tool_calls': [], 'usage': {'completion_tokens': 1024}}, 1024)[0], 'truncated')
 
     def test_lost_or_altered_observations_and_failed_reward_delivery_are_incomplete(self):
         reasons = {'lost-observation': 'Missing or ambiguous action observation',
@@ -276,20 +401,6 @@ class HarnessTests(unittest.TestCase):
         result = self.run_case(mode='reward-failure')
         self.incomplete(result, 'HTTPStatusError', posts=1, requests=4)
         self.assertEqual(episode(result)['outputs']['reward'], 1.0)  # computed, never confirmed
-        # The pinned client rewrites invalid characters in a sampled tool name. A name that
-        # becomes a real tool this way is never executed or scored as if it had been sampled.
-        for name in ('get asset', 'get.asset', 'list backup runs'):
-            with self.subTest(name=name):
-                result = self.run_case([CALL(name, asset_id=TRUTH['asset_id']), SOLVE, SOLVE, SOLVE, SOLVE])
-                self.incomplete(result, 'rewritten into a valid tool', requests=1)
-                self.assertEqual(sum(r['kind'] == 'tool' for r in result['records']), 0)
-        # A rewritten name that is still no tool remains an ordinary typed unknown-tool error.
-        result = self.run_case([CALL('functions.get_asset', asset_id=TRUTH['asset_id']), SOLVE, SOLVE, SOLVE, SOLVE])
-        self.assertEqual(self.complete(result, 1.0, 'complete_recovered')['policy_errors'], 1)
-        # The server's own finish reason is honored even where the client overrides it.
-        result = self.run_case([lambda st: completion(st.step, calls=[('get_asset', task.dumps({'asset_id': st.asset_id}))], finish='length'),
-                                SOLVE, SOLVE, SOLVE])
-        self.incomplete(result, 'Incomplete model generation', requests=1)
         # A typed-looking error whose sampled call was valid is not a policy mistake.
         fake = type('Observation', (), {'content': task.dumps(task.policy_error('unknown_asset')), 'is_error': True})
         call = type('Call', (), {'name': 'get_asset', 'arguments': task.dumps({'asset_id': TRUTH['asset_id']})})
@@ -311,6 +422,10 @@ class HarnessTests(unittest.TestCase):
         self.assertEqual((row['successful_calls_by_tool'], row['joined_observation_chains'], row['llm_calls']),
                          ({'get_asset': 1, 'get_policy': 1, 'list_backup_runs': 1}, 3, 4))
         self.assertNotIn(episode(result)['outputs']['raw_answer'], json.dumps(row))
+        # The pure fixtures used by the offline and pinned gates have exactly this schema.
+        import recovery_fixtures
+        self.assertEqual(set(row), set(recovery_fixtures.row(in_packet['case_id'], 'correct', 'train', 'ro-1')))
+        self.assertEqual(set(row['sampled_calls'][0]), set(recovery_fixtures.row(in_packet['case_id'], 'correct', 'train', 'ro-1')['sampled_calls'][0]))
         with self.assertRaisesRegex(ValueError, 'Synthetic|live'): calibration.episode_row(result['records'], packet)
         with self.assertRaises(ValueError): calibration.episode_row(result['records'], greedy, 'scripted-inference')
         with self.assertRaises(ValueError): calibration.episode_row(
@@ -378,7 +493,7 @@ class PreflightTests(unittest.TestCase):
             receipt, budget = reader_preflight.task_probe(plan, run/'ok', tokenizer(5))
             self.assertEqual((receipt['status'], receipt['reference_solver']['verified'], budget['within_limits']), ('passed', 24, True))
             self.assertEqual(json.loads((run/'ok/prompt-budget.json').read_text()), budget)
-            self.assertEqual(budget['measured_prompts_sha256'], recovery_prompt.prompt_set_sha256())
+            self.assertIs(budget['exhaustive_bound'], False)
             with self.assertRaisesRegex(ValueError, 'exceed the declared context limits'):
                 reader_preflight.task_probe(plan, run/'long', tokenizer(2))
             self.assertFalse(json.loads((run/'long/prompt-budget.json').read_text())['within_limits'])  # failure evidence is kept
@@ -437,24 +552,46 @@ class PromptTests(unittest.TestCase):
                 messages, tools = recovery_prompt.from_trace(record['inputs'])
                 self.assertEqual(recovery_prompt.render(messages, tools), recovery_prompt.render(sent['messages'], sent.get('tools')))
 
-    def test_committed_token_measurement_is_current_and_within_declared_limits(self):
+    def test_committed_token_measurement_is_current_and_states_its_assumptions(self):
         record = json.loads((ROOT/'evidence/phase4a-offline-20261124/prompt-budget.json').read_text())
         budget = record['budget']
         lock = json.loads((ROOT/'experiment/ppo_source_lock.json').read_text())['prepared_assets']['tokenizer.json']
         self.assertEqual(record['tokenizer_sha256'], lock['sha256'])
         # The measurement binds the exact prompts it counted; any prompt change invalidates it.
-        self.assertEqual(budget['measured_prompts_sha256'], recovery_prompt.prompt_set_sha256())
+        selection = budget['selection']
+        question = next(r['question'] for r in task.rows('development') if r['case_id'] == selection['longest_request_case_id'])
+        self.assertEqual(budget['measured_prompts_sha256'],
+                         recovery_prompt.prompt_set_sha256(selection['largest_observation_asset_id'], question))
         self.assertEqual(budget['context_limits'], task.CONTEXT_LIMITS)
         self.assertTrue(budget['within_limits'] and all(budget['checks'].values()))
-        worst = budget['worst_case_bounded']
-        self.assertLessEqual(worst['largest_prompt_tokens'], task.CONTEXT_LIMITS['trajectory_max_prompt_length'])
-        self.assertLessEqual(worst['largest_prompt_tokens'] + task.CONTEXT_LIMITS['max_tokens'], task.CONTEXT_LIMITS['max_model_len'])
-        self.assertLessEqual(worst['merged_response_tokens_upper_bound'], task.CONTEXT_LIMITS['trajectory_max_response_length'])
-        # The shared launcher value would not hold the bounded worst case: the limit is necessary.
-        self.assertGreater(worst['largest_prompt_tokens'], 2048)
+        # It is a measurement of scenarios with stated assumptions, never described as a bound.
+        self.assertIs(budget['exhaustive_bound'], False)
+        self.assertEqual(set(budget['assumptions']), {'scenario', 'call_size', 'answer_size', 'fragmentation'})
+        self.assertNotIn('worst_case_bounded', budget)
+        self.assertEqual(selection['assets_compared'], len(task.registry()['runs']))
+        self.assertIn('no character-length proxy', selection['method'])
+        # The overall maximum covers every measured array.
+        arrays = (budget['development_reference_path']['prompt_tokens_by_call_max'], budget['development_five_round_reflection']['prompt_tokens_by_call_max'],
+                  budget['heavy_scenario']['prompt_tokens_by_call'], budget['heavy_scenario']['with_initial_typed_error'])
+        self.assertEqual(budget['largest_measured_prompt_tokens'], max(max(a) for a in arrays))
+        self.assertEqual(len(budget['largest_measured_prompt_covers']), 4)
+        largest = budget['largest_measured_prompt_tokens']
+        self.assertLessEqual(largest, task.CONTEXT_LIMITS['trajectory_max_prompt_length'])
+        self.assertLessEqual(largest + task.CONTEXT_LIMITS['max_tokens'], task.CONTEXT_LIMITS['max_model_len'])
+        self.assertLessEqual(budget['heavy_scenario']['merged_response_tokens'], task.CONTEXT_LIMITS['trajectory_max_response_length'])
+        self.assertEqual(budget['headroom']['prompt_limit_minus_largest_measured_prompt'], task.CONTEXT_LIMITS['trajectory_max_prompt_length'] - largest)
+        # The shared launcher value would not hold the heavy scenario: the task limit is necessary.
+        self.assertGreater(largest, 2048)
         self.assertLessEqual(max(budget['development_reference_path']['prompt_tokens_by_call_max']), 2048)
+        # Maxima are selected by token count. A counter that inverts the ordering selects differently.
+        asset, tokens, compared = recovery_prompt.largest_inventory(len)
+        other, _, _ = recovery_prompt.largest_inventory(lambda text: -len(text))
+        self.assertNotEqual(asset, other)
+        self.assertEqual(compared, 203)
         if os.environ.get('AGL_PINNED_TOKENIZER'):
-            self.assertEqual(recovery_prompt.budget(recovery_prompt.tokenizer(os.environ['AGL_PINNED_TOKENIZER'])), budget)
+            count = recovery_prompt.tokenizer(os.environ['AGL_PINNED_TOKENIZER'])
+            self.assertEqual(recovery_prompt.budget(count), budget)
+            self.assertEqual(recovery_prompt.largest_inventory(count)[:2], (selection['largest_observation_asset_id'], selection['largest_observation_tokens']))
 
 
 if __name__ == '__main__':

@@ -299,6 +299,8 @@ class CompletionTests(unittest.TestCase):
                      'second refresh': lambda e: e.append({'event': 'weight_refresh', 'step': 1}),
                      'no refresh': lambda e: e.remove(next(x for x in e if x['event'] == 'weight_refresh')),
                      'no return': lambda e: e.remove(next(x for x in e if x['event'] == 'trainer_returned')),
+                     'no wandb finish': lambda e: e.remove(next(x for x in e if x['event'] == 'wandb_finished')),
+                     'two wandb finishes': lambda e: e.append(next(x for x in e if x['event'] == 'wandb_finished')),
                      'two returns': lambda e: e.append(next(x for x in e if x['event'] == 'trainer_returned')),
                      'wrong step': lambda e: next(x for x in e if x['event'] == 'trainer_returned').update(global_step=2),
                      'wrong mode': lambda e: next(x for x in e if x['event'] == 'trainer_returned').update(
@@ -362,11 +364,14 @@ class CompletionTests(unittest.TestCase):
                        'two collections': lambda e: e.append(copy.deepcopy(next(x for x in e if x['event'] == 'collection_manifest')))}
         # Server-reported completion tokens, when present, must equal the adapter's sampled tokens.
         reported = copy.deepcopy(episodes)
-        for e in reported:
-            e['completion_tokens'] = [30] * e['llm_calls']
-        self.assertEqual(len(calibration.assemble(request, good, reported)['calibration']['episodes']), 32)
+        self.assertTrue(all(None not in e['completion_tokens'] for e in reported))
         reported[3]['completion_tokens'][0] += 1
         with self.assertRaises(ValueError): calibration.assemble(request, good, reported)
+        # Where usage was not reported the comparison cannot be made, and the row says so.
+        reported = copy.deepcopy(episodes)
+        reported[3]['completion_tokens'] = [None] * reported[3]['llm_calls']
+        done = calibration.assemble(request, good, reported)
+        self.assertEqual(sum(None in e['completion_tokens'] for e in done['calibration']['episodes']), 1)
         for label, edit in event_edits.items():
             bad = copy.deepcopy(good); edit(bad)
             with self.subTest(events=label), self.assertRaises(ValueError):
@@ -380,6 +385,9 @@ class CompletionTests(unittest.TestCase):
                      lambda d: d['calibration']['audit'].update(weight_refresh_steps=[0, 1]),
                      lambda d: d['calibration']['episodes'][0].update(mask_tokens=1), lambda d: d['calibration'].update(algorithm=PPO),
                      lambda d: d['calibration'].update(seed_streams=self.plan['jobs'][1]['seed_streams']),
+                     lambda d: d['calibration']['audit'].update(trainer_returned=0), lambda d: d['calibration']['audit'].update(wandb_finished=0),
+                     lambda d: d['calibration']['episodes'][0].update(evidence_class='scripted-inference'),
+                     lambda d: d['calibration']['collection'].update(rollouts_with_token_evidence=31),
                      lambda d: d['calibration'].update(evidence_class='simulated-trace'), lambda d: d['calibration']['collection'].update(truncated_rows=2)):
             bad = copy.deepcopy(done); edit(bad)
             with self.assertRaises((ValueError, KeyError)):
@@ -387,20 +395,30 @@ class CompletionTests(unittest.TestCase):
 
 
 class ReportTests(unittest.TestCase):
+    """Report arithmetic on SIMULATED admitted reviews (fx.reviews bypasses admission).
+
+    Admission itself, with production-format traces, receipts and audit events, is
+    tested in test_recovery_evidence. Summary-only evidence is tested below.
+    """
     def setUp(self):
-        self.plan = plan()
+        self.plan = fx.executable_plan(source())
 
     def report(self, behavior, **options):
-        return calibration.report(self.plan, fx.proofs(self.plan, behavior, **options))
+        return calibration.report(self.plan, fx.reviews(self.plan, behavior, **options))
 
     def test_separate_diagnostics_denominators_and_group_classification(self):
         result = self.report(fx.informative)
         self.assertEqual((result['schema'], result['evidence_class'], result['live_policy_measurement']), ('recovery-calibration-report-v1', 'live-model', True))
         for algorithm in (GRPO, PPO):
             r = result['routes'][algorithm]
-            self.assertEqual(r['episodes'], {'expected': 120, 'attempted_and_admitted': 120, 'complete': 120, 'not_admitted': 0,
-                                             'rewards_confirmed': 120, 'rewards_missing': 0, 'note': r['episodes']['note']})
-            s, g, groups = r['sampled'], r['greedy'], r['sampled']['groups']
+            a = r['accounting']
+            self.assertEqual({k: a[k] for k in ('expected', 'admitted', 'observed_attempts', 'completed', 'rewards_confirmed',
+                                                'rewards_missing', 'rejected_untrusted', 'unattempted', 'unknown')},
+                             {'expected': 120, 'admitted': 120, 'observed_attempts': 120, 'completed': 120, 'rewards_confirmed': 120,
+                              'rewards_missing': 0, 'rejected_untrusted': 0, 'unattempted': 0, 'unknown': 0})
+            self.assertEqual({s['packet_status'] for s in r['stages'].values()}, {'admitted'})
+            self.assertEqual(r['failure_diagnostics'], {})
+            s, g, groups = r['results']['sampled'], r['results']['greedy'], r['results']['sampled']['groups']
             self.assertEqual((g['episodes'], s['episodes'], groups['groups']), (24, 96, 24))
             # Format and action failures are not counted as known semantic answers.
             self.assertEqual(s['decision_assessable'] + s['decision_not_assessable'], 96)
@@ -416,15 +434,20 @@ class ReportTests(unittest.TestCase):
             self.assertEqual(groups['mixed'], groups['mixed_semantic_evidence'] + groups['mixed_format_action_only'])
             self.assertEqual(len(s['per_question']), 24)
             self.assertTrue(all(len(q['rewards']) == 4 == len(q['failure_classes']) for q in s['per_question']))
-            self.assertEqual(Counter(q['group_type'] for q in s['per_question'])['mixed_semantic_evidence'], groups['mixed_semantic_evidence'])
             self.assertEqual(sorted(s['by_packet']), STAGES[1:])
             self.assertEqual(sum(p['groups'] for p in s['by_packet'].values()), 24)
-            self.assertEqual(s['tokens']['sampled_tokens'], s['tokens']['mask_tokens'])
+            # Token and truncation numbers are measured values with their coverage, never defaults.
+            for name in STAGES[1:]:
+                t = r['stages'][name]['token_evidence']
+                self.assertEqual((t['rollouts_expected'], t['rollouts_with_token_evidence'], t['truncated_rows'], t['dropped_prompt_rows']), (32, 32, 0, 0))
+                self.assertEqual((t['sampled_tokens'], t['adapter_evidence']), (t['mask_tokens'], 'measured by the collection adapter'))
+            self.assertEqual(r['stages'][STAGES[0]]['token_evidence']['adapter_evidence'], 'not applicable to a greedy stage')
             self.assertEqual(s['recovered_episodes'], s['outcomes'].get('complete_recovered', 0))
+            self.assertEqual(s['unknown_tool_names_as_sampled'], {})
             self.assertEqual(r['optimization_events'], {'optimizer_step': 0, 'gradient_step': 0, 'matched_advantages': 0, 'native_checkpoint_saved': 0})
-            self.assertEqual(set(r['weight_refresh_steps_by_stage'].values().__iter__().__next__()), {0})
+            self.assertEqual(r['optimization_events_coverage'], '4 of 4 stages (admitted stages only)')
             d = r['decision']
-            self.assertEqual((d['operational_validity'], d['scientific_suitability']), ('valid', 'screen_passed'))
+            self.assertEqual((d['operational_validity'], d['scientific_suitability'], d['reasons']), ('valid', 'screen_passed', []))
             self.assertGreaterEqual(d['semantic_evidence_informative_groups'], 6)
             self.assertGreaterEqual(len(d['informative_case_families']), 2)
             self.assertTrue(d['greedy_successes_and_failures_both_observed'])
@@ -458,85 +481,147 @@ class ReportTests(unittest.TestCase):
                 self.assertIn('do not repeat an unchanged collection', r['decision']['next_step'])
         # One formatting failure makes a mixed group but not a semantically informative one,
         # and 95 of 96 correct is saturation, not an interface problem.
-        r = self.report(isolated_format)['routes'][GRPO]
-        self.assertEqual((r['sampled']['groups']['mixed'], r['sampled']['groups']['mixed_format_action_only'],
-                          r['decision']['semantic_evidence_informative_groups'], r['decision']['interface_share_of_zero_rewards'],
-                          r['decision']['scientific_suitability']), (1, 1, 0, 1.0, 'saturated'))
+        d = self.report(isolated_format)['routes'][GRPO]
+        groups = d['results']['sampled']['groups']
+        self.assertEqual((groups['mixed'], groups['mixed_format_action_only'], d['decision']['semantic_evidence_informative_groups'],
+                          d['decision']['interface_share_of_zero_rewards'], d['decision']['scientific_suitability']), (1, 1, 0, 1.0, 'saturated'))
         self.assertEqual(self.report(five_groups)['routes'][GRPO]['decision']['scientific_suitability'], 'insufficient_semantic_variation')
-        r = self.report(one_family)['routes'][GRPO]['decision']
-        self.assertEqual((r['semantic_evidence_informative_groups'], r['informative_case_families'], r['scientific_suitability']),
+        d = self.report(one_family)['routes'][GRPO]['decision']
+        self.assertEqual((d['semantic_evidence_informative_groups'], d['informative_case_families'], d['scientific_suitability']),
                          (6, ['recent_usable'], 'insufficient_semantic_variation'))
         # A passing route cannot rescue a failing one.
         mixed = self.report(lambda algorithm, *rest: fx.informative(algorithm, *rest) if algorithm == GRPO else 'correct')
         self.assertEqual({a: r['decision']['scientific_suitability'] for a, r in mixed['routes'].items()},
                          {GRPO: 'screen_passed', PPO: 'saturated'})
 
-    def test_incomplete_routes_are_not_admitted_zero_filled_or_interpreted(self):
+    def test_incomplete_routes_keep_diagnostics_and_get_no_scientific_decision(self):
         result = self.report(fx.informative, skip={(PPO, 'sampled-packet-3')})
         ppo, grpo = result['routes'][PPO], result['routes'][GRPO]
-        self.assertEqual((ppo['episodes']['attempted_and_admitted'], ppo['episodes']['not_admitted'], ppo['episodes']['rewards_missing']), (88, 32, 32))
-        self.assertEqual((ppo['sampled']['episodes'], ppo['sampled']['groups']['groups']), (64, 16))  # nothing is padded to 24 groups
-        self.assertEqual(ppo['decision'], {'operational_validity': 'invalid', 'scientific_suitability': 'not_assessed', 'reason': ppo['decision']['reason']})
-        self.assertEqual(ppo['stage_problems'], ['sampled-packet-3: no admitted completion'])
-        self.assertEqual(grpo['decision']['operational_validity'], 'valid')
-        # A tampered stage proof is a stage problem, not a silently accepted count.
-        proofs = fx.proofs(self.plan, fx.informative)
-        proofs[GRPO]['sampled-packet-1']['calibration']['episodes'].pop()
-        proofs[GRPO]['greedy-development']['calibration']['audit']['optimizer_step'] = 1
-        broken = calibration.report(self.plan, proofs)['routes'][GRPO]
-        self.assertEqual((len(broken['stage_problems']), broken['episodes']['attempted_and_admitted'], broken['decision']['operational_validity']), (2, 64, 'invalid'))
-        with self.assertRaises(ValueError): calibration.report(dict(self.plan, phase='qualification'), proofs)
+        self.assertIsNone(ppo['results'])  # nothing partial is presented as a result, padded or zero-filled
+        self.assertEqual({k: ppo['accounting'][k] for k in ('expected', 'admitted', 'observed_attempts', 'rewards_confirmed', 'rewards_missing', 'unattempted', 'unknown')},
+                         {'expected': 120, 'admitted': 88, 'observed_attempts': 88, 'rewards_confirmed': 88, 'rewards_missing': 0,
+                          'unattempted': 0, 'unknown': 32})  # no local evidence is unknown, never "missing" and never "unattempted"
+        self.assertEqual(ppo['accounting']['stages_with_trace_evidence'], 3)
+        self.assertEqual((ppo['decision']['operational_validity'], ppo['decision']['scientific_suitability'], ppo['decision']['reasons']),
+                         ('invalid', 'not_assessed', ['sampled-packet-3: packet unknown']))
+        self.assertNotIn('semantic_evidence_informative_groups', ppo['decision'])
+        lost = ppo['failure_diagnostics']['sampled-packet-3']
+        self.assertEqual((lost['packet_status'], lost['episodes']['unknown'], lost['episodes']['observed_attempts'], lost['token_evidence']['truncated_rows']),
+                         ('unknown', 32, None, None))
+        self.assertEqual((grpo['decision']['operational_validity'], result['live_policy_measurement'], result['evidence_class']), ('valid', False, 'live-model'))
+        text = calibration.summary(result)
+        self.assertIn('**Not a live policy measurement.**', text); self.assertIn('32 unknown', text)
+        self.assertIn('Diagnostic, sampled-packet-3 (unknown): unknown attempts', text)
+        with self.assertRaises(ValueError): calibration.report(dict(self.plan, phase='qualification'), fx.reviews(self.plan, fx.informative))
+        with self.assertRaises(ValueError): calibration.report(self.plan, {GRPO: [], PPO: []})
 
-    def test_scripted_or_simulated_evidence_is_labelled_and_rejected_as_live(self):
+    def test_scripted_mixed_and_plan_level_evidence_never_becomes_live(self):
         result = self.report(fx.informative, evidence_class='scripted-inference')
         self.assertEqual((result['evidence_class'], result['live_policy_measurement']), ('scripted-inference', False))
         for r in result['routes'].values():
-            self.assertEqual((r['decision']['operational_validity'], r['decision']['scientific_suitability']), ('mechanics_only_not_live', 'not_assessed'))
-            self.assertIn('never a policy measurement', r['decision']['interpretation'])
+            d = r['decision']
+            self.assertEqual((d['operational_validity'], d['scientific_suitability']), ('mechanics_only_not_live', 'not_assessed'))
+            self.assertEqual(d['screen_on_unadmitted_or_non_live_evidence'], 'screen_passed')  # shown, never a decision
+            self.assertIn('never a policy measurement', d['interpretation'])
+            self.assertIn('none:', d['next_step'])
         self.assertIn('**Not a live policy measurement.**', calibration.summary(result))
         # Evidence class is decided per route and never borrowed, in either job order.
         for scripted_route, live_route in ((GRPO, PPO), (PPO, GRPO)):
-            mixed = fx.proofs(self.plan, fx.informative)
-            for proof in mixed[scripted_route].values():
-                proof['calibration']['evidence_class'] = 'scripted-inference'
-            result = calibration.report(self.plan, mixed)
-            self.assertEqual((result['evidence_class'], result['live_policy_measurement']), ('scripted-inference', False))
+            reviews = fx.reviews(self.plan, fx.informative)
+            reviews[scripted_route] = fx.reviews(self.plan, fx.informative, evidence_class='scripted-inference')[scripted_route]
+            result = calibration.report(self.plan, reviews)
+            self.assertEqual((result['evidence_class'], result['live_policy_measurement']), ('mixed', False))
             self.assertEqual((result['routes'][live_route]['evidence_class'], result['routes'][live_route]['decision']['operational_validity'],
                               result['routes'][live_route]['decision']['scientific_suitability']), ('live-model', 'valid', 'screen_passed'))
             self.assertEqual((result['routes'][scripted_route]['evidence_class'], result['routes'][scripted_route]['decision']['operational_validity'],
                               result['routes'][scripted_route]['decision']['scientific_suitability']),
                              ('scripted-inference', 'mechanics_only_not_live', 'not_assessed'))
-        # One scripted stage makes its whole route non-live.
-        mixed = fx.proofs(self.plan, fx.informative)
-        mixed[PPO]['sampled-packet-2']['calibration']['evidence_class'] = 'scripted-inference'
-        result = calibration.report(self.plan, mixed)
-        self.assertEqual((result['evidence_class'], result['routes'][PPO]['evidence_class'], result['routes'][GRPO]['evidence_class']),
-                         ('scripted-inference', 'scripted-inference', 'live-model'))
-        # Durable collection: the same joins as qualification, then the calibration report.
-        admitted = fx.calibration_plan(source(), fixture=False)
-        index, files = fx.durable(admitted, fx.proofs(admitted, fx.informative))
-        collected = evidence.validate_collection(admitted, index, files.__getitem__)
-        self.assertEqual((collected['evidence_complete'], collected['qualification_evidence']), (True, False))
-        self.assertIn('zero optimization', collected['live_qualification'])
-        self.assertEqual(collected['calibration']['routes'][GRPO]['decision']['scientific_suitability'], 'screen_passed')
-        self.assertEqual(collected['calibration']['stage_timings_seconds'][f'{GRPO}/greedy-development'], 360.0)
-        self.assertEqual(collected['algorithms'][GRPO]['integration_rule'], 'all-calibration-stages-v1')
-        self.assertNotIn('stage_proofs', collected['algorithms'][GRPO])
-        index, files = fx.durable(admitted, fx.proofs(admitted, fx.informative, evidence_class='scripted-inference'))
-        with self.assertRaisesRegex(ValueError, 'not a complete live collection'):
-            evidence.validate_collection(admitted, index, files.__getitem__)
+        # One scripted packet makes its own route mixed and unassessed.
+        reviews = fx.reviews(self.plan, fx.informative)
+        reviews[PPO][2] = fx.reviews(self.plan, fx.informative, evidence_class='scripted-inference')[PPO][2]
+        result = calibration.report(self.plan, reviews)
+        self.assertEqual((result['routes'][PPO]['evidence_class'], result['routes'][PPO]['decision']['operational_validity'],
+                          result['routes'][PPO]['decision']['scientific_suitability'], result['routes'][GRPO]['evidence_class']),
+                         ('mixed', 'mechanics_only_not_live', 'not_assessed', 'live-model'))
+        # A plan that could not have executed, missing usage, or an over-limit prompt is never valid.
+        reviews = fx.reviews(self.plan, fx.informative)
+        problem = calibration.report(self.plan, reviews, plan_problems=['the plan is not executable'])
+        self.assertEqual({r['decision']['operational_validity'] for r in problem['routes'].values()}, {'invalid'})
+        self.assertFalse(problem['live_policy_measurement'])
+        for edit, reason in ((lambda e: e.update(completion_tokens=[None] * e['llm_calls']), 'no reported usage'),
+                             (lambda e: e.update(prompt_tokens=[4000] * e['llm_calls']), 'exceed the declared trajectory prompt limit')):
+            reviews = fx.reviews(self.plan, fx.informative)
+            edit(reviews[GRPO][0]['rows'][0])
+            d = calibration.report(self.plan, reviews)['routes'][GRPO]['decision']
+            self.assertEqual((d['operational_validity'], d['scientific_suitability']), ('invalid', 'not_assessed'))
+            self.assertIn(reason, d['reasons'][0])
+
+    def test_summary_only_evidence_is_explicitly_unverified_whatever_its_fields_say(self):
+        # SIMULATED completion summaries with consistent receipts, but no traces or audit files.
+        admitted = self.plan
+        completions = fx.proofs(admitted, fx.informative)
+        index, files = fx.durable(admitted, completions)
+        self.assertEqual({p['calibration']['evidence_class'] for route in completions.values() for p in route.values()}, {'live-model'})
+        for reviewed in (evidence.validate_collection(admitted, index, files.__getitem__),
+                         evidence.calibration_collection(admitted, index, files.__getitem__)):
+            report = reviewed['calibration']
+            self.assertEqual((reviewed['evidence_complete'], report['live_policy_measurement'], report['evidence_class']), (False, False, 'none admitted'))
+            self.assertIn('Traces and audit events are required', reviewed['incomplete_reason'])
+            for r in report['routes'].values():
+                self.assertIsNone(r['results'])
+                self.assertEqual((r['decision']['operational_validity'], r['decision']['scientific_suitability']), ('invalid', 'not_assessed'))
+                self.assertEqual({k: r['accounting'][k] for k in ('expected', 'admitted', 'unknown', 'unattempted')},
+                                 {'expected': 120, 'admitted': 0, 'unknown': 120, 'unattempted': 0})
+                for s in r['stages'].values():
+                    self.assertEqual((s['packet_status'], s['checks']['completion_summary'], s['checks']['durable_identity'], s['checks']['traces'],
+                                      s['checks']['recomputed_from_traces_and_audit']), ('rejected', 'valid', 'verified', 'absent locally', False))
+                    self.assertIn('supporting traces or audit events are not available', s['problems'][0])
+                    self.assertIsNone(s['episodes']['observed_attempts'])
+        # Without a supervisor index nothing is even identity-checked.
+        report = evidence.calibration_collection(admitted, None, files.__getitem__)['calibration']
+        self.assertIn('not verified: no supervisor index was supplied', report['provenance'])
+        self.assertEqual({s['checks']['durable_identity'] for r in report['routes'].values() for s in r['stages'].values()},
+                         {'not checked: no supervisor index or receipts were available'})
+        self.assertFalse(report['live_policy_measurement'])
+        # Wrong identities, schema or completion events are named, and change nothing about admission.
+        stage = admitted['jobs'][1]['stages'][2]
+        edits = {'plan hash': lambda p: p.update(plan_sha256='0'*64), 'source hash': lambda p: p.update(source_sha256='0'*64),
+                 'configuration hash': lambda p: p.update(configuration_sha256='0'*64), 'task hash': lambda p: p.update(task_sha256='0'*64),
+                 'assets hash': lambda p: p.update(assets_sha256='0'*64), 'schema': lambda p: p.update(execution_schema='reader-reference-v1'),
+                 'wandb': lambda p: p.update(wandb_id='other')}
+        for label, edit in edits.items():
+            bad_index, bad_files = copy.deepcopy((index, files))
+            proof = bad_files[stage['output']+'/completion.json']; edit(proof)
+            bad_files[stage['output']+'/receipt.json']['completion'] = proof
+            bad_index['jobs'][admitted['jobs'][1]['job_id']]['stages'][2]['result'] = bad_files[stage['output']+'/receipt.json']
+            s = evidence.calibration_collection(admitted, bad_index, bad_files.__getitem__)['calibration']['routes'][PPO]['stages'][stage['name']]
+            self.assertEqual((s['checks']['durable_identity'], s['packet_status']), ('failed', 'rejected'), label)
+            self.assertIn('durable identity: ValueError: Durable receipt/completion/observability identity mismatch', s['problems'])
+        for label, edit in {'no trainer return': lambda p: p['calibration']['audit'].update(trainer_returned=0),
+                            'no wandb finish': lambda p: p['calibration']['audit'].update(wandb_finished=0),
+                            'optimizer event': lambda p: p['calibration']['audit'].update(optimizer_step=1),
+                            'missing episode': lambda p: p['calibration']['episodes'].pop(),
+                            'no calibration summary': lambda p: p.pop('calibration')}.items():
+            bad_index, bad_files = copy.deepcopy((index, files))
+            edit(bad_files[stage['output']+'/completion.json'])
+            s = evidence.calibration_collection(admitted, bad_index, bad_files.__getitem__)['calibration']['routes'][PPO]['stages'][stage['name']]
+            self.assertEqual((s['checks']['completion_summary'], s['packet_status']), ('invalid', 'rejected'), label)
+        # The plan is validated on every path; a non-executable plan is a stated problem.
+        with self.assertRaises(ValueError): evidence.calibration_collection(dict(admitted, configuration_sha256='0'*64), index, files.__getitem__)
+        with self.assertRaises(ValueError): evidence.calibration_collection(c.make_plan(assets.read(ROOT/'examples/reader-profile.asset.synthetic.json'), source()), None, files.__getitem__)
+        fixture_plan = plan()
+        fixture_index, fixture_files = fx.durable(fixture_plan, fx.proofs(fixture_plan, fx.informative))
+        problems = evidence.calibration_collection(fixture_plan, fixture_index, fixture_files.__getitem__)['calibration']['plan_problems']
+        self.assertEqual(len(problems), 1); self.assertIn('not executable', problems[0])
+        # The status command shows the same review and never reports completeness.
         registry = Registry({'index:'+supervisor.key(admitted): index})
         status = cli.status(admitted, registry, files.__getitem__)
-        self.assertFalse(status['evidence_complete']); self.assertIn('not a complete live collection', status['incomplete_reason'])
-        index, files = fx.durable(admitted, fx.proofs(admitted, fx.informative))
-        for edit in (lambda f, s: f[s['output']+'/completion.json']['calibration']['episodes'].pop(),
-                     lambda f, s: f[s['output']+'/completion.json'].update(optimizer_updates={'actor': 1, 'critic': 0}),
-                     lambda f, s: f[s['output']+'/completion.json'].update(task_sha256='0'*64),
-                     lambda f, s: f[s['output']+'/completion.json'].pop('calibration')):
-            bad_files = copy.deepcopy(files); edit(bad_files, admitted['jobs'][1]['stages'][2])
-            with self.assertRaises((ValueError, KeyError)): evidence.validate_collection(admitted, index, bad_files.__getitem__)
-        short = copy.deepcopy(index); short['jobs'][admitted['jobs'][0]['job_id']]['stages'].pop()
-        with self.assertRaisesRegex(ValueError, 'Missing/duplicate stage receipts'): evidence.validate_collection(admitted, short, files.__getitem__)
+        self.assertFalse(status['evidence_complete'])
+        self.assertEqual(status['calibration']['routes'][GRPO]['decision']['scientific_suitability'], 'not_assessed')
+        # Calculator and asset collections keep their strict raising behavior.
+        with self.assertRaisesRegex(ValueError, 'Incomplete or mismatched supervisor index'):
+            evidence.validate_collection(c.make_plan(assets.read(ROOT/'examples/reader-profile.asset.synthetic.json'), source()),
+                                         {'plan': {}, 'status': 'failed', 'jobs': {}}, files.__getitem__)
 
 
 class OperationTests(unittest.TestCase):
