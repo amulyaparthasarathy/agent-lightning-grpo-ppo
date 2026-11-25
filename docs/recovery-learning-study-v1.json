@@ -1,0 +1,188 @@
+{
+  "schema": "recovery-learning-study-proposal-v1",
+  "executable": false,
+  "task": "recovery-readiness-v1",
+  "environment_sha256": "0c384ed90027f7fa0fb0aeb097220e6e83876dfdd85094353f03c8dd035b1ca3",
+  "prompt_sha256": "60ba3274b9edb94540238fd11ebaa44c4d84a7d9db0a5f3f81e9b6cd47cab6b4",
+  "episode_policy": {
+    "version": "recovery-episode-v1",
+    "max_tool_iterations": 5,
+    "policy_error_limit": 2,
+    "parallel_tool_calls": false,
+    "final_generation": "context-json-reminder-v1",
+    "final_answer": "strict-evidence-verifier",
+    "recovered_final": "strict-evidence-verifier",
+    "policy_limit": "terminal-zero",
+    "missing_required_evidence": "complete-zero",
+    "multiple_calls_in_one_generation": "incomplete-no-reward",
+    "tool_call_identity": "as-served: id, name and arguments are never rewritten",
+    "completion_evidence": "served finish reason, content presence and reported completion tokens",
+    "empty_final_answer": "complete-zero",
+    "absent_final_answer": "incomplete-no-reward",
+    "infrastructure_or_missing_evidence": "incomplete-no-reward",
+    "policy_error_codes": [
+      "invalid_arguments",
+      "invalid_asset_id",
+      "unknown_asset",
+      "invalid_policy_id",
+      "unknown_policy",
+      "invalid_as_of",
+      "non_object_arguments",
+      "invalid_argument_json",
+      "unknown_tool"
+    ]
+  },
+  "model_revision": "0cb88a4f764b7a12671c53f0838cd831a0843b95",
+  "tokenizer_sha256": "79e3e522635f3171300913bb421464a87de6222182a0570b9b2ccba2a964b2b4",
+  "chat_template_sha256": "a718674808440b537a553c15e0557b5b45d6d76e49ad9ddbc1a9e92447843e2c",
+  "parser": "llama3_json",
+  "data_manifest_sha256": "c7d07942dda1ee81b8797ce9a59255e7f26bca712e668c18cd1a936d83d6e8ab",
+  "algorithm": "grpo-matched-v2",
+  "protocol": "matched-rollout-mean-v2",
+  "base_initialization": "fresh for every run",
+  "runs": [
+    {
+      "seed": 2001,
+      "streams": {
+        "python": 739147057,
+        "numpy": 765475253,
+        "torch_cpu": 1042113840,
+        "torch_cuda": 1528039489,
+        "actor_sampling": 1985310317,
+        "actor_optimizer": 1965135422,
+        "row_batching": 1492168271,
+        "critic_init": null,
+        "paired_question_order": 1771565522
+      },
+      "schedule_sha256": "8dfa354a3c1008324af24374ef9600539ff04241de0d35563bf730d18639ae5a"
+    },
+    {
+      "seed": 2002,
+      "streams": {
+        "python": 1965329281,
+        "numpy": 704083147,
+        "torch_cpu": 337984257,
+        "torch_cuda": 1348510432,
+        "actor_sampling": 1612695726,
+        "actor_optimizer": 188145402,
+        "row_batching": 290452874,
+        "critic_init": null,
+        "paired_question_order": 159418719
+      },
+      "schedule_sha256": "0b77477147ed3ea26f5482bf23580058a4ad5ab3fb8b4f54ba58bcc751794d56"
+    },
+    {
+      "seed": 2003,
+      "streams": {
+        "python": 1144113409,
+        "numpy": 1507765173,
+        "torch_cpu": 1964028339,
+        "torch_cuda": 2105002205,
+        "actor_sampling": 2087687882,
+        "actor_optimizer": 2106954347,
+        "row_batching": 617093520,
+        "critic_init": null,
+        "paired_question_order": 480664013
+      },
+      "schedule_sha256": "f752772b39c1ead64baf76be5cc0be0dc14cbfbb6c5769b0bb5fd4bb3c6f38c1"
+    }
+  ],
+  "schedule_file": "experiment/recovery_schedules.json",
+  "updates": 16,
+  "questions": 8,
+  "samples": 4,
+  "training_temperature": 1,
+  "terminal_checkpoint_only": 16,
+  "checkpoint_selection": "all three terminal checkpoints",
+  "optimization": {
+    "estimator": "grpo",
+    "group_std": "unbiased",
+    "group_epsilon": 1e-06,
+    "loss": "per_rollout_mean",
+    "optimizer": "torch.optim.AdamW",
+    "lr": 1e-06,
+    "betas": [
+      0.9,
+      0.999
+    ],
+    "weight_decay": 0.01,
+    "scheduler": "constant",
+    "warmup_ratio": 0,
+    "grad_clip": 1.0,
+    "clip_ratio_low": 0.2,
+    "clip_ratio_high": 0.3,
+    "dual_clip": 3,
+    "entropy_coeff": 0,
+    "reward_kl": false,
+    "actor_kl": false,
+    "ppo_epochs": 1,
+    "critic": false,
+    "minibatches_per_update": 1,
+    "actor_microbatch_per_gpu": 1,
+    "log_prob_microbatch_per_gpu": 1,
+    "dynamic_batching": false,
+    "rollout_correction_is": null,
+    "rollout_correction_rs": null,
+    "recompute_old_log_probs": true,
+    "param_offload": true,
+    "optimizer_offload": true,
+    "gradient_checkpointing": true,
+    "serving_gpu_utilization": 0.5,
+    "max_num_seqs": 32,
+    "context": {
+      "version": "recovery-context-v1",
+      "trajectory_max_prompt_length": 3072,
+      "trajectory_max_response_length": 2048,
+      "max_model_len": 4096,
+      "max_tokens": 1024
+    }
+  },
+  "evaluation": {
+    "policies": [
+      "base",
+      "2001",
+      "2002",
+      "2003"
+    ],
+    "samples": 1,
+    "temperature": 0,
+    "route": "val",
+    "streams": {
+      "python": 143897530,
+      "numpy": 846298712,
+      "torch_cpu": 1376393873,
+      "torch_cuda": 2040295816,
+      "actor_sampling": 1217781245,
+      "actor_optimizer": 660317075,
+      "row_batching": 1823162246,
+      "critic_init": null,
+      "paired_question_order": 1028282608
+    },
+    "seed": 9001,
+    "development": "dev_panel.parquet",
+    "final": "final_eval.parquet",
+    "sampled_final_episodes": 0,
+    "final_lock": "all checkpoints and analysis choices frozen"
+  },
+  "episodes": {
+    "training": 1536,
+    "development": 96,
+    "final": 256,
+    "total": 1888
+  },
+  "analysis": {
+    "estimand": "mean final case strict reward difference versus fresh base, per seed",
+    "unit": "four-case policy block",
+    "paired_policies": [
+      "base",
+      "2001",
+      "2002",
+      "2003"
+    ],
+    "bootstrap_replicates": 10000,
+    "analysis_seed": 329,
+    "quantile": "linear percentile 2.5 and 97.5",
+    "missing": "reject entire incomplete table",
+    "interval_label": "conditional synthetic case-mix uncertainty"
+  }
+}
