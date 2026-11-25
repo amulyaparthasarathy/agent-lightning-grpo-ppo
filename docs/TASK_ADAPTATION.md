@@ -17,6 +17,15 @@ what they taught into checks to run before a new attempt. See also
 harness demonstration uses explicitly scripted inference and does not establish
 live-model behavior.
 
+**Phase 4A** adds a third task, `recovery-readiness-v1`, with three tools, an
+evidence-grounded verifier and its own episode contract, `recovery-episode-v1`.
+It supports only a zero-optimization development calibration and has not been run
+against a model. It is documented separately: [task](PHASE4A_RECOVERY_TASK.md),
+[calibration](PHASE4A_CALIBRATION.md), [verification](PHASE4A_VERIFICATION.md).
+Everything below about the calculator and asset workflows is unchanged, and the
+asset `collection-only` purpose described later still applies to the asset task
+alone.
+
 The completed calculator qualification remains bound to execution source
 `5daff64cefd348fb731094cf465b223ddceb5fb2` and plan SHA-256
 `a3128740ba4c2133e049bd80e9bdb471aa1ad56df3158479d1594b4e0ab23cc3`.

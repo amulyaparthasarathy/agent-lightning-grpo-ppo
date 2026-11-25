@@ -210,7 +210,7 @@ class CollectionOnlyComplete(Exception):
     """Stop after admitted real training collection, before advantage/optimizer work."""
 
 
-def instrument_adapter(module, *, collection_only=False):
+def instrument_adapter(module, *, collection_only=False, calibration=False):
     # Reuse the original fragment/context mapper, not the legacy selection wrapper.
     audit._instrument_adapter(module)
     original = module.RolloutAdapter.get_train_data_batch
@@ -250,6 +250,21 @@ def instrument_adapter(module, *, collection_only=False):
             audit.emit('development_collection_admitted', iteration=global_steps,
                        real_rollouts=32, groups=8, generated_tokens=sum(actual_tokens.values()),
                        fragment_rows=len(out), constant_groups=sum(len(set(v)) == 1 for v in rewards.values()))
+            if calibration:
+                # Evidence only: read the admitted batch; nothing is changed or filtered.
+                width = out.batch['prompts'].shape[1]
+                attention = out.batch['attention_mask']
+                measured = defaultdict(lambda: {'mask_tokens': 0, 'context_tokens': 0, 'prompt_tokens': []})
+                for i, rid in enumerate(out.non_tensor_batch['rollout_id_list']):
+                    mask = int(out.batch['response_mask'][i].sum())
+                    measured[rid]['mask_tokens'] += mask
+                    measured[rid]['context_tokens'] += int(attention[i, width:].sum()) - mask
+                    measured[rid]['prompt_tokens'].append(int(attention[i, :width].sum()))
+                audit.emit('calibration_collection_tokens', iteration=global_steps,
+                           limits={'max_prompt_length': self.max_prompt_length, 'max_response_length': self.max_response_length},
+                           truncated_rows=int(metrics.get('training/n_truncated_sample', 0)),
+                           dropped_prompt_rows=int(out.batch['is_drop_mask'].sum()),
+                           rollouts=[{'rollout': r.rollout_id, **measured[r.rollout_id]} for r in completed_rollouts])
             raise CollectionOnlyComplete()
         return out, metrics
     module.RolloutAdapter.get_train_data_batch = collect
@@ -300,8 +315,14 @@ def register_in_worker():
     from verl.workers import engine_workers
     from verl.workers.utils import losses
     import wandb
-    collection_only = request['plan'].get('phase') == 'collection-only'
-    instrument_adapter(rollout_adapter, collection_only=collection_only)
+    try:
+        from . import reader_modes as modes
+    except ImportError:
+        import reader_modes as modes
+    # Mode selection only. Historical plans dispatch by stage name as before.
+    collection_only = modes.collection_only(request['plan'], request['stage'])
+    instrument_adapter(rollout_adapter, collection_only=collection_only,
+                       calibration=modes.phase(request['plan']) == modes.CALIBRATION)
     trainer.compute_advantage = advantages
     trainer.normalize_advantages_by_rollout = normalize
     cls = trainer.AgentLightningRayPPOTrainer

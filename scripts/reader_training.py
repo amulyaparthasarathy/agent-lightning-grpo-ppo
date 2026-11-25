@@ -133,6 +133,18 @@ def collect(plan, volume, out, report):
                     f.write(chunk)
         except Exception as exc:
             errors.append({'path': str(relative), 'error_type': type(exc).__name__})
+    if report.get('index') and plan.get('phase') == 'development-calibration':
+        # Calibration admission needs the traces and audit events just collected. Review
+        # again from the local copy; this is the same definition `task_local.py report` uses.
+        from experiment.reader_evidence import validate_collection, local_reader
+        try:
+            reviewed = validate_collection(plan, report['index'], local_reader(plan, out), local=out)
+            report.pop('incomplete_reason', None)
+            report.update(reviewed)
+        except Exception as exc:
+            # The download and the index are kept; an unreviewable collection is simply not complete.
+            report.update(evidence_complete=False, incomplete_reason='Collected evidence could not be reviewed: '
+                          + type(exc).__name__ + ': ' + str(exc))
     report.update(collected_bytes=size, collection_errors=errors)
     report['evidence_complete'] = report['evidence_complete'] and not errors
     assets.write_new(out/'collection.json', report)

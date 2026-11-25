@@ -30,4 +30,8 @@ reader-harness = [
     "openai==2.54.0",
     "httpx==0.28.1",
     "pyarrow==25.0.1",
+    # Effective-prompt inspection: the versions recorded in the training image.
+    # The gated tokenizer file itself is never installed or downloaded here.
+    "jinja2==3.1.6",
+    "tokenizers==0.23.3",
 ]

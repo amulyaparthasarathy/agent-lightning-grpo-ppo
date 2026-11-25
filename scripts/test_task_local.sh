@@ -10,7 +10,8 @@ fi
 "$task_python" - <<'PY'
 from importlib.metadata import version
 for name, expected in {'autogen-core':'0.7.5', 'autogen-agentchat':'0.7.5', 'autogen-ext':'0.7.5',
-                       'mcp':'1.26.0', 'openai':'2.54.0', 'pyarrow':'25.0.1'}.items():
+                       'mcp':'1.26.0', 'openai':'2.54.0', 'pyarrow':'25.0.1',
+                       'jinja2':'3.1.6', 'tokenizers':'0.23.3'}.items():
     assert version(name) == expected, 'Use the locked reader-harness environment: '+name
 PY
 task_home="$(mktemp -d /tmp/task-local-XXXXXX)"
@@ -18,4 +19,5 @@ trap 'rm -rf "$task_home"' EXIT
 # Loopback HTTP rewards are required; no cloud/model/API boundary is invoked.
 env -i PATH="$PATH" HOME="$task_home" MODAL_CONFIG_PATH=/dev/null HF_HUB_OFFLINE=1 \
   PYTHONDONTWRITEBYTECODE=1 PYTHONPATH="$PWD:$PWD/tests" \
-  "$task_python" -m unittest test_asset_task test_phase3_source -v
+  "$task_python" -m unittest test_asset_task test_phase3_source \
+  test_recovery_task test_recovery_harness test_recovery_calibration test_recovery_evidence -v

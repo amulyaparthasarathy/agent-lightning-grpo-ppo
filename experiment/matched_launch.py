@@ -12,14 +12,26 @@ import time
 from types import SimpleNamespace
 
 try:
-    from . import launch, matched_contract as c, ppo_contract, summarize
+    from . import launch, matched_contract as c, ppo_contract, summarize, reader_modes as modes
     from .request_transport import environment as request_environment
 except ImportError:
     import launch
     import matched_contract as c
     import ppo_contract
     import summarize
+    import reader_modes as modes
     from request_transport import environment as request_environment
+
+
+def calibration(request):
+    """The recovery calibration module for a calibration request, else None."""
+    if modes.phase(request['plan']) != modes.CALIBRATION:
+        return None
+    try:
+        from . import recovery_calibration
+    except ImportError:
+        import recovery_calibration
+    return recovery_calibration
 
 WORKER = '''import json, os, sys
 from pathlib import Path
@@ -71,8 +83,8 @@ def configuration(request, model, run):
         'trainer.balance_batch': False,
         'agentlightning.trace_aggregator.level': 'trajectory',
         'trainer.total_training_steps': job['steps'],
-        'trainer.val_only': stage['name'] != 'training',
-        'trainer.val_before_train': stage['name'] != 'training',
+        'trainer.val_only': modes.validation_only(plan, stage),
+        'trainer.val_before_train': modes.validation_only(plan, stage),
         'trainer.test_freq': -1,
         'trainer.save_freq': job['steps'] if c.exploratory.is_exploratory(plan) else 20,  # upstream always saves the final step as well
         'trainer.max_actor_ckpt_to_keep': None, 'trainer.max_critic_ckpt_to_keep': None,
@@ -91,6 +103,12 @@ def configuration(request, model, run):
         task = plan['task_identity']
         cfg['agentlightning.local.agent_class'] = task['agent_class']
         cfg['agentlightning.local.env_map'] = task['data_mapping']
+        if 'context_limits' in task:
+            # Versioned, task-bound limits. Tasks that declare none keep the shared values.
+            limits = task['context_limits']
+            cfg['agentlightning.trace_aggregator.trajectory_max_prompt_length'] = limits['trajectory_max_prompt_length']
+            cfg['agentlightning.trace_aggregator.trajectory_max_response_length'] = limits['trajectory_max_response_length']
+            cfg['actor_rollout_ref.rollout.max_model_len'] = limits['max_model_len']
     if stage['name'] == 'checkpoint-eval':
         checkpoint = run.parent/'training/checkpoints'/f"global_step_{job['steps']}"
         cfg.update({'trainer.resume_mode': 'resume_path', 'trainer.resume_from_path': str(checkpoint)})
@@ -108,7 +126,11 @@ def make_plan(request, bundle, repo, model, data, python, run, port):
     plan.update(protocol=c.PROTOCOL, algorithm=request['job']['algorithm'], request=request,
                 phase=request['stage']['name'], policy_version=c.PROTOCOL,
                 overrides=[launch.dot(k, v) for k, v in cfg.items()])
-    if request['plan'].get('phase') == 'collection-only':
+    if calibration(request):
+        # Both upstream dataset arguments are routed explicitly to run-local copies of the
+        # declared development file. No launcher default (train_main/eval_main) remains.
+        plan['train_file'], plan['eval_file'] = calibration(request).routes(run)
+    elif request['plan'].get('phase') == 'collection-only':
         plan['train_file'] = str(run/'development-panel.parquet')
     return plan, commands
 
@@ -124,7 +146,15 @@ def validate_resolved(config, plan):
                 raise ValueError('Ray environment drift')
         elif node != value:
             raise ValueError(f'Matched resolved configuration drift: {key}')
-    if plan['request']['plan'].get('schema') == 'reader-task-v2':
+    if calibration(plan['request']):
+        run = Path(plan['resolved_config']).parent
+        if [plan['train_file'], plan['eval_file']] != list(calibration(plan['request']).routes(run)):
+            raise ValueError('Calibration dataset routing changed')
+        limits = plan['request']['plan']['task_identity']['context_limits']
+        # launch.run_services sets AGL_MAX_TOKENS=1024 for every harness.
+        if limits['max_tokens'] != 1024 or config['actor_rollout_ref']['rollout']['max_model_len'] != limits['max_model_len']:
+            raise ValueError('Declared context limits differ from the launcher')
+    elif plan['request']['plan'].get('schema') == 'reader-task-v2':
         paths = plan['request']['plan']['profile']['paths']
         for key, name in (('train_file', 'train_main.parquet'), ('eval_file', 'eval_main.parquet')):
             if key == 'train_file' and plan['request']['plan'].get('phase') == 'collection-only':
@@ -150,7 +180,9 @@ def validate_inputs(request, model, data, repo, bundle, contract=c):
             from .reader_assets import inspect, owned_path
         except ImportError:
             from reader_assets import inspect, owned_path
-        if inspect(model, data, owned_path('/data', request['plan']['profile']['paths']['staging']), task=request['plan']['profile']['task']) != request['plan']['assets']:
+        # A calibration stage is model-facing: verify development files only.
+        scope = {'scope': 'development'} if calibration(request) else {}
+        if inspect(model, data, owned_path('/data', request['plan']['profile']['paths']['staging']), task=request['plan']['profile']['task'], **scope) != request['plan']['assets']:
             raise ValueError('Actual reader assets differ from exact plan manifests')
         return
     lock = json.loads((bundle/'ppo_source_lock.json').read_text())
@@ -213,6 +245,15 @@ def complete_stage(run, request, data):
     stage, job = request['stage']['name'], request['job']
     result = {'protocol': c.PROTOCOL, 'plan_sha256': request['plan_sha256'], 'stage': stage}
     terminal = [e for e in events if e['event']=='trainer_returned']
+    if calibration(request):
+        # Schema-specific evidence rules; never the qualification or asset-development rules.
+        result.update(calibration(request).complete(run, request, events))
+        mode = result['calibration']['mode']
+        result['trajectories'] = summarize.summarize(run, stage, 'val' if mode == 'greedy' else 'train')[0]
+        expected = result['calibration']['expected_episodes']
+        if any(result['trajectories'][k] != expected for k in ('attempts_selected', 'completed', 'reward_posts_confirmed')):
+            raise ValueError('Incomplete calibration trajectory evidence')
+        return result
     if request['plan'].get('phase') == 'collection-only':
         from collections import Counter
         admitted = [e for e in events if e['event'] == 'development_collection_admitted']
@@ -291,7 +332,10 @@ def main():
         verify_checkpoint(run.parent/'training/checkpoints'/f"global_step_{request['job']['steps']}", request)
     (run/'logs').mkdir()
     plan, commands = make_plan(request, bundle, repo, model, data, repo/'.venv/bin/python', run, launch.free_port())
-    if request['plan'].get('phase') == 'collection-only':
+    if calibration(request):
+        if calibration(request).materialize(request, data, run, commands) != [plan['train_file'], plan['eval_file']]:
+            raise ValueError('Calibration dataset routing changed')
+    elif request['plan'].get('phase') == 'collection-only':
         import pyarrow.parquet as pq
         panel = pq.read_table(data/'train_smoke.parquet').slice(0, 8)
         if panel.column('case_id').to_pylist() != request['plan']['development']['case_ids']:

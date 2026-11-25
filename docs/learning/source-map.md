@@ -84,3 +84,5 @@ Return to the [learning index](README.md).
 ## Current adaptation implementation
 
 [Task adaptation](../TASK_ADAPTATION.md) maps the calculator and synthetic asset workflows, shared instrumentation, fork provenance and v2 evidence rules. These later changes did not execute r03 or the completed reference qualification; the frozen citations above retain their original source identities.
+
+Phase 4A adds `experiment/recovery_task.py` (world, tools, verifier), `recovery_agent.py` (the `recovery-episode-v1` harness), `recovery_prompt.py` (effective-prompt rendering), `recovery_calibration.py` (zero-optimization calibration and its report) and `reader_modes.py` (closed phase and stage dispatch). See the [task](../PHASE4A_RECOVERY_TASK.md) and [calibration](../PHASE4A_CALIBRATION.md) guides. None of it has been run against a model, and it changes no numerical path.

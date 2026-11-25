@@ -1,0 +1,26 @@
+{
+  "schema": "effective-prompt-replay-record-v1",
+  "evidence_class": "offline replay of recorded live Phase 3 calls; no new inference",
+  "purpose": "Shows that experiment/recovery_prompt.py and the pinned tokenizer reproduce the prompt token count the served stack reported for each recorded call.",
+  "source": "Private Phase 3 traces of asset-status-v1 (not committed): every model call with server-reported usage in the collected a06 and a07 stage directories.",
+  "scope_limit": "Same model, template and serving stack as proposed here, but the asset task. It does not show how the model responds to recovery prompts.",
+  "tokenizer_sha256": "79e3e522635f3171300913bb421464a87de6222182a0570b9b2ccba2a964b2b4",
+  "attempts": {
+    "a06": {
+      "schema": "effective-prompt-replay-v1",
+      "model_calls_with_reported_usage": 192,
+      "rendered_token_count_equals_reported": 192,
+      "differences": {}
+    },
+    "a07": {
+      "schema": "effective-prompt-replay-v1",
+      "model_calls_with_reported_usage": 1151,
+      "rendered_token_count_equals_reported": 1151,
+      "differences": {}
+    }
+  },
+  "total": {
+    "model_calls": 1343,
+    "exact": 1343
+  }
+}
