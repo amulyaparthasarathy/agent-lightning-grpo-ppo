@@ -162,11 +162,21 @@ class CalibrationAdapterTests(unittest.TestCase):
             with self.subTest(edit=label), self.assertRaises(ValueError):
                 self.adapter(request).get_train_data_batch(bad, global_steps=1)
         # Limits that cannot hold the trajectory reject the collection; nothing is cut silently.
+        stage = self.plan['calibration']['stages']['sampled-packet-1']
+        # Events of several rejected collections together are ambiguous: no figure is taken from them.
+        coverage = calibration.token_coverage(stage, self.events(), None)
+        self.assertEqual((coverage['rollouts_with_token_evidence'], coverage['truncated_rows'], coverage['dropped_prompt_rows']), (None, None, None))
+        self.assertIn('ambiguous', coverage['adapter_evidence'])
+        for path in Path(self.tmp.name).glob('*.jsonl'):
+            path.unlink()
         with self.assertRaisesRegex(ValueError, 'truncated'): self.adapter(request, response=8).get_train_data_batch(copy.deepcopy(good), global_steps=1)
-        # With no admitted collection there is no adapter token evidence, and none is invented.
-        coverage = calibration.token_coverage(self.plan['calibration']['stages']['sampled-packet-1'], self.events(), None)
+        # One rejected collection: the adapter measured nothing, so nothing is invented and nothing reads as zero.
+        coverage = calibration.token_coverage(stage, self.events(), None)
         self.assertEqual((coverage['rollouts_with_token_evidence'], coverage['truncated_rows'], coverage['dropped_prompt_rows'], coverage['mask_tokens']),
                          (0, None, None, None))
+        self.assertIn('unknown', coverage['adapter_evidence'])
+        # No audit events at all is not a statement about the run either.
+        self.assertIsNone(calibration.token_coverage(stage, None, None)['rollouts_with_token_evidence'])
         with self.assertRaisesRegex(ValueError, 'Invalid prompt context'): self.adapter(request, prompt=2).get_train_data_batch(copy.deepcopy(good), global_steps=1)
         for path in Path(self.tmp.name).glob('*.jsonl'):
             self.assertNotIn('development_collection_admitted', path.read_text())
