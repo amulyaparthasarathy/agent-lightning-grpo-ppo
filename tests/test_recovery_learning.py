@@ -38,6 +38,27 @@ class QualificationTests(unittest.TestCase):
             with self.assertRaises(ValueError): c.validate(bad)
         with self.assertRaises(ValueError): c.validate_profile(dict(profile(), bounds=dict(profile()['bounds'], stage_seconds=7200)))
 
+    def test_lost_acknowledgement_holds_exposure_and_stops_paired_dispatch(self):
+        from experiment import matched_supervisor
+        plan = c.make_plan(profile('paired'), source())
+        persisted, calls = [], []
+        def lost(job, stage):
+            calls.append((job['algorithm'],stage['name']))
+            self.assertEqual(persisted[-1]['worker_seconds_reserved'],3600)
+            raise TimeoutError('lost acknowledgement')
+        def unexpected(*args):
+            self.fail('Unexpected provider poll, cancellation or retry')
+        index = matched_supervisor.run(plan,lost,unexpected,unexpected,unexpected,lambda:False,persisted.append,
+                                       clock=lambda:100, sleep=unexpected)
+        self.assertEqual(calls,[(c.ALGORITHMS[0],'baseline')])
+        self.assertEqual(index['status'],'unknown')
+        self.assertEqual(index['worker_seconds_reserved'],3600)
+        self.assertEqual(index['gpu_seconds_upper_bound_used'],3600)
+        self.assertEqual(index['worker_cost_usd_upper_bound_used'],10)
+        self.assertAlmostEqual(index['supervisor_reservation_usd'],(8+1/6)*10)
+        stages = [stage for job in index['jobs'].values() for stage in job['stages']]
+        self.assertEqual([s['status'] for s in stages],['unknown']+['skipped']*7)
+
     def test_immutable_parquet_and_explicit_eager_paths(self):
         import pyarrow.parquet as pq
         with tempfile.TemporaryDirectory() as tmp:

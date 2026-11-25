@@ -84,6 +84,9 @@ def run(plan, dispatch, get_result, cancel, read_heartbeat, stop_requested, pers
     start = clock()
     index = {'study_key': key(plan), 'status': 'started', 'started_at': start, 'plan': plan,
              'jobs': {j['job_id']: {'status': 'planned', 'stages': []} for j in plan['jobs']}}
+    if recovery:
+        rate = plan['bounds']['all_resource_hourly_ceiling_usd']
+        index['supervisor_reservation_usd'] = plan['bounds']['supervisor_seconds']*rate/3600
     active = {}
     pending = [(job, 0) for job in plan['jobs']]
     uncertain = False
@@ -92,6 +95,13 @@ def run(plan, dispatch, get_result, cancel, read_heartbeat, stop_requested, pers
         index['gpu_seconds_upper_bound_used'] = sum(
             (r.get('finished_at', clock())-r['submitted_at']) for job in index['jobs'].values()
             for r in job['stages'] if r.get('call_id'))
+        if recovery:
+            stages = [s for job in index['jobs'].values() for s in job['stages'] if 'reservation' in s]
+            index['worker_seconds_reserved'] = sum(s['reservation']['seconds'] for s in stages)
+            # An absent acknowledgement or merely requested cancellation is not an end-of-billing receipt.
+            index['gpu_seconds_upper_bound_used'] = sum(
+                s['reservation']['seconds'] if s['status'] == 'unknown' or s.get('cancellation_requested')
+                else s.get('finished_at',clock())-s['submitted_at'] for s in stages)
         worker_rate = plan['bounds']['all_resource_hourly_ceiling_usd']
         index['worker_cost_usd_upper_bound_used'] = index['gpu_seconds_upper_bound_used']/3600*worker_rate
         index['cost_usd_upper_bound_used'] = index['worker_cost_usd_upper_bound_used'] + (clock()-start)/3600*(plan['bounds']['supervisor_hourly_ceiling_usd'] if exploratory else worker_rate)
@@ -101,6 +111,9 @@ def run(plan, dispatch, get_result, cancel, read_heartbeat, stop_requested, pers
         stage = job['stages'][position]
         receipt = {'stage': stage['name'], 'output': stage['output'], 'status': 'planned',
                    'wandb': stage['wandb'], 'submitted_at': clock(), 'call_id': None}
+        if recovery:
+            seconds = plan['bounds']['stage_seconds']
+            receipt['reservation'] = {'seconds':seconds, 'usd':seconds*rate/3600}
         state['stages'].append(receipt)
         save()
         try:
