@@ -81,6 +81,8 @@ def run(plan, dispatch, get_result, cancel, read_heartbeat, stop_requested, pers
     plan_sha256 = hashlib.sha256(json.dumps(plan, sort_keys=True, separators=(',', ':'), allow_nan=False).encode()).hexdigest()
     exploratory = plan['phase'] in ('exploratory-qualification','exploratory')
     recovery = plan.get('schema') == 'reader-task-v2' and plan['phase'] == 'recovery-learning-qualification-v1'
+    # Recovery must journal an interrupted provider exchange, including during cleanup.
+    provider_errors = BaseException if recovery else Exception
     start = clock()
     index = {'study_key': key(plan), 'status': 'started', 'started_at': start, 'plan': plan,
              'jobs': {j['job_id']: {'status': 'planned', 'stages': []} for j in plan['jobs']}}
@@ -118,11 +120,13 @@ def run(plan, dispatch, get_result, cancel, read_heartbeat, stop_requested, pers
         save()
         try:
             call_id = dispatch(job, stage)
-        except Exception as exc:
+        except provider_errors as exc:
             # Spawn may have reached the server. No ID means no safe targeted cancel.
             receipt.update(status='unknown', error=f'spawn outcome uncertain: {type(exc).__name__}: {exc}')
             state['status'] = 'unknown'
             save()
+            if not isinstance(exc, Exception):
+                raise
             return
         receipt.update(status='submitted', call_id=call_id)
         state['status'] = 'submitted'
@@ -225,10 +229,12 @@ def run(plan, dispatch, get_result, cancel, read_heartbeat, stop_requested, pers
                 sleep(5)
     except BaseException:
         for jid, (_, _, receipt) in active.items():
+            if recovery:
+                receipt['cancellation_requested'] = True
             try:
                 cancel(receipt['call_id'])
                 receipt.update(status='cancelled', error='supervisor_interrupted')
-            except Exception as exc:
+            except provider_errors as exc:
                 receipt.update(status='unknown', error=str(exc))
             receipt['finished_at'] = clock()
             index['jobs'][jid]['status'] = receipt['status']

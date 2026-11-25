@@ -4,9 +4,9 @@ import json
 from pathlib import Path
 import tempfile
 import unittest
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 
-from experiment import matched_launch, reader_contract as c, recovery_calibration as cal, recovery_task as task
+from experiment import matched_launch, matched_supervisor, reader_contract as c, recovery_calibration as cal, recovery_task as task
 from experiment import recovery_learning as learning, recovery_learning_evidence as evidence
 from scripts import reader_training, recovery_study as study
 from recovery_learning_support import profile, request
@@ -39,7 +39,6 @@ class QualificationTests(unittest.TestCase):
         with self.assertRaises(ValueError): c.validate_profile(dict(profile(), bounds=dict(profile()['bounds'], stage_seconds=7200)))
 
     def test_lost_acknowledgement_holds_exposure_and_stops_paired_dispatch(self):
-        from experiment import matched_supervisor
         plan = c.make_plan(profile('paired'), source())
         persisted, calls = [], []
         def lost(job, stage):
@@ -124,6 +123,131 @@ class QualificationTests(unittest.TestCase):
             self.assertEqual(matched_launch.verify_checkpoint(path,req),c.digest(identity))
             (path/'data.pt').write_bytes(b'other')
             with self.assertRaises(ValueError): matched_launch.verify_checkpoint(path,req)
+
+
+class QualificationSupervisorTests(unittest.TestCase):
+    def setUp(self):
+        self.plan = c.make_plan(profile('paired'), source())
+        self.now = 100
+        self.snapshots = []
+        self.owned_id = 'fc-recovery-baseline'
+        self.dispatch = Mock(return_value=self.owned_id)
+        self.poll = Mock()
+        self.cancel = Mock()
+
+    def supervise(self):
+        return matched_supervisor.run(
+            self.plan, self.dispatch, self.poll, self.cancel, lambda _: None, lambda: False,
+            self.snapshots.append, clock=lambda: self.now, sleep=self.fail)
+
+    def check_interrupted_stage(self, status, call_id):
+        index = self.snapshots[-1]
+        first, second = self.plan['jobs']
+        self.dispatch.assert_called_once_with(first, first['stages'][0])
+        receipts = index['jobs'][first['job_id']]['stages']
+        stage = receipts[0]
+        self.assertEqual(index['jobs'][first['job_id']]['status'], status)
+        self.assertEqual((stage['status'], stage['call_id']), (status, call_id))
+        skipped_stages = receipts[1:] + index['jobs'][second['job_id']]['stages']
+        self.assertEqual(len(skipped_stages), 7)
+        for skipped in skipped_stages:
+            self.assertEqual((skipped['status'], skipped['call_id']), ('skipped', None))
+            self.assertNotIn('reservation', skipped)
+        self.assertEqual(stage['reservation'], {'seconds': 3600, 'usd': 10})
+        self.assertEqual(index['worker_seconds_reserved'], 3600)
+        self.assertEqual(index['gpu_seconds_upper_bound_used'], 3600)
+        self.assertEqual(index['worker_cost_usd_upper_bound_used'], 10)
+        self.assertAlmostEqual(index['cost_usd_upper_bound_used'], 10 + (self.now - 100)*10/3600)
+        return stage
+
+    def test_interruption_during_dispatch(self):
+        interrupt = KeyboardInterrupt('before acknowledgement')
+
+        def interrupted_dispatch(*_):
+            self.assertEqual(self.snapshots[-1]['worker_seconds_reserved'], 3600)
+            self.now += 30
+            raise interrupt
+
+        self.dispatch.side_effect = interrupted_dispatch
+        with self.assertRaises(KeyboardInterrupt) as raised:
+            self.supervise()
+        self.assertIs(raised.exception, interrupt)
+        self.assertEqual(self.snapshots[-1]['status'], 'unknown')
+        # The unknown submission was persisted even before final campaign cleanup.
+        first_job = self.plan['jobs'][0]['job_id']
+        self.assertTrue(any(i['jobs'][first_job]['status'] == 'unknown'
+                            and i['gpu_seconds_upper_bound_used'] == 3600 for i in self.snapshots[:-1]))
+        stage = self.check_interrupted_stage('unknown', None)
+        self.assertIn('KeyboardInterrupt', stage['error'])
+        self.poll.assert_not_called()
+        self.cancel.assert_not_called()
+
+    def check_active_interruption(self, cancel_error=None):
+        interrupt = KeyboardInterrupt('during poll')
+
+        def interrupted_poll(call_id):
+            self.assertEqual(call_id, self.owned_id)
+            self.now += 30
+            raise interrupt
+
+        def cancel(call_id):
+            self.assertEqual(call_id, self.owned_id)
+            self.now += 1
+            if cancel_error is not None:
+                raise cancel_error
+
+        self.poll.side_effect = interrupted_poll
+        self.cancel.side_effect = cancel
+        with self.assertRaises(KeyboardInterrupt) as raised:
+            self.supervise()
+        self.assertIs(raised.exception, interrupt)
+        self.poll.assert_called_once_with(self.owned_id)
+        self.cancel.assert_called_once_with(self.owned_id)
+        stage = self.check_interrupted_stage('unknown' if cancel_error else 'cancelled', self.owned_id)
+        self.assertIs(stage['cancellation_requested'], True)
+        if cancel_error is not None:
+            self.assertIn(str(cancel_error), stage['error'])
+
+    def test_interruption_after_acknowledgement(self):
+        self.check_active_interruption()
+
+    def test_cancellation_failure_preserves_original_interruption(self):
+        self.check_active_interruption(ConnectionError('cancel acknowledgement lost'))
+
+    def test_interrupted_cleanup_preserves_original_interruption(self):
+        self.check_active_interruption(SystemExit('cleanup interrupted'))
+
+    def test_confirmed_completion_accounts_only_elapsed_worker_time(self):
+        self.plan = c.make_plan(profile('grpo'), source())
+        job = self.plan['jobs'][0]
+        proofs = {}
+        for stage in job['stages']:
+            name = stage['name']
+            spec = self.plan['qualification']['stages'][name]
+            call_id = 'fc-' + name
+            proof = {'plan_sha256': c.digest(self.plan), 'stage': name, 'source_sha256': c.digest(self.plan['source']),
+                     'configuration_sha256': self.plan['configuration_sha256'], 'wandb_id': stage['wandb']['id'],
+                     'worker': {'call_id': call_id, 'container_id': 'ta-' + name}}
+            proof['recovery_qualification'] = {
+                'schema': 'recovery-qualification-evidence-v1', 'plan_sha256': proof['plan_sha256'], 'stage': name,
+                'declared': spec, 'episodes_admitted': spec['expected_episodes'],
+                'episodes': fx.rows(spec, lambda *_: 'correct'), 'collections': list(spec['batches']),
+                'optimizer_calls': {'actor': spec['updates']}}
+            proofs[call_id] = {'call_id': call_id, 'output': stage['output'], 'status': 'completed',
+                               'container_id': proof['worker']['container_id'], 'completion': proof}
+
+        self.dispatch.side_effect = lambda job,stage: 'fc-' + stage['name']
+        def completed(call_id):
+            self.now += 30
+            return proofs[call_id]
+        self.poll.side_effect = completed
+        index = self.supervise()
+        self.assertEqual(index['status'], 'completed')
+        self.assertEqual(index['worker_seconds_reserved'], 4*3600)
+        self.assertEqual(index['gpu_seconds_upper_bound_used'], 4*30)
+        self.assertAlmostEqual(index['worker_cost_usd_upper_bound_used'], 4*30*10/3600)
+        self.assertAlmostEqual(index['cost_usd_upper_bound_used'], 2*4*30*10/3600)
+        self.cancel.assert_not_called()
 
 
 class StudyTests(unittest.TestCase):
