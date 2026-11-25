@@ -1,0 +1,523 @@
+{
+  "allocation": "A03",
+  "source": "7fdb2b1e0ce2a05f03980cfd3a1e07a31937ca6a",
+  "prep_digest": "875d011a79a4ccce03b6c28cdac1e29a815381381cae3ae4a98f8faa8cc617b9",
+  "runtime_manifest_sha256": "ec532242c3f36be857b1c2b4c3661ebcb7b09fe3af96586ffb85feb9f36dc4ab",
+  "profile_sha256": "049320669fd72c88c213b0fa95b1a75ba45766e1d88e2efd4b8d229923f209b7",
+  "assets_sha256": "5dd82d1fcd1bbb0efc18413f373ce3fb3ff1f2a06fbc8d0a5ef1598ea4ac7f78",
+  "collected_bytes": 40035399,
+  "collection_errors": 0,
+  "independent_report_file_sha256": "1bd02e87af6fc16b0b3d5add8109286e883f4abb1c0e08ac8cdee1dd8daabe18",
+  "plan_sha256": "a899410f14650150917e0a68d9d9d2897f50d1c560106baf41e8528163cf6a39",
+  "supervisor_status": "completed",
+  "evidence_complete": true,
+  "qualification_evidence": true,
+  "stages": {
+    "baseline": {
+      "supervisor_status": "completed",
+      "durable_worker_status": "completed",
+      "stage_admitted": true,
+      "observed_slots": 24,
+      "confirmed_slots": 24,
+      "admitted_episodes": 24,
+      "independently_replayable_episodes": 24,
+      "trace_files": 24,
+      "rejected_untrusted": 0,
+      "model_calls": 144,
+      "strict_successes": 9.0,
+      "failure_classes": {
+        "semantic": 12,
+        "correct": 9,
+        "evidence": 3
+      },
+      "outcomes": {
+        "complete_final": 24
+      },
+      "reward_denominator": 24,
+      "typed_action_errors": 0,
+      "worker_elapsed_s": 259.661,
+      "submitted_to_finished_s": 275.461,
+      "actual_actor_optimizer_calls": 0,
+      "gradients": [],
+      "weight_refresh_steps": [
+        0
+      ],
+      "old_log_prob_comparisons": [],
+      "optimization": {
+        "informative_groups": [],
+        "losses": [],
+        "optimizer_calls": {
+          "actor": 0
+        }
+      },
+      "resources": {
+        "audit_max_cuda_allocated_peak": 0,
+        "audit_max_cuda_reserved_peak": 0,
+        "audit_max_memory.current": 48885391360,
+        "gpu": "NVIDIA H100 80GB HBM3",
+        "gpu_bytes": 85031190528,
+        "worker_start_scratch_free_bytes": 549755813888,
+        "successful_live_samples": 10,
+        "live_memory.usage_in_bytes": 50216357888,
+        "live_memory.limit_in_bytes": 206158430208,
+        "proc_meminfo_sample_used_bytes": 50220306432,
+        "proc_meminfo_total_bytes": 206158430208,
+        "device_used_mib_sample_max": 55261,
+        "sample_min_scratch_free_bytes": 549754441728,
+        "reported_cgroup_versions": [
+          1
+        ],
+        "cgroup_peak_available": false,
+        "scope": "CUDA allocator counters are per emitting process. Device observations are sparse. memory.current is for the process memory cgroup.",
+        "provider_averages": {
+          "gpu_memory_avg": {
+            "highest_full_bucket_average": 20.49716784307481,
+            "unit": "GiB",
+            "bucket_seconds": 60
+          },
+          "gpu_utilization_avg": {
+            "highest_full_bucket_average": 0.033335279494638506,
+            "unit": "fraction",
+            "bucket_seconds": 60
+          },
+          "memory_usage_avg": {
+            "highest_full_bucket_average": 31.553352170857007,
+            "unit": "GiB",
+            "bucket_seconds": 60
+          }
+        }
+      },
+      "update_metrics": [],
+      "actor_offload_config": {
+        "param_offload": true,
+        "optimizer_offload": true
+      }
+    },
+    "collection-probe": {
+      "supervisor_status": "completed",
+      "durable_worker_status": "completed",
+      "stage_admitted": true,
+      "observed_slots": 32,
+      "confirmed_slots": 32,
+      "admitted_episodes": 32,
+      "independently_replayable_episodes": 32,
+      "trace_files": 32,
+      "rejected_untrusted": 0,
+      "model_calls": 181,
+      "strict_successes": 12.0,
+      "failure_classes": {
+        "correct": 12,
+        "semantic": 11,
+        "format": 7,
+        "evidence": 2
+      },
+      "outcomes": {
+        "complete_final": 32
+      },
+      "reward_denominator": 32,
+      "typed_action_errors": 7,
+      "worker_elapsed_s": 267.159,
+      "submitted_to_finished_s": 279.471,
+      "actual_actor_optimizer_calls": 0,
+      "gradients": [],
+      "weight_refresh_steps": [
+        0
+      ],
+      "old_log_prob_comparisons": [],
+      "optimization": {
+        "informative_groups": [
+          5
+        ],
+        "losses": [],
+        "optimizer_calls": {
+          "actor": 0
+        }
+      },
+      "resources": {
+        "audit_max_cuda_allocated_peak": 0,
+        "audit_max_cuda_reserved_peak": 0,
+        "audit_max_memory.current": 49121804288,
+        "gpu": "NVIDIA H100 80GB HBM3",
+        "gpu_bytes": 85031190528,
+        "worker_start_scratch_free_bytes": 549755813888,
+        "successful_live_samples": 11,
+        "live_memory.usage_in_bytes": 50139652096,
+        "live_memory.limit_in_bytes": 206158430208,
+        "proc_meminfo_sample_used_bytes": 50143313920,
+        "proc_meminfo_total_bytes": 206158430208,
+        "device_used_mib_sample_max": 55077,
+        "sample_min_scratch_free_bytes": 549753159680,
+        "reported_cgroup_versions": [
+          1
+        ],
+        "cgroup_peak_available": false,
+        "scope": "CUDA allocator counters are per emitting process. Device observations are sparse. memory.current is for the process memory cgroup.",
+        "provider_averages": {
+          "gpu_memory_avg": {
+            "highest_full_bucket_average": 38.22293130386897,
+            "unit": "GiB",
+            "bucket_seconds": 60
+          },
+          "gpu_utilization_avg": {
+            "highest_full_bucket_average": 0.04345456791025784,
+            "unit": "fraction",
+            "bucket_seconds": 60
+          },
+          "memory_usage_avg": {
+            "highest_full_bucket_average": 34.6458616168274,
+            "unit": "GiB",
+            "bucket_seconds": 60
+          }
+        }
+      },
+      "update_metrics": [],
+      "actor_offload_config": {
+        "param_offload": true,
+        "optimizer_offload": true
+      }
+    },
+    "training": {
+      "supervisor_status": "completed",
+      "durable_worker_status": "completed",
+      "stage_admitted": true,
+      "observed_slots": 64,
+      "confirmed_slots": 64,
+      "admitted_episodes": 64,
+      "independently_replayable_episodes": 64,
+      "trace_files": 64,
+      "rejected_untrusted": 0,
+      "model_calls": 378,
+      "strict_successes": 16.0,
+      "failure_classes": {
+        "semantic": 29,
+        "correct": 16,
+        "format": 5,
+        "evidence": 14
+      },
+      "outcomes": {
+        "complete_final": 63,
+        "complete_recovered": 1
+      },
+      "reward_denominator": 64,
+      "typed_action_errors": 6,
+      "worker_elapsed_s": 539.162,
+      "submitted_to_finished_s": 563.205,
+      "actual_actor_optimizer_calls": 2,
+      "gradients": [
+        {
+          "role": "actor",
+          "preclip_finite": true,
+          "preclip_norm": 1.1756725311279297,
+          "optimizer_called": true
+        },
+        {
+          "role": "actor",
+          "preclip_finite": true,
+          "preclip_norm": 0.9076412320137024,
+          "optimizer_called": true
+        }
+      ],
+      "weight_refresh_steps": [
+        0,
+        1,
+        2
+      ],
+      "old_log_prob_comparisons": [
+        {
+          "iteration": 1,
+          "target_tokens": 9044,
+          "mean_delta": -3.994515826631901e-06,
+          "max_abs_delta": 0.36407470703125
+        },
+        {
+          "iteration": 2,
+          "target_tokens": 9508,
+          "mean_delta": 1.0219933073220656e-05,
+          "max_abs_delta": 0.4159736633300781
+        }
+      ],
+      "optimization": {
+        "informative_groups": [
+          3,
+          3
+        ],
+        "losses": [
+          {
+            "step": 1,
+            "metric": "actor/pg_loss",
+            "value": -3.026798367500305e-09
+          },
+          {
+            "step": 2,
+            "metric": "actor/pg_loss",
+            "value": 8.672941476106644e-09
+          }
+        ],
+        "optimizer_calls": {
+          "actor": 2
+        }
+      },
+      "resources": {
+        "audit_max_cuda_allocated_peak": 64324377600,
+        "audit_max_cuda_reserved_peak": 67689775104,
+        "audit_max_memory.current": 85908381696,
+        "gpu": "NVIDIA H100 80GB HBM3",
+        "gpu_bytes": 85031190528,
+        "worker_start_scratch_free_bytes": 549755813888,
+        "successful_live_samples": 22,
+        "live_memory.usage_in_bytes": 87451430912,
+        "live_memory.limit_in_bytes": 206158430208,
+        "proc_meminfo_sample_used_bytes": 87454621696,
+        "proc_meminfo_total_bytes": 206158430208,
+        "device_used_mib_sample_max": 69355,
+        "sample_min_scratch_free_bytes": 549749092352,
+        "reported_cgroup_versions": [
+          1
+        ],
+        "cgroup_peak_available": false,
+        "scope": "CUDA allocator counters are per emitting process. Device observations are sparse. memory.current is for the process memory cgroup.",
+        "provider_averages": {
+          "gpu_memory_avg": {
+            "highest_full_bucket_average": 57.0720327194329,
+            "unit": "GiB",
+            "bucket_seconds": 60
+          },
+          "gpu_utilization_avg": {
+            "highest_full_bucket_average": 0.5406676493821629,
+            "unit": "fraction",
+            "bucket_seconds": 60
+          },
+          "memory_usage_avg": {
+            "highest_full_bucket_average": 76.05604661936574,
+            "unit": "GiB",
+            "bucket_seconds": 60
+          }
+        }
+      },
+      "update_metrics": [
+        {
+          "step": 1,
+          "metrics": {
+            "actor/pg_loss": -3.026798367500305e-09,
+            "actor/grad_norm": 1.1756725311279297,
+            "actor/perf/max_memory_allocated_gb": 59.90665102005005,
+            "actor/perf/max_memory_reserved_gb": 63.0390625,
+            "actor/perf/cpu_memory_used_gb": 48.275360107421875,
+            "timing_s/gen": 50.97181898299999,
+            "timing_s/old_log_prob": 13.024683648999996,
+            "timing_s/adv": 0.025077659999965363,
+            "timing_s/update_actor": 44.77405077099996,
+            "timing_s/update_weights": 2.0257739109999875,
+            "timing_s/step": 111.72087168199997
+          }
+        },
+        {
+          "step": 2,
+          "metrics": {
+            "actor/pg_loss": 8.672941476106644e-09,
+            "actor/grad_norm": 0.9076412320137024,
+            "actor/perf/max_memory_allocated_gb": 59.906744956970215,
+            "actor/perf/max_memory_reserved_gb": 63.041015625,
+            "actor/perf/cpu_memory_used_gb": 80.01070785522461,
+            "timing_s/gen": 43.74990879300003,
+            "timing_s/old_log_prob": 9.77025650400003,
+            "timing_s/adv": 0.016397173000029852,
+            "timing_s/update_actor": 37.15165259600002,
+            "timing_s/update_weights": 2.027618689999997,
+            "timing_s/step": 93.18005067600001
+          }
+        }
+      ],
+      "actor_offload_config": {
+        "param_offload": true,
+        "optimizer_offload": true
+      },
+      "terminal_refresh_to_save_return_seconds": 55.562,
+      "isolated_checkpoint_write_seconds": null
+    },
+    "checkpoint-eval": {
+      "supervisor_status": "completed",
+      "durable_worker_status": "completed",
+      "stage_admitted": true,
+      "observed_slots": 24,
+      "confirmed_slots": 24,
+      "admitted_episodes": 24,
+      "independently_replayable_episodes": 24,
+      "trace_files": 24,
+      "rejected_untrusted": 0,
+      "model_calls": 144,
+      "strict_successes": 9.0,
+      "failure_classes": {
+        "semantic": 12,
+        "correct": 9,
+        "evidence": 3
+      },
+      "outcomes": {
+        "complete_final": 24
+      },
+      "reward_denominator": 24,
+      "typed_action_errors": 0,
+      "worker_elapsed_s": 343.334,
+      "submitted_to_finished_s": 356.789,
+      "actual_actor_optimizer_calls": 0,
+      "gradients": [],
+      "weight_refresh_steps": [
+        2
+      ],
+      "old_log_prob_comparisons": [],
+      "optimization": {
+        "informative_groups": [],
+        "losses": [],
+        "optimizer_calls": {
+          "actor": 0
+        }
+      },
+      "resources": {
+        "audit_max_cuda_allocated_peak": 0,
+        "audit_max_cuda_reserved_peak": 0,
+        "audit_max_memory.current": 83096485888,
+        "gpu": "NVIDIA H100 80GB HBM3",
+        "gpu_bytes": 85031190528,
+        "worker_start_scratch_free_bytes": 549755813888,
+        "successful_live_samples": 14,
+        "live_memory.usage_in_bytes": 83237285888,
+        "live_memory.limit_in_bytes": 206158430208,
+        "proc_meminfo_sample_used_bytes": 83247038464,
+        "proc_meminfo_total_bytes": 206158430208,
+        "device_used_mib_sample_max": 55543,
+        "sample_min_scratch_free_bytes": 549754241024,
+        "reported_cgroup_versions": [
+          1
+        ],
+        "cgroup_peak_available": false,
+        "scope": "CUDA allocator counters are per emitting process. Device observations are sparse. memory.current is for the process memory cgroup.",
+        "provider_averages": {
+          "gpu_memory_avg": {
+            "highest_full_bucket_average": 33.895446182521844,
+            "unit": "GiB",
+            "bucket_seconds": 60
+          },
+          "gpu_utilization_avg": {
+            "highest_full_bucket_average": 0.07367646226562995,
+            "unit": "fraction",
+            "bucket_seconds": 60
+          },
+          "memory_usage_avg": {
+            "highest_full_bucket_average": 45.63940522200354,
+            "unit": "GiB",
+            "bucket_seconds": 60
+          }
+        }
+      },
+      "update_metrics": [],
+      "actor_offload_config": {
+        "param_offload": true,
+        "optimizer_offload": true
+      }
+    }
+  },
+  "final_panel_model_evaluations": 0,
+  "checkpoint": {
+    "step": 2,
+    "digest": "932f4e21aad6e9f347706193d5485851ddaa2ae16af942757f9d06771f9e7e1a",
+    "files": {
+      "actor/extra_state_world_size_1_rank_0.pt": {
+        "bytes": 15141,
+        "sha256": "c0bc5ad77c5df9f109b679d1c4ca8587d9b42ae44b75263357f38e31c59fd908"
+      },
+      "actor/fsdp_config.json": {
+        "bytes": 46,
+        "sha256": "7315a2057e6b04e0b2e7d6ee8ad070eafd481f3e1029fb9c75c97723b6f98f36"
+      },
+      "actor/huggingface/chat_template.jinja": {
+        "bytes": 5294,
+        "sha256": "a718674808440b537a553c15e0557b5b45d6d76e49ad9ddbc1a9e92447843e2c"
+      },
+      "actor/huggingface/config.json": {
+        "bytes": 863,
+        "sha256": "3a129014de9578f3e602a4d982aab89387b25ce2f74529be5b463c29d5691b5d"
+      },
+      "actor/huggingface/generation_config.json": {
+        "bytes": 184,
+        "sha256": "358b67cf9a493e4fa27b80e4e368930caedde0a51b1f8fe6f5831e8bd434d024"
+      },
+      "actor/huggingface/tokenizer.json": {
+        "bytes": 17209920,
+        "sha256": "6b9e4e7fb171f92fd137b777cc2714bf87d11576700a1dcd7a399e7bbe39537b"
+      },
+      "actor/huggingface/tokenizer_config.json": {
+        "bytes": 352,
+        "sha256": "b67f43d859deb5bda4f0d247a875476338aca0ef92cff4c3b1d2be3265cb59ac"
+      },
+      "actor/model_world_size_1_rank_0.pt": {
+        "bytes": 14427143047,
+        "sha256": "83cc0a636c051ad223d20445882b8e89e8dd545b18948e5479dbb7e6a9a7cd0b"
+      },
+      "actor/optim_world_size_1_rank_0.pt": {
+        "bytes": 25702025404,
+        "sha256": "4c1a82fd45c45c15bd703ca130d6e8daa37d71ac19cef77895c78d775b9ef6a9"
+      },
+      "data.pt": {
+        "bytes": 7316,
+        "sha256": "7171ea94b7a9e2f6f2376cf136c6a6c16235eee324da242a8e876093a130dbf8"
+      }
+    },
+    "hashed_file_bytes": 40146407567,
+    "volume_sizes_verified": true,
+    "volume_inventory_bytes": 40146409754,
+    "distinct_call": true,
+    "distinct_container": true,
+    "training_before_after_match": true
+  },
+  "calls": {
+    "prepare": {
+      "status": "SUCCESS",
+      "provider_container_seconds": 52.592,
+      "call_id_sha256": "be00efeba58ffa849756409504a151c8709d71855e83ec4d8628bf2d197f9261",
+      "container_id_sha256": "454ff312c04a9acba470ae36465001b4d89793271529d3a9e0d00ad9d98ba13c"
+    },
+    "preflight": {
+      "status": "SUCCESS",
+      "provider_container_seconds": 64.19,
+      "call_id_sha256": "545c0793e968cbd00170250fbf279a0fc9f730bb5b05e46907417c91d3d3011d",
+      "container_id_sha256": "49f96cf903ce4dca280c0ff416babc091e90ce9d5e2ed5ae771d1e0b6879522b"
+    },
+    "launch": {
+      "status": "SUCCESS",
+      "provider_container_seconds": 1497.401,
+      "call_id_sha256": "d85a1d3287a482c2fcfc75ab4aa834a02dff3489b1011f0dd917c5cbe244a7a6",
+      "container_id_sha256": "143dcad5ae6d2fb21aa39321198fc2f5f4b2565ec25b7c66998c6c4fc9e3af5d"
+    },
+    "baseline": {
+      "status": "SUCCESS",
+      "provider_container_seconds": 263.629,
+      "call_id_sha256": "1991224f5e207ff1733f9bbfdcb1dae85987fb39fe3ef38af23ce05ea5e7e702",
+      "container_id_sha256": "494410e42ec05606534b16d870d6a300647b3c23b7bad1371ab0d334111d4b88"
+    },
+    "collection-probe": {
+      "status": "SUCCESS",
+      "provider_container_seconds": 272.411,
+      "call_id_sha256": "7759a23367aaaa907c0d6f927aa1727d8daaca4a84ea5aa1c124aa51f14d4a7e",
+      "container_id_sha256": "cb4c61a929a434aa5e6f3f9c3c4dfa9508f0295f117f0357935e5df8bc134120"
+    },
+    "training": {
+      "status": "SUCCESS",
+      "provider_container_seconds": 555.817,
+      "call_id_sha256": "72bb7c31325489099e4ce2932f7bcad0434f720aa9b6bdf738ddaf1556306c5a",
+      "container_id_sha256": "249bfd36188b51b683dbddf598dfbe51a5ef87c8fe8e30ca283c3cd67df83d09"
+    },
+    "checkpoint-eval": {
+      "status": "SUCCESS",
+      "provider_container_seconds": 348.812,
+      "call_id_sha256": "8dcbdcba41bfa56d9e01da0617060b7120411b34316dfbdf9bd48134473c25a8",
+      "container_id_sha256": "2bdde19609d75c6eb50df079e78b5c0db63f21fb59d060a433eb60b228325c4e"
+    }
+  },
+  "retention": {
+    "regular_file_bytes": 46633520042,
+    "listed_entry_bytes": 46633554701,
+    "review_date": "2026-12-02"
+  },
+  "owned_apps_stopped": 3,
+  "owned_containers": 0
+}
