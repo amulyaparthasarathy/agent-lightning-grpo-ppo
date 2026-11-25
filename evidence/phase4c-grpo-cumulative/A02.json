@@ -1,0 +1,46 @@
+{
+  "allocation": "A02",
+  "source": "d66b5d112587f36ca1a2708577d9218f7db39e29",
+  "tested_ancestor": "852e01d141b66232c73ca46e6e7bf4b9dfb0e854",
+  "prep_digest": "97afeb534d1b4c2140a805ba36b6238e366dd703e8000218b3fd50aad81112d4",
+  "execution_digest": "3d03a28a35fb903d380262a0254c3ebbd73f203fa891ac2f9c6820b5a3466e2d",
+  "runtime_manifest_digest": "05cc6d584de9217af435e4dcdc2d99a35b3e6b7560570da9aaca601daed492f0",
+  "result": "preflight failed",
+  "version_drift": {
+    "ml-dtypes": {
+      "expected": "0.6.0",
+      "actual": "0.7.0"
+    },
+    "opencv-python-headless": {
+      "expected": "5.0.0.93",
+      "actual": "5.1.0.95"
+    }
+  },
+  "supervisor_submitted": false,
+  "admitted": 0,
+  "confirmed": 0,
+  "actor_updates": 0,
+  "checkpoints": 0,
+  "reload": "skipped",
+  "final_panel_evaluations": 0,
+  "terminal_calls": {
+    "prepare": {
+      "status": "SUCCESS",
+      "container_seconds": 64.658
+    },
+    "preflight": {
+      "status": "FAILURE",
+      "container_seconds": 49.683
+    }
+  },
+  "owned_apps_stopped": 2,
+  "owned_containers": 0,
+  "call_exposure_usd": 0,
+  "retained_regular_file_bytes": 6435944452,
+  "listed_entry_bytes": 6435946810,
+  "retention_review": "2026-12-02",
+  "gross_at_settlement": "0.84622284",
+  "gross_as_of": "2026-11-25T20:14:09.968138+00:00",
+  "build_layers_observed": 81,
+  "review_file_sha256": "636099255be471d4c9a07b1d210be6d447c230a2072bdedb3aeee57399be3b79"
+}
