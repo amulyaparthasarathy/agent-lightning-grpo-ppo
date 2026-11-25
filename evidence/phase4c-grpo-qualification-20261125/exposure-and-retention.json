@@ -1,0 +1,81 @@
+{
+  "snapshot_utc": "2026-11-25T17:29:31.913296+00:00",
+  "execution_source": "547053db6636fdc1475f0d53f8bf580fed751bbd",
+  "plan_sha256": "8098ce37276f88860f2ae2a7530a8671edd8f8997e7e7d587b731a299c6eeb51",
+  "status": "failed; allocation closed to further dispatch",
+  "original_reservations_usd": {
+    "compute_supervision": 82,
+    "build": 15,
+    "preparation_preflight": 5,
+    "storage": 7,
+    "collection": 2,
+    "delayed_billing": 2
+  },
+  "original_total_usd": 113,
+  "credits_assumed": 0,
+  "calls": {
+    "prepare": {
+      "provider_input_status": "success",
+      "result": "completed",
+      "container_seconds": 118.494,
+      "container_terminal": true
+    },
+    "preflight": {
+      "provider_input_status": "success",
+      "result": "completed",
+      "container_seconds": 62.664,
+      "container_terminal": true
+    },
+    "launch": {
+      "provider_input_status": "success",
+      "result": "failed",
+      "container_seconds": 360.59,
+      "container_terminal": true
+    },
+    "baseline": {
+      "provider_input_status": "failure",
+      "result": "RuntimeError",
+      "container_seconds": 347.95,
+      "container_terminal": true
+    }
+  },
+  "owned_apps_stopped": 3,
+  "owned_containers_running": 0,
+  "unresolved_call_exposure_usd": 0,
+  "unacknowledged_dispatches": 0,
+  "billing_interval_start": "2026-11-25T17:00:00+00:00",
+  "billing_interval_end_exclusive": "2026-11-25T18:00:00+00:00",
+  "interval_closed": false,
+  "provider_gross_usd_by_object": {
+    "preflight": "0.00557058",
+    "launch": "0.60641439",
+    "prepare": "0.01303687"
+  },
+  "provider_gross_usd_by_resource": {
+    "CPU": "0.08748369",
+    "Memory": "0.15584916",
+    "Network Egress": "0.00205060",
+    "H100": "0.37963839"
+  },
+  "provider_gross_observed_usd": "0.62502184",
+  "original_ceiling_less_observed_usage_usd": "112.37497816",
+  "allowed_additional_compute_dispatch_usd": 0,
+  "delayed_billing_hold_usd": 2,
+  "retention_hold_usd": 7,
+  "storage_and_delayed_holds_included_in_original_reservation": true,
+  "unreleased_reservation_usd": "112.37497816",
+  "unreleased_reservation_basis": "Conservative campaign earmark pending billing and retention review. Further dispatch allowance is zero.",
+  "retained_regular_file_bytes": 6445405176,
+  "all_listed_entry_bytes": 6445413763,
+  "listed_regular_files": 246,
+  "seven_day_estimated_storage_usd": "0.1260579461446031928062438965",
+  "retention_review_date_utc": "2026-12-02",
+  "checkpoint_bytes": 0,
+  "other_campaigns_affected": false,
+  "build_layers_recorded": {
+    "copy": 35,
+    "environment": 2,
+    "separately_attributed_build_row_at_snapshot": false
+  },
+  "storage_inventory_scope": "246 regular files. All-entry bytes additionally include directory and symlink sizes. Worker-local scratch is reported separately."
+}
