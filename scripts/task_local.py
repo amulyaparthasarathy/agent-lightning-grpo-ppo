@@ -52,6 +52,10 @@ def calibration_report(args):
     plan = assets.read(args.plan)
     collection = args.evidence/'collection.json'
     index = assets.read(collection).get('index') if collection.is_file() else None
+    if plan.get('phase') == evidence.modes.RECOVERY_LEARNING:
+        reviewed = evidence.validate_collection(plan, index, evidence.local_reader(plan, args.evidence), local=args.evidence)
+        assets.write_new(args.out/'report.json', reviewed)
+        return reviewed
     reviewed = evidence.calibration_collection(plan, index, evidence.local_reader(plan, args.evidence), local=args.evidence)
     result = reviewed['calibration']
     args.out.mkdir(parents=True, exist_ok=False)

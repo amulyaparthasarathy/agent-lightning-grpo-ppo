@@ -85,12 +85,12 @@ class PinnedTrainingTests(unittest.TestCase):
     def tearDown(self):
         self.env.stop(); self.tmp.cleanup()
 
-    def adapter(self, collection_only=False):
+    def adapter(self, collection_only=False, recovery_request=None):
         import io, zipfile, base64
         module = load('agentlightning', 'verl/rollout_adapter.py', dict(torch=self.torch, np=self.np,
             TensorDict=self.TD, DataProto=Proto, json=json, io=io, zipfile=zipfile, base64=base64))
-        runtime.instrument_adapter(module, collection_only=collection_only)
-        return module.RolloutAdapter(max_prompt_length=24, max_response_length=32,
+        runtime.instrument_adapter(module, collection_only=collection_only, recovery_request=recovery_request)
+        return module.RolloutAdapter(max_prompt_length=3072 if recovery_request else 24, max_response_length=2048 if recovery_request else 32,
                                      device=self.torch.device('cpu'), pad_token_id=0, trace_aggregator_level='trajectory')
 
     def rollouts(self, fragmented=False, constant=False):
@@ -172,24 +172,34 @@ class PinnedTrainingTests(unittest.TestCase):
             runtime.normalize(b['advantages'], mask, batch.non_tensor_batch['rollout_id_list'], num_trained_rows=len(batch))
             self.torch.testing.assert_close(saved,b['returns'])
 
-    def update(self, fragmented, role, micro=1, dp_scale=1):
+    def update(self, fragmented, role, micro=1, dp_scale=1, admitted_batch=None, pack=None, models=None):
         torch, tu = self.torch, self.tu
-        batch = self.batch(fragmented, estimator='gae')
+        batch = self.batch(fragmented, estimator='gae') if admitted_batch is None else admitted_batch
         td = batch.batch
         td['advantages'] = runtime.normalize(td['advantages'],td['response_mask'],
             batch.non_tensor_batch['rollout_id_list'], num_trained_rows=len(batch))
         td['loss_mask'] = td['response_mask']
         # Pinned outer minibatch worker reads nested input IDs for token accounting.
         fullmask = td['attention_mask'].bool()
-        td['input_ids'] = torch.nested.as_nested_tensor([r[m] for r,m in zip(td['input_ids'],fullmask)], layout=torch.jagged)
+        if pack is None:
+            td['input_ids'] = torch.nested.as_nested_tensor([r[m] for r,m in zip(td['input_ids'],fullmask)], layout=torch.jagged)
+        else:
+            td = pack(td.clone())
         tu.assign_non_tensor(td, mini_batch_size=len(td), epochs=1, seed=43,
                             dataloader_kwargs={'shuffle':False}, use_dynamic_bsz=False,
                             micro_batch_size_per_gpu=micro, global_batch_size=len(td), pad_mode='no_padding')
-        module = torch.nn.Linear(1,1,bias=False)
-        with torch.no_grad(): module.weight.fill_(.4)
-        optimizer = torch.optim.AdamW(module.parameters(), lr=1e-3, weight_decay=0.)
-        calls = []
-        optimizer.register_step_post_hook(lambda *args: calls.append(1))
+        if models is not None and role in models:
+            module, optimizer, calls = models[role]
+        else:
+            module = torch.nn.Linear(1,1,bias=False)
+            with torch.no_grad():
+                module.weight.fill_(.4 if models is None else -.4)
+            lr = (1e-6 if role == 'actor' else 1e-5) if models is not None else 1e-3
+            optimizer = torch.optim.AdamW(module.parameters(), lr=lr, weight_decay=.01 if models is not None else 0.)
+            calls = []
+            optimizer.register_step_post_hook(lambda *args: calls.append(1))
+            if models is not None:
+                models[role] = module, optimizer, calls
         cfg = NS(cliprange_value=.5)
         from omegaconf import OmegaConf
         acfg = OmegaConf.create({'clip_ratio':.2,'clip_ratio_low':.2,'clip_ratio_high':.3,'clip_ratio_c':3.,
@@ -201,7 +211,7 @@ class PinnedTrainingTests(unittest.TestCase):
         class Engine:
             ulysses_sequence_parallel_size=1
             _qat_enabled=False
-            optimizer_config=NS(clip_grad=.1)
+            optimizer_config=NS(clip_grad=.1 if models is None else 1.)
             def get_data_parallel_group(self): return None
             def get_data_parallel_rank(self): return 0
             def get_data_parallel_size(self): return 1
@@ -242,6 +252,99 @@ class PinnedTrainingTests(unittest.TestCase):
             k:[sum_metrics(v)] if isinstance(v,list) and isinstance(v[0],Metric) else [v] if isinstance(v,list) else v for k,v in engine.train_batch(data,None)['metrics'].items()}})
         output=worker_methods.train_mini_batch(worker,td)
         return module.weight.detach().clone(),module.weight.grad.clone(),calls,output
+
+    def test_qualification_adapter_packing_recomputed_probabilities_and_updates(self):
+        import hashlib
+        from experiment import recovery_admission as admit
+        from recovery_learning_support import request
+        from test_matched_recovery_learning import fixture
+        from pinned_training_support import ROOT
+        from omegaconf import OmegaConf
+        torch = self.torch
+        torch.set_num_threads(1)
+        padding_source = ROOT/'.local/bert_padding.py'
+        self.assertEqual(hashlib.sha256(padding_source.read_bytes()).hexdigest(),
+                         '805d449ac749f87a50f3a3114385710f0f926ff45521275000b74d9e80721e5c')
+        import runpy
+        flash = runpy.run_path(str(padding_source))
+        pack = load('verl', 'workers/utils/padding.py', dict(torch=torch, tu=self.tu,
+            unpad_input=flash['unpad_input']), ['left_right_2_no_padding']).left_right_2_no_padding
+        old = load('verl', 'trainer/ppo/ray_trainer.py', dict(tu=self.tu, left_right_2_no_padding=pack,
+            no_padding_2_padding=self.padding.no_padding_2_padding, DataProto=NS(from_tensordict=lambda x: Proto(x))),
+            ['_compute_old_log_prob'], 'RayPPOTrainer')._compute_old_log_prob
+        cfg = OmegaConf.create({'actor_rollout_ref':{'actor':{}}})
+        def compute(td):
+            lengths = td['input_ids'].offsets().diff().tolist()
+            self.assertEqual(sorted(lengths), [4]*96+[24]*16)
+            flat = td['input_ids'].values().float()*0-.25
+            return self.tu.get_tensordict({'log_probs':flat,'entropy':flat*0}, {'metrics':{'mfu':0}})
+        for selection in ('grpo','ppo-mc'):
+            models = {}
+            previous = []
+            for i in (1,2):
+                req = request(selection=selection)
+                rows, eps = fixture(req,i)
+                previous += eps
+                with patch.dict('os.environ', AGL_PPO_RUN_DIR=self.tmp.name), patch.object(admit, 'reviewed_episodes', return_value=previous):
+                    batch, metrics = self.adapter(recovery_request=req).get_train_data_batch(rows, global_steps=i)
+                rep = admit.representation(batch,rows,metrics)
+                self.assertEqual((rep['fragment_rows'],rep['target_tokens'],rep['masked_response_context_tokens']), (112,384,160))
+                if i == 1 and selection == 'grpo':
+                    print('Recovery CPU representation:', json.dumps({k:v for k,v in rep.items() if k not in
+                          ('active_lengths','fragments_per_rollout')}, sort_keys=True))
+                    for key in ('response_mask','rollout_log_probs','input_ids','position_ids'):
+                        changed = batch.batch[key].clone()
+                        batch.batch[key][0,-1 if key=='input_ids' else 0] += 1
+                        if key == 'position_ids':
+                            batch.batch[key][0,3071] += 1
+                        with self.assertRaises(ValueError): admit.representation(batch,rows,metrics)
+                        batch.batch[key] = changed
+                result, _ = old(NS(config=cfg,actor_rollout_wg=NS(compute_log_prob=compute)),batch)
+                b = batch.batch
+                b['old_log_probs'] = result.batch['old_log_probs']
+                b['values'] = torch.zeros_like(b['old_log_probs'])+.2
+                b['token_level_rewards'] = b['token_level_scores']
+                diff = admit.old_probabilities(batch,selection=='ppo-mc')
+                self.assertEqual(diff['max_abs_delta'],.5)
+                b['old_log_probs'][0,0] = float('inf')
+                with self.assertRaises(ValueError): admit.old_probabilities(batch,False)
+                b['old_log_probs'][0,0] = -.25
+                runtime.advantages(batch, adv_estimator='grpo' if selection=='grpo' else 'gae')
+                for role in (('actor',) if selection=='grpo' else ('actor','critic')):
+                    value, grad, calls, _ = self.update(False,role,admitted_batch=Proto(b.clone(),batch.non_tensor_batch),
+                                                        pack=pack,models=models)
+                    module, optimizer, _ = models[role]
+                    self.assertEqual(optimizer.state[module.weight]['step'].item(),i)
+                    self.assertEqual(calls,[1]*i)
+                    self.assertTrue(torch.isfinite(grad).all() and torch.isfinite(value).all())
+            probe = request('collection-probe', selection)
+            rows,eps = fixture(probe,1)
+            with patch.dict('os.environ', AGL_PPO_RUN_DIR=self.tmp.name), patch.object(admit, 'reviewed_episodes', return_value=eps):
+                with self.assertRaises(runtime.CollectionOnlyComplete):
+                    self.adapter(collection_only=True,recovery_request=probe).get_train_data_batch(rows, global_steps=1)
+
+    def test_recovery_context_boundary_rejects_without_truncating(self):
+        from experiment import recovery_admission as admit
+        from recovery_learning_support import request
+        from test_matched_recovery_learning import fixture
+        req = request()
+        rows, eps = fixture(req,1)
+        r = rows[0]
+        t = r.triplets[0]
+        t.prompt['token_ids'] = [1]*3072
+        t.response.update(token_ids=[7]*1024, log_probs=[-.5]*1024)
+        r.triplets = [t]
+        r.triplet_events = [r.triplet_events[0], r.triplet_events[-1]]
+        r.triplet_events[0]['data'].update(prompt_token_ids=t.prompt['token_ids'],response_token_ids=t.response['token_ids'],
+                                          response_log_probs=t.response['log_probs'])
+        eps[0].update(llm_calls=1, prompt_tokens=[3072],completion_tokens=[1024])
+        with patch.dict('os.environ',AGL_PPO_RUN_DIR=self.tmp.name), patch.object(admit,'reviewed_episodes',return_value=eps):
+            adapter = self.adapter(recovery_request=req)
+            batch, metrics = adapter.get_train_data_batch(rows, global_steps=1)
+            self.assertEqual(admit.representation(batch,rows,metrics)['max_active_position'],4095)
+            t.prompt['token_ids'].append(1)
+            eps[0]['prompt_tokens'][0] += 1
+            with self.assertRaises(ValueError): adapter.get_train_data_batch(rows,global_steps=1)
 
     def test_full_pinned_microbatch_backward_clip_adamw_fragment_invariance(self):
         for role in ('actor','critic'):

@@ -12,9 +12,10 @@ import time
 from types import SimpleNamespace
 
 try:
-    from . import launch, matched_contract as c, ppo_contract, summarize, reader_modes as modes
+    from . import recovery_learning as learning, launch, matched_contract as c, ppo_contract, summarize, reader_modes as modes
     from .request_transport import environment as request_environment
 except ImportError:
+    import recovery_learning as learning
     import launch
     import matched_contract as c
     import ppo_contract
@@ -109,6 +110,12 @@ def configuration(request, model, run):
             cfg['agentlightning.trace_aggregator.trajectory_max_prompt_length'] = limits['trajectory_max_prompt_length']
             cfg['agentlightning.trace_aggregator.trajectory_max_response_length'] = limits['trajectory_max_response_length']
             cfg['actor_rollout_ref.rollout.max_model_len'] = limits['max_model_len']
+    if modes.phase(plan) == modes.RECOVERY_LEARNING:
+        cfg['data.shuffle'] = stage['name'] == 'training'
+        cfg['data.validation_shuffle'] = False
+        data = Path('/data')/plan['profile']['paths']['data']
+        train_file, val_file = learning.routes(request, data, run)
+        cfg.update({'data.train_files': [train_file], 'data.val_files': [val_file]})
     if stage['name'] == 'checkpoint-eval':
         checkpoint = run.parent/'training/checkpoints'/f"global_step_{job['steps']}"
         cfg.update({'trainer.resume_mode': 'resume_path', 'trainer.resume_from_path': str(checkpoint)})
@@ -126,7 +133,9 @@ def make_plan(request, bundle, repo, model, data, python, run, port):
     plan.update(protocol=c.PROTOCOL, algorithm=request['job']['algorithm'], request=request,
                 phase=request['stage']['name'], policy_version=c.PROTOCOL,
                 overrides=[launch.dot(k, v) for k, v in cfg.items()])
-    if calibration(request):
+    if modes.phase(request['plan']) == modes.RECOVERY_LEARNING:
+        plan['train_file'], plan['eval_file'] = learning.routes(request, data, run)
+    elif calibration(request):
         # Both upstream dataset arguments are routed explicitly to run-local copies of the
         # declared development file. No launcher default (train_main/eval_main) remains.
         plan['train_file'], plan['eval_file'] = calibration(request).routes(run)
@@ -146,7 +155,13 @@ def validate_resolved(config, plan):
                 raise ValueError('Ray environment drift')
         elif node != value:
             raise ValueError(f'Matched resolved configuration drift: {key}')
-    if calibration(plan['request']):
+    if modes.phase(plan['request']['plan']) == modes.RECOVERY_LEARNING:
+        data = Path('/data')/plan['request']['plan']['profile']['paths']['data']
+        if [plan['train_file'], plan['eval_file']] != learning.routes(plan['request'], data, Path(plan['resolved_config']).parent):
+            raise ValueError('Qualification dataset routing changed')
+        if config['data'].get('gen_batch_size', 8) != 8 or config['agentlightning']['async_rollout']['enabled']:
+            raise ValueError('Qualification requires synchronous batches of eight')
+    elif calibration(plan['request']):
         run = Path(plan['resolved_config']).parent
         if [plan['train_file'], plan['eval_file']] != list(calibration(plan['request']).routes(run)):
             raise ValueError('Calibration dataset routing changed')
@@ -182,6 +197,8 @@ def validate_inputs(request, model, data, repo, bundle, contract=c):
             from reader_assets import inspect, owned_path
         # A calibration stage is model-facing: verify development files only.
         scope = {'scope': 'development'} if calibration(request) else {}
+        if modes.phase(request['plan']) == modes.RECOVERY_LEARNING:
+            scope = {'scope': learning.scope(request)}
         if inspect(model, data, owned_path('/data', request['plan']['profile']['paths']['staging']), task=request['plan']['profile']['task'], **scope) != request['plan']['assets']:
             raise ValueError('Actual reader assets differ from exact plan manifests')
         return
@@ -222,7 +239,15 @@ def checkpoint_identity(path, request, run):
         if not all(any(Path(n).name.startswith(prefix) for n in files) for prefix in ('model_', 'optim_', 'extra_state_')):
             raise ValueError(f'Incomplete native {role} checkpoint')
         inventory[role] = files
-    return {'protocol': c.PROTOCOL, 'algorithm': request['job']['algorithm'], 'step': request['job']['steps'],
+    extra = {}
+    if modes.phase(request['plan']) == modes.RECOVERY_LEARNING:
+        members = list(path.rglob('*'))
+        if (any(p.is_symlink() for p in members) or {p.name for p in path.iterdir() if p.is_dir()} != set(roles)
+                or not (path/'data.pt').is_file()):
+            raise ValueError('Unexpected native role directories or missing dataloader state')
+        extra['trainer_files'] = {p.name: {'bytes': p.stat().st_size, 'sha256': c.file_hash(p)}
+                                  for p in path.iterdir() if p.is_file() and p.name != 'matched_identity.json'}
+    return {**extra, 'protocol': c.PROTOCOL, 'algorithm': request['job']['algorithm'], 'step': request['job']['steps'],
             'plan_sha256': request['plan_sha256'], 'roles': inventory,
             'resolved_config_sha256': c.file_hash(run/'resolved_config.json')}
 
@@ -245,6 +270,17 @@ def complete_stage(run, request, data):
     stage, job = request['stage']['name'], request['job']
     result = {'protocol': c.PROTOCOL, 'plan_sha256': request['plan_sha256'], 'stage': stage}
     terminal = [e for e in events if e['event']=='trainer_returned']
+    recovery = modes.phase(request['plan']) == modes.RECOVERY_LEARNING
+    if recovery:
+        try:
+            from .recovery_learning_evidence import stage_report
+        except ImportError:
+            from recovery_learning_evidence import stage_report
+        result['recovery_qualification'] = stage_report(run, request, events)
+        if stage == 'collection-probe':
+            if list((run/'checkpoints').glob('global_step_*')):
+                raise ValueError('Probe unexpectedly saved a checkpoint')
+            return result
     if calibration(request):
         # Schema-specific evidence rules; never the qualification or asset-development rules.
         result.update(calibration(request).complete(run, request, events))
@@ -285,7 +321,7 @@ def complete_stage(run, request, data):
             if len(calls) != job['steps'] or max(e['count'] for e in calls) != job['steps']:
                 raise ValueError(f'Wrong actual {role} optimizer count')
         path = run/'checkpoints'/f"global_step_{job['steps']}"
-        if c.exploratory.is_exploratory(request['plan']) and sorted((run/'checkpoints').glob('global_step_*')) != [path]:
+        if (recovery or c.exploratory.is_exploratory(request['plan'])) and sorted((run/'checkpoints').glob('global_step_*')) != [path]:
             raise ValueError('Exploratory checkpoint policy requires exactly the final checkpoint; no automatic deletion')
         identity = checkpoint_identity(path, request, run)
         with (path/'matched_identity.json').open('x') as f:
@@ -298,9 +334,10 @@ def complete_stage(run, request, data):
         if [e['step'] for e in events if e['event']=='weight_refresh'] != [expected_step]:
             raise ValueError('Evaluation did not refresh the declared checkpoint/base')
         report = summarize.summarize(run, stage, 'val')
-        checked = summarize.compare(report, report, data/'eval_main.jsonl')
-        if not checked['available']:
-            raise ValueError(f'Incomplete evaluation: {checked["reasons"]}')
+        if not recovery:
+            checked = summarize.compare(report, report, data/'eval_main.jsonl')
+            if not checked['available']:
+                raise ValueError(f'Incomplete evaluation: {checked["reasons"]}')
         result['evaluation'] = report[0]
         if stage == 'checkpoint-eval':
             result['checkpoint_sha256'] = verify_checkpoint(run.parent/'training/checkpoints'/f"global_step_{job['steps']}", request)
@@ -329,10 +366,12 @@ def main():
     bundle = Path(__file__).parent
     validate_inputs(request, model, data, repo, bundle, contract)
     if request['stage']['name']=='checkpoint-eval':
-        verify_checkpoint(run.parent/'training/checkpoints'/f"global_step_{request['job']['steps']}", request)
+        before_load = verify_checkpoint(run.parent/'training/checkpoints'/f"global_step_{request['job']['steps']}", request)
     (run/'logs').mkdir()
     plan, commands = make_plan(request, bundle, repo, model, data, repo/'.venv/bin/python', run, launch.free_port())
-    if calibration(request):
+    if modes.phase(request['plan']) == modes.RECOVERY_LEARNING:
+        learning.materialize(request, data, run, commands)
+    elif calibration(request):
         if calibration(request).materialize(request, data, run, commands) != [plan['train_file'], plan['eval_file']]:
             raise ValueError('Calibration dataset routing changed')
     elif request['plan'].get('phase') == 'collection-only':
@@ -356,6 +395,10 @@ def main():
     if code:
         raise SystemExit(code)
     completion = complete_stage(run, request, data)
+    if modes.phase(request['plan']) == modes.RECOVERY_LEARNING and request['stage']['name'] == 'checkpoint-eval':
+        if before_load != completion['checkpoint_sha256']:
+            raise ValueError('Native checkpoint changed during reload')
+        completion['checkpoint_before_load_sha256'] = before_load
     if contract is not c:
         try:
             from .reader_evidence import complete

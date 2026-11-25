@@ -139,21 +139,30 @@ def episode_row(records, request, evidence_class='live-model'):
     trace. Carries tool names as sampled and hashes of arguments, no answer text,
     and no label beyond the trusted family name.
     """
-    stage = stage_declaration(request)
+    if modes.phase(request['plan']) == modes.RECOVERY_LEARNING:
+        stage = request['plan']['qualification']['stages'][request['stage']['name']]
+    else:
+        stage = stage_declaration(request)
     outcome = reader_integration.episode_outcome(records)
     if outcome not in ('complete_final', 'complete_recovered', 'terminal_policy_failure'):
         raise ValueError('Incomplete or untrusted episode; no reward is admitted')
     chains = reader_integration.chains(records, request, evidence_class=evidence_class)
     episode = next(r for r in records if r['kind'] == 'episode')
     out = episode['outputs']
-    if episode['case_id'] not in stage['case_ids'] or episode['eval_split'] != 'development':
-        raise ValueError('Episode is outside the declared development panel')
-    case = dict(next(r for r in task.rows('development') if r['case_id'] == episode['case_id']))
+    if episode['case_id'] not in stage['case_ids'] or episode['eval_split'] != stage['split']:
+        raise ValueError('Episode is outside the declared panel')
+    case = dict(next(r for r in task.rows(stage['split']) if r['case_id'] == episode['case_id']))
     if episode['inputs'] != {'question': case['question']} or episode.get('episode_policy') != task.EPISODE_POLICY['version']:
         raise ValueError('Episode request or episode policy differs')
     trusted = task.expected(case['question'], case['result'])
     actions = [r for r in records if r['kind'] == 'action_outcome']
     llms = [r for r in records if r['kind'] == 'llm']
+    if modes.phase(request['plan']) == modes.RECOVERY_LEARNING:
+        try:
+            from .recovery_learning import verify_history
+        except ImportError:
+            from recovery_learning import verify_history
+        verify_history(case['question'], llms, actions)
     served = served_evidence(records, llms)
     ledger = [{'tool': a['inputs']['call']['name'], 'arguments': json.loads(a['inputs']['call']['arguments']),
                'content': a['inputs']['observation']['content']} for a in actions if a['outputs']['successful_tool_call']]

@@ -41,6 +41,36 @@ def baseline_integration_admitted(plan, job, completion):
         return False
 
 
+def recovery_stage_admitted(plan, job, position, result, sha):
+    """Require the stage-specific worker admission before dispatching a dependent stage."""
+    stage = job['stages'][position]
+    try:
+        try:
+            from . import recovery_calibration, reader_contract
+        except ImportError:
+            import recovery_calibration
+            import reader_contract
+        proof = result['completion']
+        audit = proof['recovery_qualification']
+        spec = plan['qualification']['stages'][stage['name']]
+        recovery_calibration.check_table(spec, audit['episodes'])
+        roles = ['actor','critic'] if job['algorithm'] == reader_contract.ALGORITHMS[1] else ['actor']
+        return (proof['source_sha256'] == reader_contract.digest(plan['source'])
+                and proof['configuration_sha256'] == plan['configuration_sha256']
+                and proof['plan_sha256'] == sha and result['output'] == stage['output']
+                and audit['optimizer_calls'] == {role:spec['updates'] for role in roles}
+                and all(e['evidence_class'] == 'live-model' for e in audit['episodes'])
+                and proof['worker']['call_id'] == result['call_id']
+                and proof['worker']['container_id'] == result['container_id']
+                and proof['wandb_id'] == stage['wandb']['id'] and audit['plan_sha256'] == sha
+                and audit['schema'] == 'recovery-qualification-evidence-v1' and audit['stage'] == stage['name']
+                and audit['declared'] == spec and audit['episodes_admitted'] == spec['expected_episodes']
+                and len(audit['episodes']) == spec['expected_episodes']
+                and len(audit['collections']) == len(spec['batches']))
+    except (KeyError, TypeError, ValueError):
+        return False
+
+
 def run(plan, dispatch, get_result, cancel, read_heartbeat, stop_requested, persist,
         clock=time.time, sleep=time.sleep):
     """Sole aggregate-index writer. Every spawn is recorded before polling another call.
@@ -50,9 +80,15 @@ def run(plan, dispatch, get_result, cancel, read_heartbeat, stop_requested, pers
     """
     plan_sha256 = hashlib.sha256(json.dumps(plan, sort_keys=True, separators=(',', ':'), allow_nan=False).encode()).hexdigest()
     exploratory = plan['phase'] in ('exploratory-qualification','exploratory')
+    recovery = plan.get('schema') == 'reader-task-v2' and plan['phase'] == 'recovery-learning-qualification-v1'
+    # Recovery must journal an interrupted provider exchange, including during cleanup.
+    provider_errors = BaseException if recovery else Exception
     start = clock()
     index = {'study_key': key(plan), 'status': 'started', 'started_at': start, 'plan': plan,
              'jobs': {j['job_id']: {'status': 'planned', 'stages': []} for j in plan['jobs']}}
+    if recovery:
+        rate = plan['bounds']['all_resource_hourly_ceiling_usd']
+        index['supervisor_reservation_usd'] = plan['bounds']['supervisor_seconds']*rate/3600
     active = {}
     pending = [(job, 0) for job in plan['jobs']]
     uncertain = False
@@ -61,6 +97,13 @@ def run(plan, dispatch, get_result, cancel, read_heartbeat, stop_requested, pers
         index['gpu_seconds_upper_bound_used'] = sum(
             (r.get('finished_at', clock())-r['submitted_at']) for job in index['jobs'].values()
             for r in job['stages'] if r.get('call_id'))
+        if recovery:
+            stages = [s for job in index['jobs'].values() for s in job['stages'] if 'reservation' in s]
+            index['worker_seconds_reserved'] = sum(s['reservation']['seconds'] for s in stages)
+            # An absent acknowledgement or merely requested cancellation is not an end-of-billing receipt.
+            index['gpu_seconds_upper_bound_used'] = sum(
+                s['reservation']['seconds'] if s['status'] == 'unknown' or s.get('cancellation_requested')
+                else s.get('finished_at',clock())-s['submitted_at'] for s in stages)
         worker_rate = plan['bounds']['all_resource_hourly_ceiling_usd']
         index['worker_cost_usd_upper_bound_used'] = index['gpu_seconds_upper_bound_used']/3600*worker_rate
         index['cost_usd_upper_bound_used'] = index['worker_cost_usd_upper_bound_used'] + (clock()-start)/3600*(plan['bounds']['supervisor_hourly_ceiling_usd'] if exploratory else worker_rate)
@@ -70,15 +113,20 @@ def run(plan, dispatch, get_result, cancel, read_heartbeat, stop_requested, pers
         stage = job['stages'][position]
         receipt = {'stage': stage['name'], 'output': stage['output'], 'status': 'planned',
                    'wandb': stage['wandb'], 'submitted_at': clock(), 'call_id': None}
+        if recovery:
+            seconds = plan['bounds']['stage_seconds']
+            receipt['reservation'] = {'seconds':seconds, 'usd':seconds*rate/3600}
         state['stages'].append(receipt)
         save()
         try:
             call_id = dispatch(job, stage)
-        except Exception as exc:
+        except provider_errors as exc:
             # Spawn may have reached the server. No ID means no safe targeted cancel.
             receipt.update(status='unknown', error=f'spawn outcome uncertain: {type(exc).__name__}: {exc}')
             state['status'] = 'unknown'
             save()
+            if not isinstance(exc, Exception):
+                raise
             return
         receipt.update(status='submitted', call_id=call_id)
         state['status'] = 'submitted'
@@ -86,6 +134,8 @@ def run(plan, dispatch, get_result, cancel, read_heartbeat, stop_requested, pers
         save()
     try:
         while active or pending:
+            if recovery and any(s['status'] in ('unknown','failed','cancelled') for s in index['jobs'].values()):
+                break  # one lane; preserve the failed attempt and all undispatched work
             # Fill free slots immediately, never wait for a whole sequential batch.
             while pending and len(active) < plan['bounds']['concurrency'] and not uncertain and not stop_requested() and clock()-start < plan['bounds']['supervisor_seconds']-60:
                 job, position = pending.pop(0)
@@ -152,6 +202,8 @@ def run(plan, dispatch, get_result, cancel, read_heartbeat, stop_requested, pers
                             or result.get('completion', {}).get('plan_sha256') != plan_sha256
                             or result['completion'].get('stage') != receipt['stage']):
                         receipt.update(status='unknown', error='Missing or mismatched durable completion proof')
+                    elif recovery and not recovery_stage_admitted(plan, job, position, result, plan_sha256):
+                        receipt.update(status='failed', result=result, error='recovery_stage_evidence_incomplete')
                     else:
                         receipt.update(status='completed', result=result)
                 receipt['finished_at'] = clock()
@@ -177,10 +229,12 @@ def run(plan, dispatch, get_result, cancel, read_heartbeat, stop_requested, pers
                 sleep(5)
     except BaseException:
         for jid, (_, _, receipt) in active.items():
+            if recovery:
+                receipt['cancellation_requested'] = True
             try:
                 cancel(receipt['call_id'])
                 receipt.update(status='cancelled', error='supervisor_interrupted')
-            except Exception as exc:
+            except provider_errors as exc:
                 receipt.update(status='unknown', error=str(exc))
             receipt['finished_at'] = clock()
             index['jobs'][jid]['status'] = receipt['status']

@@ -210,7 +210,7 @@ class CollectionOnlyComplete(Exception):
     """Stop after admitted real training collection, before advantage/optimizer work."""
 
 
-def instrument_adapter(module, *, collection_only=False, calibration=False):
+def instrument_adapter(module, *, collection_only=False, calibration=False, recovery_request=None):
     # Reuse the original fragment/context mapper, not the legacy selection wrapper.
     audit._instrument_adapter(module)
     original = module.RolloutAdapter.get_train_data_batch
@@ -218,7 +218,21 @@ def instrument_adapter(module, *, collection_only=False, calibration=False):
         ids = [r.rollout_id for r in completed_rollouts]
         if len(set(ids)) != len(ids):
             raise ValueError('Duplicate sampled rollout IDs')
+        if recovery_request is not None:
+            try:
+                from . import recovery_admission as admission
+            except ImportError:
+                import recovery_admission as admission
+            episodes = admission.reviewed_episodes(Path(os.environ['AGL_PPO_RUN_DIR']), recovery_request,
+                                                   completed_rollouts, self.tokenizer)
+            admission.collection_inputs(recovery_request, global_steps, completed_rollouts, episodes)
         out, metrics = original(self, completed_rollouts, global_steps=global_steps)
+        if recovery_request is not None:
+            report = admission.representation(out, completed_rollouts, metrics)
+            audit.emit('recovery_collection', iteration=global_steps, policy_step=global_steps-1,
+                       episodes=[{'rollout': r.rollout_id, 'case_id': r.input['case_id'], 'slot': r.sample_idx_in_step,
+                                  'reward': r.final_reward, 'group': r.data_id} for r in completed_rollouts],
+                       representation=report)
         observed = Counter(out.non_tensor_batch['rollout_id_list'])
         audit.emit('collection_manifest', iteration=global_steps, trajectories=[
             {'rollout': r.rollout_id, 'group': r.data_id, 'case_id': (r.input or {}).get('case_id'),
@@ -321,9 +335,20 @@ def register_in_worker():
         import reader_modes as modes
     # Mode selection only. Historical plans dispatch by stage name as before.
     collection_only = modes.collection_only(request['plan'], request['stage'])
-    instrument_adapter(rollout_adapter, collection_only=collection_only,
+    recovery = modes.phase(request['plan']) == modes.RECOVERY_LEARNING
+    instrument_adapter(rollout_adapter, collection_only=collection_only, recovery_request=request if recovery else None,
                        calibration=modes.phase(request['plan']) == modes.CALIBRATION)
     trainer.compute_advantage = advantages
+    if recovery:
+        try:
+            from .recovery_admission import old_probabilities
+        except ImportError:
+            from recovery_admission import old_probabilities
+        def checked_advantages(batch, **kwargs):
+            comparison = old_probabilities(batch, kwargs['adv_estimator'] == 'gae')
+            audit.emit('recovery_old_probabilities', iteration=audit._STATE['step'], **comparison)
+            return advantages(batch, **kwargs)
+        trainer.compute_advantage = checked_advantages
     trainer.normalize_advantages_by_rollout = normalize
     cls = trainer.AgentLightningRayPPOTrainer
     cls._train_step = patch_train_step(cls._train_step)

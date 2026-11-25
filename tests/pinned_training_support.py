@@ -19,6 +19,9 @@ LOCK = json.loads((ROOT/'experiment/ppo_source_lock.json').read_text())['files']
 for package, files in json.loads((ROOT/'experiment/matched_source_lock.json').read_text()).items():
     LOCK[package].update(files)
 
+for package, files in json.loads((ROOT/'tests/recovery_loader_lock.json').read_text()).items():
+    LOCK[package].update(files)
+
 
 def source(package, relative):
     path = ROOTS[package]/relative

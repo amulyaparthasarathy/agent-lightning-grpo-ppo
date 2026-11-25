@@ -614,5 +614,55 @@ class PromptTests(unittest.TestCase):
             self.assertEqual(recovery_prompt.largest_inventory(count)[:3], (selection['largest_observation_asset_id'], selection['largest_observation_as_of'], selection['largest_observation_tokens']))
 
 
+
+class QualificationHarnessTests(unittest.TestCase):
+    def test_training_split_recovered_and_typed_terminal_outcomes(self):
+        from recovery_learning_support import request
+        from recovery_harness_support import run_episode, RAW, SOLVE
+        req = request('collection-probe')
+        cid = req['plan']['qualification']['stages']['collection-probe']['case_ids'][0]
+        case = next(r for r in task.rows('train') if r['case_id'] == cid)
+        invalid = RAW('lookup_asset', '{}')
+        for script, outcome in [([invalid, SOLVE, SOLVE, SOLVE, SOLVE], 'complete_recovered'),
+                                ([invalid, invalid], 'terminal_policy_failure')]:
+            with tempfile.TemporaryDirectory() as tmp:
+                r = run_episode(Path(tmp), script, row=case, request=req, route='train')
+                reviewed = calibration.episode_row(r['records'], req, 'scripted-inference')
+                self.assertEqual(reviewed['outcome'], outcome)
+                self.assertEqual(reviewed['reward'], int(outcome == 'complete_recovered'))
+                self.assertEqual(r['requests'][0]['messages'][-1]['content'], case['question']+'\n'+task.PROMPT)
+                with self.assertRaises(ValueError):
+                    calibration.episode_row(r['records'], request('training'), 'scripted-inference')
+
+    def test_gateway_prompt_integrity_across_scripted_collections(self):
+        from types import SimpleNamespace as NS
+        from experiment import recovery_admission, recovery_prompt
+        from recovery_learning_support import request
+        req = request('training')
+        case = next(r for r in task.rows('train') if r['case_id'] == req['plan']['qualification']['stages']['training']['case_ids'][0])
+        tokenizer = NS(encode=lambda text, **_: list(text.encode()))
+        with tempfile.TemporaryDirectory() as tmp:
+            r = run_episode(tmp, [RAW('get_asset','{'), SOLVE, SOLVE, SOLVE, FINAL], row=case,
+                            request=req, route='train', simulate_live_labels=True)
+            self.assertIsNone(r['error'])
+            episode = next(e for e in r['records'] if e['kind'] == 'episode')
+            rollout = NS(rollout_id=episode['rollout_id'], events=[], triplets=[])
+            for body in r['requests']:
+                try:
+                    ids = tokenizer.encode(recovery_prompt.render(body['messages'],body.get('tools')))
+                except json.JSONDecodeError:
+                    ids = [101,102]  # synthetic original gateway IDs for a non-renderable continuation
+                choice = {'token_ids':[42], 'logprobs':{'content':[{'logprob':-.5}]}}
+                rollout.events.append({'event_type':'model_request','rollout_id':rollout.rollout_id,
+                    'attempt_id':episode['attempt_id'], 'data':{'status':'ok', 'request':body,
+                    'response':{'prompt_token_ids':ids,'choices':[choice]}}})
+                rollout.triplets.append(NS(prompt={'token_ids':ids}, response={'token_ids':[42],'log_probs':[-.5]}))
+            rows = recovery_admission.reviewed_episodes(Path(tmp),req,[rollout],tokenizer)
+            self.assertEqual([row['outcome'] for row in rows],['complete_recovered'])
+            rollout.events[-1]['data']['request']['messages'][-1]['content'] = 'corrupted'
+            with self.assertRaisesRegex(ValueError, 'gateway request'):
+                recovery_admission.reviewed_episodes(Path(tmp),req,[rollout],tokenizer)
+
+
 if __name__ == '__main__':
     unittest.main()

@@ -799,7 +799,9 @@ def verify(directory, scope='all'):
     declared files must exist as regular files but are never opened, so no
     final-evaluation record can reach a calibration stage through this path.
     """
-    if scope not in ('all', 'development'):
+    scopes = {'all': FILES, 'development': DEVELOPMENT_FILES, 'qual-dev': ('dev_panel.parquet',),
+              'qual-train': ('train_main.parquet',), 'qual-train-dev': ('train_main.parquet', 'dev_panel.parquet')}
+    if scope not in scopes:
         raise ValueError('Unknown dataset verification scope')
     directory = Path(directory)
     m = json.loads((directory/'data_manifest.json').read_text(), object_pairs_hook=unique_object)
@@ -812,7 +814,7 @@ def verify(directory, scope='all'):
     if hash_file(directory/'world.json') != m['world_file_sha256']:
         raise ValueError('Changed world bytes')
     trusted = cases()
-    for name in (FILES if scope == 'all' else DEVELOPMENT_FILES):
+    for name in scopes[scope]:
         if hash_file(directory/name) != m['files'][name]['sha256']:
             raise ValueError('Changed dataset bytes')
         if read_rows(directory/name) != trusted[name]:
