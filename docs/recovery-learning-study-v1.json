@@ -34,7 +34,15 @@
       "unknown_tool"
     ]
   },
+  "model_id": "meta-llama/Llama-3.2-3B-Instruct",
   "model_revision": "0cb88a4f764b7a12671c53f0838cd831a0843b95",
+  "frozen_sources": {
+    "recovery_agent.py": "f77eebc1050b4ad50247b7beff403c7fea5345774eb72eaed811fd9355f39724",
+    "recovery_task.py": "44d904f95924e2438d682357d273e5068bda6965688380301379e34c85e4e858",
+    "recovery_prompt.py": "c1410858ebdb28e0aca7d146176cb1a474a2b49aa5726dc29e48cf1890e318ef",
+    "observed_runtime.py": "81ff2831c901091a784f0b11e72de9a13c2db5ff05e0756b1c4fb97c41ca2fa9",
+    "ppo_source_lock.json": "9d211065a5dd984d5fdfc43c63cab6c38e86ff36a2f4cac9ff0b9ab63302665a"
+  },
   "tokenizer_sha256": "79e3e522635f3171300913bb421464a87de6222182a0570b9b2ccba2a964b2b4",
   "chat_template_sha256": "a718674808440b537a553c15e0557b5b45d6d76e49ad9ddbc1a9e92447843e2c",
   "parser": "llama3_json",
@@ -95,6 +103,17 @@
   "samples": 4,
   "training_temperature": 1,
   "terminal_checkpoint_only": 16,
+  "automatic_retries": 0,
+  "allow_seed_replacement": false,
+  "reward_early_stopping": false,
+  "intermediate_tuning": false,
+  "qualification_warm_start": false,
+  "policy_blocks": {
+    "train": 32,
+    "development": 6,
+    "final": 16
+  },
+  "cases_per_block": 4,
   "checkpoint_selection": "all three terminal checkpoints",
   "optimization": {
     "estimator": "grpo",

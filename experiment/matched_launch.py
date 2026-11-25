@@ -113,6 +113,9 @@ def configuration(request, model, run):
     if modes.phase(plan) == modes.RECOVERY_LEARNING:
         cfg['data.shuffle'] = stage['name'] == 'training'
         cfg['data.validation_shuffle'] = False
+        data = Path('/data')/plan['profile']['paths']['data']
+        train_file, val_file = learning.routes(request, data, run)
+        cfg.update({'data.train_files': [train_file], 'data.val_files': [val_file]})
     if stage['name'] == 'checkpoint-eval':
         checkpoint = run.parent/'training/checkpoints'/f"global_step_{job['steps']}"
         cfg.update({'trainer.resume_mode': 'resume_path', 'trainer.resume_from_path': str(checkpoint)})

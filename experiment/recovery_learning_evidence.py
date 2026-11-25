@@ -6,13 +6,14 @@ from pathlib import Path
 import hashlib
 
 try:
-    from . import reader_contract as c, reader_evidence, reader_integration, recovery_calibration as cal, recovery_learning as learning
+    from . import reader_contract as c, reader_evidence, reader_integration, recovery_calibration as cal, recovery_learning as learning, summarize
 except ImportError:
     import reader_contract as c
     import reader_evidence
     import reader_integration
     import recovery_calibration as cal
     import recovery_learning as learning
+    import summarize
 
 
 def collection(event, manifest, batch, episodes):
@@ -38,6 +39,20 @@ def collection(event, manifest, batch, episodes):
         groups[e['group']].add(row['case_id'])
     total = sum(sum(r['completion_tokens']) for r in rows.values())
     lengths = rep['active_lengths']
+    tensors = rep['tensors']
+    n = rep['fragment_rows']
+    layout = {'input_ids': (5120, 'int64'), 'attention_mask': (5120, 'int64'), 'position_ids': (5120, 'int64'),
+              'prompts': (3072, 'int64'), 'responses': (2048, 'int64'), 'response_mask': (2048, 'int64'),
+              'token_level_scores': (2048, 'float32'), 'rollout_log_probs': (2048, 'float32'), 'is_drop_mask': (1, 'bool')}
+    for key, (width, dtype) in layout.items():
+        size = {'bool': 1, 'int64': 8, 'float32': 4}[dtype]
+        expected = {'shape': [n] if key == 'is_drop_mask' else [n,width],
+                    'dtype': 'torch.'+dtype, 'bytes': n*width*size}
+        if tensors[key] != expected:
+            raise ValueError('Invalid adapter tensor inventory: '+key)
+    context = rep['masked_response_context_tokens']
+    if type(context) != int or not 0 <= context <= sum(lengths)-total-n:
+        raise ValueError('Invalid attended prompt/context accounting')
     if (len(groups) != 8 or any(len(g) != 1 for g in groups.values())
             or rep['target_tokens'] != total or rep['generated_tokens'] != total
             or rep['fragment_rows'] != sum(rep['fragments_per_rollout'].values())
@@ -73,6 +88,14 @@ def stage_report(run, request, events=None, evidence_class='live-model'):
             or len(by_event['development_collection_admitted']) != int(probe)):
         raise ValueError('Unexpected trainer, refresh, finish or checkpoint sequence')
     roles = ('actor', 'critic') if request['job']['algorithm'] == c.ALGORITHMS[1] else ('actor',)
+    critic = by_event['critic_preupdate']
+    if [e['iteration'] for e in critic] != (list(range(1, steps+1)) if 'critic' in roles else []):
+        raise ValueError('Missing or unexpected critic pre-update diagnostics')
+    for event in critic:
+        metrics = event['prediction']
+        if (metrics['prediction_time'] != 'fresh-rollout pre-update'
+                or any(not math.isfinite(metrics[k]) for k in ('mae', 'mse', 'bias', 'target_variance', 'vf_explained_var_raw'))):
+            raise ValueError('Invalid critic prediction diagnostics')
     for key in ('optimizer_step', 'gradient_step'):
         if Counter(e['role'] for e in by_event[key]) != Counter({role: steps for role in roles}):
             raise ValueError('Unexpected gradient or optimizer role/count')
@@ -115,7 +138,7 @@ def stage_report(run, request, events=None, evidence_class='live-model'):
         losses = reader_evidence.loss_evidence([json.loads(l) for l in (run/'metrics.jsonl').read_text().splitlines()], roles)
     return {'schema': 'recovery-qualification-evidence-v1', 'stage': name, 'plan_sha256': request['plan_sha256'],
             'declared': spec, 'episodes': rows, 'collections': collections, 'old_probabilities': by_event['recovery_old_probabilities'],
-            'optimizer_calls': {role: steps for role in roles}, 'losses': losses, 'informative_groups': informative,
+            'optimizer_calls': {role: steps for role in roles}, 'losses': losses, 'critic_preupdate': critic, 'informative_groups': informative,
             'strict_successes': sum(int(e['reward']) for e in rows), 'episodes_admitted': len(rows)}
 
 
@@ -166,8 +189,26 @@ def review(plan, index, read, local):
                         or integration != reader_integration.report(run, request)):
                     raise ValueError('Observability or raw integration identity differs')
                 report = stage_report(run, request)
-                if report != proof['recovery_qualification']:
+                if proof['protocol'] != c.historical.PROTOCOL or report != proof['recovery_qualification']:
                     raise ValueError('Worker summary differs from raw traces and audit')
+                if name in ('baseline', 'checkpoint-eval'):
+                    expected = summarize.summarize(run, name, 'val')[0]
+                    actual = proof['evaluation'].copy()
+                    # The collector relocates run directories from the volume to local storage.
+                    actual['run_dir'] = expected['run_dir']
+                    if actual != expected:
+                        raise ValueError('Evaluation summary differs from raw trajectories')
+                if name == 'training':
+                    counts = report['informative_groups']
+                    diags = proof['learning_diagnostics']
+                    expected = [{'iteration': i+1, 'generated_tokens': e['representation']['generated_tokens'],
+                                 'real_rollouts': 32, 'constant_groups': 8-counts[i]}
+                                for i, e in enumerate(report['collections'])]
+                    if (diags['collections'] != expected or diags['losses_by_update'] != report['losses']
+                            or diags['finite_loss_values'] != len(report['losses'])
+                            or diags['informative_reward_groups'] != sum(counts)
+                            or diags['accuracy_improvement_required'] is not False):
+                        raise ValueError('Learning diagnostics differ from collected outcomes or metrics')
                 expected_dirs = ['global_step_2'] if name == 'training' else []
                 if sorted(p.name for p in (run/'checkpoints').glob('global_step_*')) != expected_dirs:
                     raise ValueError('Unexpected native checkpoint set')

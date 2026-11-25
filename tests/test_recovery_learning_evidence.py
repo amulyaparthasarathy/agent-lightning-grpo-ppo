@@ -43,6 +43,15 @@ def events(request, rows):
         lengths = [sum(e['prompt_tokens'])+sum(e['completion_tokens']) for e in rows if e['case_id'] in batch]
         rep = dict(fragment_rows=32, fragments_per_rollout={r['rollout']:1 for r in sampled}, target_tokens=tokens,
                    generated_tokens=tokens, active_lengths=lengths, max_active_position=max(lengths)-1)
+        layout = {'input_ids':5120,'attention_mask':5120,'position_ids':5120,'prompts':3072,
+                  'responses':2048,'response_mask':2048,'token_level_scores':2048,'rollout_log_probs':2048}
+        rep['masked_response_context_tokens'] = 0
+        rep['tensors'] = {}
+        for key,width in layout.items():
+            fp = key in ('token_level_scores','rollout_log_probs')
+            rep['tensors'][key] = dict(shape=[32,width],dtype='torch.float32' if fp else 'torch.int64',
+                                       bytes=32*width*(4 if fp else 8))
+        rep['tensors']['is_drop_mask'] = dict(shape=[32],dtype='torch.bool',bytes=32)
         add('recovery_collection',iteration=i,policy_step=i-1,episodes=sampled,representation=rep)
         add('collection_manifest',iteration=i,trajectories=original,adapter_metrics={'training/n_truncated_sample':0})
         if name == 'collection-probe':
@@ -50,7 +59,8 @@ def events(request, rows):
                 fragment_rows=32,constant_groups=8)
         else:
             add('recovery_old_probabilities',iteration=i,target_tokens=tokens,mean_delta=0,max_abs_delta=0)
-            add('critic_preupdate',iteration=i,prediction={})
+            from experiment.ppo_math import prediction_metrics
+            add('critic_preupdate',iteration=i,prediction=prediction_metrics([0.]*tokens,[0.]*tokens))
             add('matched_advantages',iteration=i,real_rollouts=32,generated_tokens=tokens,constant_groups=8)
             for role in reversed(roles):
                 add('optimizer_step',role=role,count=i)
