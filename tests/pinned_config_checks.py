@@ -309,11 +309,12 @@ class ReaderTaskConfigs(unittest.TestCase):
         for selection in ('grpo','ppo-mc'):
             for name in reader.modes.STAGES[reader.modes.RECOVERY_LEARNING]:
                 req = request(name,selection)
-                paths = req['plan']['profile']['paths']
-                stage = req['stage']
-                run = Path('/data')/stage['output']
+                from experiment import qualification_paths
+                binding = qualification_paths.describe(req,'/fixture-canonical-root','vo-test')
+                locations = qualification_paths.locations(req,binding)
+                run = locations['run']
                 rp, _ = matched_launch.make_plan(req, ROOT/'experiment', SOURCES/'agent-lightning',
-                    Path('/data')/paths['model'], Path('/data')/paths['data'], Path(sys.executable), run, 12345)
+                    locations['model'], locations['data'], Path(sys.executable), run, 12345, binding=binding)
                 cfg = calc.build_config(model=rp['model'], agl_base_url=rp['gateway'], agl_key=rp['local_key'],
                     run_name=rp['run_name'], config_overrides=ppo_contract.runtime_env_overrides(rp['overrides'], get_ppo_ray_runtime_env()))
                 resolved = OmegaConf.to_container(cfg, resolve=True)

@@ -6,8 +6,9 @@ from pathlib import Path
 import hashlib
 
 try:
-    from . import reader_contract as c, reader_evidence, reader_integration, recovery_calibration as cal, recovery_learning as learning, summarize
+    from . import qualification_paths, reader_contract as c, reader_evidence, reader_integration, recovery_calibration as cal, recovery_learning as learning, summarize
 except ImportError:
+    import qualification_paths
     import reader_contract as c
     import reader_evidence
     import reader_integration
@@ -62,7 +63,7 @@ def collection(event, manifest, batch, episodes):
     return sum(len({e['reward'] for e in rows.values() if e['case_id'] == cid}) > 1 for cid in batch)
 
 
-def stage_report(run, request, events=None, evidence_class='live-model'):
+def stage_report(run, request, events=None, evidence_class='live-model', *, preflight=None):
     run = Path(run)
     events = cal.read_events(run) if events is None else events
     spec = learning.stage_spec(request)
@@ -72,13 +73,15 @@ def stage_report(run, request, events=None, evidence_class='live-model'):
         from . import matched_launch
     except ImportError:
         import matched_launch
-    paths = request['plan']['profile']['paths']
-    remote = Path('/data')/request['stage']['output']
-    train, val = learning.routes(request, Path('/data')/paths['data'], remote)
+    binding = json.loads((run/'path-binding.json').read_text())
+    paths = qualification_paths.locations(request, binding)
+    if preflight is None:
+        if run != paths['run']:
+            raise ValueError('Worker run differs from the recorded mount binding')
+    elif qualification_paths.preflight_binding(request, preflight) != binding:
+        raise ValueError('Collected stage differs from the CPU preflight mount binding')
     resolved = run/'resolved_config.json'
-    matched_launch.validate_resolved(json.loads(resolved.read_text()), {
-        'request': request, 'model': str(Path('/data')/paths['model']), 'train_file': train,
-        'eval_file': val, 'resolved_config': str(remote/'resolved_config.json')})
+    matched_launch.validate_resolved(json.loads(resolved.read_text()), qualification_paths.launch_context(request, binding))
     name = request['stage']['name']
     training, probe = name == 'training', name == 'collection-probe'
     steps = spec['updates']
@@ -148,7 +151,7 @@ def stage_report(run, request, events=None, evidence_class='live-model'):
     if training:
         losses = reader_evidence.loss_evidence([json.loads(l) for l in (run/'metrics.jsonl').read_text().splitlines()], roles)
     return {'schema': 'recovery-qualification-evidence-v1', 'stage': name, 'plan_sha256': request['plan_sha256'],
-            'resolved_config_sha256': c.file_hash(resolved), 'declared': spec, 'episodes': rows, 'collections': collections, 'old_probabilities': by_event['recovery_old_probabilities'],
+            'path_binding_sha256': c.digest(binding), 'resolved_config_sha256': c.file_hash(resolved), 'declared': spec, 'episodes': rows, 'collections': collections, 'old_probabilities': by_event['recovery_old_probabilities'],
             'optimizer_calls': {role: steps for role in roles}, 'losses': losses, 'critic_preupdate': critic, 'informative_groups': informative,
             'strict_successes': sum(int(e['reward']) for e in rows), 'episodes_admitted': len(rows)}
 
@@ -207,7 +210,14 @@ def review(plan, index, read, local):
                         or obs['request_sha256'] != hashlib.sha256(json.dumps(request, sort_keys=True).encode()).hexdigest()
                         or integration != reader_integration.report(run, request)):
                     raise ValueError('Observability or raw integration identity differs')
-                report = stage_report(run, request)
+                preflight = read(plan['root']+'/preflight/receipt.json')
+                binding = qualification_paths.preflight_binding(request, preflight)
+                if (index['owner']['preflight_sha256'] != c.digest(preflight)
+                        or binding['volume_id'] != index['owner']['volume_id']):
+                    raise ValueError('Preflight evidence differs from supervisor allocation')
+                report = stage_report(run, request, preflight=preflight)
+                if entry['result'].get('path_binding_sha256') != report['path_binding_sha256']:
+                    raise ValueError('Worker receipt differs from the reviewed stage binding')
                 if proof['protocol'] != c.historical.PROTOCOL or report != proof['recovery_qualification']:
                     raise ValueError('Worker summary differs from raw traces and audit')
                 if name in ('baseline', 'checkpoint-eval'):
@@ -235,6 +245,7 @@ def review(plan, index, read, local):
                     checkpoint = json.loads((run/'checkpoints/global_step_2/matched_identity.json').read_text())
                     if (c.digest(checkpoint) != proof['checkpoint_sha256'] or checkpoint['step'] != 2
                             or checkpoint['algorithm'] != job['algorithm'] or checkpoint['plan_sha256'] != c.digest(plan)
+                            or checkpoint['path_binding_sha256'] != report['path_binding_sha256']
                             or checkpoint['resolved_config_sha256'] != c.file_hash(run/'resolved_config.json')
                             or set(checkpoint['roles']) != set(report['optimizer_calls'])):
                         raise ValueError('Native checkpoint manifest identity differs')

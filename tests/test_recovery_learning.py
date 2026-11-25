@@ -9,6 +9,7 @@ from unittest.mock import Mock, patch
 from experiment import matched_launch, matched_supervisor, reader_contract as c, recovery_calibration as cal, recovery_task as task
 from experiment import recovery_learning as learning, recovery_learning_evidence as evidence
 from scripts import reader_training, recovery_study as study
+from experiment import qualification_paths
 from recovery_learning_support import profile, request
 from test_reader_training import source
 import recovery_fixtures as fx
@@ -62,7 +63,7 @@ class QualificationTests(unittest.TestCase):
         import pyarrow.parquet as pq
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
-            data = root/'data'
+            data = root/profile()['paths']['data']
             assets = fx.assets_manifest()
             assets['data'] = task.generate(data)
             for path in data.glob('final_eval.*'):
@@ -70,11 +71,13 @@ class QualificationTests(unittest.TestCase):
             try:
                 for name in c.modes.STAGES[c.modes.RECOVERY_LEARNING]:
                     req = request(name, assets=assets)
-                    run = root/name
-                    run.mkdir()
+                    binding = qualification_paths.observe(req,root,'vo-test')
+                    locations = qualification_paths.locations(req,binding)
+                    run = locations['run']
+                    run.mkdir(parents=True)
                     spec = learning.stage_spec(req)
                     task.verify(data, scope=learning.scope(req))
-                    plan, commands = matched_launch.make_plan(req, root, root, root/'model', data, root/'python', run, 8000)
+                    plan, commands = matched_launch.make_plan(req, root, root, locations['model'], data, root/'python', run, 8000, binding=binding)
                     paths = learning.materialize(req, data, run, commands)
                     self.assertEqual(paths, [plan['train_file'], plan['eval_file']])
                     for path, binding in zip(paths, spec['inputs'], strict=True):
@@ -109,7 +112,10 @@ class QualificationTests(unittest.TestCase):
     def test_checkpoint_identity_includes_controller_state(self):
         req = request(selection='ppo-mc')
         with tempfile.TemporaryDirectory() as tmp:
-            run = Path(tmp)
+            binding = qualification_paths.observe(req,Path(tmp),'vo-test')
+            run = qualification_paths.locations(req,binding)['run']
+            run.mkdir(parents=True)
+            (run/'path-binding.json').write_text(json.dumps(binding))
             path = run/'checkpoints/global_step_2'
             for role in ('actor','critic'):
                 (path/role).mkdir(parents=True)
@@ -120,9 +126,16 @@ class QualificationTests(unittest.TestCase):
             (path.parent/'latest_checkpointed_iteration.txt').write_text('2')
             identity = matched_launch.checkpoint_identity(path,req,run)
             (path/'matched_identity.json').write_text(json.dumps(identity))
-            self.assertEqual(matched_launch.verify_checkpoint(path,req),c.digest(identity))
+            self.assertEqual(matched_launch.verify_checkpoint(path,req,binding=binding),c.digest(identity))
+            for wrong in (path.with_name('global_step_1'), Path(tmp)/'other'/path.relative_to(tmp)):
+                with self.assertRaisesRegex(ValueError, 'Wrong bound checkpoint'):
+                    matched_launch.verify_checkpoint(wrong,req,binding=binding)
+            (path/'actor'/'unexpected').symlink_to(run/'resolved_config.json')
+            with self.assertRaises(ValueError):
+                matched_launch.verify_checkpoint(path,req,binding=binding)
+            (path/'actor'/'unexpected').unlink()
             (path/'data.pt').write_bytes(b'other')
-            with self.assertRaises(ValueError): matched_launch.verify_checkpoint(path,req)
+            with self.assertRaises(ValueError): matched_launch.verify_checkpoint(path,req,binding=binding)
 
 
 class QualificationSupervisorTests(unittest.TestCase):

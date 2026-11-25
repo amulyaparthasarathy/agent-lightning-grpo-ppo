@@ -95,6 +95,8 @@ def cpu_action(plan, action, deadline_epoch, image_id=None):
         env = runtime.environment({'wandb_entity': profile['wandb']['entity'], 'weave': False})
         env['WANDB_PROJECT'] = profile['wandb']['project']
         env['HF_HOME'] = str(run/'temporary/huggingface')
+        if action == 'preflight' and plan['phase'] == c.modes.RECOVERY_LEARNING:
+            env['AGL_READER_VOLUME_ID'] = volume.object_id
         script = 'reader_assets.py' if action == 'prepare' else 'reader_preflight.py'
         runtime.run_command([runtime.PYTHON, BUNDLE/script, run/'plan.json', run], run/'action.log',
                             env, deadline_epoch-time.time()-30,

@@ -31,7 +31,7 @@ def capture_build(run, image_id=None):
           'cache_hit': 'unverified', 'python': str(runtime.PYTHON), 'container_id': os.environ['MODAL_TASK_ID'], 'worker_hostname': __import__('socket').gethostname()})
 
 
-def stage_worker(request, deadline_epoch, *, c, registry, volume, call_id, image_id=None):
+def stage_worker(request, deadline_epoch, *, c, registry, volume, call_id, image_id=None, mount=Path('/data')):
     entered_at = time.time()
     c.validate(request['plan'])
     reader = request['plan'].get('schema') in ('reader-reference-v1', 'reader-task-v2')
@@ -47,16 +47,30 @@ def stage_worker(request, deadline_epoch, *, c, registry, volume, call_id, image
     if not registry.put(stage_key, {'call_id':call_id}, skip_if_exists=True):
         raise ValueError('Stage already entered; automatic restart forbidden')
     output = request['stage']['output']
-    run = Path('/data')/output
+    volume.reload()
+    run = mount/output
     if reader:
         from .reader_assets import owned_path
-        run = owned_path('/data', output)
+        run = owned_path(mount, output)
+    binding = None
+    if reader and request['plan']['phase'] == c.modes.RECOVERY_LEARNING:
+        from . import qualification_paths as paths
+        binding = paths.observe(request, mount, volume.object_id)
+        preflight = registry.get('result:preflight:'+request['plan']['root'])
+        if not preflight or binding != paths.preflight_binding(request, preflight):
+            raise ValueError('Worker mount differs from same-plan CPU preflight')
+        from . import matched_launch
+        local = paths.locations(request, binding)
+        matched_launch.make_plan(request, runtime.BUNDLE, Path('/opt/agent-lightning'), local['model'],
+                                 local['data'], runtime.PYTHON, run, 8000, binding=binding)
     # Unique stage marker is a restart guard. Restarting the same attempt is forbidden.
-    volume.reload()
     run.mkdir(parents=True, exist_ok=False)
     receipt = {'status': 'started', 'call_id': call_id, 'output': output, 'started_at': time.time()}
     if reader:
         receipt['container_id'] = os.environ['MODAL_TASK_ID']
+    if binding:
+        write(run/'path-binding.json', binding, exclusive=True)
+        receipt['path_binding_sha256'] = c.digest(binding)
     write(run/'receipt.json', receipt)
     write(run/'request.json', request, exclusive=True)
     volume.commit()
@@ -80,6 +94,11 @@ def stage_worker(request, deadline_epoch, *, c, registry, volume, call_id, image
     thread = threading.Thread(target=heartbeat, daemon=True)
     thread.start()
     try:
+        if binding:
+            from . import request_transport
+            env_binding = {**request_transport.environment(request, run), 'AGL_PPO_RUN_DIR': str(run)}
+            if request_transport.load(env_binding) != request:
+                raise ValueError('Worker request transport identity differs')
         scratch = shutil.disk_usage('/tmp').free
         write(run/'resource-preflight.json', {'scratch_free_bytes':scratch, 'requested':
             {'gpu':'H100!', 'cpu':16, 'memory_mib':196608}, 'concurrency_limit':request['plan']['bounds']['concurrency']})
@@ -130,6 +149,9 @@ def supervise(plan, *, c, registry, volume, modal, stage_worker, image_id=None):
     reader = plan.get('schema') in ('reader-reference-v1', 'reader-task-v2')
     study_key = supervisor.key(plan)
     owner = {'call_id': modal.current_function_call_id(), 'plan_sha256': c.digest(plan)}
+    if reader and plan['phase'] == c.modes.RECOVERY_LEARNING:
+        preflight = registry.get('result:preflight:'+plan['root'])
+        owner.update(volume_id=volume.object_id, preflight_sha256=c.digest(preflight))
     if not registry.put('owner:'+study_key, owner, skip_if_exists=True):
         raise ValueError('Attempt already owned; inspect it and use a new attempt ID')
     path = Path('/data/phase2/studies')/plan['study_id']/plan['phase']/f"supervisor-a{plan['attempt']:02d}"

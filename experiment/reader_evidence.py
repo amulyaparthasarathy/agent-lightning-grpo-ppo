@@ -94,7 +94,15 @@ def complete(run, request, completion):
             'informative_group_relative_task_advantage': ('observed' if any(e['constant_groups'] < 8 for e in collections) else 'not observed') if job['algorithm'] == c.ALGORITHMS[0] else 'not applicable',
             'losses_by_update': losses, 'finite_loss_values': len(losses), 'accuracy_improvement_required': False}
     if stage['name'] == 'checkpoint-eval':
-        training = json.loads((run.parent/'training/completion.json').read_text())
+        training_file = run.parent/'training/completion.json'
+        if modes.phase(request['plan']) == modes.RECOVERY_LEARNING:
+            try:
+                from . import qualification_paths
+            except ImportError:
+                import qualification_paths
+            binding = json.loads((run/'path-binding.json').read_text())
+            training_file = qualification_paths.locations(request, binding)['training_completion']
+        training = json.loads(training_file.read_text())
         if (training['plan_sha256'] != request['plan_sha256']
                 or training['checkpoint_sha256'] != result['checkpoint_sha256']
                 or training['worker']['call_id'] == result['worker']['call_id']
