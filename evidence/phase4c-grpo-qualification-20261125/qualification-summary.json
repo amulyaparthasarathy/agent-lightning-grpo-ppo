@@ -1,0 +1,162 @@
+{
+  "plan_sha256": "8098ce37276f88860f2ae2a7530a8671edd8f8997e7e7d587b731a299c6eeb51",
+  "supervisor_status": "failed",
+  "evidence_complete": false,
+  "qualification_evidence": false,
+  "stages": {
+    "baseline": {
+      "supervisor_status": "failed",
+      "durable_worker_status": "failed",
+      "stage_admitted": false,
+      "observed_slots": 24,
+      "confirmed_slots": 24,
+      "admitted_episodes": 0,
+      "independently_replayable_episodes": 24,
+      "trace_files": 24,
+      "rejected_untrusted": 0,
+      "model_calls": 144,
+      "strict_successes": 9,
+      "failure_classes": {
+        "semantic": 12,
+        "correct": 9,
+        "evidence": 3
+      },
+      "outcomes": {
+        "complete_final": 24
+      },
+      "reward_denominator": 24,
+      "typed_action_errors": 0,
+      "worker_elapsed_s": 341.676,
+      "submitted_to_finished_s": 353.872,
+      "actual_actor_optimizer_calls": 0,
+      "gradients": [],
+      "weight_refresh_steps": [
+        0
+      ],
+      "old_log_prob_comparisons": [],
+      "resources": {
+        "audit_max_cuda_allocated_peak": 0,
+        "audit_max_cuda_reserved_peak": 0,
+        "gpu": "NVIDIA H100 80GB HBM3",
+        "gpu_bytes": 85031190528,
+        "worker_start_scratch_free_bytes": 549755813888,
+        "successful_live_samples": 4,
+        "device_used_mib_sample_max": 54925,
+        "sample_min_scratch_free_bytes": 549754171392,
+        "live_memory.usage_in_bytes": 46618705920,
+        "live_memory.limit_in_bytes": 206158430208,
+        "proc_meminfo_sample_used_bytes": 46455140352,
+        "proc_meminfo_total_bytes": 206158430208,
+        "provider_max_of_60_second_averages": {
+          "memory_usage_avg": 35.090524910038035,
+          "gpu_memory_avg": 37.541323936972674,
+          "cpu_usage_avg": 6.694854833333333,
+          "gpu_utilization_avg": 0.09166623661343841
+        },
+        "scope": "Live device readings are point samples. A single late sample included cgroup v1 and container-visible host memory. Exact high-water values unavailable. CUDA allocator counters cover the emitting process only."
+      },
+      "update_metrics": [],
+      "actor_offload_config": {
+        "param_offload": true,
+        "optimizer_offload": true
+      },
+      "reward_scope": "Diagnostic independent replay of 24 development traces. Baseline finalization failed."
+    },
+    "collection-probe": {
+      "supervisor_status": "skipped",
+      "durable_worker_status": null,
+      "stage_admitted": false,
+      "observed_slots": 0,
+      "confirmed_slots": 0,
+      "admitted_episodes": 0,
+      "independently_replayable_episodes": 0,
+      "trace_files": 0,
+      "rejected_untrusted": 0,
+      "model_calls": 0,
+      "actual_actor_optimizer_calls": 0,
+      "gradients": [],
+      "weight_refresh_steps": [],
+      "old_log_prob_comparisons": [],
+      "resources": {
+        "successful_live_samples": 0
+      },
+      "update_metrics": []
+    },
+    "training": {
+      "supervisor_status": "skipped",
+      "durable_worker_status": null,
+      "stage_admitted": false,
+      "observed_slots": 0,
+      "confirmed_slots": 0,
+      "admitted_episodes": 0,
+      "independently_replayable_episodes": 0,
+      "trace_files": 0,
+      "rejected_untrusted": 0,
+      "model_calls": 0,
+      "actual_actor_optimizer_calls": 0,
+      "gradients": [],
+      "weight_refresh_steps": [],
+      "old_log_prob_comparisons": [],
+      "resources": {
+        "successful_live_samples": 0
+      },
+      "update_metrics": []
+    },
+    "checkpoint-eval": {
+      "supervisor_status": "skipped",
+      "durable_worker_status": null,
+      "stage_admitted": false,
+      "observed_slots": 0,
+      "confirmed_slots": 0,
+      "admitted_episodes": 0,
+      "independently_replayable_episodes": 0,
+      "trace_files": 0,
+      "rejected_untrusted": 0,
+      "model_calls": 0,
+      "actual_actor_optimizer_calls": 0,
+      "gradients": [],
+      "weight_refresh_steps": [],
+      "old_log_prob_comparisons": [],
+      "resources": {
+        "successful_live_samples": 0
+      },
+      "update_metrics": []
+    }
+  },
+  "final_panel_model_evaluations": 0,
+  "unavailable_training_measurements": [
+    "training peak GPU and host memory",
+    "observed offload transfers",
+    "old log probability recomputation",
+    "loss and gradient",
+    "informative sampled groups",
+    "actor update and weight refresh latency",
+    "checkpoint writes and write latency",
+    "fresh worker reload"
+  ],
+  "stage_validation_error": "Matched resolved configuration drift: trainer.default_local_dir",
+  "stage_validation_error_reproduced_offline": true,
+  "path_comparison": {
+    "worker_config_root": "provider-resolved fresh volume mount",
+    "reviewer_expected_root": "/data",
+    "same_relative_directory": true,
+    "field": "trainer.default_local_dir",
+    "inner_trainer_exit_code": 0,
+    "outer_launcher_exit_code": 1
+  },
+  "checkpoint": {
+    "present": false,
+    "bytes": 0,
+    "identity_sha256": null,
+    "training_and_reload_identities": null,
+    "reason": "Training and reload were skipped."
+  },
+  "totals": {
+    "planned_episodes": 144,
+    "observed_episodes": 24,
+    "independently_replayed_and_reward_confirmed": 24,
+    "admitted_to_qualification": 0,
+    "actual_actor_optimizer_calls": 0,
+    "stages_admitted": 0
+  }
+}

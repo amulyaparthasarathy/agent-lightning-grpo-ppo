@@ -1,0 +1,102 @@
+{
+  "execution_source": "547053db6636fdc1475f0d53f8bf580fed751bbd",
+  "reviewed_tested_ancestor": "852e01d141b66232c73ca46e6e7bf4b9dfb0e854",
+  "historical_phase4b_execution_source": "bc81c1fb0def27b15c56cdd8abb01098e7e1f8d5",
+  "preparation_plan_sha256": "fa8ff85ef86e8778675f0cb8533392074a798561c83606f89cfcd37c6b6d9fcd",
+  "asset_bound_plan_sha256": "8098ce37276f88860f2ae2a7530a8671edd8f8997e7e7d587b731a299c6eeb51",
+  "source_clean": true,
+  "matched_packaged_files": 69,
+  "verified_before_setup": [
+    "current workspace and environment",
+    "existing required secret handle",
+    "fresh resource names",
+    "account headroom and applicable rates",
+    "new separate campaign reservation"
+  ],
+  "allocation": {
+    "model": "meta-llama/Llama-3.2-3B-Instruct",
+    "task": "recovery-readiness-v1",
+    "purpose": "recovery-learning-qualification-v1",
+    "algorithm": "grpo-matched-v2",
+    "attempt": 1,
+    "seed": 9001,
+    "concurrency": 1,
+    "resources": {
+      "gpu": "H100!",
+      "cpu": 16,
+      "memory_mib": 196608
+    },
+    "stage_limit_seconds": 3600,
+    "startup_seconds": 600,
+    "worker_seconds": 14400,
+    "supervisor_seconds": 15000,
+    "automatic_retries": 0
+  },
+  "gates": {
+    "prepare": {
+      "outcome": "passed",
+      "plan_sha256": "fa8ff85ef86e8778675f0cb8533392074a798561c83606f89cfcd37c6b6d9fcd",
+      "provider_registry_volume_and_local_submission_agree": true,
+      "receipt_file_sha256": "61aef2f10c1ef885b99be067e1296dd29e040543a00ea10cece5066fa2eee1ab",
+      "fresh_manifest_sha256": "97b4971e8998ffe560b83b470324488f3f738fb236c7bc56214e2f09b1967c76",
+      "historical_content_comparison_passed": true,
+      "model_revision": "0cb88a4f764b7a12671c53f0838cd831a0843b95",
+      "model_file_hashes_verified": 9,
+      "dataset_files": {
+        "dev_packet_1.parquet": {
+          "sha256": "eeb1e57feb97e4b915b280b61863e4433a5e2ebb47dd6d0d202ccf8d461310c3",
+          "rows": 8
+        },
+        "dev_packet_2.parquet": {
+          "sha256": "6a0637a5637a9a306269f50b716e771e82136c5bd3e2dcb93079e6c77acc8440",
+          "rows": 8
+        },
+        "dev_packet_3.parquet": {
+          "sha256": "15df514c71836094dc9d176f08ee50920bbd83c7698394395db2c4bf3d93c323",
+          "rows": 8
+        },
+        "dev_panel.jsonl": {
+          "sha256": "b6f859d9bb5e4a3723b3b8f116c004dfff8a63ed11315ff4d6e0d2aeef910cb7",
+          "rows": 24
+        },
+        "dev_panel.parquet": {
+          "sha256": "202d1c14d43be37f0f1eb1d58161f1ede2b397d3e1e308ecaecea2c107526ba5",
+          "rows": 24
+        },
+        "final_eval.jsonl": {
+          "sha256": "345083ad6bf32b410382a4444485298a6ffbd444f8c3949e73702c0417911a18",
+          "rows": 64
+        },
+        "final_eval.parquet": {
+          "sha256": "1543a19045cf24f1a32bd4f14947f6c00facbdb160b9a7ee425b589f5badd8d3",
+          "rows": 64
+        },
+        "train_main.parquet": {
+          "sha256": "fb069644d6af7d80f5ec933cbe463998af5a24d14c2e8af31d6faa87f9d5f78b",
+          "rows": 128
+        }
+      }
+    },
+    "preflight": {
+      "outcome": "passed",
+      "plan_sha256": "8098ce37276f88860f2ae2a7530a8671edd8f8997e7e7d587b731a299c6eeb51",
+      "provider_registry_volume_and_local_submission_agree": true,
+      "receipt_file_sha256": "4f78ef54048d3bba99a8702f32ce0f5704dad48441b699eb8ac36f66500296ed",
+      "runtime_dependency_check": "diagnostic_with_reviewed_dependency_exceptions"
+    }
+  },
+  "collection": {
+    "collected_file_bytes_by_action": {
+      "prepare": 257784,
+      "preflight": 613351,
+      "qualification": 4280475
+    },
+    "collection_errors": [],
+    "terminal_evidence_files_including_collection_index": 131,
+    "private_inventory_canonical_sha256": "db442883a44e562835ebb4d8190afe45c8ea716d6219d80ff885462cf077785f",
+    "registry_volume_index_equal": true,
+    "independent_reviewer": "scripts/task_local.py report",
+    "independent_review_file_sha256": "dce541a236f007923b0228a80cbf73e80d726410638194c5c0703ca94c3eabfb",
+    "independent_and_collection_verdicts_match": true
+  }
+}
