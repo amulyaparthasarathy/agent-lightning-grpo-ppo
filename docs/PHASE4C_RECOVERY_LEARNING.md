@@ -32,9 +32,23 @@ Operational completion requires two actor optimizer calls, two additional critic
 
 The collected report joins persisted supervisor state, stage request, source/configuration, durable receipt, worker identity, raw trace, audit and W&B finish. It reconstructs the stage result and retains available slot diagnostics from incomplete work. It reports operational completion, informative groups and numerical signals, and strict performance separately. Finite zero loss or gradient is admissible. A performance decrease or absence of informative groups provides no grounds for a retry. [Evidence reviewer](../experiment/recovery_learning_evidence.py)
 
+## Single-GRPO launch review
+
+The offline planner and validator agreed on plan SHA-256 `c2e903b66e107824cb001ad9526cf932f5867ab1a8da41d5ebd510793e395713` from clean corrected runtime `852e01d141b66232c73ca46e6e7bf4b9dfb0e854`. The synthetic GRPO profile binds the retained preparation manifest. The validation receipt records `training_admissible: false` and unverified remote ownership and availability. The full bound plan and receipt are in ignored Workbench storage.
+
+| Attempt | Baseline | Probe | Training | Reload | Total |
+|---|---|---|---|---|---:|
+| 1, GRPO, seed 9001 | 24 greedy development | 32 sampled train, zero updates | 64 sampled train, two updates from fresh base | 24 greedy development, step 2 | 144 episodes |
+
+The plan permits one lane, four stages, 3,600 seconds per stage, 14,400 worker seconds, 15,000 supervisor seconds and zero automatic retries. The proposed ceiling is $113 including the $82 compute reservation. Evaluation uses development only. Fresh owner authorization is required before any paid qualification. Revalidate from the exact execution checkout when preparing a future authorized attempt. [Verification commands](PHASE4C_VERIFICATION.md#corrected-supervisor-verification)
+
 ## Future operation and capacity
 
 One operator owns the mutable source worktree and ledger. Use a clean committed source, create the bound plan in ignored storage, and keep that checkout fixed through launch acknowledgement. Reserve exposure before dispatch. Keep the submission client alive until acknowledgement. On a failed, rejected or unknown outcome, keep the reservation, logs and receipts. Reconcile the exact owned call and its exposure before a separate retry decision. Stop only an exactly owned call. The proposal allows one initial attempt, zero automatic retries, concurrency one. Never clear a reservation to create retry capacity. [Phase 3 engineering checklist](PHASE3_ENGINEERING_CHECKLIST.md)
+
+If dispatch is interrupted before acknowledgement, the persisted stage receipt records an unknown outcome with no call ID. After acknowledgement, interruption cleanup targets the exact recorded call and marks cancellation requested. A returned cancellation request may close the supervisor stage as `cancelled`. Failed cancellation leaves it `unknown`. Both retain the full 3,600-second worker reservation ($10) pending independent terminal evidence and exposure reconciliation. The supervisor's finish timestamp records local cleanup time.
+
+Inventory logical bytes under the owned retained volume paths and project the bytes that checkpoint writes will add there. Use those figures for the 300-GiB retained-volume bound and seven-day storage allowance. Measure free bytes separately on the worker-local scratch filesystem against the peak temporary writes that must coexist during save or reload. [Cost worksheets](PHASE4C_LEARNING_STUDY_PROPOSAL.md#cost-worksheets)
 
 The candidate is one exact H100, 16 CPUs and 192 GiB host memory. Qualification would have to measure GPU peaks during log-probability recomputation and backward, memory outside the per-process allocator, host/cgroup peaks and offload, update and refresh latency, checkpoint size, write latency and scratch headroom, and fresh-worker load/refresh. Sustained 16-update behavior requires separate evidence. Collection-only time and CPU fixture size supply no backward throughput estimate. Changes to capacity, duration or budget require a revised frozen proposal before execution.
 

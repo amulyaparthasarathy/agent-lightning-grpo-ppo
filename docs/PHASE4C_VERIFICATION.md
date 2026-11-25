@@ -2,9 +2,40 @@
 
 Development calibration used historical execution source `bc81c1fb0def27b15c56cdd8abb01098e7e1f8d5`. This work branched from PR #6's evidence head `79b534f5fad7b11ca32a89a239a74bb53e4d7b00` while that PR was open and draft. Main was `92b276516e93c305cd0a29c61983cb0f798042a9`. The operator's private handoff, ledger, receipts and trace files were available for read-only inspection. All new plans and raw test output stayed in ignored storage in the isolated Phase 4C worktree.
 
-The final matched and task-local gates ran on `f64d050b6deeb9d1b7a8b08df2342e98c2896610`. This includes the admission and loader work, consecutive CPU optimizer steps, and full exposure retention for a lost submission acknowledgement. The final reader gate and proposal validator also cover the prospective evaluation-routing declaration at study source `4ac797ef3da54b651621abdb1a71048355ac7f1a`. The verification report has a subsequent documentation-only commit. All three route selections were independently planned and validated on the clean study source under the offline transport guard.
+The original Phase 4C matched and task-local gates ran on `f64d050b6deeb9d1b7a8b08df2342e98c2896610`. This includes the admission and loader work, consecutive CPU optimizer steps, and full exposure retention for a lost submission acknowledgement. The original reader gate and proposal validator also cover the prospective evaluation-routing declaration at study source `4ac797ef3da54b651621abdb1a71048355ac7f1a`. The verification report has a subsequent documentation-only commit. All three route selections were independently planned and validated on the clean study source under the offline transport guard.
 
-## Reproducing the gates
+## Corrected supervisor verification
+
+The interruption correction was tested on clean commit `852e01d141b66232c73ca46e6e7bf4b9dfb0e854`. On reviewed head `b31d4ab477135a7f3b4b96487b2b78643ef5ac41`, the new five-case fixture produced two failures and two errors. The confirmed-completion control passed. In particular, a pre-acknowledgement interruption left the campaign cancelled and an acknowledged cancellation reported only 31 worker seconds.
+
+| Run on corrected runtime | Pass | Fail | Skip |
+|---|---:|---:|---:|
+| Focused matched supervisor, calibration operations and recovery-learning module | 22 | 0 | 0 |
+| Reader offline gate, including overlapping focused tests | 39 + 15 + 140 | 0 | 0 |
+| Single-GRPO offline plan and validation | Both succeeded | 0 | 0 |
+
+Injected clocks and provider callbacks exercised interruption 30 seconds into dispatch, interruption during polling followed by a one-second cancellation request, cancellation failure, and a second interruption during cleanup. The original interruption reached the caller in each case. The final persisted worker exposure held at 3,600 seconds and $10. No dependent stage, second route or retry was dispatched. Four independently acknowledged synthetic stage completions at 30 seconds each accounted for 120 worker seconds. The existing lost-acknowledgement TimeoutError test also passed.
+
+Commands below ran in the existing reader environment. `RETAINED_ASSET_MANIFEST` denotes the existing local preparation manifest. The output path is ignored and must be fresh when planning. No provider operation was invoked.
+
+```bash
+offline() {
+  env -i PATH="$PATH" HOME=/tmp MODAL_CONFIG_PATH=/dev/null HF_HUB_OFFLINE=1 \
+    PYTHONPATH="$PWD/tests/offline_guard:$PWD:$PWD/tests" .venv/bin/python "$@"
+}
+offline -m unittest -v test_matched_study.SupervisorTests \
+  test_recovery_calibration.OperationTests test_recovery_learning
+bash scripts/test_reader_offline.sh
+
+profile=examples/reader-profile.recovery-learning.synthetic.json
+plan=.local/interrupt-review/grpo-review.json
+offline scripts/reader_training.py plan --profile "$profile" --assets "$RETAINED_ASSET_MANIFEST" --out "$plan"
+offline scripts/reader_training.py validate --profile "$profile" --plan "$plan"
+```
+
+The corrected run covers supervisor accounting and the reader regression gate. Full task-harness and pinned numerical results below belong to their original commits. Live billing, storage, worker capacity and terminal reconciliation remain unverified. [Source-bound launch review](PHASE4C_RECOVERY_LEARNING.md#single-grpo-launch-review)
+
+## Reproducing the original gates
 
 Use the existing Unix Workbench with separate locked client, reader-harness and matched CPU environments. The machine used Linux aarch64 and Python 3.12.3. Reader-harness pins include AutoGen 0.7.5, MCP 1.26.0, OpenAI SDK 2.54.0, PyArrow 25.0.1, Jinja2 3.1.6 and tokenizers 0.23.3. The numerical environment used Torch CPU 2.11.0, tensordict 0.10.0, NumPy 1.26.4, Ray 2.60.0, OmegaConf 2.3.0, Hydra 1.3.2, torchdata 0.11.0, datasets 5.2.0 and PyArrow 25.0.1. The CPU preparation path acquires code and dependencies only. Reused historical wheel tests require local copies of the reviewed vLLM and Transformers wheels. No model weights were acquired.
 
@@ -24,7 +55,7 @@ python scripts/recovery_study.py
 | Matched training | 73, plus 8 nested native config checks | 0 | 0 | Source-guarded adapter, loader, Hydra/FSDP configurations, Gloo backward, optimizer, local Ray, IPC and wheel regression |
 | Study declaration and three fixture plan/validate pairs | All validated | 0 | 0 | All three selections produced source-bound, training-inadmissible plans under the offline transport guard |
 
-The final GRPO, PPO-MC and paired fixture plan SHA-256 values were respectively `a6c6bf52f5c0e9c97c07c9c6afd2e10451307869db9b299de8ff8288be3b63d4`, `c0ae378dfdc0c3bc2a121a5ba60191d2ed569efc0051f3fc3a68be49990310fa` and `c8213ee0ce8aab882d9185d10a74012c4d81416a279d0040e5b75166a55b3292`. They carry fixture identities and do not admit training. A future attempt needs a newly authorized source-bound plan.
+The original GRPO, PPO-MC and paired fixture plan SHA-256 values were respectively `a6c6bf52f5c0e9c97c07c9c6afd2e10451307869db9b299de8ff8288be3b63d4`, `c0ae378dfdc0c3bc2a121a5ba60191d2ed569efc0051f3fc3a68be49990310fa` and `c8213ee0ce8aab882d9185d10a74012c4d81416a279d0040e5b75166a55b3292`. They carry fixture identities and do not admit training. A future attempt needs a newly authorized source-bound plan.
 
 The full task gate took 768.128 seconds. The matched gate reported 64.388 seconds, including its 19.375-second nested configuration run.
 
