@@ -57,12 +57,25 @@ def collection_inputs(request, iteration, rollouts, episodes):
         if (e['case_id'] != cid or e['reward_posted'] is not True or type(r.final_reward) not in (float, int)
                 or r.final_reward not in (0, 1) or e['reward'] != r.final_reward):
             raise ValueError('Unconfirmed or inconsistent trajectory reward')
+        if r.rollout_state != 'succeeded' or r.error_message:
+            raise ValueError('Controller did not confirm a successful execution')
+        events = r.triplet_events
+        if any(event['rollout_id'] != r.rollout_id or event['attempt_id'] != e['attempt_id'] for event in events):
+            raise ValueError('Controller evidence crosses rollout attempts')
+        rewards = [event['data']['value'] for event in events if event['event_type'] == 'reward']
+        generations = [event['data'] for event in events if event['event_type'] == 'model_request']
+        if rewards != [r.final_reward] or len(generations) != e['llm_calls']:
+            raise ValueError('Missing, duplicate or unconfirmed controller reward/generation')
         turns = r.triplets or []
         if len(turns) != e['llm_calls'] or len(turns) != len(e['completion_tokens']) or not 1 <= len(turns) <= 6:
             raise ValueError('Generation count differs from submitted trajectory')
-        for t, n, p in zip(turns, e['completion_tokens'], e['prompt_tokens'], strict=True):
+        for t, n, p, raw in zip(turns, e['completion_tokens'], e['prompt_tokens'], generations, strict=True):
             prompt, action = t.prompt['token_ids'], t.response['token_ids']
             probs = t.response.get('log_probs')
+            if (raw.get('status') == 'error' or raw.get('http_status', 200) >= 400 or raw.get('error')
+                    or raw.get('prompt_token_ids') != prompt or raw.get('response_token_ids') != action
+                    or raw.get('response_log_probs') != probs):
+                raise ValueError('Controller sampled token evidence differs from adapter input')
             if (p != len(prompt) or n != len(action) or not prompt or not action or n > 1024 or p+n > 4096
                     or not isinstance(probs, list) or len(probs) != n
                     or any(type(x) not in (float, int) or not math.isfinite(x) or x > 0 for x in probs)):

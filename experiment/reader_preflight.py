@@ -61,8 +61,9 @@ def task_probe(plan, run, tokenizer):
 def main(plan, run):
     c.validate(plan)
     # Match preparation's canonical Volume paths while retaining nested-symlink rejection.
+    scope = 'qual-train-dev' if c.modes.phase(plan) == c.modes.RECOVERY_LEARNING else 'all'
     actual = assets.inspect(*(assets.owned_path('/data', plan['profile']['paths'][key])
-                              for key in ('model', 'data', 'staging')), task=plan['profile']['task'])
+                              for key in ('model', 'data', 'staging')), task=plan['profile']['task'], scope=scope)
     if actual != plan['assets']:
         raise ValueError('Preflight assets differ from plan')
     head = subprocess.check_output(['git', '-C', '/opt/agent-lightning', 'rev-parse', 'HEAD'], text=True).strip()

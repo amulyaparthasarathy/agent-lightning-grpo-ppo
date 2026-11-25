@@ -14,6 +14,8 @@ STAGE_SECONDS = 3600
 DATA_SHA256 = 'c7d07942dda1ee81b8797ce9a59255e7f26bca712e668c18cd1a936d83d6e8ab'
 TRAIN = 'train_main.parquet'
 DEV = 'dev_panel.parquet'
+SYSTEM_SHA256 = '99bbf4b832b4f5040c08bc2be9fd78708458638c87210e50384eda3d9c66647b'
+REMINDER_SHA256 = 'd5d5978428f0f9cf1892b6775a16327e13d70e8053d4d38e6a565e518882d9fd'
 PROBE_SHA256 = '1e8f9127fd30d6159bf64bf4095c5577c9ac13a14d6d1e9fc9f4e20a7ed7cbd4'
 
 
@@ -104,3 +106,33 @@ def materialize(request, data, run, commands):
     with (run/'qualification-inputs.json').open('x') as handle:
         json.dump(actual, handle)
     return paths
+
+def verify_history(question, llms, actions):
+    """Reconstruct the exact model-visible conversation, including typed-error observations."""
+    try:
+        from . import recovery_prompt
+    except ImportError:
+        import recovery_prompt
+    history = []
+    if not 1 <= len(llms) <= 6:
+        raise ValueError('Invalid recovery generation count')
+    for i, llm in enumerate(llms):
+        messages, tools = recovery_prompt.from_trace(llm['inputs'])
+        if i == 0:
+            if not messages or messages[0]['role'] != 'system' or task.digest(messages[0]['content']) != SYSTEM_SHA256:
+                raise ValueError('Recovery system prompt differs')
+            history = [messages[0], {'role': 'user', 'content': question+'\n'+task.PROMPT}]
+        if i == 5:
+            reminder = messages[-1]
+            if reminder['role'] != 'user' or task.digest(reminder['content']) != REMINDER_SHA256:
+                raise ValueError('Terminal reflection reminder differs')
+            history.append(reminder)
+        if messages != history or tools != ([] if i == 5 else recovery_prompt.tool_definitions()):
+            raise ValueError('Recovery model-visible context or tools differ')
+        if i < len(actions):
+            call, obs = actions[i]['inputs']['call'], actions[i]['inputs']['observation']
+            if obs['call_id'] != call['id']:
+                raise ValueError('Observation belongs to another call')
+            history.extend([{'role': 'assistant', 'content': None, 'tool_calls': [
+                {'id': call['id'], 'type': 'function', 'function': {'name': call['name'], 'arguments': call['arguments']}}]},
+                {'role': 'tool', 'content': obs['content'], 'tool_call_id': call['id']}])

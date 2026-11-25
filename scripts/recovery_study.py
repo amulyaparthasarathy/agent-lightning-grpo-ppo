@@ -19,7 +19,8 @@ def proposal():
     model = reader_assets.model_lock()
     return {'schema': 'recovery-learning-study-proposal-v1', 'executable': False,
         'task': task.TASK, 'environment_sha256': task.digest(task.environment()),
-        'prompt_sha256': c.digest(task.PROMPT), 'episode_policy': task.EPISODE_POLICY,
+        'prompt_sha256': c.digest(task.PROMPT), 'system_message_sha256': learning.SYSTEM_SHA256,
+        'reflection_reminder_sha256': learning.REMINDER_SHA256, 'episode_policy': task.EPISODE_POLICY,
         'model_revision': c.BASE_REVISION, 'tokenizer_sha256': model['tokenizer.json']['sha256'],
         'chat_template_sha256': model['chat_template.jinja']['sha256'], 'parser': 'llama3_json',
         'data_manifest_sha256': learning.DATA_SHA256,

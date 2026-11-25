@@ -41,6 +41,24 @@ def baseline_integration_admitted(plan, job, completion):
         return False
 
 
+def recovery_stage_admitted(plan, job, position, result, sha):
+    """Require the stage-specific worker admission before dispatching a dependent stage."""
+    stage = job['stages'][position]
+    try:
+        proof = result['completion']
+        audit = proof['recovery_qualification']
+        spec = plan['qualification']['stages'][stage['name']]
+        return (proof['worker']['call_id'] == result['call_id']
+                and proof['worker']['container_id'] == result['container_id']
+                and proof['wandb_id'] == stage['wandb']['id'] and audit['plan_sha256'] == sha
+                and audit['schema'] == 'recovery-qualification-evidence-v1' and audit['stage'] == stage['name']
+                and audit['declared'] == spec and audit['episodes_admitted'] == spec['expected_episodes']
+                and len(audit['episodes']) == spec['expected_episodes']
+                and len(audit['collections']) == len(spec['batches']))
+    except (KeyError, TypeError):
+        return False
+
+
 def run(plan, dispatch, get_result, cancel, read_heartbeat, stop_requested, persist,
         clock=time.time, sleep=time.sleep):
     """Sole aggregate-index writer. Every spawn is recorded before polling another call.
@@ -50,6 +68,7 @@ def run(plan, dispatch, get_result, cancel, read_heartbeat, stop_requested, pers
     """
     plan_sha256 = hashlib.sha256(json.dumps(plan, sort_keys=True, separators=(',', ':'), allow_nan=False).encode()).hexdigest()
     exploratory = plan['phase'] in ('exploratory-qualification','exploratory')
+    recovery = plan.get('schema') == 'reader-task-v2' and plan['phase'] == 'recovery-learning-qualification-v1'
     start = clock()
     index = {'study_key': key(plan), 'status': 'started', 'started_at': start, 'plan': plan,
              'jobs': {j['job_id']: {'status': 'planned', 'stages': []} for j in plan['jobs']}}
@@ -86,6 +105,8 @@ def run(plan, dispatch, get_result, cancel, read_heartbeat, stop_requested, pers
         save()
     try:
         while active or pending:
+            if recovery and any(s['status'] in ('unknown','failed','cancelled') for s in index['jobs'].values()):
+                break  # one lane; preserve the failed attempt and all undispatched work
             # Fill free slots immediately, never wait for a whole sequential batch.
             while pending and len(active) < plan['bounds']['concurrency'] and not uncertain and not stop_requested() and clock()-start < plan['bounds']['supervisor_seconds']-60:
                 job, position = pending.pop(0)
@@ -152,6 +173,8 @@ def run(plan, dispatch, get_result, cancel, read_heartbeat, stop_requested, pers
                             or result.get('completion', {}).get('plan_sha256') != plan_sha256
                             or result['completion'].get('stage') != receipt['stage']):
                         receipt.update(status='unknown', error='Missing or mismatched durable completion proof')
+                    elif recovery and not recovery_stage_admitted(plan, job, position, result, plan_sha256):
+                        receipt.update(status='failed', result=result, error='recovery_stage_evidence_incomplete')
                     else:
                         receipt.update(status='completed', result=result)
                 receipt['finished_at'] = clock()

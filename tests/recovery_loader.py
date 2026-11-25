@@ -1,5 +1,8 @@
 """CPU replay of the pinned synchronous loader and fit loop; no rollout or model."""
+import ast
 from collections import defaultdict
+from collections.abc import Sequence
+from typing import Any, cast
 from contextlib import nullcontext
 from types import SimpleNamespace as NS
 from unittest.mock import Mock, patch
@@ -11,13 +14,30 @@ from omegaconf import OmegaConf, open_dict
 from torchdata.stateful_dataloader import StatefulDataLoader
 
 from experiment import matched_contract as contract
-from pinned_training_support import load
+from pinned_training_support import load, ROOT, SOURCES
+
+
+def eager_inputs(train_path, dev_path):
+    """Run the original example's two from_parquet calls; intercept only the engine launch."""
+    import json
+    path = SOURCES/'agent-lightning/examples/calc_x/train_calc_agent.py'
+    lock = json.loads((ROOT/'experiment/ppo_source_lock.json').read_text())
+    assert contract.file_hash(path) == lock['calc_example_sha256']
+    tree = ast.parse(path.read_text())
+    tree.body = [n for n in tree.body if isinstance(n, ast.FunctionDef) and n.name == 'train']
+    namespace = dict(HuggingFaceDataset=Dataset, OmegaConf=OmegaConf, cast=cast, Sequence=Sequence, Any=Any,
+                     build_config=lambda **_: OmegaConf.create({}))
+    exec(compile(tree, str(path), 'exec'), namespace)
+    output = {}
+    with patch.dict('sys.modules', {'agentlightning.verl.entrypoint': NS(run_ppo=lambda cfg, **rows: output.update(rows))}):
+        namespace['train'](train_file=str(train_path), val_file=str(dev_path))
+    return output['train_dataset'], output['val_dataset']
 
 
 def replay(train_path, dev_path, seed, steps, shuffle=True):
     loaded = load('agentlightning', 'verl/dataset.py',
                   dict(RLHFDataset=torch.utils.data.Dataset, HuggingFaceDataset=Dataset, torch=torch)).LoadedDataset
-    train, dev = (loaded(Dataset.from_parquet(str(p)).to_list()) for p in (train_path, dev_path))
+    train, dev = map(loaded, eager_inputs(train_path, dev_path))
     assert not train.filter_overlong_prompts
     config = OmegaConf.create({'data': {'shuffle': shuffle, 'seed': contract.streams(seed, contract.ALGORITHMS[0])['paired_question_order'],
         'train_batch_size': 8, 'val_batch_size': None, 'validation_shuffle': False, 'dataloader_num_workers': 8},
@@ -49,3 +69,16 @@ def replay(train_path, dev_path, seed, steps, shuffle=True):
     trainer._save_checkpoint.assert_called_once()
     trainer._train_dataloader_iter._shutdown_workers()
     return batches
+
+
+if __name__ == '__main__':
+    import sys
+    from pathlib import Path
+    from experiment import recovery_learning as learning
+    train, dev, raw_seed = sys.argv[1:]
+    seed = int(raw_seed)
+    batches = replay(Path(train), Path(dev), seed, 2 if seed == 9001 else 16)
+    assert batches == learning.schedule(seed)
+    if seed != 9001:
+        ids = [cid for group in batches for cid in group]
+        assert len(set(ids)) == len(ids) == 128

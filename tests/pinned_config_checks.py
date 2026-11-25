@@ -303,6 +303,33 @@ class ReaderTaskConfigs(unittest.TestCase):
         self.assertEqual(checked, 12)
         print('12 reader configs: complete task agent/env_map, datasets, native roles and fresh-reload routing passed.')
 
+    def test_recovery_learning_resolved_dispatch(self):
+        from recovery_learning_support import request
+        from experiment import reader_contract as reader
+        for selection in ('grpo','ppo-mc'):
+            for name in reader.modes.STAGES[reader.modes.RECOVERY_LEARNING]:
+                req = request(name,selection)
+                paths = req['plan']['profile']['paths']
+                stage = req['stage']
+                run = Path('/data')/stage['output']
+                rp, _ = matched_launch.make_plan(req, ROOT/'experiment', SOURCES/'agent-lightning',
+                    Path('/data')/paths['model'], Path('/data')/paths['data'], Path(sys.executable), run, 12345)
+                cfg = calc.build_config(model=rp['model'], agl_base_url=rp['gateway'], agl_key=rp['local_key'],
+                    run_name=rp['run_name'], config_overrides=ppo_contract.runtime_env_overrides(rp['overrides'], get_ppo_ray_runtime_env()))
+                resolved = OmegaConf.to_container(cfg, resolve=True)
+                matched_launch.validate_resolved(resolved,rp)
+                self.assertEqual(cfg.trainer.val_only,name in ('baseline','checkpoint-eval'))
+                self.assertEqual(cfg.trainer.test_freq,-1)
+                self.assertEqual(cfg.trainer.resume_mode,'resume_path' if name=='checkpoint-eval' else 'disable')
+                self.assertEqual(cfg.data.shuffle,name=='training')
+                critic = omega_conf_to_dataclass(cfg.critic)
+                self.assertEqual((critic.engine.micro_batch_size_per_gpu,critic.engine.infer_micro_batch_size_per_gpu),(1,1))
+                self.assertEqual((cfg.actor_rollout_ref.actor.ppo_micro_batch_size_per_gpu,
+                                  cfg.actor_rollout_ref.rollout.log_prob_micro_batch_size_per_gpu),(1,1))
+                for key in ('train_file','eval_file'):
+                    with self.assertRaisesRegex(ValueError,'routing changed'):
+                        matched_launch.validate_resolved(resolved,dict(rp,**{key:'/data/final_eval.parquet'}))
+
     def test_recovery_calibration_two_algorithms_four_stages_composed(self):
         from experiment import reader_contract as reader, reader_assets, recovery_task
         from test_reader_training import source

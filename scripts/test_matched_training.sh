@@ -6,7 +6,7 @@ MATCHED_TEST_PYTHON="${MATCHED_TEST_PYTHON:-.local/matched-test-venv/bin/python}
 if [[ "${1:-}" == "--prepare" ]]; then
     uv venv .local/matched-test-venv
     uv pip install --python "$MATCHED_TEST_PYTHON" 'torch==2.11.0' --index-url https://download.pytorch.org/whl/cpu
-    uv pip install --python "$MATCHED_TEST_PYTHON" 'numpy==1.26.4' 'tensordict==0.10.0' 'omegaconf==2.3.0' 'hydra-core==1.3.2' 'packaging==25.0' 'modal==1.6.3' 'ray==2.60.0' 'pyzmq==27.3.0' 'psutil==7.2.2'
+    uv pip install --python "$MATCHED_TEST_PYTHON" 'numpy==1.26.4' 'tensordict==0.10.0' 'omegaconf==2.3.0' 'hydra-core==1.3.2' 'packaging==25.0' 'modal==1.6.3' 'ray==2.60.0' 'pyzmq==27.3.0' 'psutil==7.2.2' 'torchdata==0.11.0' 'datasets==5.2.0' 'pyarrow==25.0.1' 'einops==0.8.2'
     # Download code only, never models. Reuse existing reviewed checkouts when available.
     "$MATCHED_TEST_PYTHON" scripts/prepare_matched_test_sources.py
 elif [[ $# -ne 0 ]]; then

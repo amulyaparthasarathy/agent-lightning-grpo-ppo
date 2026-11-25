@@ -616,3 +616,23 @@ class PromptTests(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+
+class QualificationHarnessTests(unittest.TestCase):
+    def test_training_split_recovered_and_typed_terminal_outcomes(self):
+        from recovery_learning_support import request
+        from recovery_harness_support import run_episode, RAW, SOLVE
+        req = request('collection-probe')
+        cid = req['plan']['qualification']['stages']['collection-probe']['case_ids'][0]
+        case = next(r for r in task.rows('train') if r['case_id'] == cid)
+        invalid = RAW('lookup_asset', '{}')
+        for script, outcome in [([invalid, SOLVE, SOLVE, SOLVE, SOLVE], 'complete_recovered'),
+                                ([invalid, invalid], 'terminal_policy_failure')]:
+            with tempfile.TemporaryDirectory() as tmp:
+                r = run_episode(Path(tmp), script, row=case, request=req, route='train')
+                reviewed = calibration.episode_row(r['records'], req, 'scripted-inference')
+                self.assertEqual(reviewed['outcome'], outcome)
+                self.assertEqual(reviewed['reward'], int(outcome == 'complete_recovered'))
+                self.assertEqual(r['requests'][0]['messages'][-1]['content'], case['question']+'\n'+task.PROMPT)
+                with self.assertRaises(ValueError):
+                    calibration.episode_row(r['records'], request('training'), 'scripted-inference')

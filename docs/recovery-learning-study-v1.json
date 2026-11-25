@@ -4,6 +4,8 @@
   "task": "recovery-readiness-v1",
   "environment_sha256": "0c384ed90027f7fa0fb0aeb097220e6e83876dfdd85094353f03c8dd035b1ca3",
   "prompt_sha256": "60ba3274b9edb94540238fd11ebaa44c4d84a7d9db0a5f3f81e9b6cd47cab6b4",
+  "system_message_sha256": "99bbf4b832b4f5040c08bc2be9fd78708458638c87210e50384eda3d9c66647b",
+  "reflection_reminder_sha256": "d5d5978428f0f9cf1892b6775a16327e13d70e8053d4d38e6a565e518882d9fd",
   "episode_policy": {
     "version": "recovery-episode-v1",
     "max_tool_iterations": 5,

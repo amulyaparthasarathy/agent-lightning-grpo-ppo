@@ -157,6 +157,12 @@ def episode_row(records, request, evidence_class='live-model'):
     trusted = task.expected(case['question'], case['result'])
     actions = [r for r in records if r['kind'] == 'action_outcome']
     llms = [r for r in records if r['kind'] == 'llm']
+    if modes.phase(request['plan']) == modes.RECOVERY_LEARNING:
+        try:
+            from .recovery_learning import verify_history
+        except ImportError:
+            from recovery_learning import verify_history
+        verify_history(case['question'], llms, actions)
     served = served_evidence(records, llms)
     ledger = [{'tool': a['inputs']['call']['name'], 'arguments': json.loads(a['inputs']['call']['arguments']),
                'content': a['inputs']['observation']['content']} for a in actions if a['outputs']['successful_tool_call']]

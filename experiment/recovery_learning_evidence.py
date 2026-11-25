@@ -66,6 +66,8 @@ def stage_report(run, request, events=None, evidence_class='live-model'):
             or len(returns) != 1 or returns[0]['global_step'] != (1 if probe else spec['initial_step']+steps)
             or returns[0]['validation_only'] is not (spec['route'] == 'val')
             or bool(returns[0].get('collection_only')) != probe
+            or (probe and returns[0].get('optimizer_updates') != 0)
+            or by_event['advantages'] or (not training and by_event['critic_preupdate'])
             or [e['step'] for e in by_event['weight_refresh']] != list(range(spec['initial_step'], spec['initial_step']+steps+1))
             or [e['step'] for e in by_event['native_checkpoint_saved']] != ([2] if training else [])
             or len(by_event['development_collection_admitted']) != int(probe)):
@@ -101,6 +103,13 @@ def stage_report(run, request, events=None, evidence_class='live-model'):
                         or not math.isfinite(grad['preclip_norm'])
                         or not adv['time'] <= opt['time'] <= grad['time'] <= by_event['weight_refresh'][i]['time']):
                     raise ValueError('Gradient/optimizer evidence outside declared update')
+    if probe:
+        collected = by_event['development_collection_admitted'][0]
+        rep = collections[0]['representation']
+        if (collected['iteration'] != 1 or collected['real_rollouts'] != 32 or collected['groups'] != 8
+                or collected['generated_tokens'] != rep['target_tokens'] or collected['fragment_rows'] != rep['fragment_rows']
+                or collected['constant_groups'] != 8-informative[0]):
+            raise ValueError('Probe admission summary differs from the single collection')
     losses = []
     if training:
         losses = reader_evidence.loss_evidence([json.loads(l) for l in (run/'metrics.jsonl').read_text().splitlines()], roles)
@@ -117,6 +126,16 @@ def review(plan, index, read, local):
     if (not plan['training_admissible'] or not isinstance(jobs, dict) or index.get('plan') != plan
             or index.get('status') != 'completed' or set(jobs) != {j['job_id'] for j in plan['jobs']}):
         errors.append('Execution plan or supervisor index incomplete/unverified')
+    try:
+        owner = index['owner']
+        if (index['study_key'] != f"{plan['study_id']}/{plan['phase']}/a{plan['attempt']:02d}"
+                or owner['plan_sha256'] != c.digest(plan) or not owner['call_id'].startswith('fc-')
+                or read(plan['root']+'/supervisor/plan.json') != plan
+                or read(plan['root']+'/supervisor/index.json') != index):
+            raise ValueError('Supervisor ownership or persisted index differs')
+        calls.add(owner['call_id'])
+    except (OSError, KeyError, TypeError, ValueError, AttributeError) as exc:
+        errors.append('Unverified supervisor: '+str(exc))
     for job in plan['jobs']:
         state = (jobs or {}).get(job['job_id'], {}) if isinstance(jobs, dict) else {}
         entries = state.get('stages', []) if isinstance(state, dict) else []
@@ -138,6 +157,8 @@ def review(plan, index, read, local):
                 item['trace_diagnostics'] = facts
                 item['observed_slots'], item['completed_slots'], item['confirmed_slots'] = cal.slot_accounting(learning.stage_spec(request), attempts)
                 proof, integration = reader_evidence.durable_stage(plan, job, stage, entry, read, calls)
+                if not proof['worker']['call_id'].startswith('fc-'):
+                    raise ValueError('Missing provider stage call identity')
                 obs = read(stage['output']+'/observability.json')
                 if (read(stage['output']+'/request.json') != request or entry.get('wandb') != stage['wandb']
                         or obs['experiment_id'] != job['job_id'] or obs['wandb_run_id'] != stage['wandb']['id']
