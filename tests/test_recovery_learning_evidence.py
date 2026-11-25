@@ -71,7 +71,7 @@ def events(request, rows):
                 add('gradient_step',role=role,optimizer_called=True,preclip_finite=True,preclip_norm=0)
             add('weight_refresh',step=i)
     if spec['updates']:
-        add('native_checkpoint_saved',step=2)
+        add('native_checkpoint_saved',step=spec['updates'])
     add('trainer_returned',global_step=1 if name=='collection-probe' else spec['initial_step']+spec['updates'],
         validation_only=spec['route']=='val',collection_only=name=='collection-probe',optimizer_updates=spec['updates'])
     add('wandb_finished',id=request['stage']['wandb']['id'])
@@ -99,18 +99,18 @@ def scripted_services(commands, rp, run, repo, bundle, remaining):
     (run/'audit').mkdir()
     (run/'audit/events-4242.jsonl').write_text(''.join(json.dumps(row)+'\n' for row in audit))
     if stage['name'] == 'training':
-        path = Path(cfg['trainer']['default_local_dir'])/'global_step_2'
+        path = Path(cfg['trainer']['default_local_dir'])/f"global_step_{job['steps']}"
         roles = ['actor','critic'] if job['algorithm'] == c.ALGORITHMS[1] else ['actor']
         for role in roles:
             (path/role).mkdir(parents=True)
             for kind in ('model','optim','extra_state'):
                 (path/role/(kind+'_world_size_1_rank_0.pt')).write_bytes(b'synthetic')
         (path/'data.pt').write_bytes(b'loader fixture')
-        (path.parent/'latest_checkpointed_iteration.txt').write_text('2')
+        (path.parent/'latest_checkpointed_iteration.txt').write_text(str(job['steps']))
         metrics = {'actor/pg_loss':0}
         if 'critic' in roles:
             metrics['critic/vf_loss'] = 0
-        (run/'metrics.jsonl').write_text(''.join(json.dumps({'step':i,'metrics':metrics})+'\n' for i in (1,2)))
+        (run/'metrics.jsonl').write_text(''.join(json.dumps({'step':i,'metrics':metrics})+'\n' for i in range(1,job['steps']+1)))
     write(run/'observability.json',{'experiment_id':job['job_id'],'wandb':stage['wandb'],
           'wandb_run_id':stage['wandb']['id'],'request_sha256':hashlib.sha256(json.dumps(req,sort_keys=True).encode()).hexdigest()})
     return 0

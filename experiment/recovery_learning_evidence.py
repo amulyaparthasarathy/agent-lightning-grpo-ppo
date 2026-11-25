@@ -98,7 +98,7 @@ def stage_report(run, request, events=None, evidence_class='live-model', *, pref
             or (probe and returns[0].get('optimizer_updates') != 0)
             or by_event['advantages'] or (not training and by_event['critic_preupdate'])
             or [e['step'] for e in by_event['weight_refresh']] != list(range(spec['initial_step'], spec['initial_step']+steps+1))
-            or [e['step'] for e in by_event['native_checkpoint_saved']] != ([2] if training else [])
+            or [e['step'] for e in by_event['native_checkpoint_saved']] != ([steps] if training else [])
             or len(by_event['development_collection_admitted']) != int(probe)):
         raise ValueError('Unexpected trainer, refresh, finish or checkpoint sequence')
     roles = ('actor', 'critic') if request['job']['algorithm'] == c.ALGORITHMS[1] else ('actor',)
@@ -149,8 +149,13 @@ def stage_report(run, request, events=None, evidence_class='live-model', *, pref
             raise ValueError('Probe admission summary differs from the single collection')
     losses = []
     if training:
-        losses = reader_evidence.loss_evidence([json.loads(l) for l in (run/'metrics.jsonl').read_text().splitlines()], roles)
-    return {'schema': 'recovery-qualification-evidence-v1', 'stage': name, 'plan_sha256': request['plan_sha256'],
+        losses = reader_evidence.loss_evidence([json.loads(l) for l in (run/'metrics.jsonl').read_text().splitlines()], roles, steps)
+    study = request['plan']['phase'] == c.modes.STUDY
+    sequence = {'refresh_steps':[e['step'] for e in by_event['weight_refresh']],
+                'actor_calls':[e['count'] for e in by_event['optimizer_step']],
+                'gradient_norms':[e['preclip_norm'] for e in by_event['gradient_step']],
+                'checkpoint_steps':[e['step'] for e in by_event['native_checkpoint_saved']]} if study else {}
+    return {**sequence, 'schema': 'recovery-qualification-evidence-v1', 'stage': name, 'plan_sha256': request['plan_sha256'],
             'path_binding_sha256': c.digest(binding), 'resolved_config_sha256': c.file_hash(resolved), 'declared': spec, 'episodes': rows, 'collections': collections, 'old_probabilities': by_event['recovery_old_probabilities'],
             'optimizer_calls': {role: steps for role in roles}, 'losses': losses, 'critic_preupdate': critic, 'informative_groups': informative,
             'strict_successes': sum(int(e['reward']) for e in rows), 'episodes_admitted': len(rows)}
@@ -177,6 +182,8 @@ def review(plan, index, read, local):
         calls.add(owner['call_id'])
     except (OSError, KeyError, TypeError, ValueError, AttributeError) as exc:
         errors.append('Unverified supervisor: '+str(exc))
+    study = plan['phase'] == c.modes.STUDY
+    trained, final_rows = {}, {}
     for job in plan['jobs']:
         state = (jobs or {}).get(job['job_id'], {}) if isinstance(jobs, dict) else {}
         entries = state.get('stages', []) if isinstance(state, dict) else []
@@ -186,7 +193,7 @@ def review(plan, index, read, local):
         training = None
         for stage in job['stages']:
             name = stage['name']
-            item = stages[job['algorithm']+'/'+name] = {'admitted': False}
+            item = stages[stage['key'] if study else job['algorithm']+'/'+name] = {'admitted': False}
             request = c.stage_request(plan, job, stage)
             entry = next((e for e in entries if isinstance(e, dict) and e.get('stage') == name), {}) if isinstance(entries,list) else {}
             item['supervisor_status'] = entry.get('status', 'unknown')
@@ -197,7 +204,7 @@ def review(plan, index, read, local):
                 facts, _, attempts = cal.inspect_traces(run, request, 'live-model')
                 item['trace_diagnostics'] = facts
                 item['observed_slots'], item['completed_slots'], item['confirmed_slots'] = cal.slot_accounting(learning.stage_spec(request), attempts)
-                seconds = plan['bounds']['stage_seconds']
+                seconds = c.stage_limit(plan, stage)
                 expected_reservation = {'seconds':seconds, 'usd':seconds*plan['bounds']['all_resource_hourly_ceiling_usd']/3600}
                 if entry.get('reservation') != expected_reservation:
                     raise ValueError('Missing or inconsistent pre-dispatch reservation')
@@ -238,30 +245,61 @@ def review(plan, index, read, local):
                             or diags['informative_reward_groups'] != sum(counts)
                             or diags['accuracy_improvement_required'] is not False):
                         raise ValueError('Learning diagnostics differ from collected outcomes or metrics')
-                expected_dirs = ['global_step_2'] if name == 'training' else []
+                expected_dirs = [f"global_step_{job['steps']}"] if name == 'training' else []
                 if sorted(p.name for p in (run/'checkpoints').glob('global_step_*')) != expected_dirs:
                     raise ValueError('Unexpected native checkpoint set')
                 if name == 'training':
-                    checkpoint = json.loads((run/'checkpoints/global_step_2/matched_identity.json').read_text())
-                    if (c.digest(checkpoint) != proof['checkpoint_sha256'] or checkpoint['step'] != 2
+                    checkpoint = json.loads((run/f"checkpoints/global_step_{job['steps']}/matched_identity.json").read_text())
+                    if (c.digest(checkpoint) != proof['checkpoint_sha256'] or checkpoint['step'] != job['steps']
                             or checkpoint['algorithm'] != job['algorithm'] or checkpoint['plan_sha256'] != c.digest(plan)
                             or checkpoint['path_binding_sha256'] != report['path_binding_sha256']
                             or checkpoint['resolved_config_sha256'] != c.file_hash(run/'resolved_config.json')
                             or set(checkpoint['roles']) != set(report['optimizer_calls'])):
                         raise ValueError('Native checkpoint manifest identity differs')
+                    if study and (checkpoint['policy_seed'] != job['run_seed'] or checkpoint['training_run_id'] != stage['wandb']['id']):
+                        raise ValueError('Native study checkpoint belongs to another policy')
                     for files in checkpoint['roles'].values():
                         if not all(files[k+'_world_size_1_rank_0.pt']['bytes'] > 0 for k in ('model', 'optim', 'extra_state')):
                             raise ValueError('Incomplete checkpoint inventory')
                     training = proof
+                    if study:
+                        trained[stage['policy']] = proof
+                if study and name == 'checkpoint-eval':
+                    training = trained.get(stage['policy'])
                 if name == 'checkpoint-eval' and (proof['checkpoint_before_load_sha256'] != proof['checkpoint_sha256'] or not training or proof['training_worker'] != training['worker']
                         or proof['worker']['container_id'] == training['worker']['container_id']
                         or proof['checkpoint_sha256'] != training['checkpoint_sha256']):
                     raise ValueError('Fresh-worker checkpoint identity differs')
+                if study:
+                    metrics = [json.loads(line) for line in (run/'metrics.jsonl').read_text().splitlines()] if (run/'metrics.jsonl').exists() else []
+                    item['secondary'] = c.study.secondary(report, entry, cal.read_events(run), metrics, integration)
+                    if stage['panel'] == 'final':
+                        final_rows[stage['policy']] = report['episodes']
                 item.update(admitted=True, performance={'strict_successes': report['strict_successes'],
                     'episodes': report['episodes_admitted']}, optimization={'informative_groups': report['informative_groups'],
                     'losses': report['losses'], 'optimizer_calls': report['optimizer_calls']})
             except (OSError, ValueError, KeyError, TypeError, AttributeError, IndexError, RuntimeError) as exc:
                 item['reason'] = f'{type(exc).__name__}: {exc}'
-                errors.append(job['algorithm']+'/'+name+': '+item['reason'])
-    return {'evidence_complete': not errors, 'operational_completion': 'completed' if not errors else 'incomplete or unverified',
-            'qualification_evidence': not errors, 'stages': stages, 'problems': errors}
+                errors.append(stage.get('key',job['algorithm']+'/'+name)+': '+item['reason'])
+    analysis = {}
+    if study and not errors:
+        try:
+            release = c.study.final_release(plan, index)
+            if (read(plan['root']+'/supervisor/final-release.json') != release or index['final_release'] != release
+                    or index['first_seed_gate'] != c.study.gate(plan, index, 3)):
+                raise ValueError('Collected final release or first seed gate differs')
+            previous = index['started_at']
+            for job in plan['jobs']:
+                entry, = jobs[job['job_id']]['stages']
+                if not previous <= entry['submitted_at'] <= entry['finished_at'] <= entry['submitted_at']+c.stage_limit(plan,job['stages'][0]):
+                    raise ValueError('Study timing or stage order differs')
+                if job['stages'][0]['panel'] == 'final' and entry['result'].get('final_release_sha256') != c.digest(release):
+                    raise ValueError('Final worker did not attest the released policies and analysis')
+                previous = entry['finished_at']
+            if previous-index['started_at'] > bounds['supervisor_seconds']:
+                raise ValueError('Study supervisor exceeded its deadline')
+            analysis = {'paired_final':c.study.analyze_final(plan, final_rows)}
+        except (OSError, ValueError, TypeError, KeyError) as exc:
+            errors.append(str(exc))
+    return {**analysis, 'evidence_complete': not errors, 'operational_completion': 'completed' if not errors else 'incomplete or unverified',
+            ('study_evidence' if study else 'qualification_evidence'): not errors, 'stages': stages, 'problems': errors}

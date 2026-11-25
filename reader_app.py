@@ -20,8 +20,8 @@ from experiment import matched_container as runtime
 
 profile = json.loads(os.environ['AGL_READER_PROFILE'])
 c.validate_profile(profile)
-if profile['fixture']:
-    raise ValueError('Synthetic profiles cannot declare remote apps')
+if profile['fixture'] or profile.get('study_authority') == 'disabled':
+    raise ValueError('Fixture or disabled study profile cannot declare remote apps')
 binding = profile['modal']
 app = modal.App(binding['app'])
 image = None
@@ -45,7 +45,7 @@ def check(plan):
 
 
 @app.function(image=image, gpu='H100!', cpu=(16, 16), memory=(196608, 196608),
-              timeout=7200, retries=0, max_containers=1, single_use_containers=True,
+              timeout=c.study.TRAIN_SECONDS if profile.get('purpose') == c.modes.STUDY else 7200, retries=0, max_containers=1, single_use_containers=True,
               volumes={'/data': volume}, secrets=[credentials])
 def stage_worker(request, deadline_epoch, image_id=None):
     check(request['plan'])
@@ -55,7 +55,7 @@ def stage_worker(request, deadline_epoch, image_id=None):
                                call_id=modal.current_function_call_id(), image_id=image_id)
 
 
-@app.function(image=image, cpu=(1, 1), memory=(2048, 2048), timeout=43800,
+@app.function(image=image, cpu=(1, 1), memory=(2048, 2048), timeout=c.study.SUPERVISOR_SECONDS if profile.get('purpose') == c.modes.STUDY else 43800,
               retries=0, max_containers=1, single_use_containers=True, volumes={'/data': volume})
 def supervise(plan, image_id=None):
     check(plan)
@@ -95,7 +95,7 @@ def cpu_action(plan, action, deadline_epoch, image_id=None):
         env = runtime.environment({'wandb_entity': profile['wandb']['entity'], 'weave': False})
         env['WANDB_PROJECT'] = profile['wandb']['project']
         env['HF_HOME'] = str(run/'temporary/huggingface')
-        if action == 'preflight' and plan['phase'] == c.modes.RECOVERY_LEARNING:
+        if action == 'preflight' and c.modes.recovery(plan):
             env['AGL_READER_VOLUME_ID'] = volume.object_id
         script = 'reader_assets.py' if action == 'prepare' else 'reader_preflight.py'
         runtime.run_command([runtime.PYTHON, BUNDLE/script, run/'plan.json', run], run/'action.log',

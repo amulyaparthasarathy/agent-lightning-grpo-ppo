@@ -53,7 +53,7 @@ def stage_worker(request, deadline_epoch, *, c, registry, volume, call_id, image
         from .reader_assets import owned_path
         run = owned_path(mount, output)
     binding = None
-    if reader and request['plan']['phase'] == c.modes.RECOVERY_LEARNING:
+    if reader and c.modes.recovery(request['plan']):
         from . import qualification_paths as paths
         from . import matched_launch
         projected = matched_launch.mounted_stage_plan(request, mount, volume.object_id, runtime.BUNDLE,
@@ -62,11 +62,36 @@ def stage_worker(request, deadline_epoch, *, c, registry, volume, call_id, image
         preflight = registry.get('result:preflight:'+request['plan']['root'])
         if not preflight or binding != paths.preflight_binding(request, preflight):
             raise ValueError('Worker mount differs from same-plan CPU preflight')
+    release = None
+    study = reader and request['plan']['phase'] == c.modes.STUDY
+    if study:
+        # The supervisor commits the exact reservation and release before spawning.
+        control = owned_path(mount, request['plan']['root']+'/supervisor')
+        index = json.loads((control/'index.json').read_text())
+        job = request['job']
+        entry, = index['jobs'][job['job_id']]['stages']
+        owner = registry.get('owner:'+supervisor.key(request['plan']))
+        seconds = c.stage_limit(request['plan'], request['stage'])
+        if (not owner or index['owner'] != owner or owner['plan_sha256'] != request['plan_sha256']
+                or owner['preflight_sha256'] != c.digest(preflight) or owner['volume_id'] != volume.object_id or index['plan'] != request['plan']
+                or entry['output'] != output or entry['wandb'] != request['stage']['wandb']
+                or entry['status'] not in ('planned','submitted','started') or entry['call_id'] not in (None, call_id)
+                or entry['reservation'] != dict(seconds=seconds, usd=seconds*request['plan']['bounds']['all_resource_hourly_ceiling_usd']/3600)):
+            raise ValueError('Missing owned study reservation')
+        if request['stage']['key'] == 'training-2002' and index.get('first_seed_gate') != c.study.gate(request['plan'], index, 3):
+            raise ValueError('First seed technical gate differs')
+        if request['stage']['panel'] == 'final':
+            release = c.study.final_release(request['plan'], index)
+            if (json.loads((control/'final-release.json').read_text()) != release or index.get('final_release') != release
+                    or registry.get('release:'+request['plan_sha256']) != c.digest(release)):
+                raise ValueError('Missing or inconsistent durable final release')
     # Unique stage marker is a restart guard. Restarting the same attempt is forbidden.
     run.mkdir(parents=True, exist_ok=False)
     receipt = {'status': 'started', 'call_id': call_id, 'output': output, 'started_at': time.time()}
     if reader:
         receipt['container_id'] = os.environ['MODAL_TASK_ID']
+    if release is not None:
+        receipt['final_release_sha256'] = c.digest(release)
     if binding:
         write(run/'path-binding.json', binding, exclusive=True)
         receipt['path_binding_sha256'] = c.digest(binding)
@@ -140,15 +165,18 @@ def stage_worker(request, deadline_epoch, *, c, registry, volume, call_id, image
         receipt['finished_at'] = time.time()
         write(run/'receipt.json', receipt)
         volume.commit()
+    # Long runs keep full episode and tensor inventories on the volume.
+    if study:
+        return dict(call_id=call_id, output=output, receipt_sha256=c.digest(receipt))
     return receipt
 
 
-def supervise(plan, *, c, registry, volume, modal, stage_worker, image_id=None):
+def supervise(plan, *, c, registry, volume, modal, stage_worker, image_id=None, mount=Path('/data')):
     c.validate(plan)
     reader = plan.get('schema') in ('reader-reference-v1', 'reader-task-v2')
     study_key = supervisor.key(plan)
     owner = {'call_id': modal.current_function_call_id(), 'plan_sha256': c.digest(plan)}
-    if reader and plan['phase'] == c.modes.RECOVERY_LEARNING:
+    if reader and c.modes.recovery(plan):
         preflight = registry.get('result:preflight:'+plan['root'])
         owner.update(volume_id=volume.object_id, preflight_sha256=c.digest(preflight))
     if not registry.put('owner:'+study_key, owner, skip_if_exists=True):
@@ -156,14 +184,25 @@ def supervise(plan, *, c, registry, volume, modal, stage_worker, image_id=None):
     path = Path('/data/phase2/studies')/plan['study_id']/plan['phase']/f"supervisor-a{plan['attempt']:02d}"
     if reader:
         from .reader_assets import owned_path
-        path = owned_path('/data', plan['root']+'/supervisor')
+        path = owned_path(mount, plan['root']+'/supervisor')
     volume.reload(); path.mkdir(parents=True, exist_ok=False)
     write(path/'plan.json', plan, exclusive=True)
     def persist(index):
         index['owner'] = owner
         registry.put('lease:'+study_key, {'time':time.time(), 'owner':owner})
-        registry.put('index:'+study_key, index)
-        write(path/'index.json', index)
+        if reader and plan['phase'] == c.modes.STUDY:
+            release = index.get('final_release')
+            if release and not (path/'final-release.json').exists():
+                write(path/'final-release.json', release, exclusive=True)
+                volume.commit()
+                if not registry.put('release:'+c.digest(plan), c.digest(release), skip_if_exists=True):
+                    raise ValueError('Release already exists')
+            write(path/'index.pending', index)
+            (path/'index.pending').replace(path/'index.json')
+            registry.put('index:'+study_key, {'plan':plan, 'volume_index':True, 'owner':owner})
+        else:
+            registry.put('index:'+study_key, index)
+            write(path/'index.json', index)
         volume.commit()
     def dispatch(job, stage):
         async def bounded_spawn():
@@ -179,8 +218,20 @@ def supervise(plan, *, c, registry, volume, modal, stage_worker, image_id=None):
                 c.stage_request(plan, job, stage), **kwargs), timeout=30)
             return call.object_id
         return asyncio.run(bounded_spawn())
+    def get_result(call):
+        result = modal.FunctionCall.from_id(call).get(timeout=0)
+        if reader and plan['phase'] == c.modes.STUDY:
+            outputs = {s['output'] for j in plan['jobs'] for s in j['stages']}
+            if result['output'] not in outputs or result['call_id'] != call:
+                raise ValueError('Unowned study worker result')
+            volume.reload()
+            receipt = json.loads((owned_path(mount, result['output'])/'receipt.json').read_text())
+            if c.digest(receipt) != result['receipt_sha256']:
+                raise ValueError('Durable study worker receipt changed')
+            return receipt
+        return result
     return supervisor.run(plan, dispatch,
-        lambda call: modal.FunctionCall.from_id(call).get(timeout=0),
+        get_result,
         lambda call: modal.FunctionCall.from_id(call).cancel(terminate_containers=True),
         lambda call: registry.get('heartbeat:'+call),
         lambda: bool(registry.get('stop:'+study_key)), persist)

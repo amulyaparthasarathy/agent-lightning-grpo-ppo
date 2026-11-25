@@ -179,6 +179,8 @@ def inspect(model, data, staging=None, task="calculator-v1", scope='all'):
         verify = c.task_module(task).verify
         if scope != 'all' and task != 'recovery-readiness-v1':
             raise ValueError('Scoped dataset verification is not defined for this task')
+        if scope == 'study-final':
+            verify = c.study.verify_final_data
         m = {'schema': 'reader-assets-v1', 'fixture': False, 'model': verify_model(model),
              'data': verify(data) if scope == 'all' else verify(data, scope=scope),
              'historical_match': synthetic_claim(task)}

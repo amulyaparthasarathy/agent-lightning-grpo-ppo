@@ -3,6 +3,7 @@ from __future__ import annotations
 import copy
 import hashlib
 import json
+import math
 import time
 
 TERMINAL = {'completed', 'failed', 'cancelled', 'unknown'}
@@ -52,8 +53,20 @@ def recovery_stage_admitted(plan, job, position, result, sha):
             import reader_contract
         proof = result['completion']
         audit = proof['recovery_qualification']
-        spec = plan['qualification']['stages'][stage['name']]
+        spec = reader_contract.learning.stage_spec(dict(plan=plan, stage=stage))
         recovery_calibration.check_table(spec, audit['episodes'])
+        if plan['phase'] == reader_contract.modes.STUDY:
+            steps = spec['updates']
+            start = spec['initial_step']
+            if (audit['actor_calls'] != list(range(1,steps+1))
+                    or audit['refresh_steps'] != list(range(start,start+steps+1))
+                    or audit['checkpoint_steps'] != ([steps] if steps else [])
+                    or len(audit['gradient_norms']) != steps or not all(map(math.isfinite,audit['gradient_norms']))
+                    or [loss['step'] for loss in audit['losses']] != list(range(1,steps+1))
+                    or any(loss['metric'] != 'actor/pg_loss' or not math.isfinite(loss['value']) for loss in audit['losses'])
+                    or proof['assets_sha256'] != reader_contract.digest(plan['assets'])
+                    or proof['task_sha256'] != reader_contract.digest(plan['task_identity'])):
+                return False
         roles = ['actor','critic'] if job['algorithm'] == reader_contract.ALGORITHMS[1] else ['actor']
         return (proof['source_sha256'] == reader_contract.digest(plan['source'])
                 and proof['configuration_sha256'] == plan['configuration_sha256']
@@ -80,7 +93,14 @@ def run(plan, dispatch, get_result, cancel, read_heartbeat, stop_requested, pers
     """
     plan_sha256 = hashlib.sha256(json.dumps(plan, sort_keys=True, separators=(',', ':'), allow_nan=False).encode()).hexdigest()
     exploratory = plan['phase'] in ('exploratory-qualification','exploratory')
-    recovery = plan.get('schema') == 'reader-task-v2' and plan['phase'] == 'recovery-learning-qualification-v1'
+    study = recovery = False
+    if plan.get('schema') == 'reader-task-v2':
+        try:
+            from . import reader_contract as reader
+        except ImportError:
+            import reader_contract as reader
+        study = plan['phase'] == reader.modes.STUDY
+        recovery = plan['phase'] in (reader.modes.STUDY, reader.modes.RECOVERY_LEARNING)
     # Recovery must journal an interrupted provider exchange, including during cleanup.
     provider_errors = BaseException if recovery else Exception
     start = clock()
@@ -114,8 +134,21 @@ def run(plan, dispatch, get_result, cancel, read_heartbeat, stop_requested, pers
         receipt = {'stage': stage['name'], 'output': stage['output'], 'status': 'planned',
                    'wandb': stage['wandb'], 'submitted_at': clock(), 'call_id': None}
         if recovery:
-            seconds = plan['bounds']['stage_seconds']
+            seconds = reader.stage_limit(plan, stage)
             receipt['reservation'] = {'seconds':seconds, 'usd':seconds*rate/3600}
+        if study:
+            position_in_study = plan['jobs'].index(job)
+            if position_in_study == 3:
+                index['first_seed_gate'] = reader.study.gate(plan, index, 3)
+            if position_in_study == 7:
+                index['final_release'] = reader.study.final_release(plan, index)
+            if position_in_study >= 7 and index.get('final_release') != reader.study.final_release(plan, index):
+                raise ValueError('Final release differs before dispatch')
+            projected = index.get('worker_seconds_reserved', 0) + seconds
+            if (projected > plan['bounds']['max_gpu_seconds']
+                    or projected*rate/3600 + index['supervisor_reservation_usd'] > plan['bounds']['budget_usd']
+                    or clock()-start+seconds > plan['bounds']['supervisor_seconds']):
+                raise ValueError('Insufficient remaining study reservation or deadline')
         state['stages'].append(receipt)
         save()
         try:
@@ -174,7 +207,7 @@ def run(plan, dispatch, get_result, cancel, read_heartbeat, stop_requested, pers
                     age = now-receipt['submitted_at']
                     missing_start = not heartbeat and age >= plan['bounds']['startup_seconds']
                     stalled = heartbeat and now-heartbeat['time'] > 180
-                    expired = age >= (plan['bounds']['stage_seconds_by_name'][receipt['stage']] if exploratory else plan['bounds']['stage_seconds'])
+                    expired = age >= (plan['bounds']['stage_seconds_by_name'][receipt['stage']] if exploratory else reader.stage_limit(plan, job['stages'][position]) if study else plan['bounds']['stage_seconds'])
                     if stopped or deadline or missing_start or stalled or expired:
                         reason = ('owner_stop' if stopped else 'supervisor_deadline' if deadline else
                                   'startup_no_heartbeat' if missing_start else 'heartbeat_lost' if stalled else 'stage_deadline')
@@ -202,6 +235,9 @@ def run(plan, dispatch, get_result, cancel, read_heartbeat, stop_requested, pers
                             or result.get('completion', {}).get('plan_sha256') != plan_sha256
                             or result['completion'].get('stage') != receipt['stage']):
                         receipt.update(status='unknown', error='Missing or mismatched durable completion proof')
+                    elif study and (clock()-receipt['submitted_at'] > receipt['reservation']['seconds']
+                                    or clock()-start > plan['bounds']['supervisor_seconds']):
+                        receipt.update(status='failed', result=result, error='study_deadline_exceeded')
                     elif recovery and not recovery_stage_admitted(plan, job, position, result, plan_sha256):
                         receipt.update(status='failed', result=result, error='recovery_stage_evidence_incomplete')
                     else:

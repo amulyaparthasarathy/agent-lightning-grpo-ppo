@@ -21,15 +21,22 @@ def describe(request, root, volume_id):
     run = contract.path(stage['output'])
     assets = plan['profile']['paths']
     data = contract.path(assets['data'])
-    training = next(s for s in job['stages'] if s['name'] == 'training')
-    checkpoint = contract.path(training['output'])/'checkpoints'/f"global_step_{job['steps']}"
+    training_job = job
+    is_study = plan['phase'] == contract.modes.STUDY
+    needs_checkpoint = not is_study or stage['policy'] != 'base'
+    if is_study and needs_checkpoint:
+        training_job = contract.study.training_job(request)
+    training = next(s for s in training_job['stages'] if s['name'] == 'training') if needs_checkpoint else None
+    checkpoint = contract.path(training['output'])/'checkpoints'/f"global_step_{job['steps']}" if training else None
     train, val = recovery_learning.routes(request, data, run)
     paths = dict(model=assets['model'], chat_template=str(contract.path(assets['model'])/'chat_template.jinja'),
                  data=str(data), staging=assets['staging'], run=str(run), binding=str(run/'path-binding.json'),
                  request_file=str(run/'request.json'), audit=str(run/'audit'),
                  resolved_config=str(run/'resolved_config.json'), checkpoints=str(run/'checkpoints'),
-                 training_checkpoint=str(checkpoint), training_completion=str(checkpoint.parents[1]/'completion.json'),
-                 latest_step=str(checkpoint.parent/'latest_checkpointed_iteration.txt'), train_file=train, eval_file=val)
+                 train_file=train, eval_file=val)
+    if checkpoint:
+        paths.update(training_checkpoint=str(checkpoint), training_completion=str(checkpoint.parents[1]/'completion.json'),
+                     latest_step=str(checkpoint.parent/'latest_checkpointed_iteration.txt'))
     return {'root': root, 'volume_id': volume_id, 'volume_name': plan['profile']['modal']['volume'],
             'plan_sha256': request['plan_sha256'], 'request_sha256': contract.digest(request), 'paths': paths}
 

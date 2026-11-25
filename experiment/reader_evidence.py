@@ -20,7 +20,7 @@ def container_identity(value):
     return value
 
 
-def loss_evidence(metrics, roles):
+def loss_evidence(metrics, roles, steps=2):
     # Pinned VERL reduces minibatch Metric values before Tracking.log(data, global_steps).
     # A logger may split role keys across records; join by (global step, exact metric).
     required = {'actor': 'actor/pg_loss', 'critic': 'critic/vf_loss'}
@@ -34,13 +34,13 @@ def loss_evidence(metrics, roles):
             if key not in [required[r] for r in roles]:
                 continue
             step = row.get('step')
-            if type(step) is not int or step not in (1, 2):
+            if type(step) is not int or step not in range(1, steps+1):
                 raise ValueError('Loss evidence outside declared updates')
             pair = (step, key)
             if pair in found and found[pair] != value:
                 raise ValueError('Conflicting duplicate loss evidence')
             found[pair] = value
-    if set(found) != {(step, required[role]) for role in roles for step in (1, 2)}:
+    if set(found) != {(step, required[role]) for role in roles for step in range(1, steps+1)}:
         raise ValueError('Missing update/role loss evidence')
     return [{'step': step, 'metric': key, 'value': value} for (step, key), value in sorted(found.items())]
 
@@ -65,7 +65,8 @@ def complete(run, request, completion):
               'wandb_id': stage['wandb']['id']}
     if modes.kind(request['plan'], stage) == 'training':
         roles = ('actor', 'critic') if job['algorithm'] == c.ALGORITHMS[1] else ('actor',)
-        checkpoint = json.loads((run/'checkpoints/global_step_2/matched_identity.json').read_text())
+        steps = job['steps']
+        checkpoint = json.loads((run/f'checkpoints/global_step_{steps}/matched_identity.json').read_text())
         if set(checkpoint['roles']) != set(roles):
             raise ValueError('Unexpected native checkpoint roles')
         for role in roles:
@@ -78,24 +79,24 @@ def complete(run, request, completion):
         for role in roles:
             counts = sorted(e['count'] for e in events if e['event'] == 'optimizer_step' and e['role'] == role)
             gradients = [e for e in events if e['event'] == 'gradient_step' and e['role'] == role]
-            if counts != [1, 2] or len(gradients) != 2 or any(not e['preclip_finite'] or not e['optimizer_called'] for e in gradients):
+            if counts != list(range(1, steps+1)) or len(gradients) != steps or any(not e['preclip_finite'] or not e['optimizer_called'] for e in gradients):
                 raise ValueError('Wrong optimizer sequence or missing/nonfinite gradient evidence')
         collections = [e for e in events if e['event'] == 'matched_advantages']
-        if (len(collections) != 2 or len({e['iteration'] for e in collections}) != 2
+        if (len(collections) != steps or {e['iteration'] for e in collections} != set(range(1, steps+1))
                 or any(e['real_rollouts'] != 32 or e['generated_tokens'] <= 0
                        or not 0 <= e['constant_groups'] <= 8 for e in collections)):
             raise ValueError('Missing/duplicate/incomplete rollout accounting')
-        if [e['step'] for e in events if e['event'] == 'native_checkpoint_saved'] != [2]:
+        if [e['step'] for e in events if e['event'] == 'native_checkpoint_saved'] != [steps]:
             raise ValueError('Missing/extra final native checkpoint save')
         metrics = [json.loads(x) for x in (run/'metrics.jsonl').read_text().splitlines()]
-        losses = loss_evidence(metrics, roles)
+        losses = loss_evidence(metrics, roles, steps)
         result['learning_diagnostics'] = {'collections': [{k: e[k] for k in ('iteration', 'generated_tokens', 'real_rollouts', 'constant_groups')} for e in collections],
             'informative_reward_groups': sum(8-e['constant_groups'] for e in collections),
             'informative_group_relative_task_advantage': ('observed' if any(e['constant_groups'] < 8 for e in collections) else 'not observed') if job['algorithm'] == c.ALGORITHMS[0] else 'not applicable',
             'losses_by_update': losses, 'finite_loss_values': len(losses), 'accuracy_improvement_required': False}
     if stage['name'] == 'checkpoint-eval':
         training_file = run.parent/'training/completion.json'
-        if modes.phase(request['plan']) == modes.RECOVERY_LEARNING:
+        if modes.recovery(request['plan']):
             try:
                 from . import qualification_paths
             except ImportError:
@@ -254,7 +255,7 @@ def validate_collection(plan, index, read, local=None):
     Calibration plans return their reviewed report whether or not the evidence is
     complete (evidence_complete says which); other phases raise on any gap, as before.
     """
-    if modes.phase(plan) == modes.RECOVERY_LEARNING:
+    if modes.recovery(plan):
         try:
             from .recovery_learning_evidence import review
         except ImportError:

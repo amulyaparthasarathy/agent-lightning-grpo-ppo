@@ -116,7 +116,7 @@ def configuration(request, model, run, *, binding=None):
             cfg['agentlightning.trace_aggregator.trajectory_max_prompt_length'] = limits['trajectory_max_prompt_length']
             cfg['agentlightning.trace_aggregator.trajectory_max_response_length'] = limits['trajectory_max_response_length']
             cfg['actor_rollout_ref.rollout.max_model_len'] = limits['max_model_len']
-    if modes.phase(plan) == modes.RECOVERY_LEARNING:
+    if modes.recovery(plan):
         cfg['data.shuffle'] = stage['name'] == 'training'
         cfg['data.validation_shuffle'] = False
         paths = qualification_paths.locations(request, binding)
@@ -127,7 +127,7 @@ def configuration(request, model, run, *, binding=None):
                     'actor_rollout_ref.rollout.engine_kwargs.vllm.chat_template': str(paths['chat_template'])})
     if stage['name'] == 'checkpoint-eval':
         checkpoint = run.parent/'training/checkpoints'/f"global_step_{job['steps']}"
-        if modes.phase(plan) == modes.RECOVERY_LEARNING:
+        if modes.recovery(plan):
             checkpoint = paths['training_checkpoint']
         cfg.update({'trainer.resume_mode': 'resume_path', 'trainer.resume_from_path': str(checkpoint)})
     else:
@@ -144,7 +144,7 @@ def make_plan(request, bundle, repo, model, data, python, run, port, *, binding=
     plan.update(protocol=c.PROTOCOL, algorithm=request['job']['algorithm'], request=request,
                 phase=request['stage']['name'], policy_version=c.PROTOCOL,
                 overrides=[launch.dot(k, v) for k, v in cfg.items()])
-    if modes.phase(request['plan']) == modes.RECOVERY_LEARNING:
+    if modes.recovery(request['plan']):
         plan['path_binding'] = binding
         plan['train_file'], plan['eval_file'] = learning.routes(request, data, run)
         check_launch_paths(plan, cfg)
@@ -201,7 +201,7 @@ def validate_resolved(config, plan):
                 raise ValueError('Ray environment drift')
         elif node != value:
             raise ValueError(f'Matched resolved configuration drift: {key}')
-    if modes.phase(plan['request']['plan']) == modes.RECOVERY_LEARNING:
+    if modes.recovery(plan['request']['plan']):
         check_launch_paths(plan, expected)
         if plan['request']['stage']['name'] != 'checkpoint-eval' and config['trainer'].get('resume_from_path') is not None:
             raise ValueError('Unexpected qualification resume path')
@@ -243,7 +243,7 @@ def validate_inputs(request, model, data, repo, bundle, contract=c, mount=Path('
             from reader_assets import inspect, owned_path
         # A calibration stage is model-facing: verify development files only.
         scope = {'scope': 'development'} if calibration(request) else {}
-        if modes.phase(request['plan']) == modes.RECOVERY_LEARNING:
+        if modes.recovery(request['plan']):
             scope = {'scope': learning.scope(request)}
         if inspect(model, data, owned_path(mount, request['plan']['profile']['paths']['staging']), task=request['plan']['profile']['task'], **scope) != request['plan']['assets']:
             raise ValueError('Actual reader assets differ from exact plan manifests')
@@ -279,9 +279,11 @@ def validate_inputs(request, model, data, repo, bundle, contract=c, mount=Path('
 def checkpoint_identity(path, request, run):
     roles = ('actor', 'critic') if request['job']['algorithm'] == c.ALGORITHMS[1] else ('actor',)
     extra = {}
-    if modes.phase(request['plan']) == modes.RECOVERY_LEARNING:
-        training = next(stage for stage in request['job']['stages'] if stage['name'] == 'training')
-        training_request = qualification_paths.contract.stage_request(request['plan'], request['job'], training)
+    if modes.recovery(request['plan']):
+        training_job = (qualification_paths.contract.study.training_job(request)
+                        if modes.phase(request['plan']) == modes.STUDY else request['job'])
+        training = next(stage for stage in training_job['stages'] if stage['name'] == 'training')
+        training_request = qualification_paths.contract.stage_request(request['plan'], training_job, training)
         binding = json.loads((run/'path-binding.json').read_text())
         if binding != qualification_paths.observe(training_request, binding['root'], binding['volume_id']):
             raise ValueError('Training mount binding changed')
@@ -293,6 +295,8 @@ def checkpoint_identity(path, request, run):
             actual = json.loads((reload_run/'path-binding.json').read_text())
             if qualification_paths.locations(request, actual)['training_checkpoint'] != path or actual['volume_id'] != binding['volume_id']:
                 raise ValueError('Reload mount differs from training mount')
+        if modes.phase(request['plan']) == modes.STUDY:
+            extra.update(policy_seed=training_job['run_seed'], training_run_id=training['wandb']['id'])
         extra['path_binding_sha256'] = c.digest(binding)
         members = list(path.rglob('*'))
         if (any(p.is_symlink() for p in members) or {p.name for p in path.iterdir() if p.is_dir()} != set(roles)
@@ -313,7 +317,7 @@ def checkpoint_identity(path, request, run):
 
 
 def verify_checkpoint(path, request, *, binding=None):
-    if modes.phase(request['plan']) == modes.RECOVERY_LEARNING:
+    if modes.recovery(request['plan']):
         paths = qualification_paths.locations(request, binding)
         if path != paths['training_checkpoint']:
             raise ValueError('Wrong bound checkpoint for this stage')
@@ -334,7 +338,7 @@ def complete_stage(run, request, data):
     stage, job = request['stage']['name'], request['job']
     result = {'protocol': c.PROTOCOL, 'plan_sha256': request['plan_sha256'], 'stage': stage}
     terminal = [e for e in events if e['event']=='trainer_returned']
-    recovery = modes.phase(request['plan']) == modes.RECOVERY_LEARNING
+    recovery = modes.recovery(request['plan'])
     if recovery:
         try:
             from .recovery_learning_evidence import stage_report
@@ -432,7 +436,7 @@ def main(mount=Path('/data')):
     elif request['plan']['data_manifest'].get('holdout'):
         data = Path('/data')/request['plan']['data_manifest']['holdout']['volume_path']
     bundle = Path(__file__).parent
-    if modes.phase(request['plan']) == modes.RECOVERY_LEARNING:
+    if modes.recovery(request['plan']):
         binding = json.loads((run/'path-binding.json').read_text())
         actual = qualification_paths.observe(request, mount, binding['volume_id'])
         paths = qualification_paths.locations(request, actual)
@@ -443,9 +447,17 @@ def main(mount=Path('/data')):
     if request['stage']['name']=='checkpoint-eval':
         checkpoint = paths['training_checkpoint'] if binding else run.parent/'training/checkpoints'/f"global_step_{request['job']['steps']}"
         before_load = verify_checkpoint(checkpoint, request, binding=binding)
+        if modes.phase(request['plan']) == modes.STUDY:
+            training = json.loads(paths['training_completion'].read_text())
+            if training['plan_sha256'] != request['plan_sha256'] or training['checkpoint_sha256'] != before_load:
+                raise ValueError('Mounted checkpoint differs from the admitted training receipt')
+            if request['stage']['panel'] == 'final':
+                release = json.loads((paths['run'].parents[1]/'supervisor/final-release.json').read_text())
+                if release['checkpoints'][request['stage']['policy']]['sha256'] != before_load:
+                    raise ValueError('Mounted terminal policy differs from final release')
     (run/'logs').mkdir()
     plan, commands = make_plan(request, bundle, repo, model, data, repo/'.venv/bin/python', run, launch.free_port(), binding=binding)
-    if modes.phase(request['plan']) == modes.RECOVERY_LEARNING:
+    if modes.recovery(request['plan']):
         if learning.materialize(request, data, run, commands) != [plan['train_file'], plan['eval_file']]:
             raise ValueError('Materialized qualification inputs differ from the bound launcher paths')
     elif calibration(request):
@@ -472,7 +484,7 @@ def main(mount=Path('/data')):
     if code:
         raise SystemExit(code)
     completion = complete_stage(run, request, data)
-    if modes.phase(request['plan']) == modes.RECOVERY_LEARNING and request['stage']['name'] == 'checkpoint-eval':
+    if modes.recovery(request['plan']) and request['stage']['name'] == 'checkpoint-eval':
         if before_load != completion['checkpoint_sha256']:
             raise ValueError('Native checkpoint changed during reload')
         completion['checkpoint_before_load_sha256'] = before_load

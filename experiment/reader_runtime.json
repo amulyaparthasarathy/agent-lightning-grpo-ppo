@@ -1,4 +1,5 @@
 [
+  "docs/recovery-learning-study-v1.json",
   "experiment/LICENSE-AgentLightning.txt",
   "experiment/VERIFICATION.json",
   "experiment/__init__.py",
@@ -58,6 +59,7 @@
   "experiment/recovery_task.py",
   "experiment/request_transport.py",
   "experiment/requirements-agent.txt",
+  "experiment/study_execution.py",
   "experiment/summarize.py",
   "experiment/templates/LICENSE-vllm.txt",
   "experiment/templates/PROVENANCE.json",
