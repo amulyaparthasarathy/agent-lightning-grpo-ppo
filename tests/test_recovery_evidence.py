@@ -622,6 +622,27 @@ class EvidenceTests(unittest.TestCase):
         self.assertEqual((stage['packet_status'], stage['episodes']['unattempted'], stage['episodes']['observed_attempts']), ('rejected', 0, 32))
         self.assertTrue(any('never dispatched, but local evidence exists' in p for p in stage['problems']))
 
+    def test_jobs_list_and_mismatched_raw_finish_id(self):
+        directory = self.variant()
+        run = self.stage_dir(directory, PPO, 'sampled-packet-1')
+        path = next((run/'audit').glob('events-*.jsonl'))
+        events = [json.loads(line) for line in path.read_text().splitlines()]
+        next(e for e in events if e['event'] == 'wandb_finished')['id'] = 'another-run'
+        path.write_text(''.join(json.dumps(event) + '\n' for event in events))
+        printed, full = self.report(directory)
+        stage = full['routes'][PPO]['stages']['sampled-packet-1']
+        self.assertEqual(stage['packet_status'], 'rejected')
+        self.assertTrue(any('W&B finish ID' in p for p in stage['problems']))
+        self.assertEqual(printed['accounting'][PPO]['admitted'], 88)
+        self.assertEqual(printed['decisions'][GRPO]['operational_validity'], 'valid')
+
+        collection = load(directory/'collection.json')
+        collection['index']['jobs'] = list(collection['index']['jobs'])
+        dump(directory/'collection.json', collection)
+        printed, _ = self.report(directory)
+        self.assertIn('supervisor index is malformed', printed['provenance'])
+        self.assertEqual(printed['episodes_admitted_after_recomputation_from_traces'], 0)
+
     def test_supervisor_index_status_and_stage_list_are_required(self):
         job = self.plan['jobs'][0]
         def edit_index(edit):

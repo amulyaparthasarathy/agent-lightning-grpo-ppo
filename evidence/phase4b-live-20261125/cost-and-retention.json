@@ -1,0 +1,46 @@
+{
+  "schema": "phase4b-cost-and-retention-v1",
+  "verified_utc": "2026-11-25T07:00:52.389953+00:00",
+  "authorization_usd": 200,
+  "opening_hold_usd": 95,
+  "provider_usage_usd": "5.05898874",
+  "provider_cost_by_resource_usd": {
+    "CPU": "0.65114346",
+    "Memory": "1.24632091",
+    "Network Egress": "0.00079947",
+    "H100": "3.16072490"
+  },
+  "provider_cost_by_closed_hour_usd": {
+    "2026-11-25 05:00:00+00:00": "1.98993992",
+    "2026-11-25 06:00:00+00:00": "3.06904882"
+  },
+  "retention_hold_usd": 3,
+  "billing_lag_and_collection_hold_usd": 2,
+  "execution_exposure_usd": 0,
+  "unused_authorization_after_usage_usd": "194.94101126",
+  "unencumbered_after_holds_usd": "189.94101126",
+  "volume_logical_bytes": 6531187952,
+  "inventory_entries": 1949,
+  "checkpoint_files": 0,
+  "storage_usd_per_gib_month": 0.09,
+  "seven_day_estimate_usd": 0.128,
+  "monthly_estimate_usd": 0.547,
+  "retention_review_utc": "2026-12-02",
+  "completed_calls": {
+    "preparation": 1,
+    "preflight": 1,
+    "supervisor": 1,
+    "gpu_stage": 8
+  },
+  "apps_stopped": 3,
+  "active_containers": 0,
+  "retained_volumes": 1,
+  "retained_registries": 1,
+  "billable_objects_checked": "Three owned apps, volume, registry and 59 built image IDs; exact IDs private.",
+  "provider_data_scope": "Attributable usage before credits. Delayed billing and retained storage can change the final invoice.",
+  "usage_by_owned_object_category_usd": {
+    "preflight": "0.00496688",
+    "prepare": "0.00536315",
+    "launch": "5.04865871"
+  }
+}

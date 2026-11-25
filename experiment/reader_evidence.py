@@ -172,7 +172,7 @@ def calibration_collection(plan, index, read, local=None):
     if index is None:
         index_problem = 'no supervisor index was supplied'
     elif (not isinstance(index, dict) or index.get('plan') != plan
-          or set(index.get('jobs') or {}) != {j['job_id'] for j in plan['jobs']}):
+          or not isinstance(index.get('jobs'), dict) or set(index['jobs']) != {j['job_id'] for j in plan['jobs']}):
         index_problem = 'the supervisor index is malformed or belongs to a different plan'
     def tolerant(name):
         try:
