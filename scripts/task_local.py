@@ -30,7 +30,7 @@ def recovery_prompts(args):
     result = {'schema': 'recovery-effective-prompts-v1', 'task': task.TASK, 'case_id': row['case_id'], 'split': 'development',
               'rendering': 'prepared served template (fixed date header) rendered offline; no model inference',
               'template_date_header': 'Today Date: 11 Nov 2026', 'authoritative_time': as_of,
-              'context_limits': task.CONTEXT_LIMITS, 'measured_prompts_sha256': prompt.prompt_set_sha256(), 'paths': paths}
+              'context_limits': task.CONTEXT_LIMITS, 'paths': paths}
     if count:
         result['budget'] = prompt.budget(count)
     if args.replay:
@@ -41,33 +41,31 @@ def recovery_prompts(args):
 
 
 def calibration_report(args):
-    """Rebuild the calibration report from stage completions; recheck episode rows against traces."""
-    from experiment import reader_assets as assets, reader_contract as c, recovery_calibration as calibration
+    """Review collected calibration evidence and write the report.
+
+    The plan is validated on every path. A live decision requires the supervisor
+    index (collection.json, written by `reader_training.py collect`), the durable
+    receipts, the traces and the audit events, all under --evidence. With less, the
+    report is still written, as diagnostics: explicitly unverified, never live.
+    """
+    from experiment import reader_assets as assets, reader_evidence as evidence
     plan = assets.read(args.plan)
-    completions, rechecked = {}, 0
-    for job in plan['jobs']:
-        for stage in job['stages']:
-            run = args.evidence/job['algorithm']/stage['name']
-            if not (run/'completion.json').is_file():
-                continue
-            proof = assets.read(run/'completion.json')
-            completions.setdefault(job['algorithm'], {})[stage['name']] = proof
-            if (run/'traces').is_dir() and 'calibration' in proof:
-                request = c.stage_request(plan, job, stage) if not args.unvalidated_plan else {
-                    'plan': plan, 'job': job, 'stage': stage, 'plan_sha256': c.digest(plan)}
-                rows = calibration.episode_table(run, request, proof['calibration']['evidence_class'])
-                recorded = [{k: v for k, v in e.items() if k in rows[0]} for e in proof['calibration']['episodes']] if rows else []
-                if rows != recorded:
-                    raise ValueError(f'Episode rows differ from collected traces: {run}')
-                rechecked += len(rows)
-    result = calibration.report(plan, completions)
+    collection = args.evidence/'collection.json'
+    index = assets.read(collection).get('index') if collection.is_file() else None
+    reviewed = evidence.calibration_collection(plan, index, evidence.local_reader(plan, args.evidence), local=args.evidence)
+    result = reviewed['calibration']
     args.out.mkdir(parents=True, exist_ok=False)
     assets.write_new(args.out/'report.json', result)
-    (args.out/'summary.md').write_text(calibration.summary(result))
+    from experiment.recovery_calibration import summary
+    (args.out/'summary.md').write_text(summary(result))
     return {'report': str(args.out/'report.json'), 'summary': str(args.out/'summary.md'),
             'evidence_class': result['evidence_class'], 'live_policy_measurement': result['live_policy_measurement'],
-            'episode_rows_rechecked_against_traces': rechecked,
-            'decisions': {a: {k: r['decision'][k] for k in ('operational_validity', 'scientific_suitability')}
+            'provenance': result['provenance'], 'plan_problems': result['plan_problems'],
+            'episodes_admitted_after_recomputation_from_traces': sum(r['accounting']['admitted'] for r in result['routes'].values()),
+            'accounting': {a: {k: r['accounting'][k] for k in ('expected', 'admitted', 'observed_attempts', 'rewards_confirmed',
+                                                               'rewards_missing', 'unattempted', 'unknown', 'rejected_untrusted')}
+                           for a, r in result['routes'].items()},
+            'decisions': {a: {k: r['decision'][k] for k in ('operational_validity', 'scientific_suitability', 'reasons')}
                           for a, r in result['routes'].items()}}
 
 
@@ -80,10 +78,8 @@ def main():
     p.add_argument('--case', type=int, default=0, help='prompts: index into the development panel')
     p.add_argument('--tokenizer', type=Path, help='prompts: pinned tokenizer.json (verified against the model lock)')
     p.add_argument('--replay', type=Path, help='prompts: collected evidence directory whose recorded prompt tokens to reproduce')
-    p.add_argument('--evidence', type=Path, help='report: collected or demonstration evidence directory')
+    p.add_argument('--evidence', type=Path, help='report: directory written by reader_training.py collect, or by calibration-demo')
     p.add_argument('--plan', type=Path, help='report: the plan the evidence was produced under')
-    p.add_argument('--unvalidated-plan', action='store_true',
-                   help='report: skip regenerating the plan from current source (inspecting an older plan)')
     args = p.parse_args()
     if args.command in ('prompts', 'calibration-demo', 'report') and args.task != RECOVERY:
         p.error(f'{args.command} requires --task {RECOVERY}')

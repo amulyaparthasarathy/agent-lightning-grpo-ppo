@@ -105,8 +105,133 @@ def complete(run, request, completion):
     return result
 
 
-def validate_collection(plan, index, read):
-    """Join durable proof with exact supervisor calls; do not trust directory existence."""
+def durable_stage(plan, job, stage, entry, read, calls):
+    """Join one stage's supervisor entry with its durable receipt, completion and observability.
+
+    The single definition of durable stage identity, shared by qualification,
+    asset development and calibration. Raises ValueError on any mismatch.
+    """
+    receipt, proof, obs = (read(stage['output']+'/'+n) for n in ('receipt.json', 'completion.json', 'observability.json'))
+    if (entry['status'] != 'completed' or receipt['status'] != 'completed'
+            or entry['output'] != stage['output'] or receipt['output'] != stage['output']
+            or receipt != entry['result'] or proof['execution_schema'] != plan['schema']
+            or receipt['call_id'] != entry['call_id'] or receipt['call_id'] in calls
+            or receipt['completion'] != proof or proof != entry['result']['completion']
+            or proof['plan_sha256'] != c.digest(plan) or proof['stage'] != stage['name']
+            or proof['worker']['call_id'] != receipt['call_id']
+            or container_identity(proof['worker'].get('container_id')) != receipt.get('container_id')
+            or proof['source_sha256'] != c.digest(plan['source'])
+            or proof['configuration_sha256'] != plan['configuration_sha256']
+            or proof['assets_sha256'] != c.digest(plan['assets'])
+            or proof['task_sha256'] != c.digest(plan['task_identity'])
+            or proof['wandb_id'] != stage['wandb']['id'] or obs['wandb'] != stage['wandb']):
+        raise ValueError('Durable receipt/completion/observability identity mismatch')
+    calls.add(receipt['call_id'])
+    integration = proof.get('model_tool_integration')
+    if integration is None:
+        integration = {'qualified': False, 'gaps': ['Missing integration report']}
+    elif (integration['schema'] != ('reader-integration-v2' if plan['schema'] == c.SCHEMA else 'reader-integration-v1') or integration['algorithm'] != job['algorithm']
+            or integration['stage'] != stage['name']
+            or integration['qualified'] != (integration['episodes_with_valid_chain'] > 0)
+            or integration['episodes_with_valid_chain'] != sum(bool(e['chains']) for e in integration['coverage'])
+            or integration['trace_files'] != len(integration['coverage'])):
+        raise ValueError('Invalid integration coverage report')
+    return proof, integration
+
+
+def local_reader(plan, directory):
+    """Read durable files from a directory written by `collect` (paths relative to the plan root)."""
+    from pathlib import PurePosixPath
+    root = Path(directory)
+    def read(name):
+        return json.loads((root/PurePosixPath(name).relative_to(plan['root'])).read_text())
+    return read
+
+
+def calibration_collection(plan, index, read, local=None):
+    """Review every calibration stage and build the report. Tolerant of missing evidence.
+
+    The plan itself must be a valid current plan: that is checked on every path and
+    raises. Everything else is reported. `index` is the supervisor index or None;
+    `local` is a collected directory holding traces and audit events, or None.
+    A live calibration decision needs all of them (see recovery_calibration.review_stage).
+    """
+    try:
+        from . import recovery_calibration as calibration
+    except ImportError:
+        import recovery_calibration as calibration
+    from pathlib import PurePosixPath
+    c.validate(plan)
+    if modes.phase(plan) != modes.CALIBRATION:
+        raise ValueError('Not a calibration plan')
+    plan_problems = []
+    if not plan['training_admissible']:
+        plan_problems.append('the plan is not executable (fixture profile, unbound assets or uncommitted source), '
+                             'so it cannot have produced live evidence')
+    index_problem = None
+    if index is None:
+        index_problem = 'no supervisor index was supplied'
+    elif (not isinstance(index, dict) or index.get('plan') != plan
+          or set(index.get('jobs') or {}) != {j['job_id'] for j in plan['jobs']}):
+        index_problem = 'the supervisor index is malformed or belongs to a different plan'
+    def tolerant(name):
+        try:
+            return read(name)
+        except Exception:  # an unavailable durable file is evidence of nothing
+            return None
+    reviews, calls, timings = {}, set(), {}
+    for job in plan['jobs']:
+        entries = [] if index_problem else index['jobs'][job['job_id']].get('stages') or []
+        names = [e.get('stage') for e in entries]
+        route = reviews[job['algorithm']] = []
+        for stage in job['stages']:
+            request = c.stage_request(plan, job, stage)
+            entry = entries[names.index(stage['name'])] if names.count(stage['name']) == 1 else None
+            proof = None
+            if index_problem:
+                durable = None if index is None else {'verified': False, 'problems': [index_problem]}
+            elif entry is None:
+                durable = {'verified': False, 'problems': ['the supervisor index has no single entry for this stage']}
+            else:
+                try:
+                    proof, _ = durable_stage(plan, job, stage, entry, read, calls)
+                    durable = {'verified': True, 'problems': []}
+                except Exception as exc:
+                    durable = {'verified': False, 'problems': [f'{type(exc).__name__}: {exc}'[:200]]}
+                result = entry.get('result') or {}
+                if 'started_at' in result and 'finished_at' in result:
+                    timings[f"{job['algorithm']}/{stage['name']}"] = round(result['finished_at'] - result['started_at'], 1)
+            run = Path(local)/PurePosixPath(stage['output']).relative_to(plan['root']) if local is not None else None
+            route.append(calibration.review_stage(
+                request, supervisor=entry, receipt=tolerant(stage['output']+'/receipt.json'),
+                proof=proof if proof is not None else tolerant(stage['output']+'/completion.json'), durable=durable, run=run))
+    provenance = ('not verified: ' + index_problem if index_problem else
+                  'supervisor index, receipts, completions and observability joined per stage'
+                  + ('; traces and audit events recomputed from the collected directory' if local is not None
+                     else '; traces and audit events not available to this reader'))
+    report = calibration.report(plan, reviews, plan_problems, timings, provenance)
+    complete = report['live_policy_measurement']
+    admitted = all(s['packet_status'] == 'admitted' for r in report['routes'].values() for s in r['stages'].values())
+    out = {'evidence_complete': complete, 'operational_completion': 'completed' if admitted else 'incomplete or unverified',
+           'calibration': report, 'qualification_evidence': False,
+           'live_qualification': 'development calibration only; zero optimization; not qualification or learning evidence',
+           'hosted_wandb_history': 'not independently queried'}
+    if not complete:
+        out['incomplete_reason'] = ('Calibration evidence is not a complete, verified live collection for every route; '
+                                    'see calibration.routes[*].decision.reasons and failure_diagnostics'
+                                    + ('' if local is not None else '. Traces and audit events are required: run collect, '
+                                       'then scripts/task_local.py report on the collected directory'))
+    return out
+
+
+def validate_collection(plan, index, read, local=None):
+    """Join durable proof with exact supervisor calls; do not trust directory existence.
+
+    Calibration plans return their reviewed report whether or not the evidence is
+    complete (evidence_complete says which); other phases raise on any gap, as before.
+    """
+    if modes.phase(plan) == modes.CALIBRATION:
+        return calibration_collection(plan, index, read, local)
     if index['plan'] != plan or index['status'] != 'completed' or set(index['jobs']) != {j['job_id'] for j in plan['jobs']}:
         raise ValueError('Incomplete or mismatched supervisor index')
     calls = set()
@@ -116,43 +241,14 @@ def validate_collection(plan, index, read):
         outcome = outcomes[job['algorithm']] = {'operational_stage_completion': {}, 'model_tool_integration': {}}
         receipts = index['jobs'][job['job_id']]['stages']
         development = plan['phase'] == 'collection-only'
-        calibration = modes.phase(plan) == modes.CALIBRATION
-        expected_stages = (list(modes.STAGES[modes.CALIBRATION]) if calibration else
-                           ['training'] if development else ['baseline', 'training', 'checkpoint-eval'])
+        expected_stages = ['training'] if development else ['baseline', 'training', 'checkpoint-eval']
         if len(receipts) != len(expected_stages) or [r['stage'] for r in receipts] != expected_stages:
             raise ValueError('Missing/duplicate stage receipts')
         for stage, entry in zip(job['stages'], receipts, strict=True):
-            receipt, proof, obs = (read(stage['output']+'/'+n) for n in ('receipt.json', 'completion.json', 'observability.json'))
-            if (entry['status'] != 'completed' or receipt['status'] != 'completed'
-                    or entry['output'] != stage['output'] or receipt['output'] != stage['output']
-                    or receipt != entry['result'] or proof['execution_schema'] != plan['schema']
-                    or receipt['call_id'] != entry['call_id'] or receipt['call_id'] in calls
-                    or receipt['completion'] != proof or proof != entry['result']['completion']
-                    or proof['plan_sha256'] != c.digest(plan) or proof['stage'] != stage['name']
-                    or proof['worker']['call_id'] != receipt['call_id']
-                    or container_identity(proof['worker'].get('container_id')) != receipt.get('container_id')
-                    or proof['source_sha256'] != c.digest(plan['source'])
-                    or proof['configuration_sha256'] != plan['configuration_sha256']
-                    or proof['assets_sha256'] != c.digest(plan['assets'])
-                    or proof['task_sha256'] != c.digest(plan['task_identity'])
-                    or proof['wandb_id'] != stage['wandb']['id'] or obs['wandb'] != stage['wandb']):
-                raise ValueError('Durable receipt/completion/observability identity mismatch')
-            calls.add(receipt['call_id'])
+            proof, integration = durable_stage(plan, job, stage, entry, read, calls)
             outcome['operational_stage_completion'][stage['name']] = 'completed'
-            integration = proof.get('model_tool_integration')
-            if integration is None:
-                integration = {'qualified': False, 'gaps': ['Missing integration report']}
-            elif (integration['schema'] != ('reader-integration-v2' if plan['schema'] == c.SCHEMA else 'reader-integration-v1') or integration['algorithm'] != job['algorithm']
-                    or integration['stage'] != stage['name']
-                    or integration['qualified'] != (integration['episodes_with_valid_chain'] > 0)
-                    or integration['episodes_with_valid_chain'] != sum(bool(e['chains']) for e in integration['coverage'])
-                    or integration['trace_files'] != len(integration['coverage'])):
-                raise ValueError('Invalid integration coverage report')
             outcome['model_tool_integration'][stage['name']] = integration
-            if calibration:
-                # The calibration report validates each stage proof against the plan itself.
-                outcome.setdefault('stage_proofs', {})[stage['name']] = proof
-            elif development:
+            if development:
                 if proof.get('optimizer_updates') != {'actor': 0, 'critic': 0} or proof.get('development', {}).get('real_rollouts') != 32:
                     raise ValueError('Missing collection-only no-update evidence')
                 outcome['development'] = proof['development']
@@ -167,33 +263,14 @@ def validate_collection(plan, index, read):
                         or proof['training_worker'] != previous['worker']
                         or proof['worker']['container_id'] == previous['worker']['container_id']):
                     raise ValueError('Training/reload evidence differs')
-        outcome['integration_rule'] = ('all-calibration-stages-v1' if calibration else
-                                       'all-three-stages-v2' if plan['schema'] == c.SCHEMA else 'any-stage-v1')
+        outcome['integration_rule'] = 'all-three-stages-v2' if plan['schema'] == c.SCHEMA else 'any-stage-v1'
         outcome['harness_integration_qualified'] = (all if plan['schema'] == c.SCHEMA else any)(r['qualified'] for r in outcome['model_tool_integration'].values())
         outcome['qualification_gaps'] = [] if outcome['harness_integration_qualified'] else ['Model/tool integration unqualified: required stage coverage missing in this algorithm workflow']
-        if not development and not calibration and job['algorithm'] == c.ALGORITHMS[0] and not outcome['informative_grpo_reward_groups']:
+        if not development and job['algorithm'] == c.ALGORITHMS[0] and not outcome['informative_grpo_reward_groups']:
             outcome['qualification_gaps'].append('Informative group-relative task-advantage evidence was not observed')
-    report = None
-    if modes.phase(plan) == modes.CALIBRATION:
-        try:
-            from . import recovery_calibration
-        except ImportError:
-            import recovery_calibration
-        timings = {}
-        for job in plan['jobs']:
-            for entry in index['jobs'][job['job_id']]['stages']:
-                result = entry.get('result') or {}
-                if 'started_at' in result and 'finished_at' in result:
-                    timings[f"{job['algorithm']}/{entry['stage']}"] = round(result['finished_at'] - result['started_at'], 1)
-        report = recovery_calibration.report(plan, {a: o.pop('stage_proofs') for a, o in outcomes.items()}, timings)
-        if (report['evidence_class'] != 'live-model'
-                or any(r['decision']['operational_validity'] != 'valid' for r in report['routes'].values())):
-            raise ValueError('Calibration evidence is not a complete live collection for every route')
     return {'evidence_complete': True, 'operational_completion': 'completed', 'algorithms': outcomes,
-            **({'calibration': report} if report else {}),
-            'qualification_evidence': plan['phase'] not in ('collection-only', modes.CALIBRATION),
-            'live_qualification': ('development calibration only; zero optimization; not qualification or learning evidence'
-                                   if report else 'development only; not six-stage qualification' if plan['phase'] == 'collection-only'
+            'qualification_evidence': plan['phase'] != 'collection-only',
+            'live_qualification': ('development only; not six-stage qualification' if plan['phase'] == 'collection-only'
                 else 'gaps remain' if any(o['qualification_gaps'] for o in outcomes.values())
                 else 'operational and harness evidence observed; learning success not established'),
             'hosted_wandb_history': 'not independently queried'}
