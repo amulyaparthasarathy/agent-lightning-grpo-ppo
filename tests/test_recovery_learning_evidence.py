@@ -84,6 +84,7 @@ class RecoveryCollectionTests(unittest.TestCase):
             job = plan['jobs'][0]
             receipts = []
             index = {'plan':plan,'status':'completed','study_key':matched_supervisor.key(plan),
+                     'worker_seconds_reserved':14400, 'supervisor_reservation_usd':15000*10/3600,
                      'owner':{'call_id':'fc-supervisor','plan_sha256':c.digest(plan)},
                      'jobs':{job['job_id']:{'status':'completed','stages':receipts}}}
             for stage in job['stages']:
@@ -140,7 +141,7 @@ class RecoveryCollectionTests(unittest.TestCase):
                 forged_report = forged['completion']['recovery_qualification']
                 forged_report['episodes'][1] = forged_report['episodes'][0]
                 self.assertFalse(matched_supervisor.recovery_stage_admitted(plan,job,len(receipts),forged,c.digest(plan)))
-                receipts.append({'stage':stage['name'],'status':'completed','result':receipt,
+                receipts.append({'stage':stage['name'],'status':'completed','result':receipt,'reservation':{'seconds':3600,'usd':10},
                                  'call_id':call,'wandb':stage['wandb'],'output':stage['output']})
                 write(run/'receipt.json',receipt)
                 write(run/'completion.json',proof)

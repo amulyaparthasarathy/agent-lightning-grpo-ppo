@@ -162,7 +162,11 @@ def review(plan, index, read, local):
         errors.append('Execution plan or supervisor index incomplete/unverified')
     try:
         owner = index['owner']
-        if (index['study_key'] != f"{plan['study_id']}/{plan['phase']}/a{plan['attempt']:02d}"
+        bounds = plan['bounds']
+        rate = bounds['all_resource_hourly_ceiling_usd']
+        if (index['worker_seconds_reserved'] != bounds['max_gpu_seconds']
+                or index['supervisor_reservation_usd'] != bounds['supervisor_seconds']*rate/3600
+                or index['study_key'] != f"{plan['study_id']}/{plan['phase']}/a{plan['attempt']:02d}"
                 or owner['plan_sha256'] != c.digest(plan) or not owner['call_id'].startswith('fc-')
                 or read(plan['root']+'/supervisor/plan.json') != plan
                 or read(plan['root']+'/supervisor/index.json') != index):
@@ -190,6 +194,10 @@ def review(plan, index, read, local):
                 facts, _, attempts = cal.inspect_traces(run, request, 'live-model')
                 item['trace_diagnostics'] = facts
                 item['observed_slots'], item['completed_slots'], item['confirmed_slots'] = cal.slot_accounting(learning.stage_spec(request), attempts)
+                seconds = plan['bounds']['stage_seconds']
+                expected_reservation = {'seconds':seconds, 'usd':seconds*plan['bounds']['all_resource_hourly_ceiling_usd']/3600}
+                if entry.get('reservation') != expected_reservation:
+                    raise ValueError('Missing or inconsistent pre-dispatch reservation')
                 proof, integration = reader_evidence.durable_stage(plan, job, stage, entry, read, calls)
                 if not proof['worker']['call_id'].startswith('fc-'):
                     raise ValueError('Missing provider stage call identity')
