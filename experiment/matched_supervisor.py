@@ -45,17 +45,29 @@ def recovery_stage_admitted(plan, job, position, result, sha):
     """Require the stage-specific worker admission before dispatching a dependent stage."""
     stage = job['stages'][position]
     try:
+        try:
+            from . import recovery_calibration, reader_contract
+        except ImportError:
+            import recovery_calibration
+            import reader_contract
         proof = result['completion']
         audit = proof['recovery_qualification']
         spec = plan['qualification']['stages'][stage['name']]
-        return (proof['worker']['call_id'] == result['call_id']
+        recovery_calibration.check_table(spec, audit['episodes'])
+        roles = ['actor','critic'] if job['algorithm'] == reader_contract.ALGORITHMS[1] else ['actor']
+        return (proof['source_sha256'] == reader_contract.digest(plan['source'])
+                and proof['configuration_sha256'] == plan['configuration_sha256']
+                and proof['plan_sha256'] == sha and result['output'] == stage['output']
+                and audit['optimizer_calls'] == {role:spec['updates'] for role in roles}
+                and all(e['evidence_class'] == 'live-model' for e in audit['episodes'])
+                and proof['worker']['call_id'] == result['call_id']
                 and proof['worker']['container_id'] == result['container_id']
                 and proof['wandb_id'] == stage['wandb']['id'] and audit['plan_sha256'] == sha
                 and audit['schema'] == 'recovery-qualification-evidence-v1' and audit['stage'] == stage['name']
                 and audit['declared'] == spec and audit['episodes_admitted'] == spec['expected_episodes']
                 and len(audit['episodes']) == spec['expected_episodes']
                 and len(audit['collections']) == len(spec['batches']))
-    except (KeyError, TypeError):
+    except (KeyError, TypeError, ValueError):
         return False
 
 

@@ -99,6 +99,15 @@ class RecoveryCollectionTests(unittest.TestCase):
                         r = run_episode(run,[TEXT('wrong')],row=by_id[cid],request=req,route=spec['route'],rollout=rid,
                                         simulate_live_labels=True)
                         self.assertIsNone(r['error'])
+                model = Path('/data')/plan['profile']['paths']['model']
+                cfg = {'actor_rollout_ref': {'model': {'path': str(model)}}, 'agentlightning': {'async_rollout': {'enabled': False}}}
+                for key,value in matched_launch.configuration(req,model,Path('/data')/stage['output']).items():
+                    node = cfg
+                    parts = key.split('.')
+                    for part in parts[:-1]:
+                        node = node.setdefault(part,{})
+                    node[parts[-1]] = value
+                write(run/'resolved_config.json',cfg)
                 rows = cal.episode_table(run,req)
                 audit = events(req,rows)
                 (run/'audit').mkdir()
@@ -111,7 +120,7 @@ class RecoveryCollectionTests(unittest.TestCase):
                             (path/role/(kind+'_world_size_1_rank_0.pt')).write_bytes(b'synthetic')
                     (path/'data.pt').write_bytes(b'loader fixture')
                     (path.parent/'latest_checkpointed_iteration.txt').write_text('2')
-                    write(run/'resolved_config.json',{})
+
                     (run/'metrics.jsonl').write_text(''.join(json.dumps({'step':i,'metrics':{'actor/pg_loss':0,
                                                       'critic/vf_loss':0}})+'\n' for i in (1,2)))
                 call = 'fc-'+stage['wandb']['id']
@@ -127,6 +136,10 @@ class RecoveryCollectionTests(unittest.TestCase):
                 receipt = {'status':'completed','output':stage['output'],'call_id':call,'container_id':container,
                            'completion':proof}
                 self.assertTrue(matched_supervisor.recovery_stage_admitted(plan,job,len(receipts),receipt,c.digest(plan)))
+                forged = copy.deepcopy(receipt)
+                forged_report = forged['completion']['recovery_qualification']
+                forged_report['episodes'][1] = forged_report['episodes'][0]
+                self.assertFalse(matched_supervisor.recovery_stage_admitted(plan,job,len(receipts),forged,c.digest(plan)))
                 receipts.append({'stage':stage['name'],'status':'completed','result':receipt,
                                  'call_id':call,'wandb':stage['wandb'],'output':stage['output']})
                 write(run/'receipt.json',receipt)

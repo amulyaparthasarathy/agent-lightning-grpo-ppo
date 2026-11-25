@@ -1,5 +1,6 @@
 """Pre-optimization checks for the frozen recovery route; valid tensors pass through untouched."""
 from collections import Counter, defaultdict
+import json
 import math
 
 try:
@@ -23,11 +24,40 @@ def reviewed_episodes(run, request, rollouts, tokenizer):
         if rollout is None:
             continue  # prior collection; cumulative membership is checked by collection_inputs
         inputs = [r['inputs'] for r in records if r['kind'] == 'llm']
-        for view, turn in zip(inputs, rollout.triplets or [], strict=True):
-            rendered = recovery_prompt.render(*recovery_prompt.from_trace(view))
-            if tokenizer.encode(rendered, add_special_tokens=False) != turn.prompt['token_ids']:
-                raise ValueError('Original sampled prompt differs from the recorded conversation')
+        calls = [e for e in rollout.events if e['event_type'] == 'model_request']
+        for view, turn, event in zip(inputs, rollout.triplets or [], calls, strict=True):
+            if event['attempt_id'] != episode['attempt_id'] or event['rollout_id'] != episode['rollout_id']:
+                raise ValueError('Gateway request belongs to another rollout attempt')
+            verify_gateway_turn(view, turn, event['data'], tokenizer)
     return episodes
+
+
+def verify_gateway_turn(view, turn, data, tokenizer):
+    """Compare the original wire exchange, trimmed adapter input and recorded conversation."""
+    messages, tools = recovery_prompt.from_trace(view)
+    wire = data['request']
+    expected = [dict(m, name='user') if m['role'] == 'user' else m for m in messages]
+    response = data['response']
+    choices = response['choices']
+    if (wire['messages'] != expected or wire.get('tools', []) != tools
+            or any(k in wire for k in ('chat_template', 'chat_template_kwargs', 'truncate_prompt_tokens'))
+            or len(choices) != 1 or data.get('status') != 'ok'):
+        raise ValueError('Original gateway request differs from the verified conversation')
+    choice = choices[0]
+    prompt = response.get('prompt_token_ids') or choice.get('prompt_token_ids')
+    lp = choice.get('logprobs') or {}
+    probs = [item['logprob'] for item in lp['content']] if isinstance(lp.get('content'), list) else lp.get('token_logprobs')
+    if (prompt != turn.prompt['token_ids'] or choice.get('token_ids') != turn.response['token_ids']
+            or probs is None or probs != turn.response['log_probs']):
+        raise ValueError('Original gateway token or probability evidence differs from adapter input')
+    try:
+        rendered = recovery_prompt.render(messages, tools)
+    except json.JSONDecodeError:
+        # The local template adapter cannot render non-JSON sampled arguments. For an
+        # actually served continuation the raw request and raw prompt IDs above survive.
+        return
+    if tokenizer.encode(rendered, add_special_tokens=False) != prompt:
+        raise ValueError('Original sampled prompt differs from the recorded conversation')
 
 
 def collection_inputs(request, iteration, rollouts, episodes):
@@ -64,7 +94,8 @@ def collection_inputs(request, iteration, rollouts, episodes):
             raise ValueError('Controller evidence crosses rollout attempts')
         rewards = [event['data']['value'] for event in events if event['event_type'] == 'reward']
         generations = [event['data'] for event in events if event['event_type'] == 'model_request']
-        if rewards != [r.final_reward] or len(generations) != e['llm_calls']:
+        if (rewards != [r.final_reward] or len(generations) != e['llm_calls']
+                or any(event['data'].get('source') == 'fallback' for event in events if event['event_type'] == 'reward')):
             raise ValueError('Missing, duplicate or unconfirmed controller reward/generation')
         turns = r.triplets or []
         if len(turns) != e['llm_calls'] or len(turns) != len(e['completion_tokens']) or not 1 <= len(turns) <= 6:

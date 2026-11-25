@@ -68,6 +68,17 @@ def stage_report(run, request, events=None, evidence_class='live-model'):
     spec = learning.stage_spec(request)
     if json.loads((run/'qualification-inputs.json').read_text()) != spec['inputs']:
         raise ValueError('Eager loader input identities differ')
+    try:
+        from . import matched_launch
+    except ImportError:
+        import matched_launch
+    paths = request['plan']['profile']['paths']
+    remote = Path('/data')/request['stage']['output']
+    train, val = learning.routes(request, Path('/data')/paths['data'], remote)
+    resolved = run/'resolved_config.json'
+    matched_launch.validate_resolved(json.loads(resolved.read_text()), {
+        'request': request, 'model': str(Path('/data')/paths['model']), 'train_file': train,
+        'eval_file': val, 'resolved_config': str(remote/'resolved_config.json')})
     name = request['stage']['name']
     training, probe = name == 'training', name == 'collection-probe'
     steps = spec['updates']
@@ -137,7 +148,7 @@ def stage_report(run, request, events=None, evidence_class='live-model'):
     if training:
         losses = reader_evidence.loss_evidence([json.loads(l) for l in (run/'metrics.jsonl').read_text().splitlines()], roles)
     return {'schema': 'recovery-qualification-evidence-v1', 'stage': name, 'plan_sha256': request['plan_sha256'],
-            'declared': spec, 'episodes': rows, 'collections': collections, 'old_probabilities': by_event['recovery_old_probabilities'],
+            'resolved_config_sha256': c.file_hash(resolved), 'declared': spec, 'episodes': rows, 'collections': collections, 'old_probabilities': by_event['recovery_old_probabilities'],
             'optimizer_calls': {role: steps for role in roles}, 'losses': losses, 'critic_preupdate': critic, 'informative_groups': informative,
             'strict_successes': sum(int(e['reward']) for e in rows), 'episodes_admitted': len(rows)}
 
