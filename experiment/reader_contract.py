@@ -13,9 +13,10 @@ import re
 import subprocess
 
 try:
-    from . import matched_contract as historical, reader_modes as modes
+    from . import matched_contract as historical, reader_modes as modes, recovery_learning as learning
 except ImportError:
     import matched_contract as historical
+    import recovery_learning as learning
     import reader_modes as modes
 
 SCHEMA = 'reader-task-v2'
@@ -68,15 +69,14 @@ def path(value):
 
 
 def validate_profile(p):
+    qualification = p.get('purpose') == modes.RECOVERY_LEARNING
     exact(p, 'schema fixture modal paths experiment attempt wandb model task algorithms resources bounds'
-          + (' purpose' if 'purpose' in p else ''), 'profile')
+          + (' purpose' if 'purpose' in p else '') + (' selection' if qualification else ''), 'profile')
     if 'purpose' in p and (p['purpose'], p['task']) not in (
-            (modes.COLLECTION_ONLY, 'asset-status-v1'), (modes.CALIBRATION, 'recovery-readiness-v1')):
-        raise ValueError('Only the bounded asset collection-only development purpose is supported, '
-                         'or development-calibration for recovery-readiness-v1')
-    if p.get('task') == 'recovery-readiness-v1' and p.get('purpose') != modes.CALIBRATION:
-        # No training length, checkpoint or final evaluation is qualified for this task.
-        raise ValueError('recovery-readiness-v1 supports only the development-calibration purpose')
+            (modes.RECOVERY_LEARNING, 'recovery-readiness-v1'), (modes.COLLECTION_ONLY, 'asset-status-v1'), (modes.CALIBRATION, 'recovery-readiness-v1')):
+        raise ValueError('Unknown or unsupported reader purpose/task combination')
+    if p.get('task') == 'recovery-readiness-v1' and p.get('purpose') not in (modes.CALIBRATION, modes.RECOVERY_LEARNING):
+        raise ValueError('recovery-readiness-v1 requires explicit calibration or recovery-learning qualification')
     if p['schema'] != SCHEMA or type(p['fixture']) is not bool:
         raise ValueError('Unsupported reader schema/fixture label; migrate profile to reader-task-v2 and regenerate plans')
     exact(p['modal'], 'profile workspace environment app registry volume secret', 'Modal')
@@ -96,8 +96,16 @@ def validate_profile(p):
         slug(v)
     if p['model'] != {'id': MODEL, 'revision': BASE_REVISION, 'profile': 'llama3b', 'parser': 'llama3_json'}:
         raise ValueError('Unsupported immutable model/tokenizer/parser/critic combination')
-    if p['task'] not in modes.TASKS or p['algorithms'] != list(ALGORITHMS) or p['resources'] != RESOURCES:
-        raise ValueError('Only registered tasks, both matched algorithms and the continuity worker shape are supported')
+    algorithms = list(ALGORITHMS)
+    if qualification:
+        selection = p['selection']
+        if not isinstance(selection, str) or selection not in learning.ROUTES or p['attempt'] != 1:
+            raise ValueError('Unknown recovery qualification selection or attempt')
+        algorithms = learning.ROUTES[selection]
+        if p['bounds'].get('stage_seconds') != learning.STAGE_SECONDS:
+            raise ValueError('Recovery qualification stage deadline changed')
+    if p['task'] not in modes.TASKS or p['algorithms'] != algorithms or p['resources'] != RESOURCES:
+        raise ValueError('Unsupported task, algorithm selection or continuity worker shape')
     b = p['bounds']
     exact(b, 'stage_seconds startup_seconds preparation_seconds preflight_seconds concurrency '
           'worker_hourly_usd supervisor_hourly_usd preparation_budget_usd training_budget_usd '
@@ -117,6 +125,8 @@ def validate_profile(p):
     # Supervisor uses the worker ceiling in the existing common supervisor. Six stages
     # per qualification; development calibration schedules eight.
     stages = 8 if p.get('purpose') == modes.CALIBRATION else 6
+    if qualification:
+        stages = len(modes.STAGES[modes.RECOVERY_LEARNING]) * len(algorithms)
     compute = (2*stages*b['stage_seconds']+600)*b['worker_hourly_usd']/3600
     if (b['training_budget_usd'] < compute or b['preparation_budget_usd'] < 3
             or b['build_budget_usd'] < 5 or b['storage_budget_usd'] < b['storage_gib']*.09*b['retention_days']/30
@@ -209,7 +219,12 @@ def make_plan(profile, source, assets=None):
         plan['calibration'] = declared
         plan['bounds'].update(supervisor_seconds=8*p['bounds']['stage_seconds']+600,
                               max_gpu_seconds=8*p['bounds']['stage_seconds'])
-    for algorithm in ALGORITHMS:
+    if p.get('purpose') == modes.RECOVERY_LEARNING:
+        plan['phase'] = modes.RECOVERY_LEARNING
+        plan['qualification'] = learning.declaration(p['selection'], plan['data_manifest'])
+        exposure = len(plan['qualification']['stages']) * len(p['algorithms']) * learning.STAGE_SECONDS
+        plan['bounds'].update(supervisor_seconds=exposure+600, max_gpu_seconds=exposure)
+    for algorithm in p['algorithms']:
         name = f"{p['experiment']}-a{p['attempt']:02d}-{algorithm}"
         job = {'job_id': name, 'algorithm': algorithm, 'run_seed': 9001, 'steps': 2,
                'pair_id': f"{p['experiment']}-a{p['attempt']:02d}",
@@ -222,6 +237,10 @@ def make_plan(profile, source, assets=None):
                 'job_type': kind, 'resume': 'never', 'config': {**identity, 'protocol': PROTOCOL,
                     'seed_streams': job['seed_streams'], 'resources': RESOURCES, 'steps': 0 if development or calibration else 2,
                     'task': plan['task_identity'], 'model': p['model'], 'evaluation': p['task']+'-64'}}})
+            if plan['phase'] == modes.RECOVERY_LEARNING:
+                spec = plan['qualification']['stages'][kind]
+                job['stages'][-1]['wandb']['config'].update(evaluation=spec['split'], steps=spec['updates'],
+                                                            qualification=spec)
             if calibration:
                 # Each stage carries the exact panel it may use; no final-evaluation identity.
                 job['stages'][-1]['wandb']['config'].update(
@@ -231,9 +250,11 @@ def make_plan(profile, source, assets=None):
 
 
 def validate(plan):
+    if plan.get('schema') == 'recovery-learning-study-proposal-v1':
+        raise ValueError('The 16-update learning study is a non-executable proposal')
     if plan.get('schema') != SCHEMA:
         raise ValueError('Old/incompatible reader plan: migrate profile to reader-task-v2 and regenerate; historical reports remain archival')
-    if plan != make_plan(plan['profile'], plan['source'], plan['assets']):
+    if digest(plan) != digest(make_plan(plan['profile'], plan['source'], plan['assets'])):
         raise ValueError('Plan identities/configuration/dependencies changed; regenerate')
     source = plan['source']
     exact(source, 'commit dirty repository baseline files runtime_files', 'source')

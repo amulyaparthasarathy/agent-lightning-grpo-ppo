@@ -133,7 +133,7 @@ def collect(plan, volume, out, report):
                     f.write(chunk)
         except Exception as exc:
             errors.append({'path': str(relative), 'error_type': type(exc).__name__})
-    if report.get('index') and plan.get('phase') == 'development-calibration':
+    if report.get('index') and plan.get('phase') in (c.modes.CALIBRATION, c.modes.RECOVERY_LEARNING):
         # Calibration admission needs the traces and audit events just collected. Review
         # again from the local copy; this is the same definition `task_local.py report` uses.
         from experiment.reader_evidence import validate_collection, local_reader

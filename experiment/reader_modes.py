@@ -7,13 +7,15 @@ through to calculator, qualification or weaker historical handling.
 """
 READER = 'reader-task-v2'
 QUALIFICATION, COLLECTION_ONLY, CALIBRATION = 'qualification', 'collection-only', 'development-calibration'
+RECOVERY_LEARNING = 'recovery-learning-qualification-v1'
 TASKS = ('calculator-v1', 'asset-status-v1', 'recovery-readiness-v1')
 # phase -> ordered stage names
-STAGES = {QUALIFICATION: ('baseline', 'training', 'checkpoint-eval'),
+STAGES = {RECOVERY_LEARNING: ('baseline', 'collection-probe', 'training', 'checkpoint-eval'),
+          QUALIFICATION: ('baseline', 'training', 'checkpoint-eval'),
           COLLECTION_ONLY: ('training',),
           CALIBRATION: ('greedy-development', 'sampled-packet-1', 'sampled-packet-2', 'sampled-packet-3')}
 # phase -> tasks allowed to use it
-PHASE_TASKS = {QUALIFICATION: TASKS[:2], COLLECTION_ONLY: TASKS[1:2], CALIBRATION: TASKS[2:]}
+PHASE_TASKS = {RECOVERY_LEARNING: TASKS[2:], QUALIFICATION: TASKS[:2], COLLECTION_ONLY: TASKS[1:2], CALIBRATION: TASKS[2:]}
 
 
 def phase(plan):
@@ -35,7 +37,7 @@ def kind(plan, stage):
         return name  # historical dispatch is by stage name, unchanged
     if name not in STAGES[current]:
         raise ValueError('Stage is not declared by this reader phase')
-    if current == COLLECTION_ONLY:
+    if current == COLLECTION_ONLY or (current == RECOVERY_LEARNING and name == 'collection-probe'):
         return 'collection'
     if current == CALIBRATION:
         return 'greedy' if name == 'greedy-development' else 'collection'

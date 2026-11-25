@@ -246,6 +246,12 @@ def validate_collection(plan, index, read, local=None):
     Calibration plans return their reviewed report whether or not the evidence is
     complete (evidence_complete says which); other phases raise on any gap, as before.
     """
+    if modes.phase(plan) == modes.RECOVERY_LEARNING:
+        try:
+            from .recovery_learning_evidence import review
+        except ImportError:
+            from recovery_learning_evidence import review
+        return review(plan, index, read, local)
     if modes.phase(plan) == modes.CALIBRATION:
         return calibration_collection(plan, index, read, local)
     if index['plan'] != plan or index['status'] != 'completed' or set(index['jobs']) != {j['job_id'] for j in plan['jobs']}:
