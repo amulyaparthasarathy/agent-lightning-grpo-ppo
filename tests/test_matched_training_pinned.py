@@ -172,7 +172,7 @@ class PinnedTrainingTests(unittest.TestCase):
             runtime.normalize(b['advantages'], mask, batch.non_tensor_batch['rollout_id_list'], num_trained_rows=len(batch))
             self.torch.testing.assert_close(saved,b['returns'])
 
-    def update(self, fragmented, role, micro=1, dp_scale=1, admitted_batch=None, pack=None):
+    def update(self, fragmented, role, micro=1, dp_scale=1, admitted_batch=None, pack=None, models=None):
         torch, tu = self.torch, self.tu
         batch = self.batch(fragmented, estimator='gae') if admitted_batch is None else admitted_batch
         td = batch.batch
@@ -188,11 +188,18 @@ class PinnedTrainingTests(unittest.TestCase):
         tu.assign_non_tensor(td, mini_batch_size=len(td), epochs=1, seed=43,
                             dataloader_kwargs={'shuffle':False}, use_dynamic_bsz=False,
                             micro_batch_size_per_gpu=micro, global_batch_size=len(td), pad_mode='no_padding')
-        module = torch.nn.Linear(1,1,bias=False)
-        with torch.no_grad(): module.weight.fill_(.4)
-        optimizer = torch.optim.AdamW(module.parameters(), lr=1e-3, weight_decay=0.)
-        calls = []
-        optimizer.register_step_post_hook(lambda *args: calls.append(1))
+        if models is not None and role in models:
+            module, optimizer, calls = models[role]
+        else:
+            module = torch.nn.Linear(1,1,bias=False)
+            with torch.no_grad():
+                module.weight.fill_(.4 if models is None else -.4)
+            lr = (1e-6 if role == 'actor' else 1e-5) if models is not None else 1e-3
+            optimizer = torch.optim.AdamW(module.parameters(), lr=lr, weight_decay=.01 if models is not None else 0.)
+            calls = []
+            optimizer.register_step_post_hook(lambda *args: calls.append(1))
+            if models is not None:
+                models[role] = module, optimizer, calls
         cfg = NS(cliprange_value=.5)
         from omegaconf import OmegaConf
         acfg = OmegaConf.create({'clip_ratio':.2,'clip_ratio_low':.2,'clip_ratio_high':.3,'clip_ratio_c':3.,
@@ -204,7 +211,7 @@ class PinnedTrainingTests(unittest.TestCase):
         class Engine:
             ulysses_sequence_parallel_size=1
             _qat_enabled=False
-            optimizer_config=NS(clip_grad=.1)
+            optimizer_config=NS(clip_grad=.1 if models is None else 1.)
             def get_data_parallel_group(self): return None
             def get_data_parallel_rank(self): return 0
             def get_data_parallel_size(self): return 1
@@ -272,6 +279,7 @@ class PinnedTrainingTests(unittest.TestCase):
             flat = td['input_ids'].values().float()*0-.25
             return self.tu.get_tensordict({'log_probs':flat,'entropy':flat*0}, {'metrics':{'mfu':0}})
         for selection in ('grpo','ppo-mc'):
+            models = {}
             previous = []
             for i in (1,2):
                 req = request(selection=selection)
@@ -303,8 +311,11 @@ class PinnedTrainingTests(unittest.TestCase):
                 b['old_log_probs'][0,0] = -.25
                 runtime.advantages(batch, adv_estimator='grpo' if selection=='grpo' else 'gae')
                 for role in (('actor',) if selection=='grpo' else ('actor','critic')):
-                    value, grad, calls, _ = self.update(False,role,admitted_batch=Proto(b.clone(),batch.non_tensor_batch),pack=pack)
-                    self.assertEqual(calls,[1])
+                    value, grad, calls, _ = self.update(False,role,admitted_batch=Proto(b.clone(),batch.non_tensor_batch),
+                                                        pack=pack,models=models)
+                    module, optimizer, _ = models[role]
+                    self.assertEqual(optimizer.state[module.weight]['step'].item(),i)
+                    self.assertEqual(calls,[1]*i)
                     self.assertTrue(torch.isfinite(grad).all() and torch.isfinite(value).all())
             probe = request('collection-probe', selection)
             rows,eps = fixture(probe,1)
