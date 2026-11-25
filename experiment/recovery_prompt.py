@@ -25,11 +25,13 @@ except ImportError:
 
 BOS = '<|begin_of_text|>'
 LIMITS = {k: v for k, v in task.CONTEXT_LIMITS.items() if k != 'version'}
-# Declared allowance for the sampled final answer when bounding a fully merged
-# trajectory. It is an accounting assumption, not a decoding constraint: a longer
-# generation is never cut or repaired, and the production adapter rejects any
-# collection containing a truncated trajectory.
+# Declared allowance for the last sampled generation in the merged reading of a
+# trajectory. It is an accounting assumption, not a decoding constraint and not a
+# bound: a longer generation is never cut or repaired, and the production adapter
+# rejects any collection containing a truncated trajectory.
 ANSWER_TOKENS = 192
+# A time after every generated run started, completed and was checked.
+LATE = '2027-12-31T23:59Z'
 
 
 @lru_cache(maxsize=1)
@@ -150,77 +152,125 @@ def episode(question, actions, reflect=False):
     return views
 
 
-def worst_case_actions():
-    """Five rounds of the largest inventory the world can return (all runs visible)."""
-    registry = task.registry()
-    asset_id = max(sorted(registry['runs']), key=lambda a: len(task.dumps(
-        task.call('list_backup_runs', {'asset_id': a, 'as_of': '2027-12-31T23:59Z'}))))
-    return [('list_backup_runs', {'asset_id': asset_id, 'as_of': '2027-12-31T23:59Z'})] * task.EPISODE_POLICY['max_tool_iterations']
+def largest_inventory(count):
+    """The asset whose complete inventory observation has the most tokens, by the pinned tokenizer.
+
+    Selected over every asset in the world at a time when all of its runs are visible.
+    Character length is not used: it does not order observations the way tokens do.
+    """
+    sizes = {asset_id: count(json.dumps({'output': task.dumps(task.call(
+        'list_backup_runs', {'asset_id': asset_id, 'as_of': LATE}))})) for asset_id in sorted(task.registry()['runs'])}
+    asset_id = max(sizes, key=lambda a: (sizes[a], a))
+    return asset_id, sizes[asset_id], len(sizes)
 
 
-def scenarios():
-    """The measured prompt sets: development reference and five-round paths, and the
-    bounded worst case with and without an initial typed error."""
+def scenarios(asset_id, question):
+    """The measured prompt sets: every development case on its reference path and on a
+    five-round path, and one constructed heavy scenario with and without a typed error.
+
+    These are scenarios, not an enumeration of what a policy can do.
+    """
     rounds = task.EPISODE_POLICY['max_tool_iterations']
     reference, extended = [], []
     for row in task.rows('development'):
-        asset_id, as_of = task.target(row['question'])
-        policy_id = task.call('get_asset', {'asset_id': asset_id})['policy_id']
-        actions = [('get_asset', {'asset_id': asset_id}), ('get_policy', {'policy_id': policy_id}),
-                   ('list_backup_runs', {'asset_id': asset_id, 'as_of': as_of})]
+        target, as_of = task.target(row['question'])
+        policy_id = task.call('get_asset', {'asset_id': target})['policy_id']
+        actions = [('get_asset', {'asset_id': target}), ('get_policy', {'policy_id': policy_id}),
+                   ('list_backup_runs', {'asset_id': target, 'as_of': as_of})]
         reference.append([v['prompt'] for v in episode(row['question'], actions)])
         extended.append([v['prompt'] for v in episode(row['question'], actions + actions[2:] * (rounds - 3), reflect=True)])
-    longest = max(task.rows('development'), key=lambda r: len(r['question']))['question']
-    worst = [v['prompt'] for v in episode(longest, worst_case_actions(), reflect=True)]
-    error = [v['prompt'] for v in episode(longest, [('get_asset', {'asset_id': 'unknown'})] + worst_case_actions()[1:], reflect=True)]
-    return {'reference': reference, 'extended': extended, 'worst': worst, 'error': error}
+    heavy = [('list_backup_runs', {'asset_id': asset_id, 'as_of': LATE})] * rounds
+    return {'reference': reference, 'extended': extended,
+            'heavy': [v['prompt'] for v in episode(question, heavy, reflect=True)],
+            'heavy_after_typed_error': [v['prompt'] for v in episode(question, [('get_asset', {'asset_id': 'unknown'})] + heavy[1:], reflect=True)]}
 
 
-def prompt_set_sha256(prompts=None):
+def prompt_set_sha256(asset_id, question, prompts=None):
     """Identity of every measured prompt; a committed measurement is current only if it matches."""
-    prompts = prompts or scenarios()
+    prompts = prompts or scenarios(asset_id, question)
     return task.digest({name: [[hashlib.sha256(p.encode()).hexdigest() for p in row] for row in
                                (rows if name in ('reference', 'extended') else [rows])] for name, rows in prompts.items()})
 
 
 def budget(count):
-    """Measured prompt sizes against the actual prompt, model and trajectory limits.
+    """Measured prompt sizes of defined scenarios against the prompt, model and trajectory limits.
 
-    `count` maps prompt text to its token count under the pinned tokenizer. Every
-    development request is measured on its reference path; the worst case is
-    bounded by the episode policy and the largest observation in the whole world.
+    `count` maps prompt text to its token count under the pinned tokenizer, which also
+    selects the largest observation and the longest request. This is a measurement of
+    scenarios under stated assumptions. It is not an exhaustive bound: a sampled call
+    or answer can be far longer than assumed, and the adapter then rejects the
+    collection rather than cutting anything.
     """
     rounds = task.EPISODE_POLICY['max_tool_iterations']
-    prompts = scenarios()
-    reference = [[count(p) for p in row] for row in prompts['reference']]
-    extended = [[count(p) for p in row] for row in prompts['extended']]
-    worst, error = [count(p) for p in prompts['worst']], [count(p) for p in prompts['error']]
-    largest = max(max(worst), max(error))
-    # Two extremes of the trajectory aggregator. Live Phase 3 collections put every call
-    # in its own fragment, so each whole prompt must fit the prompt limit. If instead
-    # the tool-enabled turns merged into one row, everything after the first prompt
-    # would be "response": observations (masked) plus sampled tokens (unmasked), ending
-    # with the last tool-enabled generation. The reflection prompt has no tool preamble,
-    # shares no prefix with the earlier prompts and always starts its own row.
-    merged = max(worst[-2], error[-2]) - min(worst[0], error[0]) + ANSWER_TOKENS
+    asset_id, observation_tokens, assets = largest_inventory(count)
+    rows = task.rows('development')
+    # The request whose initial prompt is longest in tokens carries the heavy scenario.
+    longest = max(rows, key=lambda r: (count(episode(r['question'], [])[0]['prompt']), r['case_id']))
+    prompts = scenarios(asset_id, longest['question'])
+    measured = {name: ([[count(p) for p in row] for row in value] if name in ('reference', 'extended') else [count(p) for p in value])
+                for name, value in prompts.items()}
+    reference, extended, heavy, error = (measured[k] for k in ('reference', 'extended', 'heavy', 'heavy_after_typed_error'))
+    # The overall maximum is taken over every measured array, not over one scenario.
+    largest = max(max(max(row) for row in reference), max(max(row) for row in extended), max(heavy), max(error))
+    # Sizes that the assumptions below rest on, measured rather than guessed.
+    calls = [json.dumps({'name': name, 'parameters': arguments}) for row in rows for name, arguments in (
+        ('get_asset', {'asset_id': task.target(row['question'])[0]}),
+        ('get_policy', {'policy_id': task.call('get_asset', {'asset_id': task.target(row['question'])[0]})['policy_id']}),
+        ('list_backup_runs', {'as_of': task.target(row['question'])[1], 'asset_id': task.target(row['question'])[0]}))]
+    answers = []
+    for row in rows:
+        target, as_of = task.target(row['question'])
+        truth = task.truth(target, as_of)
+        answers.append(json.dumps({'asset_id': target, 'as_of': as_of, 'decision': truth['decision'],
+                                   'asset_record_id': truth['asset_record_id'], 'policy_record_id': truth['policy_record_id'],
+                                   'inventory_id': truth['inventory_id'], 'supporting_run_ids': truth['qualifying_run_ids']}))
+    call_tokens, answer_tokens = max(count(c) for c in calls), max(count(a) for a in answers)
+    # Two readings of the trajectory aggregator. Live Phase 3 collections put every call in
+    # its own fragment, so each whole prompt must fit the prompt limit. If instead the
+    # tool-enabled turns merged into one row, everything after the first prompt would be
+    # "response": observations (masked) plus sampled tokens (unmasked), ending with the last
+    # tool-enabled generation. The reflection prompt has no tool preamble, shares no prefix
+    # with the earlier prompts and always starts its own row.
+    merged = max(heavy[-2], error[-2]) - min(heavy[0], error[0]) + ANSWER_TOKENS
     checks = {
-        'every_prompt_within_trajectory_prompt_limit': largest <= LIMITS['trajectory_max_prompt_length'],
-        'prompt_plus_generation_within_model_context': largest + LIMITS['max_tokens'] <= LIMITS['max_model_len'],
-        'merged_trajectory_within_response_limit': merged <= LIMITS['trajectory_max_response_length']}
-    return {'schema': 'recovery-prompt-budget-v1', 'task': task.TASK, 'episode_policy': task.EPISODE_POLICY['version'],
-            'measured_prompts_sha256': prompt_set_sha256(prompts),
+        'every_measured_prompt_within_trajectory_prompt_limit': largest <= LIMITS['trajectory_max_prompt_length'],
+        'largest_measured_prompt_plus_generation_within_model_context': largest + LIMITS['max_tokens'] <= LIMITS['max_model_len'],
+        'merged_heavy_scenario_within_response_limit': merged <= LIMITS['trajectory_max_response_length']}
+    return {'schema': 'recovery-prompt-budget-v2', 'task': task.TASK, 'episode_policy': task.EPISODE_POLICY['version'],
+            'exhaustive_bound': False,
+            'measured_prompts_sha256': prompt_set_sha256(asset_id, longest['question'], prompts),
             'template_sha256': hashlib.sha256(prepare_model.effective_template().encode()).hexdigest(),
-            'context_limits': task.CONTEXT_LIMITS, 'assumed_answer_tokens': ANSWER_TOKENS,
+            'context_limits': task.CONTEXT_LIMITS,
+            'selection': {'method': 'token counts from the supplied tokenizer; no character-length proxy',
+                          'largest_observation_asset_id': asset_id, 'largest_observation_tokens': observation_tokens,
+                          'assets_compared': assets, 'longest_request_case_id': longest['case_id']},
             'development_reference_path': {'cases': len(reference), 'calls': 4,
                                            'prompt_tokens_by_call_max': [max(c) for c in zip(*reference)],
                                            'prompt_tokens_by_call_min': [min(c) for c in zip(*reference)]},
             'development_five_round_reflection': {'cases': len(extended), 'calls': rounds + 1,
                                                   'prompt_tokens_by_call_max': [max(c) for c in zip(*extended)]},
-            'worst_case_bounded': {'basis': f'{rounds} rounds of the largest inventory in the world, then reflection; '
-                                            'sampled calls are assumed to be schema-sized',
-                                   'prompt_tokens_by_call': worst, 'with_initial_typed_error': error,
-                                   'largest_prompt_tokens': largest, 'merged_response_tokens_upper_bound': merged,
-                                   'generation_headroom_tokens': LIMITS['trajectory_max_response_length'] - merged + ANSWER_TOKENS},
+            'heavy_scenario': {'definition': f'{rounds} rounds of the largest inventory observation in the world, then reflection',
+                               'prompt_tokens_by_call': heavy, 'with_initial_typed_error': error,
+                               'merged_response_tokens': merged},
+            'largest_measured_prompt_tokens': largest,
+            'largest_measured_prompt_covers': ['development_reference_path', 'development_five_round_reflection',
+                                               'heavy_scenario', 'heavy_scenario.with_initial_typed_error'],
+            'headroom': {'prompt_limit_minus_largest_measured_prompt': LIMITS['trajectory_max_prompt_length'] - largest,
+                         'response_limit_minus_merged_heavy_scenario': LIMITS['trajectory_max_response_length'] - merged},
+            'assumptions': {
+                'scenario': ('Only the scenarios above were measured. The heavy scenario repeats the largest observation the '
+                             'world can return in every round; it is the largest scenario that was constructed, not a proof '
+                             'that no episode is larger.'),
+                'call_size': {'measured_schema_sized_call_tokens_max': call_tokens,
+                              'statement': ('Earlier sampled calls are replayed in later prompts at the size the model wrote '
+                                            'them. The scenarios assume calls about as large as their schema requires. A '
+                                            f"call may be up to {LIMITS['max_tokens'] - 1} tokens, so the headroom above can be "
+                                            'used up by long sampled arguments.')},
+                'answer_size': {'measured_reference_answer_tokens_max': answer_tokens, 'allowance_tokens': ANSWER_TOKENS,
+                                'statement': ('The merged reading allows this many tokens for the last generation. A sampled '
+                                              f"answer may be up to {LIMITS['max_tokens']} tokens.")},
+                'fragmentation': ('Whether turns merge depends on whether sampled tokens equal the template re-rendering; in '
+                                  'Phase 3 every call was its own fragment. Both readings are checked.')},
             'checks': checks, 'within_limits': all(checks.values()),
             'truncation_policy': 'never hidden: the adapter rejects a collection whose fragment tokens differ from sampled tokens'}
 
