@@ -100,7 +100,7 @@ class RecoveryLoaderTests(unittest.TestCase):
                 projected = matched_launch.mounted_stage_plan(req,root,'vo-test',root,root,Path(sys.executable))
                 loaded = eager_inputs(projected['train_file'],projected['eval_file'])
                 for rows, binding in zip(loaded,learning.stage_spec(req)['inputs'],strict=True):
-                    self.assertEqual(learning.matched.digest(list(rows['case_id'])),binding['ordered_case_ids_sha256'])
+                    self.assertEqual(learning.matched.digest([row['case_id'] for row in rows]),binding['ordered_case_ids_sha256'])
                     self.assertEqual(len(rows),binding['rows'])
 
     def test_admission_rejects_changed_or_lost_inputs(self):
