@@ -288,11 +288,16 @@ def review(plan, index, read, local):
             if (read(plan['root']+'/supervisor/final-release.json') != release or index['final_release'] != release
                     or index['first_seed_gate'] != c.study.gate(plan, index, 3)):
                 raise ValueError('Collected final release or first seed gate differs')
+            containers = set()
             previous = index['started_at']
             for job in plan['jobs']:
                 entry, = jobs[job['job_id']]['stages']
                 if not previous <= entry['submitted_at'] <= entry['finished_at'] <= entry['submitted_at']+c.stage_limit(plan,job['stages'][0]):
                     raise ValueError('Study timing or stage order differs')
+                container = entry['result']['container_id']
+                if container in containers:
+                    raise ValueError('Study reused a worker container')
+                containers.add(container)
                 if job['stages'][0]['panel'] == 'final' and entry['result'].get('final_release_sha256') != c.digest(release):
                     raise ValueError('Final worker did not attest the released policies and analysis')
                 previous = entry['finished_at']

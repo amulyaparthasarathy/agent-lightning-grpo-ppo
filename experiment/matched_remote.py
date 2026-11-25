@@ -78,6 +78,10 @@ def stage_worker(request, deadline_epoch, *, c, registry, volume, call_id, image
                 or entry['status'] not in ('planned','submitted','started') or entry['call_id'] not in (None, call_id)
                 or entry['reservation'] != dict(seconds=seconds, usd=seconds*request['plan']['bounds']['all_resource_hourly_ceiling_usd']/3600)):
             raise ValueError('Missing owned study reservation')
+        previous_containers = {item['result']['container_id'] for state in index['jobs'].values()
+                               for item in state['stages'] if item['status'] == 'completed'}
+        if os.environ['MODAL_TASK_ID'] in previous_containers:
+            raise ValueError('Study stages require fresh workers')
         if request['stage']['key'] == 'training-2002' and index.get('first_seed_gate') != c.study.gate(request['plan'], index, 3):
             raise ValueError('First seed technical gate differs')
         if request['stage']['panel'] == 'final':

@@ -110,7 +110,7 @@ class StudyTests(unittest.TestCase):
                     # Exercise the real worker entry with a separate synthetic registry.
                     missing = Registry(registry)
                     missing.pop('release:'+sha)
-                    with patch.object(matched_remote.runtime,'run_command') as services:
+                    with patch.dict(os.environ,MODAL_TASK_ID='ta-fixture'), patch.object(matched_remote.runtime,'run_command') as services:
                         with self.assertRaisesRegex(ValueError,'durable final release'):
                             matched_remote.stage_worker(req,deadline_epoch,c=c,registry=missing,
                                 volume=volume,call_id=call,mount=mount)

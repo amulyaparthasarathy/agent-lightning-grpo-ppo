@@ -84,6 +84,25 @@ class RecoveryLoaderTests(unittest.TestCase):
                     self.assertEqual(learning.matched.digest([r['case_id'] for r in rows]),binding['ordered_case_ids_sha256'])
                     self.assertFalse(any(r['split']=='final' for r in rows))
 
+    def test_study_eager_stage_membership_in_pinned_entrypoint(self):
+        from recovery_loader import eager_inputs
+        from study_support import fixture_source, profile
+        from experiment import reader_contract, matched_launch
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            p = profile()
+            data = root/p['paths']['data']
+            task.generate(data)
+            plan = reader_contract.make_plan(p, fixture_source())
+            for job in plan['jobs']:
+                stage, = job['stages']
+                req = reader_contract.stage_request(plan, job, stage)
+                projected = matched_launch.mounted_stage_plan(req,root,'vo-test',root,root,Path(sys.executable))
+                loaded = eager_inputs(projected['train_file'],projected['eval_file'])
+                for rows, binding in zip(loaded,learning.stage_spec(req)['inputs'],strict=True):
+                    self.assertEqual(learning.matched.digest(list(rows['case_id'])),binding['ordered_case_ids_sha256'])
+                    self.assertEqual(len(rows),binding['rows'])
+
     def test_admission_rejects_changed_or_lost_inputs(self):
         req = request()
         rows, eps = fixture(req,1)
