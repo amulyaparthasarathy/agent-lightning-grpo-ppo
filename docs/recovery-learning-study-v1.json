@@ -47,6 +47,50 @@
   "chat_template_sha256": "a718674808440b537a553c15e0557b5b45d6d76e49ad9ddbc1a9e92447843e2c",
   "parser": "llama3_json",
   "data_manifest_sha256": "c7d07942dda1ee81b8797ce9a59255e7f26bca712e668c18cd1a936d83d6e8ab",
+  "eager_inputs": {
+    "training": {
+      "train_file": {
+        "file": "train_main.parquet",
+        "sha256": "fb069644d6af7d80f5ec933cbe463998af5a24d14c2e8af31d6faa87f9d5f78b",
+        "rows": 128,
+        "ordered_case_ids_sha256": "77c054be70c7527055ef3a116a1d81fdb1b54a3f13817818f8bc8d0191fbfeaa"
+      },
+      "val_file": {
+        "file": "dev_panel.parquet",
+        "sha256": "202d1c14d43be37f0f1eb1d58161f1ede2b397d3e1e308ecaecea2c107526ba5",
+        "rows": 24,
+        "ordered_case_ids_sha256": "4ca0ee5f59b49418f82442e798cef516bc785f142561020c53c50ec4fcc8048c"
+      }
+    },
+    "development": {
+      "train_file": {
+        "file": "dev_panel.parquet",
+        "sha256": "202d1c14d43be37f0f1eb1d58161f1ede2b397d3e1e308ecaecea2c107526ba5",
+        "rows": 24,
+        "ordered_case_ids_sha256": "4ca0ee5f59b49418f82442e798cef516bc785f142561020c53c50ec4fcc8048c"
+      },
+      "val_file": {
+        "file": "dev_panel.parquet",
+        "sha256": "202d1c14d43be37f0f1eb1d58161f1ede2b397d3e1e308ecaecea2c107526ba5",
+        "rows": 24,
+        "ordered_case_ids_sha256": "4ca0ee5f59b49418f82442e798cef516bc785f142561020c53c50ec4fcc8048c"
+      }
+    },
+    "final": {
+      "train_file": {
+        "file": "final_eval.parquet",
+        "sha256": "1543a19045cf24f1a32bd4f14947f6c00facbdb160b9a7ee425b589f5badd8d3",
+        "rows": 64,
+        "ordered_case_ids_sha256": "77a05b6d5d30f18cf54e48bc75aff9f3eb1d888a6e968af8c1ec6e0d36c0a6f7"
+      },
+      "val_file": {
+        "file": "final_eval.parquet",
+        "sha256": "1543a19045cf24f1a32bd4f14947f6c00facbdb160b9a7ee425b589f5badd8d3",
+        "rows": 64,
+        "ordered_case_ids_sha256": "77a05b6d5d30f18cf54e48bc75aff9f3eb1d888a6e968af8c1ec6e0d36c0a6f7"
+      }
+    }
+  },
   "algorithm": "grpo-matched-v2",
   "protocol": "matched-rollout-mean-v2",
   "base_initialization": "fresh for every run",
@@ -102,6 +146,9 @@
   "questions": 8,
   "samples": 4,
   "training_temperature": 1,
+  "training_do_sample": true,
+  "top_p": 1.0,
+  "top_k": -1,
   "terminal_checkpoint_only": 16,
   "automatic_retries": 0,
   "allow_seed_replacement": false,
@@ -167,6 +214,9 @@
     ],
     "samples": 1,
     "temperature": 0,
+    "do_sample": false,
+    "top_p": 1.0,
+    "top_k": -1,
     "route": "val",
     "streams": {
       "python": 143897530,

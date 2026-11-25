@@ -127,6 +127,22 @@ class QualificationTests(unittest.TestCase):
 
 
 class StudyTests(unittest.TestCase):
+    def test_frozen_study_routes_match_metadata_without_evaluating_final_cases(self):
+        proposed = json.loads(study.DECLARATION.read_text())
+        with tempfile.TemporaryDirectory() as directory:
+            manifest = task.generate(Path(directory)/'data')
+        self.assertEqual(c.digest(manifest),proposed['data_manifest_sha256'])
+        for stage, splits in {'training':('train','development'), 'development':('development','development'),
+                              'final':('final','final')}.items():
+            for arg,split in zip(('train_file','val_file'),splits,strict=True):
+                binding = proposed['eager_inputs'][stage][arg]
+                info = manifest['files'][binding['file']]
+                self.assertEqual(info['split'],split)
+                self.assertEqual((binding['rows'],binding['sha256']),(info['rows'],info['sha256']))
+                self.assertEqual(binding['ordered_case_ids_sha256'],c.digest(info['case_ids']))
+        proposed['eager_inputs']['final']['train_file'] = proposed['eager_inputs']['development']['train_file']
+        with self.assertRaises(ValueError): study.validate(proposed)
+
     def test_paired_block_analysis_of_repeated_samples(self):
         blocks = study.blocks('final')
         self.assertEqual([len(study.blocks(s)) for s in ('train','development','final')], [32,6,16])

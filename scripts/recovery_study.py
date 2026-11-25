@@ -15,6 +15,21 @@ POLICIES = ('base', *(str(s) for s in SEEDS))
 DECLARATION = ROOT/'docs/recovery-learning-study-v1.json'
 
 
+def routing_metadata():
+    """Proposal data only. No executor consumes these routes."""
+    files = {}
+    for split, name, digest in (
+        ('train', 'train_main.parquet', 'fb069644d6af7d80f5ec933cbe463998af5a24d14c2e8af31d6faa87f9d5f78b'),
+        ('development', 'dev_panel.parquet', '202d1c14d43be37f0f1eb1d58161f1ede2b397d3e1e308ecaecea2c107526ba5'),
+        ('final', 'final_eval.parquet', '1543a19045cf24f1a32bd4f14947f6c00facbdb160b9a7ee425b589f5badd8d3'),
+    ):
+        ids = [row['case_id'] for row in task.rows(split)]
+        files[split] = {'file': name, 'sha256': digest, 'rows': len(ids), 'ordered_case_ids_sha256': c.digest(ids)}
+    return {'training': {'train_file': files['train'], 'val_file': files['development']},
+            **{split: {'train_file': files[split], 'val_file': files[split]}
+               for split in ('development','final')}}
+
+
 def proposal():
     model = reader_assets.model_lock()
     return {'schema': 'recovery-learning-study-proposal-v1', 'executable': False,
@@ -25,11 +40,11 @@ def proposal():
         'frozen_sources': {name: c.file_hash(ROOT/'experiment'/name) for name in
             ('recovery_agent.py','recovery_task.py','recovery_prompt.py','observed_runtime.py','ppo_source_lock.json')}, 'tokenizer_sha256': model['tokenizer.json']['sha256'],
         'chat_template_sha256': model['chat_template.jinja']['sha256'], 'parser': 'llama3_json',
-        'data_manifest_sha256': learning.DATA_SHA256,
+        'data_manifest_sha256': learning.DATA_SHA256, 'eager_inputs': routing_metadata(),
         'algorithm': c.ALGORITHMS[0], 'protocol': c.PROTOCOL, 'base_initialization': 'fresh for every run',
         'runs': [{'seed': s, 'streams': c.streams(s, c.ALGORITHMS[0]), 'schedule_sha256': c.digest(learning.schedule(s))}
                  for s in SEEDS], 'schedule_file': 'experiment/recovery_schedules.json',
-        'updates': 16, 'questions': 8, 'samples': 4, 'training_temperature': 1,
+        'updates': 16, 'questions': 8, 'samples': 4, 'training_temperature': 1, 'training_do_sample': True, 'top_p': 1.0, 'top_k': -1,
         'terminal_checkpoint_only': 16, 'automatic_retries': 0,
         'allow_seed_replacement': False, 'reward_early_stopping': False, 'intermediate_tuning': False,
         'qualification_warm_start': False, 'policy_blocks': {'train': 32, 'development': 6, 'final': 16},
@@ -43,7 +58,7 @@ def proposal():
             'rollout_correction_is': None, 'rollout_correction_rs': None, 'recompute_old_log_probs': True,
             'param_offload': True, 'optimizer_offload': True, 'gradient_checkpointing': True,
             'serving_gpu_utilization': 0.5, 'max_num_seqs': 32, 'context': task.CONTEXT_LIMITS},
-        'evaluation': {'policies': list(POLICIES), 'samples': 1, 'temperature': 0, 'route': 'val',
+        'evaluation': {'policies': list(POLICIES), 'samples': 1, 'temperature': 0, 'do_sample': False, 'top_p': 1.0, 'top_k': -1, 'route': 'val',
             'streams': c.streams(9001, c.ALGORITHMS[0]), 'seed': 9001, 'development': 'dev_panel.parquet',
             'final': 'final_eval.parquet', 'sampled_final_episodes': 0, 'final_lock': 'all checkpoints and analysis choices frozen'},
         'episodes': {'training': 1536, 'development': 96, 'final': 256, 'total': 1888},
