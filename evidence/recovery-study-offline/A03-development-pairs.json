@@ -1,0 +1,16 @@
+{
+  "cases": 24,
+  "changed": {
+    "reward": 0,
+    "failure": 0,
+    "raw_answer": 0,
+    "calls": 1,
+    "normalized_calls": 1,
+    "tool_names": 1
+  },
+  "reward_transitions": {
+    "0_to_0": 15,
+    "1_to_1": 9
+  },
+  "any_answer_or_call_change": 1
+}
