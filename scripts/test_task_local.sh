@@ -20,4 +20,4 @@ trap 'rm -rf "$task_home"' EXIT
 env -i PATH="$PATH" HOME="$task_home" MODAL_CONFIG_PATH=/dev/null HF_HUB_OFFLINE=1 \
   PYTHONDONTWRITEBYTECODE=1 PYTHONPATH="$PWD:$PWD/tests" \
   "$task_python" -m unittest test_asset_task test_phase3_source \
-  test_recovery_task test_recovery_learning test_recovery_learning_evidence test_recovery_harness test_recovery_calibration test_recovery_evidence -v
+  test_recovery_task test_recovery_learning test_recovery_learning_evidence test_study_execution test_recovery_harness test_recovery_calibration test_recovery_evidence -v

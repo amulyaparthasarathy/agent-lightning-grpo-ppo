@@ -443,6 +443,10 @@ def main(mount=Path('/data')):
         if actual != binding or args.request != paths['request_file']:
             raise ValueError('Launcher request differs from worker mount binding')
         model, data = paths['model'], paths['data']
+    release = None
+    if modes.phase(request['plan']) == modes.STUDY and request['stage']['panel'] == 'final':
+        control = Path(binding['root'])/request['plan']['root']/'supervisor'
+        release = contract.study.read_release(request['plan'], control)
     validate_inputs(request, model, data, repo, bundle, contract, mount)
     if request['stage']['name']=='checkpoint-eval':
         checkpoint = paths['training_checkpoint'] if binding else run.parent/'training/checkpoints'/f"global_step_{request['job']['steps']}"
@@ -451,10 +455,8 @@ def main(mount=Path('/data')):
             training = json.loads(paths['training_completion'].read_text())
             if training['plan_sha256'] != request['plan_sha256'] or training['checkpoint_sha256'] != before_load:
                 raise ValueError('Mounted checkpoint differs from the admitted training receipt')
-            if request['stage']['panel'] == 'final':
-                release = json.loads((paths['run'].parents[1]/'supervisor/final-release.json').read_text())
-                if release['checkpoints'][request['stage']['policy']]['sha256'] != before_load:
-                    raise ValueError('Mounted terminal policy differs from final release')
+            if release and release['checkpoints'][request['stage']['policy']]['sha256'] != before_load:
+                raise ValueError('Mounted terminal policy differs from final release')
     (run/'logs').mkdir()
     plan, commands = make_plan(request, bundle, repo, model, data, repo/'.venv/bin/python', run, launch.free_port(), binding=binding)
     if modes.recovery(request['plan']):

@@ -157,6 +157,15 @@ def final_release(plan, index):
             'final_runs':[j['stages'][0]['wandb']['id'] for j in plan['jobs'][7:]]}
 
 
+def read_release(plan, control, index=None):
+    if index is None:
+        index = json.loads((control/'index.json').read_text())
+    expected = final_release(plan, index)
+    if index.get('final_release') != expected or json.loads((control/'final-release.json').read_text()) != expected:
+        raise ValueError('Missing or inconsistent durable final release')
+    return expected
+
+
 def analyze_final(plan, tables):
     path = 'scripts/recovery_study.py'
     if matched.file_hash(Path(__file__).resolve().parents[1]/path) != ANALYSIS_SOURCES[path]:

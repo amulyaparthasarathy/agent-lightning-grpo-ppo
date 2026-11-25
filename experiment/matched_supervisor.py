@@ -207,7 +207,10 @@ def run(plan, dispatch, get_result, cancel, read_heartbeat, stop_requested, pers
                     age = now-receipt['submitted_at']
                     missing_start = not heartbeat and age >= plan['bounds']['startup_seconds']
                     stalled = heartbeat and now-heartbeat['time'] > 180
-                    expired = age >= (plan['bounds']['stage_seconds_by_name'][receipt['stage']] if exploratory else reader.stage_limit(plan, job['stages'][position]) if study else plan['bounds']['stage_seconds'])
+                    limit = plan['bounds']['stage_seconds_by_name'][receipt['stage']] if exploratory else plan['bounds']['stage_seconds']
+                    if study:
+                        limit = receipt['reservation']['seconds']
+                    expired = age >= limit
                     if stopped or deadline or missing_start or stalled or expired:
                         reason = ('owner_stop' if stopped else 'supervisor_deadline' if deadline else
                                   'startup_no_heartbeat' if missing_start else 'heartbeat_lost' if stalled else 'stage_deadline')

@@ -81,9 +81,8 @@ def stage_worker(request, deadline_epoch, *, c, registry, volume, call_id, image
         if request['stage']['key'] == 'training-2002' and index.get('first_seed_gate') != c.study.gate(request['plan'], index, 3):
             raise ValueError('First seed technical gate differs')
         if request['stage']['panel'] == 'final':
-            release = c.study.final_release(request['plan'], index)
-            if (json.loads((control/'final-release.json').read_text()) != release or index.get('final_release') != release
-                    or registry.get('release:'+request['plan_sha256']) != c.digest(release)):
+            release = c.study.read_release(request['plan'], control, index)
+            if registry.get('release:'+request['plan_sha256']) != c.digest(release):
                 raise ValueError('Missing or inconsistent durable final release')
     # Unique stage marker is a restart guard. Restarting the same attempt is forbidden.
     run.mkdir(parents=True, exist_ok=False)
