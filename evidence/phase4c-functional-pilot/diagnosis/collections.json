@@ -1,0 +1,1207 @@
+[
+  {
+    "actor": {
+      "grad_norm": 1.860556960105896,
+      "pg_clipfrac": 0.0,
+      "pg_clipfrac_lower": 0.0,
+      "pg_loss": -2.3283064365386963e-09,
+      "ppo_kl": 0.0
+    },
+    "actor_call": 1,
+    "by_class": {
+      "not_ready": {
+        "action": 0,
+        "all_one": 1,
+        "all_zero": 2,
+        "correct": 11,
+        "decision_assessed": 25,
+        "decision_wrong": 14,
+        "evidence": 0,
+        "evidence_assessed": 25,
+        "evidence_wrong": 14,
+        "families": {
+          "empty_history": 2,
+          "recent_integrity_failed": 2,
+          "stale_success": 3
+        },
+        "format": 3,
+        "format_assessed": 28,
+        "median_tokens": 298.0,
+        "mixed": 4,
+        "not_ready": 11,
+        "positive_advantage_sum": 6.232038795948029,
+        "positive_advantages": 7,
+        "questions": 7,
+        "ready": 14,
+        "semantic": 14,
+        "tokens": 8438,
+        "trajectories": 28,
+        "unassessable": 3
+      },
+      "ready": {
+        "action": 0,
+        "all_one": 1,
+        "all_zero": 0,
+        "correct": 4,
+        "decision_assessed": 4,
+        "decision_wrong": 0,
+        "evidence": 0,
+        "evidence_assessed": 4,
+        "evidence_wrong": 0,
+        "families": {
+          "recent_usable": 1
+        },
+        "format": 0,
+        "format_assessed": 4,
+        "median_tokens": 265.0,
+        "mixed": 0,
+        "not_ready": 0,
+        "positive_advantage_sum": 0,
+        "positive_advantages": 0,
+        "questions": 1,
+        "ready": 4,
+        "semantic": 0,
+        "tokens": 1159,
+        "trajectories": 4,
+        "unassessable": 0
+      }
+    },
+    "collection": 1,
+    "old_minus_sampler": {
+      "max_abs_delta": 0.37927311658859253,
+      "mean_delta": 7.888045283380976e-05,
+      "target_tokens": 9597
+    },
+    "policy_step": 0
+  },
+  {
+    "actor": {
+      "grad_norm": 1.576940894126892,
+      "pg_clipfrac": 0.0,
+      "pg_clipfrac_lower": 0.0,
+      "pg_loss": -2.2118911147117615e-09,
+      "ppo_kl": 0.0
+    },
+    "actor_call": 2,
+    "by_class": {
+      "not_ready": {
+        "action": 0,
+        "all_one": 0,
+        "all_zero": 0,
+        "correct": 3,
+        "decision_assessed": 7,
+        "decision_wrong": 4,
+        "evidence": 0,
+        "evidence_assessed": 7,
+        "evidence_wrong": 4,
+        "families": {
+          "recent_incomplete": 1,
+          "stale_success": 1
+        },
+        "format": 1,
+        "format_assessed": 8,
+        "median_tokens": 336.0,
+        "mixed": 2,
+        "not_ready": 3,
+        "positive_advantage_sum": 3.232044816017151,
+        "positive_advantages": 3,
+        "questions": 2,
+        "ready": 4,
+        "semantic": 4,
+        "tokens": 2403,
+        "trajectories": 8,
+        "unassessable": 1
+      },
+      "ready": {
+        "action": 0,
+        "all_one": 1,
+        "all_zero": 2,
+        "correct": 9,
+        "decision_assessed": 20,
+        "decision_wrong": 8,
+        "evidence": 3,
+        "evidence_assessed": 20,
+        "evidence_wrong": 3,
+        "families": {
+          "failed_newer_usable_older": 3,
+          "recent_usable": 3
+        },
+        "format": 4,
+        "format_assessed": 24,
+        "median_tokens": 271.0,
+        "mixed": 3,
+        "not_ready": 8,
+        "positive_advantage_sum": 4.9640926122665405,
+        "positive_advantages": 5,
+        "questions": 6,
+        "ready": 12,
+        "semantic": 8,
+        "tokens": 6653,
+        "trajectories": 24,
+        "unassessable": 4
+      }
+    },
+    "collection": 2,
+    "old_minus_sampler": {
+      "max_abs_delta": 0.3629274368286133,
+      "mean_delta": -0.000130586364055642,
+      "target_tokens": 9056
+    },
+    "policy_step": 1
+  },
+  {
+    "actor": {
+      "grad_norm": 1.9005283117294312,
+      "pg_clipfrac": 0.0,
+      "pg_clipfrac_lower": 0.0,
+      "pg_loss": -1.5192199498414993e-08,
+      "ppo_kl": 0.0
+    },
+    "actor_call": 3,
+    "by_class": {
+      "not_ready": {
+        "action": 2,
+        "all_one": 0,
+        "all_zero": 1,
+        "correct": 5,
+        "decision_assessed": 11,
+        "decision_wrong": 6,
+        "evidence": 0,
+        "evidence_assessed": 11,
+        "evidence_wrong": 6,
+        "families": {
+          "empty_history": 1,
+          "recent_incomplete": 1,
+          "recent_integrity_failed": 1,
+          "stale_success": 1
+        },
+        "format": 3,
+        "format_assessed": 14,
+        "median_tokens": 271.0,
+        "mixed": 3,
+        "not_ready": 5,
+        "positive_advantage_sum": 4.499990999698639,
+        "positive_advantages": 5,
+        "questions": 4,
+        "ready": 6,
+        "semantic": 6,
+        "tokens": 4124,
+        "trajectories": 16,
+        "unassessable": 5
+      },
+      "ready": {
+        "action": 0,
+        "all_one": 0,
+        "all_zero": 0,
+        "correct": 10,
+        "decision_assessed": 15,
+        "decision_wrong": 5,
+        "evidence": 0,
+        "evidence_assessed": 15,
+        "evidence_wrong": 0,
+        "families": {
+          "failed_newer_usable_older": 2,
+          "recent_usable": 2
+        },
+        "format": 1,
+        "format_assessed": 16,
+        "median_tokens": 313.0,
+        "mixed": 4,
+        "not_ready": 5,
+        "positive_advantage_sum": 5.999987900257111,
+        "positive_advantages": 10,
+        "questions": 4,
+        "ready": 10,
+        "semantic": 5,
+        "tokens": 5012,
+        "trajectories": 16,
+        "unassessable": 1
+      }
+    },
+    "collection": 3,
+    "old_minus_sampler": {
+      "max_abs_delta": 0.453845739364624,
+      "mean_delta": 0.00017971495044049525,
+      "target_tokens": 9136
+    },
+    "policy_step": 2
+  },
+  {
+    "actor": {
+      "grad_norm": 1.0359861850738525,
+      "pg_clipfrac": 0.0,
+      "pg_clipfrac_lower": 0.0,
+      "pg_loss": -5.587935447692871e-09,
+      "ppo_kl": 0.0
+    },
+    "actor_call": 4,
+    "by_class": {
+      "not_ready": {
+        "action": 0,
+        "all_one": 0,
+        "all_zero": 1,
+        "correct": 3,
+        "decision_assessed": 11,
+        "decision_wrong": 8,
+        "evidence": 0,
+        "evidence_assessed": 11,
+        "evidence_wrong": 8,
+        "families": {
+          "recent_incomplete": 1,
+          "recent_integrity_failed": 2
+        },
+        "format": 1,
+        "format_assessed": 12,
+        "median_tokens": 272.0,
+        "mixed": 2,
+        "not_ready": 3,
+        "positive_advantage_sum": 3.232044816017151,
+        "positive_advantages": 3,
+        "questions": 3,
+        "ready": 8,
+        "semantic": 8,
+        "tokens": 3290,
+        "trajectories": 12,
+        "unassessable": 1
+      },
+      "ready": {
+        "action": 0,
+        "all_one": 0,
+        "all_zero": 3,
+        "correct": 3,
+        "decision_assessed": 16,
+        "decision_wrong": 9,
+        "evidence": 4,
+        "evidence_assessed": 16,
+        "evidence_wrong": 4,
+        "families": {
+          "failed_newer_usable_older": 2,
+          "recent_usable": 3
+        },
+        "format": 4,
+        "format_assessed": 20,
+        "median_tokens": 267.5,
+        "mixed": 2,
+        "not_ready": 9,
+        "positive_advantage_sum": 3.232044816017151,
+        "positive_advantages": 3,
+        "questions": 5,
+        "ready": 7,
+        "semantic": 9,
+        "tokens": 5663,
+        "trajectories": 20,
+        "unassessable": 4
+      }
+    },
+    "collection": 4,
+    "old_minus_sampler": {
+      "max_abs_delta": 0.36233842372894287,
+      "mean_delta": -0.00022776157539039266,
+      "target_tokens": 8953
+    },
+    "policy_step": 3
+  },
+  {
+    "actor": {
+      "grad_norm": 1.4331880807876587,
+      "pg_clipfrac": 0.0,
+      "pg_clipfrac_lower": 0.0,
+      "pg_loss": 5.005858838558197e-09,
+      "ppo_kl": 0.0
+    },
+    "actor_call": 5,
+    "by_class": {
+      "not_ready": {
+        "action": 0,
+        "all_one": 0,
+        "all_zero": 1,
+        "correct": 6,
+        "decision_assessed": 17,
+        "decision_wrong": 11,
+        "evidence": 0,
+        "evidence_assessed": 17,
+        "evidence_wrong": 11,
+        "families": {
+          "empty_history": 1,
+          "recent_incomplete": 1,
+          "recent_integrity_failed": 1,
+          "stale_success": 2
+        },
+        "format": 3,
+        "format_assessed": 20,
+        "median_tokens": 269.0,
+        "mixed": 4,
+        "not_ready": 6,
+        "positive_advantage_sum": 5.9999880194664,
+        "positive_advantages": 6,
+        "questions": 5,
+        "ready": 11,
+        "semantic": 11,
+        "tokens": 5842,
+        "trajectories": 20,
+        "unassessable": 3
+      },
+      "ready": {
+        "action": 0,
+        "all_one": 0,
+        "all_zero": 0,
+        "correct": 5,
+        "decision_assessed": 12,
+        "decision_wrong": 7,
+        "evidence": 0,
+        "evidence_assessed": 12,
+        "evidence_wrong": 0,
+        "families": {
+          "recent_usable": 3
+        },
+        "format": 0,
+        "format_assessed": 12,
+        "median_tokens": 273.5,
+        "mixed": 3,
+        "not_ready": 7,
+        "positive_advantage_sum": 4.499990999698639,
+        "positive_advantages": 5,
+        "questions": 3,
+        "ready": 5,
+        "semantic": 7,
+        "tokens": 3502,
+        "trajectories": 12,
+        "unassessable": 0
+      }
+    },
+    "collection": 5,
+    "old_minus_sampler": {
+      "max_abs_delta": 0.3206162452697754,
+      "mean_delta": -0.00012815012137972552,
+      "target_tokens": 9344
+    },
+    "policy_step": 4
+  },
+  {
+    "actor": {
+      "grad_norm": 1.502354383468628,
+      "pg_clipfrac": 0.0,
+      "pg_clipfrac_lower": 0.0,
+      "pg_loss": -1.1292286217212677e-08,
+      "ppo_kl": 0.0
+    },
+    "actor_call": 6,
+    "by_class": {
+      "not_ready": {
+        "action": 0,
+        "all_one": 0,
+        "all_zero": 0,
+        "correct": 5,
+        "decision_assessed": 10,
+        "decision_wrong": 5,
+        "evidence": 0,
+        "evidence_assessed": 10,
+        "evidence_wrong": 5,
+        "families": {
+          "recent_incomplete": 3
+        },
+        "format": 2,
+        "format_assessed": 12,
+        "median_tokens": 257.5,
+        "mixed": 3,
+        "not_ready": 5,
+        "positive_advantage_sum": 4.9640926122665405,
+        "positive_advantages": 5,
+        "questions": 3,
+        "ready": 5,
+        "semantic": 5,
+        "tokens": 3186,
+        "trajectories": 12,
+        "unassessable": 2
+      },
+      "ready": {
+        "action": 1,
+        "all_one": 0,
+        "all_zero": 2,
+        "correct": 5,
+        "decision_assessed": 18,
+        "decision_wrong": 11,
+        "evidence": 2,
+        "evidence_assessed": 18,
+        "evidence_wrong": 2,
+        "families": {
+          "failed_newer_usable_older": 4,
+          "recent_usable": 1
+        },
+        "format": 1,
+        "format_assessed": 19,
+        "median_tokens": 267.0,
+        "mixed": 3,
+        "not_ready": 11,
+        "positive_advantage_sum": 4.9640926122665405,
+        "positive_advantages": 5,
+        "questions": 5,
+        "ready": 7,
+        "semantic": 11,
+        "tokens": 5699,
+        "trajectories": 20,
+        "unassessable": 2
+      }
+    },
+    "collection": 6,
+    "old_minus_sampler": {
+      "max_abs_delta": 0.43544864654541016,
+      "mean_delta": -0.0003201233409333775,
+      "target_tokens": 8885
+    },
+    "policy_step": 5
+  },
+  {
+    "actor": {
+      "grad_norm": 1.5996592044830322,
+      "pg_clipfrac": 0.0,
+      "pg_clipfrac_lower": 0.0,
+      "pg_loss": -5.820766091346741e-11,
+      "ppo_kl": 0.0
+    },
+    "actor_call": 7,
+    "by_class": {
+      "not_ready": {
+        "action": 1,
+        "all_one": 0,
+        "all_zero": 0,
+        "correct": 4,
+        "decision_assessed": 10,
+        "decision_wrong": 6,
+        "evidence": 0,
+        "evidence_assessed": 10,
+        "evidence_wrong": 6,
+        "families": {
+          "recent_incomplete": 1,
+          "recent_integrity_failed": 1,
+          "stale_success": 1
+        },
+        "format": 1,
+        "format_assessed": 11,
+        "median_tokens": 264.5,
+        "mixed": 3,
+        "not_ready": 4,
+        "positive_advantage_sum": 4.732041835784912,
+        "positive_advantages": 4,
+        "questions": 3,
+        "ready": 6,
+        "semantic": 6,
+        "tokens": 3211,
+        "trajectories": 12,
+        "unassessable": 2
+      },
+      "ready": {
+        "action": 0,
+        "all_one": 0,
+        "all_zero": 1,
+        "correct": 7,
+        "decision_assessed": 19,
+        "decision_wrong": 12,
+        "evidence": 0,
+        "evidence_assessed": 19,
+        "evidence_wrong": 1,
+        "families": {
+          "failed_newer_usable_older": 2,
+          "recent_usable": 3
+        },
+        "format": 0,
+        "format_assessed": 20,
+        "median_tokens": 310.5,
+        "mixed": 4,
+        "not_ready": 13,
+        "positive_advantage_sum": 6.232038795948029,
+        "positive_advantages": 7,
+        "questions": 5,
+        "ready": 7,
+        "semantic": 13,
+        "tokens": 6283,
+        "trajectories": 20,
+        "unassessable": 0
+      }
+    },
+    "collection": 7,
+    "old_minus_sampler": {
+      "max_abs_delta": 0.6679295301437378,
+      "mean_delta": -0.0002856612679062884,
+      "target_tokens": 9494
+    },
+    "policy_step": 6
+  },
+  {
+    "actor": {
+      "grad_norm": 0.7292819023132324,
+      "pg_clipfrac": 0.0,
+      "pg_clipfrac_lower": 0.0,
+      "pg_loss": 1.862645149230957e-09,
+      "ppo_kl": 0.0
+    },
+    "actor_call": 8,
+    "by_class": {
+      "not_ready": {
+        "action": 0,
+        "all_one": 2,
+        "all_zero": 0,
+        "correct": 11,
+        "decision_assessed": 12,
+        "decision_wrong": 1,
+        "evidence": 0,
+        "evidence_assessed": 12,
+        "evidence_wrong": 1,
+        "families": {
+          "empty_history": 2,
+          "recent_integrity_failed": 1
+        },
+        "format": 0,
+        "format_assessed": 12,
+        "median_tokens": 280.0,
+        "mixed": 1,
+        "not_ready": 11,
+        "positive_advantage_sum": 1.4999969601631165,
+        "positive_advantages": 3,
+        "questions": 3,
+        "ready": 1,
+        "semantic": 1,
+        "tokens": 3681,
+        "trajectories": 12,
+        "unassessable": 0
+      },
+      "ready": {
+        "action": 0,
+        "all_one": 0,
+        "all_zero": 3,
+        "correct": 5,
+        "decision_assessed": 17,
+        "decision_wrong": 9,
+        "evidence": 3,
+        "evidence_assessed": 17,
+        "evidence_wrong": 3,
+        "families": {
+          "failed_newer_usable_older": 2,
+          "recent_usable": 3
+        },
+        "format": 3,
+        "format_assessed": 20,
+        "median_tokens": 347.5,
+        "mixed": 2,
+        "not_ready": 9,
+        "positive_advantage_sum": 3.232044756412506,
+        "positive_advantages": 5,
+        "questions": 5,
+        "ready": 8,
+        "semantic": 9,
+        "tokens": 6498,
+        "trajectories": 20,
+        "unassessable": 3
+      }
+    },
+    "collection": 8,
+    "old_minus_sampler": {
+      "max_abs_delta": 0.6040141582489014,
+      "mean_delta": -0.0001165619153328647,
+      "target_tokens": 10179
+    },
+    "policy_step": 7
+  },
+  {
+    "actor": {
+      "grad_norm": 1.1664775609970093,
+      "pg_clipfrac": 0.0,
+      "pg_clipfrac_lower": 0.0,
+      "pg_loss": -5.878973752260208e-09,
+      "ppo_kl": 0.0
+    },
+    "actor_call": 9,
+    "by_class": {
+      "not_ready": {
+        "action": 0,
+        "all_one": 0,
+        "all_zero": 0,
+        "correct": 5,
+        "decision_assessed": 15,
+        "decision_wrong": 10,
+        "evidence": 0,
+        "evidence_assessed": 15,
+        "evidence_wrong": 10,
+        "families": {
+          "recent_incomplete": 2,
+          "stale_success": 2
+        },
+        "format": 1,
+        "format_assessed": 16,
+        "median_tokens": 270.5,
+        "mixed": 4,
+        "not_ready": 5,
+        "positive_advantage_sum": 6.232038855552673,
+        "positive_advantages": 5,
+        "questions": 4,
+        "ready": 10,
+        "semantic": 10,
+        "tokens": 4802,
+        "trajectories": 16,
+        "unassessable": 1
+      },
+      "ready": {
+        "action": 0,
+        "all_one": 0,
+        "all_zero": 2,
+        "correct": 2,
+        "decision_assessed": 15,
+        "decision_wrong": 8,
+        "evidence": 5,
+        "evidence_assessed": 15,
+        "evidence_wrong": 5,
+        "families": {
+          "failed_newer_usable_older": 1,
+          "recent_usable": 3
+        },
+        "format": 0,
+        "format_assessed": 16,
+        "median_tokens": 295.0,
+        "mixed": 2,
+        "not_ready": 9,
+        "positive_advantage_sum": 2.9999940395355225,
+        "positive_advantages": 2,
+        "questions": 4,
+        "ready": 7,
+        "semantic": 9,
+        "tokens": 4887,
+        "trajectories": 16,
+        "unassessable": 0
+      }
+    },
+    "collection": 9,
+    "old_minus_sampler": {
+      "max_abs_delta": 0.24889636039733887,
+      "mean_delta": 5.1572786153641365e-05,
+      "target_tokens": 9689
+    },
+    "policy_step": 8
+  },
+  {
+    "actor": {
+      "grad_norm": 1.102704644203186,
+      "pg_clipfrac": 0.0,
+      "pg_clipfrac_lower": 0.0,
+      "pg_loss": -1.1874362826347351e-08,
+      "ppo_kl": 0.0
+    },
+    "actor_call": 10,
+    "by_class": {
+      "not_ready": {
+        "action": 1,
+        "all_one": 0,
+        "all_zero": 1,
+        "correct": 6,
+        "decision_assessed": 15,
+        "decision_wrong": 9,
+        "evidence": 0,
+        "evidence_assessed": 15,
+        "evidence_wrong": 9,
+        "families": {
+          "recent_incomplete": 2,
+          "stale_success": 2
+        },
+        "format": 0,
+        "format_assessed": 15,
+        "median_tokens": 268.0,
+        "mixed": 3,
+        "not_ready": 6,
+        "positive_advantage_sum": 5.196143388748169,
+        "positive_advantages": 6,
+        "questions": 4,
+        "ready": 9,
+        "semantic": 9,
+        "tokens": 4645,
+        "trajectories": 16,
+        "unassessable": 1
+      },
+      "ready": {
+        "action": 0,
+        "all_one": 0,
+        "all_zero": 3,
+        "correct": 1,
+        "decision_assessed": 14,
+        "decision_wrong": 8,
+        "evidence": 5,
+        "evidence_assessed": 14,
+        "evidence_wrong": 5,
+        "families": {
+          "failed_newer_usable_older": 3,
+          "recent_usable": 1
+        },
+        "format": 2,
+        "format_assessed": 16,
+        "median_tokens": 267.0,
+        "mixed": 1,
+        "not_ready": 8,
+        "positive_advantage_sum": 1.4999970197677612,
+        "positive_advantages": 1,
+        "questions": 4,
+        "ready": 6,
+        "semantic": 8,
+        "tokens": 4516,
+        "trajectories": 16,
+        "unassessable": 2
+      }
+    },
+    "collection": 10,
+    "old_minus_sampler": {
+      "max_abs_delta": 0.8176960945129395,
+      "mean_delta": -0.00010168660195511691,
+      "target_tokens": 9161
+    },
+    "policy_step": 9
+  },
+  {
+    "actor": {
+      "grad_norm": 0.8393412232398987,
+      "pg_clipfrac": 0.0,
+      "pg_clipfrac_lower": 0.0,
+      "pg_loss": -7.101334631443024e-09,
+      "ppo_kl": 0.0
+    },
+    "actor_call": 11,
+    "by_class": {
+      "not_ready": {
+        "action": 0,
+        "all_one": 2,
+        "all_zero": 0,
+        "correct": 13,
+        "decision_assessed": 20,
+        "decision_wrong": 7,
+        "evidence": 0,
+        "evidence_assessed": 20,
+        "evidence_wrong": 7,
+        "families": {
+          "empty_history": 1,
+          "recent_incomplete": 1,
+          "stale_success": 3
+        },
+        "format": 0,
+        "format_assessed": 20,
+        "median_tokens": 271.5,
+        "mixed": 3,
+        "not_ready": 13,
+        "positive_advantage_sum": 4.499990999698639,
+        "positive_advantages": 5,
+        "questions": 5,
+        "ready": 7,
+        "semantic": 7,
+        "tokens": 5786,
+        "trajectories": 20,
+        "unassessable": 0
+      },
+      "ready": {
+        "action": 0,
+        "all_one": 0,
+        "all_zero": 2,
+        "correct": 3,
+        "decision_assessed": 12,
+        "decision_wrong": 7,
+        "evidence": 2,
+        "evidence_assessed": 12,
+        "evidence_wrong": 2,
+        "families": {
+          "failed_newer_usable_older": 3
+        },
+        "format": 0,
+        "format_assessed": 12,
+        "median_tokens": 323.5,
+        "mixed": 1,
+        "not_ready": 7,
+        "positive_advantage_sum": 1.4999969601631165,
+        "positive_advantages": 3,
+        "questions": 3,
+        "ready": 5,
+        "semantic": 7,
+        "tokens": 3973,
+        "trajectories": 12,
+        "unassessable": 0
+      }
+    },
+    "collection": 11,
+    "old_minus_sampler": {
+      "max_abs_delta": 0.3098093271255493,
+      "mean_delta": 9.290290201839438e-05,
+      "target_tokens": 9759
+    },
+    "policy_step": 10
+  },
+  {
+    "actor": {
+      "grad_norm": 0.7089181542396545,
+      "pg_clipfrac": 0.0,
+      "pg_clipfrac_lower": 0.0,
+      "pg_loss": -1.6880221664905548e-09,
+      "ppo_kl": 0.0
+    },
+    "actor_call": 12,
+    "by_class": {
+      "not_ready": {
+        "action": 0,
+        "all_one": 3,
+        "all_zero": 0,
+        "correct": 15,
+        "decision_assessed": 19,
+        "decision_wrong": 4,
+        "evidence": 0,
+        "evidence_assessed": 19,
+        "evidence_wrong": 4,
+        "families": {
+          "empty_history": 2,
+          "recent_incomplete": 2,
+          "stale_success": 1
+        },
+        "format": 1,
+        "format_assessed": 20,
+        "median_tokens": 264.5,
+        "mixed": 2,
+        "not_ready": 15,
+        "positive_advantage_sum": 3.232044816017151,
+        "positive_advantages": 3,
+        "questions": 5,
+        "ready": 4,
+        "semantic": 4,
+        "tokens": 5923,
+        "trajectories": 20,
+        "unassessable": 1
+      },
+      "ready": {
+        "action": 0,
+        "all_one": 0,
+        "all_zero": 3,
+        "correct": 0,
+        "decision_assessed": 12,
+        "decision_wrong": 10,
+        "evidence": 2,
+        "evidence_assessed": 12,
+        "evidence_wrong": 2,
+        "families": {
+          "failed_newer_usable_older": 1,
+          "recent_usable": 2
+        },
+        "format": 0,
+        "format_assessed": 12,
+        "median_tokens": 271.0,
+        "mixed": 0,
+        "not_ready": 10,
+        "positive_advantage_sum": 0,
+        "positive_advantages": 0,
+        "questions": 3,
+        "ready": 2,
+        "semantic": 10,
+        "tokens": 3677,
+        "trajectories": 12,
+        "unassessable": 0
+      }
+    },
+    "collection": 12,
+    "old_minus_sampler": {
+      "max_abs_delta": 0.3275940418243408,
+      "mean_delta": -0.00013008030823659532,
+      "target_tokens": 9600
+    },
+    "policy_step": 11
+  },
+  {
+    "actor": {
+      "grad_norm": 1.0209546089172363,
+      "pg_clipfrac": 0.0,
+      "pg_clipfrac_lower": 0.0,
+      "pg_loss": -3.026798367500305e-09,
+      "ppo_kl": 0.0
+    },
+    "actor_call": 13,
+    "by_class": {
+      "not_ready": {
+        "action": 0,
+        "all_one": 0,
+        "all_zero": 0,
+        "correct": 6,
+        "decision_assessed": 8,
+        "decision_wrong": 1,
+        "evidence": 1,
+        "evidence_assessed": 8,
+        "evidence_wrong": 2,
+        "families": {
+          "recent_integrity_failed": 2
+        },
+        "format": 0,
+        "format_assessed": 8,
+        "median_tokens": 260.5,
+        "mixed": 2,
+        "not_ready": 7,
+        "positive_advantage_sum": 2.999993920326233,
+        "positive_advantages": 6,
+        "questions": 2,
+        "ready": 1,
+        "semantic": 1,
+        "tokens": 2305,
+        "trajectories": 8,
+        "unassessable": 0
+      },
+      "ready": {
+        "action": 0,
+        "all_one": 0,
+        "all_zero": 2,
+        "correct": 7,
+        "decision_assessed": 24,
+        "decision_wrong": 16,
+        "evidence": 1,
+        "evidence_assessed": 24,
+        "evidence_wrong": 1,
+        "families": {
+          "failed_newer_usable_older": 3,
+          "recent_usable": 3
+        },
+        "format": 0,
+        "format_assessed": 24,
+        "median_tokens": 258.5,
+        "mixed": 4,
+        "not_ready": 16,
+        "positive_advantage_sum": 6.232038795948029,
+        "positive_advantages": 7,
+        "questions": 6,
+        "ready": 8,
+        "semantic": 16,
+        "tokens": 6521,
+        "trajectories": 24,
+        "unassessable": 0
+      }
+    },
+    "collection": 13,
+    "old_minus_sampler": {
+      "max_abs_delta": 0.32759547233581543,
+      "mean_delta": 3.163084456731192e-05,
+      "target_tokens": 8826
+    },
+    "policy_step": 12
+  },
+  {
+    "actor": {
+      "grad_norm": 1.1920979022979736,
+      "pg_clipfrac": 0.0,
+      "pg_clipfrac_lower": 0.0,
+      "pg_loss": 7.799826562404633e-09,
+      "ppo_kl": 0.0
+    },
+    "actor_call": 14,
+    "by_class": {
+      "not_ready": {
+        "action": 0,
+        "all_one": 1,
+        "all_zero": 0,
+        "correct": 18,
+        "decision_assessed": 22,
+        "decision_wrong": 4,
+        "evidence": 0,
+        "evidence_assessed": 22,
+        "evidence_wrong": 4,
+        "families": {
+          "recent_incomplete": 1,
+          "recent_integrity_failed": 3,
+          "stale_success": 2
+        },
+        "format": 2,
+        "format_assessed": 24,
+        "median_tokens": 263.0,
+        "mixed": 5,
+        "not_ready": 18,
+        "positive_advantage_sum": 7.7320356369018555,
+        "positive_advantages": 14,
+        "questions": 6,
+        "ready": 4,
+        "semantic": 4,
+        "tokens": 6448,
+        "trajectories": 24,
+        "unassessable": 2
+      },
+      "ready": {
+        "action": 0,
+        "all_one": 0,
+        "all_zero": 1,
+        "correct": 2,
+        "decision_assessed": 7,
+        "decision_wrong": 5,
+        "evidence": 0,
+        "evidence_assessed": 7,
+        "evidence_wrong": 0,
+        "families": {
+          "failed_newer_usable_older": 1,
+          "recent_usable": 1
+        },
+        "format": 1,
+        "format_assessed": 8,
+        "median_tokens": 253.0,
+        "mixed": 1,
+        "not_ready": 5,
+        "positive_advantage_sum": 1.7320477962493896,
+        "positive_advantages": 2,
+        "questions": 2,
+        "ready": 2,
+        "semantic": 5,
+        "tokens": 2242,
+        "trajectories": 8,
+        "unassessable": 1
+      }
+    },
+    "collection": 14,
+    "old_minus_sampler": {
+      "max_abs_delta": 0.44812846183776855,
+      "mean_delta": -0.00020956295689683656,
+      "target_tokens": 8690
+    },
+    "policy_step": 13
+  },
+  {
+    "actor": {
+      "grad_norm": 0.7581993937492371,
+      "pg_clipfrac": 0.0,
+      "pg_clipfrac_lower": 0.0,
+      "pg_loss": 8.149072527885437e-09,
+      "ppo_kl": 0.0
+    },
+    "actor_call": 15,
+    "by_class": {
+      "not_ready": {
+        "action": 0,
+        "all_one": 4,
+        "all_zero": 0,
+        "correct": 16,
+        "decision_assessed": 16,
+        "decision_wrong": 0,
+        "evidence": 0,
+        "evidence_assessed": 16,
+        "evidence_wrong": 0,
+        "families": {
+          "empty_history": 1,
+          "recent_integrity_failed": 1,
+          "stale_success": 2
+        },
+        "format": 0,
+        "format_assessed": 16,
+        "median_tokens": 263.0,
+        "mixed": 0,
+        "not_ready": 16,
+        "positive_advantage_sum": 0,
+        "positive_advantages": 0,
+        "questions": 4,
+        "ready": 0,
+        "semantic": 0,
+        "tokens": 4380,
+        "trajectories": 16,
+        "unassessable": 0
+      },
+      "ready": {
+        "action": 1,
+        "all_one": 0,
+        "all_zero": 2,
+        "correct": 4,
+        "decision_assessed": 15,
+        "decision_wrong": 11,
+        "evidence": 0,
+        "evidence_assessed": 15,
+        "evidence_wrong": 0,
+        "families": {
+          "failed_newer_usable_older": 2,
+          "recent_usable": 2
+        },
+        "format": 0,
+        "format_assessed": 15,
+        "median_tokens": 254.0,
+        "mixed": 2,
+        "not_ready": 11,
+        "positive_advantage_sum": 3.4640955924987793,
+        "positive_advantages": 4,
+        "questions": 4,
+        "ready": 4,
+        "semantic": 11,
+        "tokens": 4280,
+        "trajectories": 16,
+        "unassessable": 1
+      }
+    },
+    "collection": 15,
+    "old_minus_sampler": {
+      "max_abs_delta": 0.42110490798950195,
+      "mean_delta": -0.0001286714815302826,
+      "target_tokens": 8660
+    },
+    "policy_step": 14
+  },
+  {
+    "actor": {
+      "grad_norm": 0.7078021764755249,
+      "pg_clipfrac": 0.0,
+      "pg_clipfrac_lower": 0.0,
+      "pg_loss": 7.2177499532699585e-09,
+      "ppo_kl": 0.0
+    },
+    "actor_call": 16,
+    "by_class": {
+      "not_ready": {
+        "action": 0,
+        "all_one": 1,
+        "all_zero": 0,
+        "correct": 12,
+        "decision_assessed": 16,
+        "decision_wrong": 4,
+        "evidence": 0,
+        "evidence_assessed": 16,
+        "evidence_wrong": 4,
+        "families": {
+          "recent_integrity_failed": 2,
+          "stale_success": 2
+        },
+        "format": 0,
+        "format_assessed": 16,
+        "median_tokens": 251.5,
+        "mixed": 3,
+        "not_ready": 12,
+        "positive_advantage_sum": 4.732041716575623,
+        "positive_advantages": 8,
+        "questions": 4,
+        "ready": 4,
+        "semantic": 4,
+        "tokens": 4166,
+        "trajectories": 16,
+        "unassessable": 0
+      },
+      "ready": {
+        "action": 0,
+        "all_one": 0,
+        "all_zero": 4,
+        "correct": 0,
+        "decision_assessed": 15,
+        "decision_wrong": 14,
+        "evidence": 1,
+        "evidence_assessed": 15,
+        "evidence_wrong": 1,
+        "families": {
+          "failed_newer_usable_older": 3,
+          "recent_usable": 1
+        },
+        "format": 1,
+        "format_assessed": 16,
+        "median_tokens": 247.5,
+        "mixed": 0,
+        "not_ready": 14,
+        "positive_advantage_sum": 0,
+        "positive_advantages": 0,
+        "questions": 4,
+        "ready": 1,
+        "semantic": 14,
+        "tokens": 4179,
+        "trajectories": 16,
+        "unassessable": 1
+      }
+    },
+    "collection": 16,
+    "old_minus_sampler": {
+      "max_abs_delta": 0.3107156753540039,
+      "mean_delta": -4.613994460744615e-06,
+      "target_tokens": 8345
+    },
+    "policy_step": 15
+  }
+]

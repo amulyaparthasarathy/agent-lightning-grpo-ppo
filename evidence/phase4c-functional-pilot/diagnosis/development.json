@@ -1,0 +1,3729 @@
+[
+  {
+    "actual": "not_ready",
+    "as_of": "2026-10-29T09:11Z",
+    "asset_id": "ast-c70000b4",
+    "base": {
+      "answer_sha256": "fd13b14e3944cd03b3f529159e93593100b239fc763cbb4e7b3890f7d4b2defb",
+      "asset_record_correct": true,
+      "calls_sha256": "f4caa2cedf83486d24582496c6c0c936c26ffa499fe7c50d1a618cbe3a003f11",
+      "completion_tokens_by_turn": [
+        86,
+        23,
+        25,
+        41,
+        41,
+        91
+      ],
+      "decision": "ready",
+      "decision_correct": false,
+      "evidence_correct": false,
+      "failure": "semantic",
+      "first_input_sha256": "456c428176f2752d7db5551ec4a62c49717ed6fc1e13da8801f8503631375d05",
+      "format_compliant": true,
+      "inventory_correct": true,
+      "json_syntax": true,
+      "llm_calls": 6,
+      "observation_contents_sha256": "61d73e931e80b01274c00fc075277d2f9939f63ef9b1cd60c379f311244feddc",
+      "observed": {
+        "asset": true,
+        "inventory": true,
+        "policy": true
+      },
+      "outcome": "complete_final",
+      "parsed_calls_sha256": "0f3d15c2a4116b5117c357fbb1f161186402cad4022aa7a1cc1e8014c2bb06b0",
+      "policy_errors": [],
+      "policy_record_correct": true,
+      "reward": 0,
+      "selected": [
+        "run-c70d882f"
+      ],
+      "selected_issues": [
+        "outside_rpo"
+      ],
+      "supporting_runs_correct": false,
+      "target_correct": true,
+      "time_correct": true,
+      "tokens": 307,
+      "trace_sha256": "485a2d2f7a3eeed10bf0967d847364ac4b12d1ad12a2946f4027de913fdc60fe"
+    },
+    "case_id": "recovery-readiness-v1/development/c-01f40b8f3c",
+    "family": "recent_incomplete",
+    "inventory": {
+      "run-37da8ff9": {
+        "age_minutes": 4105,
+        "integrity": "not_applicable",
+        "status": "failed"
+      },
+      "run-4af992d5": {
+        "age_minutes": 2494,
+        "integrity": "passed",
+        "status": "succeeded"
+      },
+      "run-81d29e72": {
+        "age_minutes": 3350,
+        "integrity": "not_applicable",
+        "status": "failed"
+      },
+      "run-c01aae0b": {
+        "age_minutes": 62,
+        "integrity": "not_applicable",
+        "status": "running"
+      },
+      "run-c70d882f": {
+        "age_minutes": 2267,
+        "integrity": "passed",
+        "status": "succeeded"
+      }
+    },
+    "p01_base": {
+      "answer_sha256": "fd13b14e3944cd03b3f529159e93593100b239fc763cbb4e7b3890f7d4b2defb",
+      "asset_record_correct": true,
+      "calls_sha256": "f4caa2cedf83486d24582496c6c0c936c26ffa499fe7c50d1a618cbe3a003f11",
+      "completion_tokens_by_turn": [
+        86,
+        23,
+        25,
+        41,
+        41,
+        91
+      ],
+      "decision": "ready",
+      "decision_correct": false,
+      "evidence_correct": false,
+      "failure": "semantic",
+      "first_input_sha256": "456c428176f2752d7db5551ec4a62c49717ed6fc1e13da8801f8503631375d05",
+      "format_compliant": true,
+      "inventory_correct": true,
+      "json_syntax": true,
+      "llm_calls": 6,
+      "observation_contents_sha256": "61d73e931e80b01274c00fc075277d2f9939f63ef9b1cd60c379f311244feddc",
+      "observed": {
+        "asset": true,
+        "inventory": true,
+        "policy": true
+      },
+      "outcome": "complete_final",
+      "parsed_calls_sha256": "0f3d15c2a4116b5117c357fbb1f161186402cad4022aa7a1cc1e8014c2bb06b0",
+      "policy_errors": [],
+      "policy_record_correct": true,
+      "reward": 0,
+      "selected": [
+        "run-c70d882f"
+      ],
+      "selected_issues": [
+        "outside_rpo"
+      ],
+      "supporting_runs_correct": false,
+      "target_correct": true,
+      "time_correct": true,
+      "tokens": 307,
+      "trace_sha256": "f8449d3dff896df4e00253b3aff3884391da9cddbb08dd200bb751d31642ed9f"
+    },
+    "qualifying": [],
+    "reload": {
+      "answer_sha256": "142fa6973554c84a008380cf426c0ab24d9976225bc5a55e062189de27b4c281",
+      "asset_record_correct": true,
+      "calls_sha256": "95e0ffff1744ffe1ad95105674b80a84f4dc3204efb3e3a71d4d9dc91050ac81",
+      "completion_tokens_by_turn": [
+        41,
+        23,
+        25,
+        41,
+        25,
+        86
+      ],
+      "decision": "not_ready",
+      "decision_correct": true,
+      "evidence_correct": true,
+      "failure": "correct",
+      "first_input_sha256": "456c428176f2752d7db5551ec4a62c49717ed6fc1e13da8801f8503631375d05",
+      "format_compliant": true,
+      "inventory_correct": true,
+      "json_syntax": true,
+      "llm_calls": 6,
+      "observation_contents_sha256": "7ddf513274261fdd835b786833b924cfbbc14dcac537598dd6322b6491d305f6",
+      "observed": {
+        "asset": true,
+        "inventory": true,
+        "policy": true
+      },
+      "outcome": "complete_final",
+      "parsed_calls_sha256": "940095d43b9e3a859d75abbf8c36d38836616fe983c8618d229da9aee3cabcd1",
+      "policy_errors": [],
+      "policy_record_correct": true,
+      "reward": 1,
+      "selected": [],
+      "selected_issues": [],
+      "supporting_runs_correct": true,
+      "target_correct": true,
+      "time_correct": true,
+      "tokens": 241,
+      "trace_sha256": "9b948ff18eea70a6c0be4bf5af24d590192acd9cfc76e26a06bd11d1995ce690"
+    },
+    "rpo_minutes": 2160,
+    "variant": "plain"
+  },
+  {
+    "actual": "not_ready",
+    "as_of": "2026-09-20T13:26Z",
+    "asset_id": "ast-30838f8c",
+    "base": {
+      "answer_sha256": "8982e501dee10707ba86ba0a46a79a48c8eb3a2f201e6be554ca493d49169b68",
+      "asset_record_correct": true,
+      "calls_sha256": "1ec7833a5bec62ecc4a9ec2849e3be209b1606348701e36fac873a34e5ea0fb5",
+      "completion_tokens_by_turn": [
+        130,
+        24,
+        24,
+        42,
+        42,
+        110
+      ],
+      "decision": "ready",
+      "decision_correct": false,
+      "evidence_correct": false,
+      "failure": "semantic",
+      "first_input_sha256": "21997af0feda461d849cc9aa09b3c11b9cdd91a007b77b82fd87f2e7d102f012",
+      "format_compliant": true,
+      "inventory_correct": true,
+      "json_syntax": true,
+      "llm_calls": 6,
+      "observation_contents_sha256": "7bf4b1130aab48e5c2cf67cf14a85d43a34328f066f0ffa55164369d7a43dd33",
+      "observed": {
+        "asset": true,
+        "inventory": true,
+        "policy": true
+      },
+      "outcome": "complete_final",
+      "parsed_calls_sha256": "0943457865e5fc9e18b8257d3265802bdfbcc2e401741a086d3136b038ede08b",
+      "policy_errors": [],
+      "policy_record_correct": true,
+      "reward": 0,
+      "selected": [
+        "run-9d8f3ad8",
+        "run-5e9fabbf"
+      ],
+      "selected_issues": [
+        "outside_rpo"
+      ],
+      "supporting_runs_correct": false,
+      "target_correct": true,
+      "time_correct": true,
+      "tokens": 372,
+      "trace_sha256": "759c7c9e389b62f53ca8d61a013ec4edc995539403af532ca37953922aaa96c4"
+    },
+    "case_id": "recovery-readiness-v1/development/c-121050b58a",
+    "family": "stale_success",
+    "inventory": {
+      "run-5e9fabbf": {
+        "age_minutes": 518,
+        "integrity": "passed",
+        "status": "succeeded"
+      },
+      "run-6d88194d": {
+        "age_minutes": 1249,
+        "integrity": "passed",
+        "status": "succeeded"
+      },
+      "run-9d8f3ad8": {
+        "age_minutes": 491,
+        "integrity": "passed",
+        "status": "succeeded"
+      }
+    },
+    "p01_base": {
+      "answer_sha256": "8982e501dee10707ba86ba0a46a79a48c8eb3a2f201e6be554ca493d49169b68",
+      "asset_record_correct": true,
+      "calls_sha256": "1ec7833a5bec62ecc4a9ec2849e3be209b1606348701e36fac873a34e5ea0fb5",
+      "completion_tokens_by_turn": [
+        130,
+        24,
+        24,
+        42,
+        42,
+        110
+      ],
+      "decision": "ready",
+      "decision_correct": false,
+      "evidence_correct": false,
+      "failure": "semantic",
+      "first_input_sha256": "21997af0feda461d849cc9aa09b3c11b9cdd91a007b77b82fd87f2e7d102f012",
+      "format_compliant": true,
+      "inventory_correct": true,
+      "json_syntax": true,
+      "llm_calls": 6,
+      "observation_contents_sha256": "7bf4b1130aab48e5c2cf67cf14a85d43a34328f066f0ffa55164369d7a43dd33",
+      "observed": {
+        "asset": true,
+        "inventory": true,
+        "policy": true
+      },
+      "outcome": "complete_final",
+      "parsed_calls_sha256": "0943457865e5fc9e18b8257d3265802bdfbcc2e401741a086d3136b038ede08b",
+      "policy_errors": [],
+      "policy_record_correct": true,
+      "reward": 0,
+      "selected": [
+        "run-9d8f3ad8",
+        "run-5e9fabbf"
+      ],
+      "selected_issues": [
+        "outside_rpo"
+      ],
+      "supporting_runs_correct": false,
+      "target_correct": true,
+      "time_correct": true,
+      "tokens": 372,
+      "trace_sha256": "b0d46172d623d0eafbc645d83d73d3c01b26b51aa46b38191cad93bb97a3a302"
+    },
+    "qualifying": [],
+    "reload": {
+      "answer_sha256": "a6ad289cf8ce156cd31483cfd161c3a696e33ae61287b53f6850f7a35a853b89",
+      "asset_record_correct": true,
+      "calls_sha256": "95467b385946b925133b8f678a3ed3c4026904e36c6ab3d1a428ac191211e174",
+      "completion_tokens_by_turn": [
+        42,
+        24,
+        24,
+        42,
+        24,
+        92
+      ],
+      "decision": "not_ready",
+      "decision_correct": true,
+      "evidence_correct": true,
+      "failure": "correct",
+      "first_input_sha256": "21997af0feda461d849cc9aa09b3c11b9cdd91a007b77b82fd87f2e7d102f012",
+      "format_compliant": true,
+      "inventory_correct": true,
+      "json_syntax": true,
+      "llm_calls": 6,
+      "observation_contents_sha256": "6aaecd3e25d0f50eaa394e3bdcd03811bb6ace1f2b38eb2716357407082afd4e",
+      "observed": {
+        "asset": true,
+        "inventory": true,
+        "policy": true
+      },
+      "outcome": "complete_final",
+      "parsed_calls_sha256": "e19627ed064de9cfb091913a97dd05d9172c4d4344e2a982d1b718830882420c",
+      "policy_errors": [],
+      "policy_record_correct": true,
+      "reward": 1,
+      "selected": [],
+      "selected_issues": [],
+      "supporting_runs_correct": true,
+      "target_correct": true,
+      "time_correct": true,
+      "tokens": 248,
+      "trace_sha256": "92a8458cc001e224d04283533e73f4f0b6d04202303477ca7411958f3a57bd2a"
+    },
+    "rpo_minutes": 480,
+    "variant": "completed_recent"
+  },
+  {
+    "actual": "not_ready",
+    "as_of": "2026-07-04T12:30Z",
+    "asset_id": "ast-3f588a2c",
+    "base": {
+      "answer_sha256": "04c60c68db94a2b77e57bd44c2c5046cfaefec8a4386c2f301ccb914e1f49ab4",
+      "asset_record_correct": true,
+      "calls_sha256": "bacd4bc872b8f135eaaaf500513f3a1555abaaa388bd1f8f24c7c5f38b56a7e8",
+      "completion_tokens_by_turn": [
+        133,
+        25,
+        25,
+        43,
+        43,
+        91
+      ],
+      "decision": "not_ready",
+      "decision_correct": true,
+      "evidence_correct": true,
+      "failure": "correct",
+      "first_input_sha256": "eaa29a0b8142cc8826a967fa5490381e511c9f6f4a17326b138a44a6540c8a9e",
+      "format_compliant": true,
+      "inventory_correct": true,
+      "json_syntax": true,
+      "llm_calls": 6,
+      "observation_contents_sha256": "2128fab740a41cb29b35b9bfe0c109045fd35fe06289ef6d6a8d68d65437ae69",
+      "observed": {
+        "asset": true,
+        "inventory": true,
+        "policy": true
+      },
+      "outcome": "complete_final",
+      "parsed_calls_sha256": "ecc6a604e7860938e3368e570b2e96fb84942e3f003887d223e7de983e34fe3e",
+      "policy_errors": [],
+      "policy_record_correct": true,
+      "reward": 1,
+      "selected": [],
+      "selected_issues": [],
+      "supporting_runs_correct": true,
+      "target_correct": true,
+      "time_correct": true,
+      "tokens": 360,
+      "trace_sha256": "f4c98c9ce584ca48e145154257ed8f7b643e77c7b1479afb521b59884ddb6239"
+    },
+    "case_id": "recovery-readiness-v1/development/c-2c03f8daf4",
+    "family": "empty_history",
+    "inventory": {},
+    "p01_base": {
+      "answer_sha256": "04c60c68db94a2b77e57bd44c2c5046cfaefec8a4386c2f301ccb914e1f49ab4",
+      "asset_record_correct": true,
+      "calls_sha256": "bacd4bc872b8f135eaaaf500513f3a1555abaaa388bd1f8f24c7c5f38b56a7e8",
+      "completion_tokens_by_turn": [
+        43,
+        25,
+        25,
+        43,
+        43,
+        91
+      ],
+      "decision": "not_ready",
+      "decision_correct": true,
+      "evidence_correct": true,
+      "failure": "correct",
+      "first_input_sha256": "eaa29a0b8142cc8826a967fa5490381e511c9f6f4a17326b138a44a6540c8a9e",
+      "format_compliant": true,
+      "inventory_correct": true,
+      "json_syntax": true,
+      "llm_calls": 6,
+      "observation_contents_sha256": "2128fab740a41cb29b35b9bfe0c109045fd35fe06289ef6d6a8d68d65437ae69",
+      "observed": {
+        "asset": true,
+        "inventory": true,
+        "policy": true
+      },
+      "outcome": "complete_final",
+      "parsed_calls_sha256": "ecc6a604e7860938e3368e570b2e96fb84942e3f003887d223e7de983e34fe3e",
+      "policy_errors": [],
+      "policy_record_correct": true,
+      "reward": 1,
+      "selected": [],
+      "selected_issues": [],
+      "supporting_runs_correct": true,
+      "target_correct": true,
+      "time_correct": true,
+      "tokens": 270,
+      "trace_sha256": "a872f79a49cd099557bf557baf2553505a8844fd92dd27a221c71307b2e0585b"
+    },
+    "qualifying": [],
+    "reload": {
+      "answer_sha256": "04c60c68db94a2b77e57bd44c2c5046cfaefec8a4386c2f301ccb914e1f49ab4",
+      "asset_record_correct": true,
+      "calls_sha256": "bacd4bc872b8f135eaaaf500513f3a1555abaaa388bd1f8f24c7c5f38b56a7e8",
+      "completion_tokens_by_turn": [
+        43,
+        25,
+        25,
+        43,
+        43,
+        91
+      ],
+      "decision": "not_ready",
+      "decision_correct": true,
+      "evidence_correct": true,
+      "failure": "correct",
+      "first_input_sha256": "eaa29a0b8142cc8826a967fa5490381e511c9f6f4a17326b138a44a6540c8a9e",
+      "format_compliant": true,
+      "inventory_correct": true,
+      "json_syntax": true,
+      "llm_calls": 6,
+      "observation_contents_sha256": "2128fab740a41cb29b35b9bfe0c109045fd35fe06289ef6d6a8d68d65437ae69",
+      "observed": {
+        "asset": true,
+        "inventory": true,
+        "policy": true
+      },
+      "outcome": "complete_final",
+      "parsed_calls_sha256": "ecc6a604e7860938e3368e570b2e96fb84942e3f003887d223e7de983e34fe3e",
+      "policy_errors": [],
+      "policy_record_correct": true,
+      "reward": 1,
+      "selected": [],
+      "selected_issues": [],
+      "supporting_runs_correct": true,
+      "target_correct": true,
+      "time_correct": true,
+      "tokens": 270,
+      "trace_sha256": "11d5c87d62ca6de0f8f6804caf303407937b9c0d31ce9f5aa5062deec9f049fa"
+    },
+    "rpo_minutes": 2160,
+    "variant": "plain"
+  },
+  {
+    "actual": "not_ready",
+    "as_of": "2026-12-02T15:53Z",
+    "asset_id": "ast-3a659cd7",
+    "base": {
+      "answer_sha256": "7df979feeab9b1c5a115743583ad59135c07400b3bf9e51156b359da43dc97b0",
+      "asset_record_correct": true,
+      "calls_sha256": "f602bed270f347fe3ba76cfa7bf048b3dbd67a0ed7db4f5d64c33916364afa0b",
+      "completion_tokens_by_turn": [
+        42,
+        24,
+        42,
+        25,
+        42,
+        89
+      ],
+      "decision": "not_ready",
+      "decision_correct": true,
+      "evidence_correct": true,
+      "failure": "correct",
+      "first_input_sha256": "d0f07902df7233e6da3e9aa6329c8660ddc78f3a45dc0580477572974b59710c",
+      "format_compliant": true,
+      "inventory_correct": true,
+      "json_syntax": true,
+      "llm_calls": 6,
+      "observation_contents_sha256": "f6f8c9f3b13e0961f58f287b713e0323690927f612fb4f0378b06b0b524dbc3e",
+      "observed": {
+        "asset": true,
+        "inventory": true,
+        "policy": true
+      },
+      "outcome": "complete_final",
+      "parsed_calls_sha256": "09284a4d68817c65d514075dcf5f04299083d31e8d8180ef2f2604c4b7eb2baf",
+      "policy_errors": [],
+      "policy_record_correct": true,
+      "reward": 1,
+      "selected": [],
+      "selected_issues": [],
+      "supporting_runs_correct": true,
+      "target_correct": true,
+      "time_correct": true,
+      "tokens": 264,
+      "trace_sha256": "ce655dbd7ebd37f9a96c3a382bff1ecc768fe8e98649611f98d0c3b309eed38e"
+    },
+    "case_id": "recovery-readiness-v1/development/c-2e641a2d24",
+    "family": "empty_history",
+    "inventory": {},
+    "p01_base": {
+      "answer_sha256": "7df979feeab9b1c5a115743583ad59135c07400b3bf9e51156b359da43dc97b0",
+      "asset_record_correct": true,
+      "calls_sha256": "f602bed270f347fe3ba76cfa7bf048b3dbd67a0ed7db4f5d64c33916364afa0b",
+      "completion_tokens_by_turn": [
+        130,
+        24,
+        42,
+        25,
+        42,
+        89
+      ],
+      "decision": "not_ready",
+      "decision_correct": true,
+      "evidence_correct": true,
+      "failure": "correct",
+      "first_input_sha256": "d0f07902df7233e6da3e9aa6329c8660ddc78f3a45dc0580477572974b59710c",
+      "format_compliant": true,
+      "inventory_correct": true,
+      "json_syntax": true,
+      "llm_calls": 6,
+      "observation_contents_sha256": "f6f8c9f3b13e0961f58f287b713e0323690927f612fb4f0378b06b0b524dbc3e",
+      "observed": {
+        "asset": true,
+        "inventory": true,
+        "policy": true
+      },
+      "outcome": "complete_final",
+      "parsed_calls_sha256": "09284a4d68817c65d514075dcf5f04299083d31e8d8180ef2f2604c4b7eb2baf",
+      "policy_errors": [],
+      "policy_record_correct": true,
+      "reward": 1,
+      "selected": [],
+      "selected_issues": [],
+      "supporting_runs_correct": true,
+      "target_correct": true,
+      "time_correct": true,
+      "tokens": 352,
+      "trace_sha256": "c27beeccb1aaf9d5241dee4f575a08e78cd10844c48f6e690b26b9827f3703a1"
+    },
+    "qualifying": [],
+    "reload": {
+      "answer_sha256": "7df979feeab9b1c5a115743583ad59135c07400b3bf9e51156b359da43dc97b0",
+      "asset_record_correct": true,
+      "calls_sha256": "0521f4259aff94ec8204c9d84ccc6a01d0a059eb947916a53de81bf6e0572caf",
+      "completion_tokens_by_turn": [
+        42,
+        24,
+        25,
+        42,
+        42,
+        89
+      ],
+      "decision": "not_ready",
+      "decision_correct": true,
+      "evidence_correct": true,
+      "failure": "correct",
+      "first_input_sha256": "d0f07902df7233e6da3e9aa6329c8660ddc78f3a45dc0580477572974b59710c",
+      "format_compliant": true,
+      "inventory_correct": true,
+      "json_syntax": true,
+      "llm_calls": 6,
+      "observation_contents_sha256": "b0ee8a7638e32d75472fb155819eed161be4b3c60204be248850892bda41b24b",
+      "observed": {
+        "asset": true,
+        "inventory": true,
+        "policy": true
+      },
+      "outcome": "complete_final",
+      "parsed_calls_sha256": "627e5e502027b133f7c86a8f0b2f41aa6e78c457973f5d57890235df0cc56652",
+      "policy_errors": [],
+      "policy_record_correct": true,
+      "reward": 1,
+      "selected": [],
+      "selected_issues": [],
+      "supporting_runs_correct": true,
+      "target_correct": true,
+      "time_correct": true,
+      "tokens": 264,
+      "trace_sha256": "f23b3ede9d0697e8f0d80c58964dac90953502823399ea7a863d4d3c4532d523"
+    },
+    "rpo_minutes": 720,
+    "variant": "plain"
+  },
+  {
+    "actual": "ready",
+    "as_of": "2026-12-07T18:31Z",
+    "asset_id": "ast-0deb372e",
+    "base": {
+      "answer_sha256": "119761e76d2da79533e9a56db2e1b553ae83a1a7642a0a95d3f7df683d2a337a",
+      "asset_record_correct": true,
+      "calls_sha256": "7231a021560b18097696acaab6f9e93d9c13218d580f872d8ac8e15c19035450",
+      "completion_tokens_by_turn": [
+        127,
+        23,
+        23,
+        41,
+        41,
+        97
+      ],
+      "decision": "ready",
+      "decision_correct": true,
+      "evidence_correct": true,
+      "failure": "correct",
+      "first_input_sha256": "ed7dacaf5593451360fdcbd83379f913f34b8d6e90f40ed03bd7172b1317a728",
+      "format_compliant": true,
+      "inventory_correct": true,
+      "json_syntax": true,
+      "llm_calls": 6,
+      "observation_contents_sha256": "c03d087831a3d944d69a49f437e9070f9cbf81279db3a01b2646e7506c20e54f",
+      "observed": {
+        "asset": true,
+        "inventory": true,
+        "policy": true
+      },
+      "outcome": "complete_final",
+      "parsed_calls_sha256": "0ce9dd6b00bc105eb58c06728fb78ca9be5eed0d8ce29bb19b9706d13ec0a222",
+      "policy_errors": [],
+      "policy_record_correct": true,
+      "reward": 1,
+      "selected": [
+        "run-225ea4c1"
+      ],
+      "selected_issues": [],
+      "supporting_runs_correct": true,
+      "target_correct": true,
+      "time_correct": true,
+      "tokens": 352,
+      "trace_sha256": "ae790a64a9e7c84a48f2cb0ca9b494c6ac586aee6d5523cb11d1aefa92648ade"
+    },
+    "case_id": "recovery-readiness-v1/development/c-3c9386f800",
+    "family": "failed_newer_usable_older",
+    "inventory": {
+      "run-02ecf66c": {
+        "age_minutes": 1541,
+        "integrity": "not_applicable",
+        "status": "failed"
+      },
+      "run-225ea4c1": {
+        "age_minutes": 2160,
+        "integrity": "passed",
+        "status": "succeeded"
+      },
+      "run-7186b572": {
+        "age_minutes": 5902,
+        "integrity": "failed",
+        "status": "succeeded"
+      },
+      "run-cccd22f8": {
+        "age_minutes": 4983,
+        "integrity": "passed",
+        "status": "succeeded"
+      }
+    },
+    "p01_base": {
+      "answer_sha256": "119761e76d2da79533e9a56db2e1b553ae83a1a7642a0a95d3f7df683d2a337a",
+      "asset_record_correct": true,
+      "calls_sha256": "7231a021560b18097696acaab6f9e93d9c13218d580f872d8ac8e15c19035450",
+      "completion_tokens_by_turn": [
+        127,
+        23,
+        23,
+        41,
+        41,
+        97
+      ],
+      "decision": "ready",
+      "decision_correct": true,
+      "evidence_correct": true,
+      "failure": "correct",
+      "first_input_sha256": "ed7dacaf5593451360fdcbd83379f913f34b8d6e90f40ed03bd7172b1317a728",
+      "format_compliant": true,
+      "inventory_correct": true,
+      "json_syntax": true,
+      "llm_calls": 6,
+      "observation_contents_sha256": "c03d087831a3d944d69a49f437e9070f9cbf81279db3a01b2646e7506c20e54f",
+      "observed": {
+        "asset": true,
+        "inventory": true,
+        "policy": true
+      },
+      "outcome": "complete_final",
+      "parsed_calls_sha256": "0ce9dd6b00bc105eb58c06728fb78ca9be5eed0d8ce29bb19b9706d13ec0a222",
+      "policy_errors": [],
+      "policy_record_correct": true,
+      "reward": 1,
+      "selected": [
+        "run-225ea4c1"
+      ],
+      "selected_issues": [],
+      "supporting_runs_correct": true,
+      "target_correct": true,
+      "time_correct": true,
+      "tokens": 352,
+      "trace_sha256": "3f99a7013db1b457f6d85ea5e4ebc25d69e07bfe65e175626e12c995c3aa3666"
+    },
+    "qualifying": [
+      "run-225ea4c1"
+    ],
+    "reload": {
+      "answer_sha256": "2542e04c36883c43832465e54c4e2d60287346933a91a9f3979ec21354cfaa78",
+      "asset_record_correct": true,
+      "calls_sha256": "24d0b41b26d360fb41a752af840ac44d60d2336020bccdc4e1051ef091872707",
+      "completion_tokens_by_turn": [
+        41,
+        23,
+        23,
+        41,
+        23,
+        91
+      ],
+      "decision": "not_ready",
+      "decision_correct": false,
+      "evidence_correct": true,
+      "failure": "semantic",
+      "first_input_sha256": "ed7dacaf5593451360fdcbd83379f913f34b8d6e90f40ed03bd7172b1317a728",
+      "format_compliant": true,
+      "inventory_correct": true,
+      "json_syntax": true,
+      "llm_calls": 6,
+      "observation_contents_sha256": "f09613387376c7466d2282de58206d9a7f71b5dc0e078fff2ba4d2340de7156c",
+      "observed": {
+        "asset": true,
+        "inventory": true,
+        "policy": true
+      },
+      "outcome": "complete_final",
+      "parsed_calls_sha256": "b5111aff156c4f8d25f5835a77dd6de2afc656baea35778d46f2dffbb8fd1ed1",
+      "policy_errors": [],
+      "policy_record_correct": true,
+      "reward": 0,
+      "selected": [],
+      "selected_issues": [],
+      "supporting_runs_correct": true,
+      "target_correct": true,
+      "time_correct": true,
+      "tokens": 242,
+      "trace_sha256": "96f3b4fc704d0945b697f628224a54f00a18881afad981783396f1f9d9779bdb"
+    },
+    "rpo_minutes": 2160,
+    "variant": "boundary"
+  },
+  {
+    "actual": "ready",
+    "as_of": "2026-10-22T03:39Z",
+    "asset_id": "ast-9f366b50",
+    "base": {
+      "answer_sha256": "858ce82aa65240c6f57e2b8f0bcac8cfbb94841205eee2103607b7dda0353521",
+      "asset_record_correct": true,
+      "calls_sha256": "456aca1e202fe610f9455d33d7aa7469da97b2be3e4537e44cdbd15fcc7186c3",
+      "completion_tokens_by_turn": [
+        130,
+        24,
+        23,
+        42,
+        42,
+        99
+      ],
+      "decision": "ready",
+      "decision_correct": true,
+      "evidence_correct": true,
+      "failure": "correct",
+      "first_input_sha256": "bca7f3bef83a4275c256cf3c083275d4c23d019a5acab4d1b50d4f68b96ef52b",
+      "format_compliant": true,
+      "inventory_correct": true,
+      "json_syntax": true,
+      "llm_calls": 6,
+      "observation_contents_sha256": "4590d0e21629e8a4c91856810d54099fe9f4cc95ea43b68a2efe37c8f4456af8",
+      "observed": {
+        "asset": true,
+        "inventory": true,
+        "policy": true
+      },
+      "outcome": "complete_final",
+      "parsed_calls_sha256": "10ced4072e10f247974fe6a0b6686acc48ce8e538e26fab24e3f5a4e5a8014f8",
+      "policy_errors": [],
+      "policy_record_correct": true,
+      "reward": 1,
+      "selected": [
+        "run-ad09b8d3"
+      ],
+      "selected_issues": [],
+      "supporting_runs_correct": true,
+      "target_correct": true,
+      "time_correct": true,
+      "tokens": 360,
+      "trace_sha256": "23c1a2cd98d5fa0be3024750d80d0e6c6bd5b09be3e62a66d9e490fab4fd0e4e"
+    },
+    "case_id": "recovery-readiness-v1/development/c-529d506be0",
+    "family": "recent_usable",
+    "inventory": {
+      "run-1c07b9f6": {
+        "age_minutes": 6061,
+        "integrity": "not_applicable",
+        "status": "failed"
+      },
+      "run-580b6860": {
+        "age_minutes": 3522,
+        "integrity": "passed",
+        "status": "succeeded"
+      },
+      "run-ad09b8d3": {
+        "age_minutes": 2160,
+        "integrity": "passed",
+        "status": "succeeded"
+      },
+      "run-f0c3a2b0": {
+        "age_minutes": 5037,
+        "integrity": "passed",
+        "status": "succeeded"
+      }
+    },
+    "p01_base": {
+      "answer_sha256": "34a24f145b69e4d29e8517b49d4a19fd6203899068a24e512dd477ff2108c3ba",
+      "asset_record_correct": true,
+      "calls_sha256": "456aca1e202fe610f9455d33d7aa7469da97b2be3e4537e44cdbd15fcc7186c3",
+      "completion_tokens_by_turn": [
+        42,
+        24,
+        23,
+        42,
+        42,
+        118
+      ],
+      "decision": "ready",
+      "decision_correct": true,
+      "evidence_correct": false,
+      "failure": "evidence",
+      "first_input_sha256": "bca7f3bef83a4275c256cf3c083275d4c23d019a5acab4d1b50d4f68b96ef52b",
+      "format_compliant": true,
+      "inventory_correct": true,
+      "json_syntax": true,
+      "llm_calls": 6,
+      "observation_contents_sha256": "4590d0e21629e8a4c91856810d54099fe9f4cc95ea43b68a2efe37c8f4456af8",
+      "observed": {
+        "asset": true,
+        "inventory": true,
+        "policy": true
+      },
+      "outcome": "complete_final",
+      "parsed_calls_sha256": "10ced4072e10f247974fe6a0b6686acc48ce8e538e26fab24e3f5a4e5a8014f8",
+      "policy_errors": [],
+      "policy_record_correct": true,
+      "reward": 0,
+      "selected": [
+        "run-ad09b8d3",
+        "run-f0c3a2b0",
+        "run-580b6860"
+      ],
+      "selected_issues": [
+        "outside_rpo"
+      ],
+      "supporting_runs_correct": false,
+      "target_correct": true,
+      "time_correct": true,
+      "tokens": 291,
+      "trace_sha256": "5610d36a023844269c845c1ebbedda632937aba4116976b56c0edddd8ed3b1ba"
+    },
+    "qualifying": [
+      "run-ad09b8d3"
+    ],
+    "reload": {
+      "answer_sha256": "ddfc304f640e455086a427bcbb8c15b672b50bf9ba85b3f8de995335c9ccfc95",
+      "asset_record_correct": true,
+      "calls_sha256": "ed80a5101f9ef263898b40ad2b0d675224275c4ddc619fad81b2bab750c6a590",
+      "completion_tokens_by_turn": [
+        42,
+        24,
+        23,
+        42,
+        23,
+        93
+      ],
+      "decision": "not_ready",
+      "decision_correct": false,
+      "evidence_correct": true,
+      "failure": "semantic",
+      "first_input_sha256": "bca7f3bef83a4275c256cf3c083275d4c23d019a5acab4d1b50d4f68b96ef52b",
+      "format_compliant": true,
+      "inventory_correct": true,
+      "json_syntax": true,
+      "llm_calls": 6,
+      "observation_contents_sha256": "92ed83aca41980c0d7ef08915828a17d8d093a04528cb1d4f8f75460019f4454",
+      "observed": {
+        "asset": true,
+        "inventory": true,
+        "policy": true
+      },
+      "outcome": "complete_final",
+      "parsed_calls_sha256": "2e33f262a0a279b089d47d59efcab534e9941216bde6e726200a853a4792e83a",
+      "policy_errors": [],
+      "policy_record_correct": true,
+      "reward": 0,
+      "selected": [],
+      "selected_issues": [],
+      "supporting_runs_correct": true,
+      "target_correct": true,
+      "time_correct": true,
+      "tokens": 247,
+      "trace_sha256": "bcebacc8a34261efa33bb81835811dd4e4c8887953c71875c2a3c4317d8ad27d"
+    },
+    "rpo_minutes": 2160,
+    "variant": "boundary"
+  },
+  {
+    "actual": "not_ready",
+    "as_of": "2026-03-12T19:25Z",
+    "asset_id": "ast-05f7d15b",
+    "base": {
+      "answer_sha256": "0c55b3ceb580a71c753a9e1e92cc6241502921c87c43211dfff0818ac089413e",
+      "asset_record_correct": true,
+      "calls_sha256": "902cc84b45bfc550de4395c94dffb444637d4bf5bb53b7ed38e6c63d53925a0c",
+      "completion_tokens_by_turn": [
+        43,
+        25,
+        23,
+        43,
+        43,
+        101
+      ],
+      "decision": "ready",
+      "decision_correct": false,
+      "evidence_correct": false,
+      "failure": "semantic",
+      "first_input_sha256": "d6f28034281199f3431fb34cdc5c6c783a657bccbc92cb78ac9ae3e350b7f33c",
+      "format_compliant": true,
+      "inventory_correct": true,
+      "json_syntax": true,
+      "llm_calls": 6,
+      "observation_contents_sha256": "d3d1f1d0886ac04249a9858ff21727b84996f29c63e9f0b88c2aeece4397be8e",
+      "observed": {
+        "asset": true,
+        "inventory": true,
+        "policy": true
+      },
+      "outcome": "complete_final",
+      "parsed_calls_sha256": "760b362c0676def6ff51c92e94e7ac47ebb08c0a4e348db944fbe89c11846e78",
+      "policy_errors": [],
+      "policy_record_correct": true,
+      "reward": 0,
+      "selected": [
+        "run-35a91f9a"
+      ],
+      "selected_issues": [
+        "outside_rpo"
+      ],
+      "supporting_runs_correct": false,
+      "target_correct": true,
+      "time_correct": true,
+      "tokens": 278,
+      "trace_sha256": "614876dce21bc43adb8386a339674135fb503fd2a0ecb7b7312e74df85ef9a58"
+    },
+    "case_id": "recovery-readiness-v1/development/c-5db1a70832",
+    "family": "stale_success",
+    "inventory": {
+      "run-35a91f9a": {
+        "age_minutes": 1131,
+        "integrity": "passed",
+        "status": "succeeded"
+      }
+    },
+    "p01_base": {
+      "answer_sha256": "0c55b3ceb580a71c753a9e1e92cc6241502921c87c43211dfff0818ac089413e",
+      "asset_record_correct": true,
+      "calls_sha256": "902cc84b45bfc550de4395c94dffb444637d4bf5bb53b7ed38e6c63d53925a0c",
+      "completion_tokens_by_turn": [
+        43,
+        25,
+        23,
+        43,
+        43,
+        101
+      ],
+      "decision": "ready",
+      "decision_correct": false,
+      "evidence_correct": false,
+      "failure": "semantic",
+      "first_input_sha256": "d6f28034281199f3431fb34cdc5c6c783a657bccbc92cb78ac9ae3e350b7f33c",
+      "format_compliant": true,
+      "inventory_correct": true,
+      "json_syntax": true,
+      "llm_calls": 6,
+      "observation_contents_sha256": "d3d1f1d0886ac04249a9858ff21727b84996f29c63e9f0b88c2aeece4397be8e",
+      "observed": {
+        "asset": true,
+        "inventory": true,
+        "policy": true
+      },
+      "outcome": "complete_final",
+      "parsed_calls_sha256": "760b362c0676def6ff51c92e94e7ac47ebb08c0a4e348db944fbe89c11846e78",
+      "policy_errors": [],
+      "policy_record_correct": true,
+      "reward": 0,
+      "selected": [
+        "run-35a91f9a"
+      ],
+      "selected_issues": [
+        "outside_rpo"
+      ],
+      "supporting_runs_correct": false,
+      "target_correct": true,
+      "time_correct": true,
+      "tokens": 278,
+      "trace_sha256": "d0171900e694d5512232035cc96538f1cc723b07fb16f9f89dc33c6b12da043f"
+    },
+    "qualifying": [],
+    "reload": {
+      "answer_sha256": "aba9095c4e85af6085c1cc2258060e956594c4f17f2cd869b7cd41d33da7d0e5",
+      "asset_record_correct": true,
+      "calls_sha256": "902cc84b45bfc550de4395c94dffb444637d4bf5bb53b7ed38e6c63d53925a0c",
+      "completion_tokens_by_turn": [
+        43,
+        25,
+        23,
+        43,
+        43,
+        94
+      ],
+      "decision": "not_ready",
+      "decision_correct": true,
+      "evidence_correct": true,
+      "failure": "correct",
+      "first_input_sha256": "d6f28034281199f3431fb34cdc5c6c783a657bccbc92cb78ac9ae3e350b7f33c",
+      "format_compliant": true,
+      "inventory_correct": true,
+      "json_syntax": true,
+      "llm_calls": 6,
+      "observation_contents_sha256": "d3d1f1d0886ac04249a9858ff21727b84996f29c63e9f0b88c2aeece4397be8e",
+      "observed": {
+        "asset": true,
+        "inventory": true,
+        "policy": true
+      },
+      "outcome": "complete_final",
+      "parsed_calls_sha256": "760b362c0676def6ff51c92e94e7ac47ebb08c0a4e348db944fbe89c11846e78",
+      "policy_errors": [],
+      "policy_record_correct": true,
+      "reward": 1,
+      "selected": [],
+      "selected_issues": [],
+      "supporting_runs_correct": true,
+      "target_correct": true,
+      "time_correct": true,
+      "tokens": 271,
+      "trace_sha256": "5815bb16e0c3446c187e36f0af1c8497f3e26218773de8c43b06f8faf2db73de"
+    },
+    "rpo_minutes": 720,
+    "variant": "time_sibling"
+  },
+  {
+    "actual": "not_ready",
+    "as_of": "2026-08-23T09:02Z",
+    "asset_id": "ast-c33789ab",
+    "base": {
+      "answer_sha256": "14b864184d9e47fd52abef27ddf157d280078d4e2f21b6d48200003475fe0715",
+      "asset_record_correct": true,
+      "calls_sha256": "e9f7cc8fb1d07b5ef1cc8203efc1f77456dd66ee31b64fd955e341d3488adcff",
+      "completion_tokens_by_turn": [
+        40,
+        22,
+        23,
+        40,
+        40,
+        95
+      ],
+      "decision": "ready",
+      "decision_correct": false,
+      "evidence_correct": false,
+      "failure": "semantic",
+      "first_input_sha256": "3a383d9b1b5edb0144042557ce0bde74f5464398407537c02d9c167ed97592be",
+      "format_compliant": true,
+      "inventory_correct": true,
+      "json_syntax": true,
+      "llm_calls": 6,
+      "observation_contents_sha256": "2846b475d85daf2ce86ec1228910219d218ab146e891a922e3d075af5761ed58",
+      "observed": {
+        "asset": true,
+        "inventory": true,
+        "policy": true
+      },
+      "outcome": "complete_final",
+      "parsed_calls_sha256": "812b642abd20713ba1832b1a99d7690f88ac47e53bae2389e8d7e95934d8ad54",
+      "policy_errors": [],
+      "policy_record_correct": true,
+      "reward": 0,
+      "selected": [
+        "run-d2ca05eb"
+      ],
+      "selected_issues": [
+        "integrity_pending"
+      ],
+      "supporting_runs_correct": false,
+      "target_correct": true,
+      "time_correct": true,
+      "tokens": 260,
+      "trace_sha256": "b8eb25d726a1011b5479b04852da40251bd617ab6ab311d2e1accf8d117c32b9"
+    },
+    "case_id": "recovery-readiness-v1/development/c-6a7e0cc126",
+    "family": "recent_integrity_failed",
+    "inventory": {
+      "run-00e06180": {
+        "age_minutes": 4434,
+        "integrity": "passed",
+        "status": "succeeded"
+      },
+      "run-964aa2ba": {
+        "age_minutes": 5157,
+        "integrity": "not_applicable",
+        "status": "failed"
+      },
+      "run-d2ca05eb": {
+        "age_minutes": 1848,
+        "integrity": "pending",
+        "status": "succeeded"
+      }
+    },
+    "p01_base": {
+      "answer_sha256": "14b864184d9e47fd52abef27ddf157d280078d4e2f21b6d48200003475fe0715",
+      "asset_record_correct": true,
+      "calls_sha256": "e9f7cc8fb1d07b5ef1cc8203efc1f77456dd66ee31b64fd955e341d3488adcff",
+      "completion_tokens_by_turn": [
+        40,
+        22,
+        23,
+        40,
+        40,
+        95
+      ],
+      "decision": "ready",
+      "decision_correct": false,
+      "evidence_correct": false,
+      "failure": "semantic",
+      "first_input_sha256": "3a383d9b1b5edb0144042557ce0bde74f5464398407537c02d9c167ed97592be",
+      "format_compliant": true,
+      "inventory_correct": true,
+      "json_syntax": true,
+      "llm_calls": 6,
+      "observation_contents_sha256": "2846b475d85daf2ce86ec1228910219d218ab146e891a922e3d075af5761ed58",
+      "observed": {
+        "asset": true,
+        "inventory": true,
+        "policy": true
+      },
+      "outcome": "complete_final",
+      "parsed_calls_sha256": "812b642abd20713ba1832b1a99d7690f88ac47e53bae2389e8d7e95934d8ad54",
+      "policy_errors": [],
+      "policy_record_correct": true,
+      "reward": 0,
+      "selected": [
+        "run-d2ca05eb"
+      ],
+      "selected_issues": [
+        "integrity_pending"
+      ],
+      "supporting_runs_correct": false,
+      "target_correct": true,
+      "time_correct": true,
+      "tokens": 260,
+      "trace_sha256": "3728cd4f861370b53d408ea4818d2a5ec809cbb8f965a8b5a240aba221528a74"
+    },
+    "qualifying": [],
+    "reload": {
+      "answer_sha256": "59a558ea05864cceba0fb53a9afbd17a443d31f1ad58bd33dae257c9d08667f2",
+      "asset_record_correct": true,
+      "calls_sha256": "c4085318dd091a192b53f68ec3d76cdd5ed955e5ea6764b0779a946f034bea65",
+      "completion_tokens_by_turn": [
+        40,
+        22,
+        23,
+        40,
+        23,
+        90
+      ],
+      "decision": "not_ready",
+      "decision_correct": true,
+      "evidence_correct": true,
+      "failure": "correct",
+      "first_input_sha256": "3a383d9b1b5edb0144042557ce0bde74f5464398407537c02d9c167ed97592be",
+      "format_compliant": true,
+      "inventory_correct": true,
+      "json_syntax": true,
+      "llm_calls": 6,
+      "observation_contents_sha256": "9bbf5164aec17c30501c9b5db7faf71d0004326a33245364096c4972add13c10",
+      "observed": {
+        "asset": true,
+        "inventory": true,
+        "policy": true
+      },
+      "outcome": "complete_final",
+      "parsed_calls_sha256": "8b217cc9317560f33f0818c6ae9460eedd228d221b28623fd8556546d8f7a693",
+      "policy_errors": [],
+      "policy_record_correct": true,
+      "reward": 1,
+      "selected": [],
+      "selected_issues": [],
+      "supporting_runs_correct": true,
+      "target_correct": true,
+      "time_correct": true,
+      "tokens": 238,
+      "trace_sha256": "5f610f0b2f9295522cd9b51398470e3e793ba42a59f06fedb58bc3420158751a"
+    },
+    "rpo_minutes": 2160,
+    "variant": "integrity_pending"
+  },
+  {
+    "actual": "ready",
+    "as_of": "2026-11-05T02:22Z",
+    "asset_id": "ast-2a79fcab",
+    "base": {
+      "answer_sha256": "e0d2582921af3e94fe8e2440f757542c47ec24c64aa73552cab10ba9c677d62d",
+      "asset_record_correct": true,
+      "calls_sha256": "d785a6c8fa1f5674ae49d2a1be8871358211ab6e56c5e0a4ec570d5bbb9ea91a",
+      "completion_tokens_by_turn": [
+        130,
+        24,
+        25,
+        42,
+        42,
+        99
+      ],
+      "decision": "ready",
+      "decision_correct": true,
+      "evidence_correct": true,
+      "failure": "correct",
+      "first_input_sha256": "74441da39c3f8dd73600f294d67e9584e8820c96a591130dd70cf048be9b4316",
+      "format_compliant": true,
+      "inventory_correct": true,
+      "json_syntax": true,
+      "llm_calls": 6,
+      "observation_contents_sha256": "b3c34a6e07babb0b08907b451673413060f712fbc67c140d86f9ec07a74e8c24",
+      "observed": {
+        "asset": true,
+        "inventory": true,
+        "policy": true
+      },
+      "outcome": "complete_final",
+      "parsed_calls_sha256": "6904aec66a0e43aa3e0fda4a06f4682ddf125fa2d2372f7df6cd81a67fef06c5",
+      "policy_errors": [],
+      "policy_record_correct": true,
+      "reward": 1,
+      "selected": [
+        "run-6eeba7d3"
+      ],
+      "selected_issues": [],
+      "supporting_runs_correct": true,
+      "target_correct": true,
+      "time_correct": true,
+      "tokens": 362,
+      "trace_sha256": "f6f22f099f4da03dc4a51148720ad87c7be749e3f099c22cb0765215648c35e1"
+    },
+    "case_id": "recovery-readiness-v1/development/c-6c1c74a0e6",
+    "family": "failed_newer_usable_older",
+    "inventory": {
+      "run-6a5187c4": {
+        "age_minutes": 445,
+        "integrity": "passed",
+        "status": "succeeded"
+      },
+      "run-6eeba7d3": {
+        "age_minutes": 181,
+        "integrity": "passed",
+        "status": "succeeded"
+      },
+      "run-af65ff9e": {
+        "age_minutes": 12,
+        "integrity": "not_applicable",
+        "status": "failed"
+      }
+    },
+    "p01_base": {
+      "answer_sha256": "e0d2582921af3e94fe8e2440f757542c47ec24c64aa73552cab10ba9c677d62d",
+      "asset_record_correct": true,
+      "calls_sha256": "d785a6c8fa1f5674ae49d2a1be8871358211ab6e56c5e0a4ec570d5bbb9ea91a",
+      "completion_tokens_by_turn": [
+        130,
+        24,
+        25,
+        42,
+        42,
+        99
+      ],
+      "decision": "ready",
+      "decision_correct": true,
+      "evidence_correct": true,
+      "failure": "correct",
+      "first_input_sha256": "74441da39c3f8dd73600f294d67e9584e8820c96a591130dd70cf048be9b4316",
+      "format_compliant": true,
+      "inventory_correct": true,
+      "json_syntax": true,
+      "llm_calls": 6,
+      "observation_contents_sha256": "b3c34a6e07babb0b08907b451673413060f712fbc67c140d86f9ec07a74e8c24",
+      "observed": {
+        "asset": true,
+        "inventory": true,
+        "policy": true
+      },
+      "outcome": "complete_final",
+      "parsed_calls_sha256": "6904aec66a0e43aa3e0fda4a06f4682ddf125fa2d2372f7df6cd81a67fef06c5",
+      "policy_errors": [],
+      "policy_record_correct": true,
+      "reward": 1,
+      "selected": [
+        "run-6eeba7d3"
+      ],
+      "selected_issues": [],
+      "supporting_runs_correct": true,
+      "target_correct": true,
+      "time_correct": true,
+      "tokens": 362,
+      "trace_sha256": "d10f783041fefb39cacacbba5caf5998aa81896d138f22631a398cfbc556eb04"
+    },
+    "qualifying": [
+      "run-6a5187c4",
+      "run-6eeba7d3"
+    ],
+    "reload": {
+      "answer_sha256": "2273a0919eaf916cb9e47bb5b215408923567961c0be761a90f9fdc426a66a8b",
+      "asset_record_correct": true,
+      "calls_sha256": "d785a6c8fa1f5674ae49d2a1be8871358211ab6e56c5e0a4ec570d5bbb9ea91a",
+      "completion_tokens_by_turn": [
+        42,
+        24,
+        25,
+        42,
+        42,
+        92
+      ],
+      "decision": "not_ready",
+      "decision_correct": false,
+      "evidence_correct": true,
+      "failure": "semantic",
+      "first_input_sha256": "74441da39c3f8dd73600f294d67e9584e8820c96a591130dd70cf048be9b4316",
+      "format_compliant": true,
+      "inventory_correct": true,
+      "json_syntax": true,
+      "llm_calls": 6,
+      "observation_contents_sha256": "b3c34a6e07babb0b08907b451673413060f712fbc67c140d86f9ec07a74e8c24",
+      "observed": {
+        "asset": true,
+        "inventory": true,
+        "policy": true
+      },
+      "outcome": "complete_final",
+      "parsed_calls_sha256": "6904aec66a0e43aa3e0fda4a06f4682ddf125fa2d2372f7df6cd81a67fef06c5",
+      "policy_errors": [],
+      "policy_record_correct": true,
+      "reward": 0,
+      "selected": [],
+      "selected_issues": [],
+      "supporting_runs_correct": true,
+      "target_correct": true,
+      "time_correct": true,
+      "tokens": 267,
+      "trace_sha256": "7becbcf36bf04fa348eedc34673364bbb58238e612d3865abd7a1155aed62c0c"
+    },
+    "rpo_minutes": 720,
+    "variant": "multi_witness"
+  },
+  {
+    "actual": "not_ready",
+    "as_of": "2026-12-15T16:01Z",
+    "asset_id": "ast-6529dfb8",
+    "base": {
+      "answer_sha256": "5a78f55720dfafbf3490fc4a98a20961bb11af826101f3192f026725a6b890dc",
+      "asset_record_correct": true,
+      "calls_sha256": "df330831822d19ed2ea2ca6813b69f3d63c526c16ed7c586dd2671c2c07de3f4",
+      "completion_tokens_by_turn": [
+        130,
+        24,
+        22,
+        42,
+        42,
+        93
+      ],
+      "decision": "ready",
+      "decision_correct": false,
+      "evidence_correct": false,
+      "failure": "semantic",
+      "first_input_sha256": "92b63621a9919466aba98f6d47173f6f0ac661aeb190b06df45946a15add665e",
+      "format_compliant": true,
+      "inventory_correct": true,
+      "json_syntax": true,
+      "llm_calls": 6,
+      "observation_contents_sha256": "100d96d5916eb2c372ee3c0e3336a53481bfd773dee4eaebc43ec54c028470dc",
+      "observed": {
+        "asset": true,
+        "inventory": true,
+        "policy": true
+      },
+      "outcome": "complete_final",
+      "parsed_calls_sha256": "4217c890c358ced906f875f76715cd96c388e87f10c3e9f3737ece2cd98eeb2c",
+      "policy_errors": [],
+      "policy_record_correct": true,
+      "reward": 0,
+      "selected": [
+        "run-01a459fb"
+      ],
+      "selected_issues": [
+        "outside_rpo"
+      ],
+      "supporting_runs_correct": false,
+      "target_correct": true,
+      "time_correct": true,
+      "tokens": 353,
+      "trace_sha256": "04183e87e15feade1e5fb48deda29ff25857bb25978c7f0c697ff253204a8084"
+    },
+    "case_id": "recovery-readiness-v1/development/c-77fa9e56ce",
+    "family": "recent_integrity_failed",
+    "inventory": {
+      "run-01a459fb": {
+        "age_minutes": 7373,
+        "integrity": "passed",
+        "status": "succeeded"
+      },
+      "run-6dc6af11": {
+        "age_minutes": 9975,
+        "integrity": "not_applicable",
+        "status": "failed"
+      },
+      "run-ae9f828f": {
+        "age_minutes": 10497,
+        "integrity": "not_applicable",
+        "status": "failed"
+      },
+      "run-e03aeba1": {
+        "age_minutes": 1524,
+        "integrity": "failed",
+        "status": "succeeded"
+      }
+    },
+    "p01_base": {
+      "answer_sha256": "5a78f55720dfafbf3490fc4a98a20961bb11af826101f3192f026725a6b890dc",
+      "asset_record_correct": true,
+      "calls_sha256": "df330831822d19ed2ea2ca6813b69f3d63c526c16ed7c586dd2671c2c07de3f4",
+      "completion_tokens_by_turn": [
+        130,
+        24,
+        22,
+        42,
+        42,
+        93
+      ],
+      "decision": "ready",
+      "decision_correct": false,
+      "evidence_correct": false,
+      "failure": "semantic",
+      "first_input_sha256": "92b63621a9919466aba98f6d47173f6f0ac661aeb190b06df45946a15add665e",
+      "format_compliant": true,
+      "inventory_correct": true,
+      "json_syntax": true,
+      "llm_calls": 6,
+      "observation_contents_sha256": "100d96d5916eb2c372ee3c0e3336a53481bfd773dee4eaebc43ec54c028470dc",
+      "observed": {
+        "asset": true,
+        "inventory": true,
+        "policy": true
+      },
+      "outcome": "complete_final",
+      "parsed_calls_sha256": "4217c890c358ced906f875f76715cd96c388e87f10c3e9f3737ece2cd98eeb2c",
+      "policy_errors": [],
+      "policy_record_correct": true,
+      "reward": 0,
+      "selected": [
+        "run-01a459fb"
+      ],
+      "selected_issues": [
+        "outside_rpo"
+      ],
+      "supporting_runs_correct": false,
+      "target_correct": true,
+      "time_correct": true,
+      "tokens": 353,
+      "trace_sha256": "865be548f5bd7dd803224c43c187e5306d76b968c7def2b0e1d93586512f659e"
+    },
+    "qualifying": [],
+    "reload": {
+      "answer_sha256": "577ce2c4555116f17d97de99fa80e8ed11ab3a209c34e9f7f1c4da332b717a48",
+      "asset_record_correct": true,
+      "calls_sha256": "870982ef4e924a32d596d789e8b76abd9b01e63d6aa67ce59d0c9a3bab3ef919",
+      "completion_tokens_by_turn": [
+        42,
+        24,
+        22,
+        42,
+        22,
+        88
+      ],
+      "decision": "not_ready",
+      "decision_correct": true,
+      "evidence_correct": true,
+      "failure": "correct",
+      "first_input_sha256": "92b63621a9919466aba98f6d47173f6f0ac661aeb190b06df45946a15add665e",
+      "format_compliant": true,
+      "inventory_correct": true,
+      "json_syntax": true,
+      "llm_calls": 6,
+      "observation_contents_sha256": "4a4154204baedeef0a518a69a928bcc5f6f828ec63dc740a32591dc63f309c39",
+      "observed": {
+        "asset": true,
+        "inventory": true,
+        "policy": true
+      },
+      "outcome": "complete_final",
+      "parsed_calls_sha256": "9370976d70444f2cd1dcda56cbf0fee836197577a2b09b5886566a8fee164eae",
+      "policy_errors": [],
+      "policy_record_correct": true,
+      "reward": 1,
+      "selected": [],
+      "selected_issues": [],
+      "supporting_runs_correct": true,
+      "target_correct": true,
+      "time_correct": true,
+      "tokens": 240,
+      "trace_sha256": "753fb6d5bca9a5b63426e51b1e859a17cea96073d2f4b9d83c8a585f96a88bbd"
+    },
+    "rpo_minutes": 2160,
+    "variant": "plain"
+  },
+  {
+    "actual": "not_ready",
+    "as_of": "2026-08-14T23:58Z",
+    "asset_id": "ast-972fb774",
+    "base": {
+      "answer_sha256": "328ae748c19cc49f444221bc320af0cc03541932e3c4a45597127f403ef32e7a",
+      "asset_record_correct": true,
+      "calls_sha256": "40478ca6fcee834e1ed71ea4f59e287bcaa2b272bb3f70f3a8e879427f6dfb99",
+      "completion_tokens_by_turn": [
+        40,
+        22,
+        23,
+        40,
+        40,
+        114
+      ],
+      "decision": "ready",
+      "decision_correct": false,
+      "evidence_correct": false,
+      "failure": "semantic",
+      "first_input_sha256": "0c42931d4d90e5dd26e4bdec750c63671bee946202147b78cc8303ae9d6eca8e",
+      "format_compliant": true,
+      "inventory_correct": true,
+      "json_syntax": true,
+      "llm_calls": 6,
+      "observation_contents_sha256": "d41358338272b4ab43db421740ef2623154a8a205fc1db2cc23fd565daaf8dcd",
+      "observed": {
+        "asset": true,
+        "inventory": true,
+        "policy": true
+      },
+      "outcome": "complete_final",
+      "parsed_calls_sha256": "e7915b19e82a6324409c3aad56bbe87e65d7da9560fc6023c45e78893ef5b3e3",
+      "policy_errors": [],
+      "policy_record_correct": true,
+      "reward": 0,
+      "selected": [
+        "run-df5f4dd1",
+        "run-6a4dd1ba",
+        "run-8a71e7be"
+      ],
+      "selected_issues": [
+        "outside_rpo"
+      ],
+      "supporting_runs_correct": false,
+      "target_correct": true,
+      "time_correct": true,
+      "tokens": 279,
+      "trace_sha256": "f727f73a77ca5111888f064bd558d6eeb72d0b4a87a32a62ead90b1c84b3e01a"
+    },
+    "case_id": "recovery-readiness-v1/development/c-803d4459c3",
+    "family": "stale_success",
+    "inventory": {
+      "run-6a4dd1ba": {
+        "age_minutes": 872,
+        "integrity": "passed",
+        "status": "succeeded"
+      },
+      "run-8a71e7be": {
+        "age_minutes": 801,
+        "integrity": "passed",
+        "status": "succeeded"
+      },
+      "run-df5f4dd1": {
+        "age_minutes": 790,
+        "integrity": "passed",
+        "status": "succeeded"
+      },
+      "run-fb9824d2": {
+        "age_minutes": 1650,
+        "integrity": "not_applicable",
+        "status": "failed"
+      }
+    },
+    "p01_base": {
+      "answer_sha256": "328ae748c19cc49f444221bc320af0cc03541932e3c4a45597127f403ef32e7a",
+      "asset_record_correct": true,
+      "calls_sha256": "40478ca6fcee834e1ed71ea4f59e287bcaa2b272bb3f70f3a8e879427f6dfb99",
+      "completion_tokens_by_turn": [
+        40,
+        22,
+        23,
+        40,
+        40,
+        114
+      ],
+      "decision": "ready",
+      "decision_correct": false,
+      "evidence_correct": false,
+      "failure": "semantic",
+      "first_input_sha256": "0c42931d4d90e5dd26e4bdec750c63671bee946202147b78cc8303ae9d6eca8e",
+      "format_compliant": true,
+      "inventory_correct": true,
+      "json_syntax": true,
+      "llm_calls": 6,
+      "observation_contents_sha256": "d41358338272b4ab43db421740ef2623154a8a205fc1db2cc23fd565daaf8dcd",
+      "observed": {
+        "asset": true,
+        "inventory": true,
+        "policy": true
+      },
+      "outcome": "complete_final",
+      "parsed_calls_sha256": "e7915b19e82a6324409c3aad56bbe87e65d7da9560fc6023c45e78893ef5b3e3",
+      "policy_errors": [],
+      "policy_record_correct": true,
+      "reward": 0,
+      "selected": [
+        "run-df5f4dd1",
+        "run-6a4dd1ba",
+        "run-8a71e7be"
+      ],
+      "selected_issues": [
+        "outside_rpo"
+      ],
+      "supporting_runs_correct": false,
+      "target_correct": true,
+      "time_correct": true,
+      "tokens": 279,
+      "trace_sha256": "994e5537422cd6c937275421089502a67474e9856ab6b1850ce9e745ac0cd22e"
+    },
+    "qualifying": [],
+    "reload": {
+      "answer_sha256": "75a5c1ca647517289eb4757c2611ebdc61d0620399e1c536f5f9669fae8bdd11",
+      "asset_record_correct": true,
+      "calls_sha256": "81765c8140bf21331d10734268a7273966977d6a9f5ff2ff30652768a0caead6",
+      "completion_tokens_by_turn": [
+        40,
+        22,
+        23,
+        40,
+        23,
+        87
+      ],
+      "decision": "not_ready",
+      "decision_correct": true,
+      "evidence_correct": true,
+      "failure": "correct",
+      "first_input_sha256": "0c42931d4d90e5dd26e4bdec750c63671bee946202147b78cc8303ae9d6eca8e",
+      "format_compliant": true,
+      "inventory_correct": true,
+      "json_syntax": true,
+      "llm_calls": 6,
+      "observation_contents_sha256": "42b0c7e19b06fcf0d9d5bb7506ff2d5a1570f796ec32b7bba33aa0e2982f3cae",
+      "observed": {
+        "asset": true,
+        "inventory": true,
+        "policy": true
+      },
+      "outcome": "complete_final",
+      "parsed_calls_sha256": "677dc273efda9a36bf6c1bd60d5f5d71dae61ee082d9bd6b739a96047539baa8",
+      "policy_errors": [],
+      "policy_record_correct": true,
+      "reward": 1,
+      "selected": [],
+      "selected_issues": [],
+      "supporting_runs_correct": true,
+      "target_correct": true,
+      "time_correct": true,
+      "tokens": 235,
+      "trace_sha256": "f1ff55f3316d164275a8afedaface9b07f594cb4d752c59753fbc87e6ad45140"
+    },
+    "rpo_minutes": 720,
+    "variant": "plain"
+  },
+  {
+    "actual": "not_ready",
+    "as_of": "2026-10-31T12:12Z",
+    "asset_id": "ast-e8a56d58",
+    "base": {
+      "answer_sha256": "30a394a88d872e8f02eb65cf19dcc6714748028dcb26247b27ae01f82f1d2edf",
+      "asset_record_correct": true,
+      "calls_sha256": "c4444323ed90e8e8940ca48e55b05eab4bf67fd56bc7d147de4d70b70c1cb318",
+      "completion_tokens_by_turn": [
+        130,
+        24,
+        24,
+        42,
+        42,
+        88
+      ],
+      "decision": "not_ready",
+      "decision_correct": true,
+      "evidence_correct": true,
+      "failure": "correct",
+      "first_input_sha256": "61d9446494689aea9f4ba48227861ecef4590befa58a202ac22b9b8f042a8a55",
+      "format_compliant": true,
+      "inventory_correct": true,
+      "json_syntax": true,
+      "llm_calls": 6,
+      "observation_contents_sha256": "6fd2693fa1f55fa9bcb8436aae0c59057eaf907a9757cb81f2054f6e3b5c763f",
+      "observed": {
+        "asset": true,
+        "inventory": true,
+        "policy": true
+      },
+      "outcome": "complete_final",
+      "parsed_calls_sha256": "99a33effa3a28be7fc4fe0ced42a0343438566aae0361fdbee04a735a52423cb",
+      "policy_errors": [],
+      "policy_record_correct": true,
+      "reward": 1,
+      "selected": [],
+      "selected_issues": [],
+      "supporting_runs_correct": true,
+      "target_correct": true,
+      "time_correct": true,
+      "tokens": 350,
+      "trace_sha256": "a6a626077daa303c5c3b83e401f516afc3a515d5832fe775755eaa00b79caa89"
+    },
+    "case_id": "recovery-readiness-v1/development/c-87f449f853",
+    "family": "recent_integrity_failed",
+    "inventory": {
+      "run-4eb7bf0d": {
+        "age_minutes": 843,
+        "integrity": "not_applicable",
+        "status": "failed"
+      },
+      "run-8674c5d0": {
+        "age_minutes": 94,
+        "integrity": "failed",
+        "status": "succeeded"
+      },
+      "run-cdd36f0e": {
+        "age_minutes": 521,
+        "integrity": "passed",
+        "status": "succeeded"
+      }
+    },
+    "p01_base": {
+      "answer_sha256": "30a394a88d872e8f02eb65cf19dcc6714748028dcb26247b27ae01f82f1d2edf",
+      "asset_record_correct": true,
+      "calls_sha256": "c4444323ed90e8e8940ca48e55b05eab4bf67fd56bc7d147de4d70b70c1cb318",
+      "completion_tokens_by_turn": [
+        130,
+        24,
+        24,
+        42,
+        42,
+        88
+      ],
+      "decision": "not_ready",
+      "decision_correct": true,
+      "evidence_correct": true,
+      "failure": "correct",
+      "first_input_sha256": "61d9446494689aea9f4ba48227861ecef4590befa58a202ac22b9b8f042a8a55",
+      "format_compliant": true,
+      "inventory_correct": true,
+      "json_syntax": true,
+      "llm_calls": 6,
+      "observation_contents_sha256": "6fd2693fa1f55fa9bcb8436aae0c59057eaf907a9757cb81f2054f6e3b5c763f",
+      "observed": {
+        "asset": true,
+        "inventory": true,
+        "policy": true
+      },
+      "outcome": "complete_final",
+      "parsed_calls_sha256": "99a33effa3a28be7fc4fe0ced42a0343438566aae0361fdbee04a735a52423cb",
+      "policy_errors": [],
+      "policy_record_correct": true,
+      "reward": 1,
+      "selected": [],
+      "selected_issues": [],
+      "supporting_runs_correct": true,
+      "target_correct": true,
+      "time_correct": true,
+      "tokens": 350,
+      "trace_sha256": "a3f3807743d61fe00fd7e7e39d6a71dfd8c199a814393280bacafb9455098c02"
+    },
+    "qualifying": [],
+    "reload": {
+      "answer_sha256": "30a394a88d872e8f02eb65cf19dcc6714748028dcb26247b27ae01f82f1d2edf",
+      "asset_record_correct": true,
+      "calls_sha256": "e43db63e6cdef0395fe72da0b7cb70f32cceb499aa86607df0947d9a7f15ec49",
+      "completion_tokens_by_turn": [
+        42,
+        24,
+        24,
+        42,
+        24,
+        88
+      ],
+      "decision": "not_ready",
+      "decision_correct": true,
+      "evidence_correct": true,
+      "failure": "correct",
+      "first_input_sha256": "61d9446494689aea9f4ba48227861ecef4590befa58a202ac22b9b8f042a8a55",
+      "format_compliant": true,
+      "inventory_correct": true,
+      "json_syntax": true,
+      "llm_calls": 6,
+      "observation_contents_sha256": "97b564910ae7e4ed64eaec2df51e848e171beac4d567e41d8ede460169d04334",
+      "observed": {
+        "asset": true,
+        "inventory": true,
+        "policy": true
+      },
+      "outcome": "complete_final",
+      "parsed_calls_sha256": "3ef4050e45d0d1a241932d32a54ba6cf617fb34d3939a947c5eb5f05d3cf378f",
+      "policy_errors": [],
+      "policy_record_correct": true,
+      "reward": 1,
+      "selected": [],
+      "selected_issues": [],
+      "supporting_runs_correct": true,
+      "target_correct": true,
+      "time_correct": true,
+      "tokens": 244,
+      "trace_sha256": "5621c9d03c7b4157e392bfc668ea71d1a1ef33a88f2470af576fcfb69b5f02a4"
+    },
+    "rpo_minutes": 480,
+    "variant": "plain"
+  },
+  {
+    "actual": "ready",
+    "as_of": "2026-04-07T09:58Z",
+    "asset_id": "ast-81e8334f",
+    "base": {
+      "answer_sha256": "3b34a7166611f1deef8bf8613d593e4ebc702054725c7f8e0ac2d1be017cc417",
+      "asset_record_correct": true,
+      "calls_sha256": "8a767feebc65663e4eb8d9c88298efb7ed48fd4cbccf25d364d8e1b223edc19e",
+      "completion_tokens_by_turn": [
+        42,
+        24,
+        23,
+        42,
+        42,
+        94
+      ],
+      "decision": "ready",
+      "decision_correct": true,
+      "evidence_correct": true,
+      "failure": "correct",
+      "first_input_sha256": "b760a4c67fdada22d96dfce235c2129a7f1551e164cb437514f5c3aa9b0a53ee",
+      "format_compliant": true,
+      "inventory_correct": true,
+      "json_syntax": true,
+      "llm_calls": 6,
+      "observation_contents_sha256": "4be23964e2ee0d24791c0451bbbc48402b831ba32055d3ab0073053990661073",
+      "observed": {
+        "asset": true,
+        "inventory": true,
+        "policy": true
+      },
+      "outcome": "complete_final",
+      "parsed_calls_sha256": "94590ee5f17822feca0ddce7203ecfde1449ec63da6aea14e2ffde71f69ad30c",
+      "policy_errors": [],
+      "policy_record_correct": true,
+      "reward": 1,
+      "selected": [
+        "run-34ab5dda"
+      ],
+      "selected_issues": [],
+      "supporting_runs_correct": true,
+      "target_correct": true,
+      "time_correct": true,
+      "tokens": 267,
+      "trace_sha256": "3fdd091bdb294a49b8c7f7f317359323f267993e038a02228047b14b34c7cf4f"
+    },
+    "case_id": "recovery-readiness-v1/development/c-8a187cb514",
+    "family": "failed_newer_usable_older",
+    "inventory": {
+      "run-34ab5dda": {
+        "age_minutes": 346,
+        "integrity": "passed",
+        "status": "succeeded"
+      },
+      "run-87dddd71": {
+        "age_minutes": 24,
+        "integrity": "not_applicable",
+        "status": "failed"
+      },
+      "run-98373dfa": {
+        "age_minutes": 685,
+        "integrity": "passed",
+        "status": "succeeded"
+      },
+      "run-ca11b1e9": {
+        "age_minutes": 1097,
+        "integrity": "failed",
+        "status": "succeeded"
+      },
+      "run-d5638575": {
+        "age_minutes": 2331,
+        "integrity": "passed",
+        "status": "succeeded"
+      }
+    },
+    "p01_base": {
+      "answer_sha256": "3b34a7166611f1deef8bf8613d593e4ebc702054725c7f8e0ac2d1be017cc417",
+      "asset_record_correct": true,
+      "calls_sha256": "8a767feebc65663e4eb8d9c88298efb7ed48fd4cbccf25d364d8e1b223edc19e",
+      "completion_tokens_by_turn": [
+        42,
+        24,
+        23,
+        42,
+        42,
+        94
+      ],
+      "decision": "ready",
+      "decision_correct": true,
+      "evidence_correct": true,
+      "failure": "correct",
+      "first_input_sha256": "b760a4c67fdada22d96dfce235c2129a7f1551e164cb437514f5c3aa9b0a53ee",
+      "format_compliant": true,
+      "inventory_correct": true,
+      "json_syntax": true,
+      "llm_calls": 6,
+      "observation_contents_sha256": "4be23964e2ee0d24791c0451bbbc48402b831ba32055d3ab0073053990661073",
+      "observed": {
+        "asset": true,
+        "inventory": true,
+        "policy": true
+      },
+      "outcome": "complete_final",
+      "parsed_calls_sha256": "94590ee5f17822feca0ddce7203ecfde1449ec63da6aea14e2ffde71f69ad30c",
+      "policy_errors": [],
+      "policy_record_correct": true,
+      "reward": 1,
+      "selected": [
+        "run-34ab5dda"
+      ],
+      "selected_issues": [],
+      "supporting_runs_correct": true,
+      "target_correct": true,
+      "time_correct": true,
+      "tokens": 267,
+      "trace_sha256": "cec4035afdb7546e1088bdfb231efde63273751bb60f3a7895ec79782faf8a4b"
+    },
+    "qualifying": [
+      "run-34ab5dda",
+      "run-98373dfa"
+    ],
+    "reload": {
+      "answer_sha256": "c29a0d54de5f071b66af962d87965736f0a986644b9c0042ce4483264ec1e8c7",
+      "asset_record_correct": true,
+      "calls_sha256": "002b8d678892e868c978e186e620965bf785793f78d80d86df8b4743592a3587",
+      "completion_tokens_by_turn": [
+        42,
+        24,
+        23,
+        42,
+        23,
+        89
+      ],
+      "decision": "not_ready",
+      "decision_correct": false,
+      "evidence_correct": true,
+      "failure": "semantic",
+      "first_input_sha256": "b760a4c67fdada22d96dfce235c2129a7f1551e164cb437514f5c3aa9b0a53ee",
+      "format_compliant": true,
+      "inventory_correct": true,
+      "json_syntax": true,
+      "llm_calls": 6,
+      "observation_contents_sha256": "9bb514dafddcc950ec881b88929e29144261d131ca1232f68c8c2ed0bddddb0c",
+      "observed": {
+        "asset": true,
+        "inventory": true,
+        "policy": true
+      },
+      "outcome": "complete_final",
+      "parsed_calls_sha256": "f411b8688854926d6babe3ceadc481ca69df6a748eda18a2d53dc38d67b24cd8",
+      "policy_errors": [],
+      "policy_record_correct": true,
+      "reward": 0,
+      "selected": [],
+      "selected_issues": [],
+      "supporting_runs_correct": true,
+      "target_correct": true,
+      "time_correct": true,
+      "tokens": 243,
+      "trace_sha256": "eee329d7c469584498aa309c5a0ab5d1d4f39916f0bcdecdec06db03d2239240"
+    },
+    "rpo_minutes": 720,
+    "variant": "multi_witness"
+  },
+  {
+    "actual": "ready",
+    "as_of": "2026-07-20T15:38Z",
+    "asset_id": "ast-8e186c02",
+    "base": {
+      "answer_sha256": "c4f5555e830ec7764ee7572187aa716dcf9104d1da5a7fd505370ed633d28ee1",
+      "asset_record_correct": true,
+      "calls_sha256": "1fecc2a16f606afebcd8bc6f2a738918163760847d9079db3da8fdc5bc1e4123",
+      "completion_tokens_by_turn": [
+        42,
+        24,
+        24,
+        42,
+        42,
+        117
+      ],
+      "decision": "ready",
+      "decision_correct": true,
+      "evidence_correct": false,
+      "failure": "evidence",
+      "first_input_sha256": "e6a10b846f1d6f4d6823c9f8d41818f23de430bebe34def0c46e2cf45eb32ca2",
+      "format_compliant": true,
+      "inventory_correct": true,
+      "json_syntax": true,
+      "llm_calls": 6,
+      "observation_contents_sha256": "f5e7e39332f6cc5cd1b2baffd8b427e4d0b207048ba96c39efdce0533a7bc566",
+      "observed": {
+        "asset": true,
+        "inventory": true,
+        "policy": true
+      },
+      "outcome": "complete_final",
+      "parsed_calls_sha256": "51cdd47f7ac33e5bc1146cc91356b7577b6370339cc6b513b854f086f45a4aee",
+      "policy_errors": [],
+      "policy_record_correct": true,
+      "reward": 0,
+      "selected": [
+        "run-b0d986e9",
+        "run-58ff7ac6",
+        "run-9b196155"
+      ],
+      "selected_issues": [
+        "outside_rpo"
+      ],
+      "supporting_runs_correct": false,
+      "target_correct": true,
+      "time_correct": true,
+      "tokens": 291,
+      "trace_sha256": "789b73e467e5e0cac770ba43e6990a040d929f9177dc00360b4e9eb6bdb01684"
+    },
+    "case_id": "recovery-readiness-v1/development/c-92516b687c",
+    "family": "failed_newer_usable_older",
+    "inventory": {
+      "run-40b4796c": {
+        "age_minutes": 968,
+        "integrity": "failed",
+        "status": "succeeded"
+      },
+      "run-58ff7ac6": {
+        "age_minutes": 751,
+        "integrity": "passed",
+        "status": "succeeded"
+      },
+      "run-7ee9a3f8": {
+        "age_minutes": 279,
+        "integrity": "not_applicable",
+        "status": "failed"
+      },
+      "run-9b196155": {
+        "age_minutes": 297,
+        "integrity": "passed",
+        "status": "succeeded"
+      },
+      "run-b0d986e9": {
+        "age_minutes": 555,
+        "integrity": "passed",
+        "status": "succeeded"
+      }
+    },
+    "p01_base": {
+      "answer_sha256": "c4f5555e830ec7764ee7572187aa716dcf9104d1da5a7fd505370ed633d28ee1",
+      "asset_record_correct": true,
+      "calls_sha256": "1fecc2a16f606afebcd8bc6f2a738918163760847d9079db3da8fdc5bc1e4123",
+      "completion_tokens_by_turn": [
+        42,
+        24,
+        24,
+        42,
+        42,
+        117
+      ],
+      "decision": "ready",
+      "decision_correct": true,
+      "evidence_correct": false,
+      "failure": "evidence",
+      "first_input_sha256": "e6a10b846f1d6f4d6823c9f8d41818f23de430bebe34def0c46e2cf45eb32ca2",
+      "format_compliant": true,
+      "inventory_correct": true,
+      "json_syntax": true,
+      "llm_calls": 6,
+      "observation_contents_sha256": "f5e7e39332f6cc5cd1b2baffd8b427e4d0b207048ba96c39efdce0533a7bc566",
+      "observed": {
+        "asset": true,
+        "inventory": true,
+        "policy": true
+      },
+      "outcome": "complete_final",
+      "parsed_calls_sha256": "51cdd47f7ac33e5bc1146cc91356b7577b6370339cc6b513b854f086f45a4aee",
+      "policy_errors": [],
+      "policy_record_correct": true,
+      "reward": 0,
+      "selected": [
+        "run-b0d986e9",
+        "run-58ff7ac6",
+        "run-9b196155"
+      ],
+      "selected_issues": [
+        "outside_rpo"
+      ],
+      "supporting_runs_correct": false,
+      "target_correct": true,
+      "time_correct": true,
+      "tokens": 291,
+      "trace_sha256": "622302411bc3f820d043a194d0643f00a6d0de77014c8ff40bb41ad31fc07a6d"
+    },
+    "qualifying": [
+      "run-9b196155"
+    ],
+    "reload": {
+      "answer_sha256": "295acc3310f437ac7ab4d5e142d81350df0c9547b56839123d8a564e7f4b42f2",
+      "asset_record_correct": true,
+      "calls_sha256": "f445aaba33522681d4204a914fcbc5bba55dd74ff3fd9b9cbcb53772f2be24c7",
+      "completion_tokens_by_turn": [
+        42,
+        24,
+        24,
+        42,
+        24,
+        94
+      ],
+      "decision": "not_ready",
+      "decision_correct": false,
+      "evidence_correct": true,
+      "failure": "semantic",
+      "first_input_sha256": "e6a10b846f1d6f4d6823c9f8d41818f23de430bebe34def0c46e2cf45eb32ca2",
+      "format_compliant": true,
+      "inventory_correct": true,
+      "json_syntax": true,
+      "llm_calls": 6,
+      "observation_contents_sha256": "213cf853706773935a7ce95f42e69d33217ffe53df2600cf8fb420ac13856ea3",
+      "observed": {
+        "asset": true,
+        "inventory": true,
+        "policy": true
+      },
+      "outcome": "complete_final",
+      "parsed_calls_sha256": "022e2ebabb05fb5792ca7403ccf1cff791d2471fd39461574a760e55559ec9de",
+      "policy_errors": [],
+      "policy_record_correct": true,
+      "reward": 0,
+      "selected": [],
+      "selected_issues": [],
+      "supporting_runs_correct": true,
+      "target_correct": true,
+      "time_correct": true,
+      "tokens": 250,
+      "trace_sha256": "f6892b905adf944e5d3ad4fc5b4b28115c556517a44cae7a933ebcfefdd766a7"
+    },
+    "rpo_minutes": 480,
+    "variant": "plain"
+  },
+  {
+    "actual": "ready",
+    "as_of": "2026-05-06T11:13Z",
+    "asset_id": "ast-9ba9ae46",
+    "base": {
+      "answer_sha256": "e64e4b1a564adbf175c8d05a62283dc8480872f8065c54cba4f92909adfb062e",
+      "asset_record_correct": true,
+      "calls_sha256": "c438dde507db576a3e04ab318349b90cdeac7b4d46f3edded56b6a09c62d9615",
+      "completion_tokens_by_turn": [
+        130,
+        24,
+        24,
+        42,
+        42,
+        115
+      ],
+      "decision": "ready",
+      "decision_correct": true,
+      "evidence_correct": true,
+      "failure": "correct",
+      "first_input_sha256": "bd62a749758b6b1a21078c5596344a60b412c00b58b8a4df24766459b0b13ea6",
+      "format_compliant": true,
+      "inventory_correct": true,
+      "json_syntax": true,
+      "llm_calls": 6,
+      "observation_contents_sha256": "76d92f9df6abce9618c25a2633be873e514d534ec5d998b1dd13ad90191fac2e",
+      "observed": {
+        "asset": true,
+        "inventory": true,
+        "policy": true
+      },
+      "outcome": "complete_final",
+      "parsed_calls_sha256": "3436ae1562d19f630121bed2720d3e855ff4f35db2e8b8694982e0d25b30d9fc",
+      "policy_errors": [],
+      "policy_record_correct": true,
+      "reward": 1,
+      "selected": [
+        "run-d3d6fc9d",
+        "run-fde72d11",
+        "run-4836548f"
+      ],
+      "selected_issues": [],
+      "supporting_runs_correct": true,
+      "target_correct": true,
+      "time_correct": true,
+      "tokens": 377,
+      "trace_sha256": "e3083689f20f227c7ab89c879b69beb0ad2b2f3e1eb110524d2c19b37f93a0c1"
+    },
+    "case_id": "recovery-readiness-v1/development/c-96ea63c827",
+    "family": "recent_usable",
+    "inventory": {
+      "run-4836548f": {
+        "age_minutes": 223,
+        "integrity": "passed",
+        "status": "succeeded"
+      },
+      "run-d3d6fc9d": {
+        "age_minutes": 200,
+        "integrity": "passed",
+        "status": "succeeded"
+      },
+      "run-fde72d11": {
+        "age_minutes": 214,
+        "integrity": "passed",
+        "status": "succeeded"
+      }
+    },
+    "p01_base": {
+      "answer_sha256": "e64e4b1a564adbf175c8d05a62283dc8480872f8065c54cba4f92909adfb062e",
+      "asset_record_correct": true,
+      "calls_sha256": "c438dde507db576a3e04ab318349b90cdeac7b4d46f3edded56b6a09c62d9615",
+      "completion_tokens_by_turn": [
+        130,
+        24,
+        24,
+        42,
+        42,
+        115
+      ],
+      "decision": "ready",
+      "decision_correct": true,
+      "evidence_correct": true,
+      "failure": "correct",
+      "first_input_sha256": "bd62a749758b6b1a21078c5596344a60b412c00b58b8a4df24766459b0b13ea6",
+      "format_compliant": true,
+      "inventory_correct": true,
+      "json_syntax": true,
+      "llm_calls": 6,
+      "observation_contents_sha256": "76d92f9df6abce9618c25a2633be873e514d534ec5d998b1dd13ad90191fac2e",
+      "observed": {
+        "asset": true,
+        "inventory": true,
+        "policy": true
+      },
+      "outcome": "complete_final",
+      "parsed_calls_sha256": "3436ae1562d19f630121bed2720d3e855ff4f35db2e8b8694982e0d25b30d9fc",
+      "policy_errors": [],
+      "policy_record_correct": true,
+      "reward": 1,
+      "selected": [
+        "run-d3d6fc9d",
+        "run-fde72d11",
+        "run-4836548f"
+      ],
+      "selected_issues": [],
+      "supporting_runs_correct": true,
+      "target_correct": true,
+      "time_correct": true,
+      "tokens": 377,
+      "trace_sha256": "b3ea99cce74bacb5fc1f82c7a7d04e0715eeee79296c9849d9122166460b2a7f"
+    },
+    "qualifying": [
+      "run-4836548f",
+      "run-d3d6fc9d",
+      "run-fde72d11"
+    ],
+    "reload": {
+      "answer_sha256": "1c0b5750fb3eab189210b205b2d8db4aa5441f16289246439dd84a45fbdbc970",
+      "asset_record_correct": true,
+      "calls_sha256": "e1146071350e07c9b124f3a45230e8f2bc06a83b100cdaea5cb34f267788ecf2",
+      "completion_tokens_by_turn": [
+        42,
+        24,
+        24,
+        42,
+        24,
+        92
+      ],
+      "decision": "not_ready",
+      "decision_correct": false,
+      "evidence_correct": true,
+      "failure": "semantic",
+      "first_input_sha256": "bd62a749758b6b1a21078c5596344a60b412c00b58b8a4df24766459b0b13ea6",
+      "format_compliant": true,
+      "inventory_correct": true,
+      "json_syntax": true,
+      "llm_calls": 6,
+      "observation_contents_sha256": "51406aaf9d1c60b25203963ef6afba7aef20d76ac14ba1a8c4fafc3753724907",
+      "observed": {
+        "asset": true,
+        "inventory": true,
+        "policy": true
+      },
+      "outcome": "complete_final",
+      "parsed_calls_sha256": "d42c5528c27774bd1afd72702e2e469291f53b9defd2a926f07166094a288a3b",
+      "policy_errors": [],
+      "policy_record_correct": true,
+      "reward": 0,
+      "selected": [],
+      "selected_issues": [],
+      "supporting_runs_correct": true,
+      "target_correct": true,
+      "time_correct": true,
+      "tokens": 248,
+      "trace_sha256": "fe18ef02d8a10b26332d16b5e187e45ba9ba72348640028ca8b6bb0cb1cad10a"
+    },
+    "rpo_minutes": 480,
+    "variant": "multi_witness"
+  },
+  {
+    "actual": "not_ready",
+    "as_of": "2026-07-02T16:06Z",
+    "asset_id": "ast-36cfe91a",
+    "base": {
+      "answer_sha256": "4f36cbc35249cd84c29996074ae1f5785235323d4bcfe5086eb3638ffb35a3bc",
+      "asset_record_correct": true,
+      "calls_sha256": "d753ec4ede74c8240bc704c52083fa72e6bfa0331aa82acaea08b5cf5548ec5c",
+      "completion_tokens_by_turn": [
+        42,
+        24,
+        22,
+        42,
+        42,
+        105
+      ],
+      "decision": "ready",
+      "decision_correct": false,
+      "evidence_correct": false,
+      "failure": "semantic",
+      "first_input_sha256": "ed8ad40f7a0558590ad3973eaf195a808dcb9b4dadebef6300f8eaf11370452f",
+      "format_compliant": true,
+      "inventory_correct": true,
+      "json_syntax": true,
+      "llm_calls": 6,
+      "observation_contents_sha256": "8ba5f77c518d2939ab4a383785ef6a8793718f2688e2bd3ba35fcdb802c7b19f",
+      "observed": {
+        "asset": true,
+        "inventory": true,
+        "policy": true
+      },
+      "outcome": "complete_final",
+      "parsed_calls_sha256": "c3d73698443974ac3f4e456749b235c45c5034c9202972eed5d1783ab5e0308c",
+      "policy_errors": [],
+      "policy_record_correct": true,
+      "reward": 0,
+      "selected": [
+        "run-a9d09705",
+        "run-84bb845c"
+      ],
+      "selected_issues": [
+        "outside_rpo"
+      ],
+      "supporting_runs_correct": false,
+      "target_correct": true,
+      "time_correct": true,
+      "tokens": 277,
+      "trace_sha256": "57778fe87b1a993e5d4406505a73d9b170f625ee2c40c1cc40477e79f7d7f2cd"
+    },
+    "case_id": "recovery-readiness-v1/development/c-9b22a6dd87",
+    "family": "recent_incomplete",
+    "inventory": {
+      "run-482a04e8": {
+        "age_minutes": 5375,
+        "integrity": "not_applicable",
+        "status": "failed"
+      },
+      "run-7ff51df9": {
+        "age_minutes": 3091,
+        "integrity": "not_applicable",
+        "status": "failed"
+      },
+      "run-84bb845c": {
+        "age_minutes": 2237,
+        "integrity": "passed",
+        "status": "succeeded"
+      },
+      "run-a9d09705": {
+        "age_minutes": 2268,
+        "integrity": "passed",
+        "status": "succeeded"
+      },
+      "run-fa562c03": {
+        "age_minutes": 76,
+        "integrity": "not_applicable",
+        "status": "running"
+      }
+    },
+    "p01_base": {
+      "answer_sha256": "4f36cbc35249cd84c29996074ae1f5785235323d4bcfe5086eb3638ffb35a3bc",
+      "asset_record_correct": true,
+      "calls_sha256": "d753ec4ede74c8240bc704c52083fa72e6bfa0331aa82acaea08b5cf5548ec5c",
+      "completion_tokens_by_turn": [
+        42,
+        24,
+        22,
+        42,
+        42,
+        105
+      ],
+      "decision": "ready",
+      "decision_correct": false,
+      "evidence_correct": false,
+      "failure": "semantic",
+      "first_input_sha256": "ed8ad40f7a0558590ad3973eaf195a808dcb9b4dadebef6300f8eaf11370452f",
+      "format_compliant": true,
+      "inventory_correct": true,
+      "json_syntax": true,
+      "llm_calls": 6,
+      "observation_contents_sha256": "8ba5f77c518d2939ab4a383785ef6a8793718f2688e2bd3ba35fcdb802c7b19f",
+      "observed": {
+        "asset": true,
+        "inventory": true,
+        "policy": true
+      },
+      "outcome": "complete_final",
+      "parsed_calls_sha256": "c3d73698443974ac3f4e456749b235c45c5034c9202972eed5d1783ab5e0308c",
+      "policy_errors": [],
+      "policy_record_correct": true,
+      "reward": 0,
+      "selected": [
+        "run-a9d09705",
+        "run-84bb845c"
+      ],
+      "selected_issues": [
+        "outside_rpo"
+      ],
+      "supporting_runs_correct": false,
+      "target_correct": true,
+      "time_correct": true,
+      "tokens": 277,
+      "trace_sha256": "92760cc1ee05fd9be6338022832bc83fa16ed602231292d80f1b822a5f5aef4d"
+    },
+    "qualifying": [],
+    "reload": {
+      "answer_sha256": "b1ee957f2fd04b8ac5b0101c2b64bf0133194a2dc101a72a377eae2d52340b36",
+      "asset_record_correct": true,
+      "calls_sha256": "043051932dc0b26f2b33ac95d46ca19de6b4e7b6381d36f1166872e2fa6d354d",
+      "completion_tokens_by_turn": [
+        42,
+        24,
+        22,
+        42,
+        22,
+        92
+      ],
+      "decision": "not_ready",
+      "decision_correct": true,
+      "evidence_correct": true,
+      "failure": "correct",
+      "first_input_sha256": "ed8ad40f7a0558590ad3973eaf195a808dcb9b4dadebef6300f8eaf11370452f",
+      "format_compliant": true,
+      "inventory_correct": true,
+      "json_syntax": true,
+      "llm_calls": 6,
+      "observation_contents_sha256": "e7eeae1ed2002982928b72fa308fd6fc9f3fd51972673dde1e586bab9614a34c",
+      "observed": {
+        "asset": true,
+        "inventory": true,
+        "policy": true
+      },
+      "outcome": "complete_final",
+      "parsed_calls_sha256": "f94e1f3104266f2576ef4ef46b89770248eec3b9ca0658183ffefcaa75ed6786",
+      "policy_errors": [],
+      "policy_record_correct": true,
+      "reward": 1,
+      "selected": [],
+      "selected_issues": [],
+      "supporting_runs_correct": true,
+      "target_correct": true,
+      "time_correct": true,
+      "tokens": 244,
+      "trace_sha256": "2730dbea33dc37bf9de76f5c60483ad79f432a9d4b0ff1a8286ec923e30dba9a"
+    },
+    "rpo_minutes": 2160,
+    "variant": "plain"
+  },
+  {
+    "actual": "ready",
+    "as_of": "2026-03-12T07:50Z",
+    "asset_id": "ast-05f7d15b",
+    "base": {
+      "answer_sha256": "27c3c8d04df88fe0abce59a434c141bf67148b139364826572229d583a7b045d",
+      "asset_record_correct": true,
+      "calls_sha256": "ffd7587a202d4bcfd569dde32c7cf15bea908f83c957199588006a73bbc03c9e",
+      "completion_tokens_by_turn": [
+        133,
+        25,
+        23,
+        43,
+        43,
+        93
+      ],
+      "decision": "not_ready",
+      "decision_correct": false,
+      "evidence_correct": true,
+      "failure": "semantic",
+      "first_input_sha256": "61f02e6bc6038742cd4151bbaad846727a6b7b3201d2625f3d4ec0e4fefd8f80",
+      "format_compliant": true,
+      "inventory_correct": true,
+      "json_syntax": true,
+      "llm_calls": 6,
+      "observation_contents_sha256": "e236b5484d3447c43acd97ebde4361a128fb989dac7bf0b38fd2629278cb6298",
+      "observed": {
+        "asset": true,
+        "inventory": true,
+        "policy": true
+      },
+      "outcome": "complete_final",
+      "parsed_calls_sha256": "02c4e7582d98688f5fa4931b1175a852ee6a8f0ed0ad06c25e0b4d28bde46797",
+      "policy_errors": [],
+      "policy_record_correct": true,
+      "reward": 0,
+      "selected": [],
+      "selected_issues": [],
+      "supporting_runs_correct": true,
+      "target_correct": true,
+      "time_correct": true,
+      "tokens": 360,
+      "trace_sha256": "6c40b97bf4f566b4608289b9d1843fa36b2b330d3f5eda4f09df0df398ad4f35"
+    },
+    "case_id": "recovery-readiness-v1/development/c-aa26cb7656",
+    "family": "recent_usable",
+    "inventory": {
+      "run-35a91f9a": {
+        "age_minutes": 436,
+        "integrity": "passed",
+        "status": "succeeded"
+      }
+    },
+    "p01_base": {
+      "answer_sha256": "27c3c8d04df88fe0abce59a434c141bf67148b139364826572229d583a7b045d",
+      "asset_record_correct": true,
+      "calls_sha256": "ffd7587a202d4bcfd569dde32c7cf15bea908f83c957199588006a73bbc03c9e",
+      "completion_tokens_by_turn": [
+        133,
+        25,
+        23,
+        43,
+        43,
+        93
+      ],
+      "decision": "not_ready",
+      "decision_correct": false,
+      "evidence_correct": true,
+      "failure": "semantic",
+      "first_input_sha256": "61f02e6bc6038742cd4151bbaad846727a6b7b3201d2625f3d4ec0e4fefd8f80",
+      "format_compliant": true,
+      "inventory_correct": true,
+      "json_syntax": true,
+      "llm_calls": 6,
+      "observation_contents_sha256": "e236b5484d3447c43acd97ebde4361a128fb989dac7bf0b38fd2629278cb6298",
+      "observed": {
+        "asset": true,
+        "inventory": true,
+        "policy": true
+      },
+      "outcome": "complete_final",
+      "parsed_calls_sha256": "02c4e7582d98688f5fa4931b1175a852ee6a8f0ed0ad06c25e0b4d28bde46797",
+      "policy_errors": [],
+      "policy_record_correct": true,
+      "reward": 0,
+      "selected": [],
+      "selected_issues": [],
+      "supporting_runs_correct": true,
+      "target_correct": true,
+      "time_correct": true,
+      "tokens": 360,
+      "trace_sha256": "e33ca0df59f3d69f994779c1659cf992d5e8a41d0f55551d5129203c10db064f"
+    },
+    "qualifying": [
+      "run-35a91f9a"
+    ],
+    "reload": {
+      "answer_sha256": "27c3c8d04df88fe0abce59a434c141bf67148b139364826572229d583a7b045d",
+      "asset_record_correct": true,
+      "calls_sha256": "723129fa8c04760ae4f0f514407c48f416699cbc34c0040c437d98d36daf424c",
+      "completion_tokens_by_turn": [
+        43,
+        25,
+        23,
+        43,
+        23,
+        93
+      ],
+      "decision": "not_ready",
+      "decision_correct": false,
+      "evidence_correct": true,
+      "failure": "semantic",
+      "first_input_sha256": "61f02e6bc6038742cd4151bbaad846727a6b7b3201d2625f3d4ec0e4fefd8f80",
+      "format_compliant": true,
+      "inventory_correct": true,
+      "json_syntax": true,
+      "llm_calls": 6,
+      "observation_contents_sha256": "7ac933a8accd2e452ed44872d960b5741f4135783d953c8e980d44b8651ab9b9",
+      "observed": {
+        "asset": true,
+        "inventory": true,
+        "policy": true
+      },
+      "outcome": "complete_final",
+      "parsed_calls_sha256": "de6aaa2b951df67c685afcd5a53200e713b126e4d31a81cff38e659e030640fb",
+      "policy_errors": [],
+      "policy_record_correct": true,
+      "reward": 0,
+      "selected": [],
+      "selected_issues": [],
+      "supporting_runs_correct": true,
+      "target_correct": true,
+      "time_correct": true,
+      "tokens": 250,
+      "trace_sha256": "45aac244f9bf594c9c892dfe95df3fed722243e434b78819bba8a3fb7c570002"
+    },
+    "rpo_minutes": 720,
+    "variant": "time_sibling"
+  },
+  {
+    "actual": "not_ready",
+    "as_of": "2026-06-20T00:00Z",
+    "asset_id": "ast-6871ba9a",
+    "base": {
+      "answer_sha256": "8d176a3aa31500b3cbbf8268e13e266a486edd011668df2c4cb9e81bf0ec4e8d",
+      "asset_record_correct": true,
+      "calls_sha256": "407ff39755c98dc1de46d71ba4c4d3ca212bdea9a398c4e03359c41362152d11",
+      "completion_tokens_by_turn": [
+        130,
+        24,
+        25,
+        42,
+        42,
+        99
+      ],
+      "decision": "ready",
+      "decision_correct": false,
+      "evidence_correct": false,
+      "failure": "semantic",
+      "first_input_sha256": "13fbf42d0e67d54062591dd7e27760757048055941ab99bc20ec6d1b103ad07d",
+      "format_compliant": true,
+      "inventory_correct": true,
+      "json_syntax": true,
+      "llm_calls": 6,
+      "observation_contents_sha256": "73261d659fd62444119d0abef289f8869b1019bc57c98f26b076cd01cb16ddd5",
+      "observed": {
+        "asset": true,
+        "inventory": true,
+        "policy": true
+      },
+      "outcome": "complete_final",
+      "parsed_calls_sha256": "5e77324d137ba5f08e6688168a470b0cf84605b00c9d25147fd5bfa6d33fcdd5",
+      "policy_errors": [],
+      "policy_record_correct": true,
+      "reward": 0,
+      "selected": [
+        "run-952e85e4"
+      ],
+      "selected_issues": [
+        "outside_rpo"
+      ],
+      "supporting_runs_correct": false,
+      "target_correct": true,
+      "time_correct": true,
+      "tokens": 362,
+      "trace_sha256": "57076dbc776d827f12e12bb6ee3eab3de3f67168affb89c0c4fec94d567c7180"
+    },
+    "case_id": "recovery-readiness-v1/development/c-b5fac01e6c",
+    "family": "stale_success",
+    "inventory": {
+      "run-35aff12f": {
+        "age_minutes": 1715,
+        "integrity": "not_applicable",
+        "status": "failed"
+      },
+      "run-952e85e4": {
+        "age_minutes": 721,
+        "integrity": "passed",
+        "status": "succeeded"
+      }
+    },
+    "p01_base": {
+      "answer_sha256": "8d176a3aa31500b3cbbf8268e13e266a486edd011668df2c4cb9e81bf0ec4e8d",
+      "asset_record_correct": true,
+      "calls_sha256": "407ff39755c98dc1de46d71ba4c4d3ca212bdea9a398c4e03359c41362152d11",
+      "completion_tokens_by_turn": [
+        130,
+        24,
+        25,
+        42,
+        42,
+        99
+      ],
+      "decision": "ready",
+      "decision_correct": false,
+      "evidence_correct": false,
+      "failure": "semantic",
+      "first_input_sha256": "13fbf42d0e67d54062591dd7e27760757048055941ab99bc20ec6d1b103ad07d",
+      "format_compliant": true,
+      "inventory_correct": true,
+      "json_syntax": true,
+      "llm_calls": 6,
+      "observation_contents_sha256": "73261d659fd62444119d0abef289f8869b1019bc57c98f26b076cd01cb16ddd5",
+      "observed": {
+        "asset": true,
+        "inventory": true,
+        "policy": true
+      },
+      "outcome": "complete_final",
+      "parsed_calls_sha256": "5e77324d137ba5f08e6688168a470b0cf84605b00c9d25147fd5bfa6d33fcdd5",
+      "policy_errors": [],
+      "policy_record_correct": true,
+      "reward": 0,
+      "selected": [
+        "run-952e85e4"
+      ],
+      "selected_issues": [
+        "outside_rpo"
+      ],
+      "supporting_runs_correct": false,
+      "target_correct": true,
+      "time_correct": true,
+      "tokens": 362,
+      "trace_sha256": "0572f565caa70ce78578f6cead29285759ff3c8651f43a30d9b409cfbccfeaba"
+    },
+    "qualifying": [],
+    "reload": {
+      "answer_sha256": "db04f7d6376e1084f3b380e811b75f50b06cb12aeb870cd4cae828952360678b",
+      "asset_record_correct": true,
+      "calls_sha256": "2b552e0d9d640d0a23fff20d39ed947b248385a569af6e556852c171d9610428",
+      "completion_tokens_by_turn": [
+        42,
+        24,
+        25,
+        42,
+        25,
+        93
+      ],
+      "decision": "not_ready",
+      "decision_correct": true,
+      "evidence_correct": true,
+      "failure": "correct",
+      "first_input_sha256": "13fbf42d0e67d54062591dd7e27760757048055941ab99bc20ec6d1b103ad07d",
+      "format_compliant": true,
+      "inventory_correct": true,
+      "json_syntax": true,
+      "llm_calls": 6,
+      "observation_contents_sha256": "e26af536e6cdb8c239857e88c9f8ee31a7e5f798b41315740b8f1b64e22cf742",
+      "observed": {
+        "asset": true,
+        "inventory": true,
+        "policy": true
+      },
+      "outcome": "complete_final",
+      "parsed_calls_sha256": "92fc9046badb32ca15588f665358597f451f2d7e72ab521327e82cb6134dcdba",
+      "policy_errors": [],
+      "policy_record_correct": true,
+      "reward": 1,
+      "selected": [],
+      "selected_issues": [],
+      "supporting_runs_correct": true,
+      "target_correct": true,
+      "time_correct": true,
+      "tokens": 251,
+      "trace_sha256": "defbe4b7ededf5a1da1707957648977d5f43fe711236cc645a1fae7393d74dc8"
+    },
+    "rpo_minutes": 720,
+    "variant": "just_stale"
+  },
+  {
+    "actual": "ready",
+    "as_of": "2026-08-22T17:35Z",
+    "asset_id": "ast-02eb9990",
+    "base": {
+      "answer_sha256": "e08d8b6a84d3e8638e3e1cc5177a651339c4d31b8974872f49fda6f79d188b2d",
+      "asset_record_correct": true,
+      "calls_sha256": "0b3d2780c6f1e364523958833466a3b10928cee5b5ed67de4248766011d7a408",
+      "completion_tokens_by_turn": [
+        41,
+        23,
+        22,
+        41,
+        41,
+        109
+      ],
+      "decision": "ready",
+      "decision_correct": true,
+      "evidence_correct": false,
+      "failure": "evidence",
+      "first_input_sha256": "c26ca2a3ff326138c2375668111b72f6fbb05f2ed7f99ada6ca9ae6516a16764",
+      "format_compliant": true,
+      "inventory_correct": true,
+      "json_syntax": true,
+      "llm_calls": 6,
+      "observation_contents_sha256": "4bfc9b78e2a30ff7a01e3ea859d5eb1817aa65a3fd8c988c36b82c8e8d60c2e9",
+      "observed": {
+        "asset": true,
+        "inventory": true,
+        "policy": true
+      },
+      "outcome": "complete_final",
+      "parsed_calls_sha256": "b1db4ee31855c1e5d34b9054b02caa6009ba97decbccc476adeac6ccc7b99f0f",
+      "policy_errors": [],
+      "policy_record_correct": true,
+      "reward": 0,
+      "selected": [
+        "run-cb636a45",
+        "run-9f47c915",
+        "run-ffb79681"
+      ],
+      "selected_issues": [
+        "outside_rpo"
+      ],
+      "supporting_runs_correct": false,
+      "target_correct": true,
+      "time_correct": true,
+      "tokens": 277,
+      "trace_sha256": "edd5d463e10c2114ad158fe281e00f520709caf6f6e978e67d6bcf7f1048cd97"
+    },
+    "case_id": "recovery-readiness-v1/development/c-c25ac45067",
+    "family": "failed_newer_usable_older",
+    "inventory": {
+      "run-5f593ac2": {
+        "age_minutes": 2943,
+        "integrity": "failed",
+        "status": "succeeded"
+      },
+      "run-9f47c915": {
+        "age_minutes": 2169,
+        "integrity": "passed",
+        "status": "succeeded"
+      },
+      "run-cb636a45": {
+        "age_minutes": 2282,
+        "integrity": "passed",
+        "status": "succeeded"
+      },
+      "run-eeb147b5": {
+        "age_minutes": 94,
+        "integrity": "not_applicable",
+        "status": "failed"
+      },
+      "run-ffb79681": {
+        "age_minutes": 315,
+        "integrity": "passed",
+        "status": "succeeded"
+      }
+    },
+    "p01_base": {
+      "answer_sha256": "e08d8b6a84d3e8638e3e1cc5177a651339c4d31b8974872f49fda6f79d188b2d",
+      "asset_record_correct": true,
+      "calls_sha256": "0b3d2780c6f1e364523958833466a3b10928cee5b5ed67de4248766011d7a408",
+      "completion_tokens_by_turn": [
+        41,
+        23,
+        22,
+        41,
+        41,
+        109
+      ],
+      "decision": "ready",
+      "decision_correct": true,
+      "evidence_correct": false,
+      "failure": "evidence",
+      "first_input_sha256": "c26ca2a3ff326138c2375668111b72f6fbb05f2ed7f99ada6ca9ae6516a16764",
+      "format_compliant": true,
+      "inventory_correct": true,
+      "json_syntax": true,
+      "llm_calls": 6,
+      "observation_contents_sha256": "4bfc9b78e2a30ff7a01e3ea859d5eb1817aa65a3fd8c988c36b82c8e8d60c2e9",
+      "observed": {
+        "asset": true,
+        "inventory": true,
+        "policy": true
+      },
+      "outcome": "complete_final",
+      "parsed_calls_sha256": "b1db4ee31855c1e5d34b9054b02caa6009ba97decbccc476adeac6ccc7b99f0f",
+      "policy_errors": [],
+      "policy_record_correct": true,
+      "reward": 0,
+      "selected": [
+        "run-cb636a45",
+        "run-9f47c915",
+        "run-ffb79681"
+      ],
+      "selected_issues": [
+        "outside_rpo"
+      ],
+      "supporting_runs_correct": false,
+      "target_correct": true,
+      "time_correct": true,
+      "tokens": 277,
+      "trace_sha256": "203905ece9ba856831f20c9d6dc2796696c2e699003e96b103f4cb8c86922aba"
+    },
+    "qualifying": [
+      "run-ffb79681"
+    ],
+    "reload": {
+      "answer_sha256": "318b9ea32ae3f10abb0357fee363c8ffa58727995a955a8bda4d58e500e8ac4c",
+      "asset_record_correct": true,
+      "calls_sha256": "948ab55140580cfc2e79b0db45846630fed1dcf5fa8ebdccda0a316dd8314dd5",
+      "completion_tokens_by_turn": [
+        41,
+        23,
+        22,
+        41,
+        22,
+        88
+      ],
+      "decision": "not_ready",
+      "decision_correct": false,
+      "evidence_correct": true,
+      "failure": "semantic",
+      "first_input_sha256": "c26ca2a3ff326138c2375668111b72f6fbb05f2ed7f99ada6ca9ae6516a16764",
+      "format_compliant": true,
+      "inventory_correct": true,
+      "json_syntax": true,
+      "llm_calls": 6,
+      "observation_contents_sha256": "12bdffc970b476c1d5145871f58ae02550a3f5c57c576caf1be366495e7671da",
+      "observed": {
+        "asset": true,
+        "inventory": true,
+        "policy": true
+      },
+      "outcome": "complete_final",
+      "parsed_calls_sha256": "d9f05bc52d779f80ea3b5ac57a1c9684eea4404f3437d467f0506335bb601084",
+      "policy_errors": [],
+      "policy_record_correct": true,
+      "reward": 0,
+      "selected": [],
+      "selected_issues": [],
+      "supporting_runs_correct": true,
+      "target_correct": true,
+      "time_correct": true,
+      "tokens": 237,
+      "trace_sha256": "57bd1254d63c58098bdd48f44e4443cc07c56ca1a3d27540183c46b1c756884e"
+    },
+    "rpo_minutes": 2160,
+    "variant": "plain"
+  },
+  {
+    "actual": "ready",
+    "as_of": "2026-02-09T19:52Z",
+    "asset_id": "ast-c85873a6",
+    "base": {
+      "answer_sha256": "5b986d0ea086a83d88d4a7454c00d3182ed9426e3beedf2d61ee0c5e43278755",
+      "asset_record_correct": true,
+      "calls_sha256": "7946f1cd41419c226988c7c828e7d322e65757bb26dbfc2d3abb5c2751b23755",
+      "completion_tokens_by_turn": [
+        86,
+        23,
+        25,
+        41,
+        41,
+        105
+      ],
+      "decision": "ready",
+      "decision_correct": true,
+      "evidence_correct": true,
+      "failure": "correct",
+      "first_input_sha256": "318de74097e9c85a255b2416b43184f05d8225521f1adbf67aedce15b400e4f9",
+      "format_compliant": true,
+      "inventory_correct": true,
+      "json_syntax": true,
+      "llm_calls": 6,
+      "observation_contents_sha256": "05863dae47f61a1f5131f7066c4d9103a551be6c85ab9c37a06e3ce282966309",
+      "observed": {
+        "asset": true,
+        "inventory": true,
+        "policy": true
+      },
+      "outcome": "complete_final",
+      "parsed_calls_sha256": "cd7229d3c848cc91f9289ede0b38dc10d776e42c857fd9b99e4524ade7680000",
+      "policy_errors": [],
+      "policy_record_correct": true,
+      "reward": 1,
+      "selected": [
+        "run-d5edb7d9",
+        "run-fd6996b2"
+      ],
+      "selected_issues": [],
+      "supporting_runs_correct": true,
+      "target_correct": true,
+      "time_correct": true,
+      "tokens": 321,
+      "trace_sha256": "d734cbd4a608b42de1934aea449a3f74f6164f0bbfea8f2c766cfe50d8a00c4c"
+    },
+    "case_id": "recovery-readiness-v1/development/c-cf2994fed4",
+    "family": "recent_usable",
+    "inventory": {
+      "run-d5edb7d9": {
+        "age_minutes": 261,
+        "integrity": "passed",
+        "status": "succeeded"
+      },
+      "run-fd6996b2": {
+        "age_minutes": 331,
+        "integrity": "passed",
+        "status": "succeeded"
+      }
+    },
+    "p01_base": {
+      "answer_sha256": "5b986d0ea086a83d88d4a7454c00d3182ed9426e3beedf2d61ee0c5e43278755",
+      "asset_record_correct": true,
+      "calls_sha256": "7946f1cd41419c226988c7c828e7d322e65757bb26dbfc2d3abb5c2751b23755",
+      "completion_tokens_by_turn": [
+        86,
+        23,
+        25,
+        41,
+        41,
+        105
+      ],
+      "decision": "ready",
+      "decision_correct": true,
+      "evidence_correct": true,
+      "failure": "correct",
+      "first_input_sha256": "318de74097e9c85a255b2416b43184f05d8225521f1adbf67aedce15b400e4f9",
+      "format_compliant": true,
+      "inventory_correct": true,
+      "json_syntax": true,
+      "llm_calls": 6,
+      "observation_contents_sha256": "05863dae47f61a1f5131f7066c4d9103a551be6c85ab9c37a06e3ce282966309",
+      "observed": {
+        "asset": true,
+        "inventory": true,
+        "policy": true
+      },
+      "outcome": "complete_final",
+      "parsed_calls_sha256": "cd7229d3c848cc91f9289ede0b38dc10d776e42c857fd9b99e4524ade7680000",
+      "policy_errors": [],
+      "policy_record_correct": true,
+      "reward": 1,
+      "selected": [
+        "run-d5edb7d9",
+        "run-fd6996b2"
+      ],
+      "selected_issues": [],
+      "supporting_runs_correct": true,
+      "target_correct": true,
+      "time_correct": true,
+      "tokens": 321,
+      "trace_sha256": "6b21b011ae13c597b0477fd3d4094b221cf17c8462dde36757be84ae32bc826a"
+    },
+    "qualifying": [
+      "run-d5edb7d9",
+      "run-fd6996b2"
+    ],
+    "reload": {
+      "answer_sha256": "c232c851eed9d58127a08a482b8a206616262d71aeb98a17250c404a5f7f08b4",
+      "asset_record_correct": true,
+      "calls_sha256": "212829e2a5688e43ffbe970d3c42e6937cc810a17f73223a2b08a3f57a9d7134",
+      "completion_tokens_by_turn": [
+        41,
+        23,
+        25,
+        41,
+        25,
+        90
+      ],
+      "decision": "not_ready",
+      "decision_correct": false,
+      "evidence_correct": true,
+      "failure": "semantic",
+      "first_input_sha256": "318de74097e9c85a255b2416b43184f05d8225521f1adbf67aedce15b400e4f9",
+      "format_compliant": true,
+      "inventory_correct": true,
+      "json_syntax": true,
+      "llm_calls": 6,
+      "observation_contents_sha256": "49366f13f2a21706d09f335f94daa8a2a99b2d69f9028c75b8efb987bdde7686",
+      "observed": {
+        "asset": true,
+        "inventory": true,
+        "policy": true
+      },
+      "outcome": "complete_final",
+      "parsed_calls_sha256": "f4a7ca6feb01a94be4b7ed2f5d191ca7e9bc307d32d5ddcc392df9dc6aafda68",
+      "policy_errors": [],
+      "policy_record_correct": true,
+      "reward": 0,
+      "selected": [],
+      "selected_issues": [],
+      "supporting_runs_correct": true,
+      "target_correct": true,
+      "time_correct": true,
+      "tokens": 245,
+      "trace_sha256": "9db8a40046edb14a5844a8ac9d79abf49bb80dcdba3dead62d119c185803f77d"
+    },
+    "rpo_minutes": 720,
+    "variant": "multi_witness"
+  },
+  {
+    "actual": "ready",
+    "as_of": "2026-07-30T16:39Z",
+    "asset_id": "ast-919c890f",
+    "base": {
+      "answer_sha256": "e446d8e8c53a440b406bdcba508760a58e20f5b3da33770a06494205aae137a2",
+      "asset_record_correct": true,
+      "calls_sha256": "6e1694fd4648a2239eb05312b2e394f699f09267df19c5e7c5d9c68950b0c2ce",
+      "completion_tokens_by_turn": [
+        41,
+        23,
+        25,
+        41,
+        41,
+        91
+      ],
+      "decision": "not_ready",
+      "decision_correct": false,
+      "evidence_correct": true,
+      "failure": "semantic",
+      "first_input_sha256": "ff229b2ea3c78fd58114812c5e5e24b477c10de8236d98bc743cd8be995aaebc",
+      "format_compliant": true,
+      "inventory_correct": true,
+      "json_syntax": true,
+      "llm_calls": 6,
+      "observation_contents_sha256": "0a2af2ab6c87c2ed7243a4d257d8842ec3209084ef845a446c40c77cc99489d2",
+      "observed": {
+        "asset": true,
+        "inventory": true,
+        "policy": true
+      },
+      "outcome": "complete_final",
+      "parsed_calls_sha256": "029f3fd9bd72ba4b7a1289ce546f5f80a100faf429fabe84855141736d7e7e55",
+      "policy_errors": [],
+      "policy_record_correct": true,
+      "reward": 0,
+      "selected": [],
+      "selected_issues": [],
+      "supporting_runs_correct": true,
+      "target_correct": true,
+      "time_correct": true,
+      "tokens": 262,
+      "trace_sha256": "210457cfce7325b21ad63796d5db62cc39842429e77a09802aeb4fb2070615e9"
+    },
+    "case_id": "recovery-readiness-v1/development/c-d867a4a6e7",
+    "family": "recent_usable",
+    "inventory": {
+      "run-0962b6e1": {
+        "age_minutes": 3096,
+        "integrity": "not_applicable",
+        "status": "failed"
+      },
+      "run-538bd772": {
+        "age_minutes": 2466,
+        "integrity": "passed",
+        "status": "succeeded"
+      },
+      "run-e568bc0a": {
+        "age_minutes": 1238,
+        "integrity": "passed",
+        "status": "succeeded"
+      },
+      "run-f38cb63a": {
+        "age_minutes": 3100,
+        "integrity": "failed",
+        "status": "succeeded"
+      }
+    },
+    "p01_base": {
+      "answer_sha256": "e446d8e8c53a440b406bdcba508760a58e20f5b3da33770a06494205aae137a2",
+      "asset_record_correct": true,
+      "calls_sha256": "6e1694fd4648a2239eb05312b2e394f699f09267df19c5e7c5d9c68950b0c2ce",
+      "completion_tokens_by_turn": [
+        41,
+        23,
+        25,
+        41,
+        41,
+        91
+      ],
+      "decision": "not_ready",
+      "decision_correct": false,
+      "evidence_correct": true,
+      "failure": "semantic",
+      "first_input_sha256": "ff229b2ea3c78fd58114812c5e5e24b477c10de8236d98bc743cd8be995aaebc",
+      "format_compliant": true,
+      "inventory_correct": true,
+      "json_syntax": true,
+      "llm_calls": 6,
+      "observation_contents_sha256": "0a2af2ab6c87c2ed7243a4d257d8842ec3209084ef845a446c40c77cc99489d2",
+      "observed": {
+        "asset": true,
+        "inventory": true,
+        "policy": true
+      },
+      "outcome": "complete_final",
+      "parsed_calls_sha256": "029f3fd9bd72ba4b7a1289ce546f5f80a100faf429fabe84855141736d7e7e55",
+      "policy_errors": [],
+      "policy_record_correct": true,
+      "reward": 0,
+      "selected": [],
+      "selected_issues": [],
+      "supporting_runs_correct": true,
+      "target_correct": true,
+      "time_correct": true,
+      "tokens": 262,
+      "trace_sha256": "ae8d6e9000eb6950bf23f89078e8a902b57aa4cb3fb51e96e2f493c2c9403421"
+    },
+    "qualifying": [
+      "run-e568bc0a"
+    ],
+    "reload": {
+      "answer_sha256": "e446d8e8c53a440b406bdcba508760a58e20f5b3da33770a06494205aae137a2",
+      "asset_record_correct": true,
+      "calls_sha256": "a250ee71e7d065b52887df5403eec460910794e19091638d02f5e8a509e7f1db",
+      "completion_tokens_by_turn": [
+        41,
+        23,
+        25,
+        41,
+        25,
+        91
+      ],
+      "decision": "not_ready",
+      "decision_correct": false,
+      "evidence_correct": true,
+      "failure": "semantic",
+      "first_input_sha256": "ff229b2ea3c78fd58114812c5e5e24b477c10de8236d98bc743cd8be995aaebc",
+      "format_compliant": true,
+      "inventory_correct": true,
+      "json_syntax": true,
+      "llm_calls": 6,
+      "observation_contents_sha256": "8a3cdeacf9300bcaf589d563d07cfbcec7acae07c52fff20bf842353572487c6",
+      "observed": {
+        "asset": true,
+        "inventory": true,
+        "policy": true
+      },
+      "outcome": "complete_final",
+      "parsed_calls_sha256": "b4ecf562b9f462754c420aabb3c044c44c8f98ab31778e34f4e5cacbe0dee35d",
+      "policy_errors": [],
+      "policy_record_correct": true,
+      "reward": 0,
+      "selected": [],
+      "selected_issues": [],
+      "supporting_runs_correct": true,
+      "target_correct": true,
+      "time_correct": true,
+      "tokens": 246,
+      "trace_sha256": "c07f3741db1a6044c5db143ed540770cfc4034bcec2905893d91d91a9d279d84"
+    },
+    "rpo_minutes": 2160,
+    "variant": "plain"
+  },
+  {
+    "actual": "not_ready",
+    "as_of": "2026-09-30T07:01Z",
+    "asset_id": "ast-c79b5d92",
+    "base": {
+      "answer_sha256": "9bafcc189b16d1d29577f51e6141f59d5a5e09c14c5ad30e5b34a1d46bf0b7a7",
+      "asset_record_correct": true,
+      "calls_sha256": "b4d86a64d9389e3f684c049a8d6564d66e7036bf52b04e93f852f8b902827279",
+      "completion_tokens_by_turn": [
+        130,
+        24,
+        23,
+        42,
+        42,
+        99
+      ],
+      "decision": "ready",
+      "decision_correct": false,
+      "evidence_correct": false,
+      "failure": "semantic",
+      "first_input_sha256": "9d498860cd6505d8eb244b8fce7a86965321ad60d9e8b288a97df7e8766e7b77",
+      "format_compliant": true,
+      "inventory_correct": true,
+      "json_syntax": true,
+      "llm_calls": 6,
+      "observation_contents_sha256": "0fd2ff1d483face5532bd70b8e82e2289baa05a8e1f07987d80181911067223a",
+      "observed": {
+        "asset": true,
+        "inventory": true,
+        "policy": true
+      },
+      "outcome": "complete_final",
+      "parsed_calls_sha256": "0800bbbfa78c09440bd12975639dcbdc6bb46865c0242e6351334c6a8e58bf00",
+      "policy_errors": [],
+      "policy_record_correct": true,
+      "reward": 0,
+      "selected": [
+        "run-51cf87da"
+      ],
+      "selected_issues": [
+        "outside_rpo"
+      ],
+      "supporting_runs_correct": false,
+      "target_correct": true,
+      "time_correct": true,
+      "tokens": 360,
+      "trace_sha256": "88e6ba3699ac7f3a6902b111d8720dd44159a16e157898b727c001048f840ca8"
+    },
+    "case_id": "recovery-readiness-v1/development/c-daf12ab574",
+    "family": "recent_incomplete",
+    "inventory": {
+      "run-20810618": {
+        "age_minutes": 3085,
+        "integrity": "not_applicable",
+        "status": "failed"
+      },
+      "run-3b6eb5ed": {
+        "age_minutes": 93,
+        "integrity": "not_applicable",
+        "status": "running"
+      },
+      "run-51cf87da": {
+        "age_minutes": 2338,
+        "integrity": "passed",
+        "status": "succeeded"
+      },
+      "run-972e0720": {
+        "age_minutes": 3383,
+        "integrity": "not_applicable",
+        "status": "failed"
+      }
+    },
+    "p01_base": {
+      "answer_sha256": "9bafcc189b16d1d29577f51e6141f59d5a5e09c14c5ad30e5b34a1d46bf0b7a7",
+      "asset_record_correct": true,
+      "calls_sha256": "b4d86a64d9389e3f684c049a8d6564d66e7036bf52b04e93f852f8b902827279",
+      "completion_tokens_by_turn": [
+        130,
+        24,
+        23,
+        42,
+        42,
+        99
+      ],
+      "decision": "ready",
+      "decision_correct": false,
+      "evidence_correct": false,
+      "failure": "semantic",
+      "first_input_sha256": "9d498860cd6505d8eb244b8fce7a86965321ad60d9e8b288a97df7e8766e7b77",
+      "format_compliant": true,
+      "inventory_correct": true,
+      "json_syntax": true,
+      "llm_calls": 6,
+      "observation_contents_sha256": "0fd2ff1d483face5532bd70b8e82e2289baa05a8e1f07987d80181911067223a",
+      "observed": {
+        "asset": true,
+        "inventory": true,
+        "policy": true
+      },
+      "outcome": "complete_final",
+      "parsed_calls_sha256": "0800bbbfa78c09440bd12975639dcbdc6bb46865c0242e6351334c6a8e58bf00",
+      "policy_errors": [],
+      "policy_record_correct": true,
+      "reward": 0,
+      "selected": [
+        "run-51cf87da"
+      ],
+      "selected_issues": [
+        "outside_rpo"
+      ],
+      "supporting_runs_correct": false,
+      "target_correct": true,
+      "time_correct": true,
+      "tokens": 360,
+      "trace_sha256": "2d34aca6f9162419a0ab73a64bdccce81c45a31f0ac0792707b3c69cebba172a"
+    },
+    "qualifying": [],
+    "reload": {
+      "answer_sha256": "3e8422dc0a7eacef41aa044ce432fef2bbb53471d5493e2f4541988177e137d6",
+      "asset_record_correct": true,
+      "calls_sha256": "17d0c030237c1cbf9a1f481f1b6c6c853cccd114ef4966ee03aeda688afd94b3",
+      "completion_tokens_by_turn": [
+        42,
+        24,
+        23,
+        42,
+        23,
+        94
+      ],
+      "decision": "not_ready",
+      "decision_correct": true,
+      "evidence_correct": true,
+      "failure": "correct",
+      "first_input_sha256": "9d498860cd6505d8eb244b8fce7a86965321ad60d9e8b288a97df7e8766e7b77",
+      "format_compliant": true,
+      "inventory_correct": true,
+      "json_syntax": true,
+      "llm_calls": 6,
+      "observation_contents_sha256": "c60ff430eb21fdd9a29d55283188813987fb88ce76ef06b51caa7576d4d4fc12",
+      "observed": {
+        "asset": true,
+        "inventory": true,
+        "policy": true
+      },
+      "outcome": "complete_final",
+      "parsed_calls_sha256": "acad50fe9e37b5db6a9f3407b0b8babe2ea68cc01344207e452d4a6aa673399c",
+      "policy_errors": [],
+      "policy_record_correct": true,
+      "reward": 1,
+      "selected": [],
+      "selected_issues": [],
+      "supporting_runs_correct": true,
+      "target_correct": true,
+      "time_correct": true,
+      "tokens": 248,
+      "trace_sha256": "2bef78d320dcb285dced076040f57753ae741d51ed64d521e75e9bd2a4ff3bf3"
+    },
+    "rpo_minutes": 2160,
+    "variant": "plain"
+  },
+  {
+    "actual": "ready",
+    "as_of": "2026-04-19T18:59Z",
+    "asset_id": "ast-51952054",
+    "base": {
+      "answer_sha256": "ed8385967871d53216b109e337e7c34db31158d0a6956f87ec6998806d1cf2c8",
+      "asset_record_correct": true,
+      "calls_sha256": "1946848836819ff2b13e63ff60be8d92df8e3c1b40af9321159d53769b197c08",
+      "completion_tokens_by_turn": [
+        40,
+        22,
+        25,
+        40,
+        40,
+        118
+      ],
+      "decision": "ready",
+      "decision_correct": true,
+      "evidence_correct": false,
+      "failure": "evidence",
+      "first_input_sha256": "5ab9090a24f6dca04e47259f43d04cd797db85a2866cac241c633ea4f631078e",
+      "format_compliant": true,
+      "inventory_correct": true,
+      "json_syntax": true,
+      "llm_calls": 6,
+      "observation_contents_sha256": "dce3a43e4f53b13adcde16ff07278c037aa76f5529781406a497533a7143485f",
+      "observed": {
+        "asset": true,
+        "inventory": true,
+        "policy": true
+      },
+      "outcome": "complete_final",
+      "parsed_calls_sha256": "af791558a1d61c84e6b38c6d7dec155f16aab12f2fe1eeb18e6767f6a530be7c",
+      "policy_errors": [],
+      "policy_record_correct": true,
+      "reward": 0,
+      "selected": [
+        "run-d3a909e8",
+        "run-447bb9e2",
+        "run-5dad01fa",
+        "run-66ce5559"
+      ],
+      "selected_issues": [
+        "outside_rpo"
+      ],
+      "supporting_runs_correct": false,
+      "target_correct": true,
+      "time_correct": true,
+      "tokens": 285,
+      "trace_sha256": "c85954f2a55c67f7de25dcfdef2714dd353f3fcffaac87a49ba45855799b28e5"
+    },
+    "case_id": "recovery-readiness-v1/development/c-e769799570",
+    "family": "failed_newer_usable_older",
+    "inventory": {
+      "run-447bb9e2": {
+        "age_minutes": 2160,
+        "integrity": "passed",
+        "status": "succeeded"
+      },
+      "run-5dad01fa": {
+        "age_minutes": 3788,
+        "integrity": "passed",
+        "status": "succeeded"
+      },
+      "run-66ce5559": {
+        "age_minutes": 2250,
+        "integrity": "passed",
+        "status": "succeeded"
+      },
+      "run-97788943": {
+        "age_minutes": 233,
+        "integrity": "not_applicable",
+        "status": "failed"
+      },
+      "run-d3a909e8": {
+        "age_minutes": 4235,
+        "integrity": "passed",
+        "status": "succeeded"
+      }
+    },
+    "p01_base": {
+      "answer_sha256": "ed8385967871d53216b109e337e7c34db31158d0a6956f87ec6998806d1cf2c8",
+      "asset_record_correct": true,
+      "calls_sha256": "1946848836819ff2b13e63ff60be8d92df8e3c1b40af9321159d53769b197c08",
+      "completion_tokens_by_turn": [
+        40,
+        22,
+        25,
+        40,
+        40,
+        118
+      ],
+      "decision": "ready",
+      "decision_correct": true,
+      "evidence_correct": false,
+      "failure": "evidence",
+      "first_input_sha256": "5ab9090a24f6dca04e47259f43d04cd797db85a2866cac241c633ea4f631078e",
+      "format_compliant": true,
+      "inventory_correct": true,
+      "json_syntax": true,
+      "llm_calls": 6,
+      "observation_contents_sha256": "dce3a43e4f53b13adcde16ff07278c037aa76f5529781406a497533a7143485f",
+      "observed": {
+        "asset": true,
+        "inventory": true,
+        "policy": true
+      },
+      "outcome": "complete_final",
+      "parsed_calls_sha256": "af791558a1d61c84e6b38c6d7dec155f16aab12f2fe1eeb18e6767f6a530be7c",
+      "policy_errors": [],
+      "policy_record_correct": true,
+      "reward": 0,
+      "selected": [
+        "run-d3a909e8",
+        "run-447bb9e2",
+        "run-5dad01fa",
+        "run-66ce5559"
+      ],
+      "selected_issues": [
+        "outside_rpo"
+      ],
+      "supporting_runs_correct": false,
+      "target_correct": true,
+      "time_correct": true,
+      "tokens": 285,
+      "trace_sha256": "9b8f11cf8e05759e2fe69cd0f63aa5e35136bfb8e2e1b4101e948dd776fe26fc"
+    },
+    "qualifying": [
+      "run-447bb9e2"
+    ],
+    "reload": {
+      "answer_sha256": "c956922db2fadeffadf1ddeb88bde92dcce7eda8466d2b068c3b8464926cac4f",
+      "asset_record_correct": true,
+      "calls_sha256": "bb56e64d29e89e44798dc72475558e1f493fccb7205216b4d6560268a9e5a59f",
+      "completion_tokens_by_turn": [
+        40,
+        22,
+        25,
+        40,
+        25,
+        87
+      ],
+      "decision": "not_ready",
+      "decision_correct": false,
+      "evidence_correct": true,
+      "failure": "semantic",
+      "first_input_sha256": "5ab9090a24f6dca04e47259f43d04cd797db85a2866cac241c633ea4f631078e",
+      "format_compliant": true,
+      "inventory_correct": true,
+      "json_syntax": true,
+      "llm_calls": 6,
+      "observation_contents_sha256": "9781ca35a0d628ddad985999172900b1c11146261bade7cb776f6d03f73ce50d",
+      "observed": {
+        "asset": true,
+        "inventory": true,
+        "policy": true
+      },
+      "outcome": "complete_final",
+      "parsed_calls_sha256": "824660ad6c4e976711580a06f1e7eaaa389c267926615767832e0bd7f6117729",
+      "policy_errors": [],
+      "policy_record_correct": true,
+      "reward": 0,
+      "selected": [],
+      "selected_issues": [],
+      "supporting_runs_correct": true,
+      "target_correct": true,
+      "time_correct": true,
+      "tokens": 239,
+      "trace_sha256": "9a7d45ef163099c365386720b98d95895237161c151d03db24d7307c0295131e"
+    },
+    "rpo_minutes": 2160,
+    "variant": "boundary"
+  },
+  {
+    "actual": "ready",
+    "as_of": "2026-03-31T15:11Z",
+    "asset_id": "ast-e2a0c642",
+    "base": {
+      "answer_sha256": "2c00a78b1f6f94262910ea12697135cef3febe003644f5919ffa1161dc88ba75",
+      "asset_record_correct": true,
+      "calls_sha256": "2e9880471a0b14e9f67c963314c9df9ab54caf2425d406012e18a59c0bf88df3",
+      "completion_tokens_by_turn": [
+        130,
+        24,
+        22,
+        42,
+        42,
+        90
+      ],
+      "decision": "not_ready",
+      "decision_correct": false,
+      "evidence_correct": true,
+      "failure": "semantic",
+      "first_input_sha256": "ef3c206108735f36109bc4cbaf22ed59b21653c80cbdcd1143c1decb2fc63f72",
+      "format_compliant": true,
+      "inventory_correct": true,
+      "json_syntax": true,
+      "llm_calls": 6,
+      "observation_contents_sha256": "2a7ec6736e77a8ddbb477c5ef3f962280f9222a70fa01fcb5a28ff48c9bc71aa",
+      "observed": {
+        "asset": true,
+        "inventory": true,
+        "policy": true
+      },
+      "outcome": "complete_final",
+      "parsed_calls_sha256": "4f86c04c3aa48f0dc1bd58f6e2b7714aae6047ece189a2ae96c85b178824a02b",
+      "policy_errors": [],
+      "policy_record_correct": true,
+      "reward": 0,
+      "selected": [],
+      "selected_issues": [],
+      "supporting_runs_correct": true,
+      "target_correct": true,
+      "time_correct": true,
+      "tokens": 350,
+      "trace_sha256": "15d557022cb9bc2c32eab850ce615ab44f4c91707fe2e1546845426bdf200070"
+    },
+    "case_id": "recovery-readiness-v1/development/c-fb62402846",
+    "family": "recent_usable",
+    "inventory": {
+      "run-557da0c3": {
+        "age_minutes": 1404,
+        "integrity": "passed",
+        "status": "succeeded"
+      }
+    },
+    "p01_base": {
+      "answer_sha256": "2c00a78b1f6f94262910ea12697135cef3febe003644f5919ffa1161dc88ba75",
+      "asset_record_correct": true,
+      "calls_sha256": "2e9880471a0b14e9f67c963314c9df9ab54caf2425d406012e18a59c0bf88df3",
+      "completion_tokens_by_turn": [
+        130,
+        24,
+        22,
+        42,
+        42,
+        90
+      ],
+      "decision": "not_ready",
+      "decision_correct": false,
+      "evidence_correct": true,
+      "failure": "semantic",
+      "first_input_sha256": "ef3c206108735f36109bc4cbaf22ed59b21653c80cbdcd1143c1decb2fc63f72",
+      "format_compliant": true,
+      "inventory_correct": true,
+      "json_syntax": true,
+      "llm_calls": 6,
+      "observation_contents_sha256": "2a7ec6736e77a8ddbb477c5ef3f962280f9222a70fa01fcb5a28ff48c9bc71aa",
+      "observed": {
+        "asset": true,
+        "inventory": true,
+        "policy": true
+      },
+      "outcome": "complete_final",
+      "parsed_calls_sha256": "4f86c04c3aa48f0dc1bd58f6e2b7714aae6047ece189a2ae96c85b178824a02b",
+      "policy_errors": [],
+      "policy_record_correct": true,
+      "reward": 0,
+      "selected": [],
+      "selected_issues": [],
+      "supporting_runs_correct": true,
+      "target_correct": true,
+      "time_correct": true,
+      "tokens": 350,
+      "trace_sha256": "2297258828f92866f90fd815841a2f5da58b8fbb1fd6835872475b8036e7d1a9"
+    },
+    "qualifying": [
+      "run-557da0c3"
+    ],
+    "reload": {
+      "answer_sha256": "2c00a78b1f6f94262910ea12697135cef3febe003644f5919ffa1161dc88ba75",
+      "asset_record_correct": true,
+      "calls_sha256": "2e9880471a0b14e9f67c963314c9df9ab54caf2425d406012e18a59c0bf88df3",
+      "completion_tokens_by_turn": [
+        42,
+        24,
+        22,
+        42,
+        42,
+        90
+      ],
+      "decision": "not_ready",
+      "decision_correct": false,
+      "evidence_correct": true,
+      "failure": "semantic",
+      "first_input_sha256": "ef3c206108735f36109bc4cbaf22ed59b21653c80cbdcd1143c1decb2fc63f72",
+      "format_compliant": true,
+      "inventory_correct": true,
+      "json_syntax": true,
+      "llm_calls": 6,
+      "observation_contents_sha256": "2a7ec6736e77a8ddbb477c5ef3f962280f9222a70fa01fcb5a28ff48c9bc71aa",
+      "observed": {
+        "asset": true,
+        "inventory": true,
+        "policy": true
+      },
+      "outcome": "complete_final",
+      "parsed_calls_sha256": "4f86c04c3aa48f0dc1bd58f6e2b7714aae6047ece189a2ae96c85b178824a02b",
+      "policy_errors": [],
+      "policy_record_correct": true,
+      "reward": 0,
+      "selected": [],
+      "selected_issues": [],
+      "supporting_runs_correct": true,
+      "target_correct": true,
+      "time_correct": true,
+      "tokens": 262,
+      "trace_sha256": "dbd4f75747ab863235ac31bdede34d9acde2c0159e4c5f35c64b37f588ab5c98"
+    },
+    "rpo_minutes": 2160,
+    "variant": "plain"
+  }
+]
