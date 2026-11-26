@@ -45,6 +45,7 @@ import os
 from pathlib import Path
 import random
 import textwrap
+import time
 
 try:
     from . import ppo_runtime as audit, ppo_math, ppo_contract
@@ -335,7 +336,7 @@ def register_in_worker():
         import reader_modes as modes
     # Mode selection only. Historical plans dispatch by stage name as before.
     collection_only = modes.collection_only(request['plan'], request['stage'])
-    recovery = modes.phase(request['plan']) == modes.RECOVERY_LEARNING
+    recovery = modes.recovery(request['plan'])
     instrument_adapter(rollout_adapter, collection_only=collection_only, recovery_request=request if recovery else None,
                        calibration=modes.phase(request['plan']) == modes.CALIBRATION)
     trainer.compute_advantage = advantages
@@ -404,9 +405,19 @@ def register_in_worker():
     cls.init_workers = init_workers
     original_save = cls._save_checkpoint
     def save(self):
-        original_save(self)
-        audit.emit('native_checkpoint_saved', step=self.global_steps)
+        started = time.monotonic()
+        result = original_save(self)
+        audit.emit('native_checkpoint_saved', step=self.global_steps, seconds=time.monotonic()-started)
+        return result
     cls._save_checkpoint = save
+    if modes.phase(request['plan']) == modes.STUDY:
+        original_load = cls._load_checkpoint
+        def load(self):
+            started = time.monotonic()
+            result = original_load(self)
+            audit.emit('native_checkpoint_load_returned', step=self.global_steps, seconds=time.monotonic()-started)
+            return result
+        cls._load_checkpoint = load
     _INSTALLED = True
     audit.emit('matched_registered', protocol=PROTOCOL, streams=streams,
                limitations='vLLM scheduling/Ray execution order and GPU kernels are not bitwise deterministic')

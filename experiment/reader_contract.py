@@ -5,6 +5,11 @@ and seed schedule are shared; reader paths and run identities are reconstructed.
 """
 from __future__ import annotations
 
+try:
+    from . import study_execution as study
+except ImportError:
+    import study_execution as study
+
 import copy
 import json
 import math
@@ -69,13 +74,14 @@ def path(value):
 
 
 def validate_profile(p):
+    study_mode = p.get('purpose') == modes.STUDY
     qualification = p.get('purpose') == modes.RECOVERY_LEARNING
     exact(p, 'schema fixture modal paths experiment attempt wandb model task algorithms resources bounds'
-          + (' purpose' if 'purpose' in p else '') + (' selection' if qualification else ''), 'profile')
+          + (' purpose' if 'purpose' in p else '') + (' selection' if qualification else '') + (' study_scope study_authority' if study_mode else ''), 'profile')
     if 'purpose' in p and (p['purpose'], p['task']) not in (
-            (modes.RECOVERY_LEARNING, 'recovery-readiness-v1'), (modes.COLLECTION_ONLY, 'asset-status-v1'), (modes.CALIBRATION, 'recovery-readiness-v1')):
+            (modes.STUDY, 'recovery-readiness-v1'), (modes.RECOVERY_LEARNING, 'recovery-readiness-v1'), (modes.COLLECTION_ONLY, 'asset-status-v1'), (modes.CALIBRATION, 'recovery-readiness-v1')):
         raise ValueError('Unknown or unsupported reader purpose/task combination')
-    if p.get('task') == 'recovery-readiness-v1' and p.get('purpose') not in (modes.CALIBRATION, modes.RECOVERY_LEARNING):
+    if p.get('task') == 'recovery-readiness-v1' and p.get('purpose') not in (modes.CALIBRATION, modes.RECOVERY_LEARNING, modes.STUDY):
         raise ValueError('recovery-readiness-v1 requires explicit calibration or recovery-learning qualification')
     if p['schema'] != SCHEMA or type(p['fixture']) is not bool:
         raise ValueError('Unsupported reader schema/fixture label; migrate profile to reader-task-v2 and regenerate plans')
@@ -97,6 +103,13 @@ def validate_profile(p):
     if p['model'] != {'id': MODEL, 'revision': BASE_REVISION, 'profile': 'llama3b', 'parser': 'llama3_json'}:
         raise ValueError('Unsupported immutable model/tokenizer/parser/critic combination')
     algorithms = list(ALGORITHMS)
+    if study_mode:
+        algorithms = [ALGORITHMS[0]]
+        if (p['attempt'] != 1 or p['bounds'].get('stage_seconds') != study.EVAL_SECONDS
+                or p['study_scope'] not in study.AUTHORITIES
+                or p['study_authority'] not in ('disabled', study.AUTHORITIES[p['study_scope']])
+                or p['bounds'].get('training_stage_seconds') != study.TRAIN_SECONDS):
+            raise ValueError('Invalid study authority, attempt or deadlines')
     if qualification:
         selection = p['selection']
         if not isinstance(selection, str) or selection not in learning.ROUTES or p['attempt'] != 1:
@@ -109,7 +122,7 @@ def validate_profile(p):
     b = p['bounds']
     exact(b, 'stage_seconds startup_seconds preparation_seconds preflight_seconds concurrency '
           'worker_hourly_usd supervisor_hourly_usd preparation_budget_usd training_budget_usd '
-          'build_budget_usd storage_gib retention_days storage_budget_usd collection_gib total_budget_usd', 'bounds')
+          'build_budget_usd storage_gib retention_days storage_budget_usd collection_gib total_budget_usd' + (' training_stage_seconds collection_budget_usd delayed_billing_usd' if study_mode else ''), 'bounds')
     for k, v in b.items():
         if type(v) not in (int, float) or not math.isfinite(v) or v <= 0:
             raise ValueError(f'Invalid positive finite bound: {k}')
@@ -128,6 +141,12 @@ def validate_profile(p):
     if qualification:
         stages = len(modes.STAGES[modes.RECOVERY_LEARNING]) * len(algorithms)
     compute = (2*stages*b['stage_seconds']+600)*b['worker_hourly_usd']/3600
+    if study_mode:
+        compute = sum(study.deadlines(p['study_scope']))*b['worker_hourly_usd']/3600
+    if study_mode and (b['collection_budget_usd'] < b['collection_gib']*.04
+            or b['total_budget_usd'] < sum(b[k] for k in ('training_budget_usd', 'preparation_budget_usd',
+                'build_budget_usd', 'storage_budget_usd', 'collection_budget_usd', 'delayed_billing_usd'))):
+        raise ValueError('Study budget must also reserve collection and delayed billing')
     if (b['training_budget_usd'] < compute or b['preparation_budget_usd'] < 3
             or b['build_budget_usd'] < 5 or b['storage_budget_usd'] < b['storage_gib']*.09*b['retention_days']/30
             or b['total_budget_usd'] < sum(b[k] for k in ('training_budget_usd', 'preparation_budget_usd', 'build_budget_usd', 'storage_budget_usd')) + b['collection_gib']*.04):
@@ -203,6 +222,10 @@ def make_plan(profile, source, assets=None):
                        'max_gpu_seconds': 6*p['bounds']['stage_seconds'],
                        'budget_usd': p['bounds']['training_budget_usd'],
                        'all_resource_hourly_ceiling_usd': p['bounds']['worker_hourly_usd']}}
+    if p.get('purpose') == modes.STUDY:
+        plan['phase'] = modes.STUDY
+        plan['training_admissible'] &= p['study_authority'] == study.AUTHORITIES[p['study_scope']]
+        return study.populate(plan)
     if development:
         from importlib import import_module
         task = import_module('.asset_task', __package__) if __package__ else import_module('asset_task')
@@ -278,6 +301,8 @@ def validate_current(plan, profile, training=False):
     validate(plan)
     if profile != plan['profile'] or source_identity(clean=True) != plan['source']:
         raise ValueError('Stale source or configuration; regenerate plan')
+    if (profile.get('purpose') == modes.STUDY and profile['study_authority'] == 'disabled'):
+        raise ValueError('Study execution authority disabled')
     if profile['fixture'] or (training and not plan['training_admissible']):
         raise ValueError('Fixture or missing actual asset manifests cannot execute')
 
@@ -290,4 +315,6 @@ def stage_request(plan, job, stage):
 
 
 def stage_limit(plan, stage):
+    if plan['phase'] == modes.STUDY and stage['name'] == 'training':
+        return study.TRAIN_SECONDS
     return plan['bounds']['stage_seconds']

@@ -1,4 +1,4 @@
-"""Closed recovery-learning qualification. The later study has no stage dispatcher."""
+"""Recovery stage declarations, eager input routing and conversation integrity."""
 import json
 from pathlib import Path
 
@@ -59,12 +59,16 @@ def declaration(selection, manifest):
 
 
 def stage_spec(request):
+    if modes.phase(request['plan']) == modes.STUDY:
+        return request['plan']['study']['stages'][request['stage']['key']]
     if modes.phase(request['plan']) != modes.RECOVERY_LEARNING:
         raise ValueError('Expected a recovery qualification')
     return request['plan']['qualification']['stages'][request['stage']['name']]
 
 
 def scope(request):
+    if request['stage'].get('panel') == 'final':
+        return 'study-final'
     return {'baseline': 'qual-dev', 'checkpoint-eval': 'qual-dev', 'training': 'qual-train-dev',
             'collection-probe': 'qual-train'}[request['stage']['name']]
 

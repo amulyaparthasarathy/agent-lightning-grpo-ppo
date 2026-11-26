@@ -139,8 +139,12 @@ def episode_row(records, request, evidence_class='live-model'):
     trace. Carries tool names as sampled and hashes of arguments, no answer text,
     and no label beyond the trusted family name.
     """
-    if modes.phase(request['plan']) == modes.RECOVERY_LEARNING:
-        stage = request['plan']['qualification']['stages'][request['stage']['name']]
+    if modes.recovery(request['plan']):
+        try:
+            from .recovery_learning import stage_spec
+        except ImportError:
+            from recovery_learning import stage_spec
+        stage = stage_spec(request)
     else:
         stage = stage_declaration(request)
     outcome = reader_integration.episode_outcome(records)
@@ -157,7 +161,7 @@ def episode_row(records, request, evidence_class='live-model'):
     trusted = task.expected(case['question'], case['result'])
     actions = [r for r in records if r['kind'] == 'action_outcome']
     llms = [r for r in records if r['kind'] == 'llm']
-    if modes.phase(request['plan']) == modes.RECOVERY_LEARNING:
+    if modes.recovery(request['plan']):
         try:
             from .recovery_learning import verify_history
         except ImportError:

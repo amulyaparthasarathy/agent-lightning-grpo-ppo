@@ -9,13 +9,20 @@ READER = 'reader-task-v2'
 QUALIFICATION, COLLECTION_ONLY, CALIBRATION = 'qualification', 'collection-only', 'development-calibration'
 RECOVERY_LEARNING = 'recovery-learning-qualification-v1'
 TASKS = ('calculator-v1', 'asset-status-v1', 'recovery-readiness-v1')
+STUDY = 'recovery-learning-study-execution-v1'
+
+
+def recovery(plan):
+    return phase(plan) in (RECOVERY_LEARNING, STUDY)
+
+
 # phase -> ordered stage names
-STAGES = {RECOVERY_LEARNING: ('baseline', 'collection-probe', 'training', 'checkpoint-eval'),
+STAGES = {STUDY: ('baseline', 'training', 'checkpoint-eval'), RECOVERY_LEARNING: ('baseline', 'collection-probe', 'training', 'checkpoint-eval'),
           QUALIFICATION: ('baseline', 'training', 'checkpoint-eval'),
           COLLECTION_ONLY: ('training',),
           CALIBRATION: ('greedy-development', 'sampled-packet-1', 'sampled-packet-2', 'sampled-packet-3')}
 # phase -> tasks allowed to use it
-PHASE_TASKS = {RECOVERY_LEARNING: TASKS[2:], QUALIFICATION: TASKS[:2], COLLECTION_ONLY: TASKS[1:2], CALIBRATION: TASKS[2:]}
+PHASE_TASKS = {STUDY: TASKS[2:], RECOVERY_LEARNING: TASKS[2:], QUALIFICATION: TASKS[:2], COLLECTION_ONLY: TASKS[1:2], CALIBRATION: TASKS[2:]}
 
 
 def phase(plan):

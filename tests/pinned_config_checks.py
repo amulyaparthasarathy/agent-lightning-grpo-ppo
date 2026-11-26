@@ -343,6 +343,11 @@ class ReaderTaskConfigs(unittest.TestCase):
             mount.symlink_to(root)
             records = reader_preflight.qualification_paths(request(selection='paired')['plan'],mount,'vo-test')
             self.assertEqual(len(records),8)
+            from study_support import profile, fixture_source
+            from experiment import reader_contract
+            study = reader_contract.make_plan(profile(), fixture_source())
+            records = reader_preflight.qualification_paths(study, mount, 'vo-test')
+            self.assertEqual(len(records),11)
             self.assertEqual(list(root.iterdir()),[])
 
     def test_recovery_calibration_two_algorithms_four_stages_composed(self):

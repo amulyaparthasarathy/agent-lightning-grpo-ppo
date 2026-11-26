@@ -57,7 +57,7 @@ def submit(plan, action, registry, spawn, out, ownership):
     return row
 
 
-def cancel_owned(plan, registry, cancel):
+def cancel_owned(plan, registry, cancel, read=None):
     sha = c.digest(plan)
     calls = set()
     # Preparation uses an earlier plan without assets: cancel it with that exact plan.
@@ -70,6 +70,10 @@ def cancel_owned(plan, registry, cancel):
     if index:
         if index['plan'] != plan:
             raise ValueError('Remote supervisor identity differs')
+        if index.get('volume_index'):
+            index = read(plan['root']+'/supervisor/index.json')
+            if index['plan'] != plan:
+                raise ValueError('Unowned supervisor journal')
         calls.update(s.owned_calls(index))
         if index.get('owner', {}).get('plan_sha256') == sha:
             calls.add(index['owner']['call_id'])
@@ -100,6 +104,8 @@ def status(plan, registry, read):
         key = action+':'+plan['root']
         report['operations'][action] = {'submission': registry.get('submission:'+key), 'result': registry.get('result:'+key)}
     index = registry.get('index:'+s.key(plan))
+    if index and index.get('volume_index'):
+        index = read(plan['root']+'/supervisor/index.json')
     report['index'] = index
     if index:
         try:
@@ -133,7 +139,7 @@ def collect(plan, volume, out, report):
                     f.write(chunk)
         except Exception as exc:
             errors.append({'path': str(relative), 'error_type': type(exc).__name__})
-    if report.get('index') and plan.get('phase') in (c.modes.CALIBRATION, c.modes.RECOVERY_LEARNING):
+    if report.get('index') and plan.get('phase') in (c.modes.CALIBRATION, c.modes.RECOVERY_LEARNING, c.modes.STUDY):
         # Calibration admission needs the traces and audit events just collected. Review
         # again from the local copy; this is the same definition `task_local.py report` uses.
         from experiment.reader_evidence import validate_collection, local_reader
@@ -171,12 +177,16 @@ def online(args, plan, profile):
     def read(name):
         return json.loads(b''.join(volume.read_file(name)))
     if args.command == 'stop-owned':
-        return cancel_owned(plan, registry, lambda call: modal.FunctionCall.from_id(call).cancel(terminate_containers=True))
+        return cancel_owned(plan, registry, lambda call: modal.FunctionCall.from_id(call).cancel(terminate_containers=True), read)
     if args.command in ('status', 'collect'):
         report = status(plan, registry, read)
         if args.command == 'collect':
             if args.out is None:
                 raise ValueError('collect requires a fresh --out directory')
+            if plan['phase'] == c.modes.STUDY:
+                from scripts.study_billing import snapshot
+                report['billing'] = snapshot(modal.Workspace.from_context(),plan,report['operations'],
+                                             volume.object_id,registry.object_id)
             collect(plan, volume, args.out, report)
         return report
     c.validate_current(plan, profile, training=args.command in ('preflight', 'launch'))

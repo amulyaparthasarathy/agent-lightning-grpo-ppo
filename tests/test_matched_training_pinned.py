@@ -278,11 +278,15 @@ class PinnedTrainingTests(unittest.TestCase):
             self.assertEqual(sorted(lengths), [4]*96+[24]*16)
             flat = td['input_ids'].values().float()*0-.25
             return self.tu.get_tensordict({'log_probs':flat,'entropy':flat*0}, {'metrics':{'mfu':0}})
-        for selection in ('grpo','ppo-mc'):
+        from study_support import profile, fixture_source
+        from experiment import reader_contract as contract
+        plan = contract.make_plan(profile(), fixture_source())
+        first_training = plan['jobs'][1]
+        study_request = contract.stage_request(plan, first_training, first_training['stages'][0])
+        for selection, req in [('grpo',request()), ('ppo-mc',request(selection='ppo-mc')), ('grpo',study_request)]:
             models = {}
             previous = []
-            for i in (1,2):
-                req = request(selection=selection)
+            for i in range(1,req['job']['steps']+1):
                 rows, eps = fixture(req,i)
                 previous += eps
                 with patch.dict('os.environ', AGL_PPO_RUN_DIR=self.tmp.name), patch.object(admit, 'reviewed_episodes', return_value=previous):

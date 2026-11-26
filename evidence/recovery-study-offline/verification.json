@@ -1,0 +1,204 @@
+{
+  "schema": "recovery-study-offline-verification-v1",
+  "execution_source": "b3912e9cb8382f3121ab069d370d23e829fa4d93",
+  "implementation_ancestor": "8b1bd5de11dff086b67f12038c804c527d056cbf",
+  "integrated_qualification_main": "b7e0c7753cfb0fa53efa36389d6c208c008a1957",
+  "historical_A03_execution_source": "7fdb2b1e0ce2a05f03980cfd3a1e07a31937ca6a",
+  "declaration_file_sha256": "a49003098176e66c896a14879eb691209a16bbe30d6f65bc46bf228e9c61be5e",
+  "source_manifest_sha256": "763f235f90783db7524358d6bf319984fdff9596710fab3a267ff7435f2e9ed6",
+  "runtime_manifest_sha256": "47060475d73a7f704bba75c6549a0161e812e7ddb3c39b0719645580c046830e",
+  "profile_sha256": "ac1e30848eaed43df8490e6ee1778deab09625186440c1a55ec57aa450103c51",
+  "offline_templates": {
+    "preparation": {
+      "plan_sha256": "11f7eb891134fb93184a195c56c3c96a11b9b6f883140c3011a8c52a759b83a3",
+      "fixture": true,
+      "study_authority": "disabled",
+      "training_admissible": false
+    },
+    "historical_manifest_demonstration": {
+      "plan_sha256": "dc5851239dddfc91f9ed8ec3a1a0d7ede2cbc9f0a946242f8299cc02e6854631",
+      "fixture": true,
+      "study_authority": "disabled",
+      "training_admissible": false
+    }
+  },
+  "worker_seconds": 57600,
+  "supervisor_seconds": 58200,
+  "stages": [
+    {
+      "stage": "development-base",
+      "seed": 9001,
+      "updates": 0,
+      "episodes": 24,
+      "inputs": [
+        "dev_panel.parquet",
+        "dev_panel.parquet"
+      ],
+      "deadline_seconds": 1800
+    },
+    {
+      "stage": "training-2001",
+      "seed": 2001,
+      "updates": 16,
+      "episodes": 512,
+      "inputs": [
+        "train_main.parquet",
+        "dev_panel.parquet"
+      ],
+      "deadline_seconds": 14400
+    },
+    {
+      "stage": "development-2001",
+      "seed": 9001,
+      "updates": 0,
+      "episodes": 24,
+      "inputs": [
+        "dev_panel.parquet",
+        "dev_panel.parquet"
+      ],
+      "deadline_seconds": 1800
+    },
+    {
+      "stage": "training-2002",
+      "seed": 2002,
+      "updates": 16,
+      "episodes": 512,
+      "inputs": [
+        "train_main.parquet",
+        "dev_panel.parquet"
+      ],
+      "deadline_seconds": 14400
+    },
+    {
+      "stage": "development-2002",
+      "seed": 9001,
+      "updates": 0,
+      "episodes": 24,
+      "inputs": [
+        "dev_panel.parquet",
+        "dev_panel.parquet"
+      ],
+      "deadline_seconds": 1800
+    },
+    {
+      "stage": "training-2003",
+      "seed": 2003,
+      "updates": 16,
+      "episodes": 512,
+      "inputs": [
+        "train_main.parquet",
+        "dev_panel.parquet"
+      ],
+      "deadline_seconds": 14400
+    },
+    {
+      "stage": "development-2003",
+      "seed": 9001,
+      "updates": 0,
+      "episodes": 24,
+      "inputs": [
+        "dev_panel.parquet",
+        "dev_panel.parquet"
+      ],
+      "deadline_seconds": 1800
+    },
+    {
+      "stage": "final-base",
+      "seed": 9001,
+      "updates": 0,
+      "episodes": 64,
+      "inputs": [
+        "final_eval.parquet",
+        "final_eval.parquet"
+      ],
+      "deadline_seconds": 1800
+    },
+    {
+      "stage": "final-2001",
+      "seed": 9001,
+      "updates": 0,
+      "episodes": 64,
+      "inputs": [
+        "final_eval.parquet",
+        "final_eval.parquet"
+      ],
+      "deadline_seconds": 1800
+    },
+    {
+      "stage": "final-2002",
+      "seed": 9001,
+      "updates": 0,
+      "episodes": 64,
+      "inputs": [
+        "final_eval.parquet",
+        "final_eval.parquet"
+      ],
+      "deadline_seconds": 1800
+    },
+    {
+      "stage": "final-2003",
+      "seed": 9001,
+      "updates": 0,
+      "episodes": 64,
+      "inputs": [
+        "final_eval.parquet",
+        "final_eval.parquet"
+      ],
+      "deadline_seconds": 1800
+    }
+  ],
+  "model_evaluations": 0,
+  "paid_execution": false,
+  "verification": [
+    {
+      "suite": "reader offline gate",
+      "source": "b3912e9cb8382f3121ab069d370d23e829fa4d93",
+      "passed": 202,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "pinned CPU gate including nested config suite",
+      "source": "b3912e9cb8382f3121ab069d370d23e829fa4d93",
+      "passed": 74,
+      "failed": 0,
+      "skipped": 0,
+      "nested_config_suite_passed": 9
+    },
+    {
+      "suite": "study execution",
+      "source": "b3912e9cb8382f3121ab069d370d23e829fa4d93",
+      "passed": 3,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "study and qualification preservation",
+      "source": "28cc78eae9ca4c852416584248ad858cc22a8a94",
+      "passed": 15,
+      "failed": 0,
+      "skipped": 0
+    }
+  ],
+  "superseded_failures": [
+    {
+      "suite": "initial eleven-stage flow and interruption tests",
+      "passed": 1,
+      "failed": 1,
+      "skipped": 0,
+      "reason": "Temporal metric incorrectly required every asset to have two evaluation times."
+    },
+    {
+      "suite": "pinned CPU gate at 278d77e429c577bb0fc37961259723c7b68f85cb",
+      "passed": 73,
+      "failed": 1,
+      "skipped": 0,
+      "reason": "New eager-loader test indexed the returned row list as a columnar table."
+    }
+  ],
+  "fixture_limitations": [
+    "Scripted development response and synthetic stage traces, no study model inference.",
+    "Provider, W&B, checkpoint payload and end-to-end optimizer event fixtures. Independent pinned CPU test used real backward and AdamW on a tiny actor.",
+    "Sustained H100 capacity, study throughput, live checkpoint timings, provider charges and learning outcomes unmeasured."
+  ]
+}

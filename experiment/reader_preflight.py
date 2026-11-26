@@ -59,7 +59,7 @@ def task_probe(plan, run, tokenizer):
 
 
 def qualification_paths(plan, mount, volume_id):
-    """Compose the launcher's four stage configurations without allocating stage outputs."""
+    """Compose the launcher's declared stage configurations without allocating stage outputs."""
     try:
         from . import matched_launch
     except ImportError:
@@ -79,7 +79,7 @@ def qualification_paths(plan, mount, volume_id):
 def main(plan, run):
     c.validate(plan)
     # Match preparation's canonical Volume paths while retaining nested-symlink rejection.
-    scope = 'qual-train-dev' if c.modes.phase(plan) == c.modes.RECOVERY_LEARNING else 'all'
+    scope = 'qual-train-dev' if c.modes.recovery(plan) else 'all'
     path_evidence = {}
     if scope == 'qual-train-dev':
         sys.path.insert(0, '/opt/agent-lightning/examples/calc_x')
