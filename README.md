@@ -4,7 +4,7 @@ How does one calculator-agent experience become a model-weight update? This inde
 
 Training through the harness matters because the model must act on the same kinds of histories it encounters when used: generate a tool request, receive a calculator observation, and continue to a scored answer. AutoGen and MCP run that interaction. **Agent Lightning** captures and attributes model calls and rewards, then adapts them into training samples. **VERL** performs the actor/critic forward and backward passes, optimizer steps and checkpoint operations; vLLM serves the inference copy. The model parameters change, not the calculator program.
 
-Recovery development calibration is complete. The two-update recovery qualification passed offline harness and pinned CPU checks. Live recovery training capacity remains unverified. The three-seed GRPO study is a frozen, non-executable proposal. Final-panel model evaluations total zero. [Qualification and evidence](docs/PHASE4C_RECOVERY_LEARNING.md) · [Study and costs](docs/PHASE4C_LEARNING_STUDY_PROPOSAL.md)
+The seed-2001 recovery pilot completed 16 GRPO updates and a fresh-worker development reload. Raw answers show that the terminal greedy policy answered `not_ready` on all 24 development cases. Strict success rose from 9 to 12 while decision accuracy stayed at 12/24. The separate frozen three-seed study has no final-panel model evaluations. [Learning diagnosis](docs/PHASE4C_PILOT_LEARNING_DIAGNOSIS.md) · [Pilot closeout](docs/PHASE4C_FUNCTIONAL_PILOT_CLOSEOUT.md) · [Qualification](docs/PHASE4C_RECOVERY_LEARNING.md) · [Study and costs](docs/PHASE4C_LEARNING_STUDY_PROPOSAL.md)
 
 ## Choose a reader path
 

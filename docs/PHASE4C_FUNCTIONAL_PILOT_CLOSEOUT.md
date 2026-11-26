@@ -10,7 +10,7 @@ Allocation P02 completed the development-only GRPO pilot. Independent replay adm
 
 Across the 24 paired development cases, strict reward changed on 15, decision correctness on 18, evidence correctness on 12, raw final answer on 18, and tool sequence or arguments on 20. Nine cases moved from failure to success and six from success to failure. Three remained successes and six remained failures. Baseline failures comprised 12 semantic and three evidence errors. The reload had 12 semantic failures. The redacted evidence includes all 24 paired case records.
 
-The conclusion is limited to sustained functional operation on this synthetic recovery task.
+Offline replay of the raw answers confirms that the step-16 greedy policy answered `not_ready` on all 24 development cases. Decision correctness stayed at 12/24. The strict gain coincided with loss of every ready decision on this panel. The technical gate established sustained functional operation. [Paired cases, class-conditional training signal and evidence limits](PHASE4C_PILOT_LEARNING_DIAGNOSIS.md)
 
 ## Update evidence
 
