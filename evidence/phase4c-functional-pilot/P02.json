@@ -1,0 +1,1702 @@
+{
+  "plan_sha256": "238678dbf18c5659e77b556bc24220edfd13e5bb7c03b7b936a92fdef213017a",
+  "supervisor_status": "completed",
+  "evidence_complete": true,
+  "scope": "seed-2001-development-only",
+  "stages": {
+    "baseline": {
+      "supervisor_status": "completed",
+      "durable_worker_status": "completed",
+      "stage_admitted": true,
+      "observed_slots": 24,
+      "confirmed_slots": 24,
+      "admitted_episodes": 24,
+      "independently_replayable_episodes": 24,
+      "trace_files": 24,
+      "rejected_untrusted": 0,
+      "model_calls": 144,
+      "strict_successes": 9.0,
+      "failure_classes": {
+        "semantic": 12,
+        "correct": 9,
+        "evidence": 3
+      },
+      "outcomes": {
+        "complete_final": 24
+      },
+      "reward_denominator": 24,
+      "typed_action_errors": 0,
+      "worker_elapsed_s": 297.574,
+      "submitted_to_finished_s": 312.778,
+      "actual_actor_optimizer_calls": 0,
+      "actor_call_indices": [],
+      "collections": [],
+      "gradients": [],
+      "weight_refresh_steps": [
+        0
+      ],
+      "old_log_prob_comparisons": [],
+      "optimization": {
+        "informative_groups": [],
+        "losses": [],
+        "optimizer_calls": {
+          "actor": 0
+        }
+      },
+      "resources": {
+        "cgroup_versions": [
+          1
+        ],
+        "audit_max_cuda_allocated_peak": 0,
+        "audit_max_cuda_reserved_peak": 0,
+        "audit_max_memory.current": 48848855040,
+        "gpu": "NVIDIA H100 80GB HBM3",
+        "gpu_bytes": 85031190528,
+        "worker_start_scratch_free_bytes": 549755813888,
+        "successful_live_samples": 11,
+        "live_memory.usage_in_bytes": 47655026688,
+        "live_memory.limit_in_bytes": 206158430208,
+        "proc_meminfo_sample_used_bytes": 47657910272,
+        "proc_meminfo_total_bytes": 206158430208,
+        "device_used_mib_sample_max": 55409,
+        "sample_min_scratch_free_bytes": 549753454592,
+        "provider_averages": {
+          "gpu_memory_avg": {
+            "max_full_bucket_average": 21.514914723784752,
+            "unit": "GiB",
+            "bucket_seconds": 60
+          },
+          "gpu_utilization_avg": {
+            "max_full_bucket_average": 0.007332565741469521,
+            "unit": "fraction",
+            "bucket_seconds": 60
+          },
+          "memory_usage_avg": {
+            "max_full_bucket_average": 31.82588840847194,
+            "unit": "GiB",
+            "bucket_seconds": 60
+          }
+        }
+      },
+      "update_metrics": [],
+      "actor_offload_config": {
+        "param_offload": true,
+        "optimizer_offload": true
+      },
+      "native_checkpoint_events": [
+        {
+          "event": "native_checkpoint_load_returned",
+          "step": 0,
+          "seconds": 0.00010513199998740674
+        }
+      ],
+      "resource_scopes": {
+        "cuda": "cumulative peak of the emitting process allocator",
+        "cgroup": "process memory cgroup; current is sampled, peak only when reported",
+        "whole_device": "sparse nvidia-smi samples"
+      }
+    },
+    "training": {
+      "supervisor_status": "completed",
+      "durable_worker_status": "completed",
+      "stage_admitted": true,
+      "observed_slots": 512,
+      "confirmed_slots": 512,
+      "admitted_episodes": 512,
+      "independently_replayable_episodes": 512,
+      "trace_files": 512,
+      "rejected_untrusted": 0,
+      "model_calls": 2989,
+      "strict_successes": 206.0,
+      "failure_classes": {
+        "semantic": 236,
+        "evidence": 29,
+        "correct": 206,
+        "format": 35,
+        "action": 6
+      },
+      "outcomes": {
+        "complete_final": 484,
+        "complete_recovered": 22,
+        "terminal_policy_failure": 6
+      },
+      "reward_denominator": 512,
+      "typed_action_errors": 53,
+      "worker_elapsed_s": 2021.856,
+      "submitted_to_finished_s": 2032.946,
+      "actual_actor_optimizer_calls": 16,
+      "actor_call_indices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16
+      ],
+      "collections": [
+        {
+          "iteration": 1,
+          "policy_step": 0,
+          "target_tokens": 9597
+        },
+        {
+          "iteration": 2,
+          "policy_step": 1,
+          "target_tokens": 9056
+        },
+        {
+          "iteration": 3,
+          "policy_step": 2,
+          "target_tokens": 9136
+        },
+        {
+          "iteration": 4,
+          "policy_step": 3,
+          "target_tokens": 8953
+        },
+        {
+          "iteration": 5,
+          "policy_step": 4,
+          "target_tokens": 9344
+        },
+        {
+          "iteration": 6,
+          "policy_step": 5,
+          "target_tokens": 8885
+        },
+        {
+          "iteration": 7,
+          "policy_step": 6,
+          "target_tokens": 9494
+        },
+        {
+          "iteration": 8,
+          "policy_step": 7,
+          "target_tokens": 10179
+        },
+        {
+          "iteration": 9,
+          "policy_step": 8,
+          "target_tokens": 9689
+        },
+        {
+          "iteration": 10,
+          "policy_step": 9,
+          "target_tokens": 9161
+        },
+        {
+          "iteration": 11,
+          "policy_step": 10,
+          "target_tokens": 9759
+        },
+        {
+          "iteration": 12,
+          "policy_step": 11,
+          "target_tokens": 9600
+        },
+        {
+          "iteration": 13,
+          "policy_step": 12,
+          "target_tokens": 8826
+        },
+        {
+          "iteration": 14,
+          "policy_step": 13,
+          "target_tokens": 8690
+        },
+        {
+          "iteration": 15,
+          "policy_step": 14,
+          "target_tokens": 8660
+        },
+        {
+          "iteration": 16,
+          "policy_step": 15,
+          "target_tokens": 8345
+        }
+      ],
+      "gradients": [
+        {
+          "role": "actor",
+          "preclip_finite": true,
+          "preclip_norm": 1.860556960105896,
+          "optimizer_called": true
+        },
+        {
+          "role": "actor",
+          "preclip_finite": true,
+          "preclip_norm": 1.576940894126892,
+          "optimizer_called": true
+        },
+        {
+          "role": "actor",
+          "preclip_finite": true,
+          "preclip_norm": 1.9005283117294312,
+          "optimizer_called": true
+        },
+        {
+          "role": "actor",
+          "preclip_finite": true,
+          "preclip_norm": 1.0359861850738525,
+          "optimizer_called": true
+        },
+        {
+          "role": "actor",
+          "preclip_finite": true,
+          "preclip_norm": 1.4331880807876587,
+          "optimizer_called": true
+        },
+        {
+          "role": "actor",
+          "preclip_finite": true,
+          "preclip_norm": 1.502354383468628,
+          "optimizer_called": true
+        },
+        {
+          "role": "actor",
+          "preclip_finite": true,
+          "preclip_norm": 1.5996592044830322,
+          "optimizer_called": true
+        },
+        {
+          "role": "actor",
+          "preclip_finite": true,
+          "preclip_norm": 0.7292819023132324,
+          "optimizer_called": true
+        },
+        {
+          "role": "actor",
+          "preclip_finite": true,
+          "preclip_norm": 1.1664775609970093,
+          "optimizer_called": true
+        },
+        {
+          "role": "actor",
+          "preclip_finite": true,
+          "preclip_norm": 1.102704644203186,
+          "optimizer_called": true
+        },
+        {
+          "role": "actor",
+          "preclip_finite": true,
+          "preclip_norm": 0.8393412232398987,
+          "optimizer_called": true
+        },
+        {
+          "role": "actor",
+          "preclip_finite": true,
+          "preclip_norm": 0.7089181542396545,
+          "optimizer_called": true
+        },
+        {
+          "role": "actor",
+          "preclip_finite": true,
+          "preclip_norm": 1.0209546089172363,
+          "optimizer_called": true
+        },
+        {
+          "role": "actor",
+          "preclip_finite": true,
+          "preclip_norm": 1.1920979022979736,
+          "optimizer_called": true
+        },
+        {
+          "role": "actor",
+          "preclip_finite": true,
+          "preclip_norm": 0.7581993937492371,
+          "optimizer_called": true
+        },
+        {
+          "role": "actor",
+          "preclip_finite": true,
+          "preclip_norm": 0.7078021764755249,
+          "optimizer_called": true
+        }
+      ],
+      "weight_refresh_steps": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16
+      ],
+      "old_log_prob_comparisons": [
+        {
+          "iteration": 1,
+          "target_tokens": 9597,
+          "mean_delta": 7.888045283380976e-05,
+          "max_abs_delta": 0.37927311658859253
+        },
+        {
+          "iteration": 2,
+          "target_tokens": 9056,
+          "mean_delta": -0.000130586364055642,
+          "max_abs_delta": 0.3629274368286133
+        },
+        {
+          "iteration": 3,
+          "target_tokens": 9136,
+          "mean_delta": 0.00017971495044049525,
+          "max_abs_delta": 0.453845739364624
+        },
+        {
+          "iteration": 4,
+          "target_tokens": 8953,
+          "mean_delta": -0.00022776157539039266,
+          "max_abs_delta": 0.36233842372894287
+        },
+        {
+          "iteration": 5,
+          "target_tokens": 9344,
+          "mean_delta": -0.00012815012137972552,
+          "max_abs_delta": 0.3206162452697754
+        },
+        {
+          "iteration": 6,
+          "target_tokens": 8885,
+          "mean_delta": -0.0003201233409333775,
+          "max_abs_delta": 0.43544864654541016
+        },
+        {
+          "iteration": 7,
+          "target_tokens": 9494,
+          "mean_delta": -0.0002856612679062884,
+          "max_abs_delta": 0.6679295301437378
+        },
+        {
+          "iteration": 8,
+          "target_tokens": 10179,
+          "mean_delta": -0.0001165619153328647,
+          "max_abs_delta": 0.6040141582489014
+        },
+        {
+          "iteration": 9,
+          "target_tokens": 9689,
+          "mean_delta": 5.1572786153641365e-05,
+          "max_abs_delta": 0.24889636039733887
+        },
+        {
+          "iteration": 10,
+          "target_tokens": 9161,
+          "mean_delta": -0.00010168660195511691,
+          "max_abs_delta": 0.8176960945129395
+        },
+        {
+          "iteration": 11,
+          "target_tokens": 9759,
+          "mean_delta": 9.290290201839438e-05,
+          "max_abs_delta": 0.3098093271255493
+        },
+        {
+          "iteration": 12,
+          "target_tokens": 9600,
+          "mean_delta": -0.00013008030823659532,
+          "max_abs_delta": 0.3275940418243408
+        },
+        {
+          "iteration": 13,
+          "target_tokens": 8826,
+          "mean_delta": 3.163084456731192e-05,
+          "max_abs_delta": 0.32759547233581543
+        },
+        {
+          "iteration": 14,
+          "target_tokens": 8690,
+          "mean_delta": -0.00020956295689683656,
+          "max_abs_delta": 0.44812846183776855
+        },
+        {
+          "iteration": 15,
+          "target_tokens": 8660,
+          "mean_delta": -0.0001286714815302826,
+          "max_abs_delta": 0.42110490798950195
+        },
+        {
+          "iteration": 16,
+          "target_tokens": 8345,
+          "mean_delta": -4.613994460744615e-06,
+          "max_abs_delta": 0.3107156753540039
+        }
+      ],
+      "optimization": {
+        "informative_groups": [
+          4,
+          5,
+          7,
+          4,
+          7,
+          6,
+          7,
+          3,
+          6,
+          4,
+          4,
+          2,
+          6,
+          6,
+          2,
+          3
+        ],
+        "losses": [
+          {
+            "step": 1,
+            "metric": "actor/pg_loss",
+            "value": -2.3283064365386963e-09
+          },
+          {
+            "step": 2,
+            "metric": "actor/pg_loss",
+            "value": -2.2118911147117615e-09
+          },
+          {
+            "step": 3,
+            "metric": "actor/pg_loss",
+            "value": -1.5192199498414993e-08
+          },
+          {
+            "step": 4,
+            "metric": "actor/pg_loss",
+            "value": -5.587935447692871e-09
+          },
+          {
+            "step": 5,
+            "metric": "actor/pg_loss",
+            "value": 5.005858838558197e-09
+          },
+          {
+            "step": 6,
+            "metric": "actor/pg_loss",
+            "value": -1.1292286217212677e-08
+          },
+          {
+            "step": 7,
+            "metric": "actor/pg_loss",
+            "value": -5.820766091346741e-11
+          },
+          {
+            "step": 8,
+            "metric": "actor/pg_loss",
+            "value": 1.862645149230957e-09
+          },
+          {
+            "step": 9,
+            "metric": "actor/pg_loss",
+            "value": -5.878973752260208e-09
+          },
+          {
+            "step": 10,
+            "metric": "actor/pg_loss",
+            "value": -1.1874362826347351e-08
+          },
+          {
+            "step": 11,
+            "metric": "actor/pg_loss",
+            "value": -7.101334631443024e-09
+          },
+          {
+            "step": 12,
+            "metric": "actor/pg_loss",
+            "value": -1.6880221664905548e-09
+          },
+          {
+            "step": 13,
+            "metric": "actor/pg_loss",
+            "value": -3.026798367500305e-09
+          },
+          {
+            "step": 14,
+            "metric": "actor/pg_loss",
+            "value": 7.799826562404633e-09
+          },
+          {
+            "step": 15,
+            "metric": "actor/pg_loss",
+            "value": 8.149072527885437e-09
+          },
+          {
+            "step": 16,
+            "metric": "actor/pg_loss",
+            "value": 7.2177499532699585e-09
+          }
+        ],
+        "optimizer_calls": {
+          "actor": 16
+        }
+      },
+      "resources": {
+        "cgroup_versions": [
+          1
+        ],
+        "audit_max_cuda_allocated_peak": 64324452352,
+        "audit_max_cuda_reserved_peak": 67689775104,
+        "audit_max_memory.current": 86010388480,
+        "gpu": "NVIDIA H100 80GB HBM3",
+        "gpu_bytes": 85031190528,
+        "worker_start_scratch_free_bytes": 549755813888,
+        "successful_live_samples": 75,
+        "live_memory.usage_in_bytes": 87022292992,
+        "live_memory.limit_in_bytes": 206158430208,
+        "proc_meminfo_sample_used_bytes": 87025782784,
+        "proc_meminfo_total_bytes": 206158430208,
+        "device_used_mib_sample_max": 69341,
+        "sample_min_scratch_free_bytes": 549717569536,
+        "provider_averages": {
+          "gpu_memory_avg": {
+            "max_full_bucket_average": 67.71573219148293,
+            "unit": "GiB",
+            "bucket_seconds": 60
+          },
+          "gpu_utilization_avg": {
+            "max_full_bucket_average": 0.565003687975058,
+            "unit": "fraction",
+            "bucket_seconds": 60
+          },
+          "memory_usage_avg": {
+            "max_full_bucket_average": 76.48757166978902,
+            "unit": "GiB",
+            "bucket_seconds": 60
+          }
+        }
+      },
+      "update_metrics": [
+        {
+          "step": 1,
+          "metrics": {
+            "actor/pg_loss": -2.3283064365386963e-09,
+            "actor/grad_norm": 1.860556960105896,
+            "actor/perf/max_memory_allocated_gb": 59.906609535217285,
+            "actor/perf/max_memory_reserved_gb": 63.041015625,
+            "actor/perf/cpu_memory_used_gb": 47.90166473388672,
+            "timing_s/gen": 55.941486199000025,
+            "timing_s/old_log_prob": 13.80751196,
+            "timing_s/adv": 0.03247656500002449,
+            "timing_s/update_actor": 60.201438155999995,
+            "timing_s/update_weights": 2.7763668359999656,
+            "timing_s/step": 133.893188237
+          }
+        },
+        {
+          "step": 2,
+          "metrics": {
+            "actor/pg_loss": -2.2118911147117615e-09,
+            "actor/grad_norm": 1.576940894126892,
+            "actor/perf/max_memory_allocated_gb": 59.906622886657715,
+            "actor/perf/max_memory_reserved_gb": 63.041015625,
+            "actor/perf/cpu_memory_used_gb": 79.6615104675293,
+            "timing_s/gen": 47.167777383999976,
+            "timing_s/old_log_prob": 9.78374196599998,
+            "timing_s/adv": 0.025192070000002786,
+            "timing_s/update_actor": 35.919799856,
+            "timing_s/update_weights": 2.5803445580000357,
+            "timing_s/step": 96.28258576500002
+          }
+        },
+        {
+          "step": 3,
+          "metrics": {
+            "actor/pg_loss": -1.5192199498414993e-08,
+            "actor/grad_norm": 1.9005283117294312,
+            "actor/perf/max_memory_allocated_gb": 59.906622886657715,
+            "actor/perf/max_memory_reserved_gb": 63.041015625,
+            "actor/perf/cpu_memory_used_gb": 79.83357620239258,
+            "timing_s/gen": 47.07038020299996,
+            "timing_s/old_log_prob": 9.699011112999983,
+            "timing_s/adv": 0.016924280000012004,
+            "timing_s/update_actor": 36.17286844299997,
+            "timing_s/update_weights": 2.988074308000023,
+            "timing_s/step": 96.48044182999996
+          }
+        },
+        {
+          "step": 4,
+          "metrics": {
+            "actor/pg_loss": -5.587935447692871e-09,
+            "actor/grad_norm": 1.0359861850738525,
+            "actor/perf/max_memory_allocated_gb": 59.90671110153198,
+            "actor/perf/max_memory_reserved_gb": 63.041015625,
+            "actor/perf/cpu_memory_used_gb": 79.83810043334961,
+            "timing_s/gen": 45.505822825999985,
+            "timing_s/old_log_prob": 10.221318751000013,
+            "timing_s/adv": 0.02613814200003617,
+            "timing_s/update_actor": 38.90374225100004,
+            "timing_s/update_weights": 2.8928067900000087,
+            "timing_s/step": 98.01357655200002
+          }
+        },
+        {
+          "step": 5,
+          "metrics": {
+            "actor/pg_loss": 5.005858838558197e-09,
+            "actor/grad_norm": 1.4331880807876587,
+            "actor/perf/max_memory_allocated_gb": 59.90671110153198,
+            "actor/perf/max_memory_reserved_gb": 63.041015625,
+            "actor/perf/cpu_memory_used_gb": 79.9090576171875,
+            "timing_s/gen": 47.73719361299993,
+            "timing_s/old_log_prob": 10.428789237999922,
+            "timing_s/adv": 0.020532698000010896,
+            "timing_s/update_actor": 40.063185227000076,
+            "timing_s/update_weights": 2.8693364760000577,
+            "timing_s/step": 101.81341190199998
+          }
+        },
+        {
+          "step": 6,
+          "metrics": {
+            "actor/pg_loss": -1.1292286217212677e-08,
+            "actor/grad_norm": 1.502354383468628,
+            "actor/perf/max_memory_allocated_gb": 59.90671110153198,
+            "actor/perf/max_memory_reserved_gb": 63.041015625,
+            "actor/perf/cpu_memory_used_gb": 79.86473846435547,
+            "timing_s/gen": 46.292696191000005,
+            "timing_s/old_log_prob": 9.733860616000015,
+            "timing_s/adv": 0.02237882599990826,
+            "timing_s/update_actor": 38.12452666299998,
+            "timing_s/update_weights": 2.7173466489999782,
+            "timing_s/step": 98.15224735599998
+          }
+        },
+        {
+          "step": 7,
+          "metrics": {
+            "actor/pg_loss": -5.820766091346741e-11,
+            "actor/grad_norm": 1.5996592044830322,
+            "actor/perf/max_memory_allocated_gb": 59.906803131103516,
+            "actor/perf/max_memory_reserved_gb": 63.041015625,
+            "actor/perf/cpu_memory_used_gb": 79.98262405395508,
+            "timing_s/gen": 43.81006371900003,
+            "timing_s/old_log_prob": 10.274423050999985,
+            "timing_s/adv": 0.020511661999989883,
+            "timing_s/update_actor": 39.192156694999994,
+            "timing_s/update_weights": 2.5544684039999765,
+            "timing_s/step": 96.31419073200004
+          }
+        },
+        {
+          "step": 8,
+          "metrics": {
+            "actor/pg_loss": 1.862645149230957e-09,
+            "actor/grad_norm": 0.7292819023132324,
+            "actor/perf/max_memory_allocated_gb": 59.906803131103516,
+            "actor/perf/max_memory_reserved_gb": 63.041015625,
+            "actor/perf/cpu_memory_used_gb": 79.96665954589844,
+            "timing_s/gen": 47.69627214000002,
+            "timing_s/old_log_prob": 10.478272408999942,
+            "timing_s/adv": 0.020470258000159447,
+            "timing_s/update_actor": 39.015079730000025,
+            "timing_s/update_weights": 2.6084237070001564,
+            "timing_s/step": 100.28009527999995
+          }
+        },
+        {
+          "step": 9,
+          "metrics": {
+            "actor/pg_loss": -5.878973752260208e-09,
+            "actor/grad_norm": 1.1664775609970093,
+            "actor/perf/max_memory_allocated_gb": 59.906803131103516,
+            "actor/perf/max_memory_reserved_gb": 63.041015625,
+            "actor/perf/cpu_memory_used_gb": 80.00494766235352,
+            "timing_s/gen": 46.295406746000026,
+            "timing_s/old_log_prob": 10.857512787000132,
+            "timing_s/adv": 0.024607993000017814,
+            "timing_s/update_actor": 40.26062876799983,
+            "timing_s/update_weights": 2.6357600280000497,
+            "timing_s/step": 100.82235967200018
+          }
+        },
+        {
+          "step": 10,
+          "metrics": {
+            "actor/pg_loss": -1.1874362826347351e-08,
+            "actor/grad_norm": 1.102704644203186,
+            "actor/perf/max_memory_allocated_gb": 59.906803131103516,
+            "actor/perf/max_memory_reserved_gb": 63.041015625,
+            "actor/perf/cpu_memory_used_gb": 80.02082061767578,
+            "timing_s/gen": 44.9723957409999,
+            "timing_s/old_log_prob": 10.229394957000068,
+            "timing_s/adv": 0.02246065899998939,
+            "timing_s/update_actor": 37.88117466499989,
+            "timing_s/update_weights": 2.6684527120000894,
+            "timing_s/step": 96.32693269999982
+          }
+        },
+        {
+          "step": 11,
+          "metrics": {
+            "actor/pg_loss": -7.101334631443024e-09,
+            "actor/grad_norm": 0.8393412232398987,
+            "actor/perf/max_memory_allocated_gb": 59.906803131103516,
+            "actor/perf/max_memory_reserved_gb": 63.041015625,
+            "actor/perf/cpu_memory_used_gb": 80.02722549438477,
+            "timing_s/gen": 46.6746968110001,
+            "timing_s/old_log_prob": 10.52940336200004,
+            "timing_s/adv": 0.021686588999955347,
+            "timing_s/update_actor": 38.454218110000056,
+            "timing_s/update_weights": 2.863650982000081,
+            "timing_s/step": 99.18309026499992
+          }
+        },
+        {
+          "step": 12,
+          "metrics": {
+            "actor/pg_loss": -1.6880221664905548e-09,
+            "actor/grad_norm": 0.7089181542396545,
+            "actor/perf/max_memory_allocated_gb": 59.906803131103516,
+            "actor/perf/max_memory_reserved_gb": 63.041015625,
+            "actor/perf/cpu_memory_used_gb": 80.04621124267578,
+            "timing_s/gen": 47.98605230299995,
+            "timing_s/old_log_prob": 10.494943880999926,
+            "timing_s/adv": 0.02571590799993828,
+            "timing_s/update_actor": 39.81560563899984,
+            "timing_s/update_weights": 2.442248239000037,
+            "timing_s/step": 101.54810318
+          }
+        },
+        {
+          "step": 13,
+          "metrics": {
+            "actor/pg_loss": -3.026798367500305e-09,
+            "actor/grad_norm": 1.0209546089172363,
+            "actor/perf/max_memory_allocated_gb": 59.90681457519531,
+            "actor/perf/max_memory_reserved_gb": 63.041015625,
+            "actor/perf/cpu_memory_used_gb": 80.03700256347656,
+            "timing_s/gen": 46.53506431899996,
+            "timing_s/old_log_prob": 11.190087766000033,
+            "timing_s/adv": 0.024707476000003226,
+            "timing_s/update_actor": 39.66578966299994,
+            "timing_s/update_weights": 2.511688764000155,
+            "timing_s/step": 100.762242216
+          }
+        },
+        {
+          "step": 14,
+          "metrics": {
+            "actor/pg_loss": 7.799826562404633e-09,
+            "actor/grad_norm": 1.1920979022979736,
+            "actor/perf/max_memory_allocated_gb": 59.90681457519531,
+            "actor/perf/max_memory_reserved_gb": 63.041015625,
+            "actor/perf/cpu_memory_used_gb": 80.0661849975586,
+            "timing_s/gen": 45.693102782000096,
+            "timing_s/old_log_prob": 10.116476222999836,
+            "timing_s/adv": 0.024092753000104494,
+            "timing_s/update_actor": 40.09256116200004,
+            "timing_s/update_weights": 3.07725625199987,
+            "timing_s/step": 99.46497460899991
+          }
+        },
+        {
+          "step": 15,
+          "metrics": {
+            "actor/pg_loss": 8.149072527885437e-09,
+            "actor/grad_norm": 0.7581993937492371,
+            "actor/perf/max_memory_allocated_gb": 59.90681457519531,
+            "actor/perf/max_memory_reserved_gb": 63.041015625,
+            "actor/perf/cpu_memory_used_gb": 80.1055908203125,
+            "timing_s/gen": 46.23685112399994,
+            "timing_s/old_log_prob": 10.09146389600005,
+            "timing_s/adv": 0.02550529599989204,
+            "timing_s/update_actor": 37.84840073100008,
+            "timing_s/update_weights": 2.7501205949999985,
+            "timing_s/step": 97.45023880000008
+          }
+        },
+        {
+          "step": 16,
+          "metrics": {
+            "actor/pg_loss": 7.2177499532699585e-09,
+            "actor/grad_norm": 0.7078021764755249,
+            "actor/perf/max_memory_allocated_gb": 59.90681457519531,
+            "actor/perf/max_memory_reserved_gb": 63.041015625,
+            "actor/perf/cpu_memory_used_gb": 80.08393478393555,
+            "timing_s/gen": 43.67193890800013,
+            "timing_s/old_log_prob": 10.193367669000054,
+            "timing_s/adv": 0.023641063000013673,
+            "timing_s/update_actor": 38.397589574999984,
+            "timing_s/update_weights": 2.6070884670000396,
+            "timing_s/step": 95.62922851500002
+          }
+        }
+      ],
+      "actor_offload_config": {
+        "param_offload": true,
+        "optimizer_offload": true
+      },
+      "native_checkpoint_events": [
+        {
+          "event": "native_checkpoint_load_returned",
+          "step": 0,
+          "seconds": 0.00011616300000127922
+        },
+        {
+          "event": "native_checkpoint_saved",
+          "step": 16,
+          "seconds": 76.054077065
+        }
+      ],
+      "resource_scopes": {
+        "cuda": "cumulative peak of the emitting process allocator",
+        "cgroup": "process memory cgroup; current is sampled, peak only when reported",
+        "whole_device": "sparse nvidia-smi samples"
+      },
+      "informative_groups_by_update": [
+        4,
+        5,
+        7,
+        4,
+        7,
+        6,
+        7,
+        3,
+        6,
+        4,
+        4,
+        2,
+        6,
+        6,
+        2,
+        3
+      ]
+    },
+    "checkpoint-eval": {
+      "supervisor_status": "completed",
+      "durable_worker_status": "completed",
+      "stage_admitted": true,
+      "observed_slots": 24,
+      "confirmed_slots": 24,
+      "admitted_episodes": 24,
+      "independently_replayable_episodes": 24,
+      "trace_files": 24,
+      "rejected_untrusted": 0,
+      "model_calls": 144,
+      "strict_successes": 12.0,
+      "failure_classes": {
+        "correct": 12,
+        "semantic": 12
+      },
+      "outcomes": {
+        "complete_final": 24
+      },
+      "reward_denominator": 24,
+      "typed_action_errors": 0,
+      "worker_elapsed_s": 455.874,
+      "submitted_to_finished_s": 472.527,
+      "actual_actor_optimizer_calls": 0,
+      "actor_call_indices": [],
+      "collections": [],
+      "gradients": [],
+      "weight_refresh_steps": [
+        16
+      ],
+      "old_log_prob_comparisons": [],
+      "optimization": {
+        "informative_groups": [],
+        "losses": [],
+        "optimizer_calls": {
+          "actor": 0
+        }
+      },
+      "resources": {
+        "cgroup_versions": [
+          1
+        ],
+        "audit_max_cuda_allocated_peak": 0,
+        "audit_max_cuda_reserved_peak": 0,
+        "audit_max_memory.current": 83167072256,
+        "gpu": "NVIDIA H100 80GB HBM3",
+        "gpu_bytes": 85031190528,
+        "worker_start_scratch_free_bytes": 549755813888,
+        "successful_live_samples": 17,
+        "live_memory.usage_in_bytes": 84374110208,
+        "live_memory.limit_in_bytes": 206158430208,
+        "proc_meminfo_sample_used_bytes": 84378730496,
+        "proc_meminfo_total_bytes": 206158430208,
+        "device_used_mib_sample_max": 55193,
+        "sample_min_scratch_free_bytes": 549753868288,
+        "provider_averages": {
+          "gpu_memory_avg": {
+            "max_full_bucket_average": 49.04252501360509,
+            "unit": "GiB",
+            "bucket_seconds": 60
+          },
+          "gpu_utilization_avg": {
+            "max_full_bucket_average": 0.36968370553001284,
+            "unit": "fraction",
+            "bucket_seconds": 60
+          },
+          "memory_usage_avg": {
+            "max_full_bucket_average": 72.65203873000793,
+            "unit": "GiB",
+            "bucket_seconds": 60
+          }
+        }
+      },
+      "update_metrics": [],
+      "actor_offload_config": {
+        "param_offload": true,
+        "optimizer_offload": true
+      },
+      "native_checkpoint_events": [
+        {
+          "event": "native_checkpoint_load_returned",
+          "step": 16,
+          "seconds": 30.594342534999953
+        }
+      ],
+      "resource_scopes": {
+        "cuda": "cumulative peak of the emitting process allocator",
+        "cgroup": "process memory cgroup; current is sampled, peak only when reported",
+        "whole_device": "sparse nvidia-smi samples"
+      }
+    }
+  },
+  "final_panel_model_evaluations": 0,
+  "checkpoint": {
+    "step": 16,
+    "digest": "0ff47e0e09dd070bb787b6885a1045f64fe05f7526fd884767b6935368738b7e",
+    "files": {
+      "actor/extra_state_world_size_1_rank_0.pt": {
+        "bytes": 15141,
+        "sha256": "7cba8594f2cef65ca05bf3f2ed45c274183efedafcf666d51a31aa3dcd8f1683"
+      },
+      "actor/fsdp_config.json": {
+        "bytes": 46,
+        "sha256": "7315a2057e6b04e0b2e7d6ee8ad070eafd481f3e1029fb9c75c97723b6f98f36"
+      },
+      "actor/huggingface/chat_template.jinja": {
+        "bytes": 5294,
+        "sha256": "a718674808440b537a553c15e0557b5b45d6d76e49ad9ddbc1a9e92447843e2c"
+      },
+      "actor/huggingface/config.json": {
+        "bytes": 863,
+        "sha256": "3a129014de9578f3e602a4d982aab89387b25ce2f74529be5b463c29d5691b5d"
+      },
+      "actor/huggingface/generation_config.json": {
+        "bytes": 184,
+        "sha256": "358b67cf9a493e4fa27b80e4e368930caedde0a51b1f8fe6f5831e8bd434d024"
+      },
+      "actor/huggingface/tokenizer.json": {
+        "bytes": 17209920,
+        "sha256": "6b9e4e7fb171f92fd137b777cc2714bf87d11576700a1dcd7a399e7bbe39537b"
+      },
+      "actor/huggingface/tokenizer_config.json": {
+        "bytes": 352,
+        "sha256": "b67f43d859deb5bda4f0d247a875476338aca0ef92cff4c3b1d2be3265cb59ac"
+      },
+      "actor/model_world_size_1_rank_0.pt": {
+        "bytes": 14427143047,
+        "sha256": "71aca31bda0715967967bdc1aad6820672d02ac83765b4b02791b1ec2e3509a9"
+      },
+      "actor/optim_world_size_1_rank_0.pt": {
+        "bytes": 25702025404,
+        "sha256": "8911f58c3580ce0cc0c45ce423cd4c579cf015a7a647fa3d00221fc2dabdc3a7"
+      },
+      "data.pt": {
+        "bytes": 7316,
+        "sha256": "029c240c1457a8dda9f24545439551a107b0bd9df117745efd63a09e977403d6"
+      }
+    },
+    "hashed_file_bytes": 40146407567,
+    "volume_sizes_verified": true,
+    "volume_inventory_bytes": 40146409827,
+    "distinct_call": true,
+    "distinct_container": true,
+    "training_before_after_match": true
+  },
+  "paired_development": {
+    "changed": {
+      "reward": 15,
+      "failure_class": 18,
+      "decision_correct": 18,
+      "evidence_correct": 12,
+      "final_answer": 18,
+      "tool_sequence_or_arguments": 20
+    },
+    "strict_transitions": {
+      "0_to_1": 9,
+      "1_to_0": 6,
+      "0_to_0": 6,
+      "1_to_1": 3
+    },
+    "changed_reward_cases": [
+      "recovery-readiness-v1/development/c-daf12ab574",
+      "recovery-readiness-v1/development/c-6a7e0cc126",
+      "recovery-readiness-v1/development/c-529d506be0",
+      "recovery-readiness-v1/development/c-8a187cb514",
+      "recovery-readiness-v1/development/c-803d4459c3",
+      "recovery-readiness-v1/development/c-3c9386f800",
+      "recovery-readiness-v1/development/c-cf2994fed4",
+      "recovery-readiness-v1/development/c-77fa9e56ce",
+      "recovery-readiness-v1/development/c-01f40b8f3c",
+      "recovery-readiness-v1/development/c-121050b58a",
+      "recovery-readiness-v1/development/c-5db1a70832",
+      "recovery-readiness-v1/development/c-6c1c74a0e6",
+      "recovery-readiness-v1/development/c-9b22a6dd87",
+      "recovery-readiness-v1/development/c-b5fac01e6c",
+      "recovery-readiness-v1/development/c-96ea63c827"
+    ],
+    "cases": [
+      {
+        "case_id": "recovery-readiness-v1/development/c-01f40b8f3c",
+        "baseline_reward": 0,
+        "reload_reward": 1,
+        "baseline_failure": "semantic",
+        "reload_failure": "correct",
+        "baseline_decision_correct": false,
+        "reload_decision_correct": true,
+        "baseline_evidence_correct": false,
+        "reload_evidence_correct": true,
+        "final_answer_changed": true,
+        "tool_sequence_or_arguments_changed": true
+      },
+      {
+        "case_id": "recovery-readiness-v1/development/c-121050b58a",
+        "baseline_reward": 0,
+        "reload_reward": 1,
+        "baseline_failure": "semantic",
+        "reload_failure": "correct",
+        "baseline_decision_correct": false,
+        "reload_decision_correct": true,
+        "baseline_evidence_correct": false,
+        "reload_evidence_correct": true,
+        "final_answer_changed": true,
+        "tool_sequence_or_arguments_changed": true
+      },
+      {
+        "case_id": "recovery-readiness-v1/development/c-2c03f8daf4",
+        "baseline_reward": 1,
+        "reload_reward": 1,
+        "baseline_failure": "correct",
+        "reload_failure": "correct",
+        "baseline_decision_correct": true,
+        "reload_decision_correct": true,
+        "baseline_evidence_correct": true,
+        "reload_evidence_correct": true,
+        "final_answer_changed": false,
+        "tool_sequence_or_arguments_changed": false
+      },
+      {
+        "case_id": "recovery-readiness-v1/development/c-2e641a2d24",
+        "baseline_reward": 1,
+        "reload_reward": 1,
+        "baseline_failure": "correct",
+        "reload_failure": "correct",
+        "baseline_decision_correct": true,
+        "reload_decision_correct": true,
+        "baseline_evidence_correct": true,
+        "reload_evidence_correct": true,
+        "final_answer_changed": false,
+        "tool_sequence_or_arguments_changed": true
+      },
+      {
+        "case_id": "recovery-readiness-v1/development/c-3c9386f800",
+        "baseline_reward": 1,
+        "reload_reward": 0,
+        "baseline_failure": "correct",
+        "reload_failure": "semantic",
+        "baseline_decision_correct": true,
+        "reload_decision_correct": false,
+        "baseline_evidence_correct": true,
+        "reload_evidence_correct": true,
+        "final_answer_changed": true,
+        "tool_sequence_or_arguments_changed": true
+      },
+      {
+        "case_id": "recovery-readiness-v1/development/c-529d506be0",
+        "baseline_reward": 1,
+        "reload_reward": 0,
+        "baseline_failure": "correct",
+        "reload_failure": "semantic",
+        "baseline_decision_correct": true,
+        "reload_decision_correct": false,
+        "baseline_evidence_correct": true,
+        "reload_evidence_correct": true,
+        "final_answer_changed": true,
+        "tool_sequence_or_arguments_changed": true
+      },
+      {
+        "case_id": "recovery-readiness-v1/development/c-5db1a70832",
+        "baseline_reward": 0,
+        "reload_reward": 1,
+        "baseline_failure": "semantic",
+        "reload_failure": "correct",
+        "baseline_decision_correct": false,
+        "reload_decision_correct": true,
+        "baseline_evidence_correct": false,
+        "reload_evidence_correct": true,
+        "final_answer_changed": true,
+        "tool_sequence_or_arguments_changed": false
+      },
+      {
+        "case_id": "recovery-readiness-v1/development/c-6a7e0cc126",
+        "baseline_reward": 0,
+        "reload_reward": 1,
+        "baseline_failure": "semantic",
+        "reload_failure": "correct",
+        "baseline_decision_correct": false,
+        "reload_decision_correct": true,
+        "baseline_evidence_correct": false,
+        "reload_evidence_correct": true,
+        "final_answer_changed": true,
+        "tool_sequence_or_arguments_changed": true
+      },
+      {
+        "case_id": "recovery-readiness-v1/development/c-6c1c74a0e6",
+        "baseline_reward": 1,
+        "reload_reward": 0,
+        "baseline_failure": "correct",
+        "reload_failure": "semantic",
+        "baseline_decision_correct": true,
+        "reload_decision_correct": false,
+        "baseline_evidence_correct": true,
+        "reload_evidence_correct": true,
+        "final_answer_changed": true,
+        "tool_sequence_or_arguments_changed": false
+      },
+      {
+        "case_id": "recovery-readiness-v1/development/c-77fa9e56ce",
+        "baseline_reward": 0,
+        "reload_reward": 1,
+        "baseline_failure": "semantic",
+        "reload_failure": "correct",
+        "baseline_decision_correct": false,
+        "reload_decision_correct": true,
+        "baseline_evidence_correct": false,
+        "reload_evidence_correct": true,
+        "final_answer_changed": true,
+        "tool_sequence_or_arguments_changed": true
+      },
+      {
+        "case_id": "recovery-readiness-v1/development/c-803d4459c3",
+        "baseline_reward": 0,
+        "reload_reward": 1,
+        "baseline_failure": "semantic",
+        "reload_failure": "correct",
+        "baseline_decision_correct": false,
+        "reload_decision_correct": true,
+        "baseline_evidence_correct": false,
+        "reload_evidence_correct": true,
+        "final_answer_changed": true,
+        "tool_sequence_or_arguments_changed": true
+      },
+      {
+        "case_id": "recovery-readiness-v1/development/c-87f449f853",
+        "baseline_reward": 1,
+        "reload_reward": 1,
+        "baseline_failure": "correct",
+        "reload_failure": "correct",
+        "baseline_decision_correct": true,
+        "reload_decision_correct": true,
+        "baseline_evidence_correct": true,
+        "reload_evidence_correct": true,
+        "final_answer_changed": false,
+        "tool_sequence_or_arguments_changed": true
+      },
+      {
+        "case_id": "recovery-readiness-v1/development/c-8a187cb514",
+        "baseline_reward": 1,
+        "reload_reward": 0,
+        "baseline_failure": "correct",
+        "reload_failure": "semantic",
+        "baseline_decision_correct": true,
+        "reload_decision_correct": false,
+        "baseline_evidence_correct": true,
+        "reload_evidence_correct": true,
+        "final_answer_changed": true,
+        "tool_sequence_or_arguments_changed": true
+      },
+      {
+        "case_id": "recovery-readiness-v1/development/c-92516b687c",
+        "baseline_reward": 0,
+        "reload_reward": 0,
+        "baseline_failure": "evidence",
+        "reload_failure": "semantic",
+        "baseline_decision_correct": true,
+        "reload_decision_correct": false,
+        "baseline_evidence_correct": false,
+        "reload_evidence_correct": true,
+        "final_answer_changed": true,
+        "tool_sequence_or_arguments_changed": true
+      },
+      {
+        "case_id": "recovery-readiness-v1/development/c-96ea63c827",
+        "baseline_reward": 1,
+        "reload_reward": 0,
+        "baseline_failure": "correct",
+        "reload_failure": "semantic",
+        "baseline_decision_correct": true,
+        "reload_decision_correct": false,
+        "baseline_evidence_correct": true,
+        "reload_evidence_correct": true,
+        "final_answer_changed": true,
+        "tool_sequence_or_arguments_changed": true
+      },
+      {
+        "case_id": "recovery-readiness-v1/development/c-9b22a6dd87",
+        "baseline_reward": 0,
+        "reload_reward": 1,
+        "baseline_failure": "semantic",
+        "reload_failure": "correct",
+        "baseline_decision_correct": false,
+        "reload_decision_correct": true,
+        "baseline_evidence_correct": false,
+        "reload_evidence_correct": true,
+        "final_answer_changed": true,
+        "tool_sequence_or_arguments_changed": true
+      },
+      {
+        "case_id": "recovery-readiness-v1/development/c-aa26cb7656",
+        "baseline_reward": 0,
+        "reload_reward": 0,
+        "baseline_failure": "semantic",
+        "reload_failure": "semantic",
+        "baseline_decision_correct": false,
+        "reload_decision_correct": false,
+        "baseline_evidence_correct": true,
+        "reload_evidence_correct": true,
+        "final_answer_changed": false,
+        "tool_sequence_or_arguments_changed": true
+      },
+      {
+        "case_id": "recovery-readiness-v1/development/c-b5fac01e6c",
+        "baseline_reward": 0,
+        "reload_reward": 1,
+        "baseline_failure": "semantic",
+        "reload_failure": "correct",
+        "baseline_decision_correct": false,
+        "reload_decision_correct": true,
+        "baseline_evidence_correct": false,
+        "reload_evidence_correct": true,
+        "final_answer_changed": true,
+        "tool_sequence_or_arguments_changed": true
+      },
+      {
+        "case_id": "recovery-readiness-v1/development/c-c25ac45067",
+        "baseline_reward": 0,
+        "reload_reward": 0,
+        "baseline_failure": "evidence",
+        "reload_failure": "semantic",
+        "baseline_decision_correct": true,
+        "reload_decision_correct": false,
+        "baseline_evidence_correct": false,
+        "reload_evidence_correct": true,
+        "final_answer_changed": true,
+        "tool_sequence_or_arguments_changed": true
+      },
+      {
+        "case_id": "recovery-readiness-v1/development/c-cf2994fed4",
+        "baseline_reward": 1,
+        "reload_reward": 0,
+        "baseline_failure": "correct",
+        "reload_failure": "semantic",
+        "baseline_decision_correct": true,
+        "reload_decision_correct": false,
+        "baseline_evidence_correct": true,
+        "reload_evidence_correct": true,
+        "final_answer_changed": true,
+        "tool_sequence_or_arguments_changed": true
+      },
+      {
+        "case_id": "recovery-readiness-v1/development/c-d867a4a6e7",
+        "baseline_reward": 0,
+        "reload_reward": 0,
+        "baseline_failure": "semantic",
+        "reload_failure": "semantic",
+        "baseline_decision_correct": false,
+        "reload_decision_correct": false,
+        "baseline_evidence_correct": true,
+        "reload_evidence_correct": true,
+        "final_answer_changed": false,
+        "tool_sequence_or_arguments_changed": true
+      },
+      {
+        "case_id": "recovery-readiness-v1/development/c-daf12ab574",
+        "baseline_reward": 0,
+        "reload_reward": 1,
+        "baseline_failure": "semantic",
+        "reload_failure": "correct",
+        "baseline_decision_correct": false,
+        "reload_decision_correct": true,
+        "baseline_evidence_correct": false,
+        "reload_evidence_correct": true,
+        "final_answer_changed": true,
+        "tool_sequence_or_arguments_changed": true
+      },
+      {
+        "case_id": "recovery-readiness-v1/development/c-e769799570",
+        "baseline_reward": 0,
+        "reload_reward": 0,
+        "baseline_failure": "evidence",
+        "reload_failure": "semantic",
+        "baseline_decision_correct": true,
+        "reload_decision_correct": false,
+        "baseline_evidence_correct": false,
+        "reload_evidence_correct": true,
+        "final_answer_changed": true,
+        "tool_sequence_or_arguments_changed": true
+      },
+      {
+        "case_id": "recovery-readiness-v1/development/c-fb62402846",
+        "baseline_reward": 0,
+        "reload_reward": 0,
+        "baseline_failure": "semantic",
+        "reload_failure": "semantic",
+        "baseline_decision_correct": false,
+        "reload_decision_correct": false,
+        "baseline_evidence_correct": true,
+        "reload_evidence_correct": true,
+        "final_answer_changed": false,
+        "tool_sequence_or_arguments_changed": false
+      }
+    ]
+  },
+  "allocation": "P02",
+  "source": "17889f37651d57653cfc0dbe12d06304ac27371a",
+  "runtime_manifest_sha256": "d35194e68391533ac347614de3c15486031bc371c92ec148af38e945b935ea62",
+  "owner_profile_sha256": "f00e53a3de0114630fefcdb66ee3700e05b927fa5526810178aff0acebc55ca4",
+  "preparation_plan_sha256": "be0d4436cc4275a71494f89ba1fa1cbed58953dae965f344918a6c05b1adbd10",
+  "assets_sha256": "e4c46350891b52f88ebe0ce0cd73be93e090b3c2b03c0315f0f01c5ab2d2df89",
+  "data_manifest_sha256": "c7d07942dda1ee81b8797ce9a59255e7f26bca712e668c18cd1a936d83d6e8ab",
+  "model_manifest_sha256": "af66f1551b619488d35e04a4d8cb87f556a619fb0c096d03e22c406ea2fb22e3",
+  "model_revision": "0cb88a4f764b7a12671c53f0838cd831a0843b95",
+  "source_manifest_sha256": "34df7da2fe19517cbd1748a218c9fc620a3e61458f53f4432025f23b7089664e",
+  "first_seed_gate_sha256": "530445cb9b5039d1d9ff6d647efe5d7868e053a5b31daf152ee7b60ad738d149",
+  "independent_report_sha256": "839833c614474b494b348fd7b3fdb637b7da052ae7839ffce9aa1a81bf22bf8b",
+  "accounting": {
+    "event": "settle terminal allocation",
+    "allocation": "P02",
+    "at": "2026-11-26T03:22:33.894568+00:00",
+    "all_terminal": true,
+    "complete": true,
+    "gross": "4.90468350",
+    "posted_storage": "0E-8",
+    "holds": {
+      "remaining_build_preflight_compute_collection": "23.31531650",
+      "retention": "0.92",
+      "other_delayed": "2"
+    },
+    "remaining_unencumbered": "88.06000000",
+    "credits": 0,
+    "outstanding_call_exposure": 0,
+    "additional_dispatch_authority": 0,
+    "retained_bytes": 46702825648,
+    "retention_review_utc": "2026-12-03",
+    "historical_retention_review": "2026-12-02",
+    "downloaded_evidence_bytes": 92937591,
+    "billing_rows": 4,
+    "owned_apps_stopped": 3,
+    "owned_calls": 6,
+    "owned_containers": 0,
+    "elapsed_setup_to_supervisor_finish_seconds": 3178.6543691158295,
+    "retention_review_at": "2026-12-03T03:22:33.894568+00:00",
+    "prior_allocation_gross": "4.60285676",
+    "prior_allocation_holds": {
+      "remaining_build_preflight_compute_collection": "23.27714324",
+      "retention": "0.92000000",
+      "other_delayed": "2"
+    },
+    "prior_allocation_rechecked_at": "2026-11-26T03:09:56.933658+00:00",
+    "cumulative_posted_gross": "9.50754026",
+    "cumulative_unresolved": "52.43245974",
+    "cumulative_retained_bytes": 93397672417,
+    "posted_hourly_rows": [
+      {
+        "hour": "2026-11-26 02:00:00+00:00",
+        "object_type": "ap",
+        "gross": "0.00844100"
+      },
+      {
+        "hour": "2026-11-26 02:00:00+00:00",
+        "object_type": "ap",
+        "gross": "0.00594575"
+      },
+      {
+        "hour": "2026-11-26 02:00:00+00:00",
+        "object_type": "ap",
+        "gross": "4.00939253"
+      },
+      {
+        "hour": "2026-11-26 03:00:00+00:00",
+        "object_type": "ap",
+        "gross": "0.88090422"
+      }
+    ],
+    "hourly_rate_usd": {
+      "worker": "6.24280",
+      "supervisor": "0.06330"
+    },
+    "estimated_worker_and_supervisor_from_container_lifetimes": "4.90"
+  },
+  "provider": {
+    "apps": [
+      {
+        "id_sha256": "03e09141a4f8fc26daa07ce5efe7e3002624785e3d86016e585ad162376c0bca",
+        "state": "stopped"
+      },
+      {
+        "id_sha256": "6050839c1c0bc3d31ac8faac6a71e06e0593719e9663cb1f248f195b3b88fcd5",
+        "state": "stopped"
+      },
+      {
+        "id_sha256": "9e080a6a6ef8e602a7afc3217fbad06f1417ddd347b0507e47db38cb61acca04",
+        "state": "stopped"
+      }
+    ],
+    "volume_sha256": "cb509d2b497e7fd6fb9ead63d89487199eafed24f9ca51ece1950ee3bbfd575e",
+    "registry_sha256": "7bcf2f2b981410c8f06be837189ceee78ceefd487b931d21d39e06172ee222de",
+    "calls": {
+      "prepare": {
+        "call_sha256": "6a276ad249ee4bec95460ea6390565a10dd43d44580845e7a3fd83473fb9812c",
+        "status": "SUCCESS",
+        "container_seconds": 88.66759610176086,
+        "app_sha256": "9e080a6a6ef8e602a7afc3217fbad06f1417ddd347b0507e47db38cb61acca04",
+        "container_digests": [
+          "e8c1c68304dbbceb3c95466fbc753c8dc4ac23f8e0e88a19f0ad2c7022030e93"
+        ]
+      },
+      "preflight": {
+        "call_sha256": "394b63b6840768d6d436804950c782a64d134832470932efd633b849261ca76e",
+        "status": "SUCCESS",
+        "container_seconds": 67.75745487213135,
+        "app_sha256": "6050839c1c0bc3d31ac8faac6a71e06e0593719e9663cb1f248f195b3b88fcd5",
+        "container_digests": [
+          "ca8449908868fd0fb88ed2032ad29651e8707c3a0f7ba52a3e1348102501c17a"
+        ]
+      },
+      "launch": {
+        "call_sha256": "93740991079e5485ddab17014f5baec3809f131348f141ad8ebffcb1187d4028",
+        "status": "SUCCESS",
+        "container_seconds": 2830.3413240909576,
+        "app_sha256": "03e09141a4f8fc26daa07ce5efe7e3002624785e3d86016e585ad162376c0bca",
+        "container_digests": [
+          "f401aa0e221fdc862061f1921320541bbfa9796ecca7bbcc7aa06ae325866d31"
+        ]
+      },
+      "baseline": {
+        "call_sha256": "923421301f2d84359f80a12a6677d110f813bf28547e4c8f11f5d8160160da2e",
+        "status": "SUCCESS",
+        "container_seconds": 302.9596629142761,
+        "app_sha256": "03e09141a4f8fc26daa07ce5efe7e3002624785e3d86016e585ad162376c0bca",
+        "container_digests": [
+          "5e86e358a7cf9f965403ec26cc28f91eff3769652754c79ec029894c4d023781"
+        ]
+      },
+      "training": {
+        "call_sha256": "e02b6d7ec4dc9d4974afea27651a8080ef12cb4b7b5268f6186af6c3757e71eb",
+        "status": "SUCCESS",
+        "container_seconds": 2028.4641208648682,
+        "app_sha256": "03e09141a4f8fc26daa07ce5efe7e3002624785e3d86016e585ad162376c0bca",
+        "container_digests": [
+          "188c53b3dbd2e7a316c844f6e7fde4b28d1ed7c72ed592908c528ddeb882b85c"
+        ]
+      },
+      "checkpoint-eval": {
+        "call_sha256": "c18f16ea74221d77732be828961c700e5e449d8d02073408521e8ec7f277d43c",
+        "status": "SUCCESS",
+        "container_seconds": 464.80056381225586,
+        "app_sha256": "03e09141a4f8fc26daa07ce5efe7e3002624785e3d86016e585ad162376c0bca",
+        "container_digests": [
+          "3a51f2d56fce4751838ff58c1b3e5819501005e05db34316ce387fb12f780f66"
+        ]
+      }
+    },
+    "active_containers": 0
+  },
+  "campaign_ledger": [
+    {
+      "at": "2026-11-26T01:09:34.680656+00:00",
+      "event": "open pilot campaign",
+      "cap": 150,
+      "maximum_allocations": 2,
+      "qualification_holds": "45.61444321",
+      "phase4b_holds": 5,
+      "credits": 0
+    },
+    {
+      "at": "2026-11-26T01:09:34.681815+00:00",
+      "allocation": "P01",
+      "event": "reserve before setup",
+      "source": "9d12ce32ff05b22bf7a3fd5295bb09819f5a6d8d",
+      "plan": "6752e4ab5a26f1ff17e3623273c1ccbf3fc378ad6cd23768113de84012032f15",
+      "reservation": {
+        "training_budget_usd": 72,
+        "build_budget_usd": 15,
+        "preparation_budget_usd": 5,
+        "storage_budget_usd": 7,
+        "collection_budget_usd": 2,
+        "delayed_billing_usd": 2
+      },
+      "prior": "0",
+      "available": "47"
+    },
+    {
+      "at": "2026-11-26T01:14:19.163146+00:00",
+      "allocation": "P01",
+      "event": "submission acknowledged",
+      "action": "prepare",
+      "plan": "6752e4ab5a26f1ff17e3623273c1ccbf3fc378ad6cd23768113de84012032f15",
+      "call_sha256": "8167cc40640e1a604be0c446d2fe7ebef85209a1a0b3a41660ba11e0860b8f1a"
+    },
+    {
+      "at": "2026-11-26T01:15:35.810680+00:00",
+      "allocation": "P01",
+      "event": "durable CPU result verified",
+      "action": "prepare",
+      "plan": "6752e4ab5a26f1ff17e3623273c1ccbf3fc378ad6cd23768113de84012032f15"
+    },
+    {
+      "at": "2026-11-26T01:15:36.411677+00:00",
+      "allocation": "P01",
+      "event": "bind fresh assets",
+      "plan": "4e171285502da6fa8128a56fd4f138123c447233da6a81a1c772abac5d3a5d95",
+      "runtime_manifest": "d35194e68391533ac347614de3c15486031bc371c92ec148af38e945b935ea62",
+      "assets": "a4922039741a262afd66d5251560e77e3c035a3cc3d40d2e0b9741f784e0f16a"
+    },
+    {
+      "at": "2026-11-26T01:16:21.207332+00:00",
+      "allocation": "P01",
+      "event": "submission acknowledged",
+      "action": "preflight",
+      "plan": "4e171285502da6fa8128a56fd4f138123c447233da6a81a1c772abac5d3a5d95",
+      "call_sha256": "73878bd7f5326fbc34bbc486bf5eed554d6bb710eb3974ef7f8498753f029cdc"
+    },
+    {
+      "at": "2026-11-26T01:17:57.790943+00:00",
+      "allocation": "P01",
+      "event": "durable CPU result verified",
+      "action": "preflight",
+      "plan": "4e171285502da6fa8128a56fd4f138123c447233da6a81a1c772abac5d3a5d95"
+    },
+    {
+      "at": "2026-11-26T01:18:41.612776+00:00",
+      "allocation": "P01",
+      "event": "submission acknowledged",
+      "action": "launch",
+      "plan": "4e171285502da6fa8128a56fd4f138123c447233da6a81a1c772abac5d3a5d95",
+      "call_sha256": "f8376f62c456a0ff241d5a5b288c7484201dfcddcedf2fe2bfe3204da4765967"
+    },
+    {
+      "at": "2026-11-26T02:15:24.446547+00:00",
+      "allocation": "P01",
+      "event": "settle terminal allocation",
+      "gross": "4.60285676",
+      "holds": {
+        "remaining_build_preflight_compute_collection": "23.27714324",
+        "retention": "0.92",
+        "other_delayed": "2"
+      },
+      "remaining_unencumbered": "119.20000000",
+      "credits": 0
+    },
+    {
+      "at": "2026-11-26T02:15:37.383823+00:00",
+      "allocation": "P02",
+      "event": "controlled replacement after confirmed supervisor preemption",
+      "source": "17889f37651d57653cfc0dbe12d06304ac27371a",
+      "plan": "be0d4436cc4275a71494f89ba1fa1cbed58953dae965f344918a6c05b1adbd10",
+      "runtime_manifest": "d35194e68391533ac347614de3c15486031bc371c92ec148af38e945b935ea62"
+    },
+    {
+      "at": "2026-11-26T02:15:42.611754+00:00",
+      "allocation": "P02",
+      "event": "reserve before setup",
+      "source": "17889f37651d57653cfc0dbe12d06304ac27371a",
+      "plan": "be0d4436cc4275a71494f89ba1fa1cbed58953dae965f344918a6c05b1adbd10",
+      "reservation": {
+        "training_budget_usd": 72,
+        "build_budget_usd": 15,
+        "preparation_budget_usd": 5,
+        "storage_budget_usd": 7,
+        "collection_budget_usd": 2,
+        "delayed_billing_usd": 2
+      },
+      "prior": "30.80000000",
+      "available": "16.20000000"
+    },
+    {
+      "at": "2026-11-26T02:17:13.925094+00:00",
+      "allocation": "P02",
+      "event": "submission acknowledged",
+      "action": "prepare",
+      "plan": "be0d4436cc4275a71494f89ba1fa1cbed58953dae965f344918a6c05b1adbd10",
+      "call_sha256": "6a276ad249ee4bec95460ea6390565a10dd43d44580845e7a3fd83473fb9812c"
+    },
+    {
+      "at": "2026-11-26T02:18:54.712671+00:00",
+      "allocation": "P02",
+      "event": "durable CPU result verified",
+      "action": "prepare",
+      "plan": "be0d4436cc4275a71494f89ba1fa1cbed58953dae965f344918a6c05b1adbd10"
+    },
+    {
+      "at": "2026-11-26T02:18:55.289283+00:00",
+      "allocation": "P02",
+      "event": "bind fresh assets",
+      "plan": "238678dbf18c5659e77b556bc24220edfd13e5bb7c03b7b936a92fdef213017a",
+      "runtime_manifest": "d35194e68391533ac347614de3c15486031bc371c92ec148af38e945b935ea62",
+      "assets": "e4c46350891b52f88ebe0ce0cd73be93e090b3c2b03c0315f0f01c5ab2d2df89"
+    },
+    {
+      "at": "2026-11-26T02:19:36.813045+00:00",
+      "allocation": "P02",
+      "event": "submission acknowledged",
+      "action": "preflight",
+      "plan": "238678dbf18c5659e77b556bc24220edfd13e5bb7c03b7b936a92fdef213017a",
+      "call_sha256": "394b63b6840768d6d436804950c782a64d134832470932efd633b849261ca76e"
+    },
+    {
+      "at": "2026-11-26T02:21:01.827338+00:00",
+      "allocation": "P02",
+      "event": "durable CPU result verified",
+      "action": "preflight",
+      "plan": "238678dbf18c5659e77b556bc24220edfd13e5bb7c03b7b936a92fdef213017a"
+    },
+    {
+      "at": "2026-11-26T02:21:44.267191+00:00",
+      "allocation": "P02",
+      "event": "submission acknowledged",
+      "action": "launch",
+      "plan": "238678dbf18c5659e77b556bc24220edfd13e5bb7c03b7b936a92fdef213017a",
+      "call_sha256": "93740991079e5485ddab17014f5baec3809f131348f141ad8ebffcb1187d4028"
+    },
+    {
+      "at": "2026-11-26T03:22:33.894568+00:00",
+      "allocation": "P02",
+      "event": "settle terminal allocation",
+      "gross": "4.90468350",
+      "holds": {
+        "remaining_build_preflight_compute_collection": "23.31531650",
+        "retention": "0.92",
+        "other_delayed": "2"
+      },
+      "remaining_unencumbered": "88.06000000",
+      "credits": 0
+    }
+  ],
+  "worker_receipt_seconds": 2775.304,
+  "supervisor_elapsed_seconds": 2825.339255809784,
+  "elapsed_to_evidence_closeout_seconds": 4011.283854007721,
+  "campaign_open_to_last_supervisor_finish_seconds": 7146.58434009552,
+  "campaign_open_to_settlement_seconds": 7979.2138249874115,
+  "both_allocation_worker_receipt_seconds": 5376.457
+}

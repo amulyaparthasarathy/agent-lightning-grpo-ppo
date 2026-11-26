@@ -1,5 +1,7 @@
 # Evidence to retain
 
+The closed seed-2001 pilot has separate P01 and P02 receipts and a raw-trace diagnosis of P02 development decisions and class-conditional training signal. [Pilot evidence](phase4c-functional-pilot/) · [Learning diagnosis and offline reproduction](../docs/PHASE4C_PILOT_LEARNING_DIAGNOSIS.md)
+
 **Phase 4A offline verification, November 24, 2026:** [`phase4a-offline-20261124/`](phase4a-offline-20261124/README.md) holds prompt-budget measurements, a replay of recorded prompt token counts, candidate plan identities and a scripted calibration report. It contains no live model result; see the [verification report](../docs/PHASE4A_VERIFICATION.md).
 
 **Completed Phase 2 r03, November 15, 2026:** [closeout](../docs/PHASE2_CLOSEOUT_2026-11-15.md), [selected evidence index](phase2-r03/EVIDENCE_INDEX.md), [six-run CSV](phase2-r03/per_seed_results.csv), and [publication manifest](phase2-r03/manifest.json). Run `python3 scripts/check_phase2_results.py` from the repository root for offline arithmetic/hash checks. All six study seeds/arms are retained; qualification and prior failures are separate. The older records below remain history, with their original source and retention scopes.
