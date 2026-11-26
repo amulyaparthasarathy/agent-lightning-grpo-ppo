@@ -1,5 +1,8 @@
 """Offline contract, strict replay, and production wire format tests (reader-harness group)."""
+import base64
 import json
+import subprocess
+import time
 from pathlib import Path
 import shutil
 import tempfile
@@ -7,7 +10,7 @@ import unittest
 from unittest.mock import patch
 
 from experiment import recovery_prompt
-from witness_sft import contract, data, dispatch, evaluation
+from witness_sft import artifact, contract, data, dispatch, evaluation
 from recovery_harness_support import ASSET, POLICY, INVENTORY, TEXT, run_episode
 
 
@@ -79,6 +82,52 @@ class WitnessContractTests(unittest.TestCase):
         self.assertFalse(evaluation.summarize(rows)['gate_passed'])
         with self.assertRaises(ValueError):
             evaluation.summarize(rows[::-1])
+
+    def test_three_ordered_receipts_require_external_production_binding(self):
+        plan = contract.make_plan('a'*40, {})
+        digest = data.task.digest(plan)
+        previous = []
+        rows = [{'case_id': r['case_id'], 'actual': json.loads(r['result'])['decision'],
+                 'strict': 0, 'diagnostics': {'decision_correct': None}}
+                for r in data.partition(data.read_source(data.DIRECTORY), 'development')]
+        base = artifact.worker('fc-one', 'ta-one')
+        trainer = artifact.worker('fc-two', 'ta-two')
+        previous.append({'worker': base, 'plan_sha256': digest, 'stage': 'fresh-base',
+                         'result': {'episodes': rows, 'summary': evaluation.summarize(rows)}})
+        contract.check_stage(plan, 'supervised-pass', previous)
+        stats = dict(examples=32, updates=8, preclip_norms=[1.]*8, example_losses=[1.]*32, supervised_tokens=2540)
+        cfg = artifact.reader_assets.model_lock()['config.json']['sha256']
+        identity = artifact.identity(artifact.LIVE, plan['source'], trainer, cfg)
+        previous.append({'worker': trainer, 'plan_sha256': digest, 'stage': 'supervised-pass',
+                         'result': {'artifact_sha256': 'f'*64, 'stats': stats, 'identity': identity}})
+        contract.check_stage(plan, 'terminal-reload', previous)
+        previous[-1]['result']['identity'] = artifact.identity(artifact.CPU, plan['source'], {'fixture': 'cpu'}, cfg)
+        with self.assertRaises(ValueError):
+            contract.check_stage(plan, 'terminal-reload', previous)
+        previous[-1]['result']['identity'] = identity
+        previous[-1]['worker'] = base
+        with self.assertRaises(ValueError):
+            contract.check_stage(plan, 'terminal-reload', previous)
+
+    def test_external_one_use_reservation_format(self):
+        plan, owner = contract.make_plan('b'*40, {}), {'synthetic': True}
+        body = dict(plan_sha256=data.task.digest(plan), owner_sha256=data.task.digest(owner),
+                    ceiling_usd=25, expires_epoch=int(time.time())+600)
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            def openssl(*args):
+                return subprocess.run(['openssl', *args], cwd=root, check=True, capture_output=True).stdout
+            openssl('genpkey', '-algorithm', 'ED25519', '-out', 'test.pem')
+            public = openssl('pkey', '-in', 'test.pem', '-pubout').decode()
+            (root/'message').write_text(data.task.dumps(body))
+            signature = openssl('pkeyutl', '-sign', '-rawin', '-inkey', 'test.pem', '-in', 'message')
+        permit = dict(body=body, signature=base64.b64encode(signature).decode())
+        with patch.object(contract, 'OWNER_ED25519_PUBLIC_PEM', public):
+            contract.authorize(plan, owner, permit)
+            with self.assertRaises(PermissionError):
+                contract.authorize({**plan, 'seed': 2002}, owner, permit)
+            with self.assertRaises(subprocess.CalledProcessError):
+                contract.authorize(plan, owner, dict(permit, signature=base64.b64encode(bytes(64)).decode()))
 
     def test_no_paid_route_or_extra_stage(self):
         plan = contract.make_plan('0' * 40, {})

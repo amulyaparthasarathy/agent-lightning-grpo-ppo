@@ -6,7 +6,7 @@ import time
 from pathlib import Path
 import re
 
-from experiment import reader_assets, reader_contract
+from experiment import reader_assets, reader_contract, reader_source
 from . import artifact, data, evaluation, training
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -56,6 +56,14 @@ def current_plan():
     names = sorted(set(source['runtime_files']) |
                    {str(p.relative_to(ROOT)) for pattern in ('witness_sft/*.py', 'evidence/witness-sft/*')
                     for p in ROOT.glob(pattern) if p.is_file()})
+    # The reader inventory predates JSONL runtime inputs. Check the added
+    # payload against its raw Git blob even with assume-unchanged index flags.
+    for name in names:
+        path = ROOT / name
+        if (path.is_symlink() or path.resolve() != path
+                or reader_source.git(ROOT, 'hash-object', '--no-filters', name) !=
+                   reader_source.git(ROOT, 'rev-parse', 'HEAD:' + name)):
+            raise ValueError('Source bytes differ from HEAD: ' + name)
     return make_plan(source['commit'], {n: reader_contract.file_hash(ROOT / n) for n in names})
 
 

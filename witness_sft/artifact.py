@@ -56,8 +56,16 @@ def check_binding(binding, model):
         canonical = identity(binding['class'], binding['source'], binding['producer'], binding['config_sha256'])
     except (KeyError, TypeError) as exc:
         raise ValueError('Incomplete artifact binding') from exc
-    if binding != canonical or (binding['class'] == CPU and binding['config_sha256'] != fixture_base(model)):
-        raise ValueError('Wrong model or artifact binding')
+    if binding != canonical:
+        raise ValueError('Wrong artifact binding')
+    if binding['class'] == CPU:
+        if binding['config_sha256'] != fixture_base(model):
+            raise ValueError('Wrong random fixture base')
+    else:
+        shapes = {name: tuple(p.shape) for name, p in training.projections(model).items()}
+        if shapes != {'model.layers.27.self_attn.q_proj.weight': (3072, 3072),
+                      'model.layers.27.self_attn.v_proj.weight': (1024, 3072)}:
+            raise ValueError('Wrong production projection inventory')
 
 
 def validate_stats(stats):

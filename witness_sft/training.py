@@ -71,8 +71,8 @@ def loss(model, batch):
 def projections(model):
     block = len(model.model.layers) - 1
     params = dict(model.named_parameters())
-    return {name: params[name] for kind in ('q_proj', 'v_proj')
-            for name in [f'model.layers.{block}.self_attn.{kind}.weight']}
+    names = [f'model.layers.{block}.self_attn.{kind}.weight' for kind in ('q_proj', 'v_proj')]
+    return {name: params[name] for name in names}
 
 
 def fit(model, tok, device):
