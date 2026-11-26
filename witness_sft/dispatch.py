@@ -110,11 +110,13 @@ def dispatch(plan, owner, permit, out):
                        WITNESS_BASE=str(Path('/original') / request['owner']['base_path']),
                        HF_HUB_OFFLINE='1', TRANSFORMERS_OFFLINE='1', PYTHONHASHSEED='2001')
             # -P prevents an unrelated current directory taking import precedence.
+            started = time.time()
             try:
                 matched_container.run_command([matched_container.PYTHON, '-P', '-m', 'witness_sft.worker', run],
                         run / 'worker.log', env, min(1740, request['deadline'] - time.time()),
                         cancelled=cancelled)
                 receipt = {'worker': identity, 'stage': stage, 'plan_sha256': data.task.digest(plan),
+                           'started_epoch': started, 'finished_epoch': time.time(),
                            'result': json.loads((run/'result.json').read_text())}
                 reader_assets.write_new(run / 'receipt.json', receipt)
             finally:
@@ -149,8 +151,13 @@ def dispatch(plan, owner, permit, out):
                         raise ValueError('Call and receipt identities differ')
                     reader_assets.write_new(out / (stage + '-result.json'), result)
                     receipts.append(result)
-                except BaseException:
+                except BaseException as exc:
+                    failure = {'status': 'incomplete', 'stage': stage, 'error_type': type(exc).__name__,
+                               'call_id': call.object_id if call is not None else None, 'dispatch_remaining': 0,
+                               'billing_status': 'hold entire reservation pending exact-call reconciliation',
+                               'retention_review_utc': opening['retention_review_utc']}
                     try:
+                        reader_assets.write_new(out / 'incomplete.json', failure)
                         registry.put(prefix + ':stop', True)
                     finally:
                         if call is not None:
@@ -166,6 +173,7 @@ def dispatch(plan, owner, permit, out):
                  'retention_review_utc': opening['retention_review_utc'],
                  'billing_status': 'pending reconciliation; retain full reservation'}
         reader_assets.write_new(out / 'completion.json', close)
+        registry.put(prefix + ':completion', close)
         return close
 
 

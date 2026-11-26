@@ -6,6 +6,7 @@ import shutil
 import signal
 import sys
 import tempfile
+import time
 
 from experiment import reader_assets
 from . import artifact, contract, data, evaluation, training
@@ -29,20 +30,25 @@ def execute(request, run, base):
         raise ValueError('Unexpected adapter on original base')
     if stage == 'fresh-base':
         return evaluation.evaluate(base, base, run, data.task.digest(plan))
+    started = time.monotonic()
     model = LlamaForCausalLM.from_pretrained(base, dtype=torch.bfloat16, attn_implementation='sdpa',
                                              local_files_only=True, use_safetensors=True)
+    base_load_seconds = time.monotonic() - started
     producer = worker if stage == 'supervised-pass' else previous[-1]['worker']
     binding = artifact.identity(artifact.LIVE, plan['source'], producer, reader_assets.model_lock()['config.json']['sha256'])
     path = run.parent / 'supervised-pass' / 'artifact'
     if stage == 'supervised-pass':
         device = torch.device('cuda:0')
         stats = training.fit(model.to(device), training.tokenizer(base / 'tokenizer.json'), device)
+        save_started = time.monotonic()
         digest = artifact.save(path, model, binding, stats, request['retention_review_utc'])
-        return {'artifact_sha256': digest, 'identity': binding, 'stats': stats,
+        return {'artifact_save_seconds': time.monotonic()-save_started, 'base_load_seconds': base_load_seconds,
+                'artifact_sha256': digest, 'identity': binding, 'stats': stats,
                 'peak_allocated': torch.cuda.max_memory_allocated(), 'peak_reserved': torch.cuda.max_memory_reserved()}
     if stage != 'terminal-reload':
         raise ValueError('Unknown SFT stage')
     digest = previous[-1]['result']['artifact_sha256']
+    restore_started = time.monotonic()
     artifact.restore(path, model, binding, digest, worker)
     with tempfile.TemporaryDirectory() as scratch:
         merged = Path(scratch)
@@ -52,7 +58,8 @@ def execute(request, run, base):
         # original tokenizer. Only the two projection tensors have been replaced.
         for filename in ('config.json', 'generation_config.json'):
             shutil.copyfile(base / filename, merged / filename)
-        return {'loaded_artifact_sha256': digest, **evaluation.evaluate(merged, base, run, data.task.digest(plan))}
+        return {'base_load_seconds': base_load_seconds, 'overlay_and_export_seconds': time.monotonic()-restore_started,
+                'loaded_artifact_sha256': digest, **evaluation.evaluate(merged, base, run, data.task.digest(plan))}
 
 
 if __name__ == '__main__':
