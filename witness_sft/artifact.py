@@ -3,7 +3,6 @@ from datetime import datetime, timezone, timedelta
 import hashlib
 import json
 import math
-from pathlib import Path
 import re
 
 from experiment import reader_assets, reader_contract, reader_evidence
@@ -21,9 +20,12 @@ def worker(call, container):
 
 
 def identity(kind, source, producer, config):
-    if not re.fullmatch('[0-9a-f]{40}', source) or kind not in (LIVE, CPU):
+    if (not re.fullmatch('[0-9a-f]{40}', source) or not re.fullmatch('[0-9a-f]{64}', config)
+            or kind not in (LIVE, CPU)):
         raise ValueError('Wrong source or artifact class')
     if kind == LIVE:
+        if set(producer) != {'call', 'container'}:
+            raise ValueError('Incomplete producer identity')
         worker(producer['call'], producer['container'])
         if config != reader_assets.model_lock()['config.json']['sha256']:
             raise ValueError('Wrong production architecture')
@@ -38,6 +40,26 @@ def identity(kind, source, producer, config):
             'recipe': training.RECIPE}
 
 
+def fixture_base(model):
+    """Fingerprint the random fixture configuration and unchanged base parameters."""
+    h = hashlib.sha256(data.task.dumps(model.config.to_dict()).encode())
+    replaced = training.projections(model)
+    for name, p in model.named_parameters():
+        if name not in replaced:
+            h.update(name.encode())
+            h.update(p.detach().cpu().numpy().tobytes())
+    return h.hexdigest()
+
+
+def check_binding(binding, model):
+    try:
+        canonical = identity(binding['class'], binding['source'], binding['producer'], binding['config_sha256'])
+    except (KeyError, TypeError) as exc:
+        raise ValueError('Incomplete artifact binding') from exc
+    if binding != canonical or (binding['class'] == CPU and binding['config_sha256'] != fixture_base(model)):
+        raise ValueError('Wrong model or artifact binding')
+
+
 def validate_stats(stats):
     if (stats['examples'] != 32 or stats['updates'] != training.UPDATES
             or len(stats['preclip_norms']) != training.UPDATES or len(stats['example_losses']) != 32
@@ -46,18 +68,25 @@ def validate_stats(stats):
         raise ValueError('Incomplete fixed SFT pass')
 
 
-def save(path, model, binding, stats):
+def save(path, model, binding, stats, retention_review_utc=None):
     from safetensors.torch import save_file
+    check_binding(binding, model)
     validate_stats(stats)
     params = training.projections(model)
     if binding['class'] == LIVE and (next(model.parameters()).device.type != 'cuda' or model.config.num_hidden_layers != 28):
         raise ValueError('Production artifact requires the GPU base training path')
+    created = datetime.now(timezone.utc)
+    if binding['class'] == LIVE:
+        horizon = datetime.fromisoformat(retention_review_utc)
+        if horizon.utcoffset() != timedelta(0) or not created < horizon <= created + timedelta(days=8):
+            raise ValueError('Invalid allocation retention horizon')
+    else:
+        horizon = created + timedelta(days=7)
     path.mkdir(parents=True, exist_ok=False)
     tensors = {name: p.detach().cpu().contiguous() for name, p in params.items()}
     save_file(tensors, path / WEIGHTS)
-    created = datetime.now(timezone.utc)
     manifest = {**binding, 'complete': True, 'stats': stats, 'created_utc': created.isoformat(),
-                'retention_review_utc': (created + timedelta(days=7)).isoformat(),
+                'retention_review_utc': horizon.isoformat(),
                 'file': WEIGHTS, 'bytes': (path / WEIGHTS).stat().st_size,
                 'sha256': reader_contract.file_hash(path / WEIGHTS),
                 'tensors': {name: {'shape': list(t.shape), 'dtype': str(t.dtype)} for name, t in tensors.items()}}
@@ -70,13 +99,16 @@ def save(path, model, binding, stats):
 def restore(path, model, binding, expected_digest, consumer):
     import torch
     from safetensors.torch import load_file
+    check_binding(binding, model)
     if binding['class'] == LIVE:
         worker(consumer['call'], consumer['container'])
         if any(binding['producer'][k] == consumer[k] for k in ('call', 'container')):
             raise ValueError('Reload requires a distinct call and container')
     elif binding['class'] != CPU or consumer != {'fixture': 'cpu-reload'}:
         raise ValueError('Wrong artifact consumer')
-    if path.is_symlink() or {p.name for p in path.iterdir() if p.is_file() and not p.is_symlink()} != {WEIGHTS, 'manifest.json'} or len(list(path.iterdir())) != 2:
+    entries = list(path.iterdir())
+    if (path.is_symlink() or {p.name for p in entries} != {WEIGHTS, 'manifest.json'}
+            or any(not p.is_file() or p.is_symlink() for p in entries)):
         raise ValueError('Incomplete or unexpected artifact files')
     m = json.loads((path / 'manifest.json').read_text())
     if (data.task.digest(m) != expected_digest or any(m.get(k) != v for k, v in binding.items())
