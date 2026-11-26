@@ -33,6 +33,7 @@ M1 acceptance: a basic-Python reader can explain what is trained, how the harnes
 | PR #14 tested implementation | `eeafcc10099a3a8cc2aef575e959f4f391864677` |
 | PR #14 head | `cd2829fc72c0ff7ade5c8d0dab4e9ec660295cd7`; specification-only change after the tested implementation |
 | Plan delivery branch | `docs/agent-training-project-plan` |
+| Plan delivery PR | [PR #15](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/pull/15); open and ready for review at publication |
 
 These planning files are delivered together in the documentation change on that branch. Inspect its current PR/merge state before starting implementation. If it is not merged, use that branch as the planning reference or base the authorized documentation work on it; do not assume the files already exist on main. The source SHA above is the inspected baseline, not the execution identity of every experiment or the eventual documentation commit.
 
