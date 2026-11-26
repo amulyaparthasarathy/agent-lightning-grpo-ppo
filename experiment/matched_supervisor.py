@@ -248,6 +248,12 @@ def run(plan, dispatch, get_result, cancel, read_heartbeat, stop_requested, pers
                 receipt['finished_at'] = clock()
                 del active[jid]
                 index['jobs'][jid]['status'] = receipt['status']
+                if (study and plan['profile']['study_scope'] == reader.study.PILOT
+                        and job == plan['jobs'][-1] and receipt['status'] == 'completed'):
+                    try:
+                        index['first_seed_gate'] = reader.study.gate(plan, index, 3)
+                    except (KeyError, TypeError, ValueError) as exc:
+                        index['jobs'][jid].update(status='failed', gate_error=str(exc))
                 save()
                 if receipt['status']=='completed' and position+1 < len(job['stages']):
                     gated = (receipt['stage'] == 'baseline' and plan.get('schema') == 'reader-task-v2'

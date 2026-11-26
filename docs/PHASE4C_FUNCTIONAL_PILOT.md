@@ -1,0 +1,7 @@
+# Seed 2001 functional pilot
+
+The closed scope `seed-2001-development-only` runs a 24-episode greedy base evaluation, 512 sampled training episodes over sixteen updates from fresh base, and a 24-episode development evaluation in a fresh worker from the terminal step-16 checkpoint. The two evaluations use seed 9001. Training uses the frozen 128-case order, eight questions per update and four rollouts per question. The supervisor persists the first-seed technical admission on completion. Independent review requires the gate and recomputes all three admissions. The pilot has no final-release operation.
+
+The synthetic profile disables dispatch. A live pilot requires matching scope and authority, fresh owned resources, actual asset binding and durable same-plan CPU preflight. The full eleven-stage profile requires its own distinct authority. [Pilot template](../examples/reader-profile.recovery-pilot.synthetic.json) · [Study protocol](PHASE4C_LEARNING_STUDY_PROPOSAL.md)
+
+One H100 lane has 16 CPUs and 192 GiB. The training deadline is 14,400 seconds and each evaluation has 1,800 seconds. At $7/hour over 18,000 worker and 18,600 supervisor seconds, compute exposure is $71.17, rounded up to $72. Adding $15 build, $5 preparation/preflight, $7 storage, $2 collection and $2 delayed billing yields a $103 reservation. The cumulative pilot ceiling is $150 before credits. Any engineering replacement needs its own full reservation after reconciling prior exposure. The independent qualification and Phase 4B ledgers retain their original liabilities.

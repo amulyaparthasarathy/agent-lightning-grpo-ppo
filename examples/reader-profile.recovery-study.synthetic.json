@@ -58,5 +58,6 @@
     "collection_budget_usd": 2,
     "delayed_billing_usd": 2
   },
-  "study_authority": "disabled"
+  "study_authority": "disabled",
+  "study_scope": "three-seeds-including-final"
 }

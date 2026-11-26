@@ -55,7 +55,7 @@ def stage_worker(request, deadline_epoch, image_id=None):
                                call_id=modal.current_function_call_id(), image_id=image_id)
 
 
-@app.function(image=image, cpu=(1, 1), memory=(2048, 2048), timeout=c.study.SUPERVISOR_SECONDS if profile.get('purpose') == c.modes.STUDY else 43800,
+@app.function(image=image, cpu=(1, 1), memory=(2048, 2048), timeout=c.study.deadlines(profile['study_scope'])[1] if profile.get('purpose') == c.modes.STUDY else 43800,
               retries=0, max_containers=1, single_use_containers=True, volumes={'/data': volume})
 def supervise(plan, image_id=None):
     check(plan)

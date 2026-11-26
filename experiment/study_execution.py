@@ -17,8 +17,26 @@ ANALYSIS_SOURCES = {
 }
 TRAIN_SECONDS = 14400
 EVAL_SECONDS = 1800
-WORKER_SECONDS = 3 * TRAIN_SECONDS + 8 * EVAL_SECONDS
-SUPERVISOR_SECONDS = WORKER_SECONDS + 600
+FULL = 'three-seeds-including-final'
+PILOT = 'seed-2001-development-only'
+AUTHORITIES = {FULL: 'all-eleven-stages-including-final', PILOT: PILOT}
+
+
+def stage_order(scope):
+    if scope not in AUTHORITIES:
+        raise ValueError('Unknown recovery study scope')
+    seeds = (2001,) if scope == PILOT else (2001, 2002, 2003)
+    stages = [('development', 'base')]
+    for seed in seeds:
+        stages.extend([('training', str(seed)), ('development', str(seed))])
+    if scope == FULL:
+        stages.extend(('final', policy) for policy in ('base', '2001', '2002', '2003'))
+    return stages
+
+
+def deadlines(scope):
+    worker = sum(TRAIN_SECONDS if panel == 'training' else EVAL_SECONDS for panel, _ in stage_order(scope))
+    return worker, worker + 600
 
 
 def frozen(source):
@@ -43,13 +61,10 @@ def populate(plan):
     algorithm = declaration['algorithm']
     specs = {}
     plan['study'] = {'proposal_sha256': SHA256, 'analysis': declaration['analysis'], 'stages': specs}
-    plan['bounds'].update(supervisor_seconds=SUPERVISOR_SECONDS, max_gpu_seconds=WORKER_SECONDS)
-    order = [('development', 'base')]
-    for row in declaration['runs']:
-        seed = str(row['seed'])
-        order.extend([('training', seed), ('development', seed)])
-    order.extend(('final', policy) for policy in declaration['evaluation']['policies'])
-    for panel, policy in order:
+    scope = p['study_scope']
+    worker, supervisor = deadlines(scope)
+    plan['bounds'].update(supervisor_seconds=supervisor, max_gpu_seconds=worker)
+    for panel, policy in stage_order(scope):
         training = panel == 'training'
         name = 'training' if training else 'baseline' if policy == 'base' else 'checkpoint-eval'
         key = panel+'-'+policy
@@ -125,7 +140,7 @@ def gate(plan, index, count):
         seconds = contract.stage_limit(plan, stage)
         if (state['status'] != 'completed' or receipt['status'] != 'completed'
                 or not previous <= receipt['submitted_at'] <= receipt['finished_at'] <= receipt['submitted_at']+seconds
-                or receipt['finished_at']-index['started_at'] >= SUPERVISOR_SECONDS
+                or receipt['finished_at']-index['started_at'] >= plan['bounds']['supervisor_seconds']
                 or receipt['reservation'] != dict(seconds=seconds, usd=seconds*plan['bounds']['all_resource_hourly_ceiling_usd']/3600)
                 or receipt['call_id'] != result['call_id'] or result['call_id'] in calls or result['container_id'] in containers
                 or not matched_supervisor.recovery_stage_admitted(plan, job, 0, result, sha)):
@@ -147,7 +162,7 @@ def gate(plan, index, count):
 
 
 def final_release(plan, index):
-    if plan['profile']['study_authority'] != 'all-eleven-stages-including-final' or not plan['training_admissible']:
+    if plan['profile']['study_scope'] != FULL or plan['profile']['study_authority'] != AUTHORITIES[FULL] or not plan['training_admissible']:
         raise ValueError('Missing explicit final evaluation authority')
     return {**gate(plan, index, 7), 'schema':'recovery-study-final-release-v1',
             'authority':plan['profile']['study_authority'], 'declaration_sha256':SHA256,

@@ -284,10 +284,16 @@ def review(plan, index, read, local):
     analysis = {}
     if study and not errors:
         try:
-            release = c.study.final_release(plan, index)
-            if (read(plan['root']+'/supervisor/final-release.json') != release or index['final_release'] != release
-                    or index['first_seed_gate'] != c.study.gate(plan, index, 3)):
-                raise ValueError('Collected final release or first seed gate differs')
+            pilot = plan['profile']['study_scope'] == c.study.PILOT
+            if index['first_seed_gate'] != c.study.gate(plan, index, 3):
+                raise ValueError('Collected first seed gate differs')
+            if pilot:
+                if 'final_release' in index or (Path(local)/'supervisor/final-release.json').exists():
+                    raise ValueError('Unexpected pilot final release')
+            else:
+                release = c.study.final_release(plan, index)
+                if read(plan['root']+'/supervisor/final-release.json') != release or index['final_release'] != release:
+                    raise ValueError('Collected final release differs')
             containers = set()
             previous = index['started_at']
             for job in plan['jobs']:
@@ -303,7 +309,14 @@ def review(plan, index, read, local):
                 previous = entry['finished_at']
             if previous-index['started_at'] > bounds['supervisor_seconds']:
                 raise ValueError('Study supervisor exceeded its deadline')
-            analysis = {'paired_final':c.study.analyze_final(plan, final_rows)}
+            analysis = {'scope':plan['profile']['study_scope']}
+            if pilot:
+                analysis['pilot_completion'] = {
+                    'admitted_episodes':sum(s['performance']['episodes'] for s in stages.values()),
+                    'confirmed_rewards':sum(s['confirmed_slots'] for s in stages.values()),
+                    'final_evaluations':0, 'terminal_checkpoints':index['first_seed_gate']['checkpoints']}
+            else:
+                analysis['paired_final'] = c.study.analyze_final(plan, final_rows)
         except (OSError, ValueError, TypeError, KeyError) as exc:
             errors.append(str(exc))
     return {**analysis, 'evidence_complete': not errors, 'operational_completion': 'completed' if not errors else 'incomplete or unverified',

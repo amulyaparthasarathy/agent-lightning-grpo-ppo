@@ -77,7 +77,7 @@ def validate_profile(p):
     study_mode = p.get('purpose') == modes.STUDY
     qualification = p.get('purpose') == modes.RECOVERY_LEARNING
     exact(p, 'schema fixture modal paths experiment attempt wandb model task algorithms resources bounds'
-          + (' purpose' if 'purpose' in p else '') + (' selection' if qualification else '') + (' study_authority' if study_mode else ''), 'profile')
+          + (' purpose' if 'purpose' in p else '') + (' selection' if qualification else '') + (' study_scope study_authority' if study_mode else ''), 'profile')
     if 'purpose' in p and (p['purpose'], p['task']) not in (
             (modes.STUDY, 'recovery-readiness-v1'), (modes.RECOVERY_LEARNING, 'recovery-readiness-v1'), (modes.COLLECTION_ONLY, 'asset-status-v1'), (modes.CALIBRATION, 'recovery-readiness-v1')):
         raise ValueError('Unknown or unsupported reader purpose/task combination')
@@ -106,7 +106,8 @@ def validate_profile(p):
     if study_mode:
         algorithms = [ALGORITHMS[0]]
         if (p['attempt'] != 1 or p['bounds'].get('stage_seconds') != study.EVAL_SECONDS
-                or p['study_authority'] not in ('disabled', 'all-eleven-stages-including-final')
+                or p['study_scope'] not in study.AUTHORITIES
+                or p['study_authority'] not in ('disabled', study.AUTHORITIES[p['study_scope']])
                 or p['bounds'].get('training_stage_seconds') != study.TRAIN_SECONDS):
             raise ValueError('Invalid study authority, attempt or deadlines')
     if qualification:
@@ -141,7 +142,7 @@ def validate_profile(p):
         stages = len(modes.STAGES[modes.RECOVERY_LEARNING]) * len(algorithms)
     compute = (2*stages*b['stage_seconds']+600)*b['worker_hourly_usd']/3600
     if study_mode:
-        compute = (study.WORKER_SECONDS + study.SUPERVISOR_SECONDS)*b['worker_hourly_usd']/3600
+        compute = sum(study.deadlines(p['study_scope']))*b['worker_hourly_usd']/3600
     if study_mode and (b['collection_budget_usd'] < b['collection_gib']*.04
             or b['total_budget_usd'] < sum(b[k] for k in ('training_budget_usd', 'preparation_budget_usd',
                 'build_budget_usd', 'storage_budget_usd', 'collection_budget_usd', 'delayed_billing_usd'))):
@@ -223,7 +224,7 @@ def make_plan(profile, source, assets=None):
                        'all_resource_hourly_ceiling_usd': p['bounds']['worker_hourly_usd']}}
     if p.get('purpose') == modes.STUDY:
         plan['phase'] = modes.STUDY
-        plan['training_admissible'] &= p['study_authority'] == 'all-eleven-stages-including-final'
+        plan['training_admissible'] &= p['study_authority'] == study.AUTHORITIES[p['study_scope']]
         return study.populate(plan)
     if development:
         from importlib import import_module

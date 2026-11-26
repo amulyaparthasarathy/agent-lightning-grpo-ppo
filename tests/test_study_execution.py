@@ -75,13 +75,21 @@ class StudyTests(unittest.TestCase):
             attribution(rows+rows[:1],submissions,'vo-study','di-study')
 
     def test_eleven_stages_and_collected_review(self):
+        self.exercise_scope(c.study.FULL)
+
+    def test_three_stage_functional_pilot(self):
+        self.exercise_scope(c.study.PILOT)
+
+    def exercise_scope(self, scope):
+        pilot = scope == c.study.PILOT
         with tempfile.TemporaryDirectory() as tmp:
             directory = Path(tmp)
             physical = directory/'physical'
             physical.mkdir()
             mount = directory/'mount'
             mount.symlink_to(physical)
-            p = dict(profile(), fixture=False, study_authority='all-eleven-stages-including-final')
+            p = json.loads((c.ROOT/'examples/reader-profile.recovery-pilot.synthetic.json').read_text()) if pilot else profile()
+            p.update(fixture=False, study_authority=c.study.AUTHORITIES[scope])
             assets = assets_manifest()
             data = physical/p['paths']['data']
             assets['data'] = task.generate(data)
@@ -135,13 +143,33 @@ class StudyTests(unittest.TestCase):
                 index = matched_remote.supervise(plan,c=c,registry=registry,volume=volume,modal=modal,
                                                  stage_worker=SimpleNamespace(with_options=options),mount=mount)
             self.assertEqual(index['status'],'completed',[(j,r.get('error')) for j,v in index['jobs'].items() for r in v['stages'] if r.get('error')])
-            self.assertEqual(len(results),11)
+            self.assertEqual(len(results),3 if pilot else 11)
+            if pilot:
+                self.assertEqual(index['worker_seconds_reserved'],18000)
+                self.assertEqual(plan['bounds']['supervisor_seconds'],18600)
+                self.assertEqual(set(plan['study']['stages']),{'development-base','training-2001','development-2001'})
+                for bad_scope, authority in ((c.study.FULL,c.study.PILOT),(c.study.PILOT,c.study.AUTHORITIES[c.study.FULL])):
+                    with self.assertRaises(ValueError):
+                        c.validate_profile(dict(p,study_scope=bad_scope,study_authority=authority))
+                for panel in ('development-2002','final-base'):
+                    altered = copy.deepcopy(plan)
+                    altered['jobs'].append(dict(plan['jobs'][0],job_id=panel))
+                    with self.assertRaises(ValueError):
+                        c.validate(altered)
+                with self.assertRaises(ValueError):
+                    c.study.final_release(plan,index)
+                journal = []
+                with self.assertRaises(KeyboardInterrupt):
+                    matched_supervisor.run(plan,Mock(side_effect=KeyboardInterrupt),Mock(),Mock(),Mock(),lambda:False,journal.append)
+                self.assertEqual(journal[-1]['gpu_seconds_upper_bound_used'],1800)
             job = plan['jobs'][-1]
             req = c.stage_request(plan,job,job['stages'][0])
             binding = bindings[req['stage']['wandb']['id']]
             from experiment import qualification_paths
             checkpoint = qualification_paths.locations(req,binding)['training_checkpoint']
             wrong = physical/plan['jobs'][1]['stages'][0]['output']/'checkpoints/global_step_16'
+            if pilot:
+                wrong = wrong.parent/'global_step_15'
             with self.assertRaisesRegex(ValueError,'Wrong bound checkpoint'):
                 matched_launch.verify_checkpoint(wrong,req,binding=binding)
             (checkpoint.parent/'latest_checkpointed_iteration.txt').write_text('15')
@@ -156,6 +184,18 @@ class StudyTests(unittest.TestCase):
             index = read(plan['root']+'/supervisor/index.json')
             report = reader_evidence.validate_collection(plan,index,read,local=collected)
             self.assertTrue(report['evidence_complete'],report['problems'])
+            if pilot:
+                result = report['pilot_completion']
+                self.assertEqual((result['admitted_episodes'],result['confirmed_rewards'],result['final_evaluations']),(560,560,0))
+                self.assertNotIn('paired_final',report)
+                self.assertIn('first_seed_gate',index)
+                self.assertNotIn('final_release',index)
+                self.assertEqual(set(result['terminal_checkpoints']),{'2001'})
+                audit = index['jobs'][plan['jobs'][1]['job_id']]['stages'][0]['result']['completion']['recovery_qualification']
+                self.assertEqual(audit['actor_calls'],list(range(1,17)))
+                self.assertEqual(audit['refresh_steps'],list(range(17)))
+                self.assertEqual(audit['declared']['batches'],recovery_learning.schedule(2001))
+                return
             self.assertEqual(report['paired_final']['effects'],{s:0 for s in ('2001','2002','2003')})
             self.assertEqual(sum(v['performance']['episodes'] for v in report['stages'].values()),1888)
             self.assertEqual(report['stages']['final-base']['secondary']['temporal_pairs'],
