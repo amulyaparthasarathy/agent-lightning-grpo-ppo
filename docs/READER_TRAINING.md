@@ -52,6 +52,82 @@ Both commands print the same `plan_sha256` (a fingerprint of the plan), with `va
 
 **Optional alteration.** Repeat the block with `reader_template=examples/reader-profile.asset.synthetic.json`. The task becomes `asset-status-v1`, and its contract names `lookup_asset`. The reference model, two algorithms and offline admission result stay the same. You can finish the lesson here. The [two local exercises](learning/08-reproduce-and-operate.md#two-credential-free-checks) also work without accounts.
 
+## Read the effective recipe
+
+The reader JSON chooses the task, accounts, names, paths and bounds. The planner binds that profile to the source revision and generates a job for each algorithm. After preparation, the training plan also binds the model and data manifest. Each stage receives its own request from that plan. [Reader plan builder](../experiment/reader_contract.py)
+
+The [matched launcher](../experiment/matched_launch.py) starts with the [shared main launch settings](../experiment/launch.py), then applies the job and stage settings. For example, main starts at 20 training steps. The reader job supplies `steps = 2`, which replaces 20 in `trainer.total_training_steps`. The worker uses Hydra to compose the VERL and Agent Lightning defaults, the Calc-X example settings and those final overrides, in that order. It checks the result and writes `resolved_config.json`. The gateway and controller run as separate processes. The task harness sets model-call limits, and the [matched runtime](../experiment/matched_runtime.py) implements the actual optimizer batch and loss weighting. [Pinned configuration builder](https://github.com/microsoft/agent-lightning/blob/cbc56e41e0eab643aa71d195e92e5bba652fa683/examples/calc_x/train_calc_agent.py#L103)
+
+### Model, episodes and updates
+
+| Setting and effective value | What it controls | Source or key | Editable in reader JSON? |
+|---|---|---|---|
+| Llama 3.2 3B Instruct, `meta-llama/Llama-3.2-3B-Instruct` at `0cb88a4f764b7a12671c53f0838cd831a0843b95` | Pins the starting weights, tokenizer and compatible tool-call format. | `model.id`, `revision`, `profile=llama3b`, `parser=llama3_json` | No |
+| Calculator or synthetic asset status | Selects the questions, agent, tool and answer verifier. Both tasks run GRPO and PPO-MC. | `task`, `algorithms`, plan’s `task_identity` | Task template only |
+| Run seed 9001, calculator selection seed 329 | 329 selects the calculator data. Training uses a derived question-order seed shared by the pair and per-algorithm streams for sampling and optimization. | `jobs[].run_seed`, `jobs[].seed_streams`, [seed derivation](../experiment/matched_contract.py) | No |
+| 8 questions × 4 attempts = 32 real episodes per collection | The four attempts on one question form its reward comparison group. One episode can produce multiple training rows when its model calls have different contexts. | `data.train_batch_size`, `actor_rollout_ref.rollout.n` | No |
+| Two collections per algorithm | Two actor optimizer calls for GRPO and two for PPO-MC. PPO-MC also makes two critic calls. | `jobs[].steps`, `trainer.total_training_steps`, `critic.enable` | No |
+| 64 baseline episodes and 64 reload episodes per algorithm, one answer per case | Scores the starting and terminal actors on the same panel, with zero optimizer calls in both evaluation stages. | `eval_main.parquet`, `rollout.val_kwargs.n=1`, `trainer.val_only` | No |
+| Temperature 1.0 in training, 0.0 in evaluation | Samples alternatives during collection and requests greedy answers for the two evaluations. | Gateway `default_proxy.train.temperature` and `default_proxy.val.temperature` | No |
+
+### How a collection changes the weights
+
+In the keys below, `actor` abbreviates `actor_rollout_ref.actor`. The [actor and critic settings](../experiment/ppo_contract.py) feed the [matched configuration](../experiment/matched_launch.py). The worker installs the [matched loss and batch operations](../experiment/matched_runtime.py) before training.
+
+| Setting and effective value | What it controls | Source or key | Editable in reader JSON? |
+|---|---|---|---|
+| AdamW learning rates of `1e-6` for the actor and `1e-5` for the PPO-MC critic | Scales each role’s parameter update. GRPO has no trained critic. | `actor.optim.lr`, `critic.optim.lr` | No |
+| GRPO uses four rewards per question. PPO-MC uses discount γ = 1, GAE λ = 1 and terminal bootstrap = 0 | GRPO centers and scales rewards within each group. PPO-MC uses the terminal reward as the return, subtracts the old value at each generated token and whitens those advantages over valid tokens in the collection. | `algorithm.adv_estimator`, `gamma`, `lam` and runtime `advantages` | No |
+| Actor ratio clip 0.8–1.3, dual-clip factor 3.0 for negative advantages. Critic value clip ±0.5 | Limits the actor surrogate and clips the new value prediction relative to the old one inside the critic loss. Each role also clips its accumulated gradient norm at 1.0. | `actor.clip_ratio_low/high/c` (0.2/0.3/3.0), `critic.cliprange_value`, role `optim.clip_grad` | No |
+| Reward KL off, actor KL penalty off, entropy coefficient 0 | Neither a base-policy divergence penalty nor an entropy bonus contributes to the objective. | `algorithm.use_kl_in_reward`, `actor.use_kl_loss`, `actor.entropy_coeff` | No |
+| One row per GPU microbatch, one epoch, whole collection per optimizer call | A role accumulates gradients across all retained rows. Its nominal `ppo_mini_batch_size=8` is replaced at update time by the actual fragment-row count. Even a 33-row collection of 32 episodes yields one call per trained role. | Role `ppo_micro_batch_size_per_gpu`, `ppo_epochs` and runtime `patch_update` | No |
+| Equal weight of 1/32 per episode | Divide each episode’s share among its generated tokens across **all** fragments. Observations have zero direct loss weight. PPO-MC’s config says `critic.loss_agg_mode=token-mean`, but the installed value loss uses the same matched episode weights as the actor. | `actor.policy_loss.loss_mode=per_rollout_mean` and runtime `rollout_weights`, `normalize`, `value_loss` | No |
+
+Follow one collection. The trainer stores the old log probabilities, returns and advantages before either role updates. PPO-MC fits its critic first. The actor then uses the cached advantages, even though the critic has changed. GRPO goes directly to the actor update. After the actor step the trainer refreshes vLLM’s inference weights, so the next collection samples the updated policy. After the second refresh it saves the terminal checkpoint. A fresh worker reloads step 2 for evaluation. [Chapter 6 walks through the tensors, backward passes and update order](learning/06-one-complete-training-update.md)
+
+### Where the recipe runs
+
+| Setting and effective value | What it controls | Source or key | Editable in reader JSON? |
+|---|---|---|---|
+| GPU stage requests one `H100!`, 16 CPUs and 192 GiB host RAM. CPU preparation/preflight uses 4 CPUs and 16 GiB. Supervisor uses 1 CPU and 2 GiB. | Each stage gets a single-use worker. The supervisor schedules at most one GPU stage at a time. | [Modal functions](../reader_app.py), `resources`, `bounds.concurrency=1` | No |
+| vLLM context of 4096 tokens, tensor parallel size 1, up to 32 sequences, GPU memory utilization 0.5, eager execution | Bounds the serving engine on that GPU. The memory fraction is a vLLM setting, distinct from the worker’s host RAM. | `actor_rollout_ref.rollout` keys `max_model_len`, `tensor_model_parallel_size`, `max_num_seqs`, `gpu_memory_utilization`, `enforce_eager` | No |
+| Data prompt/response limits 2048/1024 tokens. Trajectory prompt/response limits 2048/2048 | The data loader and the trace adapter have separate limits. The adapter constructs training rows from model calls. | `data.max_prompt_length/max_response_length`, `agentlightning.trace_aggregator.trajectory_max_prompt_length/trajectory_max_response_length` | No |
+| Generation cap 1024 tokens per request, two tool iterations, parallel tool calls off | Bounds one model response and the harness’s tool loop within an episode. | `AGL_MAX_TOKENS`, `max_tool_iterations`, `parallel_tool_calls` in the [calculator](../experiment/observed_calc_agent.py) and [asset](../experiment/asset_agent.py) harnesses | No |
+| Controller pool up to 8 local runners, synchronous collection, rollout timeout 300 s | Several episodes can progress inside one stage. The trainer waits for the collection before it updates. | Controller `local_runner.maximum_size`, `agentlightning.async_rollout.enabled`, `agentlightning.rollout_timeout_seconds` | No |
+| Actor and PPO-MC critic offload parameters and optimizer state to CPU and enable gradient checkpointing | Uses host memory and recomputation to fit training on one GPU. | `actor_rollout_ref.actor.fsdp_config` and `critic.fsdp` offload flags, role model `enable_gradient_checkpointing` | No |
+| Terminal native checkpoint at step 2 | The trainer saves at the last step even though `trainer.save_freq=20`. It retains actor state and, for PPO-MC, critic state. The separate reload stage evaluates with zero updates. | `trainer.default_local_dir`, `trainer.resume_from_path`, [checkpoint checks](../experiment/matched_launch.py) | Output parent only |
+| Fresh Modal Volume v2 mounted at `/data` | Persists inputs, stage outputs and checkpoints across workers. v2 supports concurrent access to distinct files. Each stage owns a separate output directory. Workers reload committed data on entry and commit their receipts and outputs. | [Reader setup](../scripts/reader_training.py), [worker and supervisor](../experiment/matched_remote.py), [Modal Volumes](https://modal.com/docs/guide/volumes#volumes-v2) | Volume name and paths only |
+
+### Predict the work without a model
+
+Use the **synthetic practice plan** you just created, from the same shell. If all stages finish, how many episodes and optimizer calls will each job produce? Read the stage names and update count from the plan and apply the fixed collection and evaluation sizes above.
+
+```bash
+.venv/bin/python - "$reader_dir/practice-plan.json" <<'PY'
+import json
+import sys
+from pathlib import Path
+
+plan = json.loads(Path(sys.argv[1]).read_text())
+for job in plan["jobs"]:
+    stages = [stage["name"] for stage in job["stages"]]
+    updates = job["steps"] * stages.count("training")
+    evaluations = stages.count("baseline") + stages.count("checkpoint-eval")
+    episodes = evaluations * 64 + updates * 8 * 4
+    critic_calls = updates if job["algorithm"] == "ppo-mc-matched-v2" else 0
+    print(job["algorithm"], "episodes", episodes, "actor", updates, "critic", critic_calls)
+PY
+```
+
+Expected for either template:
+
+```text
+grpo-matched-v2 episodes 192 actor 2 critic 0
+ppo-mc-matched-v2 episodes 192 actor 2 critic 2
+```
+
+Those are predictions for six completed stages. For a historical comparison, the [asset PPO-MC training receipt](../evidence/phase3-qualification-20261124/a07/ppo-mc-matched-v2/training.json) records the training stage alone. To verify your own counts after a funded run, use the [collected evidence](#find-your-outputs-and-interpret-the-result).
+
 ## Configure a reader-owned allocation
 
 Three different things are called a profile or credential in this workflow. Put each value where its consumer can read it.
@@ -176,7 +252,7 @@ Here is a complete **fictitious calculator allocation**. Replace its provider id
 | `modal.environment` | Must replace | Existing namespace selected from `modal environment list`. |
 | `modal.secret` | Must replace | Exact name of the two-key Secret you just created in that environment. |
 | `modal.app` | Choose/review | Fresh name for the app under which workers run. |
-| `modal.volume` | Choose/review | Fresh name for persistent files. Reader setup creates this Volume. |
+| `modal.volume` | Choose/review | Fresh name for persistent files. Leave this name unused so reader setup can create the v2 Volume. |
 | `modal.registry` | Choose/review | Fresh name for the Modal Dict (key/value store). Setup creates it for reservations, operation status and call identities. |
 | `wandb.entity`, `wandb.project` | Must replace | Exact owning namespace and existing project from the W&B project URL. |
 | `experiment`, `attempt` | Choose/review | Label this allocation and choose an integer 1–99 (start with 1). Together they name the run directory, e.g. `reader-runs/reader-calc-001/a01`. |
@@ -190,8 +266,6 @@ Here is a complete **fictitious calculator allocation**. Replace its provider id
 | `resources.gpu`, `resources.cpu`, `resources.memory_mib` | Keep fixed | `H100!`, 16 CPUs and 196608 MiB host memory per GPU worker. |
 
 All four paths are relative to the root of your Volume, mounted at `/data` on workers. For example, `reader-assets/llama3b-v1` becomes `/data/reader-assets/llama3b-v1` remotely. Use 1–180 characters from ASCII letters, digits, underscore, dot, slash and hyphen. Empty components, `.`, `..`, a leading slash and the protected first components `models`, `runs`, `exports`, `restored`, `phase2`, `data-small` are rejected. The four paths must differ and none may contain another.
-
-**Fixed training settings.** The plan uses seed 9001 with derived random streams. Calculator data selection uses seed 329. Each algorithm makes two collections of eight questions × four attempts. Training samples at temperature 1.0 and evaluation uses 0.0. The actor learning rate is `1e-6`. PPO-MC adds a critic at `1e-5` with discount and GAE parameters both 1. The actor KL penalty and entropy bonus are disabled. The terminal checkpoint is step 2. Each stage writes its effective settings in `resolved_config.json`. [Matched configuration](../experiment/matched_launch.py) · [Actor and critic settings](../experiment/ppo_contract.py) · [Serving temperatures](../experiment/launch.py)
 
 ### 6. Review the allocation before the first submission
 
@@ -245,13 +319,13 @@ reader validate --plan "$prep_plan"
 
 ## Create storage and prepare the model and data
 
-**First resource creation by the reader CLI.** Account, project and Secret setup already used the providers. The next command verifies the authenticated workspace and existing Secret with both required keys. It then creates the Volume followed by the Dict, with existing names disallowed. Use it only when you can fund the allocation.
+**First resource creation by the reader CLI.** Account, project and Secret setup already used the providers. The next command verifies the authenticated workspace and existing Secret with both required keys. It then creates a **fresh Volume with `version=2`** followed by the Dict in the configured environment. Both names must be unused. Precreating the Volume causes setup to fail. Use it only when you can fund the allocation.
 
 ```bash
 reader setup --plan "$prep_plan"
 ```
 
-Continue only after setup returns `status: resources_created`. The next command can start image resolution and a billable CPU worker.
+Continue only after setup returns `status: resources_created`. This confirms resource creation. The version argument is the request. After a later submission, read `ownership.volume_backend_version` in its local submission receipt for the **observed** version from the hydrated Volume. The same ownership record appears in `operations.<action>.submission` in status and collection reports. Earlier allocations use version-neutral lookups for status, collection and cancellation. Keep their original plans and resources. The next command can start image resolution and a billable CPU worker.
 
 ```bash
 reader prepare --plan "$prep_plan" --out "$reader_dir/preparation-submission.json"
@@ -316,9 +390,17 @@ reader collect --plan "$train_plan" --out "$reader_dir/training-evidence"
 | Where to look | What you can inspect |
 |---|---|
 | Your printed local session directory | `profile.json`, the two plans, and submission receipts with plan hashes and call IDs. The practice plan is separate. |
-| Local `training-evidence/collection.json` and its per-algorithm stage directories | The supervisor index, operation results and downloaded text evidence such as `receipt.json`, `completion.json`, `resolved_config.json`, training `metrics.jsonl` and logs. Check `collection_errors` for partial downloads. |
+| Local `training-evidence/collection.json` and its per-algorithm stage directories | The supervisor index, operation results and downloaded stage evidence. Check `collection_errors` for partial downloads. |
 | W&B project in Forge | Hosted metrics. Find each stage by the ID or run name in the training plan’s `jobs[].stages[].wandb`. Collection checks local evidence of logging and explicitly leaves hosted history independently unverified. |
 | Your Modal Volume | Prepared weights and data at `paths.model` and `paths.data`. Each stage writes to its plan’s `jobs[].stages[].output`. The native tensors are under the training stage’s `checkpoints/global_step_2/`, including the actor and, for PPO-MC, the critic. |
+
+After a funded stage has run and `collect` has copied its files, open `training-evidence/<algorithm>/<stage>/`. A partial stage may only have its earliest records.
+
+| Compare these layers | Files and what they establish |
+|---|---|
+| Bound inputs → stage settings | `request.json` identifies the plan, job and stage. `run_plan.json` records the launcher’s trainer overrides and selected data files. `resolved_config.json` records the composed trainer configuration just before training or evaluation. |
+| Trainer settings → served requests | Gateway and controller options come from the shared launcher. Read `logs/gateway.log` and `logs/controller.log` for service activity. Inspect `traces/trajectory-*.jsonl` for the harness client’s generation defaults, actual model calls, tool observations and rewards. The composed trainer file covers only the trainer portion of the run. |
+| Collections → actual updates and reload | In `audit/events-*.jsonl`, `collection_manifest` reconciles episodes to fragments, `matched_advantages` records row and rollout counts, and `optimizer_step`, `weight_refresh` and `native_checkpoint_saved` record what ran. Compare `metrics.jsonl`, `completion.json` and `receipt.json` with the fresh evaluation worker’s checkpoint digest and update counts. |
 
 **Collect does not download model tensors.** It copies selected `.json`, `.jsonl`, `.log` and `.txt` files under the plan’s run root, skips temporary directories and applies the collection limit. A checkpoint inventory in the download describes the bytes that stay in the Volume. [Collection code](../scripts/reader_training.py)
 

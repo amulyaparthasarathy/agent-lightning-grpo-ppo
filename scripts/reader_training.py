@@ -168,7 +168,7 @@ def online(args, plan, profile):
         c.validate_current(plan, profile)
         # No Secret creation or credential reads. The owner configures the named Secret normally.
         modal.Secret.from_name(binding['secret'], environment_name=binding['environment'], required_keys=['HF_TOKEN', 'WANDB_API_KEY']).hydrate()
-        modal.Volume.objects.create(binding['volume'], environment_name=binding['environment'], allow_existing=False)
+        modal.Volume.objects.create(binding['volume'], version=2, environment_name=binding['environment'], allow_existing=False)
         modal.Dict.objects.create(binding['registry'], environment_name=binding['environment'], allow_existing=False)
         return {'status': 'resources_created', 'ownership': ownership, 'secret': 'existing handle verified'}
     registry, volume = handles(modal, profile)

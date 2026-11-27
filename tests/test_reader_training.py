@@ -14,7 +14,7 @@ import tempfile
 import time
 from types import SimpleNamespace
 import unittest
-from unittest.mock import Mock, patch
+from unittest.mock import Mock, call, patch
 
 from experiment import reader_contract as c, reader_assets as assets, reader_evidence as evidence
 from experiment import matched_contract as historical, matched_launch, matched_supervisor as supervisor
@@ -193,6 +193,51 @@ class ContractTests(unittest.TestCase):
 
 
 class OwnershipTests(unittest.TestCase):
+    def test_setup_checks_workspace_and_secret_then_creates_fresh_v2_volume(self):
+        reader = profile()
+        reader['fixture'] = False
+        binding = reader['modal']
+        plan = c.make_plan(reader, source())
+        setup = SimpleNamespace(command='setup')
+        cloud = Mock()
+        workspace = cloud.Workspace.from_context.return_value.hydrate.return_value
+        secret = cloud.Secret.from_name.return_value
+        with patch.dict(sys.modules, {'modal': cloud}), patch.dict(os.environ, {'MODAL_PROFILE': binding['profile']}), \
+             patch.object(c, 'source_identity', return_value=plan['source']):
+            workspace.name = 'wrong-workspace'
+            with self.assertRaisesRegex(ValueError, 'Authenticated workspace differs'):
+                cli.online(setup, plan, reader)
+            cloud.Secret.from_name.assert_not_called()
+            cloud.Volume.objects.create.assert_not_called()
+            cloud.Dict.objects.create.assert_not_called()
+
+            workspace.name = binding['workspace']
+            secret.hydrate.side_effect = PermissionError('Secret unavailable')
+            with self.assertRaises(PermissionError):
+                cli.online(setup, plan, reader)
+            cloud.Volume.objects.create.assert_not_called()
+            cloud.Dict.objects.create.assert_not_called()
+
+            cloud.reset_mock()
+            secret.hydrate.side_effect = None
+            self.assertEqual(cli.online(setup, plan, reader)['status'], 'resources_created')
+            self.assertEqual(cloud.mock_calls, [
+                call.Workspace.from_context(), call.Workspace.from_context().hydrate(),
+                call.Secret.from_name(binding['secret'], environment_name=binding['environment'],
+                                      required_keys=['HF_TOKEN', 'WANDB_API_KEY']),
+                call.Secret.from_name().hydrate(),
+                call.Volume.objects.create(binding['volume'], version=2, environment_name=binding['environment'],
+                                           allow_existing=False),
+                call.Dict.objects.create(binding['registry'], environment_name=binding['environment'],
+                                         allow_existing=False),
+            ])
+
+            cloud.reset_mock()
+            cloud.Volume.objects.create.side_effect = FileExistsError('Volume name already in use')
+            with self.assertRaises(FileExistsError):
+                cli.online(setup, plan, reader)
+            cloud.Dict.objects.create.assert_not_called()
+
     def test_first_qualification_mocked_dispatch_requires_preflight_not_itself(self):
         p = plan(); p['profile']['fixture'] = False
         p = c.make_plan(p['profile'], source())
@@ -203,7 +248,7 @@ class OwnershipTests(unittest.TestCase):
         cloud.Workspace.from_context.return_value.hydrate.return_value.name = p['profile']['modal']['workspace']
         cloud.enable_output.side_effect = lambda: nullcontext()
         volume.iterdir.return_value = []
-        volume.object_id = 'vo-synthetic'; volume._get_metadata.return_value.version = 1
+        volume.object_id = 'vo-synthetic'; volume._get_metadata.return_value.version = 2
         volume.read_file.return_value = [json.dumps(receipt).encode()]
         app.app.run.side_effect = lambda **kw: nullcontext()
         app.image.object_id = 'im-synthetic'; app.app.app_id = 'ap-synthetic'
@@ -214,9 +259,40 @@ class OwnershipTests(unittest.TestCase):
             args = SimpleNamespace(command='launch', out=Path(tmp)/'receipt.json')
             result = cli.online(args, p, p['profile'])
             self.assertEqual(result['call_id'], 'fc-mocked')
+            self.assertEqual(assets.read(args.out)['ownership']['volume_backend_version'], 2)
             self.assertEqual(json.loads(os.environ['AGL_READER_PROFILE']), p['profile'])
             app.supervise.with_options.return_value.spawn.assert_called_once_with(p, image_id='im-synthetic')
             app.app.run.assert_called_once_with(detach=True, environment_name=p['profile']['modal']['environment'])
+
+    def test_existing_v1_allocation_supports_status_collect_and_stop(self):
+        reader = profile()
+        reader['fixture'] = False
+        binding = reader['modal']
+        plan = c.make_plan(reader, source())
+        submission = {'plan_sha256': c.digest(plan), 'call_id': 'fc-legacy',
+                      'ownership': {'volume_backend_version': 1}}
+        registry = Registry({'submission:prepare:' + plan['root']: submission})
+        cloud = Mock()
+        cloud.Workspace.from_context.return_value.hydrate.return_value.name = binding['workspace']
+        cloud.Dict.from_name.return_value.hydrate.return_value = registry
+        volume = cloud.Volume.from_name.return_value.hydrate.return_value
+        volume._get_metadata.return_value.version = 1
+        volume.iterdir.return_value = []
+        with tempfile.TemporaryDirectory() as tmp, patch.dict(sys.modules, {'modal': cloud}), \
+             patch.dict(os.environ, {'MODAL_PROFILE': binding['profile']}):
+            report = cli.online(SimpleNamespace(command='status'), plan, reader)
+            self.assertEqual(report['operations']['prepare']['submission'], submission)
+            out = Path(tmp)/'evidence'
+            cli.online(SimpleNamespace(command='collect', out=out), plan, reader)
+            self.assertEqual(assets.read(out/'collection.json')['operations'], report['operations'])
+            stopped = cli.online(SimpleNamespace(command='stop-owned'), plan, reader)
+            self.assertEqual(stopped['owned_calls'], ['fc-legacy'])
+            cloud.FunctionCall.from_id.assert_called_once_with('fc-legacy')
+            cloud.FunctionCall.from_id.return_value.cancel.assert_called_once_with(terminate_containers=True)
+        self.assertEqual(cloud.Volume.from_name.call_args_list, [
+            call(binding['volume'], environment_name=binding['environment'], create_if_missing=False)
+        ] * 3)
+        cloud.Volume.objects.create.assert_not_called()
 
     def test_account_mismatch_precedes_resource_calls(self):
         modal = Mock()
