@@ -1,40 +1,36 @@
 # Agent Lightning: GRPO and PPO-MC
 
-How does one calculator-agent experience become a model-weight update? This independent educational implementation follows that path through a real agent harness and compares GRPO with this lab's terminal Monte Carlo **PPO-MC** configuration. It is not an official Agent Lightning benchmark or a claim about every PPO implementation.
+**Start with [Chapter 1 · Why train through the agent harness?](docs/learning/01-agent-training-and-frameworks.md)**
 
-Training through the harness matters because the model must act on the same kinds of histories it encounters when used: generate a tool request, receive a calculator observation, and continue to a scored answer. AutoGen and MCP run that interaction. **Agent Lightning** captures and attributes model calls and rewards, then adapts them into training samples. **VERL** performs the actor/critic forward and backward passes, optimizer steps and checkpoint operations; vLLM serves the inference copy. The model parameters change, not the calculator program.
+If you can read basic Python, you can follow a calculator request from the model's first choice to the reward for its final answer. In [Chapter 2](docs/learning/02-follow-one-calculator-task.md) you'll predict the score, check it locally and identify which parts of the exchange can train the model.
 
-The seed-2001 recovery pilot completed 16 GRPO updates and a fresh-worker development reload. Raw answers show that the terminal greedy policy answered `not_ready` on all 24 development cases. Strict success rose from 9 to 12 while decision accuracy stayed at 12/24. The separate frozen three-seed study has no final-panel model evaluations. [Learning diagnosis](docs/PHASE4C_PILOT_LEARNING_DIAGNOSIS.md) · [Pilot closeout](docs/PHASE4C_FUNCTIONAL_PILOT_CLOSEOUT.md) · [Qualification](docs/PHASE4C_RECOVERY_LEARNING.md) · [Study and costs](docs/PHASE4C_LEARNING_STUDY_PROPOSAL.md)
-
-## Current project direction
-
-Contributors and AI agents should start with the [project plan](docs/PROJECT_PLAN.md) and [current continuation](docs/PROJECT_CONTINUATION.md). The priority is a step-by-step guide to training models for agent use, built from the existing chapters and completed experiments. The plan records the next bounded documentation task and the separately gated recovery PPO-MC qualification.
-
-## Choose a reader path
-
-| Path | Start here | What you can do |
-|---|---|---|
-| **A. Learn** | [Eight-chapter guide](docs/learning/README.md) and [source map](docs/learning/source-map.md) | Follow one synthetic task through tokens, rewards, GRPO/PPO-MC losses, a weight update and checkpoint evaluation. |
-| **B. Verify offline** | Quick start below and [selected evidence index](evidence/phase2-r03/EVIDENCE_INDEX.md) | Check synthetic arithmetic and committed derived results using Python's standard library. |
-| **Reader-owned training** | [Canonical reader procedure](docs/READER_TRAINING.md) and [live qualification report](docs/READER_QUALIFICATION_2026-11-19.md) | The reference Llama/calculator workflow completed live operational validation for both GRPO and PPO-MC: baseline, two-update training execution, native checkpoint saving, fresh-worker evaluation reload and model/tool integration. |
-| **Customize a fork or task** | [Task adaptation guide](docs/TASK_ADAPTATION.md) | Prepare fork-aware source-bound plans. The asset task is operationally qualified for both algorithms under the `asset-episode-v2` episode contract (baseline, two updates, native checkpoint, fresh-worker reload); learning improvement is not established. See the [qualification report](docs/PHASE3_QUALIFICATION_2026-11-24.md), the [closeout](docs/PHASE3_CLOSEOUT_2026-11-24.md), the [engineering checklist](docs/PHASE3_ENGINEERING_CHECKLIST.md) and the preserved [earlier failed campaign](docs/PHASE3_QUALIFICATION_2026-11-22.md). |
-| **Phase 4 recovery readiness** | [Task](docs/PHASE4A_RECOVERY_TASK.md), [offline verification](docs/PHASE4A_VERIFICATION.md), [calibration method](docs/PHASE4A_CALIBRATION.md), and [live results](docs/PHASE4B_LIVE_CALIBRATION.md) | Inspect why rewards differed on the same question. Both collection routes passed the development screen across 240 admitted base-policy episodes with zero optimization. |
-| **C. Inspect historical training** | [Experiment runbook](experiment/README.md) and [r03 closeout](docs/PHASE2_CLOSEOUT_2026-11-15.md) | Study historical owner-bound integration, configuration, scientific results and operational records. Use the separate reader procedure for new execution. |
+Continue through the chapters in order. The [learning index](docs/learning/README.md) maps the rest of the route from recorded actions to a model update, then to interpreting a real experiment. This independent lab compares two reinforcement learning methods, group relative policy optimization (GRPO) and a Monte Carlo configuration of proximal policy optimization (PPO-MC).
 
 ## Credential-free offline quick start
 
-Using Python 3.12, obtain this educational snapshot and run the credential-free checks:
+For the exercises, use a terminal and Python 3.12. If you need a checkout, run these two lines once in a directory where you keep projects. The lesson commands run from the resulting repository root, the directory containing `experiment/` and `scripts/`.
 
 ```bash
 git clone https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo.git
 cd agent-lightning-grpo-ppo
-python3 experiment/cpu_accounting_demo.py
-python3 scripts/check_phase2_results.py
 ```
 
-No package installation, cloud credentials, model/data download, inference or GPU is needed. The private historical repository is not required.
+| Activity | What you do | What you learn |
+|---|---|---|
+| Synthetic mechanics | Work through the [calculator trajectory](docs/learning/02-follow-one-calculator-task.md). Use Python's standard library to check a made-up example. | Which choices belong to the model, how the verifier scores an attempt, and how training keeps track of that attempt. |
+| Committed experimental evidence | Read the [six-run comparison](docs/learning/07-read-the-experiment-results.md). Run `python3 scripts/check_phase2_results.py` from the root to check 12 artifact hashes, 24 stage summaries, six study runs and three paired contrasts. | What the measured scores support on the reused development questions. The checker reads published files locally. |
+| New model execution | The [reader procedure](docs/READER_TRAINING.md) covers collecting new answers, training and reloading with separately authorized model access, compute and budget. | A new run produces its own measurements. Both offline activities above work without accounts, model weights or GPUs. |
 
-The arithmetic demo prints a row mean changing from **5 to 3.5** while the equal-rollout token mean stays **5**. The evidence checker reports **12 artifact hashes, 24 derived stage summaries, six study runs and three paired contrasts**. These checks do not replay raw trajectories, rehash remote checkpoint tensors or reproduce GPU training.
+## What happened on the recovery task?
+
+Recovery GRPO completed a two-update qualification (A03) and a 16-update development pilot (P02), each with a checkpoint loaded by a fresh worker. P02's final greedy policy answered `not_ready` on all 24 development cases. Strict success rose from 9/24 to 12/24, while decision accuracy stayed at 12/24. Recovery-specific PPO-MC live training and reload remain unqualified. The full recovery study remains unexecuted, and the proposed witness-selection supervised fine-tuning experiment is deferred. [A03 qualification](docs/PHASE4C_GRPO_CAMPAIGN_CLOSEOUT.md) · [P02 closeout](docs/PHASE4C_FUNCTIONAL_PILOT_CLOSEOUT.md) · [Paired decision analysis](docs/PHASE4C_PILOT_LEARNING_DIAGNOSIS.md) · [Study protocol](docs/PHASE4C_LEARNING_STUDY_PROPOSAL.md) · [Draft PR #14](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/pull/14)
+
+## Current project direction
+
+Contributors can find the agreed milestones in the [project plan](docs/PROJECT_PLAN.md) and the current handoff in the [continuation](docs/PROJECT_CONTINUATION.md). The [task adaptation guide](docs/TASK_ADAPTATION.md) explains what changes when the calculator is replaced by another tool and verifier.
+
+<details>
+<summary>Calculator study results, publication provenance and execution limits</summary>
 
 ## Completed exploratory comparison
 
@@ -55,7 +51,9 @@ This is the standalone educational publication of Agent Lightning Lab. The origi
 
 Historical training code is available for inspection here. The historical matched route remains bound to owner-specific Modal/W&B resources, frozen inputs, exact source admission and prior qualification. The separately versioned [reader procedure](docs/READER_TRAINING.md) supplies reader-owned resource profiles. The reference Llama/calculator workflow passed live operational, integration, checkpoint and fresh-worker evaluation-reload checks on the [recorded configuration](docs/READER_QUALIFICATION_2026-11-19.md). Later documentation and merge commits did not produce those live results.
 
-This short reference run established procedural execution, not reliable learning improvement. GRPO had 0/16 informative reward groups and no observed task-directed policy-gradient signal. PPO-MC made nonzero updates without establishing useful critic convergence or reliable improvement. Evaluation-only reload does not qualify resumed training. The alternate asset task was later [operationally qualified](docs/PHASE3_QUALIFICATION_2026-11-24.md), again without a learning claim; alternate-model work remains open, and future environments or cold builds are not universally qualified. The first release includes no model weights, full datasets, private editorial ZIP, raw trajectory collection or missing chart atlas. None is required for Paths A or B.
+This short reference run established procedural execution, not reliable learning improvement. GRPO had 0/16 informative reward groups and no observed task-directed policy-gradient signal. PPO-MC made nonzero updates without establishing useful critic convergence or reliable improvement. Evaluation-only reload does not qualify resumed training. The alternate asset task was later [operationally qualified](docs/PHASE3_QUALIFICATION_2026-11-24.md), again without a learning claim; alternate-model work remains open, and future environments or cold builds are not universally qualified. The first release includes no model weights, full datasets, private editorial ZIP, raw trajectory collection or missing chart atlas. The local exercises use the files in this repository.
+
+</details>
 
 ## Historical operations and retained records
 
