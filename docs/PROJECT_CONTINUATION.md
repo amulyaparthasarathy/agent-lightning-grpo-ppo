@@ -6,7 +6,7 @@ Read [AGENTS.md](../AGENTS.md), then the [project plan](PROJECT_PLAN.md). This f
 
 ## Resume here
 
-**Next action.** Review the [first-time reader procedure](READER_TRAINING.md) in the onboarding PR. This assignment ends at review.
+**Next action.** Review the first-time reader procedure in [PR #27](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/pull/27). This assignment ends at review.
 
 **M7 integration.** [PR #25](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/pull/25) merged at `306dd429231ff7ac1aab1d5365dc46161844f441`. Its parents are the M4 merge `4d24d99cab74088fa9bf05b14d18bc7bfd758ae2` and the independently reviewed M7 head `957370525abe4924f96b448f621e779023a3f7df`. The merge and reviewed head share tree `2dacb11be0049a745359655ee7ff6c00c900634c`. Only the continuation changed between validated learner commit `17123c154f9de323396fb1853bfe21140e23749b` and the reviewed head.
 
@@ -135,7 +135,7 @@ The retained private pilot continuation is `.local/phase4c-functional-pilot/CONT
 
 **Source and provider review.** Read source admission, template/contract limits, Modal CLI credential selection, worker Secret bindings, preparation/preflight, allocation reservations, launch/configuration, collection and stage evidence. Checked the linked official uv, Modal, HF and Forge documentation for first-time setup, including the current project and API-key locations. This review used public documentation and installed CLI source.
 
-**Evidence boundary.** The a07 manifest is historical metadata used to exercise local binding. The calculator and asset GPU results below belong to their original executions. Fresh-account usability, cold builds, capacity, provider run-write access and charges were unmeasured here. No runtime change was required by the offline checks. This assignment grants zero dispatch authority and does not change retention or the deferred experiments.
+**Evidence boundary.** The a07 manifest is historical metadata used to exercise local binding. The recorded calculator and asset GPU results belong to their original executions. Fresh-account usability, cold builds, capacity, provider run-write access and charges were unmeasured here. No runtime change was required by the offline checks. This assignment grants zero dispatch authority and does not change retention or the deferred experiments.
 
 ### Inherited M7 closeout
 
