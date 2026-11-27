@@ -16,6 +16,8 @@ Inspect current GitHub main, relevant PRs, and the local working tree. Reconcile
 
 - First, develop the step-by-step guide to **training language models for agent use**. Keep general foundations brief. Explain agent interaction, harness responsibilities, trajectories, training tensors, GRPO, this lab's PPO-MC, and the complete update lifecycle in depth.
 - Use the existing experiments as teaching evidence. Completed calculator, asset-status, recovery calibration, A03, P01, and P02 runs are not a backlog to repeat.
+- Give practical lessons a complete reference path: purpose, prediction, copyable command, expected output, figure or table, explanation, one small alteration, and evidence boundary. Reproduce teaching plots from public committed evidence; keep optional implementation challenges separate.
+- Explain Tinker as an optional training-service/API comparison. CMU Assignment 3 uses SkyRL's Tinker-compatible service on Modal. A runnable hosted-Tinker backend is deferred and is not a prerequisite for this guide or recovery PPO-MC.
 - Next, prepare the bounded **recovery-specific PPO-MC qualification** described in the plan. PPO already has live calculator and asset-status evidence.
 - Witness-selection SFT PR #14, additional recovery GRPO seeds, long studies, and final-panel model evaluation are deferred.
 
@@ -23,7 +25,7 @@ Inspect current GitHub main, relevant PRs, and the local working tree. Reconcile
 
 Follow the user's current instructions and any still-applicable authorization in the session. The plan records direction; it does not grant a spending mandate or override the user's scope.
 
-The owner's request to create and push this plan authorizes this documentation change. ChatGPT otherwise retains its read-only repository/cloud role unless the owner extends it. For Codex and other implementation agents, work only within the task actually assigned. Complete already-authorized local work without repeated permission requests.
+The owner authorized creating, updating, and merging this planning PR after final review. ChatGPT otherwise retains its read-only repository/cloud role unless the owner extends it. For Codex and other implementation agents, work only within the task actually assigned. Complete already-authorized local work without repeated permission requests.
 
 There is currently **zero further cloud dispatch authority**. Historical ceilings, unused balances, proposals, and `YES` instructions from closed mandates do not fund new execution. Prepare an exact proposal before requesting new paid authorization; preserve that authority once granted. No cloud execution, resource mutation, deletion, or experiment expansion follows automatically from a documentation task. Do not merge unrelated PRs.
 

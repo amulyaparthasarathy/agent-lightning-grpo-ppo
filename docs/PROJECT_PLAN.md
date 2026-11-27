@@ -1,6 +1,6 @@
 # Project plan: training language models for agent use
 
-**Version 1.0, November 26, 2026.** This is the shared implementation plan for the owner, ChatGPT, Codex, and other contributing agents. [Current continuation](PROJECT_CONTINUATION.md) records progress and the next action. [Agent instructions](../AGENTS.md) provide the session entry point.
+**Version 1.1, November 26, 2026 (America/Los_Angeles).** This is the shared implementation plan for the owner, ChatGPT, Codex, and other contributing agents. [Current continuation](PROJECT_CONTINUATION.md) records progress and the next action. [Agent instructions](../AGENTS.md) provide the session entry point.
 
 ## 1. Goal and completion standard
 
@@ -40,8 +40,10 @@ The repository is already public. This is an educational revision of that public
 | Defer the proposed SFT experiment | PR #14 stays a separate optional intervention. Its proposed budget and CPU results are not full-size execution authority or evidence. |
 | Keep new execution bounded | No automatic extra seeds, longer runs, final-panel evaluation, retries, or changes to the learning algorithm. |
 | Maintain durable continuity | Keep stable direction here and mutable progress in `PROJECT_CONTINUATION.md`. Update both only when their respective content changes. |
+| Adopt CMU-inspired practical teaching | Supply complete runnable examples, expected outputs, reproducible figures, and interpretation exercises within the existing structure. |
+| Add Tinker comparison in the explanation | Distinguish agent logic, training API/backend, and GPU infrastructure. Defer runnable backend integration until after the core guide and disposition of the bounded PPO work. |
 
-The current request authorizes creation and publication of these planning documents. It does not turn every future milestone into an unrestricted implementation or spending mandate. An agent continues the work assigned by the owner and preserves any applicable standing authorization.
+The owner authorized creation, revision, and merge of PR #15 after final review. It does not turn every future milestone into an unrestricted implementation or spending mandate. An agent continues the work assigned by the owner and preserves any applicable standing authorization.
 
 ### The conceptual bridge
 
@@ -176,6 +178,72 @@ Use: a concrete question; a small running example; intuition; exact mechanics an
 
 Diagrams should explain ownership, event order, or tensor relationships. Keep labels short and introduce one relationship at a time. Tables should retain exact comparisons and denominators. Equations and examples must be checked against the pinned implementation. No screenshots or new experiments are required merely to make a page attractive.
 
+
+### Three ways to use the guide
+
+| Path | Reader activity | Requirements | Evidence produced |
+|---|---|---|---|
+| Understand the mechanics | Run synthetic reward, mask, advantage, and weighting examples | Python; no model or account | Checked arithmetic and implementation invariants |
+| Analyze completed experiments | Reproduce tables/figures and inspect public paired cases | Committed evidence and the documented plotting environment | Derived analysis of existing execution |
+| Run a new experiment | Follow the supported baseline, training, checkpoint, and reload workflow | Separately authorized model access, compute, and budget | A new run with its own evidence |
+
+The first two paths should provide a complete learning experience. Do not make a GPU run or an account a requirement for understanding the core material. Keep raw-evidence replay, public derived-data checks, and new execution distinct.
+
+### Practical lesson contract
+
+Each practical lesson supplies:
+
+1. A one-sentence purpose.
+2. A small prediction before execution.
+3. A copyable command with its working directory, prerequisites, and required files.
+4. Expected output, including exact values or an explicit tolerance/invariant.
+5. A figure or table showing those same values.
+6. An explanation connecting the result to the training mechanism.
+7. One optional alteration or implementation challenge, with an answer.
+8. The evidence boundary: synthetic illustration, recorded-data analysis, or new model execution.
+
+Provide a complete working reference path before optional exercises. Required instructions must not depend on unfinished functions or unexplained placeholders. Do not present proposed helper commands as available until they exist and have been checked. Show meaningful setup placeholders clearly when a reader must supply their own values.
+
+Include the example inputs, figure-generation code, rendered figures, and explanations in the public learning path. Keep one implementation of each calculation. An optional notebook should call the same helpers as the command-line path. Use a small documented plotting environment; do not add another training framework or a mandatory notebook service.
+
+### Figure plan from existing evidence
+
+| Figure | What the reader should learn | Existing source |
+|---|---|---|
+| Synthetic token/action-mask strip | Generated actions and observations play different roles in the loss | Current Chapters 2–3; verify concrete schemas against the pinned code |
+| Four-attempt reward/advantage bars | Relative reward, scaling, and constant-group behavior | Current Chapter 4's synthetic example |
+| Fragment-weight comparison | Splitting a rollout must preserve its intended total weight | [CPU accounting example](../experiment/cpu_accounting_demo.py): row mean 5 to 3.5, equal-rollout mean 5 to 5 |
+| Per-seed baseline/reload points | Means can hide differing baselines and seed outcomes | [Calculator per-seed results](../evidence/phase2-r03/per_seed_results.csv) |
+| P02 strict success by actual class | Aggregate reward can conceal class collapse | [Paired development cases](../evidence/phase4c-functional-pilot/diagnosis/development.json): ready 6/12 to 0/12, negative 3/12 to 12/12 |
+| Paired-case outcome grid | Net change hides gains and regressions | Same paired cases: nine strict gains, six regressions, three retained successes, six retained failures; show decision correctness separately |
+| P02 reward-group composition | Successes and positive relative advantages are different counts | [Collections](../evidence/phase4c-functional-pilot/diagnosis/collections.json): ready all-zero/mixed/all-one 30/32/2; negative 6/44/14 |
+| Per-collection class-specific strict rate | Sampled behavior varies with policy, questions, and class denominators | Same collections; show denominator and sampled policy version |
+| Separate scalar-loss and gradient panels | A near-zero scalar policy loss can coexist with a nonzero gradient | Same sixteen recorded actor updates |
+
+Implement figures in their owning M2/M4 lessons, reusing existing plots where appropriate. The P02 class and group figures are the first experimental examples to finish; do not regenerate every historical figure for stylistic consistency. Label axes, units, denominators, sources, and synthetic values. Keep calculations reproducible and preserve original evidence bytes.
+
+P02 collection k samples policy k-1. Training questions and class composition change, so these observations are not repeated evaluations of a fixed panel. Only baseline and terminal greedy development evaluations are available. Do not invent intermediate development scores, missing raw transcripts, entropy, base-reference KL, or the unavailable historical full metric atlas. Use separate scales/panels for loss and gradient norm rather than implying a direct magnitude comparison.
+
+### CMU and Tinker references
+
+The pedagogical reference is [CMU 11-768 Assignment 3](https://github.com/cmu-agents/assignment-3/blob/88d1b1fa2aea58938d6d251847ce5559c4ac6558/ASSIGNMENT.md), inspected at commit `88d1b1fa2aea58938d6d251847ce5559c4ac6558`. Borrow its progression from data to updates and its use of diagnostics and interpretation prompts. This guide supplies a complete reference path, with optional challenges, for its broader beginner audience.
+
+Do not silently import its numerical choices. The assignment's [advantage contract](https://github.com/cmu-agents/assignment-3/blob/88d1b1fa2aea58938d6d251847ce5559c4ac6558/scottyrl/advantages.py) uses mean-centering without reward-standard-deviation normalization; its [batch contract](https://github.com/cmu-agents/assignment-3/blob/88d1b1fa2aea58938d6d251847ce5559c4ac6558/scottyrl/train/common.py) omits constant-reward groups from training sequences; its [adapter](https://github.com/cmu-agents/assignment-3/blob/88d1b1fa2aea58938d6d251847ce5559c4ac6558/scottyrl/tinker_adapter.py) uses a global action-token normalization. Preserve this lab's standardized advantages, declared rollout admission, and equal-real-rollout weighting.
+
+Introduce the following ownership comparison in Modules 3/9, and link the [sequence-extension tutorial](https://tinker-docs.thinkingmachines.ai/tutorials/advanced/sequence-extension/) from Module 5:
+
+| Stack | Agent/data/learning logic | Training and sampling backend | Infrastructure |
+|---|---|---|---|
+| Existing lab | Harness, Agent Lightning adapters, matched GRPO/PPO-MC | VERL and vLLM | Modal |
+| CMU assignment | scottyrl harness and student training/data code | Tinker-compatible API, SkyRL, Megatron, vLLM | Modal |
+| Optional hosted-Tinker example | Our adapted harness, verifier, advantages, loss, and evaluation | Thinking Machines' service through the Tinker API | Managed by Thinking Machines |
+
+CMU's [deployment guide](https://github.com/cmu-agents/assignment-3/blob/88d1b1fa2aea58938d6d251847ce5559c4ac6558/skyrl_tinker_modal/README.md) uses Tinker-compatible APIs on Modal. These are different layers, not interchangeable providers. Hosted Tinker's [current overview](https://tinker-docs.thinkingmachines.ai/tinker/) describes LoRA training; its [model catalog](https://tinker-docs.thinkingmachines.ai/tinker/models.json) did not establish support for this lab's exact pinned Llama checkpoint at the November 26 review. Recheck capabilities when implementing an optional exercise.
+
+A loss named `ppo` is an actor surrogate, not proof that this lab's learned-critic PPO-MC has been ported. A sampling client reload does not by itself prove the distinct physical worker/container identity measured on Modal. Compare the supported model/revision, parameterization, objective, masks, weighting, checkpoint guarantees, and all relevant costs before making parity claims. Hosted token-based charges and Modal resource-time charges require different accounting. No lower-cost outcome is established here.
+
+A future runnable Tinker exercise should be a separately scoped small GRPO example. It is not a prerequisite for M1–M7, does not replace the bounded recovery PPO qualification, and must not rerun the six-run calculator study or P02 simply to claim backend equivalence.
+
 ## 4. Existing experiments to teach from
 
 The following is a reuse index, verified against main `e463dc146db3a4be7e156a06109a749db5f8649e`. The linked reports own the detailed evidence. This plan does not supersede their measurements.
@@ -224,23 +292,23 @@ In the same bounded documentation work, reconcile the mutable current recovery s
 - `docs/TASK_ADAPTATION.md`: update the opening recovery status that still describes only the earlier offline/calibration phase.
 - `docs/learning/source-map.md`: correct the current adaptation footer without changing the historical public-source mapping.
 
-Acceptance: a basic-Python reader can explain what changes during training, who owns the interaction, how an episode earns reward, and where the next lesson begins. The representative lesson is finished content, not another proposed outline. New factual claims link to existing evidence.
+Acceptance: a basic-Python reader can explain what changes during training, who owns the interaction, how an episode earns reward, and where the next lesson begins. The representative lesson is finished content, not another proposed outline. Apply the practical lesson contract to its reader actions, linking an existing credential-free example with its actual expected output. Keep optional challenges after the working reference path. New factual claims link to existing evidence. M1 does not need to implement the entire figure catalog or a new backend.
 
 ### M2. Develop the deep training mechanics
 
-Work through Modules 3–8 using existing Chapters 1 and 3–6. Suggested slices: architecture/tensors; GRPO; PPO-MC/complete update. Keep the same continuous calculator example and consistent notation.
+Work through Modules 3–8 using existing Chapters 1 and 3–6. Suggested slices: architecture/tensors; GRPO; PPO-MC/complete update. Keep the same continuous calculator example and consistent notation. Include runnable token-alignment, mask, advantage, fragment-weight, and update-accounting examples, using the practical lesson contract and relevant synthetic figures.
 
 Acceptance: examples and formulas match the actual masks, normalization, advantages, clipping, and optimizer ordering. Each lesson has a checked exercise and a source pointer. The reader can work from an interaction through the loss to the actual optimizer and serving refresh. Preserve the runtime and numerical backend. A small teaching helper is acceptable only when existing examples cannot demonstrate the concept clearly; it must stay separate from production training and be labeled synthetic.
 
 ### M3. Make execution and task adaptation teachable
 
-Develop Modules 9–10 from the existing reader and adaptation procedures. Keep the canonical commands in one maintained procedure and link from the narrative instead of creating conflicting copies.
+Develop Modules 9–10 from the existing reader and adaptation procedures. Keep the canonical commands in one maintained procedure and link from the narrative instead of creating conflicting copies. Show the three reader paths explicitly, and add the conceptual backend-ownership comparison without implementing a Tinker service.
 
 Acceptance: steps identify the terminal/environment, prerequisites, exact input, expected output/evidence, cost boundary, and relevant failure diagnosis. Public readers can complete the offline route without private resources. Paid commands are explained and locally checked where applicable; running them is not a documentation acceptance gate. The local client and remote GPU dependencies remain separate.
 
 ### M4. Integrate the experiments into the teaching story
 
-Develop Modules 11–12 from the evidence index. Show the completed calculator comparison and recovery failure as different experiments answering different questions. Use asset-status to illustrate how harness fixes can change behavior without training.
+Develop Modules 11–12 from the evidence index. Show the completed calculator comparison and recovery failure as different experiments answering different questions. Use asset-status to illustrate how harness fixes can change behavior without training. Supply the relevant figure-generation helpers, rendered figures, exact expected counts, and interpretation exercises from the figure plan. Prioritize the P02 class/group figures and existing calculator per-seed results.
 
 Acceptance: results have source, task, algorithm, denominator, panel, and execution identity. The all-negative recovery policy is visible alongside aggregate strict reward. Observations, mechanistic explanations supported by code, hypotheses, and proposed interventions are distinguished. No new model run is needed.
 
@@ -366,7 +434,7 @@ That instruction points an agent to the plan. It does not itself authorize paid 
 
 ## 9. Deferred work and reopening conditions
 
-The following require a separate owner decision tied to a concrete new question: witness SFT execution/merge; additional recovery GRPO seeds; the full recovery study; extended PPO studies; final-panel model evaluation; alternative models/frameworks; resumed-training qualification; and new deployment/export campaigns.
+The following require a separate owner decision tied to a concrete new question: witness SFT execution/merge; additional recovery GRPO seeds; the full recovery study; extended PPO studies; final-panel model evaluation; a runnable hosted-Tinker or other alternative-model/framework backend; resumed-training qualification; and new deployment/export campaigns. The documented Tinker ownership comparison is part of the guide; paid integration is not.
 
 Do not keep these as mandatory unfinished tasks in the educational release. Mention them as possible future work with their uncertainties. Reopen one only when its learning or engineering value justifies the time/cost and the owner selects it.
 
