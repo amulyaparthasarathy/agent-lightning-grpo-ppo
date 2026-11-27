@@ -1,211 +1,190 @@
 # 5. PPO-MC step by step
 
-**Opening question: What changes when a learned prediction supplies the baseline?**
+The calculator has returned `36` for `(7+5)*3`. The actor still has to write an answer that the verifier will accept. At this point, how much reward should we expect? A **critic** learns to answer that question from the history the actor can see. If the return is already predictable from the history, the critic can subtract that predictable part. The actor can then give more credit to an unexpectedly good outcome than to an equally good outcome it could already expect.
 
-GRPO asks how an attempt compares with its peers. PPO-MC asks how the actual outcome compares with the critic's prediction at a particular history. The actor still uses the clipped surrogate from Chapter 4. The new pieces are a separate value model, token-level residuals, token whitening and a critic optimizer call.
+In [Chapter 4](04-grpo-step-by-step.md), GRPO compared four attempts using the same group average at every action. Here we work through the lab's version of proximal policy optimization with Monte Carlo returns (**PPO-MC**). Keep the same four synthetic attempts. A, B and C earn 0. D earns 1. PPO-MC can assign different advantages even to two actions in D, because calling the calculator and writing the answer happen with different information.
 
-## Reuse the synthetic calculator attempts
+## What could the critic know before token 40?
 
-For our **synthetic** `(7+5)*3` task, keep rewards `[0,0,0,1]`. At one representative **later** action position in each rollout, suppose values are `[0.1,0.2,0.6,0.4]`. These histories may differ because the attempts have diverged. They are not measured predictions, and they are not four different values asserted for the same identical initial history.
+The actor predicts which token to generate next. The critic reads the same preceding history and predicts the **return**, the total future reward under the collecting policy. With a single binary terminal reward, the expected return is the chance of eventual scored success given that history. The critic emits a scalar from a linear head, so its estimate can fall outside the interval from 0 to 1. The verifier supplies the actual score once the attempt ends.
 
-| Rollout | Reward $R_\rho$ | Illustrative old value $V_{\mathrm{old}}$ | Raw residual $R_\rho-V_{\mathrm{old}}$ |
-|---|---:|---:|---:|
-| A | 0 | 0.1 | -0.1 |
-| B | 0 | 0.2 | -0.2 |
-| C | 0 | 0.6 | -0.6 |
-| D | 1 | 0.4 | +0.6 |
+Use D's invented IDs from [Chapter 3](03-trajectories-tokens-and-fragments.md#line-up-each-prediction-with-its-target). At the input ending in observation `30`, the actor scores target `40` and the critic supplies its value for that same decision. Both use the output **one position before the target**. During training the complete sequence is available, but the causal model can see only the prefix through that input position. [Pinned response slice for log probabilities and values](https://github.com/verl-project/verl/blob/7aed6b230776f963fa09509c10d9c3a767d1102c/verl/workers/utils/padding.py#L137)
 
-The critic expected more from C than from A, so C has a more negative residual. That distinction helps only if the predictions are useful. A critic is a learned predictor of the scorer's return, not an independent verifier of arithmetic correctness. Its linear output is not constrained to the interval [0,1].
+**Predict.** Suppose the critic estimates 0.4 just before D writes its first answer token. D goes on to earn 1. What return should the critic learn to predict at that position? By how much did this particular outcome exceed its prediction?
 
-```mermaid
-flowchart TD
-    R[Terminal reward for rollout] --> A[Raw reward minus old value]
-    V[Old critic value at each action history] --> A
-    A --> W[Whiten all valid generated tokens]
-    W --> P[Rollout-weighted actor surrogate]
-    R --> T[Unwhitened return targets]
-    V --> L[Separate clipped value loss]
-    T --> L
-```
+| History ends in | Next response ID | What happens | Old value | Realized return target | Return minus old value |
+|---|---:|---|---:|---:|---:|
+| Question and tool instructions, `11` | 20 | Start the tool request | 0.1 | 1 | +0.9 |
+| Request token `20` | 21 | Finish the request | 0.2 | 1 | +0.8 |
+| Request token `21` | 30 | Harness inserts the observation | excluded | excluded | excluded |
+| Tool observation `30` | 40 | Start the final answer | 0.4 | 1 | +0.6 |
+| Answer token `40` | 41 | Finish the answer | 0.8 | 1 | +0.2 |
 
-## Derive the terminal Monte Carlo target from general GAE
+The target at `40` is **1**. We observed the rest of this attempt, so we can use its actual outcome as a **Monte Carlo** sample of the return. Its **raw advantage** is **+0.6**. The final token gets the same realized return and a smaller residual because success was already more expected. These are illustrative predictions. One successful attempt supplies one training example for a history where other continuations could fail.
 
-For this derivation, $t=1,\ldots,T$ enumerates generated actions in a complete rollout; observations enter the histories but are not additional actions. Let $r_t$ be reward after action $t$, $h_t$ the history before it, $V_t=V_{\mathrm{old}}(h_t)$ the pre-update value, $\gamma$ the discount and $\lambda$ the GAE mixing parameter. For terminal bootstrap $V_{T+1}=0$, the return is
+## How a terminal score reaches an earlier action
+
+Follow D backward. After the last action there are no further rewards. Before the last action there is one reward still to come. Each time we move one action earlier, we add its immediate reward (zero here) to what follows. With no discount, all four actions have return 1. A tool observation changes the next history. Splitting the stored episode at a context change leaves its single scored outcome intact.
+
+For the general case, index **generated actions** by $t=1,\ldots,T$. Write $r_t$ for the reward after action $t$, $V_t$ for the cached critic prediction from the history before it, and $\gamma$ for the discount applied per action. The sampled return at a true terminal endpoint uses zero future value, $V_{T+1}=0$.
 
 $$
 G_t=\sum_{k=t}^{T}\gamma^{k-t}r_k.
 $$
 
-A one-step temporal-difference residual is $\delta_t=r_t+\gamma V_{t+1}-V_t$. Generalized advantage estimation combines these residuals:
+A one-step prediction error compares the old prediction with the reward just received plus the discounted prediction of what remains. **Generalized advantage estimation** (GAE) combines these errors. Its parameter $\lambda$ controls how much weight later errors receive.
 
 $$
+\delta_t=r_t+\gamma V_{t+1}-V_t,\qquad
 \widehat A_t^{\mathrm{GAE}}=\sum_{l=0}^{T-t}(\gamma\lambda)^l\delta_{t+l}.
 $$
 
-At $\gamma=\lambda=1$, expand the sum:
+For D, set $\gamma=\lambda=1$. Starting before target `40`, the next two one-step errors are $0+0.8-0.4=0.4$ and $1+0-0.8=0.2$. Their sum is 0.6. The intermediate 0.8 occurs once with each sign and cancels. The same cancellation works from every action in rollout $\rho$. All earlier rewards are zero, leaving its terminal score $R_\rho$.
 
 $$
-\widehat A_t=\sum_{k=t}^{T}r_k+(V_{t+1}-V_t)+(V_{t+2}-V_{t+1})+\cdots+(V_{T+1}-V_T).
+\widehat A_t=\sum_{k=t}^{T} r_k+V_{T+1}-V_t=R_\rho-V_t,\qquad
+\widehat G_t=\widehat A_t+V_t=R_\rho.
 $$
 
-The intermediate values cancel. With zero terminal bootstrap and terminal-only reward $r_T=R_\rho$, this gives
+Check the cancellation on a CPU. Paste this and the later commands into a Unix shell at the repository root with Python 3.12. The examples use the standard library.
+
+```bash
+python3 - <<'PY'
+rewards = [0, 0, 0, 1]           # D's four actions, in time order
+old_values = [0.1, 0.2, 0.4, 0.8]
+next_value = advantage = 0.0     # true terminal endpoint
+backward = []
+for reward, old in reversed(list(zip(rewards, old_values, strict=True))):
+    delta = reward + next_value - old
+    advantage = delta + advantage
+    backward.append((round(advantage, 2), round(advantage + old, 2)))
+    next_value = old
+print("D (raw advantage, return):", backward[::-1])
+PY
+```
+
+```text
+D (raw advantage, return): [(0.9, 1.0), (0.8, 1.0), (0.6, 1.0), (0.2, 1.0)]
+```
+
+The matched configuration selects `adv_estimator=gae`, `gamma=1`, `lam=1`. Its executed override looks up the terminal reward by real rollout ID, broadcasts it across the fragments and **directly subtracts the old values**. The backward walk explains the result. The runtime computes it without running a recurrence or adding a reward per fragment. This relies on a complete, scored episode. A prematurely cut trace could need a nonzero estimate of its remaining return. The matched collector rejects incomplete token data, and the harness defines the bounded task's scored endpoint. [Matched advantage calculation](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/blob/89fe32f92f29209803c13264baed951713741d42/experiment/matched_runtime.py#L117) · [PPO configuration](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/blob/89fe32f92f29209803c13264baed951713741d42/experiment/ppo_contract.py#L69) · [Pinned generic GAE](https://github.com/verl-project/verl/blob/7aed6b230776f963fa09509c10d9c3a767d1102c/verl/trainer/ppo/core_algos.py#L216) · [GAE paper](https://arxiv.org/abs/1506.02438v6)
+
+## Which positions set the scale? Which attempts set the loss?
+
+First, **whiten** the raw advantages. Subtract the mean and divide by the spread across all valid generated tokens in the collection. This puts the numbers the actor receives on a common scale. Second, **weight** each token's loss so that a long attempt and a short one each get the same total influence in the reduction. The two operations answer different counting questions.
+
+Here is the complete arithmetic fixture. It keeps Chapter 4's masks and lengths. The first token in each attempt has the same prompt and the same old value, 0.1. Later histories can diverge. D's masked observation is marked with a dash.
+
+| Attempt | Terminal score | Old values in response order | Raw advantages at generated positions | Weight per generated token |
+|---|---:|---|---|---:|
+| A | 0 | 0.1, 0.1 | −0.1, −0.1 | 1/8 |
+| B | 0 | 0.1, 0.3, 0.2 | −0.1, −0.3, −0.2 | 1/12 |
+| C | 0 | 0.1, 0.6 | −0.1, −0.6 | 1/8 |
+| D | 1 | 0.1, 0.2, —, 0.4, 0.8 | +0.9, +0.8, +0.6, +0.2 | 1/16 |
+
+There are $M=11$ valid positions here. Each contributes once to the mean and sample variance. In the study these statistics span **all 32 real rollouts** across eight questions. For a generated position $i$, let $a_i=R_{\rho(i)}-V_i$. With the sums over valid positions, the matched calculation is
 
 $$
-\widehat A_t=R_\rho-V_t,\qquad \widehat G_t=\widehat A_t+V_t=R_\rho.
+\mu=\frac{1}{M}\sum_i a_i,\qquad
+s^2=\frac{1}{M-1}\sum_i(a_i-\mu)^2,\qquad
+\widetilde A_i=\frac{a_i-\mu}{\sqrt{s^2+10^{-8}}}.
 $$
 
-This is the Monte Carlo specialization. The matched configuration says `adv_estimator=gae`, `gamma=1`, `lam=1`, but **the executed override directly computes `targets - values`**, then whitens it. It does not call the generic GAE recurrence to build those residuals.
+The fixture gives $\mu=1/11$ and $s^2\approx0.228909$. At `40`, whitening takes the raw +0.6 to about +1.064054. The runtime requires at least two valid tokens. It excludes observation and padding positions from both statistics and zeros their policy advantages. Critic return targets keep their original reward scale.
 
-A nonterminal truncation can need a nonzero bootstrap, so the derivation cannot simply drop that term. Matched collection rejects missing/truncated token data. The harness's configured stopping horizon is a separate issue: its scored endpoint defines this bounded task. Copying its outcome onto fragments does not mean adding the same reward repeatedly along a stitched trajectory.
+For the loss, let $N$ count real rollouts, $L_\rho$ count all generated targets in rollout $\rho$ across its fragments, and $m_i$ be the target mask. The weight is $w_i=m_i/(N L_{\rho(i)})$. D contributes four samples to whitening. Its four loss weights sum to $4/16=1/4$, exactly the share A gets from its two tokens. Centering under a token average need not give a zero mean under these rollout weights. [Matched weights and actor normalization](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/blob/89fe32f92f29209803c13264baed951713741d42/experiment/matched_runtime.py#L102)
 
-## Whitening and rollout weighting are different operations
+## What does each optimizer minimize?
 
-Let $\mathcal M$ be **all valid generated-token positions in the complete collection**, and $M=|\mathcal M|$. For raw residual $a_i=R_{\rho(i)}-V_i$,
+| Training question | Actor | Critic |
+|---|---|---|
+| Output being trained | Probability of the sampled token given its history | Predicted return from that history |
+| Fixed information for this update | Old token log probability and whitened advantage | Cached old value and unwhitened return |
+| What clipping compares | Current/old token probability ratio in the Chapter 4 surrogate | Change in the predicted value from its old value |
+| Parameters updated | Actor's language model | Separate critic backbone and scalar head |
 
-$$
-\mu_a=\frac1M\sum_{i\in\mathcal M}a_i,\qquad
-s_a^2=\frac1{M-1}\sum_{i\in\mathcal M}(a_i-\mu_a)^2,\qquad
-\widetilde A_i=\frac{a_i-\mu_a}{\sqrt{s_a^2+10^{-8}}}.
-$$
+The actor uses the [Chapter 4 clipped surrogate](04-grpo-step-by-step.md#how-clipping-changes-the-objective), including the asymmetric ratio bounds and dual clipping. The trainer weights each advantage once before summing the masked surrogate. When every ratio equals 1, the actor loss simplifies to $-\sum_i w_i\widetilde A_i$. At `40` its contribution is about $-1.064054/16=-0.066503$.
 
-The runtime requires at least two valid tokens and uses unbiased sample variance. Observation/padding positions are excluded and masked out. **The four table entries are not the whitening population of a real collection.** Whitening only them is a small arithmetic illustration; real execution includes every valid generated token across all 32 rollouts.
+The critic starts from a separate copy of the prepared Llama backbone. Its token-classification head (`score.weight`, `score.bias`) produces one value per position. The loading check permits the unused language-model output weight. The new head uses a normally initialized weight and zero bias. Critic construction uses the job's dedicated seed inside a saved-and-restored random-generator context. Its optimizer trains both the backbone and head. [Critic construction](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/blob/89fe32f92f29209803c13264baed951713741d42/experiment/ppo_runtime.py#L379) · [Matched seed and optimizer setup](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/blob/89fe32f92f29209803c13264baed951713741d42/experiment/matched_runtime.py#L297)
 
-After whitening, Chapter 3's $w_{\rho,j,t}=m_{\rho,j,t}/(N L_\rho)$ scales the actor contribution. Whitening treats valid tokens uniformly; loss weighting gives complete rollouts equal total weight. Return targets remain $R_\rho$ and are never whitened. Even when all rewards are zero, differing values can produce nonzero whitened advantages. This proves a mechanism, not useful learning.
-
-## A fully specified synthetic collection
-
-To finish the arithmetic, define a separate **synthetic toy collection**, motivated by the same calculator task. It has **$N=4$ complete toy rollouts** A–D with rewards `[0,0,0,1]`, one fragment each, and generated-token counts $L_A=2$, $L_B=1$, $L_C=1$, $L_D=2$. The table below specifies every position used in this toy. It is an arithmetic fixture, not a possible full tokenization of the calculator transcript or a study batch. Here $M=6$ valid generated positions; the actual study uses $N=32$ and many more tokens.
-
-The old values are assigned to distinct synthetic histories. They do not assert different predictions for identical histories. The masked observation's deliberately irrelevant value 9 shows that it contributes neither to whitening statistics nor to either loss. Its raw residual is shown before masking.
-
-| Rollout | Position | Kind | $R_\rho$ | Old $V_i$ | Mask $m_i$ | Raw $R_\rho-V_i$ |
-|---|---|---|---:|---:|---:|---:|
-| A | 1 | Generated | 0 | 0.1 | 1 | -0.1 |
-| A | 2 | Observation | 0 | 9.0 | 0 | -9.0 (excluded) |
-| A | 3 | Generated | 0 | 0.3 | 1 | -0.3 |
-| B | 1 | Generated | 0 | 0.2 | 1 | -0.2 |
-| C | 1 | Generated | 0 | 0.6 | 1 | -0.6 |
-| D | 1 | Generated | 1 | 0.4 | 1 | +0.6 |
-| D | 2 | Generated | 1 | 0.8 | 1 | +0.2 |
-
-Over the six valid residuals, the sum is $-0.4$, so $\mu_a=-0.4/6=-1/15$. The sum of squared deviations is $0.873333\ldots$, giving sample variance
-
-$$
-s_a^2=\frac{0.873333\ldots}{6-1}=\frac{131}{750}=0.174666\ldots,
-\qquad \sqrt{s_a^2+10^{-8}}\approx0.417931426.
-$$
-
-Subtract this mean and divide by that square root, then apply the **separate** weights $w_i=m_i/(4L_{\rho(i)})$. For an illustrative actor ratio $u=1$, clipping is inactive and each token's loss contribution is $-w_i\widetilde A_i$:
-
-| Position | Whitened $\widetilde A_i$ | $w_i$ | Actor coefficient $w_i\widetilde A_i$ | Loss at $u=1$ |
-|---|---:|---:|---:|---:|
-| A:1 | -0.079758 | 1/8 | -0.009970 | +0.009970 |
-| A:2, masked | 0 | 0 | 0 | 0 |
-| A:3 | -0.558305 | 1/8 | -0.069788 | +0.069788 |
-| B:1 | -0.319032 | 1/4 | -0.079758 | +0.079758 |
-| C:1 | -1.276126 | 1/4 | -0.319032 | +0.319032 |
-| D:1 | +1.595158 | 1/8 | +0.199395 | -0.199395 |
-| D:2 | +0.638063 | 1/8 | +0.079758 | -0.079758 |
-
-Numbers are rounded for display. Each rollout's weights sum to $1/4$, although A and D each supply twice as many valid tokens to whitening as B or C. The weighted actor coefficients need not sum to zero: token centering and equal-rollout reduction use different populations. Apply the weight **once**, either to the advantage before the native surrogate or to the resulting unweighted surrogate, not both.
-
-## What is the critic, and how does it train?
-
-The critic has a **separate Llama backbone**, loaded from the same prepared base directory, and a token-classification head. It does not share the actor's live backbone. The constructor must yield `LlamaForTokenClassification`. Only `score.weight` and `score.bias` may be newly missing; the unused `lm_head.weight` is allowed. Other loading mismatches fail rather than silently selecting another model.
-
-The new head weight uses Transformers' normal initialization with `initializer_range`; the bias starts at zero. Matched initialization uses the job's dedicated critic seed inside a forked Torch RNG context. This replaces the legacy smoke's fixed seed and avoids advancing actor/data RNG state through critic construction. The critic learns its backbone and head, not just the head.
-
-For updated prediction $v_i=V_\phi(h_i)$, cached old value $V_i$ and target $R_{\rho(i)}$, define
+The critic tries to reduce squared prediction error. For each target it scores both a candidate prediction $v_i$ and a version with the change from $V_i$ clipped to ±0.5. Taking the larger squared error limits the improvement credited to a large jump. On the study's single GPU the objective is
 
 $$
 v_i^{\mathrm{clip}}=V_i+\mathrm{clip}(v_i-V_i,-0.5,0.5),
 $$
 
 $$
-\mathcal L_V=\frac12\sum_i w_i\max\{(v_i-R_{\rho(i)})^2,(v_i^{\mathrm{clip}}-R_{\rho(i)})^2\}.
+\mathcal L_V=\frac12\sum_i w_i\max\bigl((v_i-R_{\rho(i)})^2,(v_i^{\mathrm{clip}}-R_{\rho(i)})^2\bigr).
 $$
 
-This is the matched single-GPU value objective. The source also includes data-parallel scaling for its backend contract. Actor and critic have separate loss reductions and optimizers; the critic target does not inherit the actor's weighted advantage.
+Take C's last action. Its old prediction was 0.6 and its target is 0. A candidate value of 0 has squared error 0. The clipped candidate is 0.1 with squared error 0.01. This position contributes $0.5\times(1/8)\times0.01=0.000625$. The critic uses its own rollout-weighted reduction and optimizer. In particular the target for C is still 0 after actor whitening. The backend also scales this loss by the data-parallel size, which was one here. [Matched clipped value loss](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/blob/89fe32f92f29209803c13264baed951713741d42/experiment/matched_runtime.py#L167)
 
-### One synthetic clipped-value-loss contribution
+## Check the two losses on a CPU
 
-Continue with toy position **C:1**: old value $V_i=0.6$, candidate value $v_i=0$, unwhitened return target $R_C=0$, and weight $w_i=1/4$. The candidate change is $-0.6$, clipped to $-0.5$, so $v_i^{\mathrm{clip}}=0.6-0.5=0.1$. The candidate squared error is $(0-0)^2=0$; the clipped squared error is $(0.1-0)^2=0.01$. The maximum selects 0.01, so this token contributes
-
-$$
-\frac12\times\frac14\times\max(0,0.01)=0.00125.
-$$
-
-This limits the apparent improvement in the clipped objective; it does not prohibit the candidate value itself. This is one token's contribution, not the full critic loss.
-
-The following standard-library calculation checks the entire toy collection and this value-loss case. It uses the implementation's `sqrt(sample_variance + 1e-8)` convention. Return targets stay unwhitened.
+Predict D's total weight if its request and answer occupy separate rows. Then run the calculation with all actor ratios equal to 1 and the critic still at its old values. The last line checks the separate hypothetical change to C.
 
 ```bash
 python3 - <<'PY'
-from math import isclose, sqrt
+from math import sqrt
 from statistics import mean, variance
-# rollout, position, terminal reward, old value, generated-token mask
-rows = [("A", 1, 0, .1, 1), ("A", 2, 0, 9., 0),
-        ("A", 3, 0, .3, 1), ("B", 1, 0, .2, 1),
-        ("C", 1, 0, .6, 1), ("D", 1, 1, .4, 1),
-        ("D", 2, 1, .8, 1)]
-lengths = {rid: sum(m for r, _, _, _, m in rows if r == rid)
-           for rid in {r[0] for r in rows}}
-N = len(lengths)
-valid = [reward - old for _, _, reward, old, mask in rows if mask]
-mu, var = mean(valid), variance(valid)
-assert N == 4 and len(valid) == 6
-assert isclose(mu, -1/15) and isclose(var, 131/750)
-print("mean, sample variance:", round(mu, 9), round(var, 9))
-totals = dict.fromkeys(lengths, 0.)
-for rid, pos, reward, old, mask in rows:
-    z = (reward - old - mu) / sqrt(var + 1e-8) if mask else 0.
-    w = mask / (N * lengths[rid])
-    totals[rid] += w
-    print(f"{rid}:{pos}", *(round(x, 6) for x in (z, w, w*z, -w*z)))
-assert all(isclose(total, 1/N) for total in totals.values())
-old, candidate, target, weight = .6, 0., 0., 1/4
-clipped = old + min(max(candidate - old, -.5), .5)
-errors = (candidate - target)**2, (clipped - target)**2
-contribution = .5 * weight * max(errors)
-assert isclose(clipped, .1) and isclose(contribution, .00125)
-print("clipped, errors, maximum, half, weight, contribution:",
-      *(round(x, 6) for x in (clipped, *errors, max(errors), .5,
-                              weight, contribution)))
+
+# Terminal reward for each attempt. None marks the tool observation.
+rewards = [0, 0, 0, 1]
+values = [[.1, .1], [.1, .3, .2], [.1, .6], [.1, .2, None, .4, .8]]
+raw = [[r - v for v in episode if v is not None]
+       for r, episode in zip(rewards, values, strict=True)]
+valid = [a for episode in raw for a in episode]
+center, spread = mean(valid), sqrt(variance(valid) + 1e-8)
+print(f"valid tokens {len(valid)}, mean {center:.6f}, sample variance {variance(valid):.6f}")
+
+actor_loss = critic_loss = 0.0
+for name, residuals in zip("ABCD", raw, strict=True):
+    weight = 1 / (len(raw) * len(residuals))
+    whitened = [(a - center) / spread for a in residuals]
+    actor_loss -= weight * sum(whitened)
+    critic_loss += 0.5 * weight * sum(a*a for a in residuals)
+    print(f"{name} total weight {weight * len(residuals):.2f}")
+    if name == "D":
+        print(f"token 40 whitened advantage {whitened[2]:.6f}")
+print(f"actor loss {actor_loss:.6f}, critic loss at old values {critic_loss:.6f}")
+
+old, candidate, target = values[2][-1], 0.0, rewards[2]
+clipped = old + max(-.5, min(.5, candidate - old))
+weight = 1 / (len(raw) * len(raw[2]))
+loss = .5 * weight * max((candidate - target)**2, (clipped - target)**2)
+print(f"C last action with candidate zero: clipped {clipped:.1f}, contribution {loss:.6f}")
 PY
 ```
 
-**Answer key:** Mean `-0.066666667`, sample variance `0.174666667`; each printed row matches the preceding whitening/weight table. The last line is `0.1 0.0 0.01 0.01 0.5 0.25 0.00125`. These toy results do not extend the recorded experiment's evidence.
-
-## Source, predictive evidence and historical limits
-
-Read [`matched_runtime.advantages`](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/blob/89fe32f92f29209803c13264baed951713741d42/experiment/matched_runtime.py#L117), [`value_loss`](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/blob/89fe32f92f29209803c13264baed951713741d42/experiment/matched_runtime.py#L167), [`ppo_runtime._instrument_engine`](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/blob/89fe32f92f29209803c13264baed951713741d42/experiment/ppo_runtime.py#L379), and [`ppo_contract.overrides`](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/blob/89fe32f92f29209803c13264baed951713741d42/experiment/ppo_contract.py#L69). The [pinned generic GAE](https://github.com/verl-project/verl/blob/7aed6b230776f963fa09509c10d9c3a767d1102c/verl/trainer/ppo/core_algos.py#L216) skips observation gaps. [GAE's paper](https://arxiv.org/abs/1506.02438v6) supplies method attribution; the direct matched override defines this execution.
-
-[`prediction_metrics`](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/blob/89fe32f92f29209803c13264baed951713741d42/experiment/ppo_math.py#L101) reports pre-update valid-token MSE, mean squared prediction error, and explained variance. Qualified EV uses $1-\mathrm{Var}(V-R)/(\mathrm{Var}(R)+10^{-5})$ only when target sample variance exceeds $10^{-8}$. Constant targets make qualified EV undefined. This token-population diagnostic differs from the clipped, half-scaled, rollout-weighted training loss.
-
-The [scientific analysis](../../evidence/phase2-r03/SCIENTIFIC_ANALYSIS.md) reports decreasing critic MSE, but no win over the recorded earlier-data constant predictor in 57 comparable steps; all 51 defined EV observations were negative. There is no earlier-data predictor comparison at the first step. The predictor is the mean of earlier rollout rewards, evaluated on current valid tokens. These findings do not establish that the critic caused either arm's endpoint performance.
-
-The [2026-11-14 PPO smoke contract](../PHASE2_PPO_PROTOCOL.md) preserves legacy row retention/reductions and generic GAE plumbing. Its pre-execution language describes that review date. Final matched-v2 retains complete collections, directly constructs residuals, and supplies separate rollout-weighted actor/critic reductions. Standalone `ppo_math` ports are not automatically identical to this final runtime.
-
-## Offline exercise and answer
-
-Check raw residuals and a separate three-action GAE telescoping example:
-
-```bash
-python3 - <<'PY'
-rewards, values = [0, 0, 0, 1], [0.1, 0.2, 0.6, 0.4]
-print([round(r-v, 6) for r, v in zip(rewards, values)])
-r, v = [0, 0, 1], [0.1, 0.2, 0.4]
-next_value = advantage = 0.0
-raw = []
-for reward, value in reversed(list(zip(r, v))):
-    delta = reward + next_value - value
-    advantage = delta + advantage
-    raw.append(advantage)
-    next_value = value
-print([round(x, 6) for x in reversed(raw)])
-PY
+```text
+valid tokens 11, mean 0.090909, sample variance 0.228909
+A total weight 0.25
+B total weight 0.25
+C total weight 0.25
+D total weight 0.25
+token 40 whitened advantage 1.064054
+actor loss 0.203073, critic loss at old values 0.088021
+C last action with candidate zero: clipped 0.1, contribution 0.000625
 ```
 
-**Answer:** `[-0.1, -0.2, -0.6, 0.6]` and `[0.9, 0.8, 0.6]`. In the second example each value plus raw advantage equals terminal return 1. These are synthetic calculations, before full-collection whitening and rollout weighting.
+D keeps a quarter of the weight if it splits, provided all four generated targets and their original histories are preserved and the two fragments carry D's ID. The actor loss is nonzero at ratio 1 because the negative and positive whitened advantages receive different weights. Each of A's two negative coefficients gets twice the weight of each of D's four positive ones.
 
-Next: [one complete training update](06-one-complete-training-update.md).
+**Optional alteration.** In this last command, change D's terminal score to 0, leaving the old predictions fixed. All four returns are now zero. Predict whether the actor still gets a signal. At `40` the raw advantage becomes −0.4. The new token mean is −0.272727 and the whitened advantage is −0.536954. Across attempts the actor loss becomes −0.069516. Values varied across histories, so even a constant-reward collection can yield different actor coefficients. How informative those differences are depends on the critic.
+
+## Did the trained critic predict well?
+
+In the recorded calculator r03 study, each of three PPO-MC runs completed 20 actor updates and 20 critic updates. To test prediction quality, the audit examined the critic **before** each update on newly collected rollouts. It measured mean squared error (MSE) over valid generated tokens. Each token counts once here. The training loss above also has a factor of one half, clipping and equal-rollout weights. [Recorded update counts](../../evidence/phase2-r03/per_seed_results.csv) · [Prediction metric definitions](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/blob/89fe32f92f29209803c13264baed951713741d42/experiment/ppo_math.py#L101)
+
+| Recorded PPO-MC seed | Pre-update MSE, first → last collection | Steps with defined explained variance | Steps beating the earlier-data constant on MSE |
+|---|---:|---:|---:|
+| 2001 | 4.073710 → 0.189495 | 14/20 | 0/19 |
+| 2002 | 2.447244 → 0.151124 | 19/20 | 0/19 |
+| 2003 | 3.163390 → 0.376402 | 18/20 | 0/19 |
+
+For seed 2001 the first-to-last error fell substantially. Would you choose this critic over always predicting one number? The audit used the mean reward of all earlier real rollouts in that run, a number it could compute *before* the new collection. It scored that constant and the critic on the same current tokens. The constant had smaller MSE on all 57 comparable steps. Each run's first collection lacked earlier data. [Recorded per-seed critic comparison](../../evidence/phase2-r03/SCIENTIFIC_ANALYSIS.md#training-signal-and-critic-behavior)
+
+**Explained variance** asks how much of the variation in returns the predictions account for. The audit computes $1-\mathrm{Var}(V-R)/(\mathrm{Var}(R)+10^{-5})$ using sample variances over valid tokens. A negative value means the residuals varied even more than the targets. All 51 defined values were negative. On nine collections every target was the same, so there was no variation to explain. The audit leaves this metric undefined when target variance is at or below $10^{-8}$. Those nine collections are excluded from the count of 51. [Prediction metrics](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/blob/89fe32f92f29209803c13264baed951713741d42/experiment/ppo_math.py#L101)
+
+The optimizer ran, and final pre-update MSE was smaller than initial MSE in each run. The constant comparison shows that the learned critic was a worse predictor of return by MSE on every comparable collection. The study did not isolate the critic's effect on final answer accuracy. The numerical exercises above are synthetic, and the historical [PPO smoke contract](../PHASE2_PPO_PROTOCOL.md) documents an earlier reduction and collection path. The matched override and the [r03 analysis](../../evidence/phase2-r03/SCIENTIFIC_ANALYSIS.md) describe the study used here.
+
+Follow one collection through the two optimizers, policy refresh and checkpoint in [Chapter 6 · One complete training update](06-one-complete-training-update.md).
