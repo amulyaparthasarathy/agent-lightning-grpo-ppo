@@ -85,4 +85,10 @@ Return to the [learning index](README.md).
 
 [Task adaptation](../TASK_ADAPTATION.md) maps the calculator and synthetic asset workflows, shared instrumentation, fork provenance and v2 evidence rules. These later changes did not execute r03 or the completed reference qualification; the frozen citations above retain their original source identities.
 
-Phase 4A adds `experiment/recovery_task.py` (world, tools, verifier), `recovery_agent.py` (the `recovery-episode-v1` harness), `recovery_prompt.py` (effective-prompt rendering), `recovery_calibration.py` (zero-optimization calibration and its report) and `reader_modes.py` (closed phase and stage dispatch). See the [task](../PHASE4A_RECOVERY_TASK.md) and [calibration](../PHASE4A_CALIBRATION.md) guides. None of it has been run against a model, and it changes no numerical path.
+Phase 4A adds `experiment/recovery_task.py` (world, tools, verifier), `recovery_agent.py` (the `recovery-episode-v1` harness), `recovery_prompt.py` (effective-prompt rendering), `recovery_calibration.py` (zero-optimization calibration and its report) and `reader_modes.py` (closed phase and stage dispatch). See the [task](../PHASE4A_RECOVERY_TASK.md) and [calibration](../PHASE4A_CALIBRATION.md) guides. The later [live calibration](../PHASE4B_LIVE_CALIBRATION.md) records both collection routes with zero optimization.
+
+| Later recovery evidence | What it establishes |
+|---|---|
+| [A03 qualification](../PHASE4C_GRPO_CAMPAIGN_CLOSEOUT.md) and [P02 pilot](../PHASE4C_FUNCTIONAL_PILOT_CLOSEOUT.md) | Recovery GRPO completed its recorded functional gates at two and 16 actor updates respectively, including fresh-worker checkpoint reload. |
+| [P02 paired decisions](../PHASE4C_PILOT_LEARNING_DIAGNOSIS.md) | The terminal greedy policy answered `not_ready` on all 24 development cases. Strict success rose from 9/24 to 12/24. Decision accuracy stayed at 12/24. |
+| [Recovery qualification](../PHASE4C_RECOVERY_LEARNING.md), [full study protocol](../PHASE4C_LEARNING_STUDY_PROPOSAL.md) and [draft PR #14](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/pull/14) | Recovery PPO-MC live training and reload remain unqualified. The full recovery study remains unexecuted. Witness-selection SFT is deferred. |

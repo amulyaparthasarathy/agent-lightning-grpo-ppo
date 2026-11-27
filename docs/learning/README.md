@@ -1,40 +1,32 @@
-# Learn how a calculator experience becomes a weight update
+# From a calculator request to a model update
 
-The question for this guide is: **How does one calculator-agent experience become a model-weight update, and what changes between GRPO and this lab's PPO-MC?**
+**Start with [Chapter 1 · Why train through the agent harness?](01-agent-training-and-frameworks.md)**
 
-You need Python and basic machine learning. The public educational snapshot needs no account to read; the private historical repository is not a prerequisite. The exercises use Python's standard library, with no model, cloud service or dataset download.
+All you need to start is basic Python. In Chapter 2 you'll trace one attempt at `(7+5)*3`, predict its reward and check the result in a terminal. Have Python 3.12 and a [local copy of the repository](../../README.md#credential-free-offline-quick-start) for that exercise. No packages, model or account are required.
 
-## Guide revision and implementation plan
+## Read the chapters in order
 
-The [project plan](../PROJECT_PLAN.md) maps the agreed twelve learning modules onto the existing material, with brief foundations and deeper agent-training mechanics. The eight chapters below remain the current guide. Contributors should read the [current continuation](../PROJECT_CONTINUATION.md) for the next unfinished task and reuse the completed experiments.
+| Chapter | What you'll do |
+|---|---|
+| [1 · Model and harness](01-agent-training-and-frameworks.md) | Identify who chooses the calculation, who performs it and what training can change. Compare learning from a demonstration with learning from an outcome. |
+| [2 · One calculator task](02-follow-one-calculator-task.md) | Follow two model calls in one attempt. Separate the tool's result from the model's final answer and score that answer. |
+| [3 · Trajectories, tokens and fragments](03-trajectories-tokens-and-fragments.md) | Mark which pieces of text the model generated. See why one attempt can occupy several training rows. |
+| [4 · GRPO](04-grpo-step-by-step.md) | Compare four attempts at the same question and work out which actions the trainer should encourage. |
+| [5 · PPO-MC](05-ppo-mc-step-by-step.md) | Compare an outcome with a second model's prediction of that outcome. |
+| [6 · One complete training update](06-one-complete-training-update.md) | Follow the calculations that change the model's weights and see when the next attempt can use them. |
+| [7 · Read the results](07-read-the-experiment-results.md) | Read the six measured calculator runs. Compare each run's final score with its own starting score. |
+| [8 · Reproduce and operate](08-reproduce-and-operate.md) | Check the committed evidence locally. Find the prerequisites for a separately authorized run in the [reader procedure](../READER_TRAINING.md). |
 
-## Reading paths and chapter contracts
+**What counts as evidence?** The calculator dialogue and four rewards `[0, 0, 0, 1]` in the worked examples are invented to explain the mechanics. Chapter 7 uses measured results from three seed pairs on the same 64 development questions. That comparison leaves open how the policies would perform on fresh questions or with other seeds. A new measurement requires separate model execution. [Calculator closeout](../PHASE2_CLOSEOUT_2026-11-15.md)
 
-Read Chapters 1–5 then 7 for the mechanisms and findings. Read all eight for the implementation path. Start at Chapter 8 if you only want to check committed evidence. Each chapter moves from a question and intuition to an example, mathematics where needed, exact source, evidence limits and an offline exercise with an answer.
+The [glossary](glossary.md) defines terms as you need them. For task adaptation, see the [calculator and asset walkthrough](../TASK_ADAPTATION.md). For an example where a higher score hid a policy that missed every ready case, see the [recovery diagnosis](../PHASE4C_PILOT_LEARNING_DIAGNOSIS.md).
 
-| Chapter | Opening question | Contract |
-|---|---|---|
-| [01](01-agent-training-and-frameworks.md) | What is being trained, and why use a real harness? | Define workflows, compound systems, agents, SFT and offline/online RL. Map the harness, gateway/controller/adapter, vLLM, VERL and matched overlay. |
-| [02](02-follow-one-calculator-task.md) | How does one question become a recorded reward? | Follow a synthetic question through per-call prompts, tool action, observation, continuation, extraction, scoring and reward attribution. |
-| [03](03-trajectories-tokens-and-fragments.md) | Which tokens are actions, and why can one rollout occupy several rows? | Preserve exact sampled token IDs and prompts; distinguish group, rollout and fragment identities; derive real-rollout loss weights. |
-| [04](04-grpo-step-by-step.md) | How can four attempts teach an actor without a critic? | Derive sample-standard-deviation GRPO advantages, constant-group behavior, the shared clipped surrogate and zero-loss/nonzero-gradient example. |
-| [05](05-ppo-mc-step-by-step.md) | What changes when a learned value supplies the baseline? | Derive general GAE and terminal MC; explain direct matched residuals, full-token whitening, separate critic initialization, value loss and diagnostic utility. |
-| [06](06-one-complete-training-update.md) | When do collected experiences actually change model weights? | Trace 32 real rollouts through fragments, old log probabilities, losses, accumulation, optimizer calls, weight refresh, save and independent reload. |
-| [07](07-read-the-experiment-results.md) | What do the six runs establish? | Preserve denominators, separate baselines and paired contrasts; interpret weak critic, clipping, formatting and tool errors with explicit limits. |
-| [08](08-reproduce-and-operate.md) | What can a reader check offline? | Run existing arithmetic and derived-evidence checks; separate raw verification, paid cold builds, licensing and publication gates. |
+## Source and guide history
 
-Use the [glossary](glossary.md) for shared notation and the [source map](source-map.md) to distinguish execution, evidence, editorial sources and historical protocols.
+The calculator study `agl-explore-20-v1-r03` used `matched-rollout-mean-v2` and `exploratory-matched-20-v1`. Its historical execution commit was `5fb6adfd48ee245509f7dff3ab1d849fcf707d86`. The [source map](source-map.md#public-source-representations) identifies the public representations of that code. The [project plan](../PROJECT_PLAN.md#3-agreed-learning-structure-and-reuse-map) maps twelve teaching modules onto the eight chapters and their supporting guides. The [current continuation](../PROJECT_CONTINUATION.md) tracks implementation.
 
-## Scope and identity
-
-The guide explains `agl-explore-20-v1-r03`, numerical protocol `matched-rollout-mean-v2`, study protocol `exploratory-matched-20-v1`. The freshly inspected main on 2026-11-18 is `e2b57a590b9ea687fbb4c9001465eddd5b65ef70`. The actual executed source is `5fb6adfd48ee245509f7dff3ab1d849fcf707d86`. Later documentation and merge commits did not train these models.
-
-The prepared model is `meta-llama/Llama-3.2-3B-Instruct`. The upstream starter's Qwen model and the paper's benchmark experiments are separate. Chapters 2–6 share a **synthetic** `(7+5)*3` task, expected numeric result `36`, and four illustrative rewards `[0,0,0,1]`. These examples are not recorded r03 trajectories.
-
-The three seed pairs improved their frozen-scorer endpoints on a reused 64-question development panel. They establish neither superiority, equivalence, statistical significance nor fresh-holdout generalization. Read the [closeout](../PHASE2_CLOSEOUT_2026-11-15.md) and [qualified evidence](../../evidence/phase2-r03/VERIFICATION.md).
-
-This guide is retained in an independently attributed publication snapshot. Historical runbooks and frozen evidence stay at their original paths. The [source map](source-map.md#public-source-representations) explains public source links and private archival locators; [publication status](../PUBLIC_RELEASE_PLAN.md) records the separate distribution identity.
-
+<details>
+<summary>Historical authoring and verification receipts from the original repository</summary>
 
 ## Documentation verification, 2026-11-18
 
@@ -80,4 +72,4 @@ The wide source-map tables require horizontal scrolling. The frozen accuracy SVG
 
 Optional CPU backend integration tests, raw-trace/tensor verification, training/inference, paid cold builds and public-release checks remain unrun. The repository remains **PRIVATE**; licensing, privacy, redistribution and other publication gates are separate, unverified requirements. The missing metric series and chart collection remain unavailable as recorded in the source map.
 
-For an implemented second task and reader-owned forks, see [Task adaptation](../TASK_ADAPTATION.md). The asset-status task is [operationally qualified](../PHASE3_QUALIFICATION_2026-11-24.md) for both algorithms; that adds no learning results to this guide. The [engineering checklist](../PHASE3_ENGINEERING_CHECKLIST.md) collects what its failed attempts taught.
+</details>

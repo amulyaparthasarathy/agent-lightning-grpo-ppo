@@ -17,14 +17,9 @@ what they taught into checks to run before a new attempt. See also
 harness demonstration uses explicitly scripted inference and does not establish
 live-model behavior.
 
-**Phase 4A** adds a third task, `recovery-readiness-v1`, with three tools, an
-evidence-grounded verifier and its own episode contract, `recovery-episode-v1`.
-It supports only a zero-optimization development calibration and has not been run
-against a model. It is documented separately: [task](PHASE4A_RECOVERY_TASK.md),
-[calibration](PHASE4A_CALIBRATION.md), [verification](PHASE4A_VERIFICATION.md).
-Everything below about the calculator and asset workflows is unchanged, and the
-asset `collection-only` purpose described later still applies to the asset task
-alone.
+The third task, `recovery-readiness-v1`, uses three tools and a verifier that checks both the decision and its supporting evidence. The original task, calibration method and offline checks describe the `recovery-episode-v1` contract. Later, both routes ran live development calibration. GRPO completed the A03 two-update qualification and the P02 16-update pilot, including fresh-worker reloads. [Task](PHASE4A_RECOVERY_TASK.md) · [Calibration method](PHASE4A_CALIBRATION.md) · [Offline checks](PHASE4A_VERIFICATION.md) · [Live calibration](PHASE4B_LIVE_CALIBRATION.md) · [A03](PHASE4C_GRPO_CAMPAIGN_CLOSEOUT.md) · [P02](PHASE4C_FUNCTIONAL_PILOT_CLOSEOUT.md)
+
+On the 24 development cases, P02's terminal greedy policy always answered `not_ready`. Strict successes rose from 9/24 to 12/24 while decision accuracy stayed at 12/24. Recovery PPO-MC live training and reload remain unqualified. The full recovery study is unexecuted, and witness-selection SFT remains deferred. The `collection-only` procedure below is specific to the asset task. [Paired cases and verifier analysis](PHASE4C_PILOT_LEARNING_DIAGNOSIS.md) · [Study protocol](PHASE4C_LEARNING_STUDY_PROPOSAL.md) · [Draft PR #14](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/pull/14)
 
 The completed calculator qualification remains bound to execution source
 `5daff64cefd348fb731094cf465b223ddceb5fb2` and plan SHA-256
