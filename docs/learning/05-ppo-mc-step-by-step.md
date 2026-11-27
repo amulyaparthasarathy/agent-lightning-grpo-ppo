@@ -46,15 +46,17 @@ $$
 \widehat G_t=\widehat A_t+V_t=R_\rho.
 $$
 
+Watch what the list indexes. Chapter 4’s `[0, 0, 0, 1]` listed the final scores of **four attempts** at one question. In the next command those same digits list the immediate rewards for **four generated tokens within D**. Only its last token is followed by the terminal score. The later whitening exercise switches back to one final score per attempt.
+
 Check the cancellation on a CPU. Paste this and the later commands into a Unix shell at the repository root with Python 3.12. The examples use the standard library.
 
 ```bash
 python3 - <<'PY'
-rewards = [0, 0, 0, 1]           # D's four actions, in time order
+rewards_after_token = [0, 0, 0, 1]  # one completed attempt, four actions
 old_values = [0.1, 0.2, 0.4, 0.8]
 next_value = advantage = 0.0     # true terminal endpoint
 backward = []
-for reward, old in reversed(list(zip(rewards, old_values, strict=True))):
+for reward, old in reversed(list(zip(rewards_after_token, old_values, strict=True))):
     delta = reward + next_value - old
     advantage = delta + advantage
     backward.append((round(advantage, 2), round(advantage + old, 2)))
@@ -105,7 +107,7 @@ For the loss, let $N$ count real rollouts, $L_\rho$ count all generated targets 
 
 The actor uses the [Chapter 4 clipped surrogate](04-grpo-step-by-step.md#how-clipping-changes-the-objective), including the asymmetric ratio bounds and dual clipping. The trainer weights each advantage once before summing the masked surrogate. When every ratio equals 1, the actor loss simplifies to $-\sum_i w_i\widetilde A_i$. At `40` its contribution is about $-1.064054/16=-0.066503$.
 
-The critic starts from a separate copy of the prepared Llama backbone. Its token-classification head (`score.weight`, `score.bias`) produces one value per position. The loading check permits the unused language-model output weight. The new head uses a normally initialized weight and zero bias. Critic construction uses the job's dedicated seed inside a saved-and-restored random-generator context. Its optimizer trains both the backbone and head. [Critic construction](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/blob/89fe32f92f29209803c13264baed951713741d42/experiment/ppo_runtime.py#L379) · [Matched seed and optimizer setup](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/blob/89fe32f92f29209803c13264baed951713741d42/experiment/matched_runtime.py#L297)
+The critic starts from a separate copy of the prepared Llama backbone, the layers that turn input tokens into numerical representations of their histories. Its token-classification head (`score.weight`, `score.bias`) produces one value per position. The loading check permits the unused language-model output weight. The new head uses a normally initialized weight and zero bias. A dedicated random seed sets the sequence of draws for the critic’s initialization. The code restores the previous random-generator state afterward. Its optimizer trains both the backbone and head. [Critic construction](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/blob/89fe32f92f29209803c13264baed951713741d42/experiment/ppo_runtime.py#L379) · [Matched seed and optimizer setup](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/blob/89fe32f92f29209803c13264baed951713741d42/experiment/matched_runtime.py#L297)
 
 The critic tries to reduce squared prediction error. For each target it scores both a candidate prediction $v_i$ and a version with the change from $V_i$ clipped to ±0.5. Taking the larger squared error limits the improvement credited to a large jump. On the study's single GPU the objective is
 

@@ -4,7 +4,7 @@ Suppose you ask a language model, “What is `(7+5)*3`?” It can write an answe
 
 ## Who owns the next step?
 
-The **environment** is the world the actor interacts with. Here it includes a task and a calculator **tool**, a program that accepts an expression and returns a result. The actor can generate a request to evaluate `(7+5)*3`. The calculator computes `36`. That returned value is an **observation** the actor can use when it writes its answer.
+The **environment** is the world the actor interacts with. Here it includes a task and a calculator **tool**, a program that accepts an expression and returns a result. The actor can generate a request to evaluate `(7+5)*3`. To **sample** a response, the actor draws successive pieces of text according to the probabilities it assigns them. Here the generated text asks for a calculation. The calculator computes `36`. That returned value is an **observation** the actor can use when it writes its answer.
 
 Someone has to put that observation into the next model input. The **harness** is the application code that manages the exchange. It builds the first prompt, makes the tool available, dispatches the requested call, adds its result or error to the conversation history, and decides when to ask for another response or stop. That history is part of the **state** of the interaction. A trainer given only the question and final answer would miss the request the actor made and the observation it had when answering.
 
@@ -32,7 +32,7 @@ With a trainer-owned interaction loop, the trainer constructs each next model in
 | When | Component and responsibility |
 |---|---|
 | Start an attempt | Agent Lightning's local controller starts the harness. AutoGen manages the conversation and uses the Model Context Protocol (MCP) to call the calculator. |
-| Generate an action | Agent Lightning's gateway and proxy route the model request to vLLM, the generation service that runs a copy of the actor's weights. The requests and responses are associated with the attempt. |
+| Generate an action | Agent Lightning's gateway and proxy route the model request to vLLM, the generation service that runs a copy of the actor's weights. Using those weights to generate a response is called **inference**. The requests and responses are associated with the attempt. |
 | Finish and prepare data | The harness posts the verifier's reward for the attempt. Agent Lightning's rollout manager and sample adapter connect that outcome to the captured calls and turn them into training rows. |
 | Train and serve again | The lab's matched training code keeps complete attempts and gives each equal total weight. VERL, the training backend, computes how its loss (the quantity being minimized) varies with the weights. The optimizer uses those gradients to adjust the weights. Updated actor weights are copied to the generation service for later attempts. |
 
@@ -52,7 +52,7 @@ flowchart TD
     V -->|Weight refresh| I
 ```
 
-The study used the instruction-tuned Llama 3.2 3B actor. The pinned upstream starter defaults to Qwen2.5-1.5B-Instruct. For the executed setup, follow [the calculator harness](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/blob/89fe32f92f29209803c13264baed951713741d42/experiment/observed_calc_agent.py#L301), [gateway and controller configuration](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/blob/89fe32f92f29209803c13264baed951713741d42/experiment/launch.py#L216), and [matched worker registration](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/blob/89fe32f92f29209803c13264baed951713741d42/experiment/matched_runtime.py#L263). The [source map](source-map.md) distinguishes the lab implementation from the upstream design and paper.
+The study used the instruction-tuned Llama 3.2 3B actor. The pinned upstream starter defaults to Qwen2.5-1.5B-Instruct. For the executed setup, follow [the calculator harness](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/blob/89fe32f92f29209803c13264baed951713741d42/experiment/observed_calc_agent.py#L301), [gateway and controller configuration](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/blob/89fe32f92f29209803c13264baed951713741d42/experiment/launch.py#L294), and [matched worker registration](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/blob/89fe32f92f29209803c13264baed951713741d42/experiment/matched_runtime.py#L263). The [source map](source-map.md) distinguishes the lab implementation from the upstream design and paper.
 
 </details>
 

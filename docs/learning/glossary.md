@@ -7,7 +7,7 @@
 | $q$ | Question presentation/group; four sampled rollouts in this protocol |
 | $\rho$ (`rho`) | One complete sampled rollout with its own identity |
 | $j$ | Fragment/training-row index within a rollout |
-| $t$ | Generated action-token index; masked context positions do not add actions |
+| $t$ | Position within a fragment’s response in the mask and weight formulas (Chapter 3). In the return formula (Chapter 5), it counts only generated actions in time order. |
 | $R_\rho$ | Recorded terminal binary reward for a complete rollout |
 | $h_t$, $a_t$ | Exact conditioning history and sampled action token |
 | $\pi_\theta$ | Actor's token probability distribution, with parameters $\theta$ |
@@ -31,7 +31,7 @@
 | Reward | Recorded endpoint feedback, binary in this study. |
 | Return | Reward accumulated from an action onward; here terminal reward on every valid action. |
 | Advantage | Return relative to a baseline. Raw, whitened and loss-weighted advantages differ. |
-| Whitening | Centering/scaling valid token residuals by their full-collection mean and sample variance. |
+| Whitening | Subtract the mean raw advantage over generated tokens, then divide by the square root of the sample variance plus the numerical stabilizer. |
 | Weighting | Assigning each complete rollout equal total loss weight after advantage construction. |
 | Group | Four sampled attempts for one question presentation, used for GRPO statistics. |
 | Rollout / trajectory | One complete sampled agent attempt; may contain several model/tool calls. |
@@ -45,7 +45,7 @@
 | Native checkpoint | Saved model, optimizer and extra state; not automatically a deployment export. |
 | Independent reload | Separate evaluation-only worker loading the recorded final checkpoint, with zero optimizer calls. |
 | Baseline evaluation | Prepared instruction-tuned actor with the tool harness, before this run's RL. |
-| Development panel | Reused 64-case evaluation panel; disjoint case IDs do not make it a fresh holdout. |
+| Development panel | A set of cases used to examine behavior during development. The calculator study reused 64 questions and recovery P02 reused 24 cases. |
 | Percentage point (pp) | Difference between percentages, distinct from percentage relative improvement. |
 
 Definitions follow the [source assignments](source-map.md). Return to the [learning index](README.md).

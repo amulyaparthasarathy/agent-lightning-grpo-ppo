@@ -2,7 +2,7 @@
 
 **Start with [Chapter 1 · Why train through the agent harness?](01-agent-training-and-frameworks.md)**
 
-All you need to start is basic Python. In Chapter 2 you'll trace one attempt at `(7+5)*3`, predict its reward and check the result in a terminal. Have Python 3.12 and a [local copy of the repository](../../README.md#credential-free-offline-quick-start) for that exercise. No packages, model or account are required.
+In Chapter 2 you'll trace one attempt at `(7+5)*3`, predict its reward and check it in a terminal. The copyable exercises in Chapters 2–6 use a Unix shell, Python 3.12 and the standard library. You can read all the figures as published. Regenerating the recovery plots in Chapter 7 adds a small plotting environment. Chapter 8 links to the separate client and CPU harness setups when an exercise needs them. Begin at the root of your [local checkout](../../README.md#credential-free-offline-quick-start).
 
 ## Read the chapters in order
 
@@ -14,7 +14,7 @@ All you need to start is basic Python. In Chapter 2 you'll trace one attempt at 
 | [4 · GRPO](04-grpo-step-by-step.md) | Compare four attempts at the same question and work out which actions the trainer should encourage. |
 | [5 · PPO-MC](05-ppo-mc-step-by-step.md) | Compare an outcome with a second model's prediction of that outcome. |
 | [6 · One complete training update](06-one-complete-training-update.md) | Follow the calculations that change the model's weights and see when the next attempt can use them. |
-| [7 · Read the results](07-read-the-experiment-results.md) | Compare each calculator run with its own baseline. Use paired recovery cases to find the decision errors hidden by a higher score. |
+| [7 · Read the results](07-read-the-experiment-results.md) | Compare each calculator run with its own baseline and [interpret the recorded time, storage and charges](07-read-the-experiment-results.md#what-did-those-six-calculator-runs-use). Use paired recovery cases to find the decision errors hidden by a higher score. |
 | [8 · Reproduce and operate](08-reproduce-and-operate.md) | Reproduce the calculator means, [change the final asset answer](../TASK_ADAPTATION.md#a-successful-lookup-and-two-different-outcomes), or [plan a reader-owned run](../READER_TRAINING.md#try-a-plan-without-an-account). |
 
 **What counts as evidence?** The calculator dialogue and four rewards `[0, 0, 0, 1]` in the worked examples are invented to explain the mechanics. Chapter 7 uses measured results from three seed pairs on the same 64 development questions. That comparison leaves open how the policies would perform on fresh questions or with other seeds. A new measurement requires separate model execution. [Calculator closeout](../PHASE2_CLOSEOUT_2026-11-15.md)
