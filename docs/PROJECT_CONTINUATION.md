@@ -2,13 +2,13 @@
 
 Read [AGENTS.md](../AGENTS.md), then the [project plan](PROJECT_PLAN.md). This file is the mutable handoff for ChatGPT, Codex, and other agents. Update it with each completed implementation slice. Historical execution handoffs retain their original scopes.
 
-**Verified main, November 27, 2026 UTC.** [PR #21](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/pull/21) merged at `3aacc79610be9a6557af9f664b702f4367d859c8`. Its parents are the Chapter 5 merge `6228222015f2595e220f7248c8825e28448f720d` and the independently reviewed Chapter 6 head `f07929ba1c728ab4687993a0688aad4ae344c573`. The fetched merge tree equals the reviewed head's tree. The lesson and source map match the validated content, and the SDK dependency and lockfile match the preceding main. M2 is complete.
+**Verified main.** [PR #23](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/pull/23) integrated M3 by ordinary merge at `cdaac834255e951d8199c2c478588a329d4d4717`. Its parents are main `3aacc79610be9a6557af9f664b702f4367d859c8` and the independently reviewed head `1f903b71afd37d31da6a8d9b253ea50d7c9e3cf4`. The fetched merge and reviewed head have the same tree, `b1f9ad0c257ea1e5cb678a19c3089900b77ed84f`. Only the continuation differed between M3 learner source `49d3e7fc90160eafa777a89fe8949a52de253458` and that head.
 
 ## Resume here
 
-**Next action.** Review [M3 in PR #23](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/pull/23). Start in [Chapter 8](learning/08-reproduce-and-operate.md), follow the [practice plan](READER_TRAINING.md#try-a-plan-without-an-account) and reproduce the [wrong-answer and missing-answer receipts](TASK_ADAPTATION.md#a-successful-lookup-and-two-different-outcomes). Check that the guide identifies the first online resource operation and the evidence required for independent reload.
+**Next action.** Review [M4 in PR #24](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/pull/24), beginning with [Chapter 7](learning/07-read-the-experiment-results.md). Check the calculator contrasts, follow one of the three hidden decision regressions, and regenerate the four P02 figures from the public checkout. After M4 review and integration, the next documentation milestone is M7’s reader walkthrough and editorial closeout.
 
-Branch `docs/m3-run-and-adapt`, validated learner source `49d3e7fc90160eafa777a89fe8949a52de253458`. The subsequent handoff commit records delivery and validation. M3 stops at review. The next milestone after review is **M4**, teaching from existing experimental results, beginning with the recorded calculator seed pairs and recovery P02 class and reward-group counts. [M4 acceptance](PROJECT_PLAN.md#m4-integrate-the-experiments-into-the-teaching-story)
+M4 branch `docs/m4-read-experiment-results`, validated learner commit `bb01858257f1b47a3bd72fd41a7f001bd22cac27`. The subsequent handoff commit records the PR and its checks. M4 stops at review. Modules 11–12 share the existing Chapter 7 path and use the [public plotting helper](../scripts/plot_p02_lesson.py). No implementation blocker remains for review.
 
 ### Hosted-Tinker companion paused
 
@@ -40,6 +40,8 @@ The owner selected one active documentation workstream until the core guide is f
 | SDK files at the Chapter 4 merge | `pyproject.toml` blob `ca4728cbbea44d1c4e29f532c7c914452702535b` and `uv.lock` blob `49cbb72cfb9918d7073bd45ba3cdfbc2c9cc8985`. All previously locked package/version pairs were present after #19. |
 | M2 Chapter 5 | `m2-ppo-mc-calculator-lesson`, [PR #20](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/pull/20). Merged reviewed head `a94597e845e2c7a45358dc89d940fb1bd59a87d4`. Validated content `217c201eaa2b7cb4493c81bd86b30501cf69346e`. |
 | M2 Chapter 6 | `m2-complete-training-update`, [PR #21](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/pull/21). Merged at `3aacc79610be9a6557af9f664b702f4367d859c8`. Validated learner content and source map at `d97e6cea6bb513a7da9ac9c4d3a6af29ee96ae13`. |
+| M3 run and adapt | [PR #23](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/pull/23) merged at `cdaac834255e951d8199c2c478588a329d4d4717`. The verified parents and tree are above. |
+| M4 experimental results | [PR #24](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/pull/24) open for review. Learner content and figures at `bb01858257f1b47a3bd72fd41a7f001bd22cac27`. |
 
 ## Decisions to preserve
 
@@ -59,8 +61,8 @@ The owner selected one active documentation workstream until the core guide is f
 | M0: Shared plan and continuation | Complete; plan v1.1 merged through PR #15 | Reviewed head and merged tree verified |
 | M1: Entry and representative lesson | Complete and merged in PR #16 | Independently reviewed head integrated, with matching trees |
 | M2: Deep training mechanics | Complete. Chapters 3–6 merged in PRs #17, #18, #20 and #21 | Reviewed Chapter 6 tree verified on main |
-| M3: Execution and adaptation | Delivered for review in PR #23 | Review the offline learner path, asset outcomes and reader-owned workflow |
-| M4: Experimental teaching | Next milestone after M3 review | Reproducible evidence figures, expected counts, and interpretation exercises for calculator/recovery |
+| M3: Execution and adaptation | Complete and merged in PR #23 | Reviewed M3 tree verified on main |
+| M4: Experimental teaching | Delivered for review in PR #24 | Review Chapter 7’s calculator comparisons and public P02 figure path |
 | M5: Recovery PPO-MC preparation | Planned; no new reservation proposed | Exact four-stage plan, relevant local gates, capacity/cost/retention proposal |
 | M6: Recovery PPO-MC execution | Conditional; not authorized | Actual qualification or documented failure and complete closeout |
 | M7: Reader walkthrough and closeout | Planned; can finish without funded M6 | Checked learner path and an honest disposition of remaining capability work |
@@ -86,7 +88,7 @@ Key public execution identities: reader calculator `5daff64cefd348fb731094cf465b
 
 ## Authority, cost, and retention
 
-The owner authorized the ordinary merge of the reviewed Chapter 6 head and M3 delivery for review. Both actions are complete. M3 merge awaits a separate decision. Companion implementation and hosted execution are paused. PR #14 remains open, draft and deferred.
+The owner authorized the ordinary M3 merge and delivery of one offline M4 PR for review. Both actions are complete. M4 integration and further milestone work await the owner after review. ChatGPT retains its read-only review role. PR #22 stays paused, with its proposed $0.02 hosted execution unauthorized. PR #14 remains open, draft and deferred.
 
 **New paid dispatch authority: zero.** The recovery PPO preference selects a direction, not a numeric budget. M5 must produce the concrete proposal before the execution decision. Do not ask for that decision during the documentation work.
 
@@ -112,14 +114,14 @@ The retained private pilot continuation is `.local/phase4c-functional-pilot/CONT
 
 | Check performed | Observed result |
 |---|---|
-| Final Chapter 6 integration | Head and base matched the handoff. GitHub showed a clean, mergeable PR with no checks, formal reviews or threads. ChatGPT’s bounded independent review reproduced the two learner commands, split-D alteration and six receipt pairs and inspected trainer ordering. The earlier [Chapter 6 handoff](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/blob/f07929ba1c728ab4687993a0688aad4ae344c573/docs/PROJECT_CONTINUATION.md#latest-work-and-validation) owns the pinned engine tests and rendering checks. After merge we verified both parents and compared the full tree. |
-| Chapter 8 shell blocks | Synthetic row mean 5 → 3.5, equal-rollout mean 5 → 5. The r03 checker passed 12 hashes, 24 stage summaries, six runs and three contrasts. Final means reproduced at 52.083333% for GRPO and 51.041667% for PPO-MC. |
-| Reader client and offline planning | Ran the documented locked client setup, help, fixture plan/validate and the asset-template alteration in the existing Workbench. Both pairs had equal fingerprints within task, `offline: true`, unverified ownership/availability and false training admission. Parsed all 16 documented reader invocations with the actual CLI parser, checking the profile, plan and asset-manifest paths without invoking online handlers. |
-| Asset adaptation shell blocks | With the existing locked CPU harness environment, generated and verified the 256/16/64/8 panels. Both calculator probe cases and all six asset probe cases passed. The scripted harness reported one chain. The wrong answer posted 0, the missing continuation produced an exception and no post, and correcting the backup field gave 1 only for the completed answer. |
-| Focused existing tests | Seven client/evidence tests passed for offline planning, same-plan preflight, account mismatch, ambiguous submission, owned cancellation, baseline gating and reload identity. Three asset tests passed for the strict parser/independent verifier, recovery and policy-limit termination, and incomplete or failed reward delivery. The service operations in these checks were mocked. |
-| Documentation | Checked relative links, heading targets and incoming heading references, shell syntax and `git diff --check`. GitHub-rendered HTML at the learner commit matched all 22 fenced blocks and 12 table structures across Chapter 8 and the two procedures. Rendered the new mean calculation and the Mermaid workflow locally and inspected both. |
+| M3 integration | Main and PR head matched the reviewed identities. GitHub showed a clean, mergeable PR, no applicable branch rules or protection, and no checks, formal reviews or review threads. ChatGPT’s bounded review reproduced the synthetic means, calculator checker and asset fixture outcomes including cleanup. M3’s ten focused tests and rendering checks belong to the [original handoff](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/blob/1f903b71afd37d31da6a8d9b253ea50d7c9e3cf4/docs/PROJECT_CONTINUATION.md#latest-work-and-validation). Verified both parents and an exact tree match after merge. |
+| Chapter 7 public path | Ran all seven shell blocks from a clean Git archive of the validated M4 learner commit with Python 3.12 and cached script dependencies (`UV_OFFLINE=1`). All four P02 PNGs regenerated byte-for-byte from public tables. Client and training dependencies remain separate. |
+| Calculator | The existing checker passed 12 artifact hashes, 24 stage summaries, six runs and three contrasts. Checked critic values against the owning analysis, including all 57 earlier-data comparisons, 51 negative defined EV observations and nine undefined. |
+| P02 development | Verified all three public table hashes against the diagnosis summary. Joined all 24 case identities to the receipt and checked baseline/reload decision correctness, evidence correctness and reward. The nine strict gains, six regressions, three retained successes and six retained failures reconcile. Three retained failures lost correct ready decisions. All 24 terminal greedy decisions were `not_ready`. |
+| P02 training and updates | Recounted 512 CSV trajectories in 128 groups. Checked four attempts per unique question and matched all 32 class/collection cells against JSON. Ready and not-ready strict totals were 67 and 139, positive advantages 59 and 83. Checked all sixteen collection, sampled policy and actor-call identities, refreshes 0–16, scalar losses and preclip norms against the P02 receipt and rounded closeout. |
+| Reading and navigation | Inspected the historical SVG and all four new figures at 760 px width. The calculator table supplies exact values where historical endpoint labels overlap. Checked changed Markdown relative links and heading targets, incoming Chapter 7 anchors and whitespace. GitHub-rendered Chapter 7 contains seven shell blocks, seven tables and five figures. Verified no diff to frozen evidence, client manifest or lockfile. |
 
-Modules 9–10 reuse the existing Chapter 8, reader procedure and adaptation guide. There is no new runtime or helper. These checks used Python 3.12, synthetic responses, real local tool transport and committed derived results. No model ran, no credits were used and no cloud resource or historical evidence changed. New cold builds, GPU behavior, learning and hosted Tinker remain outside this validation. No implementation blocker remains for M3 review.
+The figures describe the calculator’s reused panel and P02’s one development-only seed. Only baseline and terminal greedy recovery measurements exist. There is no entropy or reference/base KL series. Training questions and class mix varied. These checks used public derived data without private replay, a new model run, a first-time reader trial or any cloud dispatch. Historical holds and retention decisions are unchanged.
 
 ## Handoff update template
 
