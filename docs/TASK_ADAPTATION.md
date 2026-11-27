@@ -1,35 +1,6 @@
-# Reader customization and task adaptation
+# Adapt a calculator agent to report asset status
 
-Phase 3 implements two tasks through the same matched training workflow. The new
-`asset-status-v1` task is **operationally qualified for both algorithms** under the
-`asset-episode-v2` episode contract: baseline, two-update training, native
-checkpoint saving and fresh-worker checkpoint evaluation all completed, with 64/64
-heldout cases at baseline and after reload. That is operational evidence, not
-evidence of learning; the corrected baseline leaves no headroom. See the
-[dated report](PHASE3_QUALIFICATION_2026-11-24.md).
-
-The four earlier attempts failed, and how they failed is the main lesson of this
-guide. They are preserved unchanged in the
-[2026-11-22 report](PHASE3_QUALIFICATION_2026-11-22.md) under their original
-episode policy. The [engineering checklist](PHASE3_ENGINEERING_CHECKLIST.md) condenses
-what they taught into checks to run before a new attempt. See also
-[offline verification](PHASE3_VERIFICATION.md). The local
-harness demonstration uses explicitly scripted inference and does not establish
-live-model behavior.
-
-The third task, `recovery-readiness-v1`, uses three tools and a verifier that checks both the decision and its supporting evidence. The original task, calibration method and offline checks describe the `recovery-episode-v1` contract. Later, both routes ran live development calibration. GRPO completed the A03 two-update qualification and the P02 16-update pilot, including fresh-worker reloads. [Task](PHASE4A_RECOVERY_TASK.md) · [Calibration method](PHASE4A_CALIBRATION.md) · [Offline checks](PHASE4A_VERIFICATION.md) · [Live calibration](PHASE4B_LIVE_CALIBRATION.md) · [A03](PHASE4C_GRPO_CAMPAIGN_CLOSEOUT.md) · [P02](PHASE4C_FUNCTIONAL_PILOT_CLOSEOUT.md)
-
-On the 24 development cases, P02's terminal greedy policy always answered `not_ready`. Strict successes rose from 9/24 to 12/24 while decision accuracy stayed at 12/24. Recovery PPO-MC live training and reload remain unqualified. The full recovery study is unexecuted, and witness-selection SFT remains deferred. The `collection-only` procedure below is specific to the asset task. [Paired cases and verifier analysis](PHASE4C_PILOT_LEARNING_DIAGNOSIS.md) · [Study protocol](PHASE4C_LEARNING_STUDY_PROPOSAL.md) · [Draft PR #14](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/pull/14)
-
-The completed calculator qualification remains bound to execution source
-`5daff64cefd348fb731094cf465b223ddceb5fb2` and plan SHA-256
-`a3128740ba4c2133e049bd80e9bdb471aa1ad56df3158479d1594b4e0ab23cc3`.
-Both algorithms completed baseline, two-update training, native checkpoint saving,
-and fresh-worker evaluation reload. GRPO had **0/16 informative reward groups** and
-no observed task-directed policy-gradient signal. PPO-MC made nonzero updates but
-had poor critic diagnostics. Operational validity was established; reliable learning
-improvement was not. Phase 3 commits did not produce those results. The historical
-20-update, three-paired-seed experiment and its learning guide remain separate.
+For the calculator, the model chooses an expression and uses the result to answer a numerical question. For asset status, it chooses an asset ID, reads a tool observation and reports two facts as JSON. In both jobs the trainer receives the model's sampled actions and one verified outcome per complete attempt. Walk through the contract below, then try giving the right tool result and the wrong final answer.
 
 ## The two workflows
 
@@ -37,11 +8,11 @@ improvement was not. Phase 3 commits did not produce those results. The historic
 |---|---|---|
 | Task ID | `calculator-v1` | `asset-status-v1` |
 | Data | Existing acquired Calc-X selection, unchanged | Versioned deterministic synthetic registry, 256 train / 64 heldout / 8 smoke assets |
-| Harness | `observed_calc_agent.Agent` | `asset_agent.Agent` |
+| Harness | [Calculator agent](../experiment/observed_calc_agent.py) builds the calculator request and observes calls | [Asset agent](../experiment/asset_agent.py) advertises the lookup, passes the observation to the next model call and records termination |
 | Request | Existing question and `### ANSWER` instructions | Asset request and strict JSON instructions |
-| MCP | `mcp_server_calculator`, `calculate(expression)` | Local `asset_server.py`, `lookup_asset(asset_id)` |
-| Final parser | Existing answer extractor | Entire response must be one JSON object |
-| Verifier | Pinned upstream scalar comparison, tolerance 0.01 | Exact field equality against independently regenerated trusted facts |
+| Tool (Model Context Protocol, MCP) | `mcp_server_calculator`, `calculate(expression)` | Local `asset_server.py`, `lookup_asset(asset_id)` |
+| Final parser | Text inside the first answer marker, otherwise the stripped final response | Entire response must be one JSON object |
+| Verifier | Exact string match or numerical comparison with relative tolerance 0.01 | Exact field equality against independently regenerated trusted facts |
 | Reward | Existing binary scorer | Exactly one binary terminal-correctness reward; no shaping |
 | Local check | Real calculator stdio probe | Real asset stdio probe and scripted harness demonstration |
 
@@ -54,32 +25,81 @@ checkpoint algorithms and fresh-worker reload are shared.
 
 ## Run the local checks
 
-Use the existing Python 3.12 workspace. Install only the locked CPU harness group in
-its separate environment; the ordinary client never needs CUDA/vLLM. Installation
-may fetch Python packages. The commands below perform no paid remote work.
+Use one Bash terminal at the [checkout root](../README.md#credential-free-offline-quick-start) on Linux or WSL2 with Git, Python 3.12 and uv. These steps use the existing CPU harness group. Installing it can download Python packages. The exercises themselves run locally without accounts, model weights or GPU access. The tool communicates over standard input and output (stdio). The scripted harness posts its reward to a receiver on the same computer, so local sockets and child processes must work.
+
+### Build a task the verifier can check
+
+**Predict.** Two requests about the same asset would share the same truth. How should we split the dataset to keep an evaluation asset out of training?
 
 ```bash
-UV_PROJECT_ENVIRONMENT=.venv-reader-cpu uv sync --locked --only-group reader-harness
-bash scripts/test_task_local.sh
-.venv-reader-cpu/bin/python scripts/task_local.py generate --data outputs/asset-v1
-.venv-reader-cpu/bin/python scripts/task_local.py verify --data outputs/asset-v1
-.venv-reader-cpu/bin/python scripts/task_local.py probe --out outputs/asset-probe.json
-.venv-reader-cpu/bin/python scripts/task_local.py probe --task calculator-v1 --out outputs/calculator-probe.json
-.venv-reader-cpu/bin/python scripts/task_local.py scripted --out outputs/asset-scripted.json
+UV_PROJECT_ENVIRONMENT=.venv-reader-cpu uv sync --locked --inexact --only-group reader-harness --python 3.12
+mkdir -p .local
+asset_dir=$(mktemp -d .local/asset-lesson-XXXXXX)
+echo "$asset_dir"
+task_local() { .venv-reader-cpu/bin/python scripts/task_local.py "$@"; }
+task_local generate --data "$asset_dir/data" > "$asset_dir/generated.json"
+task_local verify --data "$asset_dir/data" > "$asset_dir/verified.json"
+python3 - "$asset_dir/verified.json" <<'PY'
+import json, sys
+
+with open(sys.argv[1]) as f:
+    manifest = json.load(f)
+print(manifest["task"])
+for name in ("train_main.parquet", "train_smoke.parquet", "eval_main.parquet", "eval_smoke.parquet"):
+    print(name, manifest["files"][name]["rows"])
+PY
 ```
 
-Generation and receipts refuse to overwrite existing output. Choose fresh paths when
-repeating them. `--help` is dependency-light; generation/verification require PyArrow,
-and probes require the locked MCP/AutoGen group. `scripted` deliberately imports a
-**test-only** helper under `tests/`, excluded from the production image. It runs the
-production Agent, AssistantAgent, traced client and real MCP server; only model
-responses and the reward destination are test boundaries. Its receipt and traces say
-`scripted-inference`, and live evidence validation rejects them.
+Expect `asset-status-v1` and counts **256, 16, 64, 8** in that order. The 16 are a subset of the 256 training assets. The 64 heldout assets and eight evaluation-smoke assets are separate identities. Verification regenerates the expected records, compares their order and checks their hashes. If verification reports changed bytes or cases, retain the output and generate a fresh directory from the intended source. If PyArrow is missing, check that the command used the CPU interpreter above.
 
-This is distinct from `reader_training.py preflight`, which runs a **billable remote
-CPU worker** in the training image and checks model bytes, dependencies, tokenizer,
-HF/W&B access and the selected task probe. Do not run it without an approved
-spending envelope and a ledger reconciled against the provider.
+### Compare the two tools, then follow an actual harness call
+
+What arguments would you send to a calculator? Which fields should the asset tool accept? A *probe* asks a real local tool to describe its interface and process known requests. A *scripted episode* goes one step further: the production harness runs, but a fixture supplies the model's actions and answers.
+
+```bash
+task_local probe --task calculator-v1 --out "$asset_dir/calculator-probe.json"
+task_local probe --out "$asset_dir/asset-probe.json"
+task_local scripted --out "$asset_dir/scripted.json"
+```
+
+| Receipt | Expected result | What to inspect |
+|---|---|---|
+| Calculator probe | `status: passed` | `calculate` takes one expression. Its two checks obtain `20` for `(2 + 3) * 4` and a tool error for an unknown symbol. |
+| Asset probe | `status: passed`, six valid checks | `lookup_asset` accepts just an asset ID. One valid lookup and five deliberately invalid inputs check both facts and typed error codes. |
+| Scripted episode | `status: passed`, one chain, `live_qualification: false` | In `records` in the file, follow the model request, tool invocation, observation in the next model input, final response and delivered reward. Inference is scripted, the stdio tool and local reward transport run. |
+
+A tool may pass its probe even when the harness fails to deliver the observation to the next model call. If the scripted check fails, inspect its receipt for the chain and owned-process cleanup, then check the locked package versions. Receipts use fresh filenames on each run.
+
+### A successful lookup and two different outcomes
+
+Use the CPU environment from [the setup step](#build-a-task-the-verifier-can-check). The fixture's first heldout question asks for `asset-281`. Its tool reports `operational` and `failed`. Predict what happens if the model reports a *healthy* backup, then predict what happens if its second call returns empty text. Both attempts already have a successful lookup.
+
+```bash
+PYTHONPATH="$PWD/tests:$PWD" .venv-reader-cpu/bin/python - <<'PY'
+from tempfile import TemporaryDirectory
+
+from asset_harness_support import run_case
+from experiment import asset_task as task
+
+answer = {"asset_id": "asset-281", "service_state": "operational", "backup_health": "healthy"}
+for mode in ("normal", "missing-second"):
+    with TemporaryDirectory() as directory:
+        result = run_case(directory, final=task.dumps(answer), mode=mode)
+    tool = next(r for r in result["records"] if r["kind"] == "tool")
+    episode = next(r for r in result["records"] if r["kind"] == "episode")
+    rewards = [post["data"]["value"] for post in result["posts"]]
+    print(mode, tool["execution_status"], episode["execution_status"], rewards)
+PY
+```
+
+| Scripted continuation | Tool status | Episode status | Rewards received locally |
+|---|---|---|---|
+| `normal`, completed JSON with wrong backup health | `ok` | `ok` | `[0.0]` |
+| `missing-second`, empty continuation | `ok` | `exception` | `[]` |
+
+The first JSON parses, names the right asset and still disagrees with the verifier's trusted record. Its confirmed zero is an outcome the trainer can use. For the second attempt the harness cannot establish a terminal answer. Filling in zero would invent an outcome and admitting the other three siblings would change the training group. One incomplete attempt rejects its collection. The receipt above comes from the [scripted fixture](../tests/asset_harness_support.py). The [parser and verifier](../experiment/asset_task.py) and [harness](../experiment/asset_agent.py) are the production implementations.
+
+**Optional alteration.** In the Python block change only `"backup_health": "healthy"` to `"backup_health": "failed"`. The first reward list becomes `[1.0]`, and the second remains empty. A correct answer string supplied to the fixture cannot repair a missing continuation.
 
 ## Asset data, tool and answer contracts
 
@@ -283,29 +303,7 @@ adapter checks rewards, context, token conservation, fragmentation and all eight
 four-member groups, then stops before advantages or any optimizer call. Completion
 requires no optimizer, gradient or checkpoint event and only the step-zero refresh.
 
-```bash
-uv run --locked python scripts/reader_training.py plan --profile outputs/phase3/dev-profile.json --out outputs/phase3/dev-preparation-plan.json
-uv run --locked python scripts/reader_training.py setup --profile outputs/phase3/dev-profile.json --plan outputs/phase3/dev-preparation-plan.json
-uv run --locked python scripts/reader_training.py prepare --profile outputs/phase3/dev-profile.json --plan outputs/phase3/dev-preparation-plan.json --out outputs/phase3/dev-preparation-submission.json
-# Poll, then collect the completed preparation into a fresh directory.
-uv run --locked python scripts/reader_training.py status --profile outputs/phase3/dev-profile.json --plan outputs/phase3/dev-preparation-plan.json
-uv run --locked python scripts/reader_training.py collect --profile outputs/phase3/dev-profile.json --plan outputs/phase3/dev-preparation-plan.json --out outputs/phase3/dev-prepared
-uv run --locked python scripts/reader_training.py plan --profile outputs/phase3/dev-profile.json --assets outputs/phase3/dev-prepared/prepare/assets.json --out outputs/phase3/dev-plan.json
-uv run --locked python scripts/reader_training.py preflight --profile outputs/phase3/dev-profile.json --plan outputs/phase3/dev-plan.json --out outputs/phase3/dev-preflight-submission.json
-# Wait for the same-plan preflight receipt to pass before launch.
-uv run --locked python scripts/reader_training.py launch --profile outputs/phase3/dev-profile.json --plan outputs/phase3/dev-plan.json --out outputs/phase3/dev-submission.json
-uv run --locked python scripts/reader_training.py collect --profile outputs/phase3/dev-profile.json --plan outputs/phase3/dev-plan.json --out outputs/phase3/dev-results
-```
-
-These online commands are billable. They need the configured `MODAL_PROFILE`,
-owned resource bindings and a reserved budget. `status` and `collect` exit 2 until
-the evidence is complete, so the preparation-only collection exits 2 by design;
-read the preparation receipt instead of treating that as a failure. Keep the
-client running until `prepare`, `preflight` and `launch` return. Each resolves the
-image before it spawns, which can take minutes, and a client killed in that window
-leaves a receipt with status `unknown`. Never repeat such a submission. Reconcile
-it against the provider and stop it with `stop-owned`. Collecting a full six-stage
-attempt downloads about a thousand small files and can take ten minutes.
+Use the [reader procedure](READER_TRAINING.md#configure-a-reader-owned-allocation) with the asset template and this purpose in your own funded allocation. It supplies the same plan, setup, prepare, asset binding, preflight, launch, status, collect and stop commands. For this variant, expect **two training-stage collections of 32 attempts, one per algorithm** in place of the six-stage qualification table. Keep the client running through image resolution and submission. An unknown submission needs reconciliation. A complete collection-only result qualifies the sampled episode boundary and supplies no learning or checkpoint evidence.
 
 Accept development only after reviewing every attempted rollout: complete and
 incomplete counts, format compliance, rewards, policy errors, recovery, terminal
@@ -321,7 +319,7 @@ boundary greedy evaluation misses.
 
 ### A valid zero is not a missing reward
 
-A zero reward says the policy finished the episode and was wrong. It is data, and
+A confirmed zero records a complete task failure under the declared episode policy. It is data, and
 the optimizer needs it. A missing reward says the execution cannot be trusted. It
 is never filled with zero, never dropped from its group and never resampled until
 the group passes. One incomplete rollout rejects its collection.
@@ -334,10 +332,7 @@ and reported. It simply carries no group-relative signal for GRPO.
 
 ### Operational completion is not informative learning
 
-A terminal task failure is a complete episode but not a successful tool chain.
-Integration evidence reports the two separately, and each algorithm and stage
-still needs at least one real model → tool → observation → continuation → reward
-chain of its own.
+A completed wrong final answer can still demonstrate a successful model → tool → observation → continuation → reward chain. Two invalid calls followed by policy-limit termination supply a confirmed zero without such a chain. Each algorithm and stage needs live evidence of the chain to qualify integration.
 
 In the same way, completing two optimizer updates says the machinery works. It
 says nothing about improvement. In the qualifying run the corrected baseline was
@@ -395,27 +390,7 @@ settings disable their generation. Installed third-party packages remain a separ
 inventory guarded by existing source/dependency checks. The historical builder path
 is retained; the reader path no longer recursively uploads arbitrary files.
 
-The supplied profiles are deliberately fixtures. These offline commands create and
-validate a non-executable preparation plan for either task, after source is committed:
-
-```bash
-uv run --locked python scripts/reader_training.py plan \
-  --profile examples/reader-profile.asset.synthetic.json --out outputs/asset-plan.json
-uv run --locked python scripts/reader_training.py validate \
-  --profile examples/reader-profile.asset.synthetic.json --plan outputs/asset-plan.json
-# Default calculator profile: examples/reader-profile.synthetic.json
-```
-
-For later authorized execution, create a credential-free owned profile in an ignored
-output directory, select `asset-status-v1`, use fresh owned resource/path/attempt
-identities, and set `fixture` false. Keep model/resources/numerical protocol fixed.
-Generate the preparation plan; **only after approval**, the existing preparation flow
-acquires the locked model and generates this task's data. Bind the returned assets
-with a second `plan --assets PATH` invocation, then perform remote preflight and
-supervised launch as described in [reader training](READER_TRAINING.md). Plans under
-the repository must be written to ignored paths. Never commit a plan purporting to
-identify the commit containing itself. Any source/config change requires new plans,
-W&B identities and a reconciled fresh attempt.
+Try the [practice plan and asset-template alteration](READER_TRAINING.md#try-a-plan-without-an-account). The same procedure binds a real source and returned manifest for reader-owned execution. A source or configuration change requires fresh plans and attempt identities.
 
 ## Execution and evidence
 
@@ -463,7 +438,7 @@ dated reports are not rewritten or promoted to v2 qualification. Calculator prom
 scoring and data remain intact; the new v2 evidence rule applies to new plans for
 both tasks.
 
-## Common failures and a third task
+## Common failures and a new task
 
 | Failure | Next step |
 |---|---|
@@ -485,7 +460,7 @@ both tasks.
 | Missing stage integration | Report the stage unqualified, even when other stages completed |
 | Existing/unknown reservation | Reconcile owned calls and prior exposure; never clear reservations or blindly resubmit |
 
-To add a third small task, start with its independent deterministic data and verifier,
+To add another small task, start with its independent deterministic data and verifier,
 then a real MCP tool and a harness using `observed_runtime`. Define an explicit prompt
 that selects visible fields. Add the versioned descriptor in `reader_contract`, its
 preparation/inspection and local-probe dispatch, and all source inputs to the runtime
@@ -497,3 +472,35 @@ new route separately before making live execution or learning claims.
 
 Arbitrary model compatibility, resumed training, more than two updates and accuracy
 improvement are not established by this implementation.
+
+## Recorded qualifications
+
+Phase 3 implements two tasks through the same matched training workflow. The new
+`asset-status-v1` task is **operationally qualified for both algorithms** under the
+`asset-episode-v2` episode contract: baseline, two-update training, native
+checkpoint saving and fresh-worker checkpoint evaluation all completed, with 64/64
+heldout cases at baseline and after reload. That is operational evidence, not
+evidence of learning; the corrected baseline leaves no headroom. See the
+[dated report](PHASE3_QUALIFICATION_2026-11-24.md).
+
+The four earlier attempts failed. They are preserved unchanged in the
+[2026-11-22 report](PHASE3_QUALIFICATION_2026-11-22.md) under their original
+episode policy. The [engineering checklist](PHASE3_ENGINEERING_CHECKLIST.md) condenses
+what they taught into checks to run before a new attempt. See also
+[offline verification](PHASE3_VERIFICATION.md). The local
+harness demonstration uses explicitly scripted inference and does not establish
+live-model behavior.
+
+The third task, `recovery-readiness-v1`, uses three tools and a verifier that checks both the decision and its supporting evidence. The original task, calibration method and offline checks describe the `recovery-episode-v1` contract. Later, both routes ran live development calibration. GRPO completed the A03 two-update qualification and the P02 16-update pilot, including fresh-worker reloads. [Task](PHASE4A_RECOVERY_TASK.md) · [Calibration method](PHASE4A_CALIBRATION.md) · [Offline checks](PHASE4A_VERIFICATION.md) · [Live calibration](PHASE4B_LIVE_CALIBRATION.md) · [A03](PHASE4C_GRPO_CAMPAIGN_CLOSEOUT.md) · [P02](PHASE4C_FUNCTIONAL_PILOT_CLOSEOUT.md)
+
+On the 24 development cases, P02's terminal greedy policy always answered `not_ready`. Strict successes rose from 9/24 to 12/24 while decision accuracy stayed at 12/24. Recovery PPO-MC live training and reload remain unqualified. The full recovery study is unexecuted, and witness-selection SFT remains deferred. The asset `collection-only` procedure above is specific to the asset task. [Paired cases and verifier analysis](PHASE4C_PILOT_LEARNING_DIAGNOSIS.md) · [Study protocol](PHASE4C_LEARNING_STUDY_PROPOSAL.md) · [Draft PR #14](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/pull/14)
+
+The completed calculator qualification remains bound to execution source
+`5daff64cefd348fb731094cf465b223ddceb5fb2` and plan SHA-256
+`a3128740ba4c2133e049bd80e9bdb471aa1ad56df3158479d1594b4e0ab23cc3`.
+Both algorithms completed baseline, two-update training, native checkpoint saving,
+and fresh-worker evaluation reload. GRPO had **0/16 informative reward groups** and
+no observed task-directed policy-gradient signal. PPO-MC made nonzero updates but
+had poor critic diagnostics. Operational validity was established; reliable learning
+improvement was not. Phase 3 commits did not produce those results. The historical
+20-update, three-paired-seed experiment and its learning guide remain separate.

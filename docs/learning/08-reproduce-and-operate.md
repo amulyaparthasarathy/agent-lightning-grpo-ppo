@@ -1,71 +1,71 @@
-# 8. Reproduce and operate within scope
+# 8. Run and adapt an agent-training workflow
 
-**Opening question: What can you verify without credentials, and what requires a separate decision?**
+You have seen how one calculator episode reaches an optimizer. Suppose you want to check the arithmetic, find out what happened in a real experiment, or train a model to use a different tool. Each question has a different starting point.
 
-A useful reproduction claim states exactly what was checked. Recomputing a mean, validating a stored hash, replaying raw tokens and training a new model are different tasks. Begin with checks that use the committed repository alone.
+| Reader path | Start here | What you take away |
+|---|---|---|
+| Learn the mechanics | Run the synthetic example below, then try the [asset harness exercise](../TASK_ADAPTATION.md#run-the-local-checks). | Explain why a split episode keeps its weight and how a tool observation becomes part of the next model input. |
+| Inspect a completed experiment | Run the second check below and read the [six measured runs](07-read-the-experiment-results.md#preserve-every-baseline-and-paired-outcome). | Reproduce the published calculation from files in your checkout. |
+| Run your own experiment | First make an [offline practice plan](../READER_TRAINING.md#try-a-plan-without-an-account). Continue to the funded steps only with your own accounts, model access and budget. | Collect new episodes, train, save a checkpoint and evaluate that checkpoint on a fresh worker. |
 
 ## Two credential-free checks
 
-From the repository root, with Python 3.12 and its standard library:
+Use a Unix terminal, Python 3.12 and the [repository checkout](../../README.md#credential-free-offline-quick-start). Start in its root, where you can see `experiment/`, `scripts/` and `evidence/`. Both commands use the standard library. Once you have the checkout, neither needs a download, an account or a GPU.
+
+**1. Predict what happens when one attempt is split.** Two synthetic attempts, A and B, have mean token losses of 2 and 8. A is stored first as one row, then as three equal-length rows with means 1, 2 and 3. If each row gets one vote, which attempt gains influence?
 
 ```bash
 python3 experiment/cpu_accounting_demo.py
+```
+
+Read the `unsplit` and `fragmented` sections of the printed JSON.
+
+| Representation | Rows for A, B | Mean over rows | Mean over the two attempts |
+|---|---|---:|---:|
+| Unsplit | 1, 1 | 5 | 5 |
+| Fragmented | 3, 1 | 3.5 | 5 |
+
+A now gets three of four votes in the row mean. Averaging within each attempt first gives A half the total weight in either representation. The numbers in this fixture are supplied token losses. For the masks that determine which positions count, see [Chapter 3](03-trajectories-tokens-and-fragments.md#equal-weight-for-each-real-rollout).
+
+**2. Reproduce a measured result.** Look at the final GRPO scores for seeds 2001, 2002 and 2003 in the [committed results](../../evidence/phase2-r03/per_seed_results.csv). The model solved 36, 30 and 34 of the same 64 development questions. Predict the mean across the three runs using $100(36+30+34)/(3\times64)$ percent. Then run the checker.
+
+```bash
 python3 scripts/check_phase2_results.py
 ```
 
-The first prints synthetic row-versus-rollout arithmetic: row mean changes from 5 to 3.5 after fragmentation while the equal-rollout token mean remains 5. It does not measure learning.
+| Algorithm | Printed mean baseline | Printed mean final |
+|---|---:|---:|
+| GRPO | 41.666667% | 52.083333% |
+| PPO-MC | 40.104167% | 51.041667% |
 
-The second verifies 12 listed artifact hashes, six study results, three signed contrasts and 24 derived stage summaries. It recomputes GRPO's mean 41.666667% to 52.083333% and PPO-MC's 40.104167% to 51.041667%. It checks that recorded final reloads use distinct worker IDs and matching checkpoint identities. Its final scope statement is crucial: derived CSV consistency does not revalidate raw trajectories or model/data/tensor bytes.
+Expect `PASS: 12 artifact hashes; 24 stage summaries; six runs; three contrasts.` The 24 summaries include six qualification stages. Only the six 20-update study runs enter these means. The checker compares recorded checkpoint identities and worker call IDs. Rehashing the actual model tensors would require checkpoint bytes beyond the public checkout. If a script cannot be found, check your working directory. If a hash or a count fails, inspect the named evidence file against the committed revision before interpreting the numbers. [Checker source](../../scripts/check_phase2_results.py)
 
-The inline exercises in Chapters 4 and 5 are also standard-library-only. No package installation, GPU dependency download, inference, cloud configuration or training launch is needed for this reader path.
+**Try one change on paper.** Use only seed 2001. Its final GRPO accuracy is 36/64, or 56.25%. Removing two seeds changes which runs you are describing. Even the three-run mean measures performance on just one reused question panel.
 
-## Match each claim to its evidence
+## From a client plan to a served checkpoint
+
+A *plan* records the source revision, task, assets, resources and expected stages for one allocation. A *receipt* records evidence that an operation actually happened. Predict which receipt would tell you that a saved policy can answer a new request after the training worker has exited.
 
 ```mermaid
 flowchart TD
-    A[Submission recorded] --> B[Trainer terminal receipt]
-    B --> C[Actual optimizer calls]
-    C --> D[Complete native checkpoint inventory]
-    D --> E[Separate reload and complete evaluation]
-    E --> F[Recorded endpoint comparison]
-    F -.-> G[Generalization requires a separate evaluation design]
+    P["Local client writes a preparation plan"] --> D["Remote CPU prepares model and task data"]
+    D --> B["Client binds the returned asset manifest"]
+    B --> C["Remote CPU checks the bound inputs and tool"]
+    C --> E["GPU worker evaluates the base policy"]
+    E --> T["Training worker collects episodes and updates the model"]
+    T --> S["Worker saves the native step-two checkpoint"]
+    S --> R["Fresh GPU worker loads and evaluates it"]
+    R --> L["Client collects receipts and checks the stage identities"]
 ```
 
-Each box requires its own evidence; an earlier box does not automatically prove the later ones. A provider function can finish successfully while returning a failed study outcome. A directory named like a checkpoint does not prove that all role files are present.
+The diagram follows one algorithm through a full qualification. Your local terminal sends the requests and reads the evidence. On Modal the harness builds prompts, executes tools and posts rewards. Agent Lightning connects the interaction to the trainer, VERL updates the trainable weights, and vLLM serves the refreshed actor. The two algorithms share this route. PPO-MC also trains and saves a critic. The fresh-worker evaluation receipt ties a complete panel to the saved checkpoint and a different worker. Its optimizer count should be zero. [Chapter 6 reload exercise](06-one-complete-training-update.md#check-that-the-saved-actor-served-the-independent-evaluation)
 
-| Activity | Inputs and scope |
-|---|---|
-| Synthetic arithmetic | Committed demo or inline numbers; verifies the stated calculation |
-| Derived-evidence checking | Selected CSVs, SVG and manifest; checks internal consistency and listed byte identities |
-| CPU backend integration tests | Already prepared compatible pinned CPU environment; exercises backend paths within its documented limits |
-| Raw trace/tensor verification | Authorized raw records, frozen model/data/checkpoint bytes and reviewed comparison procedure |
-| New paid cold-build training | Separately approved source/data plan, services, licensed model access, capacity, costs and completion gates |
-| Public readiness | Separate history/privacy, licensing, redistribution, portability and visibility review |
+Follow the [reader procedure](../READER_TRAINING.md) for the commands, receipts and stop conditions. The recorded short calculator workflow completed both algorithms. GRPO had zero informative groups in sixteen, so every group lacked the reward contrast that supplies its task-directed gradient. The independently reloaded PPO-MC actor scored 28/64 after a 27/64 baseline. These observations establish that the workflow ran on the recorded configuration. They leave the effect of training on fresh questions open. [Calculator qualification](../READER_QUALIFICATION_2026-11-19.md#live-gpu-outcomes)
 
-Optional CPU backend tests are described in the [matched backend document](../PHASE2_MATCHED_BACKEND.md). Its preparation command downloads dependencies. It is not part of these prose exercises, and a passing CPU test is not GPU qualification.
+## Change the agent's job
 
-## Existing runbooks and publication boundaries
+Suppose the question changes from “what is (7+5)*3?” to “what is the backup health of asset-281?” A calculator result needs a numerical answer. An asset lookup returns several facts and the final answer must identify the requested asset and report both status fields. The trainer can still use one terminal reward per completed attempt. The work is in specifying what the agent sees, what the tool accepts and how the harness establishes a trustworthy outcome.
 
-For new reader-owned execution, use the [canonical reader training procedure](../READER_TRAINING.md). The reference Llama/calculator workflow passed live operational, integration, checkpoint and fresh-worker evaluation-reload checks on the [recorded configuration](../READER_QUALIFICATION_2026-11-19.md), for both GRPO and PPO-MC. This includes baseline evaluation and two-update training execution. Its execution identities are separate from the completed release and historical results; later documentation and merge commits did not produce the live run.
+Follow the [calculator-to-asset walkthrough](../TASK_ADAPTATION.md#the-two-workflows). Run the local tool, inspect a scripted continuation and change one answer field. Then decide which attempts belong in a four-member training group. The [asset qualification](../PHASE3_QUALIFICATION_2026-11-24.md) shows what happened with a real model after the harness correction. Both baseline and reload scored 64/64, leaving no measured improvement for training to explain.
 
-GRPO had 0/16 informative reward groups and no observed task-directed policy-gradient signal. PPO-MC made nonzero updates, but the short run did not establish useful critic convergence or reliable improvement. Evaluation-only reload does not qualify resumed training. The alternate asset task was later [operationally qualified](../PHASE3_QUALIFICATION_2026-11-24.md), again without a learning claim. Alternate-model work remains open; this run does not universally qualify future environments or cold builds.
-
-The [historical experiment runbook](../../experiment/README.md), [matched backend](../PHASE2_MATCHED_BACKEND.md), [exploratory protocol](../PHASE2_EXPLORATORY.md) and [ten-way runbook](../PHASE2_TENWAY.md) preserve their original scopes. New execution requires separately authorized access, source identity, data/model rights, capacity and budget. Cached-image r03 success does not establish a fresh cold build. The formal ten-job campaign remains unexecuted/unqualified; its untouched-holdout route is not the reused-panel r03 study.
-
-The [evidence index](../../evidence/phase2-r03/EVIDENCE_INDEX.md) lists retained private raw/checkpoint locators. They are not included artifacts or paths promised to exist in a clone. No backup, tensor download, deletion or model redistribution follows from reading this guide.
-
-This educational snapshot excludes the original private Git history. Scoped licenses and notices are included; the [release plan](../PUBLIC_RELEASE_PLAN.md) records publication verification. Its [source map](source-map.md#public-source-representations) supplies publicly usable implementation representations. The recorded reader-owned validation does not establish access to private historical artifacts; that remains a separate, unqualified operation.
-
-## Exact source and evidence limits
-
-[`cpu_accounting_demo.scenario`](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/blob/89fe32f92f29209803c13264baed951713741d42/experiment/cpu_accounting_demo.py#L14) is an existing synthetic fixture. [`check_phase2_results.main`](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/blob/89fe32f92f29209803c13264baed951713741d42/scripts/check_phase2_results.py#L33) maps to the post-execution verification revision because it was added after the executed source. [`checkpoint_identity`, `verify_checkpoint` and `complete_stage`](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/blob/89fe32f92f29209803c13264baed951713741d42/experiment/matched_launch.py#L158) define the recorded runtime requirements; the offline checker reads their derived summaries rather than rerunning them.
-
-The [source map](source-map.md) records editorial context, historical discrepancies and unavailable series; it does not publish editorial packet hashes. The [learning index](README.md) records this documentation revision's verification scope separately from the historical audit.
-
-## Offline exercise and answer
-
-**Exercise:** Both offline commands pass. Can you now claim that all remote checkpoint tensors were independently rehashed, that training reproduces from a cold build, or that the repository is ready to become public?
-
-**Answer:** None of those follows. You checked synthetic arithmetic and committed derived evidence. Raw tensor identity, cold-build execution and publication readiness each require different inputs and separately reviewed work.
-
-Next: use the [glossary](glossary.md) to review the vocabulary, then the [source map](source-map.md) for deeper code reading, or return to the [learning index](README.md).
+Return to the [learning index](README.md) or use the [source map](source-map.md) to locate the implementation and the original execution evidence.

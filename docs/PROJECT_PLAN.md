@@ -1,6 +1,6 @@
 # Project plan: training language models for agent use
 
-**Version 1.2, November 27, 2026 UTC.** This is the shared implementation plan for the owner, ChatGPT, Codex, and other contributing agents. [Current continuation](PROJECT_CONTINUATION.md) records progress and the next action. [Agent instructions](../AGENTS.md) provide the session entry point.
+**Version 1.3, November 27, 2026 UTC.** This is the shared implementation plan for the owner, ChatGPT, Codex, and other contributing agents. [Current continuation](PROJECT_CONTINUATION.md) records progress and the next action. [Agent instructions](../AGENTS.md) provide the session entry point.
 
 ## 1. Goal and completion standard
 
@@ -41,7 +41,7 @@ The repository is already public. This is an educational revision of that public
 | Keep new execution bounded | No automatic extra seeds, longer runs, final-panel evaluation, retries, or changes to the learning algorithm. |
 | Maintain durable continuity | Keep stable direction here and mutable progress in `PROJECT_CONTINUATION.md`. Update both only when their respective content changes. |
 | Adopt CMU-inspired practical teaching | Supply complete runnable examples, expected outputs, reproducible figures, and interpretation exercises within the existing structure. |
-| Prepare one hosted-Tinker companion in parallel | The documentation path stays first. A separate track builds one small GRPO companion offline and returns runnable code, local validation and one exact execution proposal. [Scope and decision](#parallel-hosted-tinker-companion) |
+| Keep one active implementation workstream | Finish the core learner documentation first. Preserve the implemented, locally tested hosted-Tinker companion in PR #22 until the owner returns to it. [Scope and decision](#hosted-tinker-companion) |
 
 The owner authorized creation, revision, and merge of PR #15 after final review. It does not turn every future milestone into an unrestricted implementation or spending mandate. An agent continues the work assigned by the owner and preserves any applicable standing authorization.
 
@@ -236,19 +236,19 @@ Introduce the following ownership comparison in Modules 3/9, and link the [seque
 |---|---|---|---|
 | Existing lab | Harness, Agent Lightning adapters, matched GRPO/PPO-MC | VERL and vLLM | Modal |
 | CMU assignment | scottyrl harness and student training/data code | Tinker-compatible API, SkyRL, Megatron, vLLM | Modal |
-| Hosted-Tinker companion (planned) | Our adapted harness, verifier, advantages, loss, and evaluation | Thinking Machines' service through the Tinker API | Managed by Thinking Machines |
+| Hosted-Tinker companion (locally tested) | Our adapted harness, verifier, advantages, loss, and evaluation | Thinking Machines' service through the Tinker API | Managed by Thinking Machines |
 
-CMU's [deployment guide](https://github.com/cmu-agents/assignment-3/blob/88d1b1fa2aea58938d6d251847ce5559c4ac6558/skyrl_tinker_modal/README.md) uses Tinker-compatible APIs on Modal. These are different layers, not interchangeable providers. Hosted Tinker's [current overview](https://tinker-docs.thinkingmachines.ai/tinker/) describes LoRA training; its [model catalog](https://tinker-docs.thinkingmachines.ai/tinker/models.json) did not establish support for this lab's exact pinned Llama checkpoint at the November 26 review. Recheck model availability when preparing the companion proposal.
+CMU's [deployment guide](https://github.com/cmu-agents/assignment-3/blob/88d1b1fa2aea58938d6d251847ce5559c4ac6558/skyrl_tinker_modal/README.md) uses Tinker-compatible APIs on Modal. These are different layers, not interchangeable providers. Hosted Tinker's [current overview](https://tinker-docs.thinkingmachines.ai/tinker/) describes LoRA training; its [model catalog](https://tinker-docs.thinkingmachines.ai/tinker/models.json) did not establish support for this lab's exact pinned Llama checkpoint at the November 26 review. The companion proposal records its own model selection.
 
 A loss named `ppo` is an actor surrogate, not proof that this lab's learned-critic PPO-MC has been ported. A sampling client reload does not by itself prove the distinct physical worker/container identity measured on Modal. Compare the supported model/revision, parameterization, objective, masks, weighting, checkpoint guarantees, and all relevant costs before making parity claims. Hosted token-based charges and Modal resource-time charges require different accounting. No lower-cost outcome is established here.
 
-### Parallel hosted-Tinker companion
+<a id="parallel-hosted-tinker-companion"></a>
+
+### Hosted-Tinker companion
 
 The owner reports a $250 credit grant that may expire December 15, 2026. The remaining balance, exact expiry and grant-specific eligibility are unverified. Published prices can support a cost estimate. Only account-specific evidence can establish available credit and applicable terms.
 
-Prepare one small hosted-Tinker GRPO companion alongside the guide. Deliver a runnable implementation, local credential-free validation of its data and update inputs, and one exact proposed run. Identify the source revision, command, model, task, sampling and update counts, token limits, expected evidence, maximum exposure and stop condition. Separate local results from any behavior that requires the hosted service. The owner decides on credit-consuming execution after reviewing those deliverables and the grant terms. Offline preparation has zero dispatch authority.
-
-The documentation workstream maintains the shared plan and continuation and records the companion branch/PR when known. The core chapters and planned recovery PPO-MC qualification proceed independently. Use the completed studies as teaching evidence.
+The original parallel preparation produced a runnable GRPO companion and one bounded proposal. The owner now prefers sequential execution. Preserve `hosted-tinker-grpo` in [PR #22](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/pull/22) while the documentation workstream finishes the core guide. The companion reports local tests, including mocked sampling and optimization. Hosted behavior remains unqualified and the proposed $0.02 gross maximum is unauthorized. The [continuation](PROJECT_CONTINUATION.md) records its executable source and review head. Keep the recovery PPO-MC goal independent of the companion.
 
 ## 4. Existing experiments to teach from
 
@@ -308,7 +308,7 @@ Acceptance: examples and formulas match the actual masks, normalization, advanta
 
 ### M3. Make execution and task adaptation teachable
 
-Develop Modules 9–10 from the existing reader and adaptation procedures. Keep the canonical commands in one maintained procedure and link from the narrative instead of creating conflicting copies. Show the three reader paths explicitly, and explain backend ownership. Keep companion implementation in its parallel track.
+Develop Modules 9–10 from the existing reader and adaptation procedures. Keep the canonical commands in one maintained procedure and link from the narrative instead of creating conflicting copies. Show the three reader paths explicitly, and explain backend ownership. The hosted companion stays paused during this work.
 
 Acceptance: steps identify the terminal/environment, prerequisites, exact input, expected output/evidence, cost boundary, and relevant failure diagnosis. Public readers can complete the offline route without private resources. Paid commands are explained and locally checked where applicable; running them is not a documentation acceptance gate. The local client and remote GPU dependencies remain separate.
 
@@ -432,7 +432,7 @@ docs/PROJECT_PLAN.md, and docs/PROJECT_CONTINUATION.md.
 Inspect live GitHub and local changes first, then implement the next unfinished
 milestone within my current authorization. Reuse the completed experiments and
 existing chapters. Do not restart planning or repeat old runs. Preserve the
-documentation priority, parallel offline Tinker scope, planned recovery PPO-MC
+single documentation workstream, paused Tinker companion, planned recovery PPO-MC
 qualification and all deferred-work boundaries.
 Update the continuation with actual work, checks, authority, and one next action.
 ```
@@ -441,7 +441,7 @@ That instruction points an agent to the plan. It does not itself authorize paid 
 
 ## 9. Deferred work and reopening conditions
 
-Witness SFT execution or merge, additional recovery GRPO seeds, the full recovery study, extended PPO studies, final-panel model evaluation, other alternative backends, resumed-training qualification and new deployment or export campaigns remain deferred. The [bounded hosted-Tinker companion](#parallel-hosted-tinker-companion) has a parallel offline implementation track. Hosted execution requires a separate owner decision on its exact proposal.
+Witness SFT execution or merge, additional recovery GRPO seeds, the full recovery study, extended PPO studies, final-panel model evaluation, other alternative backends, resumed-training qualification and new deployment or export campaigns remain deferred. The [bounded hosted-Tinker companion](#hosted-tinker-companion) is preserved in PR #22 until the core guide is finished. Hosted execution requires a separate owner decision on its exact proposal.
 
 Do not keep these as mandatory unfinished tasks in the educational release. Mention them as possible future work with their uncertainties. Reopen one only when its learning or engineering value justifies the time/cost and the owner selects it.
 
