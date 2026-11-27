@@ -1,5 +1,160 @@
 # Reader-owned reference training
 
+Use this procedure to take one model through **baseline evaluation → two training updates → checkpoint evaluation on a fresh worker** for both GRPO and PPO-MC. Start with a practice plan you can make locally. To learn without running a model, the [two offline checks](learning/08-reproduce-and-operate.md#two-credential-free-checks) reproduce synthetic arithmetic and published results. The [asset walkthrough](TASK_ADAPTATION.md#run-the-local-checks) exercises the harness with scripted responses.
+
+## Client and source
+
+Run every shell block **in the same Bash terminal at the root of your checkout**, on Linux or WSL2. An existing Unix Workbench environment works. You need Git, Python 3.12 and uv. The [quick start](../README.md#credential-free-offline-quick-start) shows how to obtain the public checkout. If you change the task code, use a clean, committed checkout of your own fork with its actual GitHub origin and the canonical baseline in its history. [Fork and source admission](TASK_ADAPTATION.md#a-reader-owned-fork-and-a-source-bound-plan)
+
+| Where | Responsibility | Dependencies and access |
+|---|---|---|
+| Your terminal | Write and validate plans, submit owned work, read status, collect evidence or request a stop | Locked Python client. Package installation may download from the package index. Only online commands need Modal authentication. |
+| Remote CPU | Build or resolve the training image, prepare the exact model and data on the Volume, check the tokenizer and run the tool probe | Remote Linux x86-64 image, licensed model access, task inputs and the reader's Secret |
+| Remote GPU | Run the harness and inference server, collect rewards, optimize, save the checkpoint, then evaluate it in a new worker | The remote image supplies CUDA, Torch, VERL and vLLM. One H100 stage runs at a time. |
+
+Can your client describe an allocation before you log in? Install the locked client packages in the existing project environment and inspect the command list. Use a project-local virtual environment for this checkout. The CPU-only harness environment used in the adaptation lesson is separate.
+
+```bash
+uv sync --locked --inexact --python 3.12
+.venv/bin/python scripts/reader_training.py --help
+```
+
+Expect the command list from `plan` to `stop-owned`. A missing script usually means you are outside the root. A missing client package calls for checking the Python version and locked sync. Nothing in this step acquires weights or requires a local GPU.
+
+## Try a plan without an account
+
+**Predict.** If a plan names a GPU and two algorithms but only has example account names and no asset manifest, should it be able to start training?
+
+Choose a template and create a fresh ignored directory for this session. The shell function below is a short way to run the same client with the selected profile throughout the procedure. Keep the printed directory if you need to return to the receipts later.
+
+```bash
+mkdir -p .local
+reader_dir=$(mktemp -d .local/reader-XXXXXX)
+echo "$reader_dir"
+reader_template=examples/reader-profile.synthetic.json
+reader_profile="$reader_template"
+reader() { .venv/bin/python scripts/reader_training.py "$@" --profile "$reader_profile"; }
+reader plan --out "$reader_dir/practice-plan.json"
+reader validate --plan "$reader_dir/practice-plan.json"
+```
+
+Both commands print the same `plan_sha256` (a fingerprint of the plan), with `valid: true`, `offline: true`, `training_admissible: false` and `UNVERIFIED` ownership and availability. Open `practice-plan.json` and find `source.commit`, `task_identity.name`, `assets` and the stages in `jobs`. A null asset inventory is enough for planning preparation. A fixture can never launch. The client checks the clean committed source and profile locally. If it reports stale source, changed configuration or a used output path, preserve the old plan and generate a fresh one against the intended committed inputs.
+
+**Optional alteration.** Repeat the block with `reader_template=examples/reader-profile.asset.synthetic.json`. The task becomes `asset-status-v1`, and its contract names `lookup_asset`. The reference model, two algorithms and offline admission result stay the same. You can finish the lesson here.
+
+## Configure a reader-owned allocation
+
+For a new run, use **your own separately funded resources**. The commands for `setup`, `prepare`, `preflight`, `launch`, `status`, `collect` and `stop-owned` contact your account. Preparation, image builds, preflight, GPU stages, transfers and storage can incur charges. Review current rates, capacity, outstanding exposure and retention against your own ceiling before setup. You can still run `plan` and `validate` offline with your actual profile.
+
+Start with the calculator template for the reference workflow, or the asset template for the adaptation. The example already has the required JSON structure. Copy the selected template once and edit the copy in your editor.
+
+```bash
+reader_profile="$reader_dir/profile.json"
+cp "$reader_template" "$reader_profile"
+```
+
+| Profile input | Supply or check before planning |
+|---|---|
+| `fixture`, `task`, `algorithms` | Set `fixture` to `false` for the real allocation. Keep the selected task and both algorithms. For the standard six stages, omit `purpose`. The asset-only [development variant](TASK_ADAPTATION.md#greedy-evaluation-does-not-test-sampled-training) has a different stage contract. |
+| `modal` | Use your authenticated local profile, its intended workspace and existing environment. Name an existing Secret in that environment containing `HF_TOKEN` and `WANDB_API_KEY`. Choose fresh owned app, registry and Volume names. `setup` creates the latter two. |
+| `paths`, `experiment`, `attempt` | Supply distinct Volume-relative model, data, staging and output paths, an experiment ID and attempt number. Preserve earlier allocations. |
+| `wandb` and model access | Supply a real W&B entity and existing project. Your HF account must have gated access to the model. Keep credentials in their private stores. The JSON contains names only. |
+| `model`, `resources`, `bounds` | Keep the supported Llama 3.2 3B Instruct revision, tokenizer and parser from the template. The reference allocation uses one H100, 16 CPUs and 196608 MiB of host memory. Review the ceilings below. |
+
+The example permits six stage calls of at most 3600 seconds, startup heartbeat within 600 seconds, a 22200-second supervisor, CPU preparation up to 3600 seconds and CPU preflight up to 900 seconds. Its example budget allows $10 for builds, $5 for preparation/preflight, $125 for training/supervision, $7 for storage and $0.08 for collection within $148 total. The supervisor reserves against the conservative worker rate. These values are planning inputs. Provider billing and later retention charges can differ. The client rejects unsupported or underfunded profiles.
+
+**What distinguishes the two plans you will make?** The first describes *where to prepare* assets. Select your Modal profile from the edited JSON and validate this first plan locally. Expect matching hashes and `training_admissible: false` because there are no prepared assets yet.
+
+```bash
+export MODAL_PROFILE="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["modal"]["profile"])' "$reader_profile")"
+prep_plan="$reader_dir/preparation-plan.json"
+reader plan --out "$prep_plan"
+reader validate --plan "$prep_plan"
+```
+
+## Create storage and prepare the model and data
+
+**First online operation.** Where will the next worker find the inputs when the preparation worker exits? Run this command only within the reader-owned allocation. It checks the authenticated workspace and Secret, then creates the scoped Volume (persistent files) and registry (operation records).
+
+```bash
+reader setup --plan "$prep_plan"
+```
+
+Expect `status: resources_created`. A different authenticated workspace or an existing resource name stops setup. If creation partially succeeds, inspect your actual account before making any further change.
+
+```bash
+reader prepare --plan "$prep_plan" --out "$reader_dir/preparation-submission.json"
+```
+
+Expect a submission receipt with `status: submitted` and a call ID after image resolution. Keep the client running until it returns. The remote CPU worker acquires the pinned model, installs the fixed-date tool template and verifies the weight shards, configuration and tokenizer. For the calculator it downloads the released Calc-X archive and selects the data with seed 329. For asset status it generates the versioned synthetic registry and panels. Input hashes and ordered case IDs go into a manifest. If a build fails, access is denied or a submission is `unknown`, retain the receipts. An ambiguous submission can still be running. Use status and the [owned stop procedure](#stop-and-recover-within-ownership) before considering another allocation.
+
+Poll with the following command. Expect exit code **2** while full workflow evidence is incomplete. Read the JSON: a completed preparation is `operations.prepare.result.status` equal to `completed`. A missing or failed result cannot supply the next plan.
+
+```bash
+reader status --plan "$prep_plan"
+```
+
+Once preparation completes, collect its evidence into a fresh directory. This inspection also returns 2 because the six GPU stages have yet to run.
+
+```bash
+reader collect --plan "$prep_plan" --out "$reader_dir/prepared"
+```
+
+Expect `prepared/prepare/assets.json` under your session directory and an empty `collection_errors` list in `prepared/collection.json`. If files or hashes are missing, inspect the preparation receipt and collection errors. The model weights stay in the Volume. Keep staging for the independent preflight checks.
+
+## Bind actual inputs, preflight, then launch
+
+**Can a different set of model or dataset bytes satisfy the preparation plan alone?** Make the second plan locally, this time binding the returned manifest. Both outputs should agree on the new plan hash and say `training_admissible: true` for the real qualification profile. This checks manifest consistency locally. The worker must still verify the actual files.
+
+```bash
+train_plan="$reader_dir/training-plan.json"
+reader plan --assets "$reader_dir/prepared/prepare/assets.json" --out "$train_plan"
+reader validate --plan "$train_plan"
+```
+
+Preflight submits a **billable remote CPU** check in the training image. It rehashes inputs, checks source/package identities and the reviewed dependency exceptions, loads the tokenizer, checks HF/W&B read access and exercises valid and invalid tool requests over stdio. It loads no model weights.
+
+```bash
+reader preflight --plan "$train_plan" --out "$reader_dir/preflight-submission.json"
+reader status --plan "$train_plan"
+```
+
+Expect `submitted` first. Repeat the status command until `operations.preflight.result.status` is `completed` and its nested `result.status` is `passed`. Exit 2 still applies. If a hash, package, tool probe or account check fails, inspect the preflight evidence. Launch requires a passing durable receipt for this exact plan.
+
+**Which stages should change the weights?** Within the funded allocation, launch once. The detached supervisor schedules single-use workers in one GPU lane. Expect a submission receipt. Poll status to follow the stages.
+
+```bash
+reader launch --plan "$train_plan" --out "$reader_dir/training-submission.json"
+reader status --plan "$train_plan"
+```
+
+| Stage for each algorithm | Look for this evidence | If it is missing |
+|---|---|---|
+| Baseline | 64 scored episodes from the base actor, zero optimizer calls. A live chain links a model action to the tool, the observation in a subsequent model call and a delivered reward. | A completed baseline lacking a chain causes training and reload for that algorithm to be skipped with `baseline_integration_unqualified`. |
+| Training | Two collections of 8 questions × 4 complete attempts. Two actor optimizer calls, also two critic calls for PPO-MC. Serving refresh at steps 0, 1 and 2. Native step-two checkpoint with hashes for each role. | A missing reward or missing generated tokens invalidates the collection. Keep the failure. Four confirmed zero rewards in one group are valid data. |
+| Checkpoint evaluation | A different worker verifies and loads the checkpoint, refreshes at step 2 and evaluates all 64 cases with zero optimizer calls. | Check the matched checkpoint digest, distinct call/container identities and complete evaluation receipt. A directory name alone cannot establish reload. |
+
+Once the supervisor reaches a terminal outcome, collect the bounded evidence, including failures, into a new directory. `status` can return 2 both while running and after a failed stage. Inspect the supervisor index and durable receipts to distinguish them.
+
+```bash
+reader collect --plan "$train_plan" --out "$reader_dir/training-evidence"
+```
+
+Open `training-evidence/collection.json`. A successful full qualification has `evidence_complete: true`, zero exit status, and integration coverage in baseline, training and fresh reload for **each** algorithm. Read operational completion, integration and informative GRPO groups separately. Operational checks can pass with integration gaps or with zero informative groups. A chain ending in a confirmed reward of zero can establish tool integration. Only the final answer determines task correctness. For a measured comparison, read the [calculator qualification](READER_QUALIFICATION_2026-11-19.md#live-gpu-outcomes) and the [asset qualification](PHASE3_QUALIFICATION_2026-11-24.md).
+
+## Stop and recover within ownership
+
+If the allocation must stop, use the plan for the operation you intend to cancel. Use `"$prep_plan"` in place of `"$train_plan"` below for preparation. This is an online cancellation command.
+
+```bash
+reader stop-owned --plan "$train_plan"
+```
+
+Expect `status: cancellation_requested`, the known owned calls and any cancellation errors. The command writes a plan-specific stop marker. A missing call ID leaves the outcome unknown. Check status again, inspect owned provider state and collect to a fresh directory. Preserve ambiguous reservations and partial evidence. An interrupted episode has no confirmed training reward. Reconcile exposure before any fresh attempt. The 300-GiB storage ceiling can be overshot between checks. The seven-day retention interval is a review point. Stopping calls leaves assets and checkpoints in storage.
+
+## What the reference workflow qualifies
+
+
 **Phase 3 update:** New plans use `reader-task-v2`, support reader-owned GitHub forks and the synthetic `asset-status-v1` task. See [Task adaptation](TASK_ADAPTATION.md) for the workflow, migration and all-stage integration rule. The first [asset live report](PHASE3_QUALIFICATION_2026-11-22.md) records 64/64 baseline integration for both algorithms, followed by incomplete training collections and zero optimizer updates. After the `asset-episode-v2` correction, the [2026-11-24 report](PHASE3_QUALIFICATION_2026-11-24.md) records all six asset stages completed, with native checkpoints and fresh-worker reload for both algorithms. The [closeout](PHASE3_CLOSEOUT_2026-11-24.md) holds the preservation inventory and accounting, and the [engineering checklist](PHASE3_ENGINEERING_CHECKLIST.md) lists what to check before a new attempt. The earlier calculator report retains its original v1 semantics and exact execution identities.
 
 **Recovery status.** Both collection routes completed development calibration (120 episodes each, zero updates). GRPO then passed its recorded functional gates in A03 (two actor updates) and P02 (16), each including fresh-worker checkpoint reload. P02's terminal greedy policy answered `not_ready` on all 24 development cases. Strict success rose from 9/24 to 12/24 while decision accuracy stayed at 12/24. [Calibration](PHASE4B_LIVE_CALIBRATION.md) · [A03](PHASE4C_GRPO_CAMPAIGN_CLOSEOUT.md) · [P02](PHASE4C_FUNCTIONAL_PILOT_CLOSEOUT.md) · [Paired decisions](PHASE4C_PILOT_LEARNING_DIAGNOSIS.md)
@@ -17,139 +172,19 @@ The current execution schema is `reader-task-v2`; archived `reader-reference-v1`
 | Reference Llama + recovery-readiness-v1 (`recovery-episode-v1`) | A03 two-update qualification and P02 16-update development pilot passed their functional gates and reloaded in fresh workers | Development collection ran live. Training and reload have offline checks only |
 | Reference Llama + asset-status-v1 (`asset-episode-v2`) | Live baseline, two updates, native checkpoint and fresh-worker reload completed; 64/64 before and after; 1/16 informative groups; learning benefit not established. Earlier attempts a01–a04 remain unqualified under their original policy | Live baseline, two actor and two critic updates, native checkpoint and fresh-worker reload completed; 64/64 before and after; poor critic diagnostics; learning benefit not established. Earlier attempts a01–a04 remain unqualified under their original policy |
 
-Every cell needs actual baseline, training, checkpoint and fresh-reload evidence before the milestone is complete. Qualifying the alternate rows does not qualify their cross-product. Short qualification does not require accuracy improvement and does not establish resumed-training support.
+Each cell needs its own execution evidence. Evaluation reload qualifies scoring with saved weights. Resumed optimizer-state training requires a different test.
 
-## Client and source
+### Prepared inputs and worker identities
 
-Run every command below from this public repository's root in the existing Unix Workbench Dev Container, or a Linux/WSL filesystem. Python 3.12, Git and uv are prerequisites. No local CUDA, Torch, PyArrow or Docker socket is required for ordinary client commands. Do not copy a virtual environment between architectures; the remote image targets Linux x86-64/H100. The offline verification for this PR uses the available aarch64 Python 3.12 client.
+The example uses the pinned model revision `0cb88a4f764b7a12671c53f0838cd831a0843b95`, the `llama3b` profile and the `llama3_json` tool parser. CPU preparation uses four CPUs and 16 GiB. Image resolution may invoke the shared heavy builder (8 CPUs, 64 GiB, 7200 seconds), dependency finalizer (4 CPUs, 16 GiB, 1800 seconds) and reader overlay (4 CPUs, 16 GiB, 900 seconds). Provider-default layers and cache availability also affect exposure. The client shortens its dispatch deadlines by 30 seconds for clock uncertainty. See the [profile](../examples/reader-profile.synthetic.json) and [build and runtime evidence](READER_QUALIFICATION_2026-11-19.md).
 
-```bash
-uv sync --locked --python 3.12
-uv run --locked python scripts/reader_training.py --help
-```
+All four prepared panels and evaluation JSONL files are checked for hashes, schemas, ordered IDs, duplicate/conflicting questions, split isolation and JSONL/Parquet agreement. The final panel contains 64 cases, the training pool 256, with 16 nested training-smoke and eight separate evaluation-smoke cases. Worked solutions are discarded. Only `question` enters the prompt; `result` remains the verifier's private answer key. Preflight and stages rehash raw inputs and reproduce deterministic selection, in addition to checking prepared outputs. Do not remove staging before qualification.
 
-For the local synthetic Parquet tests only, install the optional locked test group. This does not install a GPU stack or acquire model/dataset assets:
+Each worker checks source, plan, configuration and model/data identities. GPU stages run CUDA and FlashAttention checks before the model workflow. Each role's native checkpoint inventory includes model, optimizer and extra-state files with sizes and hashes. The reload must match the checkpoint before and after evaluation. Receipts bind each worker to its provider container ID and call ID. Training and reload can share a hostname or reuse a process number and still be distinct workers. Read the container and call identities together with the recorded launcher/trainer process IDs. [Stage evidence validator](../experiment/reader_evidence.py)
 
-```bash
-uv sync --locked --group reader-test --python 3.12
-bash scripts/test_reader_offline.sh
-```
+For deeper local checks, the repository includes the [reader offline suite](../scripts/test_reader_offline.sh) and [task contract suite](../scripts/test_task_local.sh). The walkthrough above uses focused exercises. Full suite inputs include synthetic bytes and mocked service boundaries.
 
-The script clears credentials, points Modal configuration at `/dev/null`, disables Hub access and denies network transports through a test-only `sitecustomize`. It runs the two accounting/results commands, 39 PPO-MC tests, 15 matched-study tests, and the reader/refactor tests. Model files in tests are explicitly synthetic non-model bytes; remote submissions and health responses are explicitly mocked. Parquet selection, actual child process environments, cleanup and Modal SDK function discovery are exercised locally. These checks do not qualify inference or training. Do not add the test guard to real execution environments.
-
-A real calculator-only stdio probe can also run locally without model/data acquisition or a GPU stack. This uses an isolated CPU environment with the same pinned calculator and AutoGen versions. Dependency installation accesses the package index; the probe itself needs no credentials or network. Choose a fresh receipt filename:
-
-```bash
-UV_PROJECT_ENVIRONMENT=.venv-reader-cpu uv sync --locked --only-group reader-harness
-mkdir -p .local/reader-cpu
-env -i PATH="$PATH" HOME=/tmp MODAL_CONFIG_PATH=/dev/null \
-  PYTHONPATH="$PWD/tests/offline_guard:$PWD" \
-  .venv-reader-cpu/bin/python experiment/reader_calculator.py \
-  --out .local/reader-cpu/calculator-preflight.json
-```
-
-The probe checks the advertised `calculate(expression: string)` schema, evaluates `(2 + 3) * 4` to `20`, and checks that `unknown_reader_symbol + 1` reports the expected tool error. Its receipt records the actual schema, requests, responses, package versions and validation outcome. RPC reads have a 15-second timeout; an isolated process bounds startup/calls/teardown to 90 seconds with up to 10 seconds for cleanup. Normal teardown exits the workbench context; timeout cleanup kills the owned client and separately registered MCP server process groups. Failure receipts are retained and never overwritten. A passing local calculator receipt alone establishes calculator CPU behavior; it cannot qualify remote packages, model/tool integration, training or reload. The [completed live reference run](READER_QUALIFICATION_2026-11-19.md) supplies separate evidence for its recorded configuration. The remote preflight runs the same probe again in its actual image and writes `preflight/calculator-preflight.json`.
-
-Plans require a clean committed checkout with a credential-free GitHub `origin` identifying the actual reader repository, plus local ancestry from the pinned canonical public baseline; see [fork admission](TASK_ADAPTATION.md#a-reader-owned-fork-and-a-source-bound-plan). The commit, packaged source hashes, lockfiles, relevant configuration inputs, resolved profile, exact asset manifests and task/verifier identities are bound into the plan. Changing source, configuration or assets requires a new plan. Keep generated plans outside Git: committing a plan that names its own source commit would change that commit. The CLI rejects dirty or uncommitted source before creating a plan; keeping the generated plan itself outside Git is required. `validate` checks current source/profile and manifest consistency, not remote bytes or account ownership.
-
-## Non-secret profile and offline planning
-
-The complete [synthetic example](../examples/reader-profile.synthetic.json) is deliberately non-executable (`fixture: true`). It uses example names, has no credentials and supplies no asset hashes. `plan` and `validate` import no cloud apps, authenticate nowhere, create no remote resources, build nothing and perform no acquisition or preparation.
-
-```bash
-uv run --locked python scripts/reader_training.py plan \
-  --profile examples/reader-profile.synthetic.json --out .local/reader-demo/plan.json
-uv run --locked python scripts/reader_training.py validate \
-  --profile examples/reader-profile.synthetic.json --plan .local/reader-demo/plan.json
-```
-
-Expected output: `offline: true`, explicit unverified ownership/availability, and `training_admissible: false`. `plan` exclusively creates its output; choose a fresh filename if it exists. `validate` writes no files. A preparation-only plan without real manifests cannot launch training. Commit intended source before planning; no dirty-source CLI preview is admitted.
-
-For a future authorized run, copy the example into ignored local storage:
-
-```bash
-mkdir -p .local/reader
-cp examples/reader-profile.synthetic.json .local/reader/profile.json
-```
-
-Edit that non-secret JSON before creating plans. Set `fixture` to `false` only for your actual configuration. Supply your explicit Modal local profile **and intended authenticated workspace**, existing environment, distinct app/registry/Volume/Secret names, W&B entity/project, fresh Volume-relative model/data/staging/output paths, experiment ID and attempt number. All fields are required. There is no maintainer-resource fallback. Historical names and path roots, traversal, absolute paths, symlink escapes, overlapping paths, unsupported models/tasks/algorithms, nonfinite bounds and insufficient budgets are rejected.
-
-Keep the exact model selection: `meta-llama/Llama-3.2-3B-Instruct`, revision `0cb88a4f764b7a12671c53f0838cd831a0843b95`, profile `llama3b`, parser `llama3_json`. Both algorithms are required. The first proposal retains one H100, 16 CPUs and 196608 MiB host memory with concurrency one. This continuity choice is not a minimum-resource claim.
-
-The example permits six stage calls of at most 3600 seconds, startup heartbeat within 600 seconds, a 22200-second supervisor, CPU preparation up to 3600 seconds and CPU preflight up to 900 seconds. It budgets $10/build, $5/preparation and preflight, $125/training and supervision, $7/storage, and $0.08/collection within $148 total. The supervisor deliberately charges its own time against the conservative $10/hour worker ceiling; the $0.10/hour supervisor estimate is informational. Reader dispatch deadlines reserve 30 seconds for cross-host clock uncertainty: a 900-second CPU limit dispatches a deadline 870 seconds after the client clock sample, and a 3600-second stage dispatches 3570 seconds. This shortens exposure; the strict worker deadline admission and provider timeouts remain intact. CPU receipts retain the admitted deadline and entry time. Each rate is a planning ceiling, not a provider-enforced spending cap. Recheck current rates and account allowance before spending. There are no automatic retries, budget extensions or later campaign stages.
-
-## Explicit online setup and preparation
-
-**Everything from here requires live authorization.** The dated qualification report records the completed reference allocation; it does not authorize another reader allocation or establish compatibility of a future image/build. Obtain gated model access under the applicable model terms and configure Modal/HF/W&B through their normal private stores. Create a W&B project and an existing named Modal Secret containing `HF_TOKEN` and `WANDB_API_KEY` through your normal account setup. Never place their values in the profile, commands, Git, logs or chat. This workflow does not create or modify Secrets or environments.
-
-Set `MODAL_PROFILE` to exactly the profile value you chose. The CLI checks `Workspace.from_context().hydrate().name` against the intended workspace before resource operations; an environment variable alone is not ownership evidence. Remote entrypoints check the workspace again. The profile's environment scopes every resource lookup. API token environment overrides that authenticate to a different workspace are rejected.
-
-```bash
-uv run --locked python scripts/reader_training.py plan \
-  --profile .local/reader/profile.json --out .local/reader/preparation-plan.json
-uv run --locked python scripts/reader_training.py validate \
-  --profile .local/reader/profile.json --plan .local/reader/preparation-plan.json
-uv run --locked python scripts/reader_training.py setup \
-  --profile .local/reader/profile.json --plan .local/reader/preparation-plan.json
-uv run --locked python scripts/reader_training.py prepare \
-  --profile .local/reader/profile.json --plan .local/reader/preparation-plan.json \
-  --out .local/reader/preparation-submission.json
-```
-
-`setup` verifies the existing Secret handle and explicitly creates the named Volume and registry, refusing existing names. If creation partially succeeds, inspect the resources; do not rerun blindly, delete them or assume they are unused. No creation happens during planning or import. The environment and Secret must already exist.
-
-`prepare` records local and remote submission intent before image resolution. It can build the pinned CUDA/training image on CPU, then submits one detached CPU preparation worker, with four CPUs/16 GiB and the declared deadline. The separate `/opt/agent-lightning/.venv/bin/python` already provides PyArrow, HF and gdown. The ordinary client never needs them for this operation. The shared heavy builder retains 8 CPUs/64 GiB/7200 seconds, the dependency finalizer 4 CPUs/16 GiB/1800 seconds, and the reader Transformers overlay 4 CPUs/16 GiB/900 seconds. Registry/base-package layers use provider defaults; their actual charges and build logs must be reviewed. Cache availability is unverified. No forced rebuild is requested.
-
-Calculator preparation reuses `prepare_model.py` and `prepare_data.py`: acquire the immutable Llama snapshot, install the fixed-date Llama JSON template, acquire the released calculator archive (`gdown` source ID `1FQMyKLLd6hP9dw9rfZn1EZOWNvKaDsqw`), extract only `train.parquet`/`test.parquet`, then select with seed 329. Inputs and partial files stay under the owned staging path. All model weights, their complete shard inventory, sizes, content hashes, config, tokenizer and template must match the existing reference lock. The calculator source dataset is not content-addressed by its download URL; its actual acquired hashes are recorded. Asset-status preparation instead generates its versioned synthetic data locally inside the preparation worker and never acquires the calculator archive.
-
-All four prepared panels and evaluation JSONL files are checked for hashes, schemas, ordered IDs, duplicate/conflicting questions, split isolation and JSONL/Parquet agreement. The final panel contains 64 cases, the training pool 256, with 16 nested training-smoke and eight separate evaluation-smoke cases. Worked solutions are discarded. Only `question` enters the prompt; `result` remains the existing verifier's privileged label. Preflight and stages rehash raw inputs and reproduce deterministic selection, in addition to checking prepared outputs. Do not remove staging before qualification.
-
-No existing asset or staging directory is reused or overwritten. A failure can leave useful partial outputs; inspect the receipt/logs and select a new allocation after resolving the cause. The historical working-Volume `prepare` refusal remains intact: the new reader route is a separate action.
-
-```bash
-uv run --locked python scripts/reader_training.py status \
-  --profile .local/reader/profile.json --plan .local/reader/preparation-plan.json
-uv run --locked python scripts/reader_training.py collect \
-  --profile .local/reader/profile.json --plan .local/reader/preparation-plan.json \
-  --out .local/reader/preparation-evidence
-```
-
-`status` is read-only and reports operation reservations, terminal CPU receipts and the supervisor index when available. A submission or missing receipt remains unresolved. Wait for `operations.prepare.result.status: completed` before collecting preparation outputs. `collect` downloads bounded JSON/JSONL/log/text evidence into a new local directory; weights stay in the Volume. Both commands exit 2 while full six-stage training evidence is incomplete, including successful preparation-only inspection. The preparation manifest is `preparation-evidence/prepare/assets.json`. Build/package evidence and logs accompany the receipts. A hard timeout may leave only started evidence; that is a failed/unknown attempt, never qualification.
-
-## Bind actual inputs, preflight, then launch
-
-```bash
-uv run --locked python scripts/reader_training.py plan \
-  --profile .local/reader/profile.json \
-  --assets .local/reader/preparation-evidence/prepare/assets.json \
-  --out .local/reader/training-plan.json
-uv run --locked python scripts/reader_training.py validate \
-  --profile .local/reader/profile.json --plan .local/reader/training-plan.json
-uv run --locked python scripts/reader_training.py preflight \
-  --profile .local/reader/profile.json --plan .local/reader/training-plan.json \
-  --out .local/reader/preflight-submission.json
-uv run --locked python scripts/reader_training.py status \
-  --profile .local/reader/profile.json --plan .local/reader/training-plan.json
-```
-
-Preflight is an explicit, potentially billable detached CPU call. It revalidates exact model/data/source identities; source guards and installed package versions; the six narrowly reviewed dependency exceptions; actual tokenizer loading; gated model revision access; W&B project read access; and the selected task stdio MCP schema, valid-request and error-request checks (plus existing calculator verifier sanity on that route). It loads no model weights. It does not demonstrate W&B write completion, GPU compatibility or a successful agent trajectory. Those require the subsequent stage evidence. Changed dependency resolution, unavailable licensed model/data, missing project/Secret or changed input bytes stop the run.
-
-Wait for the durable same-plan preflight result to pass. Then, only within the separately authorized spending decision:
-
-```bash
-uv run --locked python scripts/reader_training.py launch \
-  --profile .local/reader/profile.json --plan .local/reader/training-plan.json \
-  --out .local/reader/training-submission.json
-uv run --locked python scripts/reader_training.py status \
-  --profile .local/reader/profile.json --plan .local/reader/training-plan.json
-uv run --locked python scripts/reader_training.py collect \
-  --profile .local/reader/profile.json --plan .local/reader/training-plan.json \
-  --out .local/reader/training-evidence
-```
-
-The first qualification requires preflight, not a prior qualification of itself. The detached supervisor executes each algorithm's **baseline → two-update training → checkpoint evaluation**, sequentially in one GPU lane. Each stage uses a single-use worker and a new launcher/trainer process. Per-stage GPU/FlashAttention preflight runs before the actual model workflow. Inputs are offline during training. Logs, traces, audit events, resolved configuration, build evidence and native checkpoints are committed durably. The actual image/App/call IDs are recorded after resolution; a cache hit is never inferred merely from successful execution.
-
-Acceptance requires all six stages and their exact receipt/plan/source/config/model/task/data identities; complete 64-case baseline and reload evaluations; exactly two actor optimizer calls per algorithm and two critic calls for PPO-MC; training refreshes at 0, 1, 2; no optimizer calls during either evaluation; complete final native role inventories with sizes/hashes; exact checkpoint verification before and after reload; W&B finish evidence; and distinct training/reload worker and process identities. Reader receipts and completions must agree on the provider-assigned `MODAL_TASK_ID`; training and reload must have different container IDs and call IDs. Hostnames remain diagnostic only: distinct Modal containers can both report `modal`. Process identity is the container ID paired with its recorded launcher/trainer PID, so PID reuse across separate containers is not mistaken for process reuse. See [Modal runtime identity variables](https://modal.com/docs/guide/environment_variables). GRPO checkpoints contain actor state; PPO-MC checkpoints contain actor and critic state. Each role includes native model, optimizer and extra-state files. W&B hosted history is not independently queried by `collect`; local remote-init/finish receipts and metrics remain explicit evidence.
+### Reading the collected metrics
 
 Additional checks require positive valid generated-token counts, two complete collections, finite loss/gradient diagnostics and checkpoint-save events. Require `actor/pg_loss` at both global updates 1 and 2; PPO-MC additionally requires `critic/vf_loss` at both updates. Finite zero is valid. Records are joined by update/metric, permitting split role records and identical duplicates while rejecting missing, invalid or conflicting evidence. The pinned [VERL loss emitter](https://github.com/volcengine/verl/blob/7aed6b230776f963fa09509c10d9c3a767d1102c/verl/workers/utils/losses.py) and [Agent Lightning trainer](https://github.com/microsoft/agent-lightning/blob/cbc56e41e0eab643aa71d195e92e5bba652fa683/agentlightning/verl/trainer.py) reduce minibatch metrics and log at global training steps; this check does not assume one JSONL record per update. The lab's existing matched runtime emits the corresponding critic metric. Retain reward-group variation. If all GRPO groups have equal reward, report successful operational execution separately from the absence of informative task-directed policy-gradient signal. Nonzero optimizer calls alone do not establish learning. Reload here qualifies evaluation of the saved native checkpoint; resumed training and arbitrary weight exports are separate claims.
 
@@ -158,17 +193,6 @@ Additional checks require positive valid generated-token counts, two complete co
 Each completion includes `model_tool_integration`, with trace file hashes and observed chain identifiers. The reader joins existing schema-1 traces by experiment/W&B/stage, trace, case, rollout and attempt, episode parent span, tool-call ID and time order. A valid chain requires a successful recorded model request returning the selected task tool (`calculate` or `lookup_asset`), the matching successful tool invocation with the same arguments, a subsequent successful model request containing that exact tool observation, and a successful episode with a delivered binary terminal reward. It uses AutoGen's existing `FunctionCall`, `ToolResult.to_text()` and `FunctionExecutionResultMessage` representations. Synthetic, inconsistent or duplicate spans do not qualify. Under `reader-integration-v2`, at least one valid live chain in **each algorithm's baseline, training and fresh-reload stage** is required to qualify harness integration. The dated v1 report retains its older any-stage interpretation. A reward of zero can still demonstrate integration; correct answers without an observed tool-continuation chain cannot.
 
 Operational completion may succeed with zero informative GRPO groups. The report then explicitly states that informative group-relative task-advantage evidence was not observed. Neither nonzero loss, improved accuracy nor universal tool use is required. Missing evidence or unfavorable outcomes must be retained as observed; do not automatically retry, tune rewards, change inputs or select favorable trajectories. Hosted W&B history, meaningful learning and resumed training remain separate claims.
-
-## Stop and recover within ownership
-
-```bash
-uv run --locked python scripts/reader_training.py stop-owned \
-  --profile .local/reader/profile.json --plan .local/reader/training-plan.json
-```
-
-Use `preparation-plan.json` instead to cancel that exact preparation plan. `stop-owned` writes a stop marker to the owned registry (the provider expires such an entry after seven days without a read or write; keep the printed result as the record) and requests cancellation only for exact recorded calls and stage-entry reservations belonging to the supplied plan. It never stops an app by display name or cancels another attempt. Missing call IDs remain unknown; cancellation cannot prove that an unacknowledged spawn did not happen. Follow with status/collection. A cancelled or timed-out trajectory is not converted to a terminal-zero example.
-
-Reservations survive ambiguous submissions and failures. The registry allows only one qualification allocation; do not clear it to retry. After investigation and a new spending decision, use a new registry/app allocation and fresh attempt/output paths, preserving previous evidence. Startup without heartbeat, a stale supervisor lease, stage/supervisor deadlines, source/input mismatch, storage ceiling or owner cancellation stops owned workers. The 300-GiB ceiling is checked using owned file sizes, not Volume filesystem free-space placeholders; a write can overshoot between checks. The seven-day retention interval is a review point, not automatic deletion. Keep native checkpoints, staging and evidence until retention is explicitly decided. Retention beyond the proposal incurs further storage costs.
 
 ## Historical matching, build limits and next seams
 
