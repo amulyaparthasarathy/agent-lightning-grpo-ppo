@@ -2,7 +2,7 @@
 
 Read [AGENTS.md](../AGENTS.md), then the [project plan](PROJECT_PLAN.md). This file is the mutable handoff for ChatGPT, Codex, and other agents. Update it with each completed implementation slice. Historical execution handoffs retain their original scopes.
 
-**Last repository verification:** November 27, 2026, at approximately 00:09 UTC (November 26 in America/Los_Angeles). This snapshot precedes PR #15's authorized merge; inspect its live merge state before continuing. No cloud/account state was queried for this update.
+**Last repository verification:** November 27, 2026, at approximately 00:21 UTC (November 26 in America/Los_Angeles). PR #15 is merged, and its merge tree matches the reviewed head. PR #14 remains open and draft. No cloud/account state was queried for this update.
 
 ## Resume here
 
@@ -26,16 +26,18 @@ M1 acceptance: a basic-Python reader can explain what is trained, how the harnes
 | Item | Verified state |
 |---|---|
 | Canonical public repository | `amulyaparthasarathy/agent-lightning-grpo-ppo` |
-| Main inspected for this plan | `e463dc146db3a4be7e156a06109a749db5f8649e` |
-| Main tree | `84ddaeb53045192aba5fd0338bce94d4f0b9011b` |
+| Planning baseline (preserved) | `e463dc146db3a4be7e156a06109a749db5f8649e` |
+| PR #15 reviewed head | `bab5688141ec5df8bbbfd83006731b2122ea0f1d` |
+| Plan integration commit, verified on main | `44fc49d93563d7048c73ffc18e87a18f6d1d89ac` |
+| Merged tree, equal to the reviewed head's tree | `5faf46ed3c1bd290ffc06f0cc2227d41e234bee5` |
 | PR #13 | Merged; pilot closeout and offline behavioral diagnosis are on main |
 | PR #14 | Open, draft, unmerged; deferred by the current direction |
 | PR #14 tested implementation | `eeafcc10099a3a8cc2aef575e959f4f391864677` |
 | PR #14 head | `cd2829fc72c0ff7ade5c8d0dab4e9ec660295cd7`; specification-only change after the tested implementation |
 | Plan delivery branch | `docs/agent-training-project-plan` |
-| Plan delivery PR | [PR #15](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/pull/15); owner authorized the updated plan's merge after final review; live GitHub records integration |
+| Plan delivery PR | [PR #15](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/pull/15); merged after final review of the exact head; plan v1.1 integrated |
 
-Inspect PR #15's current merge state before starting implementation. After it is merged, use fetched main and proceed directly to M1; do not attempt a second merge or restart planning. If it is still open, the owner's instruction authorizes ordinary integration only after final review of the exact head. Do not bypass required checks or reviews. The source SHA above is the inspected pre-merge baseline, not the eventual documentation merge or an experiment execution identity.
+PR #15 is merged. Use fetched main and proceed directly to M1; do not attempt a second merge or restart planning. Check for newer repository changes and reconcile only the relevant delta. The integration SHA above identifies the merged plan, before this continuation receipt; it is not an experiment execution identity.
 
 ## Decisions to preserve
 
@@ -52,7 +54,7 @@ Inspect PR #15's current merge state before starting implementation. After it is
 
 | ID | Status at this handoff | Next acceptance evidence |
 |---|---|---|
-| M0: Shared plan and continuation | Plan v1.1 delivered in PR #15; merge authorized after exact-head final review | Verify live integration, then start M1 |
+| M0: Shared plan and continuation | Complete; plan v1.1 merged through PR #15 | Reviewed head and merged tree verified; start M1 |
 | M1: Entry and representative lesson | Next; not started | Finished opening/trajectory lesson and reconciled mutable status summaries |
 | M2: Deep training mechanics | Planned; reuse existing Chapters 1 and 3–6 | Checked examples/derivations and source-linked learner exercises |
 | M3: Execution and adaptation | Planned | Supported procedure explained step by step with expected evidence and cost boundary |
@@ -106,7 +108,7 @@ The retained private pilot continuation is `.local/phase4c-functional-pilot/CONT
 
 ## Latest work and validation
 
-This documentation change adds the shared plan, current continuation, and root agent instructions, plus navigation links. Plan v1.1 incorporates the agreed practical lesson contract, three reader paths, figure catalog, CMU numerical distinctions, and optional Tinker comparison. M1 remains the next implementation task. The change does not implement M1–M7 or alter runtime, experiment data, rewards, frozen evidence, or cloud resources.
+PR #15 merged the shared plan, current continuation, root agent instructions, and navigation links. Plan v1.1 incorporates the agreed practical lesson contract, three reader paths, figure catalog, CMU numerical distinctions, and optional Tinker comparison. Final reviewed head `bab5688141ec5df8bbbfd83006731b2122ea0f1d` merged as `44fc49d93563d7048c73ffc18e87a18f6d1d89ac`; GitHub's merge commit has exactly the reviewed tree. Post-merge reads verified PR #15 as merged and PR #14 still open/draft at its unchanged head. This continuation receipt records those integration facts. M1 remains the next implementation task; M1–M7 are not complete. Runtime, experiment data, rewards, frozen evidence, and cloud resources are unchanged.
 
 Final v1.1 verification included live main/PR reads, inspection of the existing guide and evidence reports, and a focused content review of the updated plan, agent instructions, and continuation. No merge-blocking issue was identified. The updated local Markdown/file-scope check verified 136 relative link targets across the five changed files and eight anchors whose target content was loaded, with zero errors. The file delta contains exactly the three new documents and two README navigation insertions. Both modified READMEs matched their original bytes plus the intended insertion. The PR description records exact-head delivery and final GitHub checks; these reviews are not fresh CPU/GPU qualification results.
 
