@@ -64,7 +64,7 @@ Suppose the old probability of target `40` is 0.25 and its current probability i
 The lab compares that direct loss with a second version using the ratio clipped to $[0.8,1.3]$. It takes the larger loss, so moving farther in a favorable direction eventually brings no further benefit. For negative advantages it also caps an unusually large loss, a rule called **dual clipping**. For a single unweighted token with advantage $A$, the surrogate (the loss used to guide the update) is
 
 $$
-\ell^+=\max\{-Au,-A\,\mathrm{clip}(u,0.8,1.3)\},\qquad
+\ell^+=\max\bigl(-Au,-A\cdot\mathrm{clip}(u,0.8,1.3)\bigr),\qquad
 \ell=\begin{cases}
 \min(\ell^+,-3A),& A<0,\\
 \ell^+,& A\ge 0.
@@ -86,7 +86,7 @@ For the last row the sampled action did poorly, yet became four times as likely.
 Average the generated-token losses **within each rollout**, then average those rollout means. With $N$ rollouts and $L_\rho$ generated targets across all fragments of rollout $\rho$, the [Chapter 3 weight](03-trajectories-tokens-and-fragments.md#equal-weight-for-each-real-rollout) for position $t$ of fragment $j$ is $w_{\rho,j,t}=m_{\rho,j,t}/(N L_\rho)$, where $m$ is the action mask. The total loss is
 
 $$
-\mathcal L_{\rm actor}=\sum_{\rho,j,t} w_{\rho,j,t}\,\ell_{\rho,j,t}.
+\mathcal L_{\rm actor}=\sum_{\rho,j,t} w_{\rho,j,t}\cdot\ell_{\rho,j,t}.
 $$
 
 The actual matched code scales the advantages by these weights **once** and sums the masked losses. This gives the same scalar because a nonnegative weight factors through both clipping comparisons. The full study used $N=32$ across eight question groups. Our example contains one group, so $N=4$. [Rollout weighting](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/blob/89fe32f92f29209803c13264baed951713741d42/experiment/matched_runtime.py#L102)
