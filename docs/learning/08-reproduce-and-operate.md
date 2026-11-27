@@ -48,7 +48,8 @@ A *plan* records the source revision, task, assets, resources and expected stage
 
 ```mermaid
 flowchart TD
-    P["Local client writes a preparation plan"] --> D["Remote CPU prepares model and task data"]
+    P["Local client writes a reader-owned preparation plan"] --> U["Online setup creates storage and registry"]
+    U --> D["Remote CPU prepares model and task data"]
     D --> B["Client binds the returned asset manifest"]
     B --> C["Remote CPU checks the bound inputs and tool"]
     C --> E["GPU worker evaluates the base policy"]
@@ -58,7 +59,7 @@ flowchart TD
     R --> L["Client collects receipts and checks the stage identities"]
 ```
 
-The diagram follows one algorithm through a full qualification. Your local terminal sends the requests and reads the evidence. On Modal the harness builds prompts, executes tools and posts rewards. Agent Lightning connects the interaction to the trainer, VERL updates the trainable weights, and vLLM serves the refreshed actor. The two algorithms share this route. PPO-MC also trains and saves a critic. The fresh-worker evaluation receipt ties a complete panel to the saved checkpoint and a different worker. Its optimizer count should be zero. [Chapter 6 reload exercise](06-one-complete-training-update.md#check-that-the-saved-actor-served-the-independent-evaluation)
+The offline practice plan ends on your computer. In a separately funded run, the first online resource operation is [setup](../READER_TRAINING.md#create-storage-and-prepare-the-model-and-data). It creates the storage and registry used by later workers, before a GPU is requested. The diagram follows one algorithm through the qualification. Your local terminal sends the requests and reads the evidence. On Modal the harness builds prompts, executes tools and posts rewards. Agent Lightning connects the interaction to the trainer, VERL updates the trainable weights, and vLLM serves the refreshed actor. The two algorithms share this route. PPO-MC also trains and saves a critic. The fresh-worker evaluation receipt ties a complete panel to the saved checkpoint and a different worker. Its optimizer count should be zero. [Chapter 6 reload exercise](06-one-complete-training-update.md#check-that-the-saved-actor-served-the-independent-evaluation)
 
 Follow the [reader procedure](../READER_TRAINING.md) for the commands, receipts and stop conditions. The recorded short calculator workflow completed both algorithms. GRPO had zero informative groups in sixteen, so every group lacked the reward contrast that supplies its task-directed gradient. The independently reloaded PPO-MC actor scored 28/64 after a 27/64 baseline. These observations establish that the workflow ran on the recorded configuration. They leave the effect of training on fresh questions open. [Calculator qualification](../READER_QUALIFICATION_2026-11-19.md#live-gpu-outcomes)
 
@@ -67,5 +68,9 @@ Follow the [reader procedure](../READER_TRAINING.md) for the commands, receipts 
 Suppose the question changes from “what is (7+5)*3?” to “what is the backup health of asset-281?” A calculator result needs a numerical answer. An asset lookup returns several facts and the final answer must identify the requested asset and report both status fields. The trainer can still use one terminal reward per completed attempt. The work is in specifying what the agent sees, what the tool accepts and how the harness establishes a trustworthy outcome.
 
 Follow the [calculator-to-asset walkthrough](../TASK_ADAPTATION.md#the-two-workflows). Run the local tool, inspect a scripted continuation and change one answer field. Then decide which attempts belong in a four-member training group. The [asset qualification](../PHASE3_QUALIFICATION_2026-11-24.md) shows what happened with a real model after the harness correction. Both baseline and reload scored 64/64, leaving no measured improvement for training to explain.
+
+**One last check.** A colleague says, “The calculator returned 36, the optimizer ran, and the saved policy reloaded. We taught the model to answer more questions correctly.” Which evidence would you ask for?
+
+Start with the final answer and the verifier’s score for that episode. Then compare the starting and reloaded policies on the same questions. A tool receipt tells you what the model saw. An optimizer receipt tells you that the trainer took a step. A reload receipt identifies the policy that served the evaluation. Only the paired answers tell you which cases improved and which regressed. You can make that comparison with the [calculator seed pairs](07-read-the-experiment-results.md#preserve-every-baseline-and-paired-outcome) or the [recovery transitions](07-read-the-experiment-results.md#follow-the-same-case-through-both-evaluations).
 
 Return to the [learning index](README.md) or use the [source map](source-map.md) to locate the implementation and the original execution evidence.

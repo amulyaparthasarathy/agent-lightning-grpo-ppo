@@ -8,7 +8,7 @@ Run every command in this chapter **from the root of the public checkout**. The 
 
 Accuracy counts how many of the 64 development questions received reward 1 under the frozen answer extractor and numeric scorer. Both arithmetic and answer formatting can affect that score.
 
-Study **`agl-explore-20-v1-r03`** ran at source **`5fb6adfd48ee245509f7dff3ab1d849fcf707d86`**. Each arm starts from the prepared `meta-llama/Llama-3.2-3B-Instruct` model before this lab's RL. Baseline means that instruction-tuned model running the same tool harness, not a no-tool model or the upstream Qwen starter.
+Study **`agl-explore-20-v1-r03`** ran at source **`5fb6adfd48ee245509f7dff3ab1d849fcf707d86`**. Each arm starts from the prepared `meta-llama/Llama-3.2-3B-Instruct` model before this lab's RL. Here **baseline** means an evaluation of the starting actor in the same harness. Earlier chapters also used “baseline” for a number subtracted when computing an advantage. In the results table, look for a score out of 64.
 
 | Quantity | Correct denominator |
 |---|---|
@@ -23,7 +23,7 @@ Study **`agl-explore-20-v1-r03`** ran at source **`5fb6adfd48ee245509f7dff3ab1d8
 
 The 640 trajectories are not 640 unique questions. Twenty updates are not 20 dataset epochs. Reusing the panel across six runs does not create 384 independent test questions. Phase 1 results and earlier failed attempts are separate records.
 
-Study seeds **2001, 2002, 2003** pair question-batch exposure across arms. Python/NumPy/Torch, sampling, optimizer and row-batching streams are algorithm-specific; PPO also has a critic initialization stream. Pairing does not promise identical continuations, token counts, compute budgets or bitwise results.
+A **seed** helps set the sequence of random choices in a run. In this comparison, the two methods for seed **2001** trained on matching batches of questions. The same pairing holds for **2002** and **2003**. Python/NumPy/Torch, sampling, optimizer and row-batching streams are algorithm-specific; PPO also has a critic initialization stream. Pairing does not promise identical continuations, token counts, compute budgets or bitwise results.
 
 ## Preserve every baseline and paired outcome
 
@@ -86,6 +86,32 @@ sed -n '/^| PPO seed | Pre-update MSE/,/^$/p' evidence/phase2-r03/SCIENTIFIC_ANA
 The scorer also depended on answer formatting. Across the three seeds, the number of episodes missing the answer marker fell from 77 to 2 for GRPO and from 81 to 16 for PPO-MC, each out of 192 episodes per endpoint. Every missing-marker episode earned zero. Better formatting may have contributed to the gains. The records do not isolate its share. Tool errors have a different denominator again: one episode can contain several tool calls and can recover after a call fails. [Calculator audit](../../evidence/phase2-r03/SCIENTIFIC_ANALYSIS.md)
 
 Eight calculator GRPO updates had only constant-reward groups. Their current policy gradients were zero and the optimizer still ran. In the asset-status qualification the corrected harness and final-answer procedure already scored 64/64 at baseline in both arms. Both reloads also scored 64/64. A harness can change what the agent manages to complete before the first weight update. [Calculator closeout](../PHASE2_CLOSEOUT_2026-11-15.md) · [Asset-status qualification](../PHASE3_QUALIFICATION_2026-11-24.md)
+
+## What did those six calculator runs use?
+
+**Predict.** The study used two worker lanes. If you add the seconds for every worker, will that equal the time someone waited for the study? Use Python 3.12 from the checkout root to add the six study rows. Each row covers one run’s baseline, training and reload. The checkpoint column counts bytes in the files saved for its actor and, for PPO-MC, its critic. [Per-seed CSV](../../evidence/phase2-r03/per_seed_results.csv)
+
+```bash
+python3 - <<'PY'
+import csv
+
+with open("evidence/phase2-r03/per_seed_results.csv", newline="") as f:
+    runs = list(csv.DictReader(f))
+worker_seconds = sum(float(run["elapsed_time_seconds"]) for run in runs)
+role_bytes = sum(int(run["checkpoint_bytes"]) for run in runs)
+print(f"{len(runs)} runs: {worker_seconds:.3f} worker-seconds")
+print(f"{role_bytes:,} checkpoint role-file bytes ({role_bytes / 2**30:.3f} GiB)")
+PY
+```
+
+| Your sum | How to read it |
+|---|---|
+| 6 runs, 19,120.608 worker-seconds | Each worker clock includes loading, execution and receipt work. Some clocks ran at the same time. The study supervisor measured 11,287.051 seconds of elapsed wall time. Adding that to the worker total would count overlapping time again. Neither clock gives provider-billed seconds. |
+| 356,589,684,584 bytes (332.100 GiB) | One GiB is 1,073,741,824 bytes. This sum covers the six checkpoints’ role files. Total storage occupancy also depends on logs, other artifacts and temporary files. |
+
+**Can you price seed 2001 from those numbers?** At the November 15, 2026 billing snapshot, the provider attributed USD 34.33868457 to the whole study app and USD 5.76491115 to the separate qualification app, or USD 40.10359572 combined. Dividing the study charge by six would spread the charge evenly by assumption. The provider supplied no per-seed split. The snapshot also leaves later adjustments and storage charges unresolved. A future run needs a separate estimate using its own resources, duration, retention and applicable prices. [Resources, costs and hosted reconciliation](../../evidence/phase2-r03/SCIENTIFIC_ANALYSIS.md#resources-costs-and-hosted-reconciliation)
+
+**Try one change.** Sum `training_elapsed_seconds` in place of `elapsed_time_seconds`. Now the clock covers only the six training stages, including collection and worker overhead. Expect **14,064.047 worker-seconds**. The checkpoint byte sum stays the same.
 
 ## Recovery readiness on the same 24 cases
 
