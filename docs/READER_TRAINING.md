@@ -12,7 +12,7 @@ Run every shell block **in the same Bash terminal at the root of your checkout**
 | Remote CPU | Build or resolve the training image, prepare the exact model and data on the Volume, check the tokenizer and run the tool probe | Remote Linux x86-64 image, licensed model access, task inputs and the reader's Secret |
 | Remote GPU | Run the harness and inference server, collect rewards, optimize, save the checkpoint, then evaluate it in a new worker | The remote image supplies CUDA, Torch, VERL and vLLM. One H100 stage runs at a time. |
 
-Can your client describe an allocation before you log in? Install the locked client packages in the existing project environment and inspect the command list. Use a project-local virtual environment for this checkout. The CPU-only harness environment used in the adaptation lesson is separate.
+Can your client describe an allocation before you log in? Install the locked client packages in the existing project environment and inspect the command list. Use the project-local `.venv` for this checkout. The CPU-only harness environment used in the adaptation lesson is separate.
 
 ```bash
 uv sync --locked --inexact --python 3.12
@@ -46,7 +46,7 @@ Both commands print the same `plan_sha256` (a fingerprint of the plan), with `va
 
 For a new run, use **your own separately funded resources**. The commands for `setup`, `prepare`, `preflight`, `launch`, `status`, `collect` and `stop-owned` contact your account. Preparation, image builds, preflight, GPU stages, transfers and storage can incur charges. Review current rates, capacity, outstanding exposure and retention against your own ceiling before setup. You can still run `plan` and `validate` offline with your actual profile.
 
-Start with the calculator template for the reference workflow, or the asset template for the adaptation. The example already has the required JSON structure. Copy the selected template once and edit the copy in your editor.
+Start with the calculator template for the reference workflow, or the asset template for the adaptation. In this procedure a profile is a non-secret JSON description of your allocation. The Modal profile named inside it selects your authenticated account. The example already has the required JSON structure. Copy the selected template once and edit the copy in your editor.
 
 ```bash
 reader_profile="$reader_dir/profile.json"
@@ -80,7 +80,7 @@ reader validate --plan "$prep_plan"
 reader setup --plan "$prep_plan"
 ```
 
-Expect `status: resources_created`. A different authenticated workspace or an existing resource name stops setup. If creation partially succeeds, inspect your actual account before making any further change.
+If the client has no authenticated Modal profile yet, complete Modal’s browser login for the profile name in your JSON before running setup (`.venv/bin/modal token new --profile "$MODAL_PROFILE"` in the same terminal). Expect `status: resources_created` from setup. A different authenticated workspace or an existing resource name stops setup. If creation partially succeeds, inspect your actual account before making any further change.
 
 ```bash
 reader prepare --plan "$prep_plan" --out "$reader_dir/preparation-submission.json"
@@ -140,7 +140,7 @@ Once the supervisor reaches a terminal outcome, collect the bounded evidence, in
 reader collect --plan "$train_plan" --out "$reader_dir/training-evidence"
 ```
 
-Open `training-evidence/collection.json`. A successful full qualification has `evidence_complete: true`, zero exit status, and integration coverage in baseline, training and fresh reload for **each** algorithm. Read operational completion, integration and informative GRPO groups separately. Operational checks can pass with integration gaps or with zero informative groups. A chain ending in a confirmed reward of zero can establish tool integration. Only the final answer determines task correctness. For a measured comparison, read the [calculator qualification](READER_QUALIFICATION_2026-11-19.md#live-gpu-outcomes) and the [asset qualification](PHASE3_QUALIFICATION_2026-11-24.md).
+Open `training-evidence/collection.json`. A successful full qualification has `evidence_complete: true`, zero exit status, and at least one live tool chain in each of baseline, training and fresh reload for **each** algorithm. Read operational completion, integration and informative GRPO groups separately. Operational checks can pass with integration gaps or with zero informative groups. A chain ending in a confirmed reward of zero can establish tool integration. Only the final answer determines task correctness. For a measured comparison, read the [calculator qualification](READER_QUALIFICATION_2026-11-19.md#live-gpu-outcomes) and the [asset qualification](PHASE3_QUALIFICATION_2026-11-24.md).
 
 ## Stop and recover within ownership
 
@@ -150,10 +150,9 @@ If the allocation must stop, use the plan for the operation you intend to cancel
 reader stop-owned --plan "$train_plan"
 ```
 
-Expect `status: cancellation_requested`, the known owned calls and any cancellation errors. The command writes a plan-specific stop marker. A missing call ID leaves the outcome unknown. Check status again, inspect owned provider state and collect to a fresh directory. Preserve ambiguous reservations and partial evidence. An interrupted episode has no confirmed training reward. Reconcile exposure before any fresh attempt. The 300-GiB storage ceiling can be overshot between checks. The seven-day retention interval is a review point. Stopping calls leaves assets and checkpoints in storage.
+Expect `status: cancellation_requested`, the known owned calls and any cancellation errors. The command writes a plan-specific stop marker. A missing call ID leaves the outcome unknown. Check status again, inspect owned provider state and collect to a fresh directory. Preserve ambiguous reservations and partial evidence. If you open another terminal, return to the same checkout, set `reader_dir` to the directory printed in the practice step and restore `reader_profile`, the `reader` function, `MODAL_PROFILE` and the applicable plan path from the earlier blocks. Use the existing files for status, collection and cancellation. An interrupted episode has no confirmed training reward. Reconcile exposure before any fresh attempt. The 300-GiB storage ceiling can be overshot between checks. The seven-day retention interval is a review point. Stopping calls leaves assets and checkpoints in storage.
 
 ## What the reference workflow qualifies
-
 
 **Phase 3 update:** New plans use `reader-task-v2`, support reader-owned GitHub forks and the synthetic `asset-status-v1` task. See [Task adaptation](TASK_ADAPTATION.md) for the workflow, migration and all-stage integration rule. The first [asset live report](PHASE3_QUALIFICATION_2026-11-22.md) records 64/64 baseline integration for both algorithms, followed by incomplete training collections and zero optimizer updates. After the `asset-episode-v2` correction, the [2026-11-24 report](PHASE3_QUALIFICATION_2026-11-24.md) records all six asset stages completed, with native checkpoints and fresh-worker reload for both algorithms. The [closeout](PHASE3_CLOSEOUT_2026-11-24.md) holds the preservation inventory and accounting, and the [engineering checklist](PHASE3_ENGINEERING_CHECKLIST.md) lists what to check before a new attempt. The earlier calculator report retains its original v1 semantics and exact execution identities.
 

@@ -8,11 +8,11 @@ For the calculator, the model chooses an expression and uses the result to answe
 |---|---|---|
 | Task ID | `calculator-v1` | `asset-status-v1` |
 | Data | Existing acquired Calc-X selection, unchanged | Versioned deterministic synthetic registry, 256 train / 64 heldout / 8 smoke assets |
-| Harness | `observed_calc_agent.Agent` | `asset_agent.Agent` |
+| Harness | [Calculator agent](../experiment/observed_calc_agent.py) builds the calculator request and observes calls | [Asset agent](../experiment/asset_agent.py) advertises the lookup, passes the observation to the next model call and records termination |
 | Request | Existing question and `### ANSWER` instructions | Asset request and strict JSON instructions |
-| MCP | `mcp_server_calculator`, `calculate(expression)` | Local `asset_server.py`, `lookup_asset(asset_id)` |
-| Final parser | Existing answer extractor | Entire response must be one JSON object |
-| Verifier | Pinned upstream scalar comparison, tolerance 0.01 | Exact field equality against independently regenerated trusted facts |
+| Tool (Model Context Protocol, MCP) | `mcp_server_calculator`, `calculate(expression)` | Local `asset_server.py`, `lookup_asset(asset_id)` |
+| Final parser | Text inside the first answer marker, otherwise the stripped final response | Entire response must be one JSON object |
+| Verifier | Exact string match or numerical comparison with relative tolerance 0.01 | Exact field equality against independently regenerated trusted facts |
 | Reward | Existing binary scorer | Exactly one binary terminal-correctness reward; no shaping |
 | Local check | Real calculator stdio probe | Real asset stdio probe and scripted harness demonstration |
 
@@ -25,7 +25,7 @@ checkpoint algorithms and fresh-worker reload are shared.
 
 ## Run the local checks
 
-Use one Bash terminal at the [checkout root](../README.md#credential-free-offline-quick-start) on Linux or WSL2 with Git, Python 3.12 and uv. These steps use the existing CPU harness group. Installing it can download Python packages. The exercises themselves run locally without accounts, model weights or GPU access. The scripted harness uses a loopback HTTP reward receiver, so local sockets and child processes must work.
+Use one Bash terminal at the [checkout root](../README.md#credential-free-offline-quick-start) on Linux or WSL2 with Git, Python 3.12 and uv. These steps use the existing CPU harness group. Installing it can download Python packages. The exercises themselves run locally without accounts, model weights or GPU access. The tool communicates over standard input and output (stdio). The scripted harness posts its reward to a receiver on the same computer, so local sockets and child processes must work.
 
 ### Build a task the verifier can check
 
@@ -72,7 +72,7 @@ A tool may pass its probe even when the harness fails to deliver the observation
 
 ### A successful lookup and two different outcomes
 
-The fixture's first heldout question asks for `asset-281`. Its tool reports `operational` and `failed`. Predict what happens if the model reports a *healthy* backup, then predict what happens if its second call returns empty text. Both attempts already have a successful lookup.
+Use the CPU environment from [the setup step](#build-a-task-the-verifier-can-check). The fixture's first heldout question asks for `asset-281`. Its tool reports `operational` and `failed`. Predict what happens if the model reports a *healthy* backup, then predict what happens if its second call returns empty text. Both attempts already have a successful lookup.
 
 ```bash
 PYTHONPATH="$PWD/tests:$PWD" .venv-reader-cpu/bin/python - <<'PY'

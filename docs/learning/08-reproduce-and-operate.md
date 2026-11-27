@@ -27,7 +27,7 @@ Read the `unsplit` and `fragmented` sections of the printed JSON.
 
 A now gets three of four votes in the row mean. Averaging within each attempt first gives A half the total weight in either representation. The numbers in this fixture are supplied token losses. For the masks that determine which positions count, see [Chapter 3](03-trajectories-tokens-and-fragments.md#equal-weight-for-each-real-rollout).
 
-**2. Reproduce a measured result.** Look at the final GRPO scores for seeds 2001, 2002 and 2003 in the [committed results](../../evidence/phase2-r03/per_seed_results.csv). The model solved 36, 30 and 34 of the same 64 development questions. Predict the mean across the three runs: $100(36+30+34)/(3\\times64)$ percent. Then run the checker.
+**2. Reproduce a measured result.** Look at the final GRPO scores for seeds 2001, 2002 and 2003 in the [committed results](../../evidence/phase2-r03/per_seed_results.csv). The model solved 36, 30 and 34 of the same 64 development questions. Predict the mean across the three runs using $100(36+30+34)/(3\times64)$ percent. Then run the checker.
 
 ```bash
 python3 scripts/check_phase2_results.py
