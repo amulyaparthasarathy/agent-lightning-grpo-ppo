@@ -2,19 +2,19 @@
 
 Read [AGENTS.md](../AGENTS.md), then the [project plan](PROJECT_PLAN.md). This file is the mutable handoff for ChatGPT, Codex, and other agents. Update it with each completed implementation slice. Historical execution handoffs retain their original scopes.
 
-**Verified baseline, November 27, 2026 UTC.** Main merged the reviewed Chapter 4 head `7ed7e9f26a63ddc1d7c66c307cf4895bb00a0ec4` onto the PR #19 merge `cbd4fabdb1b49133ee63c43843f25f86cda060b9`. The fetched two-parent merge `c74d0f971bfed408d5e7bfc2509a73f0fe93344b` preserves the Chapter 4 and continuation blobs from #18 and the dependency and lockfile blobs from #19. Both parent identities and all four blobs were checked.
+**Verified baseline, November 27, 2026 UTC.** [PR #20](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/pull/20) merged at `6228222015f2595e220f7248c8825e28448f720d`. The parents are the preceding main `c74d0f971bfed408d5e7bfc2509a73f0fe93344b` and the reviewed head `a94597e845e2c7a45358dc89d940fb1bd59a87d4`. On the fetched merge, Chapter 5 and its source map match the validated content commit. The SDK dependency and lockfile match the preceding main.
 
 ## Resume here
 
-**Next action.** Review [Chapter 5 in PR #20](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/pull/20). Follow D's first answer token from its pre-action value of 0.4 to a realized return of 1, a raw advantage of +0.6 and a whitened advantage of +1.064054. Run the [four-attempt CPU calculation](learning/05-ppo-mc-step-by-step.md#check-the-two-losses-on-a-cpu) and its optional all-failure alteration. The lesson ends by asking whether the measured critic predicts better than an earlier-data constant.
+**Next action.** Review [Chapter 6 in PR #21](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/pull/21). Follow D's cached advantage past the critic update into the actor update. Run the [CPU accounting exercise](learning/06-one-complete-training-update.md#count-the-work-on-a-cpu) with and without D's split. Use the [receipt exercise](learning/06-one-complete-training-update.md#check-that-the-saved-actor-served-the-independent-evaluation) to explain how the independent evaluation can report global step 20 with zero new optimizer calls.
 
-Chapters 3 and 4 are on main. Chapter 5 stays at the review boundary. The subsequent M2 slice is [Chapter 6](learning/06-one-complete-training-update.md), following a complete collection through actor and critic updates, inference refresh, checkpoint and independent reload.
+Chapters 3–5 are on main. Chapter 6 and its source-map references are ready for review. The worked example covers collection, both loss reductions, gradient accumulation, the serving refresh, the terminal save and the evaluation-only reload. No files moved.
 
 ### Parallel hosted-Tinker track
 
 Documentation remains the highest priority. The owner reports a $250 credit grant that may expire December 15, 2026. Its remaining balance, exact expiry and grant-specific eligibility are unverified. Public prices can inform a proposal but cannot confirm an account balance. The companion workstream prepares one runnable hosted-Tinker GRPO implementation, local validation and one exact execution proposal. Hosted execution awaits a separate decision. [Track scope](PROJECT_PLAN.md#parallel-hosted-tinker-companion)
 
-**Companion implementation pending.** [PR #19](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/pull/19) added and locked Tinker SDK 0.40.1 in the optional `tinker` dependency group. Select it with uv's `--group tinker` option. The dependency branch was `chore/tinker-sdk`, implementation `c3197ca34b24ae7452113d2cec6e69252ef77ca3`. The owner confirmed that the separate hosted-Tinker companion has no visible implementation branch or PR yet and will share them when available. That session owns the runnable implementation, local validation and exact execution proposal. This documentation workstream owns the shared handoff and will integrate the companion into the guide after implementation and validation. CMU's separate SkyRL deployment uses Tinker-compatible APIs on Modal. [Provider comparison](PROJECT_PLAN.md#cmu-and-tinker-references)
+**Companion implementation pending.** [PR #19](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/pull/19) added and locked Tinker SDK 0.40.1 in the optional `tinker` dependency group. Select it with uv's `--group tinker` option. The dependency branch was `chore/tinker-sdk`, implementation `c3197ca34b24ae7452113d2cec6e69252ef77ca3`. The owner has not started the separate implementation prompt and will share the branch and PR when available. At this handoff the only Tinker branch on the canonical remote is the merged dependency branch. That session owns the runnable implementation, local validation and exact execution proposal. This documentation workstream owns the shared plan and continuation and will integrate the companion into the guide after implementation and validation. CMU's separate SkyRL deployment uses Tinker-compatible APIs on Modal. [Provider comparison](PROJECT_PLAN.md#cmu-and-tinker-references)
 
 ## Repository snapshot and delivery
 
@@ -40,7 +40,8 @@ Documentation remains the highest priority. The owner reports a $250 credit gran
 | PR #17 merge and Chapter 4 base | `acc4a50c4691efb57c726d61a44e4c6167abfe82`. Both trees are `6063636db998ae6ed3ef3fb1fe043575030f1e84`. |
 | M2 Chapter 4 | [PR #18](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/pull/18) merged after final review. The lesson blob at the merge is `5bc7ca70b10a3083024ab452598fe337353da9a6` and its handoff blob is `3cd5ca623613cbef5eeb4c6f3ccea9f136cfce94`. |
 | SDK files at the Chapter 4 merge | `pyproject.toml` blob `ca4728cbbea44d1c4e29f532c7c914452702535b` and `uv.lock` blob `49cbb72cfb9918d7073bd45ba3cdfbc2c9cc8985`. All previously locked package/version pairs were present after #19. |
-| M2 Chapter 5 | `m2-ppo-mc-calculator-lesson`, [PR #20](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/pull/20). Validated learner content and source map at `217c201eaa2b7cb4493c81bd86b30501cf69346e`. |
+| M2 Chapter 5 | `m2-ppo-mc-calculator-lesson`, [PR #20](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/pull/20). Merged reviewed head `a94597e845e2c7a45358dc89d940fb1bd59a87d4`. Validated content `217c201eaa2b7cb4493c81bd86b30501cf69346e`. |
+| M2 Chapter 6 | `m2-complete-training-update`, [PR #21](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/pull/21). Validated learner content and source map at `d97e6cea6bb513a7da9ac9c4d3a6af29ee96ae13`. |
 
 ## Decisions to preserve
 
@@ -59,7 +60,7 @@ Documentation remains the highest priority. The owner reports a $250 credit gran
 |---|---|---|
 | M0: Shared plan and continuation | Complete; plan v1.1 merged through PR #15 | Reviewed head and merged tree verified |
 | M1: Entry and representative lesson | Complete and merged in PR #16 | Independently reviewed head integrated, with matching trees |
-| M2: Deep training mechanics | Chapters 3 and 4 merged. Chapter 5 ready for review in PR #20 | Check the two loss calculations and the critic evidence. Chapter 6 follows review |
+| M2: Deep training mechanics | Chapters 3–5 merged. Chapter 6 ready for review in PR #21 | Check the iteration order and both CPU exercises against the cited implementation and stage receipts |
 | M3: Execution and adaptation | Planned | Supported procedure explained step by step with expected evidence and cost boundary |
 | M4: Experimental teaching | Planned | Reproducible evidence figures, expected counts, and interpretation exercises for calculator/recovery |
 | M5: Recovery PPO-MC preparation | Planned; no new reservation proposed | Exact four-stage plan, relevant local gates, capacity/cost/retention proposal |
@@ -87,7 +88,7 @@ Key public execution identities: reader calculator `5daff64cefd348fb731094cf465b
 
 ## Authority, cost, and retention
 
-The owner authorized the ordinary merge of the reviewed Chapter 4 head and Chapter 5 delivery for review. Chapter 5 merge awaits a separate decision. The owner coordinates the separate offline companion session. PR #14 remains open, draft and deferred.
+The owner authorized the ordinary merge of the reviewed Chapter 5 head and Chapter 6 delivery for review. Chapter 6 merge awaits a separate decision. The owner coordinates the pending offline companion. PR #14 remains open, draft and deferred.
 
 **New paid dispatch authority: zero.** The recovery PPO preference selects a direction, not a numeric budget. M5 must produce the concrete proposal before the execution decision. Do not ask for that decision during the documentation work.
 
@@ -113,14 +114,15 @@ The retained private pilot continuation is `.local/phase4c-functional-pilot/CONT
 
 | Check performed | Observed result |
 |---|---|
-| Final review of [PR #18](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/pull/18) | The reviewed head matched. The PR was clean and mergeable with no outstanding checks, reviews or threads. Reproduced the Chapter 4 commands, all-success alteration, native clipping cases and slope −0.5 at zero scalar loss. Verified the reported GRPO counts against the committed analysis. |
-| Ran both Chapter 5 Python shell blocks and the all-failure alteration | D's four raw advantages were +0.9, +0.8, +0.6 and +0.2, each with return 1. Over 11 valid tokens the sample variance was 0.228909. At old probabilities and values the actor loss was 0.203073 and critic loss 0.088021. Changing D's reward to zero gave actor loss −0.069516. |
-| Fed the same histories, masks, old values and returns to the matched runtime on CPU | Checked the masked targets, whitening, and weight 0.25 per attempt. With D in one or two fragments, pinned actor loss, packed response slicing and matched value loss agreed with the lesson in both reward configurations. Changing C's last prediction from 0.6 to 0 gave the clipped contribution 0.000625. |
-| Ran focused existing CPU tests | All three passed: `PinnedTrainingTests.test_actual_pinned_gae_mc_whitening_matches_and_targets_unchanged`, `EstimatorTests.test_ev_constant_wrong_predictor_is_invalid_despite_raw_one` and `EstimatorTests.test_prediction_baseline_and_unbounded_values`. The pinned fixture exercises merged and split rows. |
-| Checked the [r03 critic comparison](../evidence/phase2-r03/SCIENTIFIC_ANALYSIS.md#training-signal-and-critic-behavior) and ran `python3 scripts/check_phase2_results.py` | Verified each seed's first/last MSE and update counts, all 51 defined EV values negative, nine undefined and zero wins on 57 earlier-constant comparisons. The existing checker passed 12 artifact hashes, 24 stage summaries, six runs and three contrasts. |
-| Checked documentation | Verified local links and heading targets, Chapter 4–6 navigation and `git diff --check`. In GitHub-rendered Chapter 5, all 36 math expressions and four command/output blocks matched source, and all four tables had the expected dimensions. |
+| Final review and integration of #20 | ChatGPT's bounded independent review reproduced the Chapter 5 commands and optional alteration. At final review we reran those examples, checked the unchanged head, clean GitHub state, requirements and threads, and verified the ordinary merge against both parents. The [Chapter 5 handoff](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/blob/a94597e845e2c7a45358dc89d940fb1bd59a87d4/docs/PROJECT_CONTINUATION.md#latest-work-and-validation) records the earlier pinned backend and rendering checks. |
+| Ran both Chapter 6 Python shell blocks and the `split_d = False` alteration | 32 synthetic episodes, 88 generated targets and weight 1/32 for D in both representations. Splitting D gave 33 backward passes per trained role, joining it gave 32. Both have one optimizer call per trained role. The recorded PPO-MC seed-2001 stage rows matched all printed values. |
+| Exercised the hash-verified adapter and matched trainer step on the lesson's 32-episode CPU fixture | Both algorithms admitted the 33- and 32-row representations. Instrumented worker stand-ins recorded the prediction, weighting, role-update and refresh order. The PPO-MC actor received the original weighted advantages and old values after the critic callback changed its simulated prediction. |
+| Exercised the pinned engine and outer trainer loop | Scalar autograd losses in the one-row microbatches produced 33 or 32 backwards before one hooked AdamW step, with accumulated preclip norm 1 in both cases. The outer loop with stubbed stage operations scheduled the final save after step 20. In validation-only mode it loaded step 20, refreshed and evaluated, then returned. This exercised control flow without reading model weights. |
+| Ran three focused `PinnedTrainingTests` | `test_incomplete_truncated_duplicate_and_missing_reward_fail_closed`, `test_runtime_update_dispatch_uses_actual_row_count` and `test_pinned_trainer_step_retains_nonmultiple_and_constant_real_rollouts` passed on CPU. |
+| Checked recorded results | For each of the six r03 study jobs, compared the committed stage rows, episode and update counts, terminal step, distinct training/reload worker calls and matching recorded checkpoint digest. Cross-checked refreshes and the single save against the verification ledger. The separate recovery P02 closeout records step 16. |
+| Checked publication and navigation | Verified the links and heading targets in the changed files, incoming heading links, Chapter 5–7 navigation, fences and `git diff --check`. The committed GitHub HTML matched the eight math expressions, event table and five fenced blocks. Rendered the Mermaid diagram locally with mmdr 0.3.1 and inspected the branches, labels and arrows. |
 
-The exercises used synthetic values and CPU tensors. The recorded results come from the existing study. No models ran, no experiments were repeated, and no cloud resources, credits, historical evidence or retention records were touched. The [Chapter 4 handoff](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/blob/7ed7e9f26a63ddc1d7c66c307cf4895bb00a0ec4/docs/PROJECT_CONTINUATION.md#latest-work-and-validation) retains the earlier GRPO validation.
+The synthetic counts and instrumented CPU callbacks describe teaching fixtures. The study measurements are from published evidence. No model execution, hosted model call, experiment rerun, cloud dispatch, credit use or retention change occurred.
 
 ## Handoff update template
 
