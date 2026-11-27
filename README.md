@@ -18,7 +18,7 @@ cd agent-lightning-grpo-ppo
 | Activity | What you do | What you learn |
 |---|---|---|
 | Synthetic mechanics | Work through the [calculator trajectory](docs/learning/02-follow-one-calculator-task.md). Then [change the answer after a successful asset lookup](docs/TASK_ADAPTATION.md#a-successful-lookup-and-two-different-outcomes) in the local CPU harness. | Which choices belong to the model, how the verifier scores an attempt, and how training keeps track of that attempt. |
-| Committed experimental evidence | Read the [six-run comparison](docs/learning/07-read-the-experiment-results.md). Reproduce the two means with the [Chapter 8 offline checks](docs/learning/08-reproduce-and-operate.md#two-credential-free-checks). | What the measured scores support on the reused development questions. The checker reads published files locally. |
+| Committed experimental evidence | Check the [six calculator runs and their baselines](docs/learning/07-read-the-experiment-results.md#preserve-every-baseline-and-paired-outcome). Plot the [recovery results by actual class](docs/learning/07-read-the-experiment-results.md#recovery-readiness-on-the-same-24-cases). | How a higher score on a development panel can hide the loss of every success on one class of cases. |
 | New model execution | The [reader procedure](docs/READER_TRAINING.md) covers collecting new answers, training and reloading with separately authorized model access, compute and budget. | A new run produces its own measurements. Both offline activities above work without accounts, model weights or GPUs. |
 
 ## What happened on the recovery task?
