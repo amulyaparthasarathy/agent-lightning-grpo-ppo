@@ -2,11 +2,13 @@
 
 Read [AGENTS.md](../AGENTS.md), then the [project plan](PROJECT_PLAN.md). This file is the mutable handoff for ChatGPT, Codex, and other agents. Update it with each completed implementation slice. Historical execution handoffs retain their original scopes.
 
-**Core guide complete.** The [eight-chapter learning guide](learning/README.md) meets the [documentation completion standard](PROJECT_PLAN.md#1-goal-and-completion-standard). M0, M1, M2, M3, M4 and M7 are complete and integrated on main. Further documentation work requires a concrete gap identified by the owner.
+**Core guide complete.** The [eight-chapter learning guide](learning/README.md) meets the [documentation completion standard](PROJECT_PLAN.md#1-goal-and-completion-standard). M0, M1, M2, M3, M4 and M7 are complete and integrated on main. After closeout, the owner reopened reader onboarding, including the effective training recipe and the storage backend for new allocations.
 
 ## Resume here
 
-**Next action.** The owner selects the next experimental objective. Hosted Tinker is one option for consideration. Its proposal and all other deferred experiments await separate authorization.
+**Reader onboarding accepted.** The owner accepted the first-time reader procedure, its explanation of the effective recipe, and fresh Volume v2 creation. The assignment ends with the ordinary merge of [PR #27](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/pull/27), which records the integration commit.
+
+**Next action.** The owner selects the next concrete assignment before any further implementation.
 
 **M7 integration.** [PR #25](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/pull/25) merged at `306dd429231ff7ac1aab1d5365dc46161844f441`. Its parents are the M4 merge `4d24d99cab74088fa9bf05b14d18bc7bfd758ae2` and the independently reviewed M7 head `957370525abe4924f96b448f621e779023a3f7df`. The merge and reviewed head share tree `2dacb11be0049a745359655ee7ff6c00c900634c`. Only the continuation changed between validated learner commit `17123c154f9de323396fb1853bfe21140e23749b` and the reviewed head.
 
@@ -20,7 +22,7 @@ Read [AGENTS.md](../AGENTS.md), then the [project plan](PROJECT_PLAN.md). This f
 | What did the agent learn and what did the run use? | Chapter 7 pairs baselines and reloads, splits recovery outcomes by actual class, and works out study worker time and role-file bytes. The dated app charges have no measured per-seed split. |
 | What can a reader reproduce or adapt? | Chapter 8 links to the public arithmetic, asset harness and fixture plan. The first online setup is marked in the workflow and the [reader procedure](READER_TRAINING.md) owns the operational commands. Its locked client is separate from the CPU harness and remote GPU stack. |
 
-The agent walkthrough found no blocking documentation gap. First-time human usability remains unmeasured. Recovery PPO-MC remains an explicitly deferred capability.
+The earlier M7 walkthrough found no blocking documentation gap at that time. First-time human usability remains unmeasured. Recovery PPO-MC remains an explicitly deferred capability.
 
 ### Hosted-Tinker companion paused
 
@@ -100,7 +102,7 @@ Key public execution identities: reader calculator `5daff64cefd348fb731094cf465b
 
 ## Authority, cost, and retention
 
-The owner authorized the ordinary M7 merge and status-only closeout. ChatGPT retains its read-only review role. PR #22 remains open and paused with its proposed $0.02 execution unauthorized. PR #14 remains open, draft and deferred. M5 preparation, M6 execution, additional recovery seeds, the full recovery study and final-panel evaluation are deferred.
+The owner authorized final integration of PR #27 only. Live Volume v2 qualification requires separate authorization. ChatGPT retains its read-only review role. PR #22 remains open and paused with its proposed $0.02 execution unauthorized. PR #14 remains open, draft and deferred. M5 preparation, M6 execution, additional recovery seeds, the full recovery study and final-panel evaluation are deferred.
 
 **New paid dispatch authority: zero.** Historical ceilings, financial holds and reported credits provide no spending authority.
 
@@ -123,6 +125,40 @@ The unencumbered balance does not fund a new run. PR #14's proposed $25 and the 
 The retained private pilot continuation is `.local/phase4c-functional-pilot/CONTINUE.md` in the operator's existing environment. Its exact resource inventory is not part of this public handoff and was not inspected during plan authoring. The current documentation work does not need it.
 
 ## Latest work and validation
+
+### PR #27 acceptance and integration
+
+The bounded independent review accepted head `b58625df10726b552429ddcb5b405cc76f6e1a60` against main `2288facdcf6340865f303b7f6fe7a4f7a1e0e508`. Only this continuation changed after the validated learner, code and test commit [`f83145e`](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/commit/f83145e2a99c4e642cd6c9db9d1acfdda4de7ca6). The final integration handoff also changes only this file.
+
+The independent reviewer passed 28 focused offline tests, regenerated and validated the calculator and asset-status practice plans with matching hashes, reproduced the counting exercise for both tasks, checked all 18 Bash blocks for syntax, and verified the source diff. The review accepted the distinction between requested and observed storage versions and the mocked v1 inspection, collection and cancellation checks. The 12 pinned trainer configurations and rendering checks below are Codex-executed evidence. Live v2 behavior and first-time human usability remain unmeasured.
+
+The [effective recipe](READER_TRAINING.md#read-the-effective-recipe) traces the source-bound plan through the launcher and composed trainer config to the runtime and collected evidence. The [setup call](../scripts/reader_training.py) requests v2 for a fresh Volume. The schedule, numerical implementation, dependency lock, existing-resource lookups and historical admission protocols are unchanged.
+
+| Checks Codex executed for the reviewed revision | Result |
+|---|---|
+| Reader planning and counting | From a clean clone at the committed revision, ran the locked client sync from cache and generated fresh practice and fictitious preparation plans for both tasks. All plan/validate hashes matched. Checked the asset-bound case with the public a07 manifest and revalidated saved plans in a fresh shell. The new exercise printed 192 episodes and two actor calls per algorithm, with zero GRPO and two PPO-MC critic calls. |
+| Configuration and evidence | Ran the existing pinned Hydra reader test across both tasks, both algorithms and all three stages. It verified the released VERL wheel and 371 Python/YAML files, composed 12 configurations and instantiated native role configs with CPU test substitutes. Separately checked 51 table settings in all 12 compositions, plus stage/role selection, question-order seed and the separate gateway and controller arguments. Read the six public a07 stage summaries to compare the exercise with their recorded counts. |
+| Setup and compatibility | 28 focused contract, ownership, completion, loss and integration tests passed under the network-denying guard. Setup mocks checked ownership and Secret hydration before creating a v2 Volume in the configured environment, both fresh-name flags and Volume collision failure. Mocked v2 launch recorded the observed backend in the receipt. Mocked v1 status, collection and owned cancellation used lookup without creation or a version filter. |
+| Commands and rendering | Checked all 41 profile fields, 19 rejected variants, ten online CLI invocations with the boundary mocked, and syntax for all 18 Bash blocks. Rendered the procedure (12 tables and 20 fenced blocks) and checked local file and heading links, incoming reader anchors and `git diff --check`. |
+
+**Source review and limits.** Inspected the locked Modal 1.6.3 creation API and the provider’s [Volumes guide](https://modal.com/docs/guide/volumes), the shared and matched launchers, task harnesses, runtime weighting, checkpoint and audit writers. The prior a07 counts are historical evidence. The revision adds no live v2 observation, GPU result, fresh-account usability measurement or billing evidence. No training-provider authentication, resource operation, model run or spend was authorized or performed. No blocker was found in the offline checks. PR #22 stays paused, PR #14 and recovery M5/M6 stay deferred.
+
+### Earlier onboarding validation at the reviewed head
+
+**Reader onboarding after core-guide closeout.** GitHub main was `2288facdcf6340865f303b7f6fe7a4f7a1e0e508`. [PR #26](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/pull/26) integrated the administrative closeout after M7. Only #14 and #22 were open before this slice. Neither adds this onboarding. Branch `docs/first-reader-account-setup`, validated learner commit `8cd864f804f62793521a2f6d132446e8ce354562`. The [reader procedure](READER_TRAINING.md) now takes a new reader from a full clone through account, credential and resource selection, local validation, the funded command sequence, evidence interpretation and terminal recovery. README and Chapter 8 direct readers there.
+
+| Checks executed for this slice | Result |
+|---|---|
+| Clean clone and offline planning | Cloned public main with history, checked out the learner commit, and synced its Python 3.12 client from the uv cache with the documented locked/inexact command. Ran the shell blocks for fixture and fictitious owned preparation plans for both tasks. Each plan/validate pair had matching hashes, unverified ownership/availability and false training admission. An offline asset plan bound the committed a07 manifest and returned true admission. Restored the shell variables and function in a new Bash process and revalidated the saved plans. |
+| Profile and command contract | Extracted the guide’s calculator JSON, checked all 41 leaf fields against the template and labeled reference, and exercised the example against the validator. All 19 invalid variations were rejected, including valid-looking provider names outside the lab grammar, protected names, overlaps, changed model/GPU and insufficient bounds. Parsed all ten online reader CLI invocations at a mocked online boundary. Incomplete status and collection returned 2. Verified Modal 1.6.3 version and help/options for the five provider CLI commands. |
+| Focused offline tests | 26 passed under the repository’s network-denying guard with empty provider credentials. Ran `ContractTests`, `OwnershipTests` and `CompletionTests` in `test_reader_training`, plus `LossTests` and `IntegrationTests` in `test_reader_evidence`. These include mocked admission/submission, unknown acknowledgments, cancellation, checkpoint identity, missing evidence and reward/integration distinctions. |
+| Navigation and rendering | Checked Bash syntax for all 17 procedure blocks. Rendered the changed Markdown locally, checked table and fence structure (eight tables and 18 fences in the procedure), relative paths and heading anchors, including incoming reader links. Ran `git diff --check`. |
+
+**Source and provider review.** Read source admission, template/contract limits, Modal CLI credential selection, worker Secret bindings, preparation/preflight, allocation reservations, launch/configuration, collection and stage evidence. Checked the linked official uv, Modal, HF and Forge documentation for first-time setup, including the current project and API-key locations. This review used public documentation and installed CLI source.
+
+**Evidence boundary.** The a07 manifest is historical metadata used to exercise local binding. The recorded calculator and asset GPU results belong to their original executions. Fresh-account usability, cold builds, capacity, provider run-write access and charges were unmeasured here. No runtime change was required by the offline checks. This assignment grants zero dispatch authority and does not change retention or the deferred experiments.
+
+### Inherited M7 closeout
 
 The closeout checked the current main and PR head, the 13-file Markdown diff, the continuation-only handoff, applicable branch rules, checks, reviews and threads. GitHub reported a clean, mergeable head with no outstanding requirements. After the ordinary merge, both parents and the complete tree matched expectation.
 
