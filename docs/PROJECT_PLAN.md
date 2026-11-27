@@ -36,12 +36,12 @@ The repository is already public. This is an educational revision of that public
 | Foundations should establish a useful contrast | Compare conventional response/chat SFT and RL with agent SFT and RL, then move into harness-aware training. |
 | Preserve technical depth | Retain the correct mathematics, exact code references, and implementation-specific qualifications already in the guide. Improve their teaching sequence. |
 | Reuse completed experiments | Treat the evidence map in Section 4 as source material, not work to rerun. |
-| Add task-specific breadth through recovery PPO-MC | Prepare one small existing-route qualification after the documentation work. Do not rebuild PPO. |
+| Add task-specific breadth through recovery PPO-MC | M5 preparation is deferred until separately assigned by the owner. M6 execution requires separate authorization of the resulting proposal. |
 | Defer the proposed SFT experiment | PR #14 stays a separate optional intervention. Its proposed budget and CPU results are not full-size execution authority or evidence. |
 | Keep new execution bounded | No automatic extra seeds, longer runs, final-panel evaluation, retries, or changes to the learning algorithm. |
 | Maintain durable continuity | Keep stable direction here and mutable progress in `PROJECT_CONTINUATION.md`. Update both only when their respective content changes. |
 | Adopt CMU-inspired practical teaching | Supply complete runnable examples, expected outputs, reproducible figures, and interpretation exercises within the existing structure. |
-| Keep one active implementation workstream | Finish the core learner documentation first. Preserve the implemented, locally tested hosted-Tinker companion in PR #22 until the owner returns to it. [Scope and decision](#hosted-tinker-companion) |
+| Keep one active implementation workstream | The owner selects the next experimental objective after core guide closeout. Preserve the implemented, locally tested hosted-Tinker companion in PR #22 pending that decision. [Scope and decision](#hosted-tinker-companion) |
 
 The owner authorized creation, revision, and merge of PR #15 after final review. It does not turn every future milestone into an unrestricted implementation or spending mandate. An agent continues the work assigned by the owner and preserves any applicable standing authorization.
 
@@ -248,7 +248,7 @@ A loss named `ppo` is an actor surrogate, not proof that this lab's learned-crit
 
 The owner reports a $250 credit grant that may expire December 15, 2026. The remaining balance, exact expiry and grant-specific eligibility are unverified. Published prices can support a cost estimate. Only account-specific evidence can establish available credit and applicable terms.
 
-The original parallel preparation produced a runnable GRPO companion and one bounded proposal. The owner now prefers sequential execution. Preserve `hosted-tinker-grpo` in [PR #22](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/pull/22) while the documentation workstream finishes the core guide. The companion reports local tests, including mocked sampling and optimization. Hosted behavior remains unqualified and the proposed $0.02 gross maximum is unauthorized. The [continuation](PROJECT_CONTINUATION.md) records its executable source and review head. Keep the recovery PPO-MC goal independent of the companion.
+The original parallel preparation produced a runnable GRPO companion and one bounded proposal. The owner now prefers sequential execution. Preserve `hosted-tinker-grpo` in [PR #22](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/pull/22) until the owner selects and authorizes further work. The companion reports local tests, including mocked sampling and optimization. Hosted behavior remains unqualified and the proposed $0.02 gross maximum is unauthorized. The [continuation](PROJECT_CONTINUATION.md) records its executable source and review head. Keep the recovery PPO-MC goal independent of the companion.
 
 ## 4. Existing experiments to teach from
 
@@ -320,7 +320,7 @@ Acceptance: results have source, task, algorithm, denominator, panel, and execut
 
 ### M5. Prepare the bounded recovery PPO-MC qualification
 
-After the main educational content is in place, reuse the existing recovery-learning route and prepare the exact proposal in Section 6. Inspect implementation changes since the last qualified source. Run only the relevant local contract/admission/numerical checks needed by that proposal. Do not reopen a broad readiness review or rebuild the framework.
+If the owner assigns M5, reuse the existing recovery-learning route and prepare the exact proposal in Section 6. Inspect implementation changes since the last qualified source. Run only the relevant local contract/admission/numerical checks needed by that proposal. Do not reopen a broad readiness review or rebuild the framework.
 
 Acceptance: a reviewable source/profile and exact four-stage plan exist; expected evidence, capacity assumptions, current prices, maximum exposure, retention horizon, and replacement policy are explicit. Distinguish historical measurements from new estimates and identify any unmeasured recovery-PPO fit. The agent completes this preparation before requesting the separate paid authorization.
 
@@ -429,11 +429,9 @@ The plan owns intent and acceptance criteria. The continuation owns present prog
 ```text
 Continue amulyaparthasarathy/agent-lightning-grpo-ppo using AGENTS.md,
 docs/PROJECT_PLAN.md, and docs/PROJECT_CONTINUATION.md.
-Inspect live GitHub and local changes first, then implement the next unfinished
-milestone within my current authorization. Reuse the completed experiments and
-existing chapters. Do not restart planning or repeat old runs. Preserve the
-single documentation workstream, paused Tinker companion, planned recovery PPO-MC
-qualification and all deferred-work boundaries.
+Inspect live GitHub and local changes first. The core guide is complete.
+The owner selects the next experimental objective. Keep Tinker, recovery
+PPO-MC and other deferred work paused pending a specific assignment.
 Update the continuation with actual work, checks, authority, and one next action.
 ```
 
@@ -441,7 +439,7 @@ That instruction points an agent to the plan. It does not itself authorize paid 
 
 ## 9. Deferred work and reopening conditions
 
-Witness SFT execution or merge, additional recovery GRPO seeds, the full recovery study, extended PPO studies, final-panel model evaluation, other alternative backends, resumed-training qualification and new deployment or export campaigns remain deferred. The [bounded hosted-Tinker companion](#hosted-tinker-companion) is preserved in PR #22 until the core guide is finished. Hosted execution requires a separate owner decision on its exact proposal.
+Witness SFT execution or merge, additional recovery GRPO seeds, the full recovery study, extended PPO studies, final-panel model evaluation, other alternative backends, resumed-training qualification and new deployment or export campaigns remain deferred. The [bounded hosted-Tinker companion](#hosted-tinker-companion) remains paused in PR #22 pending an owner decision. Hosted execution requires a separate owner decision on its exact proposal.
 
 Do not keep these as mandatory unfinished tasks in the educational release. Mention them as possible future work with their uncertainties. Reopen one only when its learning or engineering value justifies the time/cost and the owner selects it.
 

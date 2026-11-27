@@ -14,11 +14,11 @@ Inspect current GitHub main, relevant PRs, and the local working tree. Reconcile
 
 ## Working priorities
 
-- First, develop the step-by-step guide to **training language models for agent use**. Keep general foundations brief. Explain agent interaction, harness responsibilities, trajectories, training tensors, GRPO, this lab's PPO-MC, and the complete update lifecycle in depth.
+- The [eight-chapter guide](docs/learning/README.md) is complete on main. M0, M1, M2, M3, M4 and M7 are integrated. Reopen documentation only if the owner identifies a concrete gap.
+- The owner selects the next experimental objective. The [current continuation](docs/PROJECT_CONTINUATION.md) records the closeout and deferred capabilities.
 - Use the existing experiments as teaching evidence. Completed calculator, asset-status, recovery calibration, A03, P01, and P02 runs are not a backlog to repeat.
 - Give practical lessons a complete reference path: purpose, prediction, copyable command, expected output, figure or table, explanation, one optional small alteration, and evidence boundary. Reproduce teaching plots from public committed evidence; keep optional implementation challenges separate.
-- Keep one active implementation workstream. Finish the core learner documentation before returning to the hosted-Tinker companion. PR #22 is implemented, locally tested and paused before hosted execution. Preserve its branch and proposal. [Companion disposition](docs/PROJECT_PLAN.md#hosted-tinker-companion)
-- The documentation workstream owns the shared plan and continuation. M4 is integrated. Review the M7 reader walkthrough and editorial closeout in the [current continuation](docs/PROJECT_CONTINUATION.md).
+- Preserve the implemented, locally tested hosted-Tinker companion in PR #22. It remains paused. The reported credit balance and possible expiry are unverified. [Companion disposition](docs/PROJECT_PLAN.md#hosted-tinker-companion)
 - Preparation and execution of the bounded **recovery-specific PPO-MC qualification** in the plan are deferred pending separate authorization. PPO already has live calculator and asset-status evidence.
 - Witness-selection SFT PR #14, additional recovery GRPO seeds, long studies, and final-panel model evaluation are deferred.
 
@@ -26,7 +26,7 @@ Inspect current GitHub main, relevant PRs, and the local working tree. Reconcile
 
 Follow the user's current instructions and any still-applicable authorization in the session. The plan records direction; it does not grant a spending mandate or override the user's scope.
 
-The owner authorized the ordinary merge of M4 in PR #24 and delivery of M7 for review. M7 stops at the review boundary. ChatGPT otherwise retains its read-only repository/cloud role unless the owner extends it. For Codex and other implementation agents, work only within the task actually assigned. Complete already-authorized local work without repeated permission requests.
+The owner authorized integration of reviewed M7 in PR #25 and an administrative closeout. Any further implementation requires a new assignment. ChatGPT otherwise retains its read-only repository/cloud role unless the owner extends it. For Codex and other implementation agents, work only within the task actually assigned. Complete already-authorized local work without repeated permission requests.
 
 There is currently **zero further cloud dispatch authority**. Historical ceilings, unused balances, proposals, and `YES` instructions from closed mandates do not fund new execution. Prepare an exact proposal before requesting new paid authorization; preserve that authority once granted. No cloud execution, resource mutation, deletion, or experiment expansion follows automatically from a documentation task. Do not merge unrelated PRs.
 
