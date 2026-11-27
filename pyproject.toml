@@ -35,3 +35,6 @@ reader-harness = [
     "jinja2==3.1.6",
     "tokenizers==0.23.3",
 ]
+tinker = [
+    "tinker==0.40.1",
+]
