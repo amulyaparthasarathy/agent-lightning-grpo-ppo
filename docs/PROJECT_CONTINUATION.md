@@ -6,7 +6,9 @@ Read [AGENTS.md](../AGENTS.md), then the [project plan](PROJECT_PLAN.md). This f
 
 ## Resume here
 
-**Next action.** Review the effective recipe and the fresh Volume v2 setup change in [PR #27](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/pull/27). This assignment ends at review.
+**Reader onboarding accepted.** The owner accepted the first-time reader procedure, its explanation of the effective recipe, and fresh Volume v2 creation. The assignment ends with the ordinary merge of [PR #27](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/pull/27), which records the integration commit.
+
+**Next action.** The owner selects the next concrete assignment before any further implementation.
 
 **M7 integration.** [PR #25](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/pull/25) merged at `306dd429231ff7ac1aab1d5365dc46161844f441`. Its parents are the M4 merge `4d24d99cab74088fa9bf05b14d18bc7bfd758ae2` and the independently reviewed M7 head `957370525abe4924f96b448f621e779023a3f7df`. The merge and reviewed head share tree `2dacb11be0049a745359655ee7ff6c00c900634c`. Only the continuation changed between validated learner commit `17123c154f9de323396fb1853bfe21140e23749b` and the reviewed head.
 
@@ -100,7 +102,7 @@ Key public execution identities: reader calculator `5daff64cefd348fb731094cf465b
 
 ## Authority, cost, and retention
 
-The owner authorized the onboarding PR and a bounded revision to explain the effective recipe, request v2 when reader setup creates storage, and test that boundary offline. ChatGPT retains its read-only review role. PR #22 remains open and paused with its proposed $0.02 execution unauthorized. PR #14 remains open, draft and deferred. M5 preparation, M6 execution, additional recovery seeds, the full recovery study and final-panel evaluation are deferred.
+The owner authorized final integration of PR #27 only. Live Volume v2 qualification requires separate authorization. ChatGPT retains its read-only review role. PR #22 remains open and paused with its proposed $0.02 execution unauthorized. PR #14 remains open, draft and deferred. M5 preparation, M6 execution, additional recovery seeds, the full recovery study and final-panel evaluation are deferred.
 
 **New paid dispatch authority: zero.** Historical ceilings, financial holds and reported credits provide no spending authority.
 
@@ -124,13 +126,15 @@ The retained private pilot continuation is `.local/phase4c-functional-pilot/CONT
 
 ## Latest work and validation
 
-### PR #27 revision for bounded review
+### PR #27 acceptance and integration
 
-Main is `2288facdcf6340865f303b7f6fe7a4f7a1e0e508`. The working tree and open PR matched reviewed head `8c890fee1280083d6951e6359c5d2c37ca950c0f` before this revision. Validated learner and implementation commit [`f83145e`](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/commit/f83145e2a99c4e642cd6c9db9d1acfdda4de7ca6). The final commit on the [PR commit list](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/pull/27/commits) adds this handoff. The [PR record](https://api.github.com/repos/amulyaparthasarathy/agent-lightning-grpo-ppo/pulls/27) gives the full final head in `head.sha`, also recorded in the PR description.
+The bounded independent review accepted head `b58625df10726b552429ddcb5b405cc76f6e1a60` against main `2288facdcf6340865f303b7f6fe7a4f7a1e0e508`. Only this continuation changed after the validated learner, code and test commit [`f83145e`](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/commit/f83145e2a99c4e642cd6c9db9d1acfdda4de7ca6). The final integration handoff also changes only this file.
+
+The independent reviewer passed 28 focused offline tests, regenerated and validated the calculator and asset-status practice plans with matching hashes, reproduced the counting exercise for both tasks, checked all 18 Bash blocks for syntax, and verified the source diff. The review accepted the distinction between requested and observed storage versions and the mocked v1 inspection, collection and cancellation checks. The 12 pinned trainer configurations and rendering checks below are Codex-executed evidence. Live v2 behavior and first-time human usability remain unmeasured.
 
 The [effective recipe](READER_TRAINING.md#read-the-effective-recipe) traces the source-bound plan through the launcher and composed trainer config to the runtime and collected evidence. The [setup call](../scripts/reader_training.py) requests v2 for a fresh Volume. The schedule, numerical implementation, dependency lock, existing-resource lookups and historical admission protocols are unchanged.
 
-| Checks executed for this revision | Result |
+| Checks Codex executed for the reviewed revision | Result |
 |---|---|
 | Reader planning and counting | From a clean clone at the committed revision, ran the locked client sync from cache and generated fresh practice and fictitious preparation plans for both tasks. All plan/validate hashes matched. Checked the asset-bound case with the public a07 manifest and revalidated saved plans in a fresh shell. The new exercise printed 192 episodes and two actor calls per algorithm, with zero GRPO and two PPO-MC critic calls. |
 | Configuration and evidence | Ran the existing pinned Hydra reader test across both tasks, both algorithms and all three stages. It verified the released VERL wheel and 371 Python/YAML files, composed 12 configurations and instantiated native role configs with CPU test substitutes. Separately checked 51 table settings in all 12 compositions, plus stage/role selection, question-order seed and the separate gateway and controller arguments. Read the six public a07 stage summaries to compare the exercise with their recorded counts. |
