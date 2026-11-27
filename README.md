@@ -19,7 +19,7 @@ cd agent-lightning-grpo-ppo
 |---|---|---|
 | Synthetic mechanics | Work through the [calculator trajectory](docs/learning/02-follow-one-calculator-task.md). Then [change the answer after a successful asset lookup](docs/TASK_ADAPTATION.md#a-successful-lookup-and-two-different-outcomes) in the local CPU harness. | Which choices belong to the model, how the verifier scores an attempt, and how training keeps track of that attempt. |
 | Committed experimental evidence | Check the [six calculator runs and their baselines](docs/learning/07-read-the-experiment-results.md#preserve-every-baseline-and-paired-outcome). Plot the [recovery results by actual class](docs/learning/07-read-the-experiment-results.md#recovery-readiness-on-the-same-24-cases). | How a higher score on a development panel can hide the loss of every success on one class of cases. |
-| New model execution | The [reader procedure](docs/READER_TRAINING.md) covers collecting new answers, training and reloading with separately authorized model access, compute and budget. | A new run produces its own measurements. Both offline activities above work without accounts, model weights or GPUs. |
+| New model execution | Use the [reader training procedure](docs/READER_TRAINING.md) for offline practice, first-time Modal, Hugging Face and W&B setup, and a separately funded run. | A new run produces its own measurements. Both offline activities above work without accounts, model weights or GPUs. |
 
 ## What happened on the recovery task?
 
@@ -57,7 +57,7 @@ This short reference run established procedural execution, not reliable learning
 
 ## Historical operations and retained records
 
-The notes below are retained historical records from the private original. Their private-state statements, PR links and external artifact locators are dated provenance, not public reader dependencies. Public code equivalents are in the source map. They preserve earlier scientific assertions, useful links and operational context. They are not part of the offline quick start. Commands involving cloud services require separate authorization and may incur costs. The matched-study portability limits above take precedence over any generic client-setup wording below.
+The notes below are retained historical records from the private original. Their private-state statements, PR links and external artifact locators are dated provenance, not public reader dependencies. Public code equivalents are in the source map. They preserve earlier scientific assertions, useful links and operational context. They are not part of the offline quick start. Commands involving cloud services require separate authorization and may incur costs. The Secret name `agent-lightning-credentials` below belongs to that historical workflow. For your own run, follow the [reader account and Secret setup](docs/READER_TRAINING.md#configure-a-reader-owned-allocation).
 
 <details>
 <summary>Expand historical results, client setup, runtime and preservation notes</summary>
