@@ -6,6 +6,10 @@ Training through the harness matters because the model must act on the same kind
 
 The seed-2001 recovery pilot completed 16 GRPO updates and a fresh-worker development reload. Raw answers show that the terminal greedy policy answered `not_ready` on all 24 development cases. Strict success rose from 9 to 12 while decision accuracy stayed at 12/24. The separate frozen three-seed study has no final-panel model evaluations. [Learning diagnosis](docs/PHASE4C_PILOT_LEARNING_DIAGNOSIS.md) · [Pilot closeout](docs/PHASE4C_FUNCTIONAL_PILOT_CLOSEOUT.md) · [Qualification](docs/PHASE4C_RECOVERY_LEARNING.md) · [Study and costs](docs/PHASE4C_LEARNING_STUDY_PROPOSAL.md)
 
+## Current project direction
+
+Contributors and AI agents should start with the [project plan](docs/PROJECT_PLAN.md) and [current continuation](docs/PROJECT_CONTINUATION.md). The priority is a step-by-step guide to training models for agent use, built from the existing chapters and completed experiments. The plan records the next bounded documentation task and the separately gated recovery PPO-MC qualification.
+
 ## Choose a reader path
 
 | Path | Start here | What you can do |

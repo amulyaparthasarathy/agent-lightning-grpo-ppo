@@ -4,6 +4,10 @@ The question for this guide is: **How does one calculator-agent experience becom
 
 You need Python and basic machine learning. The public educational snapshot needs no account to read; the private historical repository is not a prerequisite. The exercises use Python's standard library, with no model, cloud service or dataset download.
 
+## Guide revision and implementation plan
+
+The [project plan](../PROJECT_PLAN.md) maps the agreed twelve learning modules onto the existing material, with brief foundations and deeper agent-training mechanics. The eight chapters below remain the current guide. Contributors should read the [current continuation](../PROJECT_CONTINUATION.md) for the next unfinished task and reuse the completed experiments.
+
 ## Reading paths and chapter contracts
 
 Read Chapters 1–5 then 7 for the mechanisms and findings. Read all eight for the implementation path. Start at Chapter 8 if you only want to check committed evidence. Each chapter moves from a question and intuition to an example, mathematics where needed, exact source, evidence limits and an offline exercise with an answer.
