@@ -2,19 +2,19 @@
 
 Read [AGENTS.md](../AGENTS.md), then the [project plan](PROJECT_PLAN.md). This file is the mutable handoff for ChatGPT, Codex, and other agents. Update it with each completed implementation slice. Historical execution handoffs retain their original scopes.
 
-**Repository verification, November 27, 2026 UTC.** PR #16 was open at its independently reviewed head, with a clean merge state and no outstanding GitHub requirements. The ordinary merge matched that exact head. Fetched main contains the merge and has the same tree as the reviewed M1 revision.
+**Repository verification, November 27, 2026 UTC.** PR #17 was clean and mergeable at the independently reviewed head. The ordinary merge into main used that exact head. The fetched merge and the reviewed head have identical trees.
 
 ## Resume here
 
-**Next action.** Review [M2 PR #17](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/pull/17). Walk across the [Chapter 3 shift table](learning/03-trajectories-tokens-and-fragments.md#line-up-each-prediction-with-its-target) and run the first command with both histories. The second prompt's changed prefix requires another fragment while preserving four generated targets for the episode.
+[Chapter 3](learning/03-trajectories-tokens-and-fragments.md) is on main. The next M2 slice, [Chapter 4 in PR #18](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/pull/18), is ready for review. Its CPU exercise follows four calculator attempts through the group-relative advantages, response mask, log-probability ratio, clipping and equal-rollout loss. The separate slope calculation shows why scalar cancellation can coexist with a nonzero gradient.
 
-The M1 entry path and scored calculator lesson are on main. This first M2 slice adds the two prompt histories, next-token shift, response masks, fragment identity and equal-episode weights in Chapter 3. The remaining M2 lessons cover advantages, losses and the complete update. The twelve modules still use the eight existing chapters and supporting guides.
+**Next bounded lesson after review.** Continue those four attempts into [Chapter 5](learning/05-ppo-mc-step-by-step.md). Have the reader predict the terminal return at a generated token, subtract the critic's value prediction, and distinguish whitening over valid tokens from the rollout weights on the loss. Chapter 6's complete update remains a later slice.
 
 ### Parallel hosted-Tinker track
 
 Documentation remains the highest priority. The owner reports a $250 credit grant that may expire December 15, 2026. Its remaining balance, exact expiry and grant-specific eligibility are unverified. Public prices can inform a proposal but cannot confirm an account balance. The companion workstream prepares one runnable hosted-Tinker GRPO implementation, local validation and one exact execution proposal. Hosted execution awaits a separate decision. [Track scope](PROJECT_PLAN.md#parallel-hosted-tinker-companion)
 
-**Companion branch and PR:** none identified in local worktrees, local or remote branch names, or open PRs at this handoff. The documentation workstream owns edits to the shared plan and continuation and records the companion identity here when available.
+**Companion status at the Chapter 4 handoff.** No hosted-Tinker branch or PR was visible in the local worktrees, canonical remote heads or GitHub PR search. The documentation workstream owns edits to the shared plan and continuation and records the companion identity here when available.
 
 ## Repository snapshot and delivery
 
@@ -36,7 +36,9 @@ Documentation remains the highest priority. The owner reports a $250 credit gran
 | Validated M1 learner content | `9bc04f254b797cdd61034a764d3d978787779305`. The subsequent handoff commit records the PR and validation. |
 | M1 reviewed head | `c1555bfe315d2e1afa33557ad4f245c7685e1db7`. The independent review reproduced the 36/35 exercise and fragment accounting. |
 | M1 merge and M2 base | `f2c20bb66b3c7b7dca16cb9dfe8426837a2b34d1`. Both M1 trees are `94edef83b1d02b193c01a1d6647d6e2b300f1a44`. |
-| M2 delivery | `m2-calculator-token-alignment`, [PR #17](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/pull/17). Validated Chapter 3 and scheduling revision `9ba28878608eb5c7ed00c77e5cb3db564cfb8b19`. The handoff commit records the checks and PR identity. |
+| M2 Chapter 3 | [PR #17](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/pull/17) merged. Validated content `9ba28878608eb5c7ed00c77e5cb3db564cfb8b19`. Independently reviewed head `b0f0d6579c7f8f3bcff9546c59a8ba4edffd0f7a`. |
+| PR #17 merge and Chapter 4 base | `acc4a50c4691efb57c726d61a44e4c6167abfe82`. Both trees are `6063636db998ae6ed3ef3fb1fe043575030f1e84`. |
+| M2 Chapter 4 | `m2-grpo-calculator-lesson`, [PR #18](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/pull/18). Validated lesson `3aa8f243c2753584dcbec02b32b9a84dbe49e228`. The subsequent commit records this review handoff. |
 
 ## Decisions to preserve
 
@@ -55,7 +57,7 @@ Documentation remains the highest priority. The owner reports a $250 credit gran
 |---|---|---|
 | M0: Shared plan and continuation | Complete; plan v1.1 merged through PR #15 | Reviewed head and merged tree verified |
 | M1: Entry and representative lesson | Complete and merged in PR #16 | Independently reviewed head integrated, with matching trees |
-| M2: Deep training mechanics | First Chapter 3 slice implemented in PR #17, awaiting review | Shift, masks, merge/split and weighting checked on CPU. Remaining M2 mechanics are open |
+| M2: Deep training mechanics | Chapter 3 merged. Chapter 4 implemented in PR #18 for review | Group statistics, masked token loss, clipping and gradient checked on CPU. Chapter 5 is next |
 | M3: Execution and adaptation | Planned | Supported procedure explained step by step with expected evidence and cost boundary |
 | M4: Experimental teaching | Planned | Reproducible evidence figures, expected counts, and interpretation exercises for calculator/recovery |
 | M5: Recovery PPO-MC preparation | Planned; no new reservation proposed | Exact four-stage plan, relevant local gates, capacity/cost/retention proposal |
@@ -83,7 +85,7 @@ Key public execution identities: reader calculator `5daff64cefd348fb731094cf465b
 
 ## Authority, cost, and retention
 
-The assigned integration was the reviewed M1 head. M2 ends at a reviewable PR. The parallel companion has offline preparation authority. PR #14 remains deferred and independent of recovery PPO-MC. The reported Tinker grant supplies no spending authority.
+The assigned integration was the reviewed Chapter 3 head. The Chapter 4 assignment ends at a reviewable PR. The parallel companion has offline preparation authority. PR #14 remains deferred and independent of recovery PPO-MC. The reported Tinker grant supplies no spending authority.
 
 **New paid dispatch authority: zero.** The recovery PPO preference selects a direction, not a numeric budget. M5 must produce the concrete proposal before the execution decision. Do not ask for that decision during the documentation work.
 
@@ -107,15 +109,15 @@ The retained private pilot continuation is `.local/phase4c-functional-pilot/CONT
 
 ## Latest work and validation
 
-| First M2 slice check | Observed result |
+| Chapter 4 check | Observed result |
 |---|---|
-| Ran both Chapter 3 shell blocks from the repository root with Python 3.12, then changed the second prompt as instructed | The selected pairs were `(11,20), (20,21)` and `(30,40), (40,41)`. The optional alteration changed the prefix result from true to false and preserved all four pairs. Checked the printed values against the shift table. |
-| Ran `python3 experiment/cpu_accounting_demo.py` | The synthetic fixture gave row means 5.0 and 3.5. Both equal-rollout means were 5.0 and both weights for A were 0.5. |
-| Fed the two histories to the hash-verified Agent Lightning adapter and VERL response slice in the existing pinned CPU environment | Four fixture episodes produced four rows with matching prefixes and eight with the changed prefix. Both had 16 selected targets. Verified the prompts, response masks, previous-position outputs, sampled log probabilities and total matched weight of 0.25 per episode. Used input IDs as position markers in place of model outputs. |
-| Ran the existing `PinnedTrainingTests.test_real_adapter_constant_groups_and_fragment_counts` | One CPU test passed, covering merged and fragmented rows. The optional telemetry package was absent. All assertions were local. |
-| Checked documentation and scope | Checked relative links and anchors, incoming chapter navigation, fenced blocks, the displayed formula and table values, and `git diff --check`. GitHub-rendered Chapter 3 HTML contains all three tables with the expected dimensions and its onward link. The existing Mermaid source matches the merged version. |
+| Extracted and executed the two shell blocks from the repository root with Python 3.12. Ran the optional all-success alteration. | Rewards `[0,0,0,1]` gave mean 0.25, sample standard deviation 0.5 and advantages −0.499999 for each failure and +1.499997 for D. Changing only the probability of target 40 from 0.25 to 0.40 moved the group loss from 0 to −0.028125. For four successes, both losses were zero. |
+| Used synthetic tensors with the matched GRPO advantage and weighting functions and the hash-verified native actor loss | D stored in one row or split into two fragments received the same total weight (0.25) and gave the same loss. The masked observation had zero direct gradient. All-zero and all-one groups had zero advantages and task gradient. The three clipping examples returned −1.3, 0.8 and 3. |
+| Compared the toy derivative with the backend | The finite-difference command and CPU automatic differentiation of the native loss both gave slope −0.5 at scalar loss 0. |
+| Inspected source and historical evidence | Checked recomputation of old log probabilities, clip bounds and the separate numerical log-ratio guard. The [committed analysis](../evidence/phase2-r03/SCIENTIFIC_ANALYSIS.md#training-signal-and-critic-behavior) reports 110/480 informative GRPO groups, eight constant-group steps with zero current gradient, and zero measured actor clipping fractions. |
+| Inspected rendered documentation | Verified the three tables, command and output blocks and onward navigation in GitHub HTML. Corrected two Markdown escapes, then checked all six display equations and 39 inline math expressions against their source. Checked relative links, heading anchors, fences and `git diff --check`. |
 
-The examples use invented IDs and predefined losses. No model execution, experimental cloud operation or credit use occurred. Historical evidence and retention remain in their owning records. The [M1 handoff](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/blob/c1555bfe315d2e1afa33557ad4f245c7685e1db7/docs/PROJECT_CONTINUATION.md#latest-work-and-validation) preserves the earlier validation.
+The changed probabilities, active clipping and slope example are teaching fixtures. The checks used scalar arithmetic and CPU tensors only. No model ran, no credits were consumed, and no historical evidence or retention records changed. The [Chapter 3 handoff](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/blob/b0f0d6579c7f8f3bcff9546c59a8ba4edffd0f7a/docs/PROJECT_CONTINUATION.md#latest-work-and-validation) holds the earlier alignment and fragment checks.
 
 ## Handoff update template
 
