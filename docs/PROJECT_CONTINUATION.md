@@ -2,11 +2,11 @@
 
 Read [AGENTS.md](../AGENTS.md), then the [project plan](PROJECT_PLAN.md). This file is the mutable handoff for ChatGPT, Codex, and other agents. Update it with each completed implementation slice. Historical execution handoffs retain their original scopes.
 
-**Core guide complete.** The [eight-chapter learning guide](learning/README.md) meets the [documentation completion standard](PROJECT_PLAN.md#1-goal-and-completion-standard). M0, M1, M2, M3, M4 and M7 are complete and integrated on main. After closeout, the owner identified one gap in first-time setup for reader-owned training.
+**Core guide complete.** The [eight-chapter learning guide](learning/README.md) meets the [documentation completion standard](PROJECT_PLAN.md#1-goal-and-completion-standard). M0, M1, M2, M3, M4 and M7 are complete and integrated on main. After closeout, the owner reopened reader onboarding, including the effective training recipe and the storage backend for new allocations.
 
 ## Resume here
 
-**Next action.** Review the first-time reader procedure in [PR #27](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/pull/27). This assignment ends at review.
+**Next action.** Review the effective recipe and the fresh Volume v2 setup change in [PR #27](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/pull/27). This assignment ends at review.
 
 **M7 integration.** [PR #25](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/pull/25) merged at `306dd429231ff7ac1aab1d5365dc46161844f441`. Its parents are the M4 merge `4d24d99cab74088fa9bf05b14d18bc7bfd758ae2` and the independently reviewed M7 head `957370525abe4924f96b448f621e779023a3f7df`. The merge and reviewed head share tree `2dacb11be0049a745359655ee7ff6c00c900634c`. Only the continuation changed between validated learner commit `17123c154f9de323396fb1853bfe21140e23749b` and the reviewed head.
 
@@ -100,7 +100,7 @@ Key public execution identities: reader calculator `5daff64cefd348fb731094cf465b
 
 ## Authority, cost, and retention
 
-The owner authorized one follow-up documentation PR for reader onboarding after the ordinary M7 merge and status-only closeout. ChatGPT retains its read-only review role. PR #22 remains open and paused with its proposed $0.02 execution unauthorized. PR #14 remains open, draft and deferred. M5 preparation, M6 execution, additional recovery seeds, the full recovery study and final-panel evaluation are deferred.
+The owner authorized the onboarding PR and a bounded revision to explain the effective recipe, request v2 when reader setup creates storage, and test that boundary offline. ChatGPT retains its read-only review role. PR #22 remains open and paused with its proposed $0.02 execution unauthorized. PR #14 remains open, draft and deferred. M5 preparation, M6 execution, additional recovery seeds, the full recovery study and final-panel evaluation are deferred.
 
 **New paid dispatch authority: zero.** Historical ceilings, financial holds and reported credits provide no spending authority.
 
@@ -123,6 +123,23 @@ The unencumbered balance does not fund a new run. PR #14's proposed $25 and the 
 The retained private pilot continuation is `.local/phase4c-functional-pilot/CONTINUE.md` in the operator's existing environment. Its exact resource inventory is not part of this public handoff and was not inspected during plan authoring. The current documentation work does not need it.
 
 ## Latest work and validation
+
+### PR #27 revision for bounded review
+
+Main is `2288facdcf6340865f303b7f6fe7a4f7a1e0e508`. The working tree and open PR matched reviewed head `8c890fee1280083d6951e6359c5d2c37ca950c0f` before this revision. Validated learner and implementation commit [`f83145e`](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/commit/f83145e2a99c4e642cd6c9db9d1acfdda4de7ca6). The final commit on the [PR commit list](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/pull/27/commits) adds this handoff. The [PR record](https://api.github.com/repos/amulyaparthasarathy/agent-lightning-grpo-ppo/pulls/27) gives the full final head in `head.sha`, also recorded in the PR description.
+
+The [effective recipe](READER_TRAINING.md#read-the-effective-recipe) traces the source-bound plan through the launcher and composed trainer config to the runtime and collected evidence. The [setup call](../scripts/reader_training.py) requests v2 for a fresh Volume. The schedule, numerical implementation, dependency lock, existing-resource lookups and historical admission protocols are unchanged.
+
+| Checks executed for this revision | Result |
+|---|---|
+| Reader planning and counting | From a clean clone at the committed revision, ran the locked client sync from cache and generated fresh practice and fictitious preparation plans for both tasks. All plan/validate hashes matched. Checked the asset-bound case with the public a07 manifest and revalidated saved plans in a fresh shell. The new exercise printed 192 episodes and two actor calls per algorithm, with zero GRPO and two PPO-MC critic calls. |
+| Configuration and evidence | Ran the existing pinned Hydra reader test across both tasks, both algorithms and all three stages. It verified the released VERL wheel and 371 Python/YAML files, composed 12 configurations and instantiated native role configs with CPU test substitutes. Separately checked 51 table settings in all 12 compositions, plus stage/role selection, question-order seed and the separate gateway and controller arguments. Read the six public a07 stage summaries to compare the exercise with their recorded counts. |
+| Setup and compatibility | 28 focused contract, ownership, completion, loss and integration tests passed under the network-denying guard. Setup mocks checked ownership and Secret hydration before creating a v2 Volume in the configured environment, both fresh-name flags and Volume collision failure. Mocked v2 launch recorded the observed backend in the receipt. Mocked v1 status, collection and owned cancellation used lookup without creation or a version filter. |
+| Commands and rendering | Checked all 41 profile fields, 19 rejected variants, ten online CLI invocations with the boundary mocked, and syntax for all 18 Bash blocks. Rendered the procedure (12 tables and 20 fenced blocks) and checked local file and heading links, incoming reader anchors and `git diff --check`. |
+
+**Source review and limits.** Inspected the locked Modal 1.6.3 creation API and the provider’s [Volumes guide](https://modal.com/docs/guide/volumes), the shared and matched launchers, task harnesses, runtime weighting, checkpoint and audit writers. The prior a07 counts are historical evidence. The revision adds no live v2 observation, GPU result, fresh-account usability measurement or billing evidence. No training-provider authentication, resource operation, model run or spend was authorized or performed. No blocker was found in the offline checks. PR #22 stays paused, PR #14 and recovery M5/M6 stay deferred.
+
+### Earlier onboarding validation at the reviewed head
 
 **Reader onboarding after core-guide closeout.** GitHub main was `2288facdcf6340865f303b7f6fe7a4f7a1e0e508`. [PR #26](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/pull/26) integrated the administrative closeout after M7. Only #14 and #22 were open before this slice. Neither adds this onboarding. Branch `docs/first-reader-account-setup`, validated learner commit `8cd864f804f62793521a2f6d132446e8ce354562`. The [reader procedure](READER_TRAINING.md) now takes a new reader from a full clone through account, credential and resource selection, local validation, the funded command sequence, evidence interpretation and terminal recovery. README and Chapter 8 direct readers there.
 
