@@ -2,11 +2,11 @@
 
 Read [AGENTS.md](../AGENTS.md), then the [project plan](PROJECT_PLAN.md). This file is the mutable handoff for ChatGPT, Codex, and other agents. Update it with each completed implementation slice. Historical execution handoffs retain their original scopes.
 
-**Core guide complete.** The [eight-chapter learning guide](learning/README.md) meets the [documentation completion standard](PROJECT_PLAN.md#1-goal-and-completion-standard). M0, M1, M2, M3, M4 and M7 are complete and integrated on main. Further documentation work requires a concrete gap identified by the owner.
+**Core guide complete.** The [eight-chapter learning guide](learning/README.md) meets the [documentation completion standard](PROJECT_PLAN.md#1-goal-and-completion-standard). M0, M1, M2, M3, M4 and M7 are complete and integrated on main. After closeout, the owner identified one gap in first-time setup for reader-owned training.
 
 ## Resume here
 
-**Next action.** The owner selects the next experimental objective. Hosted Tinker is one option for consideration. Its proposal and all other deferred experiments await separate authorization.
+**Next action.** Review the [first-time reader procedure](READER_TRAINING.md) in the onboarding PR. This assignment ends at review.
 
 **M7 integration.** [PR #25](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/pull/25) merged at `306dd429231ff7ac1aab1d5365dc46161844f441`. Its parents are the M4 merge `4d24d99cab74088fa9bf05b14d18bc7bfd758ae2` and the independently reviewed M7 head `957370525abe4924f96b448f621e779023a3f7df`. The merge and reviewed head share tree `2dacb11be0049a745359655ee7ff6c00c900634c`. Only the continuation changed between validated learner commit `17123c154f9de323396fb1853bfe21140e23749b` and the reviewed head.
 
@@ -20,7 +20,7 @@ Read [AGENTS.md](../AGENTS.md), then the [project plan](PROJECT_PLAN.md). This f
 | What did the agent learn and what did the run use? | Chapter 7 pairs baselines and reloads, splits recovery outcomes by actual class, and works out study worker time and role-file bytes. The dated app charges have no measured per-seed split. |
 | What can a reader reproduce or adapt? | Chapter 8 links to the public arithmetic, asset harness and fixture plan. The first online setup is marked in the workflow and the [reader procedure](READER_TRAINING.md) owns the operational commands. Its locked client is separate from the CPU harness and remote GPU stack. |
 
-The agent walkthrough found no blocking documentation gap. First-time human usability remains unmeasured. Recovery PPO-MC remains an explicitly deferred capability.
+The earlier M7 walkthrough found no blocking documentation gap at that time. First-time human usability remains unmeasured. Recovery PPO-MC remains an explicitly deferred capability.
 
 ### Hosted-Tinker companion paused
 
@@ -100,7 +100,7 @@ Key public execution identities: reader calculator `5daff64cefd348fb731094cf465b
 
 ## Authority, cost, and retention
 
-The owner authorized the ordinary M7 merge and status-only closeout. ChatGPT retains its read-only review role. PR #22 remains open and paused with its proposed $0.02 execution unauthorized. PR #14 remains open, draft and deferred. M5 preparation, M6 execution, additional recovery seeds, the full recovery study and final-panel evaluation are deferred.
+The owner authorized one follow-up documentation PR for reader onboarding after the ordinary M7 merge and status-only closeout. ChatGPT retains its read-only review role. PR #22 remains open and paused with its proposed $0.02 execution unauthorized. PR #14 remains open, draft and deferred. M5 preparation, M6 execution, additional recovery seeds, the full recovery study and final-panel evaluation are deferred.
 
 **New paid dispatch authority: zero.** Historical ceilings, financial holds and reported credits provide no spending authority.
 
@@ -123,6 +123,21 @@ The unencumbered balance does not fund a new run. PR #14's proposed $25 and the 
 The retained private pilot continuation is `.local/phase4c-functional-pilot/CONTINUE.md` in the operator's existing environment. Its exact resource inventory is not part of this public handoff and was not inspected during plan authoring. The current documentation work does not need it.
 
 ## Latest work and validation
+
+**Reader onboarding after core-guide closeout.** GitHub main was `2288facdcf6340865f303b7f6fe7a4f7a1e0e508`. [PR #26](https://github.com/amulyaparthasarathy/agent-lightning-grpo-ppo/pull/26) integrated the administrative closeout after M7. Only #14 and #22 were open before this slice. Neither adds this onboarding. Branch `docs/first-reader-account-setup`, validated learner commit `8cd864f804f62793521a2f6d132446e8ce354562`. The [reader procedure](READER_TRAINING.md) now takes a new reader from a full clone through account, credential and resource selection, local validation, the funded command sequence, evidence interpretation and terminal recovery. README and Chapter 8 direct readers there.
+
+| Checks executed for this slice | Result |
+|---|---|
+| Clean clone and offline planning | Cloned public main with history, checked out the learner commit, and synced its Python 3.12 client from the uv cache with the documented locked/inexact command. Ran the shell blocks for fixture and fictitious owned preparation plans for both tasks. Each plan/validate pair had matching hashes, unverified ownership/availability and false training admission. An offline asset plan bound the committed a07 manifest and returned true admission. Restored the shell variables and function in a new Bash process and revalidated the saved plans. |
+| Profile and command contract | Extracted the guide’s calculator JSON, checked all 41 leaf fields against the template and labeled reference, and exercised the example against the validator. All 19 invalid variations were rejected, including valid-looking provider names outside the lab grammar, protected names, overlaps, changed model/GPU and insufficient bounds. Parsed all ten online reader CLI invocations at a mocked online boundary. Incomplete status and collection returned 2. Verified Modal 1.6.3 version and help/options for the five provider CLI commands. |
+| Focused offline tests | 26 passed under the repository’s network-denying guard with empty provider credentials. Ran `ContractTests`, `OwnershipTests` and `CompletionTests` in `test_reader_training`, plus `LossTests` and `IntegrationTests` in `test_reader_evidence`. These include mocked admission/submission, unknown acknowledgments, cancellation, checkpoint identity, missing evidence and reward/integration distinctions. |
+| Navigation and rendering | Checked Bash syntax for all 17 procedure blocks. Rendered the changed Markdown locally, checked table and fence structure (eight tables and 18 fences in the procedure), relative paths and heading anchors, including incoming reader links. Ran `git diff --check`. |
+
+**Source and provider review.** Read source admission, template/contract limits, Modal CLI credential selection, worker Secret bindings, preparation/preflight, allocation reservations, launch/configuration, collection and stage evidence. Checked the linked official uv, Modal, HF and Forge documentation for first-time setup, including the current project and API-key locations. This review used public documentation and installed CLI source.
+
+**Evidence boundary.** The a07 manifest is historical metadata used to exercise local binding. The calculator and asset GPU results below belong to their original executions. Fresh-account usability, cold builds, capacity, provider run-write access and charges were unmeasured here. No runtime change was required by the offline checks. This assignment grants zero dispatch authority and does not change retention or the deferred experiments.
+
+### Inherited M7 closeout
 
 The closeout checked the current main and PR head, the 13-file Markdown diff, the continuation-only handoff, applicable branch rules, checks, reviews and threads. GitHub reported a clean, mergeable head with no outstanding requirements. After the ordinary merge, both parents and the complete tree matched expectation.
 
