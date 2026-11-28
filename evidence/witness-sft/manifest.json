@@ -1,0 +1,241 @@
+{
+  "schema": "witness-demonstrations-v1",
+  "seed": 2001,
+  "streams": [
+    "selection",
+    "order"
+  ],
+  "source_manifest_sha256": "c7d07942dda1ee81b8797ce9a59255e7f26bca712e668c18cd1a936d83d6e8ab",
+  "train_file": "fb069644d6af7d80f5ec933cbe463998af5a24d14c2e8af31d6faa87f9d5f78b",
+  "dataset_sha256": "15bcd21eefc2e8f7a8bfdc77209f6be3f333f5b67285ced35161531be9db903b",
+  "balance": {
+    "ready": 16,
+    "not_ready": 16
+  },
+  "cases_in_training_order": [
+    {
+      "case_id": "recovery-readiness-v1/train/c-ade87351ba",
+      "family": "recent_usable",
+      "variant": "time_sibling",
+      "actual": "ready",
+      "strict_reward": 1
+    },
+    {
+      "case_id": "recovery-readiness-v1/train/c-30b7b66782",
+      "family": "recent_incomplete",
+      "variant": "plain",
+      "actual": "not_ready",
+      "strict_reward": 1
+    },
+    {
+      "case_id": "recovery-readiness-v1/train/c-12f517fe94",
+      "family": "failed_newer_usable_older",
+      "variant": "plain",
+      "actual": "ready",
+      "strict_reward": 1
+    },
+    {
+      "case_id": "recovery-readiness-v1/train/c-92941931c9",
+      "family": "empty_history",
+      "variant": "plain",
+      "actual": "not_ready",
+      "strict_reward": 1
+    },
+    {
+      "case_id": "recovery-readiness-v1/train/c-3bfc2b6ea4",
+      "family": "empty_history",
+      "variant": "plain",
+      "actual": "not_ready",
+      "strict_reward": 1
+    },
+    {
+      "case_id": "recovery-readiness-v1/train/c-c1b77daafa",
+      "family": "failed_newer_usable_older",
+      "variant": "boundary",
+      "actual": "ready",
+      "strict_reward": 1
+    },
+    {
+      "case_id": "recovery-readiness-v1/train/c-b045ea9c96",
+      "family": "recent_integrity_failed",
+      "variant": "plain",
+      "actual": "not_ready",
+      "strict_reward": 1
+    },
+    {
+      "case_id": "recovery-readiness-v1/train/c-98885a67be",
+      "family": "stale_success",
+      "variant": "completed_recent",
+      "actual": "not_ready",
+      "strict_reward": 1
+    },
+    {
+      "case_id": "recovery-readiness-v1/train/c-4f28bbaa31",
+      "family": "recent_usable",
+      "variant": "multi_witness",
+      "actual": "ready",
+      "strict_reward": 1
+    },
+    {
+      "case_id": "recovery-readiness-v1/train/c-3711c6b181",
+      "family": "stale_success",
+      "variant": "plain",
+      "actual": "not_ready",
+      "strict_reward": 1
+    },
+    {
+      "case_id": "recovery-readiness-v1/train/c-6fb7093f16",
+      "family": "recent_usable",
+      "variant": "plain",
+      "actual": "ready",
+      "strict_reward": 1
+    },
+    {
+      "case_id": "recovery-readiness-v1/train/c-0c395cbc16",
+      "family": "recent_integrity_failed",
+      "variant": "integrity_pending",
+      "actual": "not_ready",
+      "strict_reward": 1
+    },
+    {
+      "case_id": "recovery-readiness-v1/train/c-ced7c3fb98",
+      "family": "recent_integrity_failed",
+      "variant": "plain",
+      "actual": "not_ready",
+      "strict_reward": 1
+    },
+    {
+      "case_id": "recovery-readiness-v1/train/c-faf21938ea",
+      "family": "recent_usable",
+      "variant": "boundary",
+      "actual": "ready",
+      "strict_reward": 1
+    },
+    {
+      "case_id": "recovery-readiness-v1/train/c-1669c0b7ee",
+      "family": "stale_success",
+      "variant": "time_sibling",
+      "actual": "not_ready",
+      "strict_reward": 1
+    },
+    {
+      "case_id": "recovery-readiness-v1/train/c-e2635aedc6",
+      "family": "recent_incomplete",
+      "variant": "plain",
+      "actual": "not_ready",
+      "strict_reward": 1
+    },
+    {
+      "case_id": "recovery-readiness-v1/train/c-d01672d448",
+      "family": "recent_usable",
+      "variant": "multi_witness",
+      "actual": "ready",
+      "strict_reward": 1
+    },
+    {
+      "case_id": "recovery-readiness-v1/train/c-d27c6987bd",
+      "family": "recent_usable",
+      "variant": "plain",
+      "actual": "ready",
+      "strict_reward": 1
+    },
+    {
+      "case_id": "recovery-readiness-v1/train/c-8d4607f508",
+      "family": "failed_newer_usable_older",
+      "variant": "multi_witness",
+      "actual": "ready",
+      "strict_reward": 1
+    },
+    {
+      "case_id": "recovery-readiness-v1/train/c-df4e83025d",
+      "family": "recent_integrity_failed",
+      "variant": "integrity_pending",
+      "actual": "not_ready",
+      "strict_reward": 1
+    },
+    {
+      "case_id": "recovery-readiness-v1/train/c-48703c1dcf",
+      "family": "recent_usable",
+      "variant": "time_sibling",
+      "actual": "ready",
+      "strict_reward": 1
+    },
+    {
+      "case_id": "recovery-readiness-v1/train/c-734d5bab77",
+      "family": "empty_history",
+      "variant": "plain",
+      "actual": "not_ready",
+      "strict_reward": 1
+    },
+    {
+      "case_id": "recovery-readiness-v1/train/c-f48550797e",
+      "family": "recent_incomplete",
+      "variant": "plain",
+      "actual": "not_ready",
+      "strict_reward": 1
+    },
+    {
+      "case_id": "recovery-readiness-v1/train/c-4f370dff82",
+      "family": "failed_newer_usable_older",
+      "variant": "plain",
+      "actual": "ready",
+      "strict_reward": 1
+    },
+    {
+      "case_id": "recovery-readiness-v1/train/c-e317105b1d",
+      "family": "failed_newer_usable_older",
+      "variant": "multi_witness",
+      "actual": "ready",
+      "strict_reward": 1
+    },
+    {
+      "case_id": "recovery-readiness-v1/train/c-1e33f0757a",
+      "family": "failed_newer_usable_older",
+      "variant": "boundary",
+      "actual": "ready",
+      "strict_reward": 1
+    },
+    {
+      "case_id": "recovery-readiness-v1/train/c-839036ae0d",
+      "family": "failed_newer_usable_older",
+      "variant": "multi_witness",
+      "actual": "ready",
+      "strict_reward": 1
+    },
+    {
+      "case_id": "recovery-readiness-v1/train/c-c257ee0d75",
+      "family": "recent_incomplete",
+      "variant": "plain",
+      "actual": "not_ready",
+      "strict_reward": 1
+    },
+    {
+      "case_id": "recovery-readiness-v1/train/c-4797c19de1",
+      "family": "failed_newer_usable_older",
+      "variant": "boundary",
+      "actual": "ready",
+      "strict_reward": 1
+    },
+    {
+      "case_id": "recovery-readiness-v1/train/c-dda94ea016",
+      "family": "recent_usable",
+      "variant": "boundary",
+      "actual": "ready",
+      "strict_reward": 1
+    },
+    {
+      "case_id": "recovery-readiness-v1/train/c-592a3081e8",
+      "family": "empty_history",
+      "variant": "plain",
+      "actual": "not_ready",
+      "strict_reward": 1
+    },
+    {
+      "case_id": "recovery-readiness-v1/train/c-ec873962cc",
+      "family": "stale_success",
+      "variant": "just_stale",
+      "actual": "not_ready",
+      "strict_reward": 1
+    }
+  ]
+}
